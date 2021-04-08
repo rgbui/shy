@@ -1,0 +1,38 @@
+.sy-surface {
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : stretch;
+    width          : 100vw;
+    height         : 100vh;
+
+    .sy-slide {
+        width      : 200px;
+        flex-shrink: 0;
+        background : rgb(247, 246, 243);
+        position   : relative;
+    }
+
+    .sy-doc {
+        flex-grow: 1.0;
+    }
+}
+
+.sy-slide {
+    &-user {
+        position       : absolute;
+        bottom         : 0px;
+        left           : 0px;
+        right          : 0px;
+        height         : 30px;
+        display        : flex;
+        align-items    : center;
+        justify-content: flex-start;
+        &-profile {
+            img {
+                width        : 24px;
+                height       : 24px;
+                border-radius: 5px;
+            }
+        }
+    }
+}

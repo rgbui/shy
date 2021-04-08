@@ -4,7 +4,8 @@
   "description": "sy.live platform app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "webpack": "webpack --config scripts/webpack.config.prod.js",
+    "webpack-dev": "webpack-dev-server  --env development  --config scripts/webpack.config.dev.js  --hot --progress --colors  "
   },
   "keywords": [
     "sy.live",
@@ -21,6 +22,7 @@
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
     "resize-observer-polyfill": "^1.5.1",
+    "rich": "file:../rich",
     "short-uuid": "^4.1.0"
   },
   "devDependencies": {

@@ -1,14 +1,16 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { Design } from './design';
-import { Router, Route, browserHistory } from 'react-router'
-
-
-
+import { ViewSurface } from './view';
+import { Router, Route } from 'react-router';
+import { history } from "./history";
+import "./assert/theme.less";
+import "./view/style.less";
+import "./core/style.less";
+import "./assert/font-sy/iconfont.css"
 // render react DOM
 ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path='/' component={Design}></Route>
+  <Router history={history}>
+    <Route path='/' component={ViewSurface}></Route>
   </Router>,
-  document.body,
+  document.body.appendChild(document.createElement('div')),
 )
