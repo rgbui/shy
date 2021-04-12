@@ -7,6 +7,31 @@
     &-bar {
         height     : 45px;
         flex-shrink: 0;
+        position   : relative;
+
+        &-right {
+            position       : absolute;
+            top            : 0px;
+            right          : 0px;
+            height         : 45px;
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+
+            .sy-icon {
+                cursor         : pointer;
+                margin-right   : 10px;
+                display        : inline-flex;
+                justify-content: center;
+                align-items    : center;
+                border-radius  : 4px;
+                color          : rgb(55, 53, 47);
+
+                &:hover {
+                    background-color: rgba(55, 53, 47, 0.08);
+                }
+            }
+        }
     }
 
     .sy-docs {
@@ -16,21 +41,169 @@
     }
 }
 
-.sy-workspaces {
-    .sy-workspace {
+.sy-wss {
+    outline: none;
+
+    .sy-ws {
         &-profile {
+            padding        : 10px 10px;
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
+            cursor         : pointer;
+
             &-face {
                 img {
-                    width : 25px;
-                    height: 25px;
+                    width        : 40px;
+                    height       : 40px;
+                    border-radius: 50%;
+                    margin-right : 10px;
                 }
             }
+
             &-info {
-                
+                color          : rgb(55, 53, 47);
+                font-weight    : 500;
+                font-size      : 14px;
+                display        : inline-flex;
+                justify-content: flex-start;
+                align-items    : center;
+                span {
+                    display: inline-flex;
+                }
+            }
+
+            &:hover {
+                background-color: rgba(55, 53, 47, 0.08);
             }
         }
+    }
+}
+
+.sy-ws-module {
+    position: relative;
+
+    &-head {
+        padding-left: 10px;
+        color       : rgba(55, 53, 47, 0.4);
+        font-size   : 12px;
+
+        span {
+            padding: 2px 4px;
+            display: inline-block;
+            cursor : pointer;
+
+            &:hover {
+                background-color: rgba(55, 53, 47, 0.08);
+            }
+        }
+    }
+
+    &-operators {
+        padding-right  : 10px;
+        position       : absolute;
+        top            : 0px;
+        right          : 0px;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        visibility     : hidden;
+
+        .sy-icon {
+            display        : inline-flex;
+            justify-content: center;
+            align-items    : center;
+            color          : rgba(25, 23, 17, 0.6);
+            width          : 20px;
+            height         : 20px;
+            border-radius  : 3px;
+
+            &:hover {
+                background-color: rgba(55, 53, 47, 0.08);
+            }
+        }
+    }
+
+    &:hover {
+        .sy-ws-module-operators {
+            visibility: visible;
+        }
+    }
+}
+
+.sy-ws-item {
+    &-page {
+        cursor     : pointer;
+        position   : relative;
+        display    : flex;
+        align-items: center;
+        min-height : 27px;
+
+
+        color    : rgba(25, 23, 17, 0.6);
+        font-size: 14px;
+
+        &-spread {
+            color          : inherit;
+            display        : inline-flex;
+            justify-content: center;
+            align-items    : center;
+            width          : 20px;
+            height         : 20px;
+            border-radius  : 3px;
+
+            &:hover {
+                background-color: rgba(55, 53, 47, 0.08);
+            }
+        }
+
+        span {
+            color: inherit;
+        }
+
+        &-operators {
+            padding-right  : 10px;
+            position       : absolute;
+            top            : 0px;
+            right          : 0px;
+            bottom         : 0px;
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            visibility     : hidden;
+
+            .sy-icon {
+                display        : inline-flex;
+                justify-content: center;
+                align-items    : center;
+                width          : 20px;
+                height         : 20px;
+                border-radius  : 3px;
+
+                &:hover {
+                    background-color: rgba(55, 53, 47, 0.08);
+                }
+            }
+        }
+
+        &.selected {
+            background: rgba(55, 53, 47, 0.08);
+            color     : rgb(55, 53, 47);
+        }
+
+        &:hover {
+            background: rgba(55, 53, 47, 0.08);
+
+            .sy-ws-item-page-operators {
+                visibility: visible;
+            }
+        }
+    }
+}
+
+.sy-ws-item-empty {
+    span {
+        color    : rgba(55, 53, 47, 0.4);
+        font-size: 12px;
     }
 }

@@ -12,27 +12,38 @@
         position   : relative;
     }
 
-    .sy-doc {
+    .sy-content {
         flex-grow: 1.0;
     }
 }
 
 .sy-slide {
+    position: relative;
+
     &-user {
         position       : absolute;
         bottom         : 0px;
         left           : 0px;
         right          : 0px;
-        height         : 30px;
         display        : flex;
         align-items    : center;
         justify-content: flex-start;
+        background     : #f7f6f3;
+        box-shadow     : rgba(55, 53, 47, .09) 0px -1px 0px;
+        height         : 40px;
+        z-index        : 100;
+        padding        : 0px 10px;
+
         &-profile {
-            img {
-                width        : 24px;
-                height       : 24px;
-                border-radius: 5px;
-            }
+            
+        }
+
+        img {
+            width        : 30px;
+            height       : 30px;
+            border-radius: 50%;
+            cursor       : pointer;
+            margin-right: 10px;
         }
     }
 }

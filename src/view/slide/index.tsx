@@ -1,12 +1,12 @@
 import React from "react";
-import { WorkSpaces } from "../../core/workspace/view";
+import { WorkSpacesView } from "../../core/workspace/surface";
 import { User } from "./user";
 
 export class Slide extends React.Component {
     constructor(props) { super(props) }
     render() {
         return <div className='sy-slide'>
-            <WorkSpaces></WorkSpaces>
+            <WorkSpacesView></WorkSpacesView>
             <User></User>
         </div>
     }

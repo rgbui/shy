@@ -1,23 +1,21 @@
 import React from "react";
-import { UserService } from "../service/user";
-import { Doc } from "./doc/doc";
+import { Content } from "./Content";
 import { Slide } from "./slide";
 import { surface } from "./surface";
 export class ViewSurface extends React.Component {
     constructor(props) {
         super(props);
+        surface.view = this;
     }
     async componentDidMount() {
-        surface.user = await UserService.tryLogin();
-        surface.pageData = await UserService.getPageData('router source get page id')
-        surface.workspace = await UserService.getWorkspace(surface.pageData.workspaceId);
-        this.forceUpdate();
+        surface.mounted();
     }
+    content: Content;
     render() {
         return <div className='sy-surface'>{
             surface.isLogin && <>
                 <Slide></Slide>
-                <Doc></Doc>
+                <Content ref={e => this.content = e}></Content>
             </>
         }{!surface.isLogin && <div className='sy-surface-loading'>正在加载中...</div>}
         </div>
