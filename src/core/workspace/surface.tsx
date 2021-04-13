@@ -35,7 +35,7 @@ export class WorkSpacesView extends React.Component {
     render() {
         var wss = [surface.workspace];
         return <div className='sy-wss' onKeyDown={e => this.keydown(e.nativeEvent)} tabIndex={1}>
-            <PageItemMenu></PageItemMenu>
+            <PageItemMenu ref={e => surface.pageItemMenuView = e}></PageItemMenu>
             {wss.map(ws => {
                 return <WorkspaceView workspacesView={this} workspace={ws} key={ws.id}></WorkspaceView>
             })}

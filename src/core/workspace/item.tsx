@@ -69,7 +69,7 @@ export class PageItem {
         else console.error('not found item view when add child')
     }
     onOpenProperty(event: MouseEvent) {
-
+        surface.pageItemMenuView.openItem(this, event);
     }
     onMousedown(event: MouseEvent) {
         eventBus.emit(EventName.selectPageItem, this, event);
@@ -90,6 +90,15 @@ export class WorkspaceItemView extends React.Component<{ item: PageItem, deep?: 
     }
     componentWillUnmount() {
 
+    }
+    componentDidUpdate() {
+        var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
+        if (input) {
+            setTimeout(() => {
+                input.focus();
+                input.select();
+            }, 100);
+        }
     }
     mousedown(event: MouseEvent) {
         var item = this.props.item;
@@ -116,16 +125,20 @@ export class WorkspaceItemView extends React.Component<{ item: PageItem, deep?: 
     inputBlur(event: Event) {
         surface.onCancelRenameItem()
     }
+    contextmenu(event: MouseEvent) {
+        event.preventDefault();
+        this.item.onOpenProperty(event);
+    }
     render() {
         var self = this;
         var item = this.props.item;
         var style: Record<string, any> = {};
         style.paddingLeft = 10 + (this.props.deep || 0) * 15;
         return <div className='sy-ws-item'>
-            <div className='sy-ws-item-page' style={style} onMouseDown={e => self.mousedown(e.nativeEvent)}>
+            <div className='sy-ws-item-page' style={style} onContextMenu={e => self.contextmenu(e.nativeEvent)} onMouseDown={e => self.mousedown(e.nativeEvent)}>
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
                 {surface.renameItem !== item && <span>{item.text}</span>}
-                {surface.renameItem === item && <div><input type='text' onBlur={e => this.inputBlur(e.nativeEvent)} value={item.text} onInput={e => self.inputName(e.nativeEvent)} /></div>}
+                {surface.renameItem === item && <div className='sy-ws-item-page-input'><input type='text' onBlur={e => this.inputBlur(e.nativeEvent)} value={item.text} onInput={e => self.inputName(e.nativeEvent)} /></div>}
                 <div className='sy-ws-item-page-operators'>
                     <Icon className='sy-ws-item-page-property' icon='elipsis:sy'></Icon>
                     <Icon className='sy-ws-item-page-add' icon='add:sy'></Icon>

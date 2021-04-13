@@ -8,7 +8,7 @@ import { history } from "./history";
 import "./assert/theme.less";
 import "./view/style.less";
 import "./core/style.less";
-import "./assert/font-sy/iconfont.css";
+// import "./assert/font-sy/iconfont.css";
 import "./component/style.less";
 // render react DOM
 ReactDOM.render(

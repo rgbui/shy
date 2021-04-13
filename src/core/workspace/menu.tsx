@@ -40,6 +40,12 @@ export class PageItemMenu extends React.Component {
     }
     getMenuItems() {
         var items: PageItemMenuType[] = [];
+        items.push({
+            name: 'delete', icon: 'ashbin:sy', text: '删除'
+        });
+        items.push({
+            name: 'rename', icon: 'bianji:sy', text: '重命名'
+        });
         return items;
     }
     private currentItem: PageItem;
@@ -47,19 +53,19 @@ export class PageItemMenu extends React.Component {
     visible: boolean = false;
     point: Point = new Point(0, 0);
     renderItem(item: PageItemMenuType) {
-        return <div key={item.name}>
-            {item.type == 'devide' && <a></a>}
-            {(item.type == 'item' || !item.type) && <a className={`${item.disabled == true ? "disabled" : ""}`} onMouseDown={e => this.mousedownItem(item, e.nativeEvent)}>
+        return <div key={item.name} className='sy-ws-menu-item'>
+            {item.type == 'devide' && <a className='sy-ws-menu-item-devide'></a>}
+            {(item.type == 'item' || !item.type) && <a className={`sy-ws-menu-item-option ${item.disabled == true ? "disabled" : ""}`} onMouseDown={e => this.mousedownItem(item, e.nativeEvent)}>
                 <Icon icon={item.icon}></Icon>
                 <span>{item.text}</span>
                 <label>{item.label}</label>
             </a>}
-            {item.type == 'text' && <a></a>}
+            {item.type == 'text' && <a className='sy-ws-menu-item-text'></a>}
         </div>
     }
     private mousedownCover(event: MouseEvent) {
         var target = event.target as HTMLElement;
-        if (target && target.classList.contains('sy-menu-cove')) {
+        if (target && target.classList.contains('sy-ws-menu-cove')) {
             this.visible = false;
             this.forceUpdate();
         }
@@ -81,9 +87,11 @@ export class PageItemMenu extends React.Component {
         style.top = this.point.y;
         style.left = this.point.x;
         return createPortal(
-            <div>
-                {this.visible && <div className='sy-menu-cove' onMouseDown={e => this.mousedownCover(e.nativeEvent)} >
-                    <div className='sy-menu-box' style={style}>{this.items.map(item => this.renderItem(item))}</div>
+            <div className='sy-ws-menu'>
+                {this.visible && <div className='sy-ws-menu-cove' onMouseDown={e => this.mousedownCover(e.nativeEvent)} >
+                    <div className='sy-ws-menu-box' style={style}>
+                        <div className='sy-ws-menu-box-content'>{this.items.map(item => this.renderItem(item))}</div>
+                    </div>
                 </div>}
             </div>
             , this.node);
