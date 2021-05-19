@@ -6,6 +6,7 @@ import { PageItemMenu } from "../core/workspace/menu";
 import { Workspace } from "../core/workspace/workspace";
 
 import { User } from "../model/user";
+import { DataStore } from "../service/store";
 import { UserService } from "../service/user";
 
 
@@ -32,7 +33,7 @@ export class Surface {
          * 根据当前的路由，可以获取当前访问的网页文档Id,或者获取当前用户的workspace域名和id等
          */
         var url = location.href;
-        this.workspace = await UserService.getWorkspace(url);
+        this.workspace = await DataStore.getWorkspace(url);
         var se = this.workspace.find(g => g.url == url);
         if (!se) {
             se = this.workspace.find(g => true);
