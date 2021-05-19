@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 /**
  * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
  */
@@ -75,7 +76,7 @@ module.exports = {
             loader: 'url-loader?limit=8192&name=assert/img/[hash:8].[name].[ext]'
         },
         {
-            test: /assert\/svg\/[\w]+\.svg$/,
+            test: /assert\/svg\/[\w\.]+\.svg$/,
             use: ['@svgr/webpack'],
         },
         {
@@ -101,6 +102,9 @@ module.exports = {
             },
             canPrint: true
         }),
-        new MiniCssExtractPlugin({ filename: "sy.css" })
+        new MiniCssExtractPlugin({ filename: "sy.css" }),
+        new CopyWebpackPlugin([
+            { from: "../../rich/src/plug/emoji/emoji.json", to: "data/emoji.json" }
+        ]),
     ]
 };

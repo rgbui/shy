@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 /**
@@ -88,7 +89,7 @@ module.exports = {
             loader: 'url-loader?limit=8192&name=assert/img/[hash:8].[name].[ext]'
         },
         {
-            test: /assert\/svg\/[\w]+\.svg$/,
+            test: /assert\/svg\/[\w\.]+\.svg$/,
             use: ['@svgr/webpack'],
         },
         {
@@ -123,6 +124,13 @@ module.exports = {
                 preset: ['default', { discardComments: { removeAll: true } }]
             },
             canPrint: true
-        })
+        }),
+        new CopyWebpackPlugin(
+            {
+                patterns: [
+                    { from: path.join(__dirname, "../../rich/src/plug/emoji/emoji.json"), to: "data/emoji.json" }
+                ]
+            }
+        )
     ]
 };
