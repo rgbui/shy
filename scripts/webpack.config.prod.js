@@ -12,7 +12,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 var outputDir = path.join(__dirname, "../dist");
 module.exports = {
     mode: 'production',
-    entry: "./src/main.tsx",
+    entry: "./src/surface/main.tsx",
     output: {
         path: outputDir,
         filename: "sy.js"
