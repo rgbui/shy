@@ -1,6 +1,6 @@
 import { Workspace } from "../core/workspace/workspace";
 import { data, defaultPageData } from "./data";
-
+const DATASTORE_PAGE_KEY = 'sy.page.';
 
 export class DataStore {
     private static cachePageDatas: Map<string, Record<string, any>> = new Map();
@@ -10,6 +10,8 @@ export class DataStore {
             return cp;
         }
         else {
+            var data = localStorage.getItem(DATASTORE_PAGE_KEY + pageId);
+            if (typeof data == 'string') return JSON.parse(data);
             /**
              * search page data 
              */
@@ -21,6 +23,7 @@ export class DataStore {
     }
     static async savePageData(pageId: string, data: Record<string, any>) {
         this.cachePageDatas.set(pageId, data);
+        localStorage.setItem(DATASTORE_PAGE_KEY + pageId, JSON.stringify(data));
     }
     static async getDefaultPageData() {
         return defaultPageData;
@@ -34,7 +37,9 @@ export class DataStore {
             title: '我的空间',
             modules: [
                 {
-                    name: 'pages', text: '我的页面', items: [
+                    name: 'pages',
+                    text: '我的页面',
+                    items: [
                         { id: pageId, text: '测试页面', mime: 1 },
                         { id: 'kankanTes', text: '测试页面', mime: 1 },
                         { id: 'kankanTe', text: '测试页面', mime: 1 }
