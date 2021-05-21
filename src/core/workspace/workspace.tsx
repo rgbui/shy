@@ -21,7 +21,6 @@ export class Workspace {
             if (n == 'modules') {
                 this.modules = [];
                 data.modules.each(module => {
-
                     var mo = new WorkspaceModule();
                     mo.workspace = this;
                     mo.load(module);
@@ -32,7 +31,6 @@ export class Workspace {
                 this[n] = data[n];
             }
         }
-        console.log(this);
     }
     get pagesModule() {
         return this.modules.find(g => g.name == 'pages');
