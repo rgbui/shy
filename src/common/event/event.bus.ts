@@ -1,7 +1,7 @@
 
 import { EventName } from "./event.name";
-import { PageItem } from "../workspace/item";
-import { PageItemMenuType } from "../workspace/menu";
+import { PageItem } from "../../solution/item/item";
+import { PageItemMenuType } from "../../solution/extensions/menu";
 
 export class EventBus {
     private _events: { name: EventName, fn: (...args: any[]) => any }[] = [];

@@ -1,13 +1,15 @@
-import { ViewSurface } from ".";
-import { eventBus } from "../core/event/event.bus";
-import { EventName } from "../core/event/event.name";
-import { PageItem } from "../core/workspace/item";
-import { PageItemMenu } from "../core/workspace/menu";
-import { Workspace } from "../core/workspace/workspace";
 
-import { User } from "../model/user";
-import { DataStore } from "../service/store";
+import { eventBus } from "../common/event/event.bus";
+import { EventName } from "../common/event/event.name";
+import { PageItem } from "../solution/item/item";
+import { PageItemMenu } from "../solution/extensions/menu";
+import { Workspace } from "../solution/workspace/workspace";
+
+import { User } from "../user/user";
+
 import { UserService } from "../service/user";
+import { ViewSurface } from "./view";
+import { WorkspaceStore } from "../service/store/workspace";
 
 
 export class Surface {
@@ -33,7 +35,7 @@ export class Surface {
          * 根据当前的路由，可以获取当前访问的网页文档Id,或者获取当前用户的workspace域名和id等
          */
         var url = location.href;
-        this.workspace = await DataStore.getWorkspace(url);
+        this.workspace = await WorkspaceStore.getWorkspace(url);
         var se = this.workspace.find(g => g.url == url);
         if (!se) {
             se = this.workspace.find(g => true);

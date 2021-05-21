@@ -1,8 +1,9 @@
 import React from "react";
 import { Icon } from "rich/src/component/icon";
 import { util } from "rich/src/util/util";
-import { PageItem, WorkspaceItemBox } from "./item";
-import { Workspace } from "./workspace";
+import { PageItem, WorkspaceItemBox } from "../item/item";
+import { Mime } from "../item/item.mine";
+import { Workspace } from "../workspace/workspace";
 
 export class WorkspaceModule {
     name: string;
@@ -26,6 +27,16 @@ export class WorkspaceModule {
             }
         }
     }
+    get() {
+        return {
+            name: this.name,
+            text: this.text,
+            items: this.items.map(item => {
+                return item.get()
+            }),
+            spread: this.spread
+        }
+    }
     view?: WorkspaceModuleView;
     onAddItem() {
         var item = new PageItem();
@@ -33,6 +44,7 @@ export class WorkspaceModule {
         item.text = '新页面';
         item.module = this;
         item.spread = false;
+        item.mime = Mime.page;
         this.spread = true;
         this.items.insertAt(0, item);
         this.view.forceUpdate();

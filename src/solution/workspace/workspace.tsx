@@ -1,9 +1,9 @@
 import React from "react";
 import { Icon } from "rich/src/component/icon";
-import { PageItem } from "./item";
+import { PageItem } from "../item/item";
 
-import { WorkspaceModule, WorkspaceModuleView } from "./module";
-import { WorkSpacesView } from "./surface";
+import { WorkspaceModule, WorkspaceModuleView } from "../module/module";
+import { WorkSpacesView } from "..";
 
 
 export class Workspace {
@@ -47,6 +47,16 @@ export class Workspace {
             item.module.items.arrayJsonRemove('childs', g => g == item);
             item.module.view.forceUpdate();
         }
+    }
+    async get() {
+        var json: Record<string, any> = {
+            id: this.id,
+            title: this.title,
+            profile_photo: this.profile_photo,
+            modules: this.modules.map(g => g.get()),
+            domain: this.domain
+        };
+        return json;
     }
 }
 

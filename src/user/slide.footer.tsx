@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { surface } from '../surface';
-export function User(props) {
+export function SlideUserFooter(props) {
     return <div className='sy-slide-user'>
         <img src={surface.user.profile_photo} />
         <div className='sy-slide-user-profile'>

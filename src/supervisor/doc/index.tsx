@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { PageItem } from '../workspace/item';
+import { PageItem } from '../../solution/item/item';
 import { DocBar } from './bar';
 import { DocView } from './content';
 

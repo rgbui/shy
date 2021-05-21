@@ -4,14 +4,14 @@ import ReactDOM from 'react-dom';
 import { createPortal } from 'react-dom';
 import { Point } from 'rich/src/common/point';
 import { Icon } from 'rich/src/component/icon';
-import { surface } from '../../view/surface';
-import { eventBus } from '../event/event.bus';
-import { EventName } from '../event/event.name';
-
-import { PageItem } from './item';
+import { surface } from '../../surface';
+import { eventBus } from '../../common/event/event.bus';
+import { EventName } from '../../common/event/event.name';
+import trash from "rich/src/assert/svg/trash.svg";
+import { PageItem } from '../item/item';
 export type PageItemMenuType = {
     name: string,
-    icon: string,
+    icon: string|SvgrComponent,
     text: string,
     label?: string,
     disabled?: boolean,
@@ -41,7 +41,7 @@ export class PageItemMenu extends React.Component {
     getMenuItems() {
         var items: PageItemMenuType[] = [];
         items.push({
-            name: 'delete', icon: 'ashbin:sy', text: '删除'
+            name: 'delete', icon: trash, text: '删除'
         });
         items.push({
             name: 'rename', icon: 'bianji:sy', text: '重命名'

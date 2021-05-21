@@ -1,9 +1,10 @@
 import React from "react";
-import { DocPage } from "../../core/doc";
-import { PageItem } from "../../core/workspace/item";
-import { Mime } from "../../core/workspace/item.mine";
 import { surface } from "../surface";
-export class Content extends React.Component {
+import { PageItem } from "../solution/item/item";
+import { Mime } from "../solution/item/item.mine";
+import { DocPage } from "./doc";
+
+export class Supervisor extends React.Component {
     constructor(props) { super(props) }
     get items() {
         return surface.openItems;

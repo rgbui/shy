@@ -1,7 +1,8 @@
 import React from "react";
-import { Content } from "./Content";
-import { Slide } from "./slide";
-import { surface } from "./surface";
+import { WorkSpacesView } from "../solution";
+import { surface } from ".";
+import { SlideUserFooter } from "../user/slide.footer";
+import { Supervisor } from "../supervisor";
 export class ViewSurface extends React.Component {
     constructor(props) {
         super(props);
@@ -10,12 +11,14 @@ export class ViewSurface extends React.Component {
     async componentDidMount() {
         surface.mounted();
     }
-    content: Content;
     render() {
         return <div className='sy-surface'>{
             surface.isLogin && <>
-                <Slide></Slide>
-                <Content ref={e => this.content = e}></Content>
+                <div className='sy-slide'>
+                    <WorkSpacesView></WorkSpacesView>
+                    <SlideUserFooter></SlideUserFooter>
+                </div>
+                <Supervisor></Supervisor>
             </>
         }{!surface.isLogin && <div className='sy-surface-loading'>正在加载中...</div>}
         </div>

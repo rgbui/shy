@@ -1,15 +1,14 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { ViewSurface } from './view';
+
 import { Router, Route } from 'react-router';
 
 import "rich/src/util/array";
 import { history } from "./history";
-import "./assert/theme.less";
-import "./view/style.less";
-import "./core/style.less";
-// import "./assert/font-sy/iconfont.css";
-import "./component/style.less";
+import "../assert/theme.less";
+import "../surface/style.less";
+import "../supervisor/style.less";
+import { ViewSurface } from './view';
 // render react DOM
 ReactDOM.render(
   <Router history={history}>

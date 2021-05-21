@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Icon } from "rich/src/component/icon";
 import { util } from "rich/src/util/util";
-import { surface } from "../../view/surface";
-import { eventBus } from "../event/event.bus";
-import { EventName } from "../event/event.name";
+import { surface } from "../../surface";
+import { eventBus } from "../../common/event/event.bus";
+import { EventName } from "../../common/event/event.name";
 import { Mime } from "./item.mine";
-import { WorkspaceModule } from "./module";
+import { WorkspaceModule } from "../module/module";
 
 export class PageItem {
     id: string;
@@ -46,6 +46,16 @@ export class PageItem {
             else {
                 this[n] = data[n];
             }
+        }
+    }
+    get() {
+        return {
+            id: this.id,
+            childs: Array.isArray(this.childs) ? this.childs.map(c => c.get()) : undefined,
+            text: this.text,
+            spread: this.spread,
+            mime: this.mime,
+            uri: this.uri
         }
     }
     onSpread(spread?: boolean) {

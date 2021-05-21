@@ -1,7 +1,7 @@
 import React from "react";
-import { surface } from "../../view/surface";
-import { PageItemMenu } from "./menu";
-import { WorkspaceView } from "./workspace";
+import { surface } from "../surface";
+import { PageItemMenu } from "./extensions/menu";
+import { WorkspaceView } from "./workspace/workspace";
 
 export class WorkSpacesView extends React.Component {
     constructor(props) {
@@ -18,10 +18,10 @@ export class WorkSpacesView extends React.Component {
         document.removeEventListener('keyup', this._keyup);
     }
     keydown(event: KeyboardEvent) {
-
+        this.keys.push(event.key);
     }
     keyup(event: KeyboardEvent) {
-
+        this.keys.remove(event.key);
     }
     mousemove(event: MouseEvent) {
 
@@ -32,6 +32,7 @@ export class WorkSpacesView extends React.Component {
     private _mousemove: (event: MouseEvent) => void;
     private _mouseup: (event: MouseEvent) => void;
     private _keyup: (event: KeyboardEvent) => void;
+    private keys: string[] = [];
     render() {
         var wss = [surface.workspace];
         return <div className='sy-wss' onKeyDown={e => this.keydown(e.nativeEvent)} tabIndex={1}>

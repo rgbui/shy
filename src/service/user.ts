@@ -1,9 +1,9 @@
-import { PageItem } from "../core/workspace/item";
-import { Workspace } from "../core/workspace/workspace";
+import { PageItem } from "../solution/item/item";
+import { Workspace } from "../solution/workspace/workspace";
 
-import { User, UserStatus } from "../model/user";
+import { User, UserStatus } from "../user/user";
 
-import { data, defaultPageData } from "./data";
+import { data, defaultPageData } from "./store/data";
 
 export class UserService {
     static async tryLogin() {
