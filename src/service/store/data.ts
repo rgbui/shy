@@ -296,8 +296,8 @@ export var workspaceDefaultData = {
     title: '我的空间',
     modules: [
         {
-            name: 'pages',
             text: '我的页面',
+            type: 'pages',
             items: [
                 { id: 'kankankan', text: '测试页面', mime: 1 },
                 { id: 'kankanTes', text: '测试页面', mime: 1 },

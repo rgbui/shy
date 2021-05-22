@@ -1,7 +1,7 @@
 import React from "react";
 import { SY } from "rich";
 import ReactDOM from "react-dom";
-import { PageItem } from "../../solution/item/item";
+import { PageItem } from "../../solution/item";
 import { surface } from "../../surface";
 
 import { Page } from "rich/src/page";

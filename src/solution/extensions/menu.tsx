@@ -8,10 +8,10 @@ import { surface } from '../../surface';
 import { eventBus } from '../../common/event/event.bus';
 import { EventName } from '../../common/event/event.name';
 import trash from "rich/src/assert/svg/trash.svg";
-import { PageItem } from '../item/item';
+import { PageItem } from '../item';
 export type PageItemMenuType = {
     name: string,
-    icon: string|SvgrComponent,
+    icon: string | SvgrComponent,
     text: string,
     label?: string,
     disabled?: boolean,
@@ -22,7 +22,6 @@ export class PageItemMenu extends React.Component {
     private node: HTMLElement;
     constructor(props) {
         super(props);
-        surface.pageItemMenuView = this;
         //  记录参数 利用window.document
         const doc = window.document
         // 定义this.node 创建一个div节点

@@ -1,11 +1,15 @@
 import React from "react";
+import { Solution } from ".";
 import { surface } from "../surface";
 import { PageItemMenu } from "./extensions/menu";
-import { WorkspaceView } from "./workspace/workspace";
+import { WorkspaceView } from "./workspace/view";
 
-export class WorkSpacesView extends React.Component {
+export class SolutionView extends React.Component {
+    private solution: Solution;
     constructor(props) {
         super(props);
+        surface.solution.view = this;
+        this.solution = surface.solution;
     }
     componentDidMount() {
         document.addEventListener('keyup', this._keyup = this.keydown.bind(this));
@@ -18,10 +22,10 @@ export class WorkSpacesView extends React.Component {
         document.removeEventListener('keyup', this._keyup);
     }
     keydown(event: KeyboardEvent) {
-        this.keys.push(event.key);
+        this.solution._keys.push(event.key);
     }
     keyup(event: KeyboardEvent) {
-        this.keys.remove(event.key);
+        this.solution._keys.remove(event.key);
     }
     mousemove(event: MouseEvent) {
 
@@ -32,14 +36,10 @@ export class WorkSpacesView extends React.Component {
     private _mousemove: (event: MouseEvent) => void;
     private _mouseup: (event: MouseEvent) => void;
     private _keyup: (event: KeyboardEvent) => void;
-    private keys: string[] = [];
     render() {
-        var wss = [surface.workspace];
         return <div className='sy-wss' onKeyDown={e => this.keydown(e.nativeEvent)} tabIndex={1}>
-            <PageItemMenu ref={e => surface.pageItemMenuView = e}></PageItemMenu>
-            {wss.map(ws => {
-                return <WorkspaceView workspacesView={this} workspace={ws} key={ws.id}></WorkspaceView>
-            })}
+            <PageItemMenu ref={e => this.solution.menu = e}></PageItemMenu>
+            {this.solution.workspace && <WorkspaceView workspace={this.solution.workspace} ></WorkspaceView>}
         </div>
     }
 }

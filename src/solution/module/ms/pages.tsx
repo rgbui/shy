@@ -1,12 +1,15 @@
 import React from "react";
 import { Icon } from "rich/src/component/icon";
 import { util } from "rich/src/util/util";
-import { PageItem, WorkspaceItemBox } from "../item/item";
-import { Mime } from "../item/item.mine";
-import { Workspace } from "../workspace/workspace";
+import { PageItem } from "../../item";
+import { PageItemBox } from "../../item/box";
+import { Mime } from "../../item/mine";
+import { Workspace } from "../../workspace";
+import { WorkspaceModule } from "../base";
+import { WorkspaceModuleType } from "../enum";
 
-export class WorkspaceModule {
-    name: string;
+export class PagesViewModule extends WorkspaceModule {
+    type: WorkspaceModuleType;
     text: string;
     items: PageItem[];
     spread?: boolean;
@@ -29,7 +32,7 @@ export class WorkspaceModule {
     }
     get() {
         return {
-            name: this.name,
+            name: this.type,
             text: this.text,
             items: this.items.map(item => {
                 return item.get()
@@ -37,7 +40,7 @@ export class WorkspaceModule {
             spread: this.spread
         }
     }
-    view?: WorkspaceModuleView;
+    view: PagesViewModuleView;
     onAddItem() {
         var item = new PageItem();
         item.id = util.guid();
@@ -55,22 +58,23 @@ export class WorkspaceModule {
         this.view.forceUpdate();
     }
 }
-
-export class WorkspaceModuleView extends React.Component<{ module: WorkspaceModule }> {
+export class PagesViewModuleView extends React.Component<{ module: PagesViewModule }> {
     constructor(props) {
         super(props);
         this.props.module.view = this;
     }
+    get module() {
+        return this.props.module;
+    }
     render() {
-        var module = this.props.module;
-        return <div className='sy-ws-module' key={module.name}>
+        return <div className='sy-ws-module' key={this.module.id}>
             <div className='sy-ws-module-head'>
-                <span onMouseDown={e => module.onSpread()}>{module.text || "我的页面"}</span>
+                <span onMouseDown={e => this.module.onSpread()}>{this.module.text || "我的页面"}</span>
             </div>
             <div className='sy-ws-module-operators'>
-                <Icon icon='add:sy' mousedown={e => module.onAddItem()}></Icon>
+                <Icon icon='add:sy' mousedown={e => this.module.onAddItem()}></Icon>
             </div>
-            <WorkspaceItemBox items={module.items}></WorkspaceItemBox>
+            <PageItemBox items={this.module.items}></PageItemBox>
         </div>
     }
 }
