@@ -53,8 +53,8 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
             this.item.text = input.value;
         }
     }
-    inputBlur(event: Event) {
-        //surface.onCancelRenameItem()
+    inputBlur() {
+        this.solution.onEditItem(null);
     }
     contextmenu(event: MouseEvent) {
         event.preventDefault();
@@ -70,7 +70,7 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
                 {this.solution.editItem !== item && <span>{item.text}</span>}
                 {this.solution.editItem === item && <div className='sy-ws-item-page-input'><input type='text'
-                    onBlur={e => this.inputBlur(e.nativeEvent)}
+                    onBlur={e => this.inputBlur()}
                     value={item.text}
                     onInput={e => self.inputName(e.nativeEvent)} /></div>}
                 <div className='sy-ws-item-page-operators'>

@@ -80,6 +80,7 @@ export class PageItem {
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
         this.childs.insertAt(0, item);
+
         if (this.view) this.view.forceUpdate();
         else console.error('not found item view when add child')
     }
@@ -95,6 +96,17 @@ export class PageItem {
             name: PageItemOperator.rename, icon: rename, text: '重命名'
         });
         return items;
+    }
+    onMenuClickItem(menuItem: PageItemMenuType, event: MouseEvent) {
+        switch (menuItem.name) {
+            case PageItemOperator.copy:
+                break;
+            case PageItemOperator.remove:
+                break;
+            case PageItemOperator.rename:
+                this.solution.onEditItem(this);
+                break;
+        }
     }
 }
 

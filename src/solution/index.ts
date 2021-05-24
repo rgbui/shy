@@ -50,11 +50,21 @@ export class Solution extends Events<SolutionOperator> {
             this.emit(SolutionOperator.openItem, item);
         }
     }
-    bindMenu(menu: PageItemMenu) {
-        this.menu = menu;
-        this.menu.on('selectPageItemMenu', (menuItem, item, event) => {
+    onEditItem(item: PageItem) {
+        var lastEditItem: PageItem;
+        if (this.editItem && this.editItem != item) {
+            lastEditItem = this.editItem;
+        }
+        if (item) {
+            this.editItem = item;
+            this.editItem.view.forceUpdate(() => {
 
-        })
+            })
+        }
+        else this.editItem = null;
+        if (lastEditItem) {
+            lastEditItem.view.forceUpdate();
+        }
     }
 }
 

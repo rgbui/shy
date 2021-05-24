@@ -15,7 +15,7 @@ export type PageItemMenuType = {
     childs?: PageItemMenuType[],
     type?: 'devide' | 'item' | 'text'
 }
-export class PageItemMenu extends SyPlugComponent {
+export class PageItemMenu extends SyPlugComponent<{}, string> {
     private node: HTMLElement;
     constructor(props) {
         super(props);
@@ -59,7 +59,7 @@ export class PageItemMenu extends SyPlugComponent {
     }
     private mousedownItem(item: PageItemMenuType, event: MouseEvent) {
         try {
-            this.emit('selectPageItemMenu', item, this.currentItem, event);
+            this.currentItem.onMenuClickItem(item, event);
         }
         catch (ex) {
 
