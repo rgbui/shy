@@ -15,10 +15,12 @@ export class WorkspaceStore {
         ws.load(data);
         return ws;
     }
+
     /***
      * 保存workspace，该功能后面废弃掉
      */
     static async saveWorkspace(workspace: Workspace) {
         localStorage.setItem(WORKSPACE_CACHE_KEY + workspace.id, JSON.stringify(await workspace.get()));
     }
+    
 }

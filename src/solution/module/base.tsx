@@ -13,7 +13,7 @@ export class WorkspaceModule {
     type: WorkspaceModuleType;
     text: string;
     items: PageItem[];
-    spread?: boolean;
+    spread: boolean;
     workspace: Workspace;
     load(data) {
         for (var n in data) {
@@ -25,6 +25,14 @@ export class WorkspaceModule {
                     item.load(child);
                     this.items.push(item);
                 });
+            }
+            else if (n == 'type') {
+                if (typeof data[n] == 'string') {
+                    this.type = WorkspaceModuleType[data[n]] as any;
+                }
+                else {
+                    this[n] = data[n];
+                }
             }
             else {
                 this[n] = data[n];

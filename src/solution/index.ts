@@ -2,19 +2,21 @@ import { Events } from "rich/src/util/events";
 import { WorkspaceStore } from "../service/store/workspace";
 import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
+import { Mime } from "./item/mine";
+import { SolutionOperator } from "./operator";
 import { SolutionView } from "./view";
 import { Workspace } from "./workspace";
 
-export class Solution extends Events {
+export class Solution extends Events<SolutionOperator> {
+    constructor() {
+        super();
+        this.init()
+    }
     /**
      * 右键菜单
      */
     menu: PageItemMenu;
     workspace: Workspace;
-    /**
-     * 当前打开的
-     */
-    openItems: PageItem[] = [];
     /**
      * 当前选择的
      */
@@ -25,8 +27,38 @@ export class Solution extends Events {
     editItem: PageItem;
     _keys: string[] = [];
     view: SolutionView;
+    private init() {
+
+    }
     async loadWorkspace() {
         var url = location.href;
         this.workspace = await WorkspaceStore.getWorkspace(url);
+        var item = this.workspace.find(g => g.mime == Mime.page);
+        this.selectItems = item ? [item] : [];
+        if (item)
+            this.emit(SolutionOperator.openItem, item);
     }
+    onOpenItemMenu(item: PageItem, event: MouseEvent) {
+        this.menu.openItem(item, event);
+    }
+    onMousedownItem(item: PageItem, event: MouseEvent) {
+        if (!this.selectItems.exists(g => g === item)) {
+            var lastItems = this.selectItems.map(o => o);
+            this.selectItems = [item];
+            lastItems.each(item => item.view.forceUpdate())
+            item.view.forceUpdate();
+            this.emit(SolutionOperator.openItem, item);
+        }
+    }
+    bindMenu(menu: PageItemMenu) {
+        this.menu = menu;
+        this.menu.on('selectPageItemMenu', (menuItem, item, event) => {
+
+        })
+    }
+}
+
+export interface Solution {
+    on(name: SolutionOperator.openItem, fn: (item: PageItem) => void);
+    emit(name: SolutionOperator.openItem, item: PageItem);
 }

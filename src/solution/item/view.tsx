@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Icon } from "rich/src/component/icon";
 import { PageItem } from ".";
-import { surface } from "../../surface";
 import { PageItemBox } from "./box";
 
 export class PageItemView extends React.Component<{ item: PageItem, deep?: number }> {
@@ -12,6 +11,9 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     }
     get item() {
         return this.props.item;
+    }
+    get solution() {
+        return this.item.solution;
     }
     el: HTMLElement;
     componentDidMount() {
@@ -39,10 +41,10 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
             item.onAdd();
         }
         else if (target.classList.contains('sy-ws-item-page-property')) {
-            item.onOpenProperty(event);
+            this.item.solution.onOpenItemMenu(this.item, event);
         }
         else {
-            item.onMousedown(event);
+            this.item.solution.onMousedownItem(this.item, event);
         }
     }
     inputName(event: Event) {
@@ -56,7 +58,7 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     }
     contextmenu(event: MouseEvent) {
         event.preventDefault();
-        this.item.onOpenProperty(event);
+        this.item.solution.onOpenItemMenu(this.item, event);
     }
     render() {
         var self = this;
@@ -64,10 +66,10 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
         var style: Record<string, any> = {};
         style.paddingLeft = 10 + (this.props.deep || 0) * 15;
         return <div className='sy-ws-item'>
-            <div className='sy-ws-item-page' style={style} onContextMenu={e => self.contextmenu(e.nativeEvent)} onMouseDown={e => self.mousedown(e.nativeEvent)}>
+            <div className={'sy-ws-item-page' + (this.solution.selectItems.exists(g => g == item) ? " sy-ws-item-page-selected" : "")} style={style} onContextMenu={e => self.contextmenu(e.nativeEvent)} onMouseDown={e => self.mousedown(e.nativeEvent)}>
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-                {surface.solution.editItem !== item && <span>{item.text}</span>}
-                {surface.solution.editItem === item && <div className='sy-ws-item-page-input'><input type='text'
+                {this.solution.editItem !== item && <span>{item.text}</span>}
+                {this.solution.editItem === item && <div className='sy-ws-item-page-input'><input type='text'
                     onBlur={e => this.inputBlur(e.nativeEvent)}
                     value={item.text}
                     onInput={e => self.inputName(e.nativeEvent)} /></div>}

@@ -7,39 +7,12 @@ import { Mime } from "../../item/mine";
 import { Workspace } from "../../workspace";
 import { WorkspaceModule } from "../base";
 import { WorkspaceModuleType } from "../enum";
-
 export class PagesViewModule extends WorkspaceModule {
     type: WorkspaceModuleType;
     text: string;
     items: PageItem[];
-    spread?: boolean;
+    spread: boolean = true;
     workspace: Workspace;
-    load(data) {
-        for (var n in data) {
-            if (n == 'items') {
-                this.items = [];
-                data.items.each(child => {
-                    var item = new PageItem();
-                    item.module = this;
-                    item.load(child);
-                    this.items.push(item);
-                });
-            }
-            else {
-                this[n] = data[n];
-            }
-        }
-    }
-    get() {
-        return {
-            name: this.type,
-            text: this.text,
-            items: this.items.map(item => {
-                return item.get()
-            }),
-            spread: this.spread
-        }
-    }
     view: PagesViewModuleView;
     onAddItem() {
         var item = new PageItem();
@@ -50,11 +23,6 @@ export class PagesViewModule extends WorkspaceModule {
         item.mime = Mime.page;
         this.spread = true;
         this.items.insertAt(0, item);
-        this.view.forceUpdate();
-    }
-    onSpread(spread?: boolean) {
-        var sp = typeof spread != 'undefined' ? spread : this.spread;
-        this.spread = sp == false ? true : false;
         this.view.forceUpdate();
     }
 }
@@ -74,7 +42,7 @@ export class PagesViewModuleView extends React.Component<{ module: PagesViewModu
             <div className='sy-ws-module-operators'>
                 <Icon icon='add:sy' mousedown={e => this.module.onAddItem()}></Icon>
             </div>
-            <PageItemBox items={this.module.items}></PageItemBox>
+            {this.module.spread == true && <PageItemBox items={this.module.items}></PageItemBox>}
         </div>
     }
 }

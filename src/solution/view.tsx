@@ -38,7 +38,7 @@ export class SolutionView extends React.Component {
     private _keyup: (event: KeyboardEvent) => void;
     render() {
         return <div className='sy-wss' onKeyDown={e => this.keydown(e.nativeEvent)} tabIndex={1}>
-            <PageItemMenu ref={e => this.solution.menu = e}></PageItemMenu>
+            <PageItemMenu ref={e => this.solution.bindMenu(e)}></PageItemMenu>
             {this.solution.workspace && <WorkspaceView workspace={this.solution.workspace} ></WorkspaceView>}
         </div>
     }

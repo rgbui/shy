@@ -1,16 +1,13 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { createPortal } from 'react-dom';
 import { Point } from 'rich/src/common/point';
 import { Icon } from 'rich/src/component/icon';
-import { surface } from '../../surface';
-import { eventBus } from '../../common/event/event.bus';
-import { EventName } from '../../common/event/event.name';
-import trash from "rich/src/assert/svg/trash.svg";
+import { SyPlugComponent } from "rich/src/plug/sy.plug.component"
 import { PageItem } from '../item';
+import { PageItemOperator } from '../item/operator.declare';
 export type PageItemMenuType = {
-    name: string,
+    name: PageItemOperator,
     icon: string | SvgrComponent,
     text: string,
     label?: string,
@@ -18,7 +15,7 @@ export type PageItemMenuType = {
     childs?: PageItemMenuType[],
     type?: 'devide' | 'item' | 'text'
 }
-export class PageItemMenu extends React.Component {
+export class PageItemMenu extends SyPlugComponent {
     private node: HTMLElement;
     constructor(props) {
         super(props);
@@ -33,20 +30,11 @@ export class PageItemMenu extends React.Component {
         this.currentItem = item;
         this.point = Point.from(event);
         this.visible = true;
-        var items = this.getMenuItems();
+        var items = this.currentItem.getPageItemMenus();
         this.items = items;
         this.forceUpdate();
     }
-    getMenuItems() {
-        var items: PageItemMenuType[] = [];
-        items.push({
-            name: 'delete', icon: trash, text: '删除'
-        });
-        items.push({
-            name: 'rename', icon: 'bianji:sy', text: '重命名'
-        });
-        return items;
-    }
+
     private currentItem: PageItem;
     items: PageItemMenuType[] = [];
     visible: boolean = false;
@@ -71,7 +59,7 @@ export class PageItemMenu extends React.Component {
     }
     private mousedownItem(item: PageItemMenuType, event: MouseEvent) {
         try {
-            eventBus.emit(EventName.selectPageItemMenu, this.currentItem, item, event);
+            this.emit('selectPageItemMenu', item, this.currentItem, event);
         }
         catch (ex) {
 

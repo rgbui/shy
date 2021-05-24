@@ -8,6 +8,7 @@ import { history } from "./history";
 import "../assert/theme.less";
 import "../surface/style.less";
 import "../supervisor/style.less";
+import "../solution/style.less";
 import { ViewSurface } from './view';
 // render react DOM
 ReactDOM.render(

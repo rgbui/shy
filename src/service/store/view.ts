@@ -1,4 +1,4 @@
-import { defaultPageData } from "./data";
+import { data, defaultPageData } from "./data";
 
 /***
  * 视图页面数据存储
@@ -12,8 +12,9 @@ export class PageViewStore {
             return cp;
         }
         else {
-            var data = localStorage.getItem(DATASTORE_PAGE_KEY + pageId);
-            if (typeof data == 'string') return JSON.parse(data);
+            var da = localStorage.getItem(DATASTORE_PAGE_KEY + pageId);
+            if (typeof da == 'string') return JSON.parse(da);
+            console.log(pageId);
             /**
              * search page data 
              */
@@ -23,9 +24,9 @@ export class PageViewStore {
             return cp;
         }
     }
-    static async savePageData(pageId: string, data: Record<string, any>) {
-        this.cachePageDatas.set(pageId, data);
-        localStorage.setItem(DATASTORE_PAGE_KEY + pageId, JSON.stringify(data));
+    static async savePageData(pageId: string, da: Record<string, any>) {
+        this.cachePageDatas.set(pageId, da);
+        localStorage.setItem(DATASTORE_PAGE_KEY + pageId, JSON.stringify(da));
     }
     static async getDefaultPageData() {
         return defaultPageData;

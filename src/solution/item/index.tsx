@@ -1,12 +1,15 @@
 
 import { util } from "rich/src/util/util";
-import { eventBus } from "../../common/event/event.bus";
-import { EventName } from "../../common/event/event.name";
 import { Mime } from "./mine";
 import { WorkspaceModule } from "../module/base";
 import { PageItemView } from "./view";
 import { surface } from "../../surface";
 import { PageItemBox } from "./box";
+import { PageItemMenuType } from "../extensions/menu";
+import trash from "rich/src/assert/svg/trash.svg";
+import rename from "../../assert/svg/rename.svg";
+import copy from "rich/src/assert/svg/duplicate.svg";
+import { PageItemOperator } from "./operator.declare";
 export class PageItem {
     id: string;
     childs?: PageItem[];
@@ -64,8 +67,7 @@ export class PageItem {
     onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
         this.spread = sp == false ? true : false;
-        if (this.view)
-            this.view.forceUpdate();
+        if (this.view) this.view.forceUpdate();
         else console.error('not found item view when spread')
     }
     onAdd() {
@@ -81,11 +83,18 @@ export class PageItem {
         if (this.view) this.view.forceUpdate();
         else console.error('not found item view when add child')
     }
-    onOpenProperty(event: MouseEvent) {
-        // surface.pageItemMenuView.openItem(this, event);
-    }
-    onMousedown(event: MouseEvent) {
-        eventBus.emit(EventName.selectPageItem, this, event);
+    getPageItemMenus() {
+        var items: PageItemMenuType[] = [];
+        items.push({
+            name: PageItemOperator.remove, icon: trash, text: '删除'
+        });
+        items.push({
+            name: PageItemOperator.copy, icon: copy, text: '拷贝'
+        });
+        items.push({
+            name: PageItemOperator.rename, icon: rename, text: '重命名'
+        });
+        return items;
     }
 }
 
