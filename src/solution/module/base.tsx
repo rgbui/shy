@@ -12,13 +12,14 @@ export class WorkspaceModule {
     date: number;
     type: WorkspaceModuleType;
     text: string;
-    items: PageItem[];
+    items: PageItem[] = [];
     spread: boolean;
     workspace: Workspace;
     load(data) {
+        this.items = [];
         for (var n in data) {
             if (n == 'items') {
-                this.items = [];
+
                 data.items.each(child => {
                     var item = new PageItem();
                     item.module = this;
@@ -43,7 +44,7 @@ export class WorkspaceModule {
     }
     get() {
         return {
-            name: this.type,
+            type: this.type,
             text: this.text,
             items: this.items.map(item => {
                 return item.get()

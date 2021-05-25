@@ -1,9 +1,11 @@
 import React from "react";
 import { Icon } from "rich/src/component/icon";
 import { util } from "rich/src/util/util";
+import { surface } from "../../../surface";
 import { PageItem } from "../../item";
 import { PageItemBox } from "../../item/box";
 import { Mime } from "../../item/mine";
+import { SolutionOperator } from "../../operator";
 import { Workspace } from "../../workspace";
 import { WorkspaceModule } from "../base";
 import { WorkspaceModuleType } from "../enum";
@@ -14,6 +16,9 @@ export class PagesViewModule extends WorkspaceModule {
     spread: boolean = true;
     workspace: Workspace;
     view: PagesViewModuleView;
+    get solution() {
+        return surface.solution;
+    }
     onAddItem() {
         var item = new PageItem();
         item.id = util.guid();
@@ -21,9 +26,15 @@ export class PagesViewModule extends WorkspaceModule {
         item.module = this;
         item.spread = false;
         item.mime = Mime.page;
-        this.spread = true;
+        if (this.spread != true) {
+            this.spread = true;
+            this.solution.emit(SolutionOperator.toggleModule, this);
+        }
         this.items.insertAt(0, item);
-        this.view.forceUpdate();
+        this.view.forceUpdate(() => {
+            item.onEdit();
+        });
+        this.solution.emit(SolutionOperator.addSubPageItem, item);
     }
 }
 export class PagesViewModuleView extends React.Component<{ module: PagesViewModule }> {
