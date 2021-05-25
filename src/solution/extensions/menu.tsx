@@ -3,7 +3,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { Point } from 'rich/src/common/point';
 import { Icon } from 'rich/src/component/icon';
-import { SyPlugComponent } from "rich/src/plug/sy.plug.component"
+import { SyPlugComponent } from "rich/src/extensions/sy.plug.component"
 import { PageItem } from '../item';
 import { PageItemOperator } from '../item/operator.declare';
 export type PageItemMenuType = {

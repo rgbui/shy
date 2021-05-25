@@ -15,7 +15,6 @@ export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
     }
     renderModule(module: WorkspaceModule) {
         var key = module.type + module.text;
-        console.log(module);
         switch (module.type) {
             case WorkspaceModuleType.pages:
                 return <PagesViewModuleView key={key} module={module as PagesViewModule}></PagesViewModuleView>

@@ -104,7 +104,7 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({ filename: "sy.css" }),
         new CopyWebpackPlugin([
-            { from: "../../rich/src/plug/emoji/emoji.json", to: "data/emoji.json" }
+            { from: "../../rich/src/extensions/emoji/emoji.json", to: "data/emoji.json" }
         ]),
     ]
 };

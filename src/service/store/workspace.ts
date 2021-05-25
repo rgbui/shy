@@ -21,7 +21,6 @@ export class WorkspaceStore {
      */
     static async saveWorkspace(workspace: Workspace) {
         var data = await workspace.get();
-        console.log(data);
         localStorage.setItem(WORKSPACE_CACHE_KEY + workspace.id, JSON.stringify(data));
     }
 }
