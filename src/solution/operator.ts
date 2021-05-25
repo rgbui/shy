@@ -1,10 +1,9 @@
 
 export enum SolutionOperator {
-
+    addSubPageItem,
+    removePageItem,
     changePageItemName,
-    addPageItemOnModule,
     toggleModule,
     togglePageItem,
-    addSubPageItem,
     openItem
 }

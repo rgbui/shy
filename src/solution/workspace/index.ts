@@ -1,3 +1,4 @@
+import { util } from "rich/src/util/util";
 import { PageItem } from "../item";
 import { WorkspaceModule } from "../module/base";
 import { WorkspaceModuleType } from "../module/enum";
@@ -5,6 +6,7 @@ import { PagesViewModule } from "../module/ms/pages";
 import { WorkspaceView } from "./view";
 export class Workspace {
     id: string;
+    date: number;
     title: string;
     profile_photo: string;
     modules: WorkspaceModule[] = [];
@@ -16,7 +18,6 @@ export class Workspace {
     load(data) {
         for (var n in data) {
             if (n == 'modules') {
-                this.modules = [];
                 data.modules.each(module => {
                     this.modules.push(this.createModule(module));
                 });
@@ -25,6 +26,8 @@ export class Workspace {
                 this[n] = data[n];
             }
         }
+        if (typeof this.id == 'undefined') this.id = util.guid();
+        if (typeof this.date == undefined) this.date = Date.now();
     }
     createModule(module: Record<string, any>) {
         var type: WorkspaceModuleType = typeof module.type == 'string' ? WorkspaceModuleType[module.type] : module.type;
@@ -33,8 +36,10 @@ export class Workspace {
             case WorkspaceModuleType.pages:
                 mo = new PagesViewModule(this);
                 mo.load(module);
+                console.log(mo);
                 break;
         }
+        console.log(mo);
         return mo;
     }
     find(predict: (item: PageItem) => boolean) {

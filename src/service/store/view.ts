@@ -14,7 +14,6 @@ export class PageViewStore {
         else {
             var da = localStorage.getItem(DATASTORE_PAGE_KEY + pageId);
             if (typeof da == 'string') return JSON.parse(da);
-            console.log(pageId);
             /**
              * search page data 
              */

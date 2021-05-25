@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Icon } from "rich/src/component/icon";
 import { PageItem } from ".";
+import { SolutionOperator } from "../operator";
 import { PageItemBox } from "./box";
 
 export class PageItemView extends React.Component<{ item: PageItem, deep?: number }> {
@@ -23,13 +24,13 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
 
     }
     componentDidUpdate() {
-        var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
-        if (input) {
-            setTimeout(() => {
-                input.focus();
-                input.select();
-            }, 100);
-        }
+        // var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
+        // if (input) {
+        //     setTimeout(() => {
+        //         input.focus();
+        //         input.select();
+        //     }, 100);
+        // }
     }
     mousedown(event: MouseEvent) {
         var item = this.props.item;
@@ -49,11 +50,22 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     }
     inputName(event: Event) {
         var input = event.target as HTMLInputElement;
-        if (input.value) {
-            this.item.text = input.value;
+        this.item.text = input.value;
+    }
+    private lastName;
+    select() {
+        var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
+        if (input) {
+            this.lastName = this.item.text;
+            setTimeout(() => {
+                input.focus();
+                input.select();
+            }, 400);
         }
     }
     inputBlur() {
+        if (!this.item.text) { this.item.text = this.lastName; }
+        this.solution.emit(SolutionOperator.changePageItemName, this.item);
         this.solution.onEditItem(null);
     }
     contextmenu(event: MouseEvent) {
@@ -65,18 +77,19 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
         var item = this.props.item;
         var style: Record<string, any> = {};
         style.paddingLeft = 10 + (this.props.deep || 0) * 15;
+        var isInEdit = this.solution.editItem == item;
         return <div className='sy-ws-item'>
             <div className={'sy-ws-item-page' + (this.solution.selectItems.exists(g => g == item) ? " sy-ws-item-page-selected" : "")} style={style} onContextMenu={e => self.contextmenu(e.nativeEvent)} onMouseDown={e => self.mousedown(e.nativeEvent)}>
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-                {this.solution.editItem !== item && <span>{item.text}</span>}
-                {this.solution.editItem === item && <div className='sy-ws-item-page-input'><input type='text'
+                {!isInEdit && <span>{item.text}</span>}
+                {isInEdit && <div className='sy-ws-item-page-input'><input type='text'
                     onBlur={e => this.inputBlur()}
-                    value={item.text}
+                    defaultValue={item.text}
                     onInput={e => self.inputName(e.nativeEvent)} /></div>}
-                <div className='sy-ws-item-page-operators'>
+                {!isInEdit && <div className='sy-ws-item-page-operators'>
                     <Icon className='sy-ws-item-page-property' icon='elipsis:sy'></Icon>
                     <Icon className='sy-ws-item-page-add' icon='add:sy'></Icon>
-                </div>
+                </div>}
             </div>
             {item.spread != false && <PageItemBox items={item.childs || []} deep={(this.props.deep || 0) + 1}></PageItemBox>}
         </div>

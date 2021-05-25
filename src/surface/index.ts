@@ -5,6 +5,7 @@ import { Solution } from "../solution";
 import { Events } from "rich/src/util/events";
 import { SolutionOperator } from "../solution/operator";
 import { Supervisor } from "../supervisor";
+import { WorkspaceStore } from "../service/store/workspace";
 class Surface extends Events {
     constructor() {
         super();
@@ -21,6 +22,21 @@ class Surface extends Events {
     private init() {
         this.solution.on(SolutionOperator.openItem, (item) => {
             this.supervisor.onOpenItem(item);
+        });
+        this.solution.on(SolutionOperator.togglePageItem, (item) => {
+            WorkspaceStore.saveWorkspace(this.solution.workspace);
+        });
+        this.solution.on(SolutionOperator.changePageItemName, (item) => {
+            WorkspaceStore.saveWorkspace(this.solution.workspace);
+        });
+        this.solution.on(SolutionOperator.removePageItem, (item) => {
+            WorkspaceStore.saveWorkspace(this.solution.workspace);
+        });
+        this.solution.on(SolutionOperator.addSubPageItem, (item) => {
+            WorkspaceStore.saveWorkspace(this.solution.workspace);
+        });
+        this.solution.on(SolutionOperator.toggleModule, (item) => {
+            WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
     }
     async load() {

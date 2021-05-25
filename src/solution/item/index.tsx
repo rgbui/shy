@@ -10,6 +10,7 @@ import trash from "rich/src/assert/svg/trash.svg";
 import rename from "../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
 import { PageItemOperator } from "./operator.declare";
+import { SolutionOperator } from "../operator";
 export class PageItem {
     id: string;
     childs?: PageItem[];
@@ -19,6 +20,7 @@ export class PageItem {
     viewChilds: PageItemBox;
     module: WorkspaceModule;
     mime: Mime;
+    selectedDate: number;
     get solution() {
         return surface.solution;
     }
@@ -61,14 +63,16 @@ export class PageItem {
             text: this.text,
             spread: this.spread,
             mime: this.mime,
-            uri: this.uri
+            uri: this.uri,
+            selectedDate: this.selectedDate
         }
     }
     onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
         this.spread = sp == false ? true : false;
         if (this.view) this.view.forceUpdate();
-        else console.error('not found item view when spread')
+        else console.error('not found item view when spread');
+        this.solution.emit(SolutionOperator.togglePageItem, this);
     }
     onAdd() {
         var item = new PageItem();
@@ -79,10 +83,30 @@ export class PageItem {
         item.spread = false;
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
+        this.solution.emit(SolutionOperator.addSubPageItem, item);
         this.childs.insertAt(0, item);
-
-        if (this.view) this.view.forceUpdate();
+        if (this.view)
+            this.view.forceUpdate(() => {
+                item.onEdit();
+            });
         else console.error('not found item view when add child')
+    }
+    onEdit() {
+        this.solution.onEditItem(this);
+    }
+    onRemove() {
+        if (this.solution.selectItems.exists(g => g == this)) {
+            this.solution.selectItems.remove(this);
+        }
+        if (this.parent) {
+            this.parent.childs.remove(g => g == this);
+            this.parent.view.forceUpdate();
+        }
+        else {
+            this.module.items.remove(g => g == this);
+            this.module.view.forceUpdate();
+        }
+        this.solution.emit(SolutionOperator.removePageItem, this);
     }
     getPageItemMenus() {
         var items: PageItemMenuType[] = [];
@@ -102,9 +126,10 @@ export class PageItem {
             case PageItemOperator.copy:
                 break;
             case PageItemOperator.remove:
+                this.onRemove();
                 break;
             case PageItemOperator.rename:
-                this.solution.onEditItem(this);
+                this.onEdit();
                 break;
         }
     }

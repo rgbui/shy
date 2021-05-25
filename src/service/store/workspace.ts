@@ -1,7 +1,7 @@
 
 import { Workspace } from "../../solution/workspace";
 import { workspaceDefaultData } from "./data";
-const WORKSPACE_CACHE_KEY = 'sy.workspace';
+const WORKSPACE_CACHE_KEY = 'sy.workspace.';
 export class WorkspaceStore {
     /***
      * 主要是通过不同的网址来计算读取相应的workspace空间
@@ -12,15 +12,16 @@ export class WorkspaceStore {
         if (!data) { data = workspaceDefaultData }
         else data = JSON.parse(data as any);
         var ws = new Workspace();
-        ws.load(data);
+        await ws.load(data);
+        ws.id = workspaceId;
         return ws;
     }
-
     /***
      * 保存workspace，该功能后面废弃掉
      */
     static async saveWorkspace(workspace: Workspace) {
-        localStorage.setItem(WORKSPACE_CACHE_KEY + workspace.id, JSON.stringify(await workspace.get()));
+        var data = await workspace.get();
+        console.log(data);
+        localStorage.setItem(WORKSPACE_CACHE_KEY + workspace.id, JSON.stringify(data));
     }
-    
 }

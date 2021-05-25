@@ -3,6 +3,7 @@ import { WorkspaceStore } from "../service/store/workspace";
 import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
 import { Mime } from "./item/mine";
+import { WorkspaceModule } from "./module/base";
 import { SolutionOperator } from "./operator";
 import { SolutionView } from "./view";
 import { Workspace } from "./workspace";
@@ -43,11 +44,15 @@ export class Solution extends Events<SolutionOperator> {
     }
     onMousedownItem(item: PageItem, event: MouseEvent) {
         if (!this.selectItems.exists(g => g === item)) {
+            item.selectedDate = new Date().getTime();
             var lastItems = this.selectItems.map(o => o);
             this.selectItems = [item];
             lastItems.each(item => item.view.forceUpdate())
             item.view.forceUpdate();
             this.emit(SolutionOperator.openItem, item);
+        }
+        else {
+            item.selectedDate = new Date().getTime();
         }
     }
     onEditItem(item: PageItem) {
@@ -58,7 +63,7 @@ export class Solution extends Events<SolutionOperator> {
         if (item) {
             this.editItem = item;
             this.editItem.view.forceUpdate(() => {
-
+                this.editItem.view.select();
             })
         }
         else this.editItem = null;
@@ -71,4 +76,14 @@ export class Solution extends Events<SolutionOperator> {
 export interface Solution {
     on(name: SolutionOperator.openItem, fn: (item: PageItem) => void);
     emit(name: SolutionOperator.openItem, item: PageItem);
+    emit(name: SolutionOperator.addSubPageItem, item: PageItem);
+    on(name: SolutionOperator.addSubPageItem, fn: (item: PageItem) => void);
+    emit(name: SolutionOperator.removePageItem, item: PageItem);
+    on(name: SolutionOperator.removePageItem, fn: (item: PageItem) => void);
+    emit(name: SolutionOperator.changePageItemName, item: PageItem);
+    on(name: SolutionOperator.changePageItemName, fn: (item: PageItem) => void);
+    emit(name: SolutionOperator.toggleModule, module: WorkspaceModule);
+    on(name: SolutionOperator.toggleModule, fn: (module: WorkspaceModule) => void);
+    emit(name: SolutionOperator.togglePageItem, item: PageItem);
+    on(name: SolutionOperator.togglePageItem, fn: (item: PageItem) => void);
 }
