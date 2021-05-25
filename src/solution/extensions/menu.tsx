@@ -43,7 +43,7 @@ export class PageItemMenu extends SyPlugComponent<{}, string> {
         return <div key={item.name} className='sy-ws-menu-item'>
             {item.type == 'devide' && <a className='sy-ws-menu-item-devide'></a>}
             {(item.type == 'item' || !item.type) && <a className={`sy-ws-menu-item-option ${item.disabled == true ? "disabled" : ""}`} onMouseDown={e => this.mousedownItem(item, e.nativeEvent)}>
-                <Icon icon={item.icon}></Icon>
+                <Icon icon={item.icon} size={17}></Icon>
                 <span>{item.text}</span>
                 <label>{item.label}</label>
             </a>}

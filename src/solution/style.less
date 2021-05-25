@@ -108,6 +108,7 @@
             align-items    : center;
             width          : 20px;
             height         : 20px;
+            flex-shrink    : 0;
             border-radius  : 3px;
 
             &:hover {
@@ -118,6 +119,24 @@
         span {
             color: inherit;
         }
+
+        &-input {
+            flex-grow: 1.0;
+
+            input {
+                width        : 100%;
+                font-size    : inherit;
+                min-height   : 20px;
+                line-height  : 20x;
+                outline      : none;
+                border-radius: 3px;
+                box-shadow   : rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
+                background   : rgba(242, 241, 238, 0.6);
+                border       : none;
+                color        : rgba(25, 23, 17, 0.6);
+            }
+        }
+
 
         &-operators {
             padding-right  : 10px;
@@ -200,10 +219,12 @@
             max-height: 70vh;
             min-width : 180px;
             overflow  : hidden auto;
+            padding:10px 0px;
         }
     }
 
     .sy-ws-menu-item {
+
         &-devide {
             height    : 1px;
             box-shadow: rgb(55, 53, 47, 0.09) 0px 1px 0px;
@@ -222,6 +243,15 @@
             color          : rgba(55, 53, 47);
             padding        : 0px 20px;
             cursor         : pointer;
+
+            .sy-icon {
+                width              : 17px;
+                height             : 17px;
+                display            : block;
+                fill               : inherit;
+                flex-shrink        : 0;
+                backface-visibility: hidden;
+            }
 
             .sy-ws-item-page-spread {
                 flex-shrink: 0;
