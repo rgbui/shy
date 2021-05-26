@@ -8,14 +8,16 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 /**
  * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
  */
-
+let publicPath = `/`;
 var outputDir = path.join(__dirname, "../dist");
 module.exports = {
     mode: 'production',
     entry: "./src/surface/main.tsx",
     output: {
         path: outputDir,
-        filename: "sy.js"
+        filename: "assert/js/sy.[hash:8].js",
+        chunkFilename: 'assert/js/dynamic/[name].[hash:8].js',
+        publicPath
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js", ".less", ".css"]
@@ -91,6 +93,16 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, "../index.html"), // 婧愭ā鏉挎枃浠�
+            filename: './index.html', // 杈撳嚭鏂囦欢銆愭敞鎰忥細杩欓噷鐨勬牴璺緞鏄痬odule.exports.output.path銆�
+            showErrors: true,
+            hash: true,
+            inject: 'body',
+            templateParameters: {
+                mode: 'prod'
+            }
+        }),
         new webpack.DefinePlugin({
             MODE: JSON.stringify('production')
         }),
@@ -102,13 +114,16 @@ module.exports = {
             },
             canPrint: true
         }),
-        new MiniCssExtractPlugin({ filename: "sy.css" }),
-        new CopyWebpackPlugin([
+        new MiniCssExtractPlugin({
+            filename: "sy.[hash:8].css",
+            // publicPath
+        }),
+        new CopyWebpackPlugin(
             {
                 patterns: [
                     { from: path.join(__dirname, "../../rich/src/extensions/emoji/emoji.json"), to: "data/emoji.json" }
                 ]
             }
-        ]),
+        ),
     ]
 };
