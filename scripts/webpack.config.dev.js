@@ -18,7 +18,7 @@ let port = 8081;
 let publicPath = `http://localhost:${port}/`;
 module.exports = {
     mode: 'development',
-    entry: "./src/surface/main.tsx",
+    entry: "./src/main.tsx",
     output: {
         path: path.resolve(__dirname, "../dist"),
         filename: "assert/js/bundle.js",

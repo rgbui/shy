@@ -5,11 +5,11 @@ import { Router, Route } from 'react-router';
 
 import "rich/src/util/array";
 import { history } from "./history";
-import "../assert/theme.less";
-import "../surface/style.less";
-import "../supervisor/style.less";
-import "../solution/style.less";
-import { ViewSurface } from './view';
+import "./assert/theme.less";
+import "./surface/style.less";
+import "./supervisor/style.less";
+import "./solution/style.less";
+import { ViewSurface } from './surface/view';
 // render react DOM
 ReactDOM.render(
   <Router history={history}>

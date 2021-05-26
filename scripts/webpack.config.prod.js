@@ -12,7 +12,7 @@ let publicPath = `/`;
 var outputDir = path.join(__dirname, "../dist");
 module.exports = {
     mode: 'production',
-    entry: "./src/surface/main.tsx",
+    entry: "./src/main.tsx",
     output: {
         path: outputDir,
         filename: "assert/js/sy.[hash:8].js",
