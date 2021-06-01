@@ -36,10 +36,8 @@ export class Workspace {
             case WorkspaceModuleType.pages:
                 mo = new PagesViewModule(this);
                 mo.load(module);
-                console.log(mo);
                 break;
         }
-        console.log(mo);
         return mo;
     }
     find(predict: (item: PageItem) => boolean) {
