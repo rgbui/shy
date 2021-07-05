@@ -35,7 +35,14 @@ module.exports = {
             rewrites: [
                 { from: /^[a-zA-Z\d\/]+$/, to: '/index.html' }
             ]
-        }
+        },
+        // proxy: {
+        //     "/api": `http://${proxyIP}:8800`,
+        //     "/socket": {
+        //         target: `http://${proxyIP}:8800`,
+        //         ws: true,
+        //     }
+        // }
     },
     resolve: {
         extensions: ['.tsx', ".ts", ".js", ".less", ".css"]
