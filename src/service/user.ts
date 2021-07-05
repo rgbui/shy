@@ -1,7 +1,17 @@
 
 import { UserStatus } from "../user/user";
+import { fingerFlag } from "../util/finger";
+import { masterSock, SockResponseType } from "./sock";
 
 export class UserService {
+    static async phoneSign(phone: string, verifyCode: string) {
+        let id = await fingerFlag();
+        return await masterSock.post<SockResponseType>('/phone/login', { phone, verifyCode, fingerprint: id });
+    }
+    static async GeneratePhoneCode(phone: string) {
+        let id = await fingerFlag();
+        return await masterSock.post<SockResponseType>('/generate/phone/code', { phone, fingerprint: id });
+    }
     static async tryLogin() {
         var user: Record<string, any> = {};
         user.id = 'kankantest';
