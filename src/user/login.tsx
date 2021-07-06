@@ -1,6 +1,7 @@
 import React from "react";
 import { history } from "../history";
 import { UserService } from "../service/user";
+import { fingerFlag } from "../util/finger";
 export class Login extends React.Component {
     /**
      * 登录方式
@@ -35,6 +36,7 @@ export class Login extends React.Component {
             if (result.success == false && result.error) this.signFailMsg = result.error;
             else {
                 this.signFailMsg = '';
+                history.push('/');
             }
         }
         catch (ex) {
@@ -47,6 +49,9 @@ export class Login extends React.Component {
     }
     async keydown(event: KeyboardEvent) {
         if (event.key == 'Enter') await this.phoneSign()
+    }
+    async componentDidMount() {
+        // console.log(await fingerFlag())
     }
     private el: HTMLElement;
     render() {
