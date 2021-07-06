@@ -1,7 +1,6 @@
 import React from "react";
 import { history } from "../history";
 import { UserService } from "../service/user";
-import { fingerFlag } from "../util/finger";
 export class Login extends React.Component {
     /**
      * 登录方式

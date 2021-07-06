@@ -12,6 +12,10 @@ export class UserService {
         let id = await fingerFlag();
         return await masterSock.post<SockResponseType>('/generate/phone/code', { phone, fingerprint: id });
     }
+    static async Logout() {
+        let id = await fingerFlag();
+        return await masterSock.post<SockResponseType>('/logout', { fingerprint: id });
+    }
     static async tryLogin() {
         var user: Record<string, any> = {};
         user.id = 'kankantest';
