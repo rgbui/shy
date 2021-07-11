@@ -1,6 +1,5 @@
+import { config } from "../common/config";
 import { Aes } from "../util/crypto";
-
-
 
 /**
  * 缓存应用的key
@@ -36,7 +35,8 @@ class SyCache {
         }
     }
     private getKey(key: CacheKey) {
-        return FLAG + CacheKey[key];
+        if (config.isPro) return FLAG + key;
+        else return FLAG + CacheKey[key];
     }
     get(key: CacheKey) {
         var v = this.getValue(key);
