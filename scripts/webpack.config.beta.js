@@ -8,8 +8,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 /**
  * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
  */
-let publicPath = `/`;
-var outputDir = path.join(__dirname, "../dist");
+let publicPath = `https://beta.shy.live/`;
+var outputDir = path.join(__dirname, "../beta");
 module.exports = {
     mode: 'production',
     entry: "./src/main.tsx",
@@ -94,8 +94,8 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, "../index.html"), // 婧愭ā鏉挎枃浠�
-            filename: './index.html', // 杈撳嚭鏂囦欢銆愭敞鎰忥細杩欓噷鐨勬牴璺緞鏄痬odule.exports.output.path銆�
+            template: path.join(__dirname, "../index.html"), //
+            filename: './index.html', // 
             showErrors: true,
             hash: true,
             inject: 'body',
@@ -104,7 +104,7 @@ module.exports = {
             }
         }),
         new webpack.DefinePlugin({
-            MODE: JSON.stringify('production')
+            MODE: JSON.stringify('pro')
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
@@ -116,7 +116,7 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: "sy.[hash:8].css",
-            // publicPath
+            publicPath
         }),
         new CopyWebpackPlugin(
             {

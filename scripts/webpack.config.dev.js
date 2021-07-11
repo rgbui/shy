@@ -36,13 +36,13 @@ module.exports = {
                 { from: /^[a-zA-Z\d\/]+$/, to: '/index.html' }
             ]
         },
-        // proxy: {
-        //     "/api": `http://${proxyIP}:8800`,
-        //     "/socket": {
-        //         target: `http://${proxyIP}:8800`,
-        //         ws: true,
-        //     }
-        // }
+        proxy: {
+            "/api": `http://localhost:8888`,
+            "/socket": {
+                target: `http://localhost:8888/primus`,
+                ws: true,
+            }
+        }
     },
     resolve: {
         extensions: ['.tsx', ".ts", ".js", ".less", ".css"]
@@ -118,11 +118,13 @@ module.exports = {
             hash: true
         }),
         new webpack.DefinePlugin({
-            MODE: JSON.stringify('dev')
+            MODE: JSON.stringify('dev'),
+            VERSION: JSON.stringify('1.0.0'),
+            REMOTE_URL: JSON.stringify('https://m1.shiyun.host')
         }),
         new MiniCssExtractPlugin({
             filename: "sy.css",
-            //publicPath
+            publicPath
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,

@@ -1,14 +1,15 @@
 {
-  "name": "sy.app",
+  "name": "shy.app",
   "version": "1.0.0",
-  "description": "sy.live platform app",
+  "description": "shy.live platform app",
   "main": "index.js",
   "scripts": {
-    "webpack": "webpack --config scripts/webpack.config.prod.js",
+    "webpack": "webpack --config scripts/webpack.config.pro.js",
+    "webpack-beta": "webpack --config scripts/webpack.config.beta.js",
     "webpack-dev": "webpack-dev-server  --env development  --config scripts/webpack.config.dev.js  --hot --progress --colors  "
   },
   "keywords": [
-    "sy.live",
+    "shy.live",
     "app",
     "platform"
   ],
