@@ -6,7 +6,8 @@ import { Aes } from "../util/crypto";
  */
 export enum CacheKey {
     token,
-    clientId
+    clientId,
+    workspaceId
 }
 const FLAG = 'shy.live.';
 class SyCache {
