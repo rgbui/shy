@@ -5,7 +5,7 @@ import { Solution } from "../solution";
 import { Events } from "rich/src/util/events";
 import { SolutionOperator } from "../solution/operator";
 import { Supervisor } from "../supervisor";
-import { WorkspaceStore } from "../service/store/workspace";
+import { SyHistory } from "../history";
 class Surface extends Events {
     constructor() {
         super();
@@ -24,26 +24,28 @@ class Surface extends Events {
             this.supervisor.onOpenItem(item);
         });
         this.solution.on(SolutionOperator.togglePageItem, (item) => {
-            WorkspaceStore.saveWorkspace(this.solution.workspace);
+            // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
         this.solution.on(SolutionOperator.changePageItemName, (item) => {
-            WorkspaceStore.saveWorkspace(this.solution.workspace);
+            // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
         this.solution.on(SolutionOperator.removePageItem, (item) => {
-            WorkspaceStore.saveWorkspace(this.solution.workspace);
+            // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
         this.solution.on(SolutionOperator.addSubPageItem, (item) => {
-            WorkspaceStore.saveWorkspace(this.solution.workspace);
+            // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
         this.solution.on(SolutionOperator.toggleModule, (item) => {
-            WorkspaceStore.saveWorkspace(this.solution.workspace);
+            // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
     }
     async load() {
-        await this.user.loadUser();
+        if (!this.user.isSign)
+            await this.user.loadUser();
+        if (!this.user.isSign)
+            return SyHistory.push('/login');
         await this.solution.loadWorkspace();
         this.isSuccessfullyLoaded = true;
-        this.emit('loaded');
     }
 }
 export var surface = new Surface();
