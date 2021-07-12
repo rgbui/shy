@@ -78,14 +78,22 @@ class Sock {
         }
         return response;
     }
-    async post<T = any, U = any>(url: string, data: Record<string, any>) {
+    async post<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
         var r = await this.remote.post(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
-    async get<T = any, U = any>(url: string) {
+    async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
-        var r = await this.remote.get(this.resolve(baseUrl, url), await this.config());
+        var resolveUrl = this.resolve(baseUrl, url);
+        if (querys) {
+            var ps: string[] = [];
+            for (let q in querys) {
+                ps.push(q + '=' + encodeURIComponent(querys[q]))
+            }
+            resolveUrl = resolveUrl + (resolveUrl.indexOf('?') == -1 ? "?" : "&") + ps.join("&");
+        }
+        var r = await this.remote.get(resolveUrl, await this.config());
         return this.handleResponse<T, U>(r);
     }
     async delete<T = any, U = any>(url: string) {
