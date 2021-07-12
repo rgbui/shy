@@ -1,4 +1,5 @@
 import { Events } from "rich/src/util/events";
+import { CacheKey, sCache } from "./cache";
 import { SockResponse } from "./sock";
 
 var VerifyOptions = {
@@ -43,5 +44,9 @@ export class BaseService extends Events {
             }
         }
         return rs;
+    }
+
+    get token() {
+        return sCache.get(CacheKey.token);
     }
 }
