@@ -1,22 +1,28 @@
-import { UserService } from "../service/user";
-
+import { userService } from "./service";
 
 export enum UserStatus {
     busy,
     online,
     offline
 }
-
 export class User {
-    id: string;
-    profile_photo: string;
-    account: string;
-    status: UserStatus;
-    get isLogin() {
+    public id: string;
+    public inc: number;
+    public status: UserStatus;
+    public createDate: Date;
+    public phone: string;
+    public paw: string;
+    public name: string;
+    public avatar: { url: string };
+    public email: string;
+    public slogan: string;
+    get isSign() {
         return this.id ? true : false;
     }
     async loadUser() {
-        var userInfo = await UserService.tryLogin();
-        Object.assign(this, userInfo);
+        var r = await userService.ping();
+        if (r.ok) {
+            Object.assign(this, r.data.user);
+        }
     }
 }
