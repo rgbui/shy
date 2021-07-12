@@ -5,11 +5,12 @@ import { PageItemMenu } from "./extensions/menu";
 import { WorkspaceView } from "./workspace/view";
 
 export class SolutionView extends React.Component {
-    private solution: Solution;
+    private get solution() {
+        return surface.solution;
+    }
     constructor(props) {
         super(props);
         surface.solution.view = this;
-        this.solution = surface.solution;
     }
     componentDidMount() {
         document.addEventListener('keyup', this._keyup = this.keydown.bind(this));
@@ -22,10 +23,10 @@ export class SolutionView extends React.Component {
         document.removeEventListener('keyup', this._keyup);
     }
     keydown(event: KeyboardEvent) {
-        this.solution._keys.push(event.key);
+        this.solution.keyboardPlate.keydown(event);
     }
     keyup(event: KeyboardEvent) {
-        this.solution._keys.remove(event.key);
+        this.solution.keyboardPlate.keyup(event);
     }
     mousemove(event: MouseEvent) {
 
@@ -37,7 +38,7 @@ export class SolutionView extends React.Component {
     private _mouseup: (event: MouseEvent) => void;
     private _keyup: (event: KeyboardEvent) => void;
     render() {
-        return <div className='sy-wss' onKeyDown={e => this.keydown(e.nativeEvent)} tabIndex={1}>
+        return <div className='sy-wss' onKeyDownCapture={e => this.keydown(e.nativeEvent)} tabIndex={1}>
             <PageItemMenu ref={e => this.solution.menu = e}></PageItemMenu>
             {this.solution.workspace && <WorkspaceView workspace={this.solution.workspace} ></WorkspaceView>}
         </div>

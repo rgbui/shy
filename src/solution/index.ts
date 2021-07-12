@@ -1,5 +1,5 @@
 import { Events } from "rich/src/util/events";
-import { WorkspaceStore } from "../service/store/workspace";
+import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
 import { Mime } from "./item/mine";
@@ -7,6 +7,8 @@ import { WorkspaceModule } from "./module/base";
 import { SolutionOperator } from "./operator";
 import { SolutionView } from "./view";
 import { Workspace } from "./workspace";
+import { workspaceService } from "./service";
+import { SyHistory } from "../history";
 
 export class Solution extends Events<SolutionOperator> {
     constructor() {
@@ -26,18 +28,23 @@ export class Solution extends Events<SolutionOperator> {
      * 当前正在编辑名称的pageItem
      */
     editItem: PageItem;
-    _keys: string[] = [];
     view: SolutionView;
+    keyboardPlate = new KeyboardPlate();
     private init() {
 
     }
     async loadWorkspace() {
-        var url = location.href;
-        this.workspace = await WorkspaceStore.getWorkspace(url);
-        var item = this.workspace.find(g => g.mime == Mime.page);
-        this.selectItems = item ? [item] : [];
-        if (item)
-            this.emit(SolutionOperator.openItem, item);
+        var rr = await workspaceService.loadWorkSpace();
+        if (rr.ok) {
+
+        }
+        else SyHistory.push('/work/create')
+        // var url = location.href;
+        // this.workspace = await WorkspaceStore.getWorkspace(url);
+        // var item = this.workspace.find(g => g.mime == Mime.page);
+        // this.selectItems = item ? [item] : [];
+        // if (item)
+        //     this.emit(SolutionOperator.openItem, item);
     }
     onOpenItemMenu(item: PageItem, event: MouseEvent) {
         this.menu.openItem(item, event);
