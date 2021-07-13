@@ -35,14 +35,14 @@ module.exports = {
             rewrites: [
                 { from: /^[a-zA-Z\d\/]+$/, to: '/index.html' }
             ]
-        },
-        proxy: {
-            "/api": `http://localhost:8888`,
-            "/socket": {
-                target: `http://localhost:8888/primus`,
-                ws: true,
-            }
         }
+        // proxy: {
+        //     "/api": `http://localhost:8888`,
+        //     "/socket": {
+        //         target: `http://localhost:8888/primus`,
+        //         ws: true,
+        //     }
+        // }
     },
     resolve: {
         extensions: ['.tsx', ".ts", ".js", ".less", ".css"]
@@ -121,8 +121,7 @@ module.exports = {
             REMOTE_URL: JSON.stringify('https://m1.shiyun.host')
         }),
         new MiniCssExtractPlugin({
-            filename: "sy.css",
-            publicPath
+            filename: "sy.css"
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
