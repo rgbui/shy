@@ -219,7 +219,7 @@
             max-height: 70vh;
             min-width : 180px;
             overflow  : hidden auto;
-            padding:10px 0px;
+            padding   : 10px 0px;
         }
     }
 
@@ -296,4 +296,24 @@
             color      : rgba(55, 53, 47, 0.4);
         }
     }
+}
+
+
+.sy-workspace-create {
+    position : absolute;
+    top      : 150px;
+    left     : 50%;
+    width    : 300px;
+    transform: translateX(-50%);
+
+    &-text {
+        input {
+            width: 100%;
+        }
+        margin-bottom: 14px;
+    }
+
+    &-fail-tip {}
+
+    &-button {}
 }
