@@ -4,7 +4,7 @@ import { SockResponse } from "./sock";
 
 var VerifyOptions = {
     phone: {
-        regex: /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$/,
+        regex: /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/,
         tip: '手机号格式不正确',
         nullTip: '手机号不能为空'
     },
@@ -23,7 +23,7 @@ export class BaseService extends Events {
      * @returns 
      */
     protected createResponse<U = Record<string, any>, T = string>(verifyParams?: Record<string, any>) {
-        var rs: SockResponse<U, T> = {};
+        var rs: SockResponse<U, T> = { ok: true };
         if (typeof verifyParams == 'object') {
             for (let n in verifyParams) {
                 var isVerifyNull = n.startsWith('$');
