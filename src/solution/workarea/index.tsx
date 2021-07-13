@@ -21,7 +21,7 @@ export class Workarea {
             if (n == 'items') {
                 data.items.each(child => {
                     var item = new PageItem();
-                    item.module = this;
+                    item.area = this;
                     item.load(child);
                     this.items.push(item);
                 });

@@ -2,7 +2,7 @@ import { util } from "rich/src/util/util";
 import { PageItem } from "../item";
 import { Workarea } from "../workarea";
 import { WorkareaType } from "../workarea/enum";
-import { PagesViewModule } from "../workarea/ms/pages";
+import { PagesViewArea } from "../workarea/ms/pages";
 import { WorkspaceView } from "./view";
 export class Workspace {
     id: string;
@@ -17,9 +17,9 @@ export class Workspace {
     }
     load(data) {
         for (var n in data) {
-            if (n == 'modules') {
-                data.modules.each(module => {
-                    this.areas.push(this.createModule(module));
+            if (n == 'areas') {
+                data.areas.each(area => {
+                    this.areas.push(this.createArea(area));
                 });
             }
             else {
@@ -29,13 +29,13 @@ export class Workspace {
         if (typeof this.id == 'undefined') this.id = util.guid();
         if (typeof this.date == undefined) this.date = Date.now();
     }
-    createModule(module: Record<string, any>) {
-        var type: WorkareaType = typeof module.type == 'string' ? WorkareaType[module.type] : module.type;
+    createArea(area: Record<string, any>) {
+        var type: WorkareaType = typeof area.type == 'string' ? WorkareaType[area.type] : area.type;
         var mo: Workarea
         switch (type) {
             case WorkareaType.pages:
-                mo = new PagesViewModule(this);
-                mo.load(module);
+                mo = new PagesViewArea(this);
+                mo.load(area);
                 break;
         }
         return mo;
@@ -49,8 +49,8 @@ export class Workspace {
     remove(predict: (item: PageItem) => boolean) {
         var item = this.find(predict);
         if (item) {
-            item.module.items.arrayJsonRemove('childs', g => g == item);
-            item.module.view.forceUpdate();
+            item.area.items.arrayJsonRemove('childs', g => g == item);
+            item.area.view.forceUpdate();
         }
     }
 }

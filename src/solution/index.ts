@@ -35,7 +35,7 @@ export class Solution extends Events<SolutionOperator> {
     async loadWorkspace() {
         var rr = await workspaceService.loadWorkSpace();
         if (rr.ok) {
-
+            this.workspace.load({ ...rr.data.workspace, areas: rr.data.areas });
         }
         else SyHistory.push('/work/create')
         // var url = location.href;

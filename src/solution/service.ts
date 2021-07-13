@@ -18,6 +18,10 @@ class WorkspaceService extends BaseService {
         var rr = await masterSock.post<{ id: string }, string>('/workspace/create', { text: args.text });
         return rr;
     }
+    async loadWorkspacePages(workspaceId: string) {
+        var rr = await masterSock.get<{ id: string }, string>('/pages/load', { workspaceId });
+        return rr;
+    }
     /***
      * 保存workspace，该功能后面废弃掉
      */

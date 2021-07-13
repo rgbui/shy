@@ -2,7 +2,7 @@ import React from "react";
 import { Workspace } from ".";
 import { Workarea } from "../workarea";
 import { WorkareaType } from "../workarea/enum";
-import { PagesViewModule, PagesViewModuleView } from "../workarea/ms/pages";
+import { PagesViewArea, PagesViewModuleView } from "../workarea/ms/pages";
 import { WorkspaceProfile } from "./profile";
 
 export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
@@ -17,7 +17,7 @@ export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
         var key = area.type + area.text;
         switch (area.type) {
             case WorkareaType.pages:
-                return <PagesViewModuleView key={key} module={area as PagesViewModule}></PagesViewModuleView>
+                return <PagesViewModuleView key={key} module={area as PagesViewArea}></PagesViewModuleView>
         }
     }
     render() {

@@ -18,7 +18,7 @@ export class PageItem {
     spread: boolean = false;
     view: PageItemView;
     viewChilds: PageItemBox;
-    module: Workarea;
+    area: Workarea;
     mime: Mime;
     selectedDate: number;
     get solution() {
@@ -36,7 +36,7 @@ export class PageItem {
         return this.workspace.url + this.path;
     }
     get workspace() {
-        return this.module.workspace;
+        return this.area.workspace;
     }
     parent?: PageItem;
     load(data) {
@@ -46,7 +46,7 @@ export class PageItem {
                 data.childs.each(child => {
                     var item = new PageItem();
                     item.parent = this;
-                    item.module = this.module;
+                    item.area = this.area;
                     item.load(child);
                     this.childs.push(item);
                 });
@@ -79,7 +79,7 @@ export class PageItem {
         item.id = util.guid();
         item.text = '新页面';
         item.mime = Mime.page;
-        item.module = this.module;
+        item.area = this.area;
         item.spread = false;
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
@@ -103,8 +103,8 @@ export class PageItem {
             this.parent.view.forceUpdate();
         }
         else {
-            this.module.items.remove(g => g == this);
-            this.module.view.forceUpdate();
+            this.area.items.remove(g => g == this);
+            this.area.view.forceUpdate();
         }
         this.solution.emit(SolutionOperator.removePageItem, this);
     }

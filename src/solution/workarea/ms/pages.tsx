@@ -9,7 +9,7 @@ import { SolutionOperator } from "../../operator";
 import { Workspace } from "../../workspace";
 import { Workarea } from "..";
 import { WorkareaType } from "../enum";
-export class PagesViewModule extends Workarea {
+export class PagesViewArea extends Workarea {
     type: WorkareaType;
     text: string;
     items: PageItem[];
@@ -23,7 +23,7 @@ export class PagesViewModule extends Workarea {
         var item = new PageItem();
         item.id = util.guid();
         item.text = '新页面';
-        item.module = this;
+        item.area = this;
         item.spread = false;
         item.mime = Mime.page;
         if (this.spread != true) {
@@ -37,7 +37,7 @@ export class PagesViewModule extends Workarea {
         this.solution.emit(SolutionOperator.addSubPageItem, item);
     }
 }
-export class PagesViewModuleView extends React.Component<{ module: PagesViewModule }> {
+export class PagesViewModuleView extends React.Component<{ module: PagesViewArea }> {
     constructor(props) {
         super(props);
         this.props.module.view = this;
