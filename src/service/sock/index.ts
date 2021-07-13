@@ -89,7 +89,8 @@ class Sock {
         if (querys) {
             var ps: string[] = [];
             for (let q in querys) {
-                ps.push(q + '=' + encodeURIComponent(querys[q]))
+                if (typeof querys[q] != 'undefined')
+                    ps.push(q + '=' + encodeURIComponent(querys[q]))
             }
             resolveUrl = resolveUrl + (resolveUrl.indexOf('?') == -1 ? "?" : "&") + ps.join("&");
         }
