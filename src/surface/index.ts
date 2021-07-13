@@ -6,6 +6,7 @@ import { Events } from "rich/src/util/events";
 import { SolutionOperator } from "../solution/operator";
 import { Supervisor } from "../supervisor";
 import { SyHistory } from "../history";
+import { generatePath } from "react-router";
 class Surface extends Events {
     constructor() {
         super();
@@ -40,11 +41,13 @@ class Surface extends Events {
         });
     }
     async load() {
-        if (!this.user.isSign)
-            await this.user.loadUser();
-        if (!this.user.isSign)
-            return SyHistory.push('/login');
-        await this.solution.loadWorkspace();
+        if (!this.user.isSign) await this.user.loadUser();
+        if (!this.user.isSign) return SyHistory.push('/login');
+        var loadResult = await this.solution.loadWorkspace();
+        if (loadResult.ok != true) {
+            if (loadResult?.data?.toId) return SyHistory.push(generatePath('/ws/:id', { id: loadResult.data.toId }))
+            else return SyHistory.push('/work/create')
+        }
         this.isSuccessfullyLoaded = true;
     }
 }

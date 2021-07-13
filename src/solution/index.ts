@@ -37,13 +37,7 @@ export class Solution extends Events<SolutionOperator> {
         if (rr.ok) {
             this.workspace.load({ ...rr.data.workspace, areas: rr.data.areas });
         }
-        else SyHistory.push('/work/create')
-        // var url = location.href;
-        // this.workspace = await WorkspaceStore.getWorkspace(url);
-        // var item = this.workspace.find(g => g.mime == Mime.page);
-        // this.selectItems = item ? [item] : [];
-        // if (item)
-        //     this.emit(SolutionOperator.openItem, item);
+        return rr;
     }
     onOpenItemMenu(item: PageItem, event: MouseEvent) {
         this.menu.openItem(item, event);

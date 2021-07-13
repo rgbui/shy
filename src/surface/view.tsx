@@ -11,8 +11,7 @@ export class ViewSurface extends React.Component {
     }
     async componentDidMount() {
         await surface.load();
-        if (surface.isSuccessfullyLoaded)
-            this.forceUpdate();
+        if (surface.isSuccessfullyLoaded) this.forceUpdate();
     }
     render() {
         return <div className='sy-surface'>{
