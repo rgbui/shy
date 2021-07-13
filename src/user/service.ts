@@ -6,9 +6,16 @@ import { CacheKey, sCache } from "../service/cache";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {
-        var result: SockResponse<{ token: string, user: Partial<User> }, string> = this.createResponse({ $phone: phone, $code: code });
+        var result: SockResponse<{justRegistered:boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: phone, $code: code });
         if (result.ok == false) return result;
         result = await masterSock.post('/phone/login', { phone, code });
+        return result;
+    }
+    async updateName(name: string) {
+        var result: SockResponse<{ token: string, user: Partial<User> }, string> = this.createResponse({});
+        if (!name) { result.ok = false; result.warn = '呢称不能为空'; return result; }
+        if (result.ok == false) return result;
+        result = await masterSock.post('/user/update/name', { name });
         return result;
     }
     async generatePhoneCode(phone: string) {
