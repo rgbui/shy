@@ -34,7 +34,6 @@ export class PageItemMenu extends SyExtensionsComponent<{}, string> {
         this.items = items;
         this.forceUpdate();
     }
-
     private currentItem: PageItem;
     items: PageItemMenuType[] = [];
     visible: boolean = false;

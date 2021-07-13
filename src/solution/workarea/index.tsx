@@ -2,15 +2,15 @@ import React from "react";
 import { util } from "rich/src/util/util";
 import { PageItem } from "../item";
 import { Workspace } from "../workspace";
-import { WorkspaceModuleType } from "./enum";
+import { WorkareaType } from "./enum";
 
-export class WorkspaceModule {
+export class Workarea {
     constructor(workspace: Workspace) {
         this.workspace = workspace;
     }
     id: string;
     date: number;
-    type: WorkspaceModuleType;
+    type: WorkareaType;
     text: string;
     items: PageItem[] = [];
     spread: boolean;
@@ -19,7 +19,6 @@ export class WorkspaceModule {
         this.items = [];
         for (var n in data) {
             if (n == 'items') {
-
                 data.items.each(child => {
                     var item = new PageItem();
                     item.module = this;
@@ -29,7 +28,7 @@ export class WorkspaceModule {
             }
             else if (n == 'type') {
                 if (typeof data[n] == 'string') {
-                    this.type = WorkspaceModuleType[data[n]] as any;
+                    this.type = WorkareaType[data[n]] as any;
                 }
                 else {
                     this[n] = data[n];

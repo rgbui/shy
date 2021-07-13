@@ -1,15 +1,15 @@
 import { util } from "rich/src/util/util";
 import { PageItem } from "../item";
-import { WorkspaceModule } from "../module/base";
-import { WorkspaceModuleType } from "../module/enum";
-import { PagesViewModule } from "../module/ms/pages";
+import { Workarea } from "../workarea";
+import { WorkareaType } from "../workarea/enum";
+import { PagesViewModule } from "../workarea/ms/pages";
 import { WorkspaceView } from "./view";
 export class Workspace {
     id: string;
     date: number;
-    title: string;
-    profile_photo: string;
-    modules: WorkspaceModule[] = [];
+    text: string;
+    icon: { url: string };
+    areas: Workarea[] = [];
     view?: WorkspaceView;
     domain: string;
     get url() {
@@ -19,7 +19,7 @@ export class Workspace {
         for (var n in data) {
             if (n == 'modules') {
                 data.modules.each(module => {
-                    this.modules.push(this.createModule(module));
+                    this.areas.push(this.createModule(module));
                 });
             }
             else {
@@ -30,10 +30,10 @@ export class Workspace {
         if (typeof this.date == undefined) this.date = Date.now();
     }
     createModule(module: Record<string, any>) {
-        var type: WorkspaceModuleType = typeof module.type == 'string' ? WorkspaceModuleType[module.type] : module.type;
-        var mo: WorkspaceModule
+        var type: WorkareaType = typeof module.type == 'string' ? WorkareaType[module.type] : module.type;
+        var mo: Workarea
         switch (type) {
-            case WorkspaceModuleType.pages:
+            case WorkareaType.pages:
                 mo = new PagesViewModule(this);
                 mo.load(module);
                 break;
@@ -41,8 +41,8 @@ export class Workspace {
         return mo;
     }
     find(predict: (item: PageItem) => boolean) {
-        for (let i = 0; i < this.modules.length; i++) {
-            var item = this.modules[i].items.arrayJsonFind('childs', predict);
+        for (let i = 0; i < this.areas.length; i++) {
+            var item = this.areas[i].items.arrayJsonFind('childs', predict);
             if (item) return item;
         }
     }
@@ -52,15 +52,5 @@ export class Workspace {
             item.module.items.arrayJsonRemove('childs', g => g == item);
             item.module.view.forceUpdate();
         }
-    }
-    async get() {
-        var json: Record<string, any> = {
-            id: this.id,
-            title: this.title,
-            profile_photo: this.profile_photo,
-            modules: this.modules.map(g => g.get()),
-            domain: this.domain
-        };
-        return json;
     }
 }

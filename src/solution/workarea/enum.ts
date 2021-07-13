@@ -1,5 +1,5 @@
 
-export enum WorkspaceModuleType {
+export enum WorkareaType {
     pages,
     favourite,
     trash,

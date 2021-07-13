@@ -1,5 +1,5 @@
 
-import { User, UserStatus } from "./user";
+import { User } from "./user";
 import { masterSock, SockResponse } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";

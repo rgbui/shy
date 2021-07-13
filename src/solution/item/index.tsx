@@ -1,7 +1,7 @@
 
 import { util } from "rich/src/util/util";
 import { Mime } from "./mine";
-import { WorkspaceModule } from "../module/base";
+import { Workarea } from "../workarea";
 import { PageItemView } from "./view";
 import { surface } from "../../surface";
 import { PageItemBox } from "./box";
@@ -18,7 +18,7 @@ export class PageItem {
     spread: boolean = false;
     view: PageItemView;
     viewChilds: PageItemBox;
-    module: WorkspaceModule;
+    module: Workarea;
     mime: Mime;
     selectedDate: number;
     get solution() {

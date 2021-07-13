@@ -1,8 +1,8 @@
 import React from "react";
 import { Workspace } from ".";
-import { WorkspaceModule } from "../module/base";
-import { WorkspaceModuleType } from "../module/enum";
-import { PagesViewModule, PagesViewModuleView } from "../module/ms/pages";
+import { Workarea } from "../workarea";
+import { WorkareaType } from "../workarea/enum";
+import { PagesViewModule, PagesViewModuleView } from "../workarea/ms/pages";
 import { WorkspaceProfile } from "./profile";
 
 export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
@@ -13,18 +13,18 @@ export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
     get workspace() {
         return this.props.workspace;
     }
-    renderModule(module: WorkspaceModule) {
-        var key = module.type + module.text;
-        switch (module.type) {
-            case WorkspaceModuleType.pages:
-                return <PagesViewModuleView key={key} module={module as PagesViewModule}></PagesViewModuleView>
+    renderArea(area: Workarea) {
+        var key = area.type + area.text;
+        switch (area.type) {
+            case WorkareaType.pages:
+                return <PagesViewModuleView key={key} module={area as PagesViewModule}></PagesViewModuleView>
         }
     }
     render() {
         return <div className='sy-ws'>
             <WorkspaceProfile workspace={this.workspace}></WorkspaceProfile>
             <div className='sy-ws-modules'>
-                {this.workspace.modules.map(g => this.renderModule(g))}
+                {this.workspace.areas.map(g => this.renderArea(g))}
             </div>
         </div>
     }

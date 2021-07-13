@@ -7,10 +7,10 @@ import { PageItemBox } from "../../item/box";
 import { Mime } from "../../item/mine";
 import { SolutionOperator } from "../../operator";
 import { Workspace } from "../../workspace";
-import { WorkspaceModule } from "../base";
-import { WorkspaceModuleType } from "../enum";
-export class PagesViewModule extends WorkspaceModule {
-    type: WorkspaceModuleType;
+import { Workarea } from "..";
+import { WorkareaType } from "../enum";
+export class PagesViewModule extends Workarea {
+    type: WorkareaType;
     text: string;
     items: PageItem[];
     spread: boolean = true;

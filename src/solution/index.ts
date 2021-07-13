@@ -2,8 +2,7 @@ import { Events } from "rich/src/util/events";
 import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
-import { Mime } from "./item/mine";
-import { WorkspaceModule } from "./module/base";
+import { Workarea } from "./workarea";
 import { SolutionOperator } from "./operator";
 import { SolutionView } from "./view";
 import { Workspace } from "./workspace";
@@ -89,8 +88,8 @@ export interface Solution {
     on(name: SolutionOperator.removePageItem, fn: (item: PageItem) => void);
     emit(name: SolutionOperator.changePageItemName, item: PageItem);
     on(name: SolutionOperator.changePageItemName, fn: (item: PageItem) => void);
-    emit(name: SolutionOperator.toggleModule, module: WorkspaceModule);
-    on(name: SolutionOperator.toggleModule, fn: (module: WorkspaceModule) => void);
+    emit(name: SolutionOperator.toggleModule, module: Workarea);
+    on(name: SolutionOperator.toggleModule, fn: (module: Workarea) => void);
     emit(name: SolutionOperator.togglePageItem, item: PageItem);
     on(name: SolutionOperator.togglePageItem, fn: (item: PageItem) => void);
 }
