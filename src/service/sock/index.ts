@@ -3,6 +3,7 @@ import { fingerFlag } from "../../util/finger";
 import { CacheKey, sCache } from "../cache";
 import { SockType } from "./type";
 import { StatusCode } from "./status.code";
+import { config } from "../../common/config";
 
 class Sock {
     private type: SockType;
@@ -59,8 +60,11 @@ class Sock {
         if (this._remote) return this._remote;
         else {
             this._remote = axios.create();
-            if (this.type != SockType.file)
-                this._remote.defaults.timeout = 1000;
+            if (config.isDev) this._remote.defaults.timeout = 300;
+            else if (config.isBeta || config.isPro) {
+                if (this.type != SockType.file)
+                    this._remote.defaults.timeout = 1000;
+            }
             this._remote.defaults.validateStatus = function (status) {
                 return status < 500
             };
