@@ -6,7 +6,7 @@ import { PageItem } from "../../item";
 import { PageItemBox } from "../../item/box";
 import { Mime } from "../../item/mine";
 import { SolutionOperator } from "../../operator";
-import { Workspace } from "../../workspace";
+import { Workspace } from "../../../workspace";
 import { Workarea } from "..";
 import { WorkareaType } from "../enum";
 export class PagesViewArea extends Workarea {

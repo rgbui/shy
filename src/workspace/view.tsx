@@ -1,8 +1,8 @@
 import React from "react";
 import { Workspace } from ".";
-import { Workarea } from "../workarea";
-import { WorkareaType } from "../workarea/enum";
-import { PagesViewArea, PagesViewModuleView } from "../workarea/ms/pages";
+import { Workarea } from "../solution/workarea";
+import { WorkareaType } from "../solution/workarea/enum";
+import { PagesViewArea, PagesViewModuleView } from "../solution/workarea/ms/pages";
 import { WorkspaceProfile } from "./profile";
 
 export class WorkspaceView extends React.Component<{ workspace: Workspace }> {

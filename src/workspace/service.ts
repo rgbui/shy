@@ -1,9 +1,10 @@
 
 import { BaseService } from "../service";
-import { Workspace } from "./workspace";
+import { Workspace } from ".";
 import { masterSock } from "../service/sock";
 import { CacheKey, sCache } from "../service/cache";
-import { currentParams, SyHistory } from "../history";
+import { currentParams } from "../history";
+import { PageItem } from "../solution/item";
 class WorkspaceService extends BaseService {
     /***
      * 主要是通过不同的网址来计算读取相应的workspace空间
@@ -13,18 +14,18 @@ class WorkspaceService extends BaseService {
         var domain = location.host == 'shy.live' ? undefined : location.host;
         var wsId = currentParams('/ws/:id')?.id;
         if (wsId) local = undefined;
-        return await masterSock.get<{ toId?: string, workspace: Workspace, areas: any[] }, string>('/workspace/load', {
+        return await masterSock.get<{ toId?: string, toSn?: number, workspace: Workspace, areas: any[] }, string>('/workspace/load', {
             local: local,
             domain,
-            wsId
+            sn: wsId
         })
     }
     async createWorkspace(args: { text: string }) {
-        var rr = await masterSock.post<{ id: string }, string>('/workspace/create', { text: args.text });
+        var rr = await masterSock.post<{ id: string, sn: number }, string>('/workspace/create', { text: args.text });
         return rr;
     }
     async loadWorkspacePages(workspaceId: string) {
-        var rr = await masterSock.get<{ id: string }, string>('/pages/load', { workspaceId });
+        var rr = await masterSock.get<{ pages: PageItem[] }, string>('/pages/load', { workspaceId });
         return rr;
     }
     /***

@@ -1,7 +1,7 @@
 import React from "react";
 import { generatePath } from "react-router";
-import { SyHistory } from "../../history";
-import { workspaceService } from "../service";
+import { SyHistory } from "../history";
+import { workspaceService } from "./service";
 
 export class WorkspaceCreateView extends React.Component {
     private text: string = '';
@@ -14,7 +14,7 @@ export class WorkspaceCreateView extends React.Component {
         button.disabled = true;
         try {
             var rr = await workspaceService.createWorkspace({ text: this.text })
-            if (rr.ok) return SyHistory.push(generatePath('/ws/:id', { id: rr.data.id }));
+            if (rr.ok) return SyHistory.push(generatePath('/ws/:id', { id: rr.data.sn}));
             else this.failTip = rr.warn;
             this.forceUpdate();
         }

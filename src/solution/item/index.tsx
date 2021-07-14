@@ -20,6 +20,7 @@ export class PageItem {
     viewChilds: PageItemBox;
     area: Workarea;
     mime: Mime;
+    workareaIds: string[] = [];
     selectedDate: number;
     get solution() {
         return surface.solution;

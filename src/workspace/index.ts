@@ -1,13 +1,13 @@
 import { util } from "rich/src/util/util";
-import { PageItem } from "../item";
-import { Workarea } from "../workarea";
-import { WorkareaType } from "../workarea/enum";
-import { PagesViewArea } from "../workarea/ms/pages";
+import { PageItem } from "../solution/item";
+import { Workarea } from "../solution/workarea";
+import { WorkareaType } from "../solution/workarea/enum";
+import { PagesViewArea } from "../solution/workarea/ms/pages";
 import { WorkspaceView } from "./view";
 export class Workspace {
     id: string;
     date: number;
-    inc: number;
+    sn: number;
     text: string;
     icon: { url: string };
     areas: Workarea[] = [];

@@ -5,10 +5,6 @@ import { PageItem } from "./item";
 import { Workarea } from "./workarea";
 import { SolutionOperator } from "./operator";
 import { SolutionView } from "./view";
-import { Workspace } from "./workspace";
-import { workspaceService } from "./service";
-import { SyHistory } from "../history";
-
 export class Solution extends Events<SolutionOperator> {
     constructor() {
         super();
@@ -18,7 +14,6 @@ export class Solution extends Events<SolutionOperator> {
      * 右键菜单
      */
     menu: PageItemMenu;
-    workspace: Workspace = new Workspace();
     /**
      * 当前选择的
      */
@@ -32,16 +27,7 @@ export class Solution extends Events<SolutionOperator> {
     private init() {
 
     }
-    async loadWorkspace() {
-        var rr = await workspaceService.loadWorkSpace();
-        if (rr.ok) {
-            this.workspace.load({ ...rr.data.workspace, areas: rr.data.areas });
-        }
-        return rr;
-    }
-    async loadPages() {
 
-    }
     onOpenItemMenu(item: PageItem, event: MouseEvent) {
         this.menu.openItem(item, event);
     }

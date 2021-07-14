@@ -2,7 +2,7 @@ import React from "react";
 import { Solution } from ".";
 import { surface } from "../surface";
 import { PageItemMenu } from "./extensions/menu";
-import { WorkspaceView } from "./workspace/view";
+import { WorkspaceView } from "../workspace/view";
 
 export class SolutionView extends React.Component {
     private get solution() {
@@ -40,7 +40,7 @@ export class SolutionView extends React.Component {
     render() {
         return <div className='sy-wss' onKeyDownCapture={e => this.keydown(e.nativeEvent)} tabIndex={1}>
             <PageItemMenu ref={e => this.solution.menu = e}></PageItemMenu>
-            {this.solution.workspace && <WorkspaceView workspace={this.solution.workspace} ></WorkspaceView>}
+            {surface.workspace && <WorkspaceView workspace={surface.workspace} ></WorkspaceView>}
         </div>
     }
 }

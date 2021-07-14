@@ -1,7 +1,7 @@
 import React from "react";
 import { util } from "rich/src/util/util";
 import { PageItem } from "../item";
-import { Workspace } from "../workspace";
+import { Workspace } from "../../workspace";
 import { WorkareaType } from "./enum";
 
 export class Workarea {
