@@ -18,7 +18,7 @@ export class Solution extends Events<SolutionOperator> {
      * 右键菜单
      */
     menu: PageItemMenu;
-    workspace: Workspace;
+    workspace: Workspace = new Workspace();
     /**
      * 当前选择的
      */
@@ -38,6 +38,9 @@ export class Solution extends Events<SolutionOperator> {
             this.workspace.load({ ...rr.data.workspace, areas: rr.data.areas });
         }
         return rr;
+    }
+    async loadPages() {
+
     }
     onOpenItemMenu(item: PageItem, event: MouseEvent) {
         this.menu.openItem(item, event);

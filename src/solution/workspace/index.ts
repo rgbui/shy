@@ -7,6 +7,7 @@ import { WorkspaceView } from "./view";
 export class Workspace {
     id: string;
     date: number;
+    inc: number;
     text: string;
     icon: { url: string };
     areas: Workarea[] = [];
