@@ -60,7 +60,7 @@ class Sock {
         if (this._remote) return this._remote;
         else {
             this._remote = axios.create();
-            if (config.isDev) this._remote.defaults.timeout = 300;
+            if (config.isDev) this._remote.defaults.timeout = 1000;
             else if (config.isBeta || config.isPro) {
                 if (this.type != SockType.file)
                     this._remote.defaults.timeout = 1000;

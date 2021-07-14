@@ -9,7 +9,7 @@ import "./solution/style.less";
 import "./user/style.less";
 import { ViewSurface } from './surface/view';
 import { Login } from './user/login';
-import { WorkspaceCreateView } from './solution/workspace/create';
+import { WorkspaceCreateView } from './workspace/create';
 import { TestView } from './test/view';
 import { SyHistory } from './history';
 // render react DOM
