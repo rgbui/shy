@@ -1,6 +1,5 @@
-import React, { MouseEvent } from "react";
+import React from "react";
 import { SyHistory } from "../history";
-
 import { CacheKey, sCache } from "../service/cache";
 import { surface } from "../surface";
 import { userService } from "./service";
@@ -35,6 +34,9 @@ export class Login extends React.Component {
         }
         else alert(result.warn);
     }
+    clear() {
+        if (this.codeExpireCounterTime) clearInterval(this.codeExpireCounterTime);
+    }
     async phoneSign(event?: globalThis.MouseEvent) {
         var button = event ? (event.target as HTMLButtonElement) : (this.el.querySelector('.sy-login-box-button button') as HTMLButtonElement);
         button.disabled = true;
@@ -45,9 +47,11 @@ export class Login extends React.Component {
                 sCache.set(CacheKey.token, result.data.token, 180, 'd');
                 Object.assign(surface.user, result.data.user);
                 this.signFailMsg = '';
-                if (result.data.justRegistered == true)
-                    this.mode = 'phoneName';
-                else return SyHistory.push('/')
+                if (result.data.justRegistered == true) this.mode = 'phoneName';
+                else {
+                    this.clear();
+                    return SyHistory.push('/');
+                }
             }
         }
         catch (ex) {
@@ -61,7 +65,13 @@ export class Login extends React.Component {
         button.disabled = true;
         try {
             var rr = await userService.updateName(this.name);
-            if (rr.ok) return SyHistory.push('/');
+            if (rr.ok) {
+                surface.updateUser({ name: this.name });
+                {
+                    this.clear();
+                    return SyHistory.push('/');
+                }
+            }
             else this.updateNameFileMsg = rr.warn;
         }
         catch (ex) {
@@ -69,13 +79,9 @@ export class Login extends React.Component {
         }
         button.disabled = false;
         this.forceUpdate();
-
     }
     async keydown(event: KeyboardEvent) {
         if (event.key == 'Enter') await this.phoneSign()
-    }
-    async componentDidMount() {
-
     }
     private el: HTMLElement;
     render() {
