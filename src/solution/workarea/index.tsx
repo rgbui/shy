@@ -1,20 +1,14 @@
 import React from "react";
 import { util } from "rich/src/util/util";
 import { PageItem } from "../item";
-import { Workspace } from "../../workspace";
 import { WorkareaType } from "./enum";
-
 export class Workarea {
-    constructor(workspace: Workspace) {
-        this.workspace = workspace;
-    }
     id: string;
     date: number;
     type: WorkareaType;
     text: string;
     items: PageItem[] = [];
     spread: boolean;
-    workspace: Workspace;
     load(data) {
         this.items = [];
         for (var n in data) {

@@ -2,7 +2,7 @@
 import { BaseService } from "../service";
 import { Workspace } from ".";
 import { masterSock } from "../service/sock";
-import { CacheKey, sCache } from "../service/cache";
+import { CacheKey, sCache, yCache } from "../service/cache";
 import { currentParams } from "../history";
 import { PageItem } from "../solution/item";
 class WorkspaceService extends BaseService {
@@ -29,16 +29,19 @@ class WorkspaceService extends BaseService {
         return rr;
     }
     async loadPageChilds(pageId: string) {
-        var rr = await masterSock.get<{ pages: PageItem[] }, string>('/page/subs', { pageId: pageId });
+        var rr = await masterSock.get<{ list: PageItem[] }, string>('/page/subs', { parentId: pageId });
         return rr;
     }
     async updatePage(item: PageItem) {
         if (typeof item.sn === 'undefined') {
             var re = await masterSock.post<{ item: PageItem }, string>('/page/create', {
-                id: item.id,
-                text: item.text,
-                parentId: item.parent?.id,
-                workareaIds: item.workareaIds?.length > 0 ? item.workareaIds : undefined,
+                data: {
+                    id: item.id,
+                    text: item.text,
+                    parentId: item.parentId ? item.parentId : item.parent?.id,
+                    workareaIds: item.workareaIds?.length > 0 ? item.workareaIds : undefined,
+                    workspaceId: item.workspace?.id
+                }
             });
             if (re.ok) {
                 item.sn = re.data.item.sn;
@@ -56,10 +59,13 @@ class WorkspaceService extends BaseService {
         await masterSock.delete('/page/delete/' + id);
     }
     async loadPageContent(id: string) {
-        return null;
+        var r = yCache.get(id);
+        if (r) {
+            return r;
+        }
     }
     async savePageContent(id: string, content: Record<string, any>) {
-
+        yCache.set(id, content);
     }
 }
 export var workspaceService = new WorkspaceService();

@@ -35,7 +35,7 @@ export class Workspace {
         var mo: Workarea
         switch (type) {
             case WorkareaType.pages:
-                mo = new PagesViewArea(this);
+                mo = new PagesViewArea();
                 mo.load(area);
                 break;
         }

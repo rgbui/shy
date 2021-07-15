@@ -43,9 +43,10 @@ export class PageItem {
         return this.workspace.url + this.path;
     }
     get workspace() {
-        return this.area.workspace;
+        return surface.workspace
     }
     parent?: PageItem;
+    parentId?: string;
     load(data) {
         for (var n in data) {
             if (n == 'childs') {
@@ -53,7 +54,6 @@ export class PageItem {
                 data.childs.each(child => {
                     var item = new PageItem();
                     item.parent = this;
-                    item.area = this.area;
                     item.load(child);
                     this.childs.push(item);
                 });
@@ -70,9 +70,10 @@ export class PageItem {
         if (this.spread == true && this.checkedHasChilds == false) {
             var sus = await workspaceService.loadPageChilds(this.id);
             if (sus.ok == true) {
-                this.load({ items: sus.data.pages })
+                this.load({ childs: sus.data.list })
             }
             this.checkedHasChilds = true;
+            if (this.view) this.view.forceUpdate();
         }
         this.solution.emit(SolutionOperator.togglePageItem, this);
     }
@@ -81,18 +82,16 @@ export class PageItem {
         item.id = util.guid();
         item.text = '新页面';
         item.mime = Mime.page;
-        item.area = this.area;
         item.spread = false;
-        item.createDate = new Date();
-        item.creater = surface.user.id;
+        item.parentId = this.id;
+        item.parent = this;
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
         this.solution.emit(SolutionOperator.addSubPageItem, item);
         this.childs.insertAt(0, item);
-        if (this.view)
-            this.view.forceUpdate(() => {
-                item.onEdit();
-            });
+        if (this.view) this.view.forceUpdate(() => {
+            item.onEdit();
+        });
         else console.error('not found item view when add child')
     }
     onEdit() {
@@ -118,13 +117,19 @@ export class PageItem {
     getPageItemMenus() {
         var items: PageItemMenuType[] = [];
         items.push({
-            name: PageItemOperator.remove, icon: trash, text: '删除'
+            name: PageItemOperator.remove,
+            icon: trash,
+            text: '删除'
         });
         items.push({
-            name: PageItemOperator.copy, icon: copy, text: '拷贝'
+            name: PageItemOperator.copy,
+            icon: copy,
+            text: '拷贝'
         });
         items.push({
-            name: PageItemOperator.rename, icon: rename, text: '重命名'
+            name: PageItemOperator.rename,
+            icon: rename,
+            text: '重命名'
         });
         return items;
     }

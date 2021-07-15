@@ -25,6 +25,7 @@ export class PagesViewArea extends Workarea {
         item.text = '新页面';
         item.area = this;
         item.spread = false;
+        item.workareaIds = [this.id];
         item.mime = Mime.page;
         if (this.spread != true) {
             this.spread = true;
