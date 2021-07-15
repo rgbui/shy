@@ -28,12 +28,38 @@ class WorkspaceService extends BaseService {
         var rr = await masterSock.get<{ pages: PageItem[] }, string>('/pages/load', { workspaceId });
         return rr;
     }
-    /***
-     * 保存workspace，该功能后面废弃掉
-     */
-    async saveWorkspace(workspace: Workspace) {
-        // var data = await workspace.get();
-        // localStorage.setItem(WORKSPACE_CACHE_KEY + workspace.id, JSON.stringify(data));
+    async loadPageChilds(pageId: string) {
+        var rr = await masterSock.get<{ pages: PageItem[] }, string>('/page/subs', { pageId: pageId });
+        return rr;
+    }
+    async updatePage(item: PageItem) {
+        if (typeof item.sn === 'undefined') {
+            var re = await masterSock.post<{ item: PageItem }, string>('/page/create', {
+                id: item.id,
+                text: item.text,
+                parentId: item.parent?.id,
+                workareaIds: item.workareaIds?.length > 0 ? item.workareaIds : undefined,
+            });
+            if (re.ok) {
+                item.sn = re.data.item.sn;
+                item.creater = re.data.item.creater;
+                item.createDate = re.data.item.createDate;
+            }
+        }
+        else {
+            var rr = await masterSock.post('/page/update/' + item.id, { data: { text: item.text } });
+            if (rr.ok) {
+            }
+        }
+    }
+    async deletePage(id: string) {
+        await masterSock.delete('/page/delete/' + id);
+    }
+    async loadPageContent(id: string) {
+        return null;
+    }
+    async savePageContent(id: string, content: Record<string, any>) {
+
     }
 }
 export var workspaceService = new WorkspaceService();

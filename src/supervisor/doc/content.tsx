@@ -3,10 +3,9 @@ import { SY } from "rich";
 import ReactDOM from "react-dom";
 import { PageItem } from "../../solution/item";
 import { surface } from "../../surface";
-
 import { Page } from "rich/src/page";
 import { PageViewStore } from "../../service/store/view";
-
+import { workspaceService } from "../../workspace/service";
 export class DocView extends React.Component<{ item: PageItem }>{
     constructor(props) { super(props) }
     get item() {
@@ -17,7 +16,7 @@ export class DocView extends React.Component<{ item: PageItem }>{
     async componentDidMount() {
         var self = this;
         this.el = ReactDOM.findDOMNode(this) as HTMLElement;
-        var pageData = await PageViewStore.getPageData(this.item.id);
+        var pageData = await workspaceService.loadPageContent(this.item.id);
         var page = new SY.Page(this.el, {
             user: surface.user
         });
@@ -33,7 +32,7 @@ export class DocView extends React.Component<{ item: PageItem }>{
         });
         page.on('history', async function (action) {
             var _pagedata = await page.get();
-            await PageViewStore.savePageData(self.item.id, _pagedata);
+            await workspaceService.savePageContent(self.item.id, _pagedata);
         });
         await page.load(pageData);
         await page.render();
