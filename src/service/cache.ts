@@ -23,7 +23,7 @@ class SyCache {
         if (this.security == true) return Aes.decrypt(d);
         else return d;
     }
-    private getValue(key: CacheKey): { value: any, expire: number } {
+    private getValue(key: CacheKey | string): { value: any, expire: number } {
         var k = this.getKey(key);
         var value = localStorage.getItem(k);
         if (value) {
@@ -35,15 +35,15 @@ class SyCache {
             }
         }
     }
-    private getKey(key: CacheKey) {
+    private getKey(key: CacheKey | string) {
         if (config.isPro) return FLAG + key;
-        else return FLAG + CacheKey[key];
+        else return FLAG + (typeof key == 'number' ? CacheKey[key] : key);
     }
-    get(key: CacheKey) {
+    get(key: CacheKey | string) {
         var v = this.getValue(key);
-        if (v && v.expire > Date.now()) return v.value;
+        if (v && (typeof v.expire == 'undefined' || typeof v.expire == 'number' && v.expire > Date.now())) return v.value;
     }
-    set(key: CacheKey, value: any, expire?: number, unit: string = 'm') {
+    set(key: CacheKey | string, value: any, expire?: number, unit: string = 'm') {
         var k = this.getKey(key);
         var t = undefined;
         if (typeof expire == 'number') {
@@ -60,7 +60,7 @@ class SyCache {
         }
         localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
     }
-    has(key: CacheKey) {
+    has(key: CacheKey | string) {
         var r = this.get(key);
         if (typeof r != 'undefined') return true;
         else return false;
@@ -72,7 +72,7 @@ class SyCache {
      */
     isExpired(key: CacheKey) {
         var v = this.getValue(key);
-        if (v && v.expire < Date.now()) return true;
+        if (v && (typeof v.expire == 'undefined' || typeof v.expire == 'number' && v.expire > Date.now())) return true;
         else return false;
     }
 }
