@@ -1,4 +1,17 @@
-诗云应用程序
+[诗云](https://shy.live)应用程序
+
+## 结构
+`surface`
+ * web
+ * pc (windows,mac os,linux)
+ * mobile(android,mac os)  
+
+`workspace` 
+1. `solution`  
+  \[...workitems\]   
+    ---\[...pageItems\]   
+2. `supervisor`
+    [doc]
 
 
 ## 参考资料
