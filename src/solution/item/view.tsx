@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Icon } from "rich/src/component/icon";
 import { PageItem } from ".";
+import { workspaceService } from "../../workspace/service";
 import { SolutionOperator } from "../operator";
 import { PageItemBox } from "./box";
 
@@ -19,18 +20,6 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     el: HTMLElement;
     componentDidMount() {
         this.el = ReactDOM.findDOMNode(this) as HTMLElement;
-    }
-    componentWillUnmount() {
-
-    }
-    componentDidUpdate() {
-        // var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
-        // if (input) {
-        //     setTimeout(() => {
-        //         input.focus();
-        //         input.select();
-        //     }, 100);
-        // }
     }
     mousedown(event: MouseEvent) {
         var item = this.props.item;
@@ -63,8 +52,11 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
             }, 400);
         }
     }
-    inputBlur() {
-        if (!this.item.text) { this.item.text = this.lastName; }
+    async inputBlur() {
+        if (!this.item.text) {
+            this.item.text = this.lastName;
+        }
+        await workspaceService.updatePage(this.item);
         this.solution.emit(SolutionOperator.changePageItemName, this.item);
         this.solution.onEditItem(null);
     }
@@ -91,6 +83,7 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
                     <Icon className='sy-ws-item-page-add' icon='add:sy'></Icon>
                 </div>}
             </div>
+            {item.willLoadSubs == true && <div className='sy-ws-item-page-loaddding'>...</div>}
             {item.spread != false && <PageItemBox items={item.childs || []} deep={(this.props.deep || 0) + 1}></PageItemBox>}
         </div>
     }

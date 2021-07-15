@@ -41,16 +41,6 @@ export class Workarea {
         if (typeof this.id == 'undefined') this.id = util.guid();
         if (typeof this.date == 'undefined') this.date = Date.now();
     }
-    get() {
-        return {
-            type: this.type,
-            text: this.text,
-            items: this.items.map(item => {
-                return item.get()
-            }),
-            spread: this.spread
-        }
-    }
     view: React.Component;
     onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;

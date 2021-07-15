@@ -10,7 +10,6 @@ export async function fingerFlag() {
     // Get the visitor identifier when you need it.
     const fp = await fpPromise;
     const result = await fp.get();
-    console.log(result);
     // This is the visitor identifier:
     const visitorId = result.visitorId;
     fingerId = visitorId;

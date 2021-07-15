@@ -27,7 +27,6 @@ export class Solution extends Events<SolutionOperator> {
     private init() {
 
     }
-
     onOpenItemMenu(item: PageItem, event: MouseEvent) {
         this.menu.openItem(item, event);
     }

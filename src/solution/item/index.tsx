@@ -11,17 +11,23 @@ import rename from "../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
 import { PageItemOperator } from "./operator.declare";
 import { SolutionOperator } from "../operator";
+import { workspaceService } from "../../workspace/service";
 export class PageItem {
     id: string;
+    sn?: number;
     childs?: PageItem[];
     text: string;
     spread: boolean = false;
     view: PageItemView;
+    creater: string;
+    createDate: Date;
     viewChilds: PageItemBox;
     area: Workarea;
     mime: Mime;
     workareaIds: string[] = [];
     selectedDate: number;
+    checkedHasChilds: boolean = false;
+    willLoadSubs: boolean = false;
     get solution() {
         return surface.solution;
     }
@@ -57,22 +63,17 @@ export class PageItem {
             }
         }
     }
-    get() {
-        return {
-            id: this.id,
-            childs: Array.isArray(this.childs) ? this.childs.map(c => c.get()) : undefined,
-            text: this.text,
-            spread: this.spread,
-            mime: this.mime,
-            uri: this.uri,
-            selectedDate: this.selectedDate
-        }
-    }
-    onSpread(spread?: boolean) {
+    async onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
         this.spread = sp == false ? true : false;
         if (this.view) this.view.forceUpdate();
-        else console.error('not found item view when spread');
+        if (this.spread == true && this.checkedHasChilds == false) {
+            var sus = await workspaceService.loadPageChilds(this.id);
+            if (sus.ok == true) {
+                this.load({ items: sus.data.pages })
+            }
+            this.checkedHasChilds = true;
+        }
         this.solution.emit(SolutionOperator.togglePageItem, this);
     }
     onAdd() {
@@ -82,6 +83,8 @@ export class PageItem {
         item.mime = Mime.page;
         item.area = this.area;
         item.spread = false;
+        item.createDate = new Date();
+        item.creater = surface.user.id;
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
         this.solution.emit(SolutionOperator.addSubPageItem, item);
@@ -95,7 +98,9 @@ export class PageItem {
     onEdit() {
         this.solution.onEditItem(this);
     }
-    onRemove() {
+    async onRemove() {
+        var id = this.id;
+        await workspaceService.deletePage(id);
         if (this.solution.selectItems.exists(g => g == this)) {
             this.solution.selectItems.remove(this);
         }
@@ -107,6 +112,7 @@ export class PageItem {
             this.area.items.remove(g => g == this);
             this.area.view.forceUpdate();
         }
+
         this.solution.emit(SolutionOperator.removePageItem, this);
     }
     getPageItemMenus() {
