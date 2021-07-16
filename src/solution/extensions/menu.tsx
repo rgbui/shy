@@ -5,11 +5,11 @@ import { Point } from 'rich/src/common/point';
 import { Icon } from 'rich/src/component/icon';
 import { SyExtensionsComponent } from "rich/src/extensions/sy.component"
 import { PageItem } from '../item';
-import { PageItemOperator } from '../item/operator.declare';
+import { PageItemDirective } from '../item/operator.declare';
 export type PageItemMenuType = {
-    name: PageItemOperator,
-    icon: string | SvgrComponent,
-    text: string,
+    name?: PageItemDirective,
+    icon?: string | SvgrComponent,
+    text?: string,
     label?: string,
     disabled?: boolean,
     childs?: PageItemMenuType[],
@@ -33,17 +33,6 @@ export class PageItemMenu extends SyExtensionsComponent<{}, string> {
     items: PageItemMenuType[] = [];
     visible: boolean = false;
     point: Point = new Point(0, 0);
-    renderItem(item: PageItemMenuType) {
-        return <div key={item.name} className='sy-ws-menu-item'>
-            {item.type == 'devide' && <a className='sy-ws-menu-item-devide'></a>}
-            {(item.type == 'item' || !item.type) && <a className={`sy-ws-menu-item-option ${item.disabled == true ? "disabled" : ""}`} onMouseDown={e => this.mousedownItem(item, e.nativeEvent)}>
-                <Icon icon={item.icon} size={17}></Icon>
-                <span>{item.text}</span>
-                <label>{item.label}</label>
-            </a>}
-            {item.type == 'text' && <a className='sy-ws-menu-item-text'></a>}
-        </div>
-    }
     private mousedownCover(event: MouseEvent) {
         var target = event.target as HTMLElement;
         if (target && target.classList.contains('sy-ws-menu-cove')) {
@@ -63,15 +52,26 @@ export class PageItemMenu extends SyExtensionsComponent<{}, string> {
             this.forceUpdate();
         }
     }
+    renderItem(item: PageItemMenuType, at: number) {
+        return <div key={at} className='sy-ws-menu-item'>
+            {item.type == 'devide' && <a className='sy-ws-menu-item-devide'></a>}
+            {(item.type == 'item' || !item.type) && <a className={`sy-ws-menu-item-option ${item.disabled == true ? "disabled" : ""}`} onMouseUp={e => this.mousedownItem(item, e.nativeEvent)}>
+                <Icon icon={item.icon} size={17}></Icon>
+                <span>{item.text}</span>
+                <label>{item.label}</label>
+            </a>}
+            {item.type == 'text' && <a className='sy-ws-menu-item-text'><span>{item.text}</span></a>}
+        </div>
+    }
     render() {
         var style: Record<string, any> = {};
         style.top = this.point.y;
         style.left = this.point.x;
         return createPortal(
             <div className='sy-ws-menu'>
-                {this.visible && <div className='sy-ws-menu-cove' onMouseDown={e => this.mousedownCover(e.nativeEvent)} >
+                {this.visible && <div className='sy-ws-menu-cove' onMouseUp={e => this.mousedownCover(e.nativeEvent)} >
                     <div className='sy-ws-menu-box' style={style}>
-                        <div className='sy-ws-menu-box-content'>{this.items.map(item => this.renderItem(item))}</div>
+                        <div className='sy-ws-menu-box-content'>{this.items.map((item, index) => this.renderItem(item, index))}</div>
                     </div>
                 </div>}
             </div>

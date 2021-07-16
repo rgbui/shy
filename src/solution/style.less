@@ -226,9 +226,11 @@
     .sy-ws-menu-item {
 
         &-devide {
-            height    : 1px;
-            box-shadow: rgb(55, 53, 47, 0.09) 0px 1px 0px;
-            display   : block;
+            height       : 1px;
+            display      : block;
+            margin-top   : 6px;
+            margin-bottom: 6px;
+            box-shadow   : rgba(55, 53, 47, 0.09) 0px -1px 0px;
         }
 
         &-option {
@@ -241,7 +243,7 @@
             line-height    : 28px;
             font-size      : 14px;
             color          : rgba(55, 53, 47);
-            padding        : 0px 20px;
+            padding        : 0px 14px;
             cursor         : pointer;
 
             .sy-icon {
@@ -258,9 +260,10 @@
             }
 
             span {
-                display    : inline-flex;
-                margin-left: 3px;
-                flex-grow  : 1.0;
+                display     : inline-flex;
+                margin-left : 8px;
+                margin-right: 14px;
+                flex-grow   : 1.0;
             }
 
             .sy-ws-item-page-input {
@@ -273,8 +276,6 @@
                     outline         : none;
                 }
             }
-
-
 
             &:hover {
                 background-color: rgba(55, 53, 47, 0.08);
@@ -290,7 +291,7 @@
 
         &-text {
             display    : block;
-            padding    : 0px 20px;
+            padding    : 0px 14px;
             font-size  : 12px;
             line-height: 16px;
             color      : rgba(55, 53, 47, 0.4);
@@ -310,6 +311,7 @@
         input {
             width: 100%;
         }
+
         margin-bottom: 14px;
     }
 
