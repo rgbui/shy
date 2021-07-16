@@ -1,5 +1,7 @@
-export enum PageItemOperator {
+export enum PageItemDirective {
     copy,
     remove,
-    rename
+    rename,
+    link,
+    cut
 }

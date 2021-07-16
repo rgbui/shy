@@ -5,7 +5,7 @@ import { surface } from "../../../surface";
 import { PageItem } from "../../item";
 import { PageItemBox } from "../../item/box";
 import { Mime } from "../../item/mine";
-import { SolutionOperator } from "../../operator";
+import { SolutionDirective } from "../../operator";
 import { Workspace } from "../../../workspace";
 import { Workarea } from "..";
 import { WorkareaType } from "../enum";
@@ -29,13 +29,13 @@ export class PagesViewArea extends Workarea {
         item.mime = Mime.page;
         if (this.spread != true) {
             this.spread = true;
-            this.solution.emit(SolutionOperator.toggleModule, this);
+            this.solution.emit(SolutionDirective.toggleModule, this);
         }
         this.items.insertAt(0, item);
         this.view.forceUpdate(() => {
             item.onEdit();
         });
-        this.solution.emit(SolutionOperator.addSubPageItem, item);
+        this.solution.emit(SolutionDirective.addSubPageItem, item);
     }
 }
 export class PagesViewModuleView extends React.Component<{ module: PagesViewArea }> {

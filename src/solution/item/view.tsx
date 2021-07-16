@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Icon } from "rich/src/component/icon";
 import { PageItem } from ".";
-import { workspaceService } from "../../workspace/service";
-import { SolutionOperator } from "../operator";
 import { PageItemBox } from "./box";
 
 export class PageItemView extends React.Component<{ item: PageItem, deep?: number }> {
@@ -14,15 +12,12 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     get item() {
         return this.props.item;
     }
-    get solution() {
-        return this.item.solution;
-    }
     el: HTMLElement;
     componentDidMount() {
         this.el = ReactDOM.findDOMNode(this) as HTMLElement;
     }
     mousedown(event: MouseEvent) {
-        var item = this.props.item;
+        var item = this.item;
         var target = event.target as HTMLElement;
         if (target.classList.contains('sy-ws-item-page-spread')) {
             item.onSpread();
@@ -31,52 +26,59 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
             item.onAdd();
         }
         else if (target.classList.contains('sy-ws-item-page-property')) {
-            this.item.solution.onOpenItemMenu(this.item, event);
+            item.onOpenItemMenu(event);
         }
         else {
-            this.item.solution.onMousedownItem(this.item, event);
+            item.onMousedownItem(event);
         }
     }
     inputName(event: Event) {
         var input = event.target as HTMLInputElement;
-        this.item.text = input.value;
+        this.item.text = input.value.trim();
     }
-    private lastName;
+    private lastName: string;
     select() {
         var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
         if (input) {
             this.lastName = this.item.text;
-            setTimeout(() => {
-                input.focus();
-                input.select();
-            }, 400);
+            input.focus();
+            input.select();
         }
     }
-    async inputBlur() {
-        if (!this.item.text) {
-            this.item.text = this.lastName;
+    async blur() {
+        if (this.lastName != this.item.text) {
+            if (!this.item.text) {
+                this.item.text = this.lastName;
+            }
+            else {
+                this.item.onUpdate({ text: this.item.text });
+            }
         }
-        await workspaceService.updatePage(this.item);
-        this.solution.emit(SolutionOperator.changePageItemName, this.item);
-        this.solution.onEditItem(null);
+        this.item.onExitEdit();
     }
     contextmenu(event: MouseEvent) {
         event.preventDefault();
-        this.item.solution.onOpenItemMenu(this.item, event);
+        this.item.onContextmenu(event);
+    }
+    async keydown(event: KeyboardEvent) {
+        if (event.code == 'Enter') {
+            await this.blur()
+        }
     }
     render() {
         var self = this;
         var item = this.props.item;
         var style: Record<string, any> = {};
         style.paddingLeft = 10 + (this.props.deep || 0) * 15;
-        var isInEdit = this.solution.editItem == item;
+        var isInEdit = this.item.isInEdit;
         return <div className='sy-ws-item'>
-            <div className={'sy-ws-item-page' + (this.solution.selectItems.exists(g => g == item) ? " sy-ws-item-page-selected" : "")} style={style} onContextMenu={e => self.contextmenu(e.nativeEvent)} onMouseDown={e => self.mousedown(e.nativeEvent)}>
+            <div className={'sy-ws-item-page' + (this.item.isSelected ? " sy-ws-item-page-selected" : "")} style={style} onContextMenu={e => self.contextmenu(e.nativeEvent)} onMouseDown={e => self.mousedown(e.nativeEvent)}>
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
                 {!isInEdit && <span>{item.text}</span>}
                 {isInEdit && <div className='sy-ws-item-page-input'><input type='text'
-                    onBlur={e => this.inputBlur()}
+                    onBlur={e => this.blur()}
                     defaultValue={item.text}
+                    onKeyDown={e => this.keydown(e.nativeEvent)}
                     onInput={e => self.inputName(e.nativeEvent)} /></div>}
                 {!isInEdit && <div className='sy-ws-item-page-operators'>
                     <Icon className='sy-ws-item-page-property' icon='elipsis:sy'></Icon>

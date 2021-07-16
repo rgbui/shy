@@ -3,9 +3,9 @@ import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
 import { Workarea } from "./workarea";
-import { SolutionOperator } from "./operator";
+import { SolutionDirective } from "./operator";
 import { SolutionView } from "./view";
-export class Solution extends Events<SolutionOperator> {
+export class Solution extends Events<SolutionDirective> {
     constructor() {
         super();
         this.init()
@@ -37,7 +37,7 @@ export class Solution extends Events<SolutionOperator> {
             this.selectItems = [item];
             lastItems.each(item => item.view.forceUpdate())
             item.view.forceUpdate();
-            this.emit(SolutionOperator.openItem, item);
+            this.emit(SolutionDirective.openItem, item);
         }
         else {
             item.selectedDate = new Date().getTime();
@@ -62,16 +62,16 @@ export class Solution extends Events<SolutionOperator> {
 }
 
 export interface Solution {
-    on(name: SolutionOperator.openItem, fn: (item: PageItem) => void);
-    emit(name: SolutionOperator.openItem, item: PageItem);
-    emit(name: SolutionOperator.addSubPageItem, item: PageItem);
-    on(name: SolutionOperator.addSubPageItem, fn: (item: PageItem) => void);
-    emit(name: SolutionOperator.removePageItem, item: PageItem);
-    on(name: SolutionOperator.removePageItem, fn: (item: PageItem) => void);
-    emit(name: SolutionOperator.changePageItemName, item: PageItem);
-    on(name: SolutionOperator.changePageItemName, fn: (item: PageItem) => void);
-    emit(name: SolutionOperator.toggleModule, module: Workarea);
-    on(name: SolutionOperator.toggleModule, fn: (module: Workarea) => void);
-    emit(name: SolutionOperator.togglePageItem, item: PageItem);
-    on(name: SolutionOperator.togglePageItem, fn: (item: PageItem) => void);
+    on(name: SolutionDirective.openItem, fn: (item: PageItem) => void);
+    emit(name: SolutionDirective.openItem, item: PageItem);
+    emit(name: SolutionDirective.addSubPageItem, item: PageItem);
+    on(name: SolutionDirective.addSubPageItem, fn: (item: PageItem) => void);
+    emit(name: SolutionDirective.removePageItem, item: PageItem);
+    on(name: SolutionDirective.removePageItem, fn: (item: PageItem) => void);
+    emit(name: SolutionDirective.updatePageItem, item: PageItem);
+    on(name: SolutionDirective.updatePageItem, fn: (item: PageItem) => void);
+    emit(name: SolutionDirective.toggleModule, module: Workarea);
+    on(name: SolutionDirective.toggleModule, fn: (module: Workarea) => void);
+    emit(name: SolutionDirective.togglePageItem, item: PageItem);
+    on(name: SolutionDirective.togglePageItem, fn: (item: PageItem) => void);
 }

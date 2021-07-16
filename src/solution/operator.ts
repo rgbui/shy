@@ -1,8 +1,8 @@
 
-export enum SolutionOperator {
+export enum SolutionDirective {
     addSubPageItem,
     removePageItem,
-    changePageItemName,
+    updatePageItem,
     toggleModule,
     togglePageItem,
     openItem

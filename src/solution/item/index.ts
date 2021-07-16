@@ -9,8 +9,11 @@ import { PageItemMenuType } from "../extensions/menu";
 import trash from "rich/src/assert/svg/trash.svg";
 import rename from "../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
-import { PageItemOperator } from "./operator.declare";
-import { SolutionOperator } from "../operator";
+import cut from "../../assert/svg/cut.svg";
+import link from '../../assert/svg/link.svg';
+
+import { PageItemDirective } from "./operator.declare";
+import { SolutionDirective } from "../operator";
 import { workspaceService } from "../../workspace/service";
 export class PageItem {
     id: string;
@@ -59,7 +62,11 @@ export class PageItem {
                 });
             }
             else {
-                this[n] = data[n];
+                if (n == 'mime') {
+                    if (typeof data[n] == 'number') this[n] = data[n];
+                    else this[n] = Mime[data[n]] as any;
+                }
+                else this[n] = data[n];
             }
         }
     }
@@ -75,7 +82,7 @@ export class PageItem {
             this.checkedHasChilds = true;
             if (this.view) this.view.forceUpdate();
         }
-        this.solution.emit(SolutionOperator.togglePageItem, this);
+        this.solution.emit(SolutionDirective.togglePageItem, this);
     }
     onAdd() {
         var item = new PageItem();
@@ -87,7 +94,7 @@ export class PageItem {
         item.parent = this;
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
-        this.solution.emit(SolutionOperator.addSubPageItem, item);
+        this.solution.emit(SolutionDirective.addSubPageItem, item);
         this.childs.insertAt(0, item);
         if (this.view) this.view.forceUpdate(() => {
             item.onEdit();
@@ -96,6 +103,9 @@ export class PageItem {
     }
     onEdit() {
         this.solution.onEditItem(this);
+    }
+    onExitEdit() {
+        this.solution.onEditItem(null);
     }
     async onRemove() {
         var id = this.id;
@@ -112,38 +122,82 @@ export class PageItem {
             this.area.view.forceUpdate();
         }
 
-        this.solution.emit(SolutionOperator.removePageItem, this);
+        this.solution.emit(SolutionDirective.removePageItem, this);
     }
     getPageItemMenus() {
         var items: PageItemMenuType[] = [];
         items.push({
-            name: PageItemOperator.remove,
+            name: PageItemDirective.remove,
             icon: trash,
             text: '删除'
         });
         items.push({
-            name: PageItemOperator.copy,
+            name: PageItemDirective.copy,
             icon: copy,
             text: '拷贝'
         });
         items.push({
-            name: PageItemOperator.rename,
+            name: PageItemDirective.rename,
             icon: rename,
             text: '重命名'
+        });
+        items.push({
+            type: 'devide'
+        })
+        items.push({
+            name: PageItemDirective.link,
+            icon: link,
+            text: '链接'
+        });
+        items.push({
+            name: PageItemDirective.cut,
+            icon: cut,
+            text: '剪贴'
+        });
+        items.push({
+            type: 'devide'
+        });
+        items.push({
+            type: 'text',
+            text: '编辑人kanhai'
+        });
+        items.push({
+            type: 'text',
+            text: '编辑于2021.19.20'
         });
         return items;
     }
     onMenuClickItem(menuItem: PageItemMenuType, event: MouseEvent) {
         switch (menuItem.name) {
-            case PageItemOperator.copy:
+            case PageItemDirective.copy:
                 break;
-            case PageItemOperator.remove:
+            case PageItemDirective.remove:
                 this.onRemove();
                 break;
-            case PageItemOperator.rename:
+            case PageItemDirective.rename:
                 this.onEdit();
                 break;
         }
+    }
+    onOpenItemMenu(event: MouseEvent) {
+        this.solution.onOpenItemMenu(this, event);
+    }
+    onMousedownItem(event: MouseEvent) {
+        this.solution.onMousedownItem(this, event);
+    }
+    onContextmenu(event: MouseEvent) {
+        this.solution.onOpenItemMenu(this, event);
+    }
+    async onUpdate(data: Record<string, any>) {
+        Object.assign(this, data);
+        await workspaceService.updatePage(this);
+        this.solution.emit(SolutionDirective.updatePageItem, this);
+    }
+    get isInEdit() {
+        return this.solution.editItem === this;
+    }
+    get isSelected() {
+        return this.solution.selectItems.exists(this);
     }
 }
 

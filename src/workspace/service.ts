@@ -5,6 +5,7 @@ import { masterSock } from "../service/sock";
 import { CacheKey, sCache, yCache } from "../service/cache";
 import { currentParams } from "../history";
 import { PageItem } from "../solution/item";
+import { Mime } from "../solution/item/mine";
 class WorkspaceService extends BaseService {
     /***
      * 主要是通过不同的网址来计算读取相应的workspace空间
@@ -40,7 +41,8 @@ class WorkspaceService extends BaseService {
                     text: item.text,
                     parentId: item.parentId ? item.parentId : item.parent?.id,
                     workareaIds: item.workareaIds?.length > 0 ? item.workareaIds : undefined,
-                    workspaceId: item.workspace?.id
+                    workspaceId: item.workspace?.id,
+                    mime: item.mime
                 }
             });
             if (re.ok) {
@@ -60,9 +62,7 @@ class WorkspaceService extends BaseService {
     }
     async loadPageContent(id: string) {
         var r = yCache.get(id);
-        if (r) {
-            return r;
-        }
+        if (r) return r;
     }
     async savePageContent(id: string, content: Record<string, any>) {
         yCache.set(id, content);

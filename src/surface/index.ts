@@ -3,7 +3,7 @@ import { User } from "../user/user";
 import { ViewSurface } from "./view";
 import { Solution } from "../solution";
 import { Events } from "rich/src/util/events";
-import { SolutionOperator } from "../solution/operator";
+import { SolutionDirective } from "../solution/operator";
 import { Supervisor } from "../supervisor";
 import { SyHistory } from "../history";
 import { generatePath } from "react-router";
@@ -24,22 +24,22 @@ class Surface extends Events {
      */
     isSuccessfullyLoaded: boolean = false;
     private init() {
-        this.solution.on(SolutionOperator.openItem, (item) => {
+        this.solution.on(SolutionDirective.openItem, (item) => {
             this.supervisor.onOpenItem(item);
         });
-        this.solution.on(SolutionOperator.togglePageItem, (item) => {
+        this.solution.on(SolutionDirective.togglePageItem, (item) => {
             // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
-        this.solution.on(SolutionOperator.changePageItemName, (item) => {
+        this.solution.on(SolutionDirective.updatePageItem, (item) => {
             // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
-        this.solution.on(SolutionOperator.removePageItem, (item) => {
+        this.solution.on(SolutionDirective.removePageItem, (item) => {
             // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
-        this.solution.on(SolutionOperator.addSubPageItem, (item) => {
+        this.solution.on(SolutionDirective.addSubPageItem, (item) => {
             // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
-        this.solution.on(SolutionOperator.toggleModule, (item) => {
+        this.solution.on(SolutionDirective.toggleModule, (item) => {
             // WorkspaceStore.saveWorkspace(this.solution.workspace);
         });
     }

@@ -10,6 +10,7 @@ export class DocPage extends React.Component<{ item: PageItem }> {
         return this.props.item;
     }
     render() {
+        console.log('page..',this.item);
         return <div className='sy-doc'>
             <DocBar></DocBar>
             <DocView item={this.item}></DocView>
