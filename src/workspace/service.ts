@@ -1,11 +1,11 @@
 
 import { BaseService } from "../service";
 import { Workspace } from ".";
-import { masterSock } from "../service/sock";
+import { masterSock, userSock } from "../service/sock";
 import { CacheKey, sCache, yCache } from "../service/cache";
 import { currentParams } from "../history";
 import { PageItem } from "../solution/item";
-import { Mime } from "../solution/item/mine";
+import { TableMeta } from "rich/blocks/data-present/schema/meta";
 class WorkspaceService extends BaseService {
     /***
      * 主要是通过不同的网址来计算读取相应的workspace空间
@@ -66,6 +66,23 @@ class WorkspaceService extends BaseService {
     }
     async savePageContent(id: string, content: Record<string, any>) {
         yCache.set(id, content);
+    }
+    async createDefaultPresentData(text: string, templateId?: string) {
+        var result = await userSock.put<TableMeta, string>('/create/present/schema', { text, templateId });
+        return result.data;
+    }
+    async searchDataPresentMeta(metaId: string) {
+        var result = await userSock.get<{ schema: Record<string, any>, fields: Record<string, any>[] }, string>('/search/schema/:id', { id: metaId });
+        return result.data;
+    }
+    async loadDataPresentData(metaId: string, options: { page: number, size: number, filter?: Record<string, any> }) {
+        var result = await userSock.get<{ list: any[], total: number }, string>('/present/schema/query', {
+            schemaId: metaId,
+            page: options.page,
+            size: options.size,
+            filter: options.filter
+        });
+        return result.data;
     }
 }
 export var workspaceService = new WorkspaceService();

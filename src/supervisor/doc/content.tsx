@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import { PageItem } from "../../solution/item";
 import { surface } from "../../surface";
 import { Page } from "rich/src/page";
-import { PageViewStore } from "../../service/store/view";
 import { workspaceService } from "../../workspace/service";
 export class DocView extends React.Component<{ item: PageItem }>{
     constructor(props) { super(props) }
@@ -34,6 +33,15 @@ export class DocView extends React.Component<{ item: PageItem }>{
             var _pagedata = await page.get();
             await workspaceService.savePageContent(self.item.id, _pagedata);
         });
+        page.on('createDefaultPresentData', async () => {
+            return {} as any;
+        });
+        page.on('loadDataPresentData', async (options) => {
+            return {} as any;
+        });
+        page.on('searchDataPresentMeta', async (metaId: string) => {
+            return {} as any;
+        })
         await page.load(pageData);
         await page.render();
     }
