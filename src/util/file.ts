@@ -6,7 +6,7 @@ var upload_file: HTMLInputElement;
  * @param options 
  * @returns 
  */
-export async function OpenMultipleFileDialoug(options: {
+export async function OpenMultipleFileDialoug(options?: {
     exts?: string[],
     maxSize?: number
 }) {
@@ -31,7 +31,7 @@ export async function OpenMultipleFileDialoug(options: {
  * @param options 
  * @returns 
  */
-export async function OpenFileDialoug(options: {
+export async function OpenFileDialoug(options?: {
     exts?: string[],
     maxSize?: number
 }) {

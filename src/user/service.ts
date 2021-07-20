@@ -3,10 +3,11 @@ import { User } from "./user";
 import { masterSock, SockResponse } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";
+import { FileMd5, OpenMultipleFileDialoug } from "../util/file";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {
-        var result: SockResponse<{justRegistered:boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: phone, $code: code });
+        var result: SockResponse<{ justRegistered: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: phone, $code: code });
         if (result.ok == false) return result;
         result = await masterSock.post('/phone/login', { phone, code });
         return result;
@@ -36,6 +37,15 @@ class UserService extends BaseService {
             }
         }
         return result;
+    }
+    /**
+     * 用户批量上传文件
+     */
+    async uploadFiles() {
+        var files = await OpenMultipleFileDialoug();
+        files.eachAsync(async (file: File) => {
+            file.md5 = await FileMd5(file);
+        });
     }
 }
 export var userService = new UserService();
