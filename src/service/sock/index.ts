@@ -4,6 +4,7 @@ import { CacheKey, sCache } from "../cache";
 import { SockType } from "./type";
 import { StatusCode } from "./status.code";
 import { config } from "../../common/config";
+import { FileMd5 } from "../../util/file";
 
 class Sock {
     private type: SockType;
@@ -126,6 +127,29 @@ class Sock {
             }
         }
         return url;
+    }
+    /**
+     * 上传文件对象
+     * @param file 
+     * @param options 
+     * @returns 
+     */
+    async upload<T = any, U = any>(file: File, options?: {
+        uploadProgress?: (event: ProgressEvent) => void
+    }) {
+        var baseUrl = await this.getBaseUrl();
+        var url = this.resolve(baseUrl, '/storage/file');
+        var configs = await this.config();
+        configs.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        if (options?.uploadProgress) (configs as any).onUploadProgress = options.uploadProgress;
+        var forms = new FormData()
+        forms.append('file', file)
+        if (!(file as any).md5) {
+            (file as any).md5 = await FileMd5(file);
+        }
+        forms.append('md5', (file as any).md5);
+        var r = await this.remote.post(url, forms, configs);
+        return this.handleResponse<T, U>(r);
     }
 }
 /**
