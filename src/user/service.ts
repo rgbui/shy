@@ -1,9 +1,10 @@
 
 import { User } from "./user";
-import { masterSock, SockResponse } from "../service/sock";
+import { fileSock, masterSock, SockResponse } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";
-import { FileMd5, OpenMultipleFileDialoug } from "../util/file";
+import { FileMd5, OpenFileDialoug, OpenMultipleFileDialoug } from "../util/file";
+import { FileType } from "../../type";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {
@@ -46,6 +47,46 @@ class UserService extends BaseService {
         files.eachAsync(async (file: File) => {
             file.md5 = await FileMd5(file);
         });
+        var fs: { file: File, data: FileType }[] = [];
+        files.eachAsync(async file => {
+            var r = await masterSock.get('/user/get/file/' + file.md5);
+            if (r && r.ok) {
+                fs.push({ file, data: r.data })
+            }
+            else {
+                var d = await fileSock.upload<FileType, string>(file);
+                if (d.ok) {
+                    var z = await masterSock.post<FileType>(`/user/storage/file`, { ...d.data, ...{ id: undefined } })
+                    if (z.ok) {
+                        fs.push({ file, data: z.data })
+                    }
+                }
+            }
+        });
+        return fs;
+    }
+    /**
+     * 用户上传单个文件
+     * @returns 
+     */
+    async uploadFile() {
+        var file = await OpenFileDialoug();
+        if (file) {
+            file.md5 = await FileMd5(file);
+            var r = await masterSock.get('/user/get/file/' + file.md5);
+            if (r && r.ok) {
+                return ({ file, data: r.data })
+            }
+            else {
+                var d = await fileSock.upload<FileType, string>(file);
+                if (d.ok) {
+                    var z = await masterSock.post<FileType>(`/user/storage/file`, { ...d.data, ...{ id: undefined } })
+                    if (z.ok) {
+                        return ({ file, data: z.data })
+                    }
+                }
+            }
+        }
     }
 }
 export var userService = new UserService();
