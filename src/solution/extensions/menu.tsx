@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { Point } from 'rich/src/common/point';
+import { Point, Rect, RectUtility } from 'rich/src/common/point';
 import { Icon } from 'rich/src/component/icon';
 import { SyExtensionsComponent } from "rich/src/extensions/sy.component"
 import { PageItem } from '../item';
@@ -27,7 +27,16 @@ export class PageItemMenu extends SyExtensionsComponent<{}, string> {
         this.visible = true;
         var items = this.currentItem.getPageItemMenus();
         this.items = items;
-        this.forceUpdate();
+        this.forceUpdate(() => {
+            if (this.boxEl) {
+                var bound = this.boxEl.getBoundingClientRect();
+                var newPoint = RectUtility.getChildRectPositionInRect(this.point, Rect.from(bound))
+                if (!this.point.equal(newPoint)) {
+                    this.point = newPoint;
+                    this.forceUpdate()
+                }
+            }
+        });
     }
     private currentItem: PageItem;
     items: PageItemMenuType[] = [];
@@ -63,6 +72,7 @@ export class PageItemMenu extends SyExtensionsComponent<{}, string> {
             {item.type == 'text' && <a className='sy-ws-menu-item-text'><span>{item.text}</span></a>}
         </div>
     }
+    private boxEl: HTMLElement;
     render() {
         var style: Record<string, any> = {};
         style.top = this.point.y;
@@ -70,7 +80,7 @@ export class PageItemMenu extends SyExtensionsComponent<{}, string> {
         return createPortal(
             <div className='sy-ws-menu'>
                 {this.visible && <div className='sy-ws-menu-cove' onMouseUp={e => this.mousedownCover(e.nativeEvent)} >
-                    <div className='sy-ws-menu-box' style={style}>
+                    <div className='sy-ws-menu-box' ref={e => this.boxEl = e} style={style}>
                         <div className='sy-ws-menu-box-content'>{this.items.map((item, index) => this.renderItem(item, index))}</div>
                     </div>
                 </div>}
