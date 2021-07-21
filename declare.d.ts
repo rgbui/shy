@@ -27,3 +27,5 @@ declare module '*.webp';
 interface File{
    md5?:string
 }
+
+
