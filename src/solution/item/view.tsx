@@ -27,9 +27,13 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
         }
         else if (target.classList.contains('sy-ws-item-page-property')) {
             item.onContextmenu(event);
+            return;
         }
         else {
             item.onMousedownItem(event);
+        }
+        if (event.button == 2) {
+            item.onContextmenu(event);
         }
     }
     inputName(event: Event) {
@@ -58,7 +62,7 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     }
     contextmenu(event: MouseEvent) {
         event.preventDefault();
-        this.item.onContextmenu(event);
+        // this.item.onContextmenu(event);
     }
     async keydown(event: KeyboardEvent) {
         if (event.code == 'Enter') {
@@ -68,14 +72,14 @@ export class PageItemView extends React.Component<{ item: PageItem, deep?: numbe
     render() {
         var self = this;
         var item = this.props.item;
-        var style:Record<string, any> = {};
+        var style: Record<string, any> = {};
         style.paddingLeft = 10 + (this.props.deep || 0) * 15;
         var isInEdit = this.item.isInEdit;
         return <div className='sy-ws-item'>
             <div className={'sy-ws-item-page' + (this.item.isSelected ? " sy-ws-item-page-selected" : "")}
                 style={style}
                 onContextMenu={e => self.contextmenu(e.nativeEvent)}
-                onMouseDown={e => self.mousedown(e.nativeEvent)}>
+                onMouseUp={e => self.mousedown(e.nativeEvent)}>
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
                 {!isInEdit && <span>{item.text}</span>}
                 {isInEdit && <div className='sy-ws-item-page-input'><input type='text'
