@@ -62,9 +62,10 @@ export class PageItem {
                 });
             }
             else {
-                if (n == 'mime') {
-                    if (typeof data[n] == 'number') this[n] = data[n];
-                    else this[n] = Mime[data[n]] as any;
+                if (n == 'mime' || n == 'mine') {
+                    var name = 'mime';
+                    if (typeof data[n] == 'number') this[name] = data[n];
+                    else this[name] = Mime[data[n]] as any;
                 }
                 else this[n] = data[n];
             }
@@ -178,9 +179,6 @@ export class PageItem {
                 this.onEdit();
                 break;
         }
-    }
-    onOpenItemMenu(event: MouseEvent) {
-        this.solution.onOpenItemMenu(this, event);
     }
     onMousedownItem(event: MouseEvent) {
         this.solution.onMousedownItem(this, event);
