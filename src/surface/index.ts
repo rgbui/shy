@@ -70,8 +70,8 @@ class Surface extends Events {
     async loadPages() {
         var rr = await workspaceService.loadWorkspacePages(this.workspace.id);
         if (rr) {
-            if (Array.isArray(rr?.data?.pages)) {
-                console.log(rr.data.pages);
+            if (Array.isArray(rr?.data?.pages))
+            {
                 this.workspace.areas.each(area => {
                     var rs = rr.data.pages.findAll(g => Array.isArray(g.workareaIds) && g.workareaIds.exists(z => z == area.id));
                     if (rs.length > 0) {

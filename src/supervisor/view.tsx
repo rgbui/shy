@@ -15,9 +15,7 @@ export class SupervisorView extends React.Component {
     get items() {
         return this.supervisor.items;
     }
-
-    renderItem(item: PageItem)
-    {
+    renderItem(item: PageItem) {
         switch (item.mime) {
             case Mime.page:
                 return <DocPage key={item.id} item={item}></DocPage>
