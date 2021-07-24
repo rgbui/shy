@@ -1,5 +1,5 @@
 import React from "react";
-import { Solution } from ".";
+
 import { surface } from "../surface";
 import { PageItemMenu } from "./extensions/menu";
 import { WorkspaceView } from "../workspace/view";

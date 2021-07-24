@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "rich/src/component/icon";
+import { Icon } from "rich/component/icon";
 import { Workspace } from ".";
 
 

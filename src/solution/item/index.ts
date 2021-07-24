@@ -1,5 +1,5 @@
 
-import { util } from "rich/src/util/util";
+import { util } from "rich/util/util";
 import { Mime } from "./mine";
 import { Workarea } from "../workarea";
 import { PageItemView } from "./view";

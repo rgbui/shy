@@ -2,7 +2,7 @@
 import { User } from "../user/user";
 import { ViewSurface } from "./view";
 import { Solution } from "../solution";
-import { Events } from "rich/src/util/events";
+import { Events } from "rich/util/events";
 import { SolutionDirective } from "../solution/operator";
 import { Supervisor } from "../supervisor";
 import { SyHistory } from "../history";

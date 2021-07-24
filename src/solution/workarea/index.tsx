@@ -1,5 +1,5 @@
 import React from "react";
-import { util } from "rich/src/util/util";
+import { util } from "rich/util/util";
 import { PageItem } from "../item";
 import { WorkareaType } from "./enum";
 export class Workarea {

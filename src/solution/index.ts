@@ -1,4 +1,4 @@
-import { Events } from "rich/src/util/events";
+import { Events } from "rich/util/events";
 import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
@@ -60,7 +60,6 @@ export class Solution extends Events<SolutionDirective> {
         }
     }
 }
-
 export interface Solution {
     on(name: SolutionDirective.openItem, fn: (item: PageItem) => void);
     emit(name: SolutionDirective.openItem, item: PageItem);

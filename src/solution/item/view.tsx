@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Icon } from "rich/src/component/icon";
+import { Icon } from "rich/component/icon";
 import { PageItem } from ".";
 import { PageItemBox } from "./box";
 

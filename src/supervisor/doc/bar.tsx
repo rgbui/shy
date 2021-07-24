@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Icon } from 'rich/src/component/icon';
+import { Icon } from 'rich/component/icon';
 export class DocBar extends React.Component {
     render() {
         return <div className='sy-doc-bar'>

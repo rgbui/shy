@@ -1,6 +1,6 @@
 import React from "react";
-import { Icon } from "rich/src/component/icon";
-import { util } from "rich/src/util/util";
+import { Icon } from "rich/component/icon";
+import { util } from "rich/util/util";
 import { surface } from "../../../surface";
 import { PageItem } from "../../item";
 import { PageItemBox } from "../../item/box";

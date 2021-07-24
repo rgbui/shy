@@ -2,8 +2,8 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { Point, Rect, RectUtility } from 'rich/src/common/point';
-import { Icon } from 'rich/src/component/icon';
-import { SyExtensionsComponent } from "rich/src/extensions/sy.component"
+import { Icon } from 'rich/component/icon';
+import { SyExtensionsComponent } from "rich/extensions/sy.component"
 import { PageItem } from '../item';
 import { PageItemDirective } from '../item/operator.declare';
 export type PageItemMenuType = {

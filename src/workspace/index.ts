@@ -1,4 +1,4 @@
-import { util } from "rich/src/util/util";
+import { util } from "rich/util/util";
 import { PageItem } from "../solution/item";
 import { Workarea } from "../solution/workarea";
 import { WorkareaType } from "../solution/workarea/enum";

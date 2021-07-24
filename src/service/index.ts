@@ -1,4 +1,4 @@
-import { Events } from "rich/src/util/events";
+import { Events } from "rich/util/events";
 import { CacheKey, sCache } from "./cache";
 import { SockResponse } from "./sock";
 

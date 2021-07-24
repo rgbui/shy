@@ -1,7 +1,7 @@
 
 import { PageItem } from "../solution/item";
 
-import { Events } from "rich/src/util/events";
+import { Events } from "rich/util/events";
 import { SupervisorView } from "./view";
 
 export class Supervisor extends Events {
