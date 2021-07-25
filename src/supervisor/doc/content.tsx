@@ -33,14 +33,17 @@ export class DocView extends React.Component<{ item: PageItem }>{
             var _pagedata = await page.get();
             await workspaceService.savePageContent(self.item.id, _pagedata);
         });
-        page.on('createDefaultPresentData', async () => {
-            return {} as any;
+        page.on('createDefaultTableSchema', async (data) => {
+            var r = await workspaceService.createDefaultTableSchema(data);
+            return r;
         });
-        page.on('loadDataPresentData', async (options) => {
-            return {} as any;
+        page.on('loadTableSchemaData', async (schemaId: string, options) => {
+            var r = await workspaceService.loadTableSchemaData(schemaId, options);
+            return r;
         });
-        page.on('searchDataPresentMeta', async (metaId: string) => {
-            return {} as any;
+        page.on('loadTableSchema', async (schemaId: string) => {
+            var r = await workspaceService.loadTableSchema(schemaId);
+            return r;
         })
         await page.load(pageData);
         await page.render();
