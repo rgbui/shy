@@ -90,6 +90,15 @@ class Sock {
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
+        url = url.replace(/(:[\w\-]+)/g, (_, $) => {
+            var key=$.substring(1);
+            if (typeof querys[key] != 'undefined') {
+                var value = querys[key];
+                delete querys[key];
+                return value;
+            }
+            else return $
+        })
         var resolveUrl = this.resolve(baseUrl, url);
         if (querys) {
             var ps: string[] = [];
