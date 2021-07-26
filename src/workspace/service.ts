@@ -71,13 +71,13 @@ class WorkspaceService extends BaseService {
         var result = await userSock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});
         return result.data?.schema;
     }
-    async loadTableSchema(metaId: string) {
-        var result = await userSock.get<{ schema: Partial<TableSchema> }, string>('/load/table/schema/:id', { id: metaId });
+    async loadTableSchema(schemaId: string) {
+        var result = await userSock.get<{ schema: Partial<TableSchema> }, string>('/load/table/schema/:id', { id: schemaId });
         return result.data?.schema;
     }
-    async loadTableSchemaData(metaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
-        var result = await userSock.get<{ list: any[], total: number }, string>('/load/table/data', {
-            schemaId: metaId,
+    async loadTableSchemaData(schemaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
+        var result = await userSock.get<{ list: any[], total: number }, string>('/load/table/:schemaId', {
+            schemaId: schemaId,
             page: options.page,
             size: options.size,
             filter: options.filter

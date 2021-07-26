@@ -85,20 +85,13 @@ class Sock {
     }
     async post<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
+        url = this.urlJoint(baseUrl, data);
         var r = await this.remote.post(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
-        url = url.replace(/(:[\w\-]+)/g, (_, $) => {
-            var key=$.substring(1);
-            if (typeof querys[key] != 'undefined') {
-                var value = querys[key];
-                delete querys[key];
-                return value;
-            }
-            else return $
-        })
+        url = this.urlJoint(url, querys);
         var resolveUrl = this.resolve(baseUrl, url);
         if (querys) {
             var ps: string[] = [];
@@ -111,13 +104,15 @@ class Sock {
         var r = await this.remote.get(resolveUrl, await this.config());
         return this.handleResponse<T, U>(r);
     }
-    async delete<T = any, U = any>(url: string) {
+    async delete<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
+        url = this.urlJoint(baseUrl, data);
         var r = await this.remote.delete(this.resolve(baseUrl, url), await this.config());
         return this.handleResponse<T, U>(r);
     }
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
+        url = this.urlJoint(baseUrl, data);
         var r = await this.remote.put(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
@@ -135,6 +130,19 @@ class Sock {
                 url += current;
             }
         }
+        return url;
+    }
+    private urlJoint(url: string, data: Record<string, any>) {
+        if (!data) return url;
+        url = url.replace(/(:[\w\-]+)/g, (_, $) => {
+            var key = $.substring(1);
+            if (typeof data[key] != 'undefined') {
+                var value = data[key];
+                delete data[key];
+                return value;
+            }
+            else return $
+        });
         return url;
     }
     /**
