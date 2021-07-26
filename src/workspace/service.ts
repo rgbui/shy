@@ -6,6 +6,8 @@ import { CacheKey, sCache, yCache } from "../service/cache";
 import { currentParams } from "../history";
 import { PageItem } from "../solution/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
+import { FieldType } from "rich/blocks/data-present/schema/field.type";
+import { FileType } from "../../type";
 class WorkspaceService extends BaseService {
     /***
      * 主要是通过不同的网址来计算读取相应的workspace空间
@@ -58,7 +60,7 @@ class WorkspaceService extends BaseService {
         }
     }
     async deletePage(id: string) {
-        await masterSock.delete('/page/delete/' + id);
+        await masterSock.delete('/page/delete/:id', { id });
     }
     async loadPageContent(id: string) {
         var r = yCache.get(id);
@@ -76,11 +78,19 @@ class WorkspaceService extends BaseService {
         return result.data?.schema;
     }
     async loadTableSchemaData(schemaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
-        var result = await userSock.get<{ list: any[], total: number }, string>('/load/table/:schemaId', {
+        var result = await userSock.get<{ list: any[], total: number }, string>('/table/:schemaId/query', {
             schemaId: schemaId,
             page: options.page,
             size: options.size,
             filter: options.filter
+        });
+        return result.data;
+    }
+    async createTableSchemaField(schemaId: string, options: { type: FieldType, text: string }) {
+        var result = await userSock.get<{ field: FileType }, string>('/create/schema/:id/field', {
+            id: schemaId,
+            type: options.type,
+            text: options.text
         });
         return result.data;
     }
