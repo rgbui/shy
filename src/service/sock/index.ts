@@ -85,7 +85,7 @@ class Sock {
     }
     async post<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
-        url = this.urlJoint(baseUrl, data);
+        url = this.urlJoint(url, data);
         var r = await this.remote.post(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
@@ -93,7 +93,7 @@ class Sock {
         var baseUrl = await this.getBaseUrl();
         url = this.urlJoint(url, querys);
         var resolveUrl = this.resolve(baseUrl, url);
-        if (querys) {
+        if (querys && Object.keys(querys).length > 0) {
             var ps: string[] = [];
             for (let q in querys) {
                 if (typeof querys[q] != 'undefined')
@@ -106,13 +106,13 @@ class Sock {
     }
     async delete<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
-        url = this.urlJoint(baseUrl, data);
+        url = this.urlJoint(url, data);
         var r = await this.remote.delete(this.resolve(baseUrl, url), await this.config());
         return this.handleResponse<T, U>(r);
     }
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
-        url = this.urlJoint(baseUrl, data);
+        url = this.urlJoint(url, data);
         var r = await this.remote.put(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
