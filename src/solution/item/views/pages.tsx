@@ -13,7 +13,7 @@ export class PagesView extends PageView {
                 <Icon icon='add:sy' mousedown={e => item.onAdd()}></Icon>
             </div>
             {item.willLoadSubs == true && <div className='sy-ws-item-page-loading'>...</div>}
-            {item.spread != false && <PageItemBox items={item.childs || []} deep={(this.props.deep || 0) + 1}></PageItemBox>}
+            <PageItemBox style={{ display: item.spread!=false ? "block" : "none" }} items={item.childs || []} deep={(this.props.deep || 0) + 1}></PageItemBox>
         </div>
     }
 }
