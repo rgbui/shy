@@ -13,10 +13,17 @@ class WorkspaceService extends BaseService {
      * 主要是通过不同的网址来计算读取相应的workspace空间
      */
     async loadWorkSpace() {
+        var pageId = currentParams('/page/:id')?.id;
         var local = sCache.get(CacheKey.workspaceId);
         var domain = location.host == 'shy.live' ? undefined : location.host;
         var wsId = currentParams('/ws/:id')?.id;
         if (wsId) local = undefined;
+        if (pageId && !wsId) {
+            var page = await masterSock.get<Partial<PageItem>, string>('/page/:id', { id: pageId });
+            if (page) {
+                wsId = page.data.workspaceId;
+            }
+        }
         return await masterSock.get<{ toId?: string, toSn?: number, workspace: Workspace, areas: any[] }, string>('/workspace/load', {
             local: local,
             domain,
@@ -28,11 +35,11 @@ class WorkspaceService extends BaseService {
         return rr;
     }
     async loadWorkspacePages(workspaceId: string) {
-        var rr = await masterSock.get<{ pages: PageItem[] }, string>('/pages/load', { workspaceId });
+        var rr = await masterSock.get<{ pages: Partial<PageItem>[] }, string>('/pages/load', { workspaceId });
         return rr;
     }
     async loadPageChilds(pageId: string) {
-        var rr = await masterSock.get<{ list: PageItem[] }, string>('/page/subs', { parentId: pageId });
+        var rr = await masterSock.get<{ list: Partial<PageItem>[] }, string>('/page/subs', { parentId: pageId });
         return rr;
     }
     async updatePage(item: PageItem) {
@@ -42,7 +49,6 @@ class WorkspaceService extends BaseService {
                     id: item.id,
                     text: item.text,
                     parentId: item.parentId ? item.parentId : item.parent?.id,
-                    workareaIds: item.workareaIds?.length > 0 ? item.workareaIds : undefined,
                     workspaceId: item.workspace?.id,
                     mime: item.mime
                 }

@@ -1,10 +1,8 @@
 import React from "react";
 import { Workspace } from ".";
-import { Workarea } from "../solution/workarea";
-import { WorkareaType } from "../solution/workarea/enum";
-import { PagesViewArea, PagesViewModuleView } from "../solution/workarea/ms/pages";
+import { getMimeViewComponent } from "../solution/item/mime";
 import { WorkspaceProfile } from "./profile";
-
+import { PageView } from "../solution/item/view";
 export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
     constructor(props) {
         super(props);
@@ -13,18 +11,14 @@ export class WorkspaceView extends React.Component<{ workspace: Workspace }> {
     get workspace() {
         return this.props.workspace;
     }
-    renderArea(area: Workarea) {
-        var key = area.type + area.text;
-        switch (area.type) {
-            case WorkareaType.pages:
-                return <PagesViewModuleView key={key} module={area as PagesViewArea}></PagesViewModuleView>
-        }
-    }
     render() {
         return <div className='sy-ws'>
             <WorkspaceProfile workspace={this.workspace}></WorkspaceProfile>
-            <div className='sy-ws-modules'>
-                {this.workspace.areas.map(g => this.renderArea(g))}
+            <div className='sy-ws-items'>
+                {this.workspace.childs.map(ws => {
+                    var View: typeof PageView = getMimeViewComponent(ws.mime);
+                    return <View key={ws.id} item={ws} deep={0} ></View>
+                })}
             </div>
         </div>
     }
