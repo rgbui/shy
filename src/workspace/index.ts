@@ -1,6 +1,5 @@
 import { util } from "rich/util/util";
 import { PageItem } from "../solution/item";
-import { WorkspaceView } from "./view";
 export class Workspace {
     id: string;
     date: number;
@@ -8,7 +7,6 @@ export class Workspace {
     text: string;
     icon: { url: string };
     childs: PageItem[] = [];
-    view?: WorkspaceView;
     domain: string;
     get url() {
         return this.domain + '.sy.live';
