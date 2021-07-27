@@ -182,6 +182,7 @@ export type SockResponse<T, U = any> = {
      * 表示当前的是否处理正常
      * 通常200~300表示正常处理
      * 大于300小于500表示处理不正常，
+     * 500 seriver happend error
      * 返回值是用来提醒处理异常原因的
      */
     ok?: boolean,
