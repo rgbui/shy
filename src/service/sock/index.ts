@@ -96,8 +96,11 @@ class Sock {
         if (querys && Object.keys(querys).length > 0) {
             var ps: string[] = [];
             for (let q in querys) {
-                if (typeof querys[q] != 'undefined')
-                    ps.push(q + '=' + encodeURIComponent(querys[q]))
+                if (typeof querys[q] != 'undefined') {
+                    var value = querys[q];
+                    if (typeof value == 'object') value = JSON.stringify(value);
+                    ps.push(q + '=' + encodeURIComponent(value));
+                }
             }
             resolveUrl = resolveUrl + (resolveUrl.indexOf('?') == -1 ? "?" : "&") + ps.join("&");
         }
@@ -139,6 +142,7 @@ class Sock {
             if (typeof data[key] != 'undefined') {
                 var value = data[key];
                 delete data[key];
+                if (typeof value == 'object') return JSON.stringify(value)
                 return value;
             }
             else return $
