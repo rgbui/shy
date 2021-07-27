@@ -1,10 +1,9 @@
 import React from "react";
-import { SY } from "rich";
 import ReactDOM from "react-dom";
-import { PageItem } from "../../solution/item";
-import { surface } from "../../surface";
+import { PageItem } from "../../../solution/item";
+import { surface } from "../../../surface";
 import { Page } from "rich/src/page";
-import { workspaceService } from "../../workspace/service";
+import { workspaceService } from "../../../workspace/service";
 export class DocView extends React.Component<{ item: PageItem }>{
     constructor(props) { super(props) }
     get item() {
@@ -16,7 +15,7 @@ export class DocView extends React.Component<{ item: PageItem }>{
         var self = this;
         this.el = ReactDOM.findDOMNode(this) as HTMLElement;
         var pageData = await workspaceService.loadPageContent(this.item.id);
-        var page = new SY.Page(this.el, {
+        var page = new Page(this.el, {
             user: surface.user
         });
         this.page = page;
@@ -50,7 +49,7 @@ export class DocView extends React.Component<{ item: PageItem }>{
     }
     async componentWillUnmount() {
         //https://www.jianshu.com/p/7648c6f30d1e
-        this.page.onUnmount();
+        if (this.page) this.page.onUnmount();
     }
     render() {
         return <div className='sy-doc-view'></div>

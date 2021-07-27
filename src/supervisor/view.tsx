@@ -2,7 +2,7 @@ import React from "react";
 import { PageItem } from "../solution/item";
 import { Mime } from "../solution/item/mime";
 import { surface } from "../surface";
-import { DocPage } from "./doc";
+import { DocPage } from "./items/page";
 
 export class SupervisorView extends React.Component {
     constructor(props) {
