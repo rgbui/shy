@@ -5,7 +5,7 @@ import { Solution } from "../solution";
 import { Events } from "rich/util/events";
 import { SolutionDirective } from "../solution/operator";
 import { Supervisor } from "../supervisor";
-import { SyHistory } from "../history";
+import { currentParams, SyHistory } from "../history";
 import { generatePath } from "react-router";
 import { Workspace } from "../workspace";
 import { workspaceService } from "../workspace/service";
@@ -25,6 +25,7 @@ class Surface extends Events {
     isSuccessfullyLoaded: boolean = false;
     private init() {
         this.solution.on(SolutionDirective.openItem, (item) => {
+            SyHistory.push(generatePath('/page/:id', { id: item.id }));
             this.supervisor.onOpenItem(item);
         });
         this.solution.on(SolutionDirective.togglePageItem, (item) => {
@@ -67,11 +68,21 @@ class Surface extends Events {
         return rr;
     }
     async loadPages() {
-        var rr = await workspaceService.loadWorkspacePages(this.workspace.id);
+        var rr = await workspaceService.loadWorkspaceItems(this.workspace.id);
         if (rr) {
             if (Array.isArray(rr?.data?.pages)) {
                 this.workspace.load({ childs: rr.data.pages });
             }
+        }
+        var rg = await workspaceService.loadWorkspacePages(this.workspace.id, this.workspace.childs.map(c => c.id));
+        if (rg && Array.isArray(rg?.data?.pages)) {
+            rg.data.pages.each(pa => {
+                var item = this.workspace.find(g => g.id == pa.parentId);
+                if (item) {
+                    item.spread = true;
+                    item.createItem(pa);
+                }
+            })
         }
     }
 }

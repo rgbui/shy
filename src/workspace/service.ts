@@ -19,7 +19,7 @@ class WorkspaceService extends BaseService {
         var wsId = currentParams('/ws/:id')?.id;
         if (wsId) local = undefined;
         if (pageId && !wsId) {
-            var page = await masterSock.get<Partial<PageItem>, string>('/page/:id', { id: pageId });
+            var page = await masterSock.get<Partial<PageItem>, string>('/page/query/:id', { id: pageId });
             if (page) {
                 wsId = page.data.workspaceId;
             }
@@ -34,8 +34,12 @@ class WorkspaceService extends BaseService {
         var rr = await masterSock.post<{ id: string, sn: number }, string>('/workspace/create', { text: args.text });
         return rr;
     }
-    async loadWorkspacePages(workspaceId: string) {
-        var rr = await masterSock.get<{ pages: Partial<PageItem>[] }, string>('/pages/load', { workspaceId });
+    async loadWorkspaceItems(workspaceId: string) {
+        var rr = await masterSock.get<{ pages: Partial<PageItem> }, string>('/workspace/:wsId/items', { wsId: workspaceId })
+        return rr;
+    }
+    async loadWorkspacePages(workspaceId: string, pageIds: string[]) {
+        var rr = await masterSock.get<{ pages: Partial<PageItem>[] }, string>('/pages/load', { workspaceId, pageIds: pageIds });
         return rr;
     }
     async loadPageChilds(pageId: string) {

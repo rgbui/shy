@@ -8,6 +8,7 @@ import { currentParams, SyHistory } from "../history";
 import { CacheKey, yCache } from "../service/cache";
 import { generatePath } from "react-router";
 import { surface } from "../surface";
+import { Mime } from "./item/mime";
 export class Solution extends Events<SolutionDirective> {
     constructor() {
         super();
@@ -38,9 +39,10 @@ export class Solution extends Events<SolutionDirective> {
             item.selectedDate = new Date().getTime();
             var lastItems = this.selectItems.map(o => o);
             this.selectItems = [item];
-            lastItems.each(item => item.view.forceUpdate())
-            item.view.forceUpdate();
-            this.emit(SolutionDirective.openItem, item);
+            lastItems.each(item => item?.view?.forceUpdate())
+            if (item.view)
+                item.view.forceUpdate();
+            this.emit(SolutionDirective.openItem, this.selectItems[0]);
         }
         else {
             item.selectedDate = new Date().getTime();
@@ -67,7 +69,8 @@ export class Solution extends Events<SolutionDirective> {
         if (!pageId) {
             var pid = yCache.get(CacheKey.pageId);
             if (!pid) {
-
+                var pt = surface.workspace.find(g => g.mime == Mime.page);
+                if (pt) pid = pt.id;
             }
             if (pid) {
                 SyHistory.push(generatePath('/page/:id', { id: pid }));
@@ -75,13 +78,12 @@ export class Solution extends Events<SolutionDirective> {
             }
         }
         else {
-            var item = surface.workspace.find(g => g.id = pageId);
-            if (item) this.selectItems = [item]
-            else {
-
+            var item = surface.workspace.find(g => g.id == pageId);
+            if (item) {
+                this.selectItems = [item];
+                this.emit(SolutionDirective.openItem, this.selectItems[0])
             }
         }
-        return true;
     }
 }
 export interface Solution {

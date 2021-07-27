@@ -71,6 +71,15 @@ export class PageItem {
             }
         }
     }
+    createItem(data, at?: number) {
+        var item = new PageItem();
+        item.parent = this;
+        item.load(data);
+        if (!Array.isArray(this.childs)) this.childs = [];
+        if (typeof at == 'undefined') this.childs.push(item);
+        else this.childs.insertAt(at, item);
+        return item;
+    }
     async onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
         this.spread = sp == false ? true : false;

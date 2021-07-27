@@ -2,7 +2,9 @@ import React from "react";
 
 import { surface } from "../surface";
 import { PageItemMenu } from "./extensions/menu";
-import { WorkspaceView } from "../workspace/view";
+import { WorkspaceProfile } from "../workspace/profile";
+import { PageView } from "./item/view";
+import { getMimeViewComponent } from "./item/mime";
 
 export class SolutionView extends React.Component {
     private get solution() {
@@ -16,8 +18,7 @@ export class SolutionView extends React.Component {
         document.addEventListener('keyup', this._keyup = this.keydown.bind(this));
         document.addEventListener('mousemove', this._mousemove = this.mousemove.bind(this));
         document.addEventListener('mouseup', this._mouseup = this.mouseup.bind(this));
-        var r = await this.solution.load();
-        if (r) this.forceUpdate();
+        await this.solution.load();
     }
     componentWillUnmount() {
         document.removeEventListener('mousemove', this._mousemove);
@@ -42,7 +43,15 @@ export class SolutionView extends React.Component {
     render() {
         return <div className='sy-wss' onKeyDownCapture={e => this.keydown(e.nativeEvent)} tabIndex={1}>
             <PageItemMenu ref={e => this.solution.menu = e}></PageItemMenu>
-            {surface.workspace && <WorkspaceView workspace={surface.workspace} ></WorkspaceView>}
+            {surface.workspace && <div className='sy-ws'>
+                <WorkspaceProfile workspace={surface.workspace}></WorkspaceProfile>
+                <div className='sy-ws-items'>
+                    {surface.workspace.childs.map(ws => {
+                        var View: typeof PageView = getMimeViewComponent(ws.mime);
+                        return <View ref={e => ws.view = e} key={ws.id} item={ws} deep={0} ></View>
+                    })}
+                </div>
+            </div>}
         </div>
     }
 }
