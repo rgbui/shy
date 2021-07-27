@@ -1,5 +1,5 @@
 import React from "react";
-import { PageItem } from ".";
+import { PageItem } from "..";
 import { PageItemView } from "./view";
 
 export class PageItemBox extends React.Component<{ items: PageItem[], deep?: number }>{

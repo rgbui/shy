@@ -1,21 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { Icon } from "rich/component/icon";
-import { PageItem } from ".";
+import { PageView } from "../view";
 import { PageItemBox } from "./box";
 
-export class PageItemView extends React.Component<{ item: PageItem, deep?: number }> {
-    constructor(props) {
-        super(props);
-        this.props.item.view = this;
-    }
-    get item() {
-        return this.props.item;
-    }
-    el: HTMLElement;
-    componentDidMount() {
-        this.el = ReactDOM.findDOMNode(this) as HTMLElement;
-    }
+export class PageItemView extends PageView {
     mousedown(event: MouseEvent) {
         var item = this.item;
         var target = event.target as HTMLElement;

@@ -1,10 +1,9 @@
 
 import { util } from "rich/util/util";
-import { Mime } from "./mine";
-import { Workarea } from "../workarea";
-import { PageItemView } from "./view";
+import { Mime } from "./mime";
+import { PageItemView } from "./views/view";
 import { surface } from "../../surface";
-import { PageItemBox } from "./box";
+import { PageItemBox } from "./views/box";
 import { PageItemMenuType } from "../extensions/menu";
 import trash from "rich/src/assert/svg/trash.svg";
 import rename from "../../assert/svg/rename.svg";
@@ -12,22 +11,23 @@ import copy from "rich/src/assert/svg/duplicate.svg";
 import cut from "../../assert/svg/cut.svg";
 import link from '../../assert/svg/link.svg';
 
-import { PageItemDirective } from "./operator.declare";
+import { PageItemDirective } from "./operator";
 import { SolutionDirective } from "../operator";
 import { workspaceService } from "../../workspace/service";
+import { PageView } from "./view";
 export class PageItem {
     id: string;
     sn?: number;
     childs?: PageItem[];
     text: string;
     spread: boolean = false;
-    view: PageItemView;
+    view: PageView;
     creater: string;
     createDate: Date;
     viewChilds: PageItemBox;
-    area: Workarea;
     mime: Mime;
-    workareaIds: string[] = [];
+    parentIds: string[] = [];
+    workspaceId: string;
     selectedDate: number;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
@@ -62,7 +62,7 @@ export class PageItem {
                 });
             }
             else {
-                if (n == 'mime' || n == 'mine') {
+                if (n == 'mime') {
                     var name = 'mime';
                     if (typeof data[n] == 'number') this[name] = data[n];
                     else this[name] = Mime[data[n]] as any;
@@ -119,10 +119,8 @@ export class PageItem {
             this.parent.view.forceUpdate();
         }
         else {
-            this.area.items.remove(g => g == this);
-            this.area.view.forceUpdate();
+            surface.workspace.childs.remove(g => g === this);
         }
-
         this.solution.emit(SolutionDirective.removePageItem, this);
     }
     getPageItemMenus() {

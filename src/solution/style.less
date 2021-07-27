@@ -38,7 +38,7 @@
     }
 }
 
-.sy-ws-module {
+.sy-ws-pages {
     position: relative;
 
     &-head {
@@ -83,7 +83,7 @@
     }
 
     &:hover {
-        .sy-ws-module-operators {
+        .sy-ws-pages-operators {
             visibility: visible;
         }
     }
@@ -245,7 +245,6 @@
             color          : rgba(55, 53, 47);
             padding        : 0px 14px;
             cursor         : pointer;
-
             .sy-icon {
                 width              : 17px;
                 height             : 17px;
@@ -254,21 +253,17 @@
                 flex-shrink        : 0;
                 backface-visibility: hidden;
             }
-
             .sy-ws-item-page-spread {
                 flex-shrink: 0;
             }
-
             span {
                 display     : inline-flex;
                 margin-left : 8px;
                 margin-right: 14px;
                 flex-grow   : 1.0;
             }
-
             .sy-ws-item-page-input {
                 flex-grow: 1.0;
-
                 input {
                     width           : 100%;
                     background-color: #fff;
@@ -276,11 +271,9 @@
                     outline         : none;
                 }
             }
-
             &:hover {
                 background-color: rgba(55, 53, 47, 0.08);
             }
-
             label {
                 position: absolute;
                 top     : 0px;
@@ -288,7 +281,6 @@
                 bottom  : 0px;
             }
         }
-
         &-text {
             display    : block;
             padding    : 0px 14px;
@@ -298,24 +290,18 @@
         }
     }
 }
-
-
 .sy-workspace-create {
     position : absolute;
     top      : 150px;
     left     : 50%;
     width    : 300px;
     transform: translateX(-50%);
-
     &-text {
         input {
             width: 100%;
         }
-
         margin-bottom: 14px;
     }
-
     &-fail-tip {}
-
     &-button {}
 }

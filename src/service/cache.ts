@@ -7,7 +7,8 @@ import { Aes } from "../util/crypto";
 export enum CacheKey {
     token,
     clientId,
-    workspaceId
+    workspaceId,
+    pageId
 }
 const FLAG = 'shy.live.';
 class SyCache {
@@ -43,7 +44,7 @@ class SyCache {
         var v = this.getValue(key);
         if (v && (typeof v.expire == 'undefined' || typeof v.expire == 'number' && v.expire > Date.now())) return v.value;
     }
-    set(key: CacheKey | string, value: any, expire?: number, unit: string = 'm') {
+    set(key: CacheKey | string, value: any, expire?: number, unit: 'm' | 's' | 'h' | 'd' | 'M' | 'y' | 'w' = 'm') {
         var k = this.getKey(key);
         var t = undefined;
         if (typeof expire == 'number') {

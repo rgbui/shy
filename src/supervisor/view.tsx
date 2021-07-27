@@ -1,6 +1,6 @@
 import React from "react";
 import { PageItem } from "../solution/item";
-import { Mime } from "../solution/item/mine";
+import { Mime } from "../solution/item/mime";
 import { surface } from "../surface";
 import { DocPage } from "./doc";
 

@@ -12,10 +12,12 @@ export class SolutionView extends React.Component {
         super(props);
         surface.solution.view = this;
     }
-    componentDidMount() {
+    async componentDidMount() {
         document.addEventListener('keyup', this._keyup = this.keydown.bind(this));
         document.addEventListener('mousemove', this._mousemove = this.mousemove.bind(this));
         document.addEventListener('mouseup', this._mouseup = this.mouseup.bind(this));
+        var r = await this.solution.load();
+        if (r) this.forceUpdate();
     }
     componentWillUnmount() {
         document.removeEventListener('mousemove', this._mousemove);

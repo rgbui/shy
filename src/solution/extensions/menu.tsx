@@ -5,7 +5,7 @@ import { Point, Rect, RectUtility } from 'rich/src/common/point';
 import { Icon } from 'rich/component/icon';
 import { SyExtensionsComponent } from "rich/extensions/sy.component"
 import { PageItem } from '../item';
-import { PageItemDirective } from '../item/operator.declare';
+import { PageItemDirective } from '../item/operator';
 export type PageItemMenuType = {
     name?: PageItemDirective,
     icon?: string | SvgrComponent,
