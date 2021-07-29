@@ -12,6 +12,7 @@ import { Login } from './user/login';
 import { WorkspaceCreateView } from './workspace/create';
 import { TestView } from './test/view';
 import { SyHistory } from './history';
+import { Component } from './test/component';
 // render react DOM
 ReactDOM.render(
   <Router history={SyHistory}>
@@ -20,7 +21,8 @@ ReactDOM.render(
     <Route path='/ws/:id' exact component={ViewSurface}></Route>
     <Route path='/page/:id' exact component={ViewSurface}></Route>
     <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
-    <Route path='/test/:id' exact component={TestView}></Route>
+    <Route path='/test/component' exact component={Component}></Route>
+    {/* <Route path='/test/:id' exact component={TestView}></Route> */}
   </Router>,
   document.body.appendChild(document.createElement('div')),
 )
