@@ -43,7 +43,10 @@ export class DocView extends React.Component<{ item: PageItem }>{
         page.on('loadTableSchema', async (schemaId: string) => {
             var r = await workspaceService.loadTableSchema(schemaId);
             return r;
-        })
+        });
+        page.on('error', error => {
+            console.error(error);
+        });
         await page.load(pageData);
         await page.render();
     }
