@@ -4,6 +4,7 @@ import { PageItem } from "../../../solution/item";
 import { surface } from "../../../surface";
 import { Page } from "rich/src/page";
 import { workspaceService } from "../../../workspace/service";
+import { PageDirective } from "rich/src/page/directive";
 export class DocView extends React.Component<{ item: PageItem }>{
     constructor(props) { super(props) }
     get item() {
@@ -19,32 +20,32 @@ export class DocView extends React.Component<{ item: PageItem }>{
             user: surface.user
         });
         this.page = page;
-        page.on('blur', function (ev) {
+        page.on(PageDirective.blur, function (ev) {
             // console.log('blur', ev)
         });
-        page.on('focus', function (ev) {
+        page.on(PageDirective.focus, function (ev) {
             //console.log('focus', ev);
         });
-        page.on('focusAnchor', function (anchor) {
+        page.on(PageDirective.focusAnchor, function (anchor) {
             // console.log('focusAnchor', anchor);
         });
-        page.on('history', async function (action) {
+        page.on(PageDirective.history, async function (action) {
             var _pagedata = await page.get();
             await workspaceService.savePageContent(self.item.id, _pagedata);
         });
-        page.on('createDefaultTableSchema', async (data) => {
+        page.on(PageDirective.createDefaultTableSchema, async (data) => {
             var r = await workspaceService.createDefaultTableSchema(data);
             return r;
         });
-        page.on('loadTableSchemaData', async (schemaId: string, options) => {
+        page.on(PageDirective.loadTableSchemaData, async (schemaId: string, options) => {
             var r = await workspaceService.loadTableSchemaData(schemaId, options);
             return r;
         });
-        page.on('loadTableSchema', async (schemaId: string) => {
+        page.on(PageDirective.loadTableSchema, async (schemaId: string) => {
             var r = await workspaceService.loadTableSchema(schemaId);
             return r;
         });
-        page.on('error', error => {
+        page.on(PageDirective.error, error => {
             console.error(error);
         });
         await page.load(pageData);
