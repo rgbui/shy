@@ -8,7 +8,8 @@ export enum CacheKey {
     token,
     clientId,
     workspaceId,
-    pageId
+    pageId,
+    lang
 }
 const FLAG = 'shy.live.';
 class SyCache {
