@@ -5,6 +5,7 @@ import { SockType } from "./type";
 import { StatusCode } from "./status.code";
 import { config } from "../../common/config";
 import { FileMd5 } from "../../util/file";
+import { GenreConsistency } from "./genre";
 
 class Sock {
     private type: SockType;
@@ -49,9 +50,11 @@ class Sock {
     private async config() {
         var id = await fingerFlag();
         var token = await sCache.get(CacheKey.token);
+        var lang = await sCache.get(CacheKey.lang);
         var headers: Record<string, any> = {};
         if (id) headers['shy-client'] = id;
         if (token) headers['shy-token'] = token;
+        if (lang) headers['shy-lang'] = lang;
         return {
             headers: headers
         }
@@ -78,6 +81,9 @@ class Sock {
             data: data.data,
             ok: data.status >= 200 && data.status < 300 ? true : false
         };
+        if (response.data && typeof response.data == 'object') {
+            GenreConsistency.parse(response.data);
+        }
         if (response.ok == false) {
             response.warn = data.data;
         }
@@ -86,12 +92,14 @@ class Sock {
     async post<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
         url = this.urlJoint(url, data);
+        GenreConsistency.transform(data);
         var r = await this.remote.post(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
         url = this.urlJoint(url, querys);
+        GenreConsistency.transform(querys);
         var resolveUrl = this.resolve(baseUrl, url);
         if (querys && Object.keys(querys).length > 0) {
             var ps: string[] = [];
@@ -116,6 +124,7 @@ class Sock {
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
         var baseUrl = await this.getBaseUrl();
         url = this.urlJoint(url, data);
+        GenreConsistency.transform(data);
         var r = await this.remote.put(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
@@ -165,10 +174,10 @@ class Sock {
         if (options?.uploadProgress) (configs as any).onUploadProgress = options.uploadProgress;
         var forms = new FormData()
         forms.append('file', file)
-        if (!(file as any).md5) {
-            (file as any).md5 = await FileMd5(file);
+        if (!file.md5) {
+            file.md5 = await FileMd5(file);
         }
-        forms.append('md5', (file as any).md5);
+        forms.append('md5', file.md5);
         var r = await this.remote.post(url, forms, configs);
         return this.handleResponse<T, U>(r);
     }
