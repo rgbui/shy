@@ -18,6 +18,13 @@ declare module '*.svg' {
   export default content
 }
 
+// for style loader
+declare module '*.css' {
+  const styles: any
+  export = styles
+}
+
+
 declare module '*.jpg';
 declare module '*.png';
 declare module '*.jpeg';
