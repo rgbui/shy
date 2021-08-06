@@ -3,8 +3,9 @@ import { User } from "./user";
 import { fileSock, masterSock, SockResponse } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";
-import { FileMd5, OpenFileDialoug, OpenMultipleFileDialoug } from "../util/file";
+import { FileMd5 } from "../util/file";
 import { FileType } from "../../type";
+import { OpenFileDialoug, OpenMultipleFileDialoug } from "rich/component/file";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {
