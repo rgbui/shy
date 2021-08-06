@@ -48,6 +48,9 @@ export class DocView extends React.Component<{ item: PageItem }>{
         page.on(PageDirective.error, error => {
             console.error(error);
         });
+        page.on(PageDirective.loadPageInfo, async () => {
+            return { text: self.item.text, id: self.item.id };
+        });
         await page.load(pageData);
         await page.render();
     }
