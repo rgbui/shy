@@ -3,7 +3,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { Point, Rect, RectUtility } from 'rich/src/common/point';
 import { Icon } from 'rich/component/icon';
-import { SyExtensionsComponent } from "rich/extensions/sy.component"
+import { EventsComponent } from "rich/extensions/events.component"
 import { PageItem } from '../item';
 import { PageItemDirective } from '../item/operator';
 export type PageItemMenuType = {
@@ -15,7 +15,7 @@ export type PageItemMenuType = {
     childs?: PageItemMenuType[],
     type?: 'devide' | 'item' | 'text'
 }
-export class PageItemMenu extends SyExtensionsComponent<{}, string> {
+export class PageItemMenu extends EventsComponent<{}, string> {
     private node: HTMLElement;
     constructor(props) {
         super(props);
