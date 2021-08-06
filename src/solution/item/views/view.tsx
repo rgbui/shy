@@ -2,19 +2,23 @@ import React from "react";
 import { Icon } from "rich/component/icon";
 import { PageView } from "../view";
 import { PageItemBox } from "./box";
-
+import PageSvg from "../../../assert/svg/page.svg";
 export class PageItemView extends PageView {
-    mousedown(event: MouseEvent) {
+    async mousedown(event: MouseEvent) {
         var item = this.item;
         var target = event.target as HTMLElement;
-        if (target.classList.contains('sy-ws-item-page-spread')) {
+        if (target.closest('.sy-ws-item-page-spread')) {
             item.onSpread();
         }
-        else if (target.classList.contains('sy-ws-item-page-add')) {
+        else if (target.closest('.sy-ws-item-page-add')) {
             item.onAdd();
         }
-        else if (target.classList.contains('sy-ws-item-page-property')) {
+        else if (target.closest('.sy-ws-item-page-property')) {
             item.onContextmenu(event);
+            return;
+        }
+        else if (target.closest('.sy-ws-item-page-icon')) {
+            await item.onChangeIcon(event);
             return;
         }
         else {
@@ -69,6 +73,7 @@ export class PageItemView extends PageView {
                 onContextMenu={e => self.contextmenu(e.nativeEvent)}
                 onMouseUp={e => self.mousedown(e.nativeEvent)}>
                 <Icon className='sy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
+                <i className='sy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
                 {!isInEdit && <span>{item.text}</span>}
                 {isInEdit && <div className='sy-ws-item-page-input'><input type='text'
                     onBlur={e => this.blur()}
@@ -80,7 +85,7 @@ export class PageItemView extends PageView {
                     <Icon className='sy-ws-item-page-add' icon='add:sy'></Icon>
                 </div>}
             </div>
-            {item.willLoadSubs == true && <div className='sy-ws-item-page-loaddding'>...</div>}
+            {item.willLoadSubs == true && <div className='sy-ws-item-page-loading'>...</div>}
             {item.spread != false && <PageItemBox items={item.childs || []} deep={(this.props.deep || 0) + 1}></PageItemBox>}
         </div>
     }
