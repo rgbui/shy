@@ -5,10 +5,13 @@ import { Solution } from "../solution";
 import { Events } from "rich/util/events";
 import { SolutionDirective } from "../solution/operator";
 import { Supervisor } from "../supervisor";
-import { currentParams, SyHistory } from "../history";
+import { SyHistory } from "../history";
 import { generatePath } from "react-router";
 import { Workspace } from "../workspace";
 import { workspaceService } from "../workspace/service";
+import { richBus } from "../../../rich/util/bus/event.bus";
+import { Directive } from "../../../rich/util/bus/directive";
+import { userService } from "../user/service";
 class Surface extends Events {
     constructor() {
         super();
@@ -55,6 +58,23 @@ class Surface extends Events {
             }
         }
         this.isSuccessfullyLoaded = true;
+        await this.loadAfter();
+    }
+    async loadAfter() {
+        if (richBus.has(Directive.GalleryQuery)) return;
+        richBus.only(Directive.GalleryQuery, async (type, word) => {
+
+        });
+        richBus.only(Directive.PagesQuery, async (word) => {
+
+        });
+        richBus.only(Directive.UploadFile, async (file, progress) => {
+            var r = await userService.uploadFile(file, surface.workspace.id, progress);
+            return r;
+        });
+        richBus.only(Directive.UsersQuery, async () => {
+
+        });
     }
     updateUser(user: Partial<User>) {
         Object.assign(this.user, user);

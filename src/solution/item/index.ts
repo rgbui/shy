@@ -1,7 +1,6 @@
 
 import { util } from "rich/util/util";
 import { Mime } from "./mime";
-import { PageItemView } from "./views/view";
 import { surface } from "../../surface";
 import { PageItemBox } from "./views/box";
 import { PageItemMenuType } from "../extensions/menu";
@@ -15,9 +14,13 @@ import { PageItemDirective } from "./operator";
 import { SolutionDirective } from "../operator";
 import { workspaceService } from "../../workspace/service";
 import { PageView } from "./view";
+import { IconArguments } from "rich/extensions/icon/declare";
+import { useIconPicker } from 'rich/extensions/icon/index';
+import { Rect } from "../../../../rich/src/common/point";
 export class PageItem {
     id: string;
     sn?: number;
+    icon?: IconArguments;
     childs?: PageItem[];
     text: string;
     spread: boolean = false;
@@ -192,6 +195,13 @@ export class PageItem {
     }
     onContextmenu(event: MouseEvent) {
         this.solution.onOpenItemMenu(this, event);
+    }
+    async onChangeIcon(event: MouseEvent) {
+        var icon = await useIconPicker({ roundArea: Rect.fromEvent(event) });
+        if (icon) {
+            await this.onUpdate({ icon: icon });
+        }
+        if (this.view) this.view.forceUpdate();
     }
     async onUpdate(data: Record<string, any>) {
         Object.assign(this, data);
