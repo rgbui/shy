@@ -54,7 +54,8 @@ class WorkspaceService extends BaseService {
                     text: item.text,
                     parentId: item.parentId ? item.parentId : item.parent?.id,
                     workspaceId: item.workspace?.id,
-                    mime: item.mime
+                    mime: item.mime,
+                    icon: item.icon
                 }
             });
             if (re.ok) {
@@ -64,7 +65,12 @@ class WorkspaceService extends BaseService {
             }
         }
         else {
-            var rr = await masterSock.post('/page/update/' + item.id, { data: { text: item.text } });
+            var rr = await masterSock.post('/page/update/' + item.id, {
+                data: {
+                    text: item.text,
+                    icon: item.icon
+                }
+            });
             if (rr.ok) {
             }
         }
