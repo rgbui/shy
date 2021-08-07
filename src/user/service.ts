@@ -1,11 +1,10 @@
 
 import { User } from "./user";
-import { fileSock, masterSock, SockResponse } from "../service/sock";
+import { fileSock, masterSock, SockResponse, userSock } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";
 import { FileMd5 } from "../util/file";
 import { FileType } from "../../type";
-import { OpenFileDialoug, OpenMultipleFileDialoug } from "rich/component/file";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {
@@ -44,49 +43,54 @@ class UserService extends BaseService {
      * 用户批量上传文件
      */
     async uploadFiles() {
-        var files = await OpenMultipleFileDialoug();
-        files.eachAsync(async (file: File) => {
-            file.md5 = await FileMd5(file);
-        });
-        var fs: { file: File, data: FileType }[] = [];
-        files.eachAsync(async file => {
-            var r = await masterSock.get('/user/get/file/' + file.md5);
-            if (r && r.ok) {
-                fs.push({ file, data: r.data })
-            }
-            else {
-                var d = await fileSock.upload<FileType, string>(file);
-                if (d.ok) {
-                    var z = await masterSock.post<FileType>(`/user/storage/file`, { ...d.data, ...{ id: undefined } })
-                    if (z.ok) {
-                        fs.push({ file, data: z.data })
-                    }
-                }
-            }
-        });
-        return fs;
+        // var files = await OpenMultipleFileDialoug();
+        // files.eachAsync(async (file: File) => {
+        //     file.md5 = await FileMd5(file);
+        // });
+        // var fs: { file: File, data: FileType }[] = [];
+        // files.eachAsync(async file => {
+        //     var r = await masterSock.get('/user/get/file/' + file.md5);
+        //     if (r && r.ok) {
+        //         fs.push({ file, data: r.data })
+        //     }
+        //     else {
+        //         var d = await fileSock.upload<FileType, string>(file);
+        //         if (d.ok) {
+        //             var z = await masterSock.post<FileType>(`/user/storage/file`, { ...d.data, ...{ id: undefined } })
+        //             if (z.ok) {
+        //                 fs.push({ file, data: z.data })
+        //             }
+        //         }
+        //     }
+        // });
+        // return fs;
     }
     /**
      * 用户上传单个文件
      * @returns 
      */
-    async uploadFile() {
-        var file = await OpenFileDialoug();
-        if (file) {
-            file.md5 = await FileMd5(file);
-            var r = await masterSock.get('/user/get/file/' + file.md5);
-            if (r && r.ok) {
-                return ({ file, data: r.data })
-            }
+    async uploadFile(file: File, workspaceId, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+        try {
+            if (!file.md5) file.md5 = await FileMd5(file);
+            var r = await masterSock.get('/get/file/:md5', { md5: file.md5 });
+            var masterFile;
+            if (r?.ok) masterFile = r.data;
             else {
-                var d = await fileSock.upload<FileType, string>(file);
+                var d = await fileSock.upload<FileType, string>(file, { uploadProgress: progress });
                 if (d.ok) {
-                    var z = await masterSock.post<FileType>(`/user/storage/file`, { ...d.data, ...{ id: undefined } })
+                    var z = await masterSock.post<FileType>(`/shy/file`, { ...d.data, ...{ id: undefined } })
                     if (z.ok) {
-                        return ({ file, data: z.data })
+                        masterFile = z.data;
                     }
                 }
             }
+            if (masterFile) {
+                await userSock.post('/user/storage/file', { ...masterFile, workspaceId });
+            }
+            return { ok: true, data: masterFile }
+        }
+        catch (ex) {
+            return { ok: false, warn: '上传文件失败' }
         }
     }
 }
