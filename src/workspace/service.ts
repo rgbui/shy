@@ -4,7 +4,7 @@ import { Workspace } from ".";
 import { masterSock, userSock } from "../service/sock";
 import { CacheKey, sCache, yCache } from "../service/cache";
 import { currentParams } from "../history";
-import { PageItem } from "../solution/item";
+import { PageItem } from "../sln/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
 import { FileType } from "../../type";
@@ -46,7 +46,7 @@ class WorkspaceService extends BaseService {
         var rr = await masterSock.get<{ list: Partial<PageItem>[] }, string>('/page/subs', { parentId: pageId });
         return rr;
     }
-    async updatePage(item: PageItem) {
+    async savePage(item: PageItem) {
         if (typeof item.sn === 'undefined') {
             var re = await masterSock.post<{ item: PageItem }, string>('/page/create', {
                 data: {
@@ -59,6 +59,7 @@ class WorkspaceService extends BaseService {
                 }
             });
             if (re.ok) {
+                item.id = re.data.item.id;
                 item.sn = re.data.item.sn;
                 item.creater = re.data.item.creater;
                 item.createDate = re.data.item.createDate;
@@ -74,6 +75,9 @@ class WorkspaceService extends BaseService {
             if (rr.ok) {
             }
         }
+    }
+    async togglePage(item: PageItem) {
+        await workspaceTogglePages.save(item.id, item.spread)
     }
     async deletePage(id: string) {
         await masterSock.delete('/page/delete/:id', { id });
@@ -112,3 +116,21 @@ class WorkspaceService extends BaseService {
     }
 }
 export var workspaceService = new WorkspaceService();
+
+export class workspaceTogglePages {
+    private static ids: string[];
+    static async getIds() {
+        if (Array.isArray(this.ids)) return this.ids;
+        var ids = await yCache.get(CacheKey.togglePages);
+        if (Array.isArray(ids)) {
+            this.ids = ids;
+        }
+        return this.ids;
+    }
+    static async save(id: string, toggle: boolean) {
+        if (toggle == true && !this.ids.exists(id)) this.ids.push(id)
+        else if (toggle == false && this.ids.exists(id)) this.ids.remove(id)
+        await yCache.set(CacheKey.togglePages, this.ids)
+    }
+
+}
