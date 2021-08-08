@@ -1,4 +1,7 @@
 import React from "react";
+import { AppLang } from "../../i18n/enum";
+import { appLangProvider } from "../../i18n/provider";
+import { SA } from "../../i18n/view";
 import { SyHistory } from "../history";
 import { CacheKey, sCache } from "../service/cache";
 import { surface } from "../surface";
@@ -92,17 +95,17 @@ export class Login extends React.Component {
                     <div className='sy-login-box-account'>
                         <input className='input' type='text' onInput={
                             e => this.phone = (e.nativeEvent.target as HTMLInputElement).value
-                        } defaultValue={this.phone} placeholder='手机号' />
+                        } defaultValue={this.phone} placeholder={appLangProvider.getText(AppLang.Phone)} />
                     </div>
                     <div className='sy-login-box-code'>
                         <input className='input' type='text' onKeyDown={e => this.keydown(e.nativeEvent)} defaultValue={this.verifyPhoneCode} onInput={
                             e => this.verifyPhoneCode = (e.nativeEvent.target as HTMLInputElement).value
-                        } placeholder='短信验证码' />
+                        } placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)} />
                         {this.codeExpireCounter == -1 && <button className='button' onMouseDown={e => this.generatePhoneCode(e.nativeEvent)}>获取短信验证码</button>}
                         {this.codeExpireCounter > -1 && <button className='button'>{this.codeExpireCounter}s</button>}
                     </div>
                     <div className='sy-login-box-button'>
-                        <button className='button' onMouseDown={e => this.phoneSign(e.nativeEvent)}>登录</button>
+                        <button className='button' onMouseDown={e => this.phoneSign(e.nativeEvent)}><SA id={AppLang.Login}></SA></button>
                     </div>
                     {this.signFailMsg && <div className='sy-login-box-fail'>{this.signFailMsg}</div>}
                 </div>}
@@ -111,7 +114,7 @@ export class Login extends React.Component {
                         <div className='sy-login-box-code'>
                             <input className='input' type='text' onKeyDown={e => this.keydown(e.nativeEvent)} defaultValue={this.name} onInput={
                                 e => this.name = (e.nativeEvent.target as HTMLInputElement).value
-                            } placeholder='请输入称呼' />
+                            } placeholder={appLangProvider.getText(AppLang.PleashName)} />
                         </div>
                         <div className='sy-login-box-button'>
                             <button className='button' onMouseDown={e => this.inputName(e.nativeEvent)}>欢迎使用诗云</button>
