@@ -1,11 +1,12 @@
 import { util } from "rich/util/util";
-import { PageItem } from "../solution/item";
+import { IconArguments } from "../../../rich/extensions/icon/declare";
+import { PageItem } from "../sln/item";
 export class Workspace {
     id: string;
     date: number;
     sn: number;
     text: string;
-    icon: { url: string };
+    icon: IconArguments;
     childs: PageItem[] = [];
     domain: string;
     get url() {
