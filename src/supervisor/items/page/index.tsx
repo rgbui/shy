@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { PageItem } from '../../../solution/item';
+import { PageItem } from '../../../sln/item';
 import { DocBar } from './bar';
 import { DocView } from './content';
 

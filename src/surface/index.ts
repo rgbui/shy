@@ -1,9 +1,9 @@
 
 import { User } from "../user/user";
 import { ViewSurface } from "./view";
-import { Solution } from "../solution";
+import { Sln } from "../sln";
 import { Events } from "rich/util/events";
-import { SolutionDirective } from "../solution/operator";
+import { SlnDirective } from "../sln/operator";
 import { Supervisor } from "../supervisor";
 import { SyHistory } from "../history";
 import { generatePath } from "react-router";
@@ -20,28 +20,29 @@ class Surface extends Events {
     view: ViewSurface;
     supervisor: Supervisor = new Supervisor();
     user: User = new User();
-    solution: Solution = new Solution();
+    sln: Sln = new Sln();
     workspace: Workspace;
     /**
      * 是否成功加载数据
      */
     isSuccessfullyLoaded: boolean = false;
     private init() {
-        this.solution.on(SolutionDirective.openItem, (item) => {
+        this.sln.on(SlnDirective.openItem, (item) => {
             SyHistory.push(generatePath('/page/:id', { id: item.id }));
             this.supervisor.onOpenItem(item);
         });
-        this.solution.on(SolutionDirective.togglePageItem, (item) => {
-            // WorkspaceStore.saveWorkspace(this.solution.workspace);
+        this.sln.on(SlnDirective.togglePageItem, async (item) => {
+            await workspaceService.togglePage(item);
         });
-        this.solution.on(SolutionDirective.updatePageItem, (item) => {
-            // WorkspaceStore.saveWorkspace(this.solution.workspace);
+        this.sln.on(SlnDirective.updatePageItem, async (item) => {
+            await workspaceService.savePage(item);
         });
-        this.solution.on(SolutionDirective.removePageItem, (item) => {
+        this.sln.on(SlnDirective.removePageItem, async (item) => {
             // WorkspaceStore.saveWorkspace(this.solution.workspace);
+            await workspaceService.deletePage(item.id)
         });
-        this.solution.on(SolutionDirective.addSubPageItem, (item) => {
-            // WorkspaceStore.saveWorkspace(this.solution.workspace);
+        this.sln.on(SlnDirective.addSubPageItem, async (item) => {
+            await workspaceService.savePage(item);
         });
     }
     async load() {
@@ -74,6 +75,11 @@ class Surface extends Events {
         });
         richBus.only(Directive.UsersQuery, async () => {
 
+        });
+        richBus.only(Directive.CreatePage, async (pageInfo) => {
+            var item = surface.sln.selectItems[0];
+            var newItem = await item.onAdd(pageInfo);
+            return { id: newItem.id, sn: newItem.sn, text: newItem.text }
         });
     }
     updateUser(user: Partial<User>) {

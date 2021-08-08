@@ -1,5 +1,5 @@
 
-import { PageItem } from "../solution/item";
+import { PageItem } from "../sln/item";
 import { Events } from "rich/util/events";
 import { SupervisorView } from "./view";
 

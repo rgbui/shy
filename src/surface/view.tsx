@@ -2,7 +2,7 @@ import React from "react";
 
 import { surface } from ".";
 import { SlideUserFooter } from "../user/slide.footer";
-import { SolutionView } from "../solution/view";
+import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
 export class ViewSurface extends React.Component {
     constructor(props) {
@@ -19,7 +19,7 @@ export class ViewSurface extends React.Component {
         return <div className='sy-surface'>{
             surface.isSuccessfullyLoaded && <>
                 <div className='sy-slide'>
-                    <SolutionView ></SolutionView>
+                    <SlnView ></SlnView>
                     <SlideUserFooter></SlideUserFooter>
                 </div>
                 <SupervisorView ></SupervisorView>

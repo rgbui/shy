@@ -1,18 +1,16 @@
 import React from "react";
-
 import { surface } from "../surface";
-import { PageItemMenu } from "./extensions/menu";
 import { WorkspaceProfile } from "../workspace/profile";
 import { PageView } from "./item/view";
 import { getMimeViewComponent } from "./item/mime";
 
-export class SolutionView extends React.Component {
+export class SlnView extends React.Component {
     private get solution() {
-        return surface.solution;
+        return surface.sln;
     }
     constructor(props) {
         super(props);
-        surface.solution.view = this;
+        surface.sln.view = this;
     }
     async componentDidMount() {
         document.addEventListener('keyup', this._keyup = this.keydown.bind(this));
@@ -42,7 +40,6 @@ export class SolutionView extends React.Component {
     private _keyup: (event: KeyboardEvent) => void;
     render() {
         return <div className='sy-wss' onKeyDownCapture={e => this.keydown(e.nativeEvent)} tabIndex={1}>
-            <PageItemMenu ref={e => this.solution.menu = e}></PageItemMenu>
             {surface.workspace && <div className='sy-ws'>
                 <WorkspaceProfile workspace={surface.workspace}></WorkspaceProfile>
                 <div className='sy-ws-items'>

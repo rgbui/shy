@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { PageItem } from "../../../solution/item";
+import { PageItem } from "../../../sln/item";
 import { surface } from "../../../surface";
 import { Page } from "rich/src/page";
 import { workspaceService } from "../../../workspace/service";

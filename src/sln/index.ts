@@ -1,23 +1,20 @@
 import { Events } from "rich/util/events";
 import { KeyboardPlate } from "rich/src/common/keys";
-import { PageItemMenu } from "./extensions/menu";
 import { PageItem } from "./item";
-import { SolutionDirective } from "./operator";
-import { SolutionView } from "./view";
+import { SlnDirective } from "./operator";
+import { SlnView } from "./view";
 import { currentParams, SyHistory } from "../history";
 import { CacheKey, yCache } from "../service/cache";
 import { generatePath } from "react-router";
 import { surface } from "../surface";
 import { Mime } from "./item/mime";
-export class Solution extends Events<SolutionDirective> {
+import { useSelectMenuItem } from "rich/component/menu";
+import { Rect } from "../../../rich/src/common/point";
+export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
         this.init()
     }
-    /**
-     * 右键菜单
-     */
-    menu: PageItemMenu;
     /**
      * 当前选择的
      */
@@ -26,13 +23,14 @@ export class Solution extends Events<SolutionDirective> {
      * 当前正在编辑名称的pageItem
      */
     editItem: PageItem;
-    view: SolutionView;
+    view: SlnView;
     keyboardPlate = new KeyboardPlate();
     private init() {
 
     }
-    onOpenItemMenu(item: PageItem, event: MouseEvent) {
-        this.menu.openItem(item, event);
+    async onOpenItemMenu(item: PageItem, event: MouseEvent) {
+        // this.menu.openItem(item, event);
+        await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, item.getPageItemMenus());
     }
     onMousedownItem(item: PageItem, event: MouseEvent) {
         if (!this.selectItems.exists(g => g === item)) {
@@ -42,7 +40,7 @@ export class Solution extends Events<SolutionDirective> {
             lastItems.each(item => item?.view?.forceUpdate())
             if (item.view)
                 item.view.forceUpdate();
-            this.emit(SolutionDirective.openItem, this.selectItems[0]);
+            this.emit(SlnDirective.openItem, this.selectItems[0]);
         }
         else {
             item.selectedDate = new Date().getTime();
@@ -81,20 +79,23 @@ export class Solution extends Events<SolutionDirective> {
             var item = surface.workspace.find(g => g.id == pageId);
             if (item) {
                 this.selectItems = [item];
-                this.emit(SolutionDirective.openItem, this.selectItems[0])
+                this.emit(SlnDirective.openItem, this.selectItems[0])
             }
         }
     }
 }
-export interface Solution {
-    on(name: SolutionDirective.openItem, fn: (item: PageItem) => void);
-    emit(name: SolutionDirective.openItem, item: PageItem);
-    emit(name: SolutionDirective.addSubPageItem, item: PageItem);
-    on(name: SolutionDirective.addSubPageItem, fn: (item: PageItem) => void);
-    emit(name: SolutionDirective.removePageItem, item: PageItem);
-    on(name: SolutionDirective.removePageItem, fn: (item: PageItem) => void);
-    emit(name: SolutionDirective.updatePageItem, item: PageItem);
-    on(name: SolutionDirective.updatePageItem, fn: (item: PageItem) => void);
-    emit(name: SolutionDirective.togglePageItem, item: PageItem);
-    on(name: SolutionDirective.togglePageItem, fn: (item: PageItem) => void);
+export interface Sln {
+    on(name: SlnDirective.openItem, fn: (item: PageItem) => void);
+    emit(name: SlnDirective.openItem, item: PageItem);
+
+    emit(name: SlnDirective.addSubPageItem, item: PageItem);
+    emitAsync(name: SlnDirective.addSubPageItem, item: PageItem): Promise<void>;
+    on(name: SlnDirective.addSubPageItem, fn: (item: PageItem) => Promise<void>);
+
+    emit(name: SlnDirective.removePageItem, item: PageItem);
+    on(name: SlnDirective.removePageItem, fn: (item: PageItem) => void);
+    emit(name: SlnDirective.updatePageItem, item: PageItem);
+    on(name: SlnDirective.updatePageItem, fn: (item: PageItem) => void);
+    emit(name: SlnDirective.togglePageItem, item: PageItem);
+    on(name: SlnDirective.togglePageItem, fn: (item: PageItem) => void);
 }

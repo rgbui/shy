@@ -3,7 +3,6 @@ import { util } from "rich/util/util";
 import { Mime } from "./mime";
 import { surface } from "../../surface";
 import { PageItemBox } from "./views/box";
-import { PageItemMenuType } from "../extensions/menu";
 import trash from "rich/src/assert/svg/trash.svg";
 import rename from "../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
@@ -11,12 +10,13 @@ import cut from "../../assert/svg/cut.svg";
 import link from '../../assert/svg/link.svg';
 
 import { PageItemDirective } from "./operator";
-import { SolutionDirective } from "../operator";
+import { SlnDirective } from "../operator";
 import { workspaceService } from "../../workspace/service";
 import { PageView } from "./view";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
-import { Rect } from "../../../../rich/src/common/point";
+import { Rect } from "rich/src/common/point";
+import { MenuItemType, MenuItemTypeValue } from "rich/component/menu/declare";
 export class PageItem {
     id: string;
     sn?: number;
@@ -34,8 +34,8 @@ export class PageItem {
     selectedDate: number;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-    get solution() {
-        return surface.solution;
+    get sln() {
+        return surface.sln;
     }
     /***
      * 用户设置的路径
@@ -95,9 +95,9 @@ export class PageItem {
             this.checkedHasChilds = true;
             if (this.view) this.view.forceUpdate();
         }
-        this.solution.emit(SolutionDirective.togglePageItem, this);
+        this.sln.emit(SlnDirective.togglePageItem, this);
     }
-    onAdd() {
+    async onAdd(data?: Record<string, any>, at?: number) {
         var item = new PageItem();
         item.id = util.guid();
         item.text = '新页面';
@@ -105,26 +105,32 @@ export class PageItem {
         item.spread = false;
         item.parentId = this.id;
         item.parent = this;
+        if (data) Object.assign(item, data);
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
-        this.solution.emit(SolutionDirective.addSubPageItem, item);
-        this.childs.insertAt(0, item);
+        await this.sln.emitAsync(SlnDirective.addSubPageItem, item);
+        if (typeof at == 'undefined') at = 0;
+        this.childs.insertAt(at, item);
+        return item;
+    }
+    async onAddAndEdit(data?: Record<string, any>, at?: number) {
+        var item = await this.onAdd();
         if (this.view) this.view.forceUpdate(() => {
             item.onEdit();
         });
         else console.error('not found item view when add child')
     }
     onEdit() {
-        this.solution.onEditItem(this);
+        this.sln.onEditItem(this);
     }
     onExitEdit() {
-        this.solution.onEditItem(null);
+        this.sln.onEditItem(null);
     }
     async onRemove() {
         var id = this.id;
         await workspaceService.deletePage(id);
-        if (this.solution.selectItems.exists(g => g == this)) {
-            this.solution.selectItems.remove(this);
+        if (this.sln.selectItems.exists(g => g == this)) {
+            this.sln.selectItems.remove(this);
         }
         if (this.parent) {
             this.parent.childs.remove(g => g == this);
@@ -133,10 +139,10 @@ export class PageItem {
         else {
             surface.workspace.childs.remove(g => g === this);
         }
-        this.solution.emit(SolutionDirective.removePageItem, this);
+        this.sln.emit(SlnDirective.removePageItem, this);
     }
     getPageItemMenus() {
-        var items: PageItemMenuType[] = [];
+        var items: MenuItemType<PageItemDirective>[] = [];
         items.push({
             name: PageItemDirective.remove,
             icon: trash,
@@ -153,7 +159,7 @@ export class PageItem {
             text: '重命名'
         });
         items.push({
-            type: 'devide'
+            type: MenuItemTypeValue.divide,
         })
         items.push({
             name: PageItemDirective.link,
@@ -166,19 +172,19 @@ export class PageItem {
             text: '剪贴'
         });
         items.push({
-            type: 'devide'
+            type: MenuItemTypeValue.divide,
         });
         items.push({
-            type: 'text',
+            type: MenuItemTypeValue.text,
             text: '编辑人kanhai'
         });
         items.push({
-            type: 'text',
+            type: MenuItemTypeValue.text,
             text: '编辑于2021.19.20'
         });
         return items;
     }
-    onMenuClickItem(menuItem: PageItemMenuType, event: MouseEvent) {
+    onMenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
         switch (menuItem.name) {
             case PageItemDirective.copy:
                 break;
@@ -191,10 +197,10 @@ export class PageItem {
         }
     }
     onMousedownItem(event: MouseEvent) {
-        this.solution.onMousedownItem(this, event);
+        this.sln.onMousedownItem(this, event);
     }
     onContextmenu(event: MouseEvent) {
-        this.solution.onOpenItemMenu(this, event);
+        this.sln.onOpenItemMenu(this, event);
     }
     async onChangeIcon(event: MouseEvent) {
         var icon = await useIconPicker({ roundArea: Rect.fromEvent(event) });
@@ -205,14 +211,14 @@ export class PageItem {
     }
     async onUpdate(data: Record<string, any>) {
         Object.assign(this, data);
-        await workspaceService.updatePage(this);
-        this.solution.emit(SolutionDirective.updatePageItem, this);
+        await workspaceService.savePage(this);
+        this.sln.emit(SlnDirective.updatePageItem, this);
     }
     get isInEdit() {
-        return this.solution.editItem === this;
+        return this.sln.editItem === this;
     }
     get isSelected() {
-        return this.solution.selectItems.exists(this);
+        return this.sln.selectItems.exists(this);
     }
 }
 

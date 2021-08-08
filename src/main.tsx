@@ -5,7 +5,7 @@ import "rich";
 import "./assert/theme.less";
 import "./surface/style.less";
 import "./supervisor/style.less";
-import "./solution/style.less";
+import "./sln/style.less";
 import "./user/style.less";
 import { ViewSurface } from './surface/view';
 import { Login } from './user/login';

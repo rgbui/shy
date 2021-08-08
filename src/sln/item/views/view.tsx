@@ -11,7 +11,7 @@ export class PageItemView extends PageView {
             item.onSpread();
         }
         else if (target.closest('.sy-ws-item-page-add')) {
-            item.onAdd();
+            item.onAddAndEdit();
         }
         else if (target.closest('.sy-ws-item-page-property')) {
             item.onContextmenu(event);

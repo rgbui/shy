@@ -1,5 +1,5 @@
 
-export enum SolutionDirective {
+export enum SlnDirective {
     addSubPageItem,
     removePageItem,
     updatePageItem,
