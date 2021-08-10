@@ -73,6 +73,7 @@ export class PageItem {
                 else this[n] = data[n];
             }
         }
+        if (this.childs?.length > 0) this.spread = true;
     }
     createItem(data, at?: number) {
         var item = new PageItem();
@@ -219,6 +220,15 @@ export class PageItem {
     }
     get isSelected() {
         return this.sln.selectItems.exists(this);
+    }
+    getVisibleIds() {
+        var ids: string[] = [this.id];
+        if (this.spread == true) {
+            this.childs.each(c => {
+                ids.addRange(c.getVisibleIds())
+            })
+        }
+        return ids;
     }
 }
 
