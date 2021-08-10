@@ -28,26 +28,26 @@ export class PageItemView extends PageView {
             item.onContextmenu(event);
         }
     }
-    inputName(event: Event) {
+    inputting(event: Event) {
         var input = event.target as HTMLInputElement;
         this.item.text = input.value.trim();
     }
-    private lastName: string;
+    private editBeforeName: string;
     select() {
         var input = this.el.querySelector('.sy-ws-item-page input') as HTMLInputElement;
         if (input) {
-            this.lastName = this.item.text;
+            this.editBeforeName = this.item.text;
             input.focus();
             input.select();
         }
     }
     async blur() {
-        if (this.lastName != this.item.text) {
+        if (this.editBeforeName != this.item.text) {
             if (!this.item.text) {
-                this.item.text = this.lastName;
+                this.item.text = this.editBeforeName;
             }
             else {
-                this.item.onChange({ text: this.item.text });
+                this.item.onChange({ text: this.item.text }, true);
             }
         }
         this.item.onExitEdit();
@@ -79,7 +79,7 @@ export class PageItemView extends PageView {
                     onBlur={e => this.blur()}
                     defaultValue={item.text}
                     onKeyDown={e => this.keydown(e.nativeEvent)}
-                    onInput={e => self.inputName(e.nativeEvent)} /></div>}
+                    onInput={e => self.inputting(e.nativeEvent)} /></div>}
                 {!isInEdit && <div className='sy-ws-item-page-operators'>
                     <Icon className='sy-ws-item-page-property' icon='elipsis:sy'></Icon>
                     <Icon className='sy-ws-item-page-add' icon='add:sy'></Icon>
