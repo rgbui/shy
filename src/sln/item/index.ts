@@ -17,6 +17,8 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/menu/declare";
+import { messageChannel } from "../../../../rich/util/bus/event.bus";
+import { Directive } from "../../../../rich/util/bus/directive";
 export class PageItem {
     id: string;
     sn?: number;
@@ -83,6 +85,11 @@ export class PageItem {
         if (typeof at == 'undefined') this.childs.push(item);
         else this.childs.insertAt(at, item);
         return item;
+    }
+    onUpdate(pageInfo: Record<string, any>) {
+        Object.assign(this, pageInfo);
+        if (this.view)
+            this.view.forceUpdate()
     }
     async onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
@@ -206,14 +213,14 @@ export class PageItem {
     async onChangeIcon(event: MouseEvent) {
         var icon = await useIconPicker({ roundArea: Rect.fromEvent(event) });
         if (icon) {
-            await this.onUpdate({ icon: icon });
+            this.onChange({ icon });
         }
-        if (this.view) this.view.forceUpdate();
     }
-    async onUpdate(data: Record<string, any>) {
-        Object.assign(this, data);
-        await workspaceService.savePage(this);
-        this.sln.emit(SlnDirective.updatePageItem, this);
+    onChange(pageInfo: Record<string, any>) {
+        var keys = Object.keys(pageInfo);
+        var json = util.pickJson(this, keys);
+        if (util.valueIsEqual(json, pageInfo)) return
+        messageChannel.fire(Directive.UpdatePageItem, this.id, pageInfo);
     }
     get isInEdit() {
         return this.sln.editItem === this;

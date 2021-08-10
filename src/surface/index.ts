@@ -9,10 +9,10 @@ import { SyHistory } from "../history";
 import { generatePath } from "react-router";
 import { Workspace } from "../workspace";
 import { workspaceService, workspaceTogglePages } from "../workspace/service";
-import { richBus } from "../../../rich/util/bus/event.bus";
-import { Directive } from "../../../rich/util/bus/directive";
+import { Directive } from "rich/util/bus/directive";
 import { userService } from "../user/service";
 import { util } from "../util";
+import { messageChannel } from "rich/util/bus/event.bus";
 class Surface extends Events {
     constructor() {
         super();
@@ -62,24 +62,32 @@ class Surface extends Events {
         await this.loadAfter();
     }
     async loadAfter() {
-        if (richBus.has(Directive.GalleryQuery)) return;
-        richBus.only(Directive.GalleryQuery, async (type, word) => {
+        if (messageChannel.has(Directive.GalleryQuery)) return;
+        messageChannel.on(Directive.GalleryQuery, async (type, word) => {
 
         });
-        richBus.only(Directive.PagesQuery, async (word) => {
+        messageChannel.on(Directive.PagesQuery, async (word) => {
 
         });
-        richBus.only(Directive.UploadFile, async (file, progress) => {
+        messageChannel.on(Directive.UploadFile, async (file, progress) => {
             var r = await userService.uploadFile(file, surface.workspace.id, progress);
             return r;
         });
-        richBus.only(Directive.UsersQuery, async () => {
+        messageChannel.on(Directive.UsersQuery, async () => {
 
         });
-        richBus.only(Directive.CreatePage, async (pageInfo) => {
+        messageChannel.on(Directive.CreatePage, async (pageInfo) => {
             var item = surface.sln.selectItems[0];
             var newItem = await item.onAdd(pageInfo);
             return { id: newItem.id, sn: newItem.sn, text: newItem.text }
+        });
+        messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
+            var item = this.workspace.find(g => g.id == id);
+            if (item) {
+                Object.assign(item, pageInfo);
+                if (item.view) item.view.forceUpdate()
+            }
+            workspaceService.updatePage(id, pageInfo);
         });
     }
     updateUser(user: Partial<User>) {

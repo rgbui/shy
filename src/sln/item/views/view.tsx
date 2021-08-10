@@ -47,7 +47,7 @@ export class PageItemView extends PageView {
                 this.item.text = this.lastName;
             }
             else {
-                this.item.onUpdate({ text: this.item.text });
+                this.item.onChange({ text: this.item.text });
             }
         }
         this.item.onExitEdit();

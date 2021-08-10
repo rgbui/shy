@@ -76,6 +76,13 @@ class WorkspaceService extends BaseService {
             }
         }
     }
+    async updatePage(id: string, data: Record<string, any>) {
+        var rr = await masterSock.post('/page/update/:id', {
+            id,
+            data: data
+        });
+        return rr
+    }
     async togglePage(item: PageItem) {
         await workspaceTogglePages.save(item.workspace.getVisibleIds())
     }
