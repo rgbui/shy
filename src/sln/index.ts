@@ -29,7 +29,10 @@ export class Sln extends Events<SlnDirective> {
 
     }
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
-        await useSelectMenuItem({ roundPoint: Point.from(event) }, item.getPageItemMenus());
+        var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) }, item.getPageItemMenus());
+        if (menuItem) {
+            item.onContextmenuClickItem(menuItem.item, menuItem.event);
+        }
     }
     onMousedownItem(item: PageItem, event: MouseEvent) {
         if (!this.selectItems.exists(g => g === item)) {

@@ -192,7 +192,7 @@ export class PageItem {
         });
         return items;
     }
-    onMenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
+    onContextmenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
         switch (menuItem.name) {
             case PageItemDirective.copy:
                 break;
@@ -216,10 +216,12 @@ export class PageItem {
             this.onChange({ icon });
         }
     }
-    onChange(pageInfo: Record<string, any>) {
-        var keys = Object.keys(pageInfo);
-        var json = util.pickJson(this, keys);
-        if (util.valueIsEqual(json, pageInfo)) return
+    onChange(pageInfo: Record<string, any>, force?: boolean) {
+        if (force != true) {
+            var keys = Object.keys(pageInfo);
+            var json = util.pickJson(this, keys);
+            if (util.valueIsEqual(json, pageInfo)) return;
+        }
         messageChannel.fire(Directive.UpdatePageItem, this.id, pageInfo);
     }
     get isInEdit() {
