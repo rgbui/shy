@@ -31,4 +31,12 @@ export class Workspace {
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)
     }
+    getVisibleIds()
+    {
+        var ids: string[] = [];
+        this.childs.each(c=>{
+            ids.addRange(c.getVisibleIds())
+        })
+        return ids;
+    }
 }

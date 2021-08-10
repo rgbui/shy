@@ -34,12 +34,12 @@ class WorkspaceService extends BaseService {
         var rr = await masterSock.post<{ id: string, sn: number }, string>('/workspace/create', { text: args.text });
         return rr;
     }
-    async loadWorkspaceItems(workspaceId: string) {
-        var rr = await masterSock.get<{ pages: Partial<PageItem> }, string>('/workspace/:wsId/items', { wsId: workspaceId })
-        return rr;
-    }
-    async loadWorkspacePages(workspaceId: string, pageIds: string[]) {
-        var rr = await masterSock.get<{ pages: Partial<PageItem>[] }, string>('/pages/load', { workspaceId, pageIds: pageIds });
+    async loadWorkspaceItems(workspaceId: string, pageIds: string[]) {
+        var rr = await masterSock.post<
+            { pages: Partial<PageItem> },
+            string>('/workspace/:wsId/items',
+                { wsId: workspaceId, pageIds: pageIds || [] }
+            )
         return rr;
     }
     async loadPageChilds(pageId: string) {
@@ -77,7 +77,7 @@ class WorkspaceService extends BaseService {
         }
     }
     async togglePage(item: PageItem) {
-        await workspaceTogglePages.save(item.id, item.spread)
+        await workspaceTogglePages.save(item.workspace.getVisibleIds())
     }
     async deletePage(id: string) {
         await masterSock.delete('/page/delete/:id', { id });
@@ -125,12 +125,11 @@ export class workspaceTogglePages {
         if (Array.isArray(ids)) {
             this.ids = ids;
         }
+        else this.ids = [];
         return this.ids;
     }
-    static async save(id: string, toggle: boolean) {
-        if (toggle == true && !this.ids.exists(id)) this.ids.push(id)
-        else if (toggle == false && this.ids.exists(id)) this.ids.remove(id)
+    static async save(ids: string[]) {
+        this.ids = ids;
         await yCache.set(CacheKey.togglePages, this.ids)
     }
-
 }
