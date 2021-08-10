@@ -8,10 +8,11 @@ import { Supervisor } from "../supervisor";
 import { SyHistory } from "../history";
 import { generatePath } from "react-router";
 import { Workspace } from "../workspace";
-import { workspaceService } from "../workspace/service";
+import { workspaceService, workspaceTogglePages } from "../workspace/service";
 import { richBus } from "../../../rich/util/bus/event.bus";
 import { Directive } from "../../../rich/util/bus/directive";
 import { userService } from "../user/service";
+import { util } from "../util";
 class Surface extends Events {
     constructor() {
         super();
@@ -38,7 +39,6 @@ class Surface extends Events {
             await workspaceService.savePage(item);
         });
         this.sln.on(SlnDirective.removePageItem, async (item) => {
-            // WorkspaceStore.saveWorkspace(this.solution.workspace);
             await workspaceService.deletePage(item.id)
         });
         this.sln.on(SlnDirective.addSubPageItem, async (item) => {
@@ -94,21 +94,14 @@ class Surface extends Events {
         return rr;
     }
     async loadPages() {
-        var rr = await workspaceService.loadWorkspaceItems(this.workspace.id);
+        var ids = await workspaceTogglePages.getIds();
+        var rr = await workspaceService.loadWorkspaceItems(this.workspace.id, ids);
         if (rr) {
             if (Array.isArray(rr?.data?.pages)) {
-                this.workspace.load({ childs: rr.data.pages });
+                var pages = rr.data.pages;
+                pages = util.flatArrayConvertTree(pages);
+                this.workspace.load({ childs: pages });
             }
-        }
-        var rg = await workspaceService.loadWorkspacePages(this.workspace.id, this.workspace.childs.map(c => c.id));
-        if (rg && Array.isArray(rg?.data?.pages)) {
-            rg.data.pages.each(pa => {
-                var item = this.workspace.find(g => g.id == pa.parentId);
-                if (item) {
-                    item.spread = true;
-                    item.createItem(pa);
-                }
-            })
         }
     }
 }
