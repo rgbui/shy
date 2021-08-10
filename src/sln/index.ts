@@ -9,7 +9,7 @@ import { generatePath } from "react-router";
 import { surface } from "../surface";
 import { Mime } from "./item/mime";
 import { useSelectMenuItem } from "rich/component/menu";
-import { Rect } from "../../../rich/src/common/point";
+import { Point } from "rich/src/common/point";
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
@@ -29,8 +29,7 @@ export class Sln extends Events<SlnDirective> {
 
     }
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
-        // this.menu.openItem(item, event);
-        await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, item.getPageItemMenus());
+        await useSelectMenuItem({ roundPoint: Point.from(event) }, item.getPageItemMenus());
     }
     onMousedownItem(item: PageItem, event: MouseEvent) {
         if (!this.selectItems.exists(g => g === item)) {
