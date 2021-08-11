@@ -239,5 +239,38 @@ export class PageItem {
         }
         return ids;
     }
+
+    onUpdateDocument() {
+        document.title = this.text || '页面';
+        if (this.icon) {
+            if (this.icon.name == 'emoji') {
+                var canvas = document.createElement('canvas');
+                var size = 30;
+                canvas.width = size;
+                canvas.height = size;
+                var context = canvas.getContext("2d");
+                context.font = "26px Arial";
+                context.textBaseline = 'middle';
+                context.textAlign = 'center';
+                context.fillText(this.icon.code, size / 2, size / 2);
+                var dataUrl = canvas.toDataURL('image/png', 1);
+                var link: HTMLAnchorElement;
+                for (let i = 0; i < document.head.children.length; i++) {
+                    var dl = document.head.children[i] as any;
+                    if (dl && dl.getAttribute('rel') == 'icon' && dl.getAttribute('type') == 'image/x-icon') {
+                        link = dl as any;
+                    }
+                }
+                if (!link) {
+                    link = document.createElement('link') as any;
+                    link.setAttribute('rel', 'icon');
+                    link.setAttribute('type', 'image/x-icon');
+                    document.head.appendChild(link);
+                }
+                link.setAttribute('href', dataUrl);
+            }
+            //<link rel="icon" type="image/x-icon" href="https://secure.wostatic.cn/icon/rwF6bK9DDEHgFAkA5rzSWy/%E6%84%8F%E5%A4%A7%E5%88%A9%E9%A3%8E%E5%85%89%20%E5%B0%9A%C2%B7%E5%B7%B4%E8%92%82%E6%96%AF%E7%89%B9%C2%B7%E5%8D%A1%E7%B1%B3%E5%B0%94%C2%B7%E7%A7%91%E7%BD%97%EF%BC%88%E6%B3%95%E5%9B%BD%EF%BC%89.jpg?auth_key=1628690385-b5mmS9cDfRgyx5ZK8wTBap-0-bdd99d9c46f9257401450fbf47b1a890&amp;image_process=resize,w_48">
+        }
+    }
 }
 

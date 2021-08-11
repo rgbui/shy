@@ -30,6 +30,7 @@ class Surface extends Events {
     private init() {
         this.sln.on(SlnDirective.openItem, (item) => {
             SyHistory.push(generatePath('/page/:id', { id: item.id }));
+            item.onUpdateDocument();
             this.supervisor.onOpenItem(item);
         });
         this.sln.on(SlnDirective.togglePageItem, async (item) => {
@@ -84,6 +85,7 @@ class Surface extends Events {
         messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
             var item = this.workspace.find(g => g.id == id);
             if (item) {
+                item.onUpdateDocument();
                 Object.assign(item, pageInfo);
                 if (item.view) item.view.forceUpdate()
             }
