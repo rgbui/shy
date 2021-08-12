@@ -1,8 +1,11 @@
 
 
-export enum AppLang{
+export enum AppLang {
     Login,
     Phone,
     PhoneVerifyCode,
-    PleashName
+    PleashName,
+    BarFavourite,
+    BarPublish,
+    BarProperty
 }
