@@ -10,6 +10,8 @@ import { surface } from "../surface";
 import { Mime } from "./item/mime";
 import { useSelectMenuItem } from "rich/component/menu";
 import { Point } from "rich/src/common/point";
+import { messageChannel } from "../../../rich/util/bus/event.bus";
+import { Directive } from "../../../rich/util/bus/directive";
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
@@ -35,6 +37,9 @@ export class Sln extends Events<SlnDirective> {
         }
     }
     onMousedownItem(item: PageItem, event: MouseEvent) {
+        messageChannel.fire(Directive.OpenPageItem, item);
+    }
+    onFocusItem(item: PageItem) {
         if (!this.selectItems.exists(g => g === item)) {
             item.selectedDate = new Date().getTime();
             var lastItems = this.selectItems.map(o => o);
@@ -81,7 +86,7 @@ export class Sln extends Events<SlnDirective> {
             var item = surface.workspace.find(g => g.id == pageId);
             if (item) {
                 this.selectItems = [item];
-                this.emit(SlnDirective.openItem, this.selectItems[0])
+                messageChannel.fire(Directive.OpenPageItem, this.selectItems[0]);
             }
         }
     }

@@ -28,11 +28,6 @@ class Surface extends Events {
      */
     isSuccessfullyLoaded: boolean = false;
     private init() {
-        this.sln.on(SlnDirective.openItem, (item) => {
-            SyHistory.push(generatePath('/page/:id', { id: item.id }));
-            item.onUpdateDocument();
-            this.supervisor.onOpenItem(item);
-        });
         this.sln.on(SlnDirective.togglePageItem, async (item) => {
             await workspaceService.togglePage(item);
         });
@@ -90,6 +85,16 @@ class Surface extends Events {
                 if (item.view) item.view.forceUpdate()
             }
             workspaceService.updatePage(id, pageInfo);
+        });
+        messageChannel.on(Directive.OpenPageItem, (item) => {
+            var id = typeof item == 'string' ? item : item.id;
+            var it = surface.workspace.find(g => g.id == id);
+            if (it) {
+                SyHistory.push(generatePath('/page/:id', { id: it.id }));
+                it.onUpdateDocument();
+                this.supervisor.onOpenItem(it);
+                this.sln.onFocusItem(it);
+            }
         });
     }
     updateUser(user: Partial<User>) {

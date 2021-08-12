@@ -2,7 +2,9 @@ import React from "react";
 import { PageItem } from "../sln/item";
 import { Mime } from "../sln/item/mime";
 import { surface } from "../surface";
+import { Bar } from "./bar";
 import { DocPage } from "./page";
+import { EmptyPageView } from "./page/empty";
 
 export class SupervisorView extends React.Component {
     constructor(props) {
@@ -22,9 +24,12 @@ export class SupervisorView extends React.Component {
         }
     }
     render() {
-        return <div className='sy-content'>
-            {this.items.length > 0 && this.items.map(item => this.renderItem(item))}
-            {this.items.length == 0 && <div className='sy-content-empty'>没有打开任何文档</div>}
+        return <div className='shy-supervisor'>
+            <Bar></Bar>
+            <div className='shy-supervisor-view'>
+                {this.items.length > 0 && this.items.map(item => this.renderItem(item))}
+                {this.items.length == 0 && <EmptyPageView></EmptyPageView>}
+            </div>
         </div>
     }
 }

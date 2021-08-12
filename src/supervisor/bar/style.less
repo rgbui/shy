@@ -1,0 +1,100 @@
+.shy-supervisor-bar {
+    position       : absolute;
+    left           : 0px;
+    right          : 0px;
+    z-index        : 1111;
+    height         : 45px;
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : center;
+    background: white;
+
+    &-left {
+        flex-grow      : 1;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+    }
+
+    &-right {
+        width          : 80px;
+        flex-shrink    : 0;
+        height         : 45px;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+
+        .sy-icon {
+            cursor         : pointer;
+            margin-right   : 10px;
+            display        : inline-flex;
+            justify-content: center;
+            align-items    : center;
+            border-radius  : 4px;
+            color          : rgb(55, 53, 47);
+
+            &:hover {
+                background-color: rgba(55, 53, 47, 0.08);
+            }
+        }
+    }
+}
+
+.shy-supervisor-bar-routers {
+    margin-left: 10px;
+
+    &-item {
+        display      : inline-flex;
+        padding-left : 6px;
+        padding-right: 6px;
+        color        : rgb(55, 53, 47);
+        white-space  : nowrap;
+        height       : 24px;
+        border-radius: 3px;
+        cursor       : pointer;
+
+        .sy-icon {
+            user-select    : none;
+            transition     : background 20ms ease-in 0s;
+            display        : flex;
+            align-items    : center;
+            justify-content: center;
+            height         : 20px;
+            width          : 20px;
+            border-radius  : 3px;
+            flex-shrink    : 0;
+            margin-right   : 6px;
+        }
+
+        a {}
+
+        &:hover {
+            background-color: rgba(55, 53, 47, 0.08);
+        }
+    }
+
+    >label {
+        user-select  : none;
+        transition   : background 20ms ease-in 0s;
+        cursor       : pointer;
+        display      : inline-flex;
+        align-items  : center;
+        flex-shrink  : 0;
+        white-space  : nowrap;
+        height       : 24px;
+        border-radius: 3px;
+        font-size    : 14px;
+        line-height  : 1.2;
+        min-width    : 0px;
+        padding-left : 6px;
+        padding-right: 6px;
+        color        : rgb(55, 53, 47);
+    }
+
+    >em {
+        font-style  : normal;
+        margin-left : 2px;
+        margin-right: 2px;
+        color       : rgba(55, 53, 47, 0.4);
+    }
+}

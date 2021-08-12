@@ -53,7 +53,7 @@ export class PageItem {
     get workspace() {
         return surface.workspace
     }
-    parent?: PageItem;
+    parent: PageItem;
     parentId?: string;
     load(data) {
         for (var n in data) {
@@ -76,6 +76,17 @@ export class PageItem {
             }
         }
         if (this.childs?.length > 0) this.spread = true;
+    }
+    closest(predict: (item: PageItem) => boolean, ignoreSelf?: boolean) {
+        if (ignoreSelf != true && predict(this)) return this;
+        var pa = this.parent;
+        while (true) {
+            if (pa) {
+                if (predict(pa)) return pa;
+                else pa = pa.parent;
+            }
+            else break;
+        }
     }
     createItem(data, at?: number) {
         var item = new PageItem();
