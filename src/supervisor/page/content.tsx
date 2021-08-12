@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { PageItem } from "../../../sln/item";
-import { surface } from "../../../surface";
+import { PageItem } from "../../sln/item";
+import { surface } from "../../surface";
 import { Page } from "rich/src/page";
-import { workspaceService } from "../../../workspace/service";
+import { workspaceService } from "../../workspace/service";
 import { PageDirective } from "rich/src/page/directive";
 export class DocView extends React.Component<{ item: PageItem }>{
     constructor(props) { super(props) }
