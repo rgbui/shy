@@ -30,6 +30,10 @@ class WorkspaceService extends BaseService {
             sn: wsId
         })
     }
+    async getWorkspaces() {
+        var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/workspace/list');
+        return data;
+    }
     async createWorkspace(args: { text: string }) {
         var rr = await masterSock.post<{ id: string, sn: number }, string>('/workspace/create', { text: args.text });
         return rr;
