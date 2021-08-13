@@ -7,7 +7,7 @@
     display        : flex;
     justify-content: flex-start;
     align-items    : center;
-    background: white;
+    background     : white;
 
     &-left {
         flex-grow      : 1;
@@ -24,18 +24,25 @@
         justify-content: center;
         align-items    : center;
 
-        .sy-icon {
-            cursor         : pointer;
-            margin-right   : 10px;
+        a {
+            width          : 24px;
+            height         : 24px;
             display        : inline-flex;
             justify-content: center;
             align-items    : center;
-            border-radius  : 4px;
-            color          : rgb(55, 53, 47);
-
             &:hover {
                 background-color: rgba(55, 53, 47, 0.08);
             }
+            border-radius : 4px;
+            margin-right  : 10px;
+            cursor        : pointer;
+        }
+
+        .sy-icon {
+            display        : inline-flex;
+            justify-content: center;
+            align-items    : center;
+            color: rgb(55, 53, 47);
         }
     }
 }

@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Icon } from 'rich/component/icon';
-import { Directive } from '../../../../rich/util/bus/directive';
-import { messageChannel } from '../../../../rich/util/bus/event.bus';
+import { Directive } from 'rich/util/bus/directive';
+import { messageChannel } from 'rich/util/bus/event.bus';
 import { PageItem } from '../../sln/item';
 import { Mime } from '../../sln/item/mime';
 import { surface } from '../../surface';
 export class PageRouter extends React.Component {
     onClick(item: PageItem) {
+        if (this.supervisor.item === item) return;
         messageChannel.fire(Directive.OpenPageItem, item);
     }
     render() {

@@ -1,7 +1,5 @@
 import React from "react";
-
 import { surface } from ".";
-import { SlideUserFooter } from "../user/slide.footer";
 import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
 export class ViewSurface extends React.Component {
@@ -20,7 +18,6 @@ export class ViewSurface extends React.Component {
             surface.isSuccessfullyLoaded && <>
                 <div className='sy-slide'>
                     <SlnView ></SlnView>
-                    <SlideUserFooter></SlideUserFooter>
                 </div>
                 <SupervisorView ></SupervisorView>
             </>
