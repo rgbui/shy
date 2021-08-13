@@ -14,7 +14,7 @@ export class WorkspaceCreateView extends React.Component {
         button.disabled = true;
         try {
             var rr = await workspaceService.createWorkspace({ text: this.text })
-            if (rr.ok) return SyHistory.push(generatePath('/ws/:id', { id: rr.data.sn}));
+            if (rr.ok) return SyHistory.push(generatePath('/ws/:id', { id: rr.data.sn }));
             else this.failTip = rr.warn;
             this.forceUpdate();
         }

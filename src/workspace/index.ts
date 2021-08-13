@@ -1,6 +1,7 @@
 import { util } from "rich/util/util";
 import { IconArguments } from "../../../rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
+import "./style.less";
 export class Workspace {
     id: string;
     date: number;
@@ -31,10 +32,9 @@ export class Workspace {
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)
     }
-    getVisibleIds()
-    {
+    getVisibleIds() {
         var ids: string[] = [];
-        this.childs.each(c=>{
+        this.childs.each(c => {
             ids.addRange(c.getVisibleIds())
         })
         return ids;

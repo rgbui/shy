@@ -14,14 +14,14 @@ export class ViewSurface extends React.Component {
         }
     }
     render() {
-        return <div className='sy-surface'>{
+        return <div className='shy-surface'>{
             surface.isSuccessfullyLoaded && <>
-                <div className='sy-slide'>
+                <div className='shy-slide'>
                     <SlnView ></SlnView>
                 </div>
                 <SupervisorView ></SupervisorView>
             </>
-        }{!surface.isSuccessfullyLoaded && <div className='sy-surface-loading'>正在加载中...</div>}
+        }{!surface.isSuccessfullyLoaded && <div className='shy-surface-loading'>正在加载中...</div>}
         </div>
     }
 }
