@@ -10,7 +10,8 @@ export enum CacheKey {
     workspaceId,
     pageId,
     lang,
-    togglePages
+    togglePages,
+    slideWidth
 }
 const FLAG = 'shy.live.';
 class SyCache {
@@ -42,11 +43,11 @@ class SyCache {
         if (config.isPro) return FLAG + key;
         else return FLAG + (typeof key == 'number' ? CacheKey[key] : key);
     }
-    get(key: CacheKey | string) {
+    get<T = any>(key: CacheKey | string): T {
         var v = this.getValue(key);
         if (v && (typeof v.expire == 'undefined' || typeof v.expire == 'number' && v.expire > Date.now())) return v.value;
     }
-    set(key: CacheKey | string, value: any, expire?: number, unit: 'm' | 's' | 'h' | 'd' | 'M' | 'y' | 'w' = 'm') {
+    set<T = any>(key: CacheKey | string, value: T, expire?: number, unit: 'm' | 's' | 'h' | 'd' | 'M' | 'y' | 'w' = 'm') {
         var k = this.getKey(key);
         var t = undefined;
         if (typeof expire == 'number') {
