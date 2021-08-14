@@ -21,7 +21,7 @@ module.exports = {
     entry: "./src/main.tsx",
     output: {
         path: path.resolve(__dirname, "../dist"),
-        filename: "assert/js/bundle.js",
+        filename: "assert/js/shy.[hash:8].js",
         publicPath
     },
     devServer: {
@@ -121,7 +121,7 @@ module.exports = {
             REMOTE_URL: JSON.stringify('https://m1.shiyun.host')
         }),
         new MiniCssExtractPlugin({
-            filename: "sy.css"
+            filename: "shy.css"
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,

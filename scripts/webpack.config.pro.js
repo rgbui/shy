@@ -15,7 +15,7 @@ module.exports = {
     entry: "./src/main.tsx",
     output: {
         path: outputDir,
-        filename: "assert/js/sy.[hash:8].js",
+        filename: "assert/js/shy.[hash:8].js",
         chunkFilename: 'assert/js/dynamic/[name].[hash:8].js',
         publicPath
     },
@@ -118,8 +118,7 @@ module.exports = {
             canPrint: true
         }),
         new MiniCssExtractPlugin({
-            filename: "sy.[hash:8].css"
-            
+            filename: "shy.[hash:8].css"
         }),
         new CopyWebpackPlugin(
             {
