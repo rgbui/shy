@@ -1,4 +1,7 @@
+import { IconArguments } from "rich/extensions/icon/declare";
+import React from "../../../rich/node_modules/@types/react";
 import { userService } from "./service";
+import { useOpenUserSettings } from "./settings";
 
 export enum UserStatus {
     busy,
@@ -13,7 +16,7 @@ export class User {
     public phone: string;
     public paw: string;
     public name: string;
-    public avatar: { url: string };
+    public avatar: IconArguments;
     public email: string;
     public slogan: string;
     get isSign() {
@@ -24,5 +27,8 @@ export class User {
         if (r.ok) {
             Object.assign(this, r.data.user);
         }
+    }
+    async onOpenUserSettings(event: React.MouseEvent) {
+        await useOpenUserSettings()
     }
 }
