@@ -10,6 +10,51 @@
         flex-shrink: 0;
         background : rgb(247, 246, 243);
         position   : relative;
+
+        &-resize {
+            position  : absolute;
+            top       : 0px;
+            right     : 1px;
+            bottom    : 0px;
+            width     : 2px;
+            opacity   : 0;
+            box-shadow: rgba(0, 0, 0, 0.1) -2px 0px 0px 0px inset;
+            cursor    : col-resize;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        &:hover {
+            .shy-ws-profile-operators {
+                visibility: visible;
+            }
+        }
+
+        &.dragging {
+            .shy-slide-resize {
+                opacity: 1;
+            }
+        }
+
+        &.float {
+            position: absolute;
+            top     : 100px;
+            left    : 0px;
+            bottom  : 100px;
+            opacity : 1;
+            z-index : 100;
+        }
+
+        &.float-hide {
+            position: absolute;
+            top     : 100px;
+            left    : 0px;
+            bottom  : 100px;
+            opacity : 0;
+            z-index : 100;
+        }
     }
 
     .shy-content {
