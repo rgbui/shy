@@ -7,5 +7,7 @@ export enum AppLang {
     PleashName,
     BarFavourite,
     BarPublish,
-    BarProperty
+    BarProperty,
+    ShrinkSlide,
+    UnfoldSlide
 }

@@ -18,7 +18,7 @@ export class Bar extends React.Component {
                     onMouseLeave={e => { this.isHoverMenu = true; this.forceUpdate() }}
                     className='shy-supervisor-bar-menu'
                 >
-                    <Icon size={14} icon={this.isHoverMenu ? MenuSvg : DobuleArrow}></Icon></a>
+                    <AppTip id={AppLang.UnfoldSlide} placement={'bottom'}><Icon size={14} icon={this.isHoverMenu ? MenuSvg : DobuleArrow}></Icon></AppTip>    </a>
                 }
                 <PageRouter></PageRouter>
                 <PageUsers></PageUsers>

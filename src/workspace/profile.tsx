@@ -7,6 +7,8 @@ import { surface } from "../surface";
 import { useSwitchWorkspace } from "./switch";
 import ExpandSvg from "../assert/svg/expand.svg";
 import DoubleArrow from "../assert/svg/doubleRight.svg";
+import { AppTip } from "../../i18n/tip";
+import { AppLang } from "../../i18n/enum";
 
 export class WorkspaceProfile extends React.Component<{ workspace: Workspace }>{
     get workspace() {
@@ -30,7 +32,7 @@ export class WorkspaceProfile extends React.Component<{ workspace: Workspace }>{
             <div className='shy-ws-profile-operators'>
                 <a onMouseDown={e => { e.stopPropagation(); surface.workspace.onOpenWorkspaceSettings(e) }}><Icon icon='elipsis:sy'></Icon></a>
                 {surface.isShowSln && <a onMouseDown={e => { e.stopPropagation(); surface.onToggleSln(false) }}>
-                    <Icon size={12} icon={DoubleArrow} style={{ transform: 'scale(-1,1)' }}></Icon>
+                    <AppTip id={AppLang.ShrinkSlide} placement={'bottom'}><Icon size={12} icon={DoubleArrow} style={{ transform: 'scale(-1,1)' }}></Icon></AppTip>
                 </a>}
             </div>
         </div>
