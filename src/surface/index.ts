@@ -27,6 +27,7 @@ class Surface extends Events {
      * 是否成功加载数据
      */
     isSuccessfullyLoaded: boolean = false;
+    isShowSln: boolean = true;
     private init() {
         this.sln.on(SlnDirective.togglePageItem, async (item) => {
             await workspaceService.togglePage(item);
@@ -118,6 +119,13 @@ class Surface extends Events {
                 this.workspace.load({ childs: pages });
             }
         }
+    }
+    onChangeWorkspace(workspace: Partial<Workspace>) {
+
+    }
+    onToggleSln(isShowSln: boolean) {
+        this.isShowSln = isShowSln;
+        this.view.forceUpdate();
     }
 }
 export var surface = new Surface();

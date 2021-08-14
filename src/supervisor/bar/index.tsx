@@ -4,13 +4,22 @@ import { surface } from '../../surface';
 import { PageRouter } from './router';
 import { PageUsers } from './user';
 import "./style.less";
-
 import { AppLang } from '../../../i18n/enum';
 import { AppTip } from '../../../i18n/tip';
+import DobuleArrow from "../../assert/svg/doubleRight.svg";
+import MenuSvg from "../../assert/svg/menu.svg";
 export class Bar extends React.Component {
+    private isHoverMenu: boolean = true;
     render() {
         return <div className='shy-supervisor-bar'>
             <div className='shy-supervisor-bar-left'>
+                {!surface.isShowSln && <a onMouseDown={e => surface.onToggleSln(true)}
+                    onMouseEnter={e => { this.isHoverMenu = false; this.forceUpdate() }}
+                    onMouseLeave={e => { this.isHoverMenu = true; this.forceUpdate() }}
+                    className='shy-supervisor-bar-menu'
+                >
+                    <Icon size={14} icon={this.isHoverMenu ? MenuSvg : DobuleArrow}></Icon></a>
+                }
                 <PageRouter></PageRouter>
                 <PageUsers></PageUsers>
             </div>
