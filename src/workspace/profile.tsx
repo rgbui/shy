@@ -15,13 +15,15 @@ export class WorkspaceProfile extends React.Component<{ workspace: Workspace }>{
         return this.props.workspace;
     }
     async mousedown(event: React.MouseEvent) {
-        var r = await useSwitchWorkspace({ roundArea: Rect.fromEvent(event) });
+        var rect = Rect.from(this.el.getBoundingClientRect());
+        var r = await useSwitchWorkspace({ fixPoint: rect.leftBottom.add(30, 0) });
         if (r) {
             surface.onChangeWorkspace(r);
         }
     }
+    el: HTMLElement;
     render() {
-        return <div className='shy-ws-profile' onMouseDown={e => this.mousedown(e)}>
+        return <div className='shy-ws-profile' ref={e => this.el = e} onMouseDown={e => this.mousedown(e)}>
             <div className='shy-ws-profile-face'>
                 <Avatar circle size={30} icon={this.workspace.icon} text={this.workspace.text}></Avatar>
             </div>

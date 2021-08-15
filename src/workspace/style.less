@@ -1,12 +1,15 @@
 .shy-ws-profile {
-    padding        : 10px 10px;
+
+    padding        : 0px 10px;
+    height         : 45px;
     display        : flex;
     justify-content: flex-start;
     align-items    : center;
     cursor         : pointer;
+    position       : relative;
 
     &-face {
-        margin-right: 10px;
+        margin-right: 8px;
     }
 
     &-info {
@@ -18,11 +21,74 @@
         align-items    : center;
 
         span {
-            display: inline-flex;
+            display      : inline-flex;
+            margin-right : 6px;
+            overflow     : hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shy-icon {
+            flex-grow: 0;
+            flex-shrink: 0;
+            color: rgba(55, 53, 47, 0.4);
+            fill : rgba(55, 53, 47, 0.4);
+        }
+    }
+
+    &-operators {
+        position       : absolute;
+        right          : 0px;
+        padding        : 0px 10px;
+        height         : 100%;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+        height         : 40px;
+        visibility     : hidden;
+
+        a {
+            display        : inline-flex;
+            width          : 24px;
+            height         : 24px;
+            justify-content: center;
+            align-items    : center;
+            color          : rgba(55, 53, 47, 0.4);
+            fill           : rgba(55, 53, 47, 0.4);
+            border-radius  : 4px;
+
+            >svg {
+                width : 14px;
+                height: 14px;
+            }
+
+            &:hover {
+                background-color: rgba(55, 53, 47, 0.08);
+            }
         }
     }
 
     &:hover {
         background-color: rgba(55, 53, 47, 0.08);
     }
+}
+
+
+.shy-ws-create {
+    position : absolute;
+    top      : 150px;
+    left     : 50%;
+    width    : 300px;
+    transform: translateX(-50%);
+
+    &-text {
+        input {
+            width: 100%;
+        }
+
+        margin-bottom: 14px;
+    }
+
+    &-fail-tip {}
+
+    &-button {}
 }

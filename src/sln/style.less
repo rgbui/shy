@@ -1,5 +1,4 @@
-
-.sy-ws-pages {
+.shy-ws-pages {
     position: relative;
 
     &-head {
@@ -44,13 +43,13 @@
     }
 
     &:hover {
-        .sy-ws-pages-operators {
+        .shy-ws-pages-operators {
             visibility: visible;
         }
     }
 }
 
-.sy-ws-item {
+.shy-ws-item {
     &-page {
         cursor     : pointer;
         position   : relative;
@@ -89,8 +88,9 @@
             height         : 20px;
             margin-right   : 4px;
             transition     : background 20ms ease-in 0s;
-            border-radius: 3px;
-            font-style: normal;
+            border-radius  : 3px;
+            font-style     : normal;
+
             &:hover {
                 background-color: rgba(55, 53, 47, 0.08);
             }
@@ -158,143 +158,9 @@
     }
 }
 
-.sy-ws-item-empty {
+.shy-ws-item-empty {
     span {
         color    : rgba(55, 53, 47, 0.4);
         font-size: 12px;
     }
-}
-
-
-.sy-ws-menu {
-    position      : fixed;
-    top           : 0px;
-    left          : 0px;
-    width         : 100vw;
-    height        : 100vh;
-    z-index       : 1;
-    pointer-events: none;
-
-    &-cove {
-        position      : absolute;
-        top           : 0px;
-        left          : 0px;
-        width         : 100vw;
-        height        : 100vh;
-        z-index       : 1;
-        pointer-events: visible;
-    }
-
-    &-box {
-        pointer-events: visible;
-        position      : absolute;
-        border-radius : 3px;
-        background    : white;
-        z-index       : 2;
-        box-shadow    : rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
-        overflow      : hidden;
-
-        &-content {
-            width     : 220px;
-            max-height: 70vh;
-            min-width : 180px;
-            overflow  : hidden auto;
-            padding   : 10px 0px;
-        }
-    }
-
-    .sy-ws-menu-item {
-
-        &-devide {
-            height       : 1px;
-            display      : block;
-            margin-top   : 6px;
-            margin-bottom: 6px;
-            box-shadow   : rgba(55, 53, 47, 0.09) 0px -1px 0px;
-        }
-
-        &-option {
-            position       : relative;
-            display        : flex;
-            justify-content: flex-start;
-            align-items    : center;
-            user-select    : none;
-            min-height     : 28px;
-            line-height    : 28px;
-            font-size      : 14px;
-            color          : rgba(55, 53, 47);
-            padding        : 0px 14px;
-            cursor         : pointer;
-
-            .sy-icon {
-                width              : 17px;
-                height             : 17px;
-                display            : block;
-                fill               : inherit;
-                flex-shrink        : 0;
-                backface-visibility: hidden;
-            }
-
-            .sy-ws-item-page-spread {
-                flex-shrink: 0;
-            }
-
-            span {
-                display     : inline-flex;
-                margin-left : 8px;
-                margin-right: 14px;
-                flex-grow   : 1.0;
-            }
-
-            .sy-ws-item-page-input {
-                flex-grow: 1.0;
-
-                input {
-                    width           : 100%;
-                    background-color: #fff;
-                    border          : 0px;
-                    outline         : none;
-                }
-            }
-
-            &:hover {
-                background-color: rgba(55, 53, 47, 0.08);
-            }
-
-            label {
-                position: absolute;
-                top     : 0px;
-                right   : 0px;
-                bottom  : 0px;
-            }
-        }
-
-        &-text {
-            display    : block;
-            padding    : 0px 14px;
-            font-size  : 12px;
-            line-height: 16px;
-            color      : rgba(55, 53, 47, 0.4);
-        }
-    }
-}
-
-.sy-workspace-create {
-    position : absolute;
-    top      : 150px;
-    left     : 50%;
-    width    : 300px;
-    transform: translateX(-50%);
-
-    &-text {
-        input {
-            width: 100%;
-        }
-
-        margin-bottom: 14px;
-    }
-
-    &-fail-tip {}
-
-    &-button {}
 }

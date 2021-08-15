@@ -250,7 +250,6 @@ export class PageItem {
         }
         return ids;
     }
-
     onUpdateDocument() {
         document.title = this.text || '页面';
         if (this.icon) {

@@ -3,7 +3,6 @@ import { surface } from "../surface";
 import { WorkspaceProfile } from "../workspace/profile";
 import { PageView } from "./item/view";
 import { getMimeViewComponent } from "./item/mime";
-
 export class SlnView extends React.Component {
     private get solution() {
         return surface.sln;
@@ -39,10 +38,10 @@ export class SlnView extends React.Component {
     private _mouseup: (event: MouseEvent) => void;
     private _keyup: (event: KeyboardEvent) => void;
     render() {
-        return <div className='sy-wss' onKeyDownCapture={e => this.keydown(e.nativeEvent)} tabIndex={1}>
-            {surface.workspace && <div className='sy-ws'>
+        return <div className='shy-wss' onKeyDownCapture={e => this.keydown(e.nativeEvent)} tabIndex={1}>
+            {surface.workspace && <div className='shy-ws'>
                 <WorkspaceProfile workspace={surface.workspace}></WorkspaceProfile>
-                <div className='sy-ws-items'>
+                <div className='shy-ws-items'>
                     {surface.workspace.childs.map(ws => {
                         var View: typeof PageView = getMimeViewComponent(ws.mime);
                         return <View ref={e => ws.view = e} key={ws.id} item={ws} deep={0} ></View>
