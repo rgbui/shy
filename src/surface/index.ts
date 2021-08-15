@@ -121,7 +121,10 @@ class Surface extends Events {
         }
     }
     onChangeWorkspace(workspace: Partial<Workspace>) {
-
+        SyHistory.push(generatePath('/ws/:id', { id: workspace.sn }))
+    }
+    onCreateWorkspace() {
+        SyHistory.push('/work/create')
     }
     onToggleSln(isShowSln: boolean) {
         this.isShowSln = isShowSln;

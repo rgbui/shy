@@ -1,7 +1,8 @@
 import { util } from "rich/util/util";
-import { IconArguments } from "../../../rich/extensions/icon/declare";
+import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
 import "./style.less";
+import { useOpenWorkspaceSettings } from "./settings";
 export class Workspace {
     id: string;
     date: number;
@@ -38,5 +39,8 @@ export class Workspace {
             ids.addRange(c.getVisibleIds())
         })
         return ids;
+    }
+    async onOpenWorkspaceSettings(event: React.MouseEvent) {
+        await useOpenWorkspaceSettings();
     }
 }
