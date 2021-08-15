@@ -31,7 +31,7 @@ class SwitchWorkspace extends EventsComponent {
             <div className='shy-ws-group-head' onMouseDown={e => surface.user.onOpenUserSettings(e)}>
                 <Avatar icon={surface.user.avatar} text={surface.user.name}></Avatar>
                 <span>{surface.user.name}</span>
-                <a onMouseDown={e => { e.stopPropagation(); surface.onCreateWorkspace() }}><Icon size={20} icon={PlusSvg} ></Icon></a>
+                <a onMouseDown={e => { e.stopPropagation(); surface.onCreateWorkspace(); this.emit('close'); }}><Icon size={20} icon={PlusSvg} ></Icon></a>
             </div>
             <div className='shy-ws-group-items'>
                 {this.list.map(item => {
@@ -65,6 +65,8 @@ class SwitchWorkspace extends EventsComponent {
 interface SwitchWorkspace {
     only(name: 'select', fn: (data: Partial<Workspace>) => void);
     emit(name: 'select', data: Partial<Workspace>);
+    only(name: 'close', fn: () => void);
+    emit(name: 'close');
 }
 
 export async function useSwitchWorkspace(pos: PopoverPosition) {
@@ -76,6 +78,10 @@ export async function useSwitchWorkspace(pos: PopoverPosition) {
             resolve(data);
         })
         popover.only('close', () => {
+            resolve(null)
+        });
+        switchWorkspace.only('close', () => {
+            popover.close();
             resolve(null)
         })
     })
