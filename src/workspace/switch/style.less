@@ -1,0 +1,98 @@
+.shy-ws-switch-box {
+    width     : 270px;
+    max-height: 300px;
+
+    .shy-ws-group {
+        position: relative;
+
+        &-head {
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+            height         : 30px;
+            padding        : 0px 14px;
+            box-shadow     : rgba(55, 53, 47, .08) 0px 1px 0px;
+
+            .shy-avatar {
+                flex-shrink : 0;
+                margin-right: 6px;
+            }
+
+            >span {
+                flex-grow: 1;
+            }
+
+            a {
+                flex-shrink    : 0;
+                width          : 20px;
+                height         : 20px;
+                color          : rgba(55, 53, 47, 0.4);
+                fill           : rgba(55, 53, 47, 0.4);
+                display        : flex;
+                align-items    : center;
+                justify-content: center;
+                flex-shrink    : 0;
+                flex-grow      : 0;
+                width          : 20px;
+                height         : 20px;
+                transition     : background 20ms ease-in 0s;
+                border-radius  : 3px;
+                font-style     : normal;
+                cursor         : pointer;
+
+                &:hover {
+                    background-color: rgba(55, 53, 47, 0.08);
+                }
+            }
+        }
+
+
+
+        &-items {
+            .shy-ws-item {
+                padding        : 4px 14px;
+                font-size      : 14px;
+                height         : 48px;
+                display        : flex;
+                justify-content: flex-start;
+                align-items    : center;
+                cursor         : pointer;
+                .shy-ws-item-drag {
+                    display        : flex;
+                    align-items    : center;
+                    justify-content: center;
+                    width          : 18px;
+                    height         : 24px;
+                    flex-shrink    : 0;
+                    fill           : rgba(55, 53, 47, 0.4);
+                }
+                .shy-avatar {
+                    width       : 40px;
+                    height      : 40px;
+                    flex-shrink : 0;
+                    margin-right: 6px;
+
+                }
+
+                &-info {
+                    flex-grow: 1;
+                    color    : rgb(55, 53, 47);
+                }
+
+                &-check {
+                    flex-shrink    : 0;
+                    fill           : rgb(55, 53, 47);
+                    width          : 20px;
+                    height         : 20px;
+                    display        : flex;
+                    justify-content: center;
+                    align-items    : center;
+                }
+
+                &:hover {
+                    background-color: rgba(55, 53, 47, 0.08);
+                }
+            }
+        }
+    }
+}
