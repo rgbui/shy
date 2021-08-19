@@ -39,31 +39,9 @@ class UserService extends BaseService {
         }
         return result;
     }
-    /**
-     * 用户批量上传文件
-     */
-    async uploadFiles() {
-        // var files = await OpenMultipleFileDialoug();
-        // files.eachAsync(async (file: File) => {
-        //     file.md5 = await FileMd5(file);
-        // });
-        // var fs: { file: File, data: FileType }[] = [];
-        // files.eachAsync(async file => {
-        //     var r = await masterSock.get('/user/get/file/' + file.md5);
-        //     if (r && r.ok) {
-        //         fs.push({ file, data: r.data })
-        //     }
-        //     else {
-        //         var d = await fileSock.upload<FileType, string>(file);
-        //         if (d.ok) {
-        //             var z = await masterSock.post<FileType>(`/user/storage/file`, { ...d.data, ...{ id: undefined } })
-        //             if (z.ok) {
-        //                 fs.push({ file, data: z.data })
-        //             }
-        //         }
-        //     }
-        // });
-        // return fs;
+    async update(data: Partial<User>) {
+        var r = await masterSock.post('/user/update', { data });
+        return r;
     }
     /**
      * 用户上传单个文件
