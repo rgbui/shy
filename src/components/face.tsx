@@ -11,7 +11,7 @@ export class Avatar extends React.Component<{
         var size = this.props.size ? this.props.size : 20;
         return <div className='shy-avatar'>
             {this.props.icon && <img style={{ width: size, height: size }} src={this.props.icon.url} />}
-            {!this.props.icon && <span style={{ width: size, height: size }} className='shy-avatar-name'>{this.props.text.slice(0, 1)}</span>}
+            {!this.props.icon && <span style={{ width: size, height: size, fontSize: size * 0.8, lineHeight: size + 'px' }} className='shy-avatar-name'>{this.props.text.slice(0, 1)}</span>}
         </div>
     }
 }
