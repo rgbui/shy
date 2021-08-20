@@ -4,6 +4,11 @@ import { PageItem } from "../sln/item";
 import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
 
+export type WorkspaceUser = {
+    userid: string;
+    role: string;
+    nick: string;
+}
 export class Workspace {
     id: string;
     date: number;
@@ -12,6 +17,8 @@ export class Workspace {
     icon: IconArguments;
     childs: PageItem[] = [];
     domain: string;
+    users: WorkspaceUser[] = [];
+    public inviteUrl: string;
     get url() {
         return this.domain + '.sy.live';
     }

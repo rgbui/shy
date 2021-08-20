@@ -24,7 +24,7 @@ class WorkspaceService extends BaseService {
                 wsId = page.data.workspaceId;
             }
         }
-        return await masterSock.get<{ toId?: string, toSn?: number, workspace: Workspace, areas: any[] }, string>('/workspace/load', {
+        return await masterSock.get<{ toId?: string, toSn?: number, workspace: Workspace, users: any[] }, string>('/workspace/load', {
             local: local,
             domain,
             sn: wsId
@@ -124,6 +124,9 @@ class WorkspaceService extends BaseService {
             text: options.text
         });
         return result.data;
+    }
+    async createInvite(wsId: string) {
+        return await masterSock.post<{ url: string }, string>('/ws/:wsId/create/invite', { wsId })
     }
 }
 export var workspaceService = new WorkspaceService();

@@ -105,7 +105,7 @@ class Surface extends Events {
         var rr = await workspaceService.loadWorkSpace();
         if (rr.ok) {
             this.workspace = new Workspace()
-            this.workspace.load({ ...rr.data.workspace, areas: rr.data.areas });
+            this.workspace.load({ ...rr.data.workspace, users: rr.data.users });
         }
         return rr;
     }
