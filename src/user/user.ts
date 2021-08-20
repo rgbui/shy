@@ -1,5 +1,8 @@
 import { IconArguments } from "rich/extensions/icon/declare";
 import React from "../../../rich/node_modules/@types/react";
+import { Directive } from "../../../rich/util/bus/directive";
+import { messageChannel } from "../../../rich/util/bus/event.bus";
+import { util } from "../../../rich/util/util";
 import { userService } from "./service";
 import { useOpenUserSettings } from "./settings";
 
@@ -30,5 +33,19 @@ export class User {
     }
     async onOpenUserSettings(event: React.MouseEvent) {
         await useOpenUserSettings()
+    }
+    async onUpdateUserInfo(userInfo: Partial<User>) {
+        var updateData: Partial<User> = {};
+        for (let n in userInfo) {
+            if (util.valueIsEqual(userInfo[n], this[n])) continue;
+            else updateData[n] = userInfo[n];
+        }
+        if (Object.keys(updateData).length > 0) {
+            var r = await userService.update(userInfo);
+            if (r.ok) {
+                Object.assign(this, userInfo);
+                await messageChannel.fireAsync(Directive.UpdateUser, this);
+            }
+        }
     }
 }
