@@ -14,7 +14,7 @@ class Sock {
     }
     private masterUrl: string;
     private userPidMap: Map<string, string> = new Map();
-    private async getBaseUrl() {
+    async getBaseUrl() {
         return 'http://localhost:8888/';
         switch (this.type) {
             case SockType.master:
@@ -128,7 +128,7 @@ class Sock {
         var r = await this.remote.put(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
-    private resolve(...urls: string[]) {
+    resolve(...urls: string[]) {
         var url: string = urls[0];
         for (let i = 1; i < urls.length; i++) {
             var current = urls[i];
