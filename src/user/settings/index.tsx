@@ -26,7 +26,7 @@ class UserSettings extends EventsComponent {
                 {/* <a><span>帐单</span></a> */}
             </div>
             <div className='shy-settings-content'>
-                {this.mode == 'ws-settings' && <WorkspaceSettingsView></WorkspaceSettingsView>}
+                {this.mode == 'ws-settings' && <WorkspaceSettingsView close={() => this.onClose()}></WorkspaceSettingsView>}
                 {this.mode == 'user-settings' && <UserSettingsView close={() => this.onClose()}></UserSettingsView>}
                 {this.mode == 'ws-members' && <WorkspaceMembers></WorkspaceMembers>}
             </div>
