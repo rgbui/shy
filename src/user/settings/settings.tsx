@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'rich/component/button';
-import { Row, Col, Divider, Space } from 'rich/component/grid';
-import { Input, Textarea } from 'rich/component/input';
+import { Button } from 'rich/component/view/button';
+import { Row, Col, Divider, Space } from 'rich/component/view/grid';
+import { Input, Textarea } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
 import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';

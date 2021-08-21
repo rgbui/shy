@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'rich/component/icon';
+import { Icon } from 'rich/component/view/icon';
 import { surface } from '../../surface';
 import { PageRouter } from './router';
 import { PageUsers } from './user';

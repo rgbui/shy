@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "rich/component/icon";
+import { Icon } from "rich/component/view/icon";
 import { Workspace } from ".";
 import { Rect } from "rich/src/common/point";
 import { Avatar } from "../components/face";

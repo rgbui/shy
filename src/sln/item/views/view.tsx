@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "rich/component/icon";
+import { Icon } from "rich/component/view/icon";
 import { PageView } from "../view";
 import { PageItemBox } from "./box";
 import PageSvg from "../../../assert/svg/page.svg";

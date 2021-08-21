@@ -8,7 +8,7 @@ import { CacheKey, yCache } from "../service/cache";
 import { generatePath } from "react-router";
 import { surface } from "../surface";
 import { Mime } from "./item/mime";
-import { useSelectMenuItem } from "rich/component/menu";
+import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point } from "rich/src/common/point";
 import { messageChannel } from "../../../rich/util/bus/event.bus";
 import { Directive } from "../../../rich/util/bus/directive";

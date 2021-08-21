@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { Row, Col, Divider } from 'rich/component/grid';
-import { Input } from 'rich/component/input';
-import { Button } from 'rich/component/button';
+import { Row, Col, Divider } from 'rich/component/view/grid';
+import { Input } from 'rich/component/view/input';
+import { Button } from 'rich/component/view/button';
 import { CopyText } from 'rich/component/copy';
 import { surface } from '../../surface';
 import { workspaceService } from '../service';
 import { Avatar } from '../../components/face';
-import { Select } from 'rich/component/select';
+import { Select } from 'rich/component/view/select';
 
 export class WorkspaceMembers extends React.Component {
     async createInvite() {

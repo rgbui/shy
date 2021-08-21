@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Select } from "rich/component/select";
-import { Input } from "rich/component/input";
-import { Switch } from "rich/component/switch";
-import { Button } from "rich/component/button";
-import { Tab } from 'rich/component/tab';
+import { Select } from "rich/component/view/select";
+import { Input } from "rich/component/view/input";
+import { Switch } from "rich/component/view/switch";
+import { Button } from "rich/component/view/button";
+import { Tab } from 'rich/component/view/tab';
 export function Component() {
     var [checked, setChecked] = React.useState(false);
     var [name, setName] = React.useState('kanhai');

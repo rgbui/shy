@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Icon } from 'rich/component/icon';
+import { Icon } from 'rich/component/view/icon';
 import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';
 import { PageItem } from '../../sln/item';
