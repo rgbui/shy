@@ -1,4 +1,4 @@
-import { EventsComponent } from "rich/extensions/events.component";
+import { EventsComponent } from "rich/component/events.component";
 import React from 'react';
 import { PopoverPosition } from "rich/extensions/popover/position";
 import { PopoverSingleton } from "rich/extensions/popover/popover";

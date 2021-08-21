@@ -1,6 +1,6 @@
 import React from 'react';
 import { PopoverSingleton } from 'rich/extensions/popover/popover';
-import { EventsComponent } from 'rich/extensions/events.component';
+import { EventsComponent } from 'rich/component/events.component';
 import { WorkspaceSettingsView } from '../../workspace/settings/settings';
 import { WorkspaceMembers } from '../../workspace/settings/member';
 import { UserSettingsView } from './settings';

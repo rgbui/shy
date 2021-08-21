@@ -1,4 +1,4 @@
-import { EventsComponent } from "rich/extensions/events.component";
+import { EventsComponent } from "rich/component/events.component";
 export class PagePublish extends EventsComponent {
 
 }
