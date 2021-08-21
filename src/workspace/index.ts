@@ -16,11 +16,13 @@ export class Workspace {
     text: string;
     icon: IconArguments;
     childs: PageItem[] = [];
-    domain: string;
+    customizeSecondDomain: string;
+    customizeDomain: string;
+    slogan: string;
     users: WorkspaceUser[] = [];
     public inviteUrl: string;
     get url() {
-        return this.domain + '.sy.live';
+        return 'https://' + this.customizeSecondDomain + '.shy.live';
     }
     load(data) {
         for (var n in data) {
@@ -50,5 +52,8 @@ export class Workspace {
     }
     async onOpenWorkspaceSettings(event: React.MouseEvent) {
         await useOpenUserSettings();
+    }
+    async onUpdateInfo(data:Partial<Workspace>){
+        
     }
 }

@@ -38,6 +38,10 @@ class WorkspaceService extends BaseService {
         var rr = await masterSock.post<{ id: string, sn: number }, string>('/workspace/create', { text: args.text });
         return rr;
     }
+    async updateWorkspace(wsId: string, data: Partial<Workspace>) {
+        var rr = await masterSock.post('/ws/:wsId/update', { wsId, data });
+        return rr;
+    }
     async loadWorkspaceItems(workspaceId: string, pageIds: string[]) {
         var rr = await masterSock.post<
             { pages: Partial<PageItem> },
@@ -130,7 +134,6 @@ class WorkspaceService extends BaseService {
     }
 }
 export var workspaceService = new WorkspaceService();
-
 export class workspaceTogglePages {
     private static ids: string[];
     static async getIds() {
