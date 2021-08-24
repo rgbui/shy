@@ -2,6 +2,9 @@
 import { PageItem } from "../sln/item";
 import { Events } from "rich/util/events";
 import { SupervisorView } from "./view";
+import { useSelectMenuItem } from "rich/component/view/menu";
+import { Rect } from "rich/src/common/point";
+import { workspaceService } from "../workspace/service";
 
 export class Supervisor extends Events {
     items: PageItem[] = [];
@@ -14,12 +17,12 @@ export class Supervisor extends Events {
         if (this.view) this.view.forceUpdate();
     }
     onFavourite(event: React.MouseEvent) {
-
+        workspaceService.toggleFavourcePage(this.item)
     }
     onOpenPublish(event: React.MouseEvent) {
 
     }
-    onOpenPageProperty(event: React.MouseEvent) {
-
+    async onOpenPageProperty(event: React.MouseEvent) {
+        var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [])
     }
 }

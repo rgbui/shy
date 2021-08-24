@@ -94,6 +94,9 @@ class WorkspaceService extends BaseService {
     async togglePage(item: PageItem) {
         await workspaceTogglePages.save(item.workspace.getVisibleIds())
     }
+    async toggleFavourcePage(item:PageItem){
+        
+    }
     async deletePage(id: string) {
         await masterSock.delete('/page/delete/:id', { id });
     }
