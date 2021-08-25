@@ -1,15 +1,17 @@
 import React from "react";
 import { generatePath } from "react-router";
+import { Button } from "../../../rich/component/view/button";
+import { Input } from "../../../rich/component/view/input";
 import { SyHistory } from "../history";
 import { workspaceService } from "./service";
-
+import "./style.less";
 export class WorkspaceCreateView extends React.Component {
     private text: string = '';
     private failTip: string = '';
-    setText(event: React.FormEvent<HTMLInputElement>) {
-        this.text = (event.nativeEvent.target as HTMLInputElement).value;
+    setText(text: string) {
+        this.text = this.text;
     }
-    async save(event: React.MouseEvent<HTMLButtonElement>) {
+    async save(event: React.MouseEvent) {
         var button = event.nativeEvent.target as HTMLButtonElement;
         button.disabled = true;
         try {
@@ -25,9 +27,9 @@ export class WorkspaceCreateView extends React.Component {
     }
     render() {
         return <div className='shy-ws-create'>
-            <div className='shy-ws-create-text'><input className='input' defaultValue={this.text} onInput={e => this.setText(e)} /></div>
+            <div className='shy-ws-create-text'><Input value={this.text} onChange={e => this.setText(e)} /></div>
             <div className='shy-ws-create-fail-tip'>{this.failTip}</div>
-            <div className='shy-ws-create-button'><button className='button' onClick={e => this.save(e)}>创建空间</button></div>
+            <div className='shy-ws-create-button'><Button onClick={e => this.save(e)}>创建空间</Button></div>
         </div>
     }
 }
