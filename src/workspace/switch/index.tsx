@@ -28,10 +28,17 @@ class SwitchWorkspace extends EventsComponent {
     }
     renderMyWorkspaces() {
         return <div className='shy-ws-group'>
-            <div className='shy-ws-group-head' onMouseDown={e => surface.user.onOpenUserSettings(e)}>
+            <div className='shy-ws-group-head' onMouseDown={e => {
+                surface.user.onOpenUserSettings(e);
+                this.onClose();
+            }}>
                 <Avatar icon={surface.user.avatar} text={surface.user.name}></Avatar>
                 <span>{surface.user.name}</span>
-                <a onMouseDown={e => { e.stopPropagation(); surface.onCreateWorkspace(); this.emit('close'); }}><Icon size={20} icon={PlusSvg} ></Icon></a>
+                <a onMouseDown={e => {
+                    e.stopPropagation();
+                    surface.onCreateWorkspace();
+                    this.onClose();
+                }}><Icon size={20} icon={PlusSvg} ></Icon></a>
             </div>
             <div className='shy-ws-group-items'>
                 {this.list.map(item => {
@@ -59,6 +66,9 @@ class SwitchWorkspace extends EventsComponent {
     }
     onChangeWorkspace(ws: Partial<Workspace>) {
         this.emit('select', ws)
+    }
+    onClose() {
+        this.emit('close');
     }
 }
 
