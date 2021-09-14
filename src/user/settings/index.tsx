@@ -36,7 +36,7 @@ class UserSettings extends EventsComponent {
 
 export async function useOpenUserSettings() {
     var popover = await PopoverSingleton(UserSettings, { mask: true, shadow: true });
-    var us = await popover.open<UserSettings>({ center: true });
+    var us = await popover.open({ center: true });
     us.only('close', () => {
         popover.onClose()
     })

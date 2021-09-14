@@ -81,7 +81,7 @@ interface SwitchWorkspace {
 
 export async function useSwitchWorkspace(pos: PopoverPosition) {
     let popover = await PopoverSingleton(SwitchWorkspace, { mask: true });
-    let switchWorkspace = await popover.open<SwitchWorkspace>(pos);
+    let switchWorkspace = await popover.open(pos);
     return new Promise((resolve: (data: Partial<Workspace>) => void, reject) => {
         switchWorkspace.only('select', (data) => {
             popover.close();
