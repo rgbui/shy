@@ -22,7 +22,7 @@ class UserSettings extends EventsComponent {
                 {/* <a><span>账户钱包</span></a> */}
                 <h4>空间</h4>
                 <a onMouseDown={e => this.setMode('ws-settings')} className={this.mode == 'ws-settings' ? "hover" : ""} ><span>设置</span></a>
-                <a onMouseDown={e => this.setMode('ws-members')} className={this.mode == 'ws-members' ? "hover" : ""} ><span>成员</span></a>
+                {/* <a onMouseDown={e => this.setMode('ws-members')} className={this.mode == 'ws-members' ? "hover" : ""} ><span>成员</span></a> */}
                 {/* <a><span>帐单</span></a> */}
             </div>
             <div className='shy-settings-content'>
