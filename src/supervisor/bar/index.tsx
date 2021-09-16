@@ -24,8 +24,8 @@ export class Bar extends React.Component {
                 <PageUsers></PageUsers>
             </div>
             <div className='shy-supervisor-bar-right'>
-                <AppTip placement='bottom' id={AppLang.BarFavourite} ><a><Icon size={20} icon='favorite:sy' click={e => this.supervisor.onFavourite(e)}></Icon></a></AppTip>
-                <AppTip placement='bottom' id={AppLang.BarPublish}  ><a><Icon size={20} icon='publish:sy' click={e => this.supervisor.onOpenPublish(e)}></Icon></a></AppTip>
+                {/* <AppTip placement='bottom' id={AppLang.BarFavourite} ><a><Icon size={20} icon='favorite:sy' click={e => this.supervisor.onFavourite(e)}></Icon></a></AppTip>
+                <AppTip placement='bottom' id={AppLang.BarPublish}  ><a><Icon size={20} icon='publish:sy' click={e => this.supervisor.onOpenPublish(e)}></Icon></a></AppTip> */}
                 <AppTip placement='bottom' id={AppLang.BarProperty}  ><a><Icon size={20} icon='elipsis:sy' click={e => this.supervisor.onOpenPageProperty(e)}></Icon></a></AppTip>
             </div>
         </div>
