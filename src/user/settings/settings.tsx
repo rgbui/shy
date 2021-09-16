@@ -92,7 +92,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                     <Col><span>{surface.user.phone}</span></Col><Col><Button>更改手机号</Button></Col>
                 </Row>
                 <Divider></Divider>
-                <Row>
+                {/*<Row>
                     <Col><h5>邮箱</h5></Col>
                     <Col><label>未验证</label></Col>
                     <Col><span>{surface.user.email}</span></Col><Col>
@@ -100,15 +100,15 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                         <Button>更改邮箱</Button>
                     </Col>
                 </Row>
-                <Divider></Divider>
-                <Row>
+                <Divider></Divider>*/}
+                {/* <Row>
                     <Col><h5>密码</h5></Col>
                     <Col> <label>未设置</label></Col>
                     <Col><span>{surface.user.email}</span></Col>
                     <Col>
                         <Button>更换密码</Button>
                     </Col>
-                </Row>
+                </Row> */}
             </div>
             <div className='shy-settings-content-form-footer'>
                 <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()} >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>
