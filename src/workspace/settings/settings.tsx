@@ -78,7 +78,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                     <label>点击输入框可修改名称</label>
                     <Input value={surface.workspace.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
                 </Row>
-                <Divider></Divider>
+                {/* <Divider></Divider>
                 <Row>
                     <h5>空间域名</h5>
                     <label>设置你的专属工作空间域名:https://domain.shy.live</label>
@@ -90,7 +90,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                             placeholder={'domain'} style={{ display: 'inline-block', width: 120 }}></Input>
                         <span>.shy.live</span>
                     </div>
-                </Row>
+                </Row> */}
             </div>
             <div className='shy-settings-content-form-footer'>
                 <Space align='end' style={{ height: '100%' }}><Button >取消</Button><Button>保存</Button></Space>
