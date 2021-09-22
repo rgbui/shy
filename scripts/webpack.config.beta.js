@@ -8,8 +8,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 /**
  * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
  */
-let publicPath = `https://shiyun.life/`;
-var outputDir = path.join(__dirname, "../beta");
+let publicPath = `https://shiyun.live/`;
+var outputDir = path.join(__dirname, "../dist/beta");
 module.exports = {
     mode: 'production',
     entry: "./src/main.tsx",
