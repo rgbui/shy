@@ -1,14 +1,14 @@
-const requestAnimFrame = (function() {
+const requestAnimFrame = (function () {
   return (
     window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    function(callback) {
+    (window as any).webkitRequestAnimationFrame ||
+    function (callback) {
       window.setTimeout(callback, 1000 / 60)
     }
   )
 })()
 
-const easeInOutQuad = function(t, b, c, d) {
+const easeInOutQuad = function (t, b, c, d) {
   t /= d / 2
   if (t < 1) {
     return (c / 2) * t * t + b
@@ -17,7 +17,7 @@ const easeInOutQuad = function(t, b, c, d) {
   return (-c / 2) * (t * (t - 2) - 1) + b
 }
 
-const animatedScrollTo = function(element, to, duration = 1000, callback?) {
+const animatedScrollTo = function (element, to, duration = 1000, callback?) {
   if (!element) {
     return
   }
@@ -27,7 +27,7 @@ const animatedScrollTo = function(element, to, duration = 1000, callback?) {
   const change = to - start
   const animationStart = +Number(new Date())
   let animating = true
-  const animateScroll = function() {
+  const animateScroll = function () {
     if (!animating || !element) {
       if (element) {
         element.classList.remove('willChange-scroll')
