@@ -13,6 +13,7 @@ import { Directive } from "rich/util/bus/directive";
 import { userService } from "../user/service";
 import { util } from "../util";
 import { messageChannel } from "rich/util/bus/event.bus";
+import { sockSync } from "../service/primus";
 class Surface extends Events {
     constructor() {
         super();
@@ -45,6 +46,7 @@ class Surface extends Events {
     async load() {
         if (!this.user.isSign) await this.user.loadUser();
         if (!this.user.isSign) return SyHistory.push('/login');
+        if (this.user.isSign) await sockSync.load();
         if (!surface.workspace) {
             var loadResult = await this.loadWorkspace();
             if (loadResult.ok != true) {
