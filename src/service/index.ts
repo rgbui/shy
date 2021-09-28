@@ -45,7 +45,6 @@ export class BaseService extends Events {
         }
         return rs;
     }
-
     get token() {
         return sCache.get(CacheKey.token);
     }
