@@ -1,5 +1,5 @@
-import { config } from "../common/config";
-import { Aes } from "../util/crypto";
+import { config } from "../../common/config";
+import { Aes } from "../../util/crypto";
 
 /**
  * 缓存应用的key
