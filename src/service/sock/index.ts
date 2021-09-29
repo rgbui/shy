@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { fingerFlag } from "../../util/finger";
 import { CacheKey, sCache } from "../cache";
-import { SockType } from "./type";
+import { SockResponse, SockType } from "./type";
 import { StatusCode } from "./status.code";
 import { config } from "../../common/config";
 import { FileMd5 } from "../../util/file";
@@ -182,26 +182,7 @@ class Sock {
         return this.handleResponse<T, U>(r);
     }
 }
-/**
- * 泛型T表示正常的返回数据
- * 泛型U表示异常返回的数据
- */
-export type SockResponse<T, U = any> = {
-    /**
-     * 返回状态码
-     */
-    code?: StatusCode,
-    /**
-     * 表示当前的是否处理正常
-     * 通常200~300表示正常处理
-     * 大于300小于500表示处理不正常，
-     * 500 seriver happend error
-     * 返回值是用来提醒处理异常原因的
-     */
-    ok?: boolean,
-    data?: T,
-    warn?: U
-}
+
 /**
  * 主服务（主要用来服务于整个系统的的业务）
  */

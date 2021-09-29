@@ -1,6 +1,5 @@
-import { GenreConsistency } from '../sock/genre.js';
-import { SockResponse } from '../sock/index.js';
-
+import { GenreConsistency } from '../sock/genre';
+import { SockResponse } from '../sock/type';
 
 export enum HttpMethod {
     get,

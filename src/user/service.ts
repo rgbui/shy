@@ -1,10 +1,11 @@
 
 import { User } from "./user";
-import { fileSock, masterSock, SockResponse, userSock } from "../service/sock";
+import { fileSock, masterSock,  userSock } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";
 import { FileMd5 } from "../util/file";
 import { FileType } from "../../type";
+import { SockResponse } from "../service/sock/type";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {
