@@ -8,7 +8,7 @@
  */
 declare var MODE: 'pro' | 'dev' | 'beta';
 declare var VERSION: string;
-declare var REMOTE_URL:string;
+declare var API_MASTER_URL:string;
 type ArrayOf<T> = T extends (infer p)[] ? p : never;
 
 type SvgrComponent = React.StatelessComponent<React.SVGAttributes<SVGElement>>

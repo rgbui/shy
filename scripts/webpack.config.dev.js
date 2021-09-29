@@ -116,9 +116,9 @@ module.exports = {
             hash: true
         }),
         new webpack.DefinePlugin({
-            MODE: JSON.stringify('dev'),
-            VERSION: JSON.stringify('1.0.0'),
-            REMOTE_URL: JSON.stringify('https://m1.shiyun.host')
+            MODE: JSON.stringify('pro'),
+            VERSION: JSON.stringify(pkg.version),
+            API_MASTER_URL: JSON.stringify('http://127.0.0.1:8888')
         }),
         new MiniCssExtractPlugin({
             filename: "shy.css"

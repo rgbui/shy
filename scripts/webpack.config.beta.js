@@ -1,4 +1,5 @@
 const path = require("path");
+var pkg = require('../package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -8,7 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 /**
  * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
  */
-let publicPath = `https://shiyun.live/`;
+let publicPath = `https://beta.shy.red/`;
 var outputDir = path.join(__dirname, "../dist/beta");
 module.exports = {
     mode: 'production',
@@ -16,7 +17,7 @@ module.exports = {
     output: {
         path: outputDir,
         filename: "assert/js/shy.[hash:8].js",
-        chunkFilename: 'assert/js/dynamic/[name].[hash:8].js',
+        chunkFilename: 'assert/js/[name].[hash:8].js',
         publicPath
     },
     resolve: {
@@ -98,13 +99,11 @@ module.exports = {
             filename: './index.html', // 
             showErrors: true,
             hash: true,
-            inject: 'body',
-            templateParameters: {
-                mode: 'prod'
-            }
         }),
         new webpack.DefinePlugin({
-            MODE: JSON.stringify('pro')
+            MODE: JSON.stringify('pro'),
+            VERSION: JSON.stringify(pkg.version),
+            API_MASTER_URL: JSON.stringify('https://m1.beta.shy.red')
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,

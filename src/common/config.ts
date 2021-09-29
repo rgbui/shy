@@ -19,7 +19,7 @@ class Config {
         return this.mode == 'dev'
     }
     get remoteUrl() {
-        return REMOTE_URL
+        return API_MASTER_URL
     }
     get version() {
         return VERSION

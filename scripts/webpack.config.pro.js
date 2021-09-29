@@ -1,4 +1,5 @@
 const path = require("path");
+var pkg = require('../package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -8,7 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 /**
  * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
  */
-let publicPath = `https://shy.live/`;
+let publicPath = `https://shy.red/`;
 var outputDir = path.join(__dirname, "../dist/pro");
 module.exports = {
     mode: 'production',
@@ -16,7 +17,7 @@ module.exports = {
     output: {
         path: outputDir,
         filename: "assert/js/shy.[hash:8].js",
-        chunkFilename: 'assert/js/dynamic/[name].[hash:8].js',
+        chunkFilename: 'assert/js/[name].[hash:8].js',
         publicPath
     },
     resolve: {
@@ -87,7 +88,8 @@ module.exports = {
                 // 规则 limit给定的是图片的大小 如果我们给定图片的大小大于等于我们给定的limit 则不会被转为base64编码
                 //反之会被转换name=[hash:8]-[name].[ext] 前面加hash值区分图片 名字原样输出
                 loader: 'url-loader?limit=8192&name=assert/font/[hash:8].[name].[ext]'
-            }]
+            }
+        ]
     },
     externals: {
 
@@ -98,16 +100,12 @@ module.exports = {
             template: path.join(__dirname, "../index.html"),// 婧愭ā鏉挎枃浠�
             filename: './index.html', // 杈撳嚭鏂囦欢銆愭敞鎰忥細杩欓噷鐨勬牴璺緞鏄痬odule.exports.output.path銆�
             showErrors: true,
-            hash: true,
-            inject: 'body',
-            templateParameters: {
-                mode: 'prod'
-            }
+            hash: true
         }),
         new webpack.DefinePlugin({
             MODE: JSON.stringify('pro'),
-            VERSION: JSON.stringify('1.0.0'),
-            REMOTE_URL: JSON.stringify('https://m1.shiyun.host')
+            VERSION: JSON.stringify(pkg.version),
+            API_MASTER_URL: JSON.stringify('https://m1.api.shy.red')
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
