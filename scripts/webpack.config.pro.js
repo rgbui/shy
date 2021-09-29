@@ -116,7 +116,7 @@ module.exports = {
             canPrint: true
         }),
         new MiniCssExtractPlugin({
-            filename: "shy.[hash:8].css"
+            filename: "assert/css/shy.[hash:8].css"
         }),
         new CopyWebpackPlugin(
             {
