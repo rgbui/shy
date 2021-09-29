@@ -7,7 +7,7 @@
 #### 版本
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro)网址:[https://shy.live](https://shy.live)   
-  测试版(beta)网址:[https://shy.today](https://shy.today) 
+  测试版(beta)网址:[https://beta.shy.red](https://beta.shy.red) 
 
 ## 0.6.1-beta
 * 诗云beta正式上线了
