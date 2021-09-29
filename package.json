@@ -4,9 +4,9 @@
   "description": "shy.live platform app",
   "main": "index.js",
   "scripts": {
-    "webpack": "webpack --config scripts/webpack.config.pro.js",
-    "webpack-beta": "webpack --config scripts/webpack.config.beta.js",
-    "webpack-dev": "webpack-dev-server  --env development  --config scripts/webpack.config.dev.js  --hot --progress --colors  "
+    "pro": "webpack --config scripts/webpack.config.pro.js",
+    "beta": "webpack --config scripts/webpack.config.beta.js",
+    "dev": "webpack-dev-server  --env development  --config scripts/webpack.config.dev.js  --hot --progress --colors  "
   },
   "keywords": [
     "shy.live",
