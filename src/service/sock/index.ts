@@ -2,42 +2,40 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { fingerFlag } from "../../util/finger";
 import { CacheKey, sCache } from "../cache";
 import { SockResponse, SockType } from "./type";
-import { StatusCode } from "./status.code";
 import { config } from "../../common/config";
 import { FileMd5 } from "../../util/file";
 import { GenreConsistency } from "./genre";
-
 class Sock {
     private type: SockType;
     constructor(type: SockType) {
         this.type = type;
     }
-    private masterUrl: string;
-    private userPidMap: Map<string, string> = new Map();
     async getBaseUrl() {
-        return 'http://localhost:8888/';
         switch (this.type) {
             case SockType.master:
-                if (typeof this.masterUrl == 'undefined') {
-                    this.masterUrl = 'http://sy.viewparse.com';
-                }
+                return API_MASTER_URL;
                 break;
             case SockType.user:
                 var userid = await this.getUserId();
-                if (!this.userPidMap.has(userid)) {
-                    /**
-                     * 查询当前用户分配在那个子进程上面
-                     */
-                    var data = await axios.get(this.masterUrl + "/assign/" + userid);
-                    if (data && data.data) {
-                        if (data.data.success == true) {
-                            var pidUrl = data.data.pid.url;
-                            this.userPidMap.set(userid, pidUrl);
-                        }
-                    }
-                    return this.userPidMap.get(userid);
-                }
-                else return this.userPidMap.get(userid);
+                // if (!this.userPidMap.has(userid))
+                // {
+                //     /**
+                //      * 查询当前用户分配在那个子进程上面
+                //      */
+                //     var data = await axios.get(this.masterUrl + "/assign/" + userid);
+                //     if (data && data.data) {
+                //         if (data.data.success == true) {
+                //             var pidUrl = data.data.pid.url;
+                //             this.userPidMap.set(userid, pidUrl);
+                //         }
+                //     }
+                //     return this.userPidMap.get(userid);
+                // }
+                // else return this.userPidMap.get(userid);
+                break;
+            case SockType.api:
+                break;
+            case SockType.file:
                 break;
         }
     }

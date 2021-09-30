@@ -10,7 +10,7 @@ export class ViewSurface extends React.Component {
         surface.view = this;
     }
     async componentDidMount() {
-        var width = yCache.get<number>(CacheKey.slideWidth);
+        var width = await yCache.get<number>(CacheKey.slideWidth);
         if (typeof width == 'number') {
             if (this.slideWidth != width) { this.slideWidth = width; this.forceUpdate() }
         }
@@ -38,7 +38,7 @@ export class ViewSurface extends React.Component {
                 if (isEnd) {
                     self.slideEl.classList.remove('dragging');
                     self.slideWidth = m;
-                    yCache.set(CacheKey.slideWidth, m);
+                    yCache.set(CacheKey.slideWidth,m);
                 }
             }
         })

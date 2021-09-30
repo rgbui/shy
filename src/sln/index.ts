@@ -72,7 +72,7 @@ export class Sln extends Events<SlnDirective> {
     async load() {
         var pageId = currentParams('/page/:id')?.id;
         if (!pageId) {
-            var pid = yCache.get(CacheKey.pageId);
+            var pid =await yCache.get(CacheKey.pageId);
             if (!pid) {
                 var pt = surface.workspace.find(g => g.mime == Mime.page);
                 if (pt) pid = pt.id;

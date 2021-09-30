@@ -27,7 +27,7 @@ class SyCache {
         if (this.security == true) return Aes.decrypt(d);
         else return d;
     }
-    private getValue(key: CacheKey | string): { value: any, expire: number } {
+    private async getValue(key: CacheKey | string): Promise<{ value: any, expire: number }> {
         var k = this.getKey(key);
         var value = localStorage.getItem(k);
         if (value) {
@@ -43,11 +43,11 @@ class SyCache {
         if (config.isPro) return FLAG + key;
         else return FLAG + (typeof key == 'number' ? CacheKey[key] : key);
     }
-    get<T = any>(key: CacheKey | string): T {
-        var v = this.getValue(key);
+    async get<T = any>(key: CacheKey | string): Promise<T> {
+        var v = await this.getValue(key);
         if (v && (typeof v.expire == 'undefined' || typeof v.expire == 'number' && v.expire > Date.now())) return v.value;
     }
-    set<T = any>(key: CacheKey | string, value: T, expire?: number, unit: 'm' | 's' | 'h' | 'd' | 'M' | 'y' | 'w' = 'm') {
+    async set<T = any>(key: CacheKey | string, value: T, expire?: number, unit: 'm' | 's' | 'h' | 'd' | 'M' | 'y' | 'w' = 'm') {
         var k = this.getKey(key);
         var t = undefined;
         if (typeof expire == 'number') {
@@ -64,8 +64,8 @@ class SyCache {
         }
         localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
     }
-    has(key: CacheKey | string) {
-        var r = this.get(key);
+    async has(key: CacheKey | string) {
+        var r = await this.get(key);
         if (typeof r != 'undefined') return true;
         else return false;
     }
@@ -74,8 +74,8 @@ class SyCache {
      * @param key 
      * @returns 
      */
-    isExpired(key: CacheKey) {
-        var v = this.getValue(key);
+    async isExpired(key: CacheKey) {
+        var v = await this.getValue(key);
         if (v && (typeof v.expire == 'undefined' || typeof v.expire == 'number' && v.expire > Date.now())) return true;
         else return false;
     }

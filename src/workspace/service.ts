@@ -14,7 +14,7 @@ class WorkspaceService extends BaseService {
      */
     async loadWorkSpace() {
         var pageId = currentParams('/page/:id')?.id;
-        var local = sCache.get(CacheKey.workspaceId);
+        var local = await sCache.get(CacheKey.workspaceId);
         var domain = location.host == 'shy.live' ? undefined : location.host;
         var wsId = currentParams('/ws/:id')?.id;
         if (wsId) local = undefined;
@@ -94,18 +94,18 @@ class WorkspaceService extends BaseService {
     async togglePage(item: PageItem) {
         await workspaceTogglePages.save(item.workspace.getVisibleIds())
     }
-    async toggleFavourcePage(item:PageItem){
-        
+    async toggleFavourcePage(item: PageItem) {
+
     }
     async deletePage(id: string) {
         await masterSock.delete('/page/delete/:id', { id });
     }
     async loadPageContent(id: string) {
-        var r = yCache.get(id);
+        var r = await yCache.get(id);
         if (r) return r;
     }
     async savePageContent(id: string, content: Record<string, any>) {
-        yCache.set(id, content);
+        await yCache.set(id, content);
     }
     async createDefaultTableSchema(data: { text?: string, templateId?: string }) {
         var result = await userSock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});

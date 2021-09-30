@@ -1,6 +1,6 @@
 
 import { User } from "./user";
-import { fileSock, masterSock,  userSock } from "../service/sock";
+import { fileSock, masterSock, userSock } from "../service/sock";
 import { BaseService } from "../service";
 import { CacheKey, sCache } from "../service/cache";
 import { FileMd5 } from "../util/file";
@@ -34,8 +34,8 @@ class UserService extends BaseService {
         var result: SockResponse<{ token: string, user: Partial<User> }> = this.createResponse();
         result = await masterSock.post('/user/ping');
         if (result.ok) {
-            if (result.data.token != this.token) {
-                sCache.set(CacheKey.token, result.data.token, 180, 'd');
+            if (result.data.token != await this.token()) {
+                await sCache.set(CacheKey.token, result.data.token, 180, 'd');
             }
         }
         return result;

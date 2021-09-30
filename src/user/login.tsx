@@ -47,7 +47,7 @@ export class Login extends React.Component {
             var result = await userService.phoneSign(this.phone, this.verifyPhoneCode);
             if (result.ok == false) this.signFailMsg = result.warn;
             else {
-                sCache.set(CacheKey.token, result.data.token, 180, 'd');
+                await sCache.set(CacheKey.token, result.data.token, 180, 'd');
                 Object.assign(surface.user, result.data.user);
                 this.signFailMsg = '';
                 if (result.data.justRegistered == true) this.mode = 'phoneName';

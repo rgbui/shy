@@ -4,7 +4,7 @@ import { CacheKey, sCache } from '../service/cache';
 let fingerId = '';
 export async function fingerFlag() {
     if (fingerId) return fingerId;
-    var id = sCache.get(CacheKey.clientId);
+    var id = await sCache.get(CacheKey.clientId);
     if (id) { return fingerId = id; }
     const fpPromise = FingerprintJS.load();
     // Get the visitor identifier when you need it.
@@ -13,6 +13,6 @@ export async function fingerFlag() {
     // This is the visitor identifier:
     const visitorId = result.visitorId;
     fingerId = visitorId;
-    sCache.set(CacheKey.clientId, fingerId);
+    await sCache.set(CacheKey.clientId, fingerId);
     return visitorId;
 }
