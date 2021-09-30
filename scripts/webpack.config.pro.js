@@ -35,8 +35,6 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            // 杩欓噷鍙互鎸囧畾涓�涓� publicPath
-                            // 榛樿浣跨敤 webpackOptions.output涓殑publicPath
                             //publicPath: '../../'
                         },
                     },
@@ -50,8 +48,6 @@ module.exports = {
                         {
                             loader: MiniCssExtractPlugin.loader,
                             options: {
-                                // 杩欓噷鍙互鎸囧畾涓�涓� publicPath
-                                // 榛樿浣跨敤 webpackOptions.output涓殑publicPath
                                 //publicPath: '../../'
                             }
                         },
