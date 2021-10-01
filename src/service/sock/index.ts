@@ -1,49 +1,50 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { fingerFlag } from "../../util/finger";
-import { CacheKey, sCache } from "../cache";
+import { CacheKey, sCache, yCache } from "../cache";
 import { SockResponse, SockType } from "./type";
 import { config } from "../../common/config";
 import { FileMd5 } from "../../util/file";
 import { GenreConsistency } from "./genre";
+
 class Sock {
     private type: SockType;
     constructor(type: SockType) {
         this.type = type;
     }
-    async getBaseUrl() {
+    private remoteUrl: string;
+    async baseUrl() {
         switch (this.type) {
             case SockType.master:
                 return API_MASTER_URL;
                 break;
             case SockType.user:
-                var userid = await this.getUserId();
-                // if (!this.userPidMap.has(userid))
-                // {
-                //     /**
-                //      * 查询当前用户分配在那个子进程上面
-                //      */
-                //     var data = await axios.get(this.masterUrl + "/assign/" + userid);
-                //     if (data && data.data) {
-                //         if (data.data.success == true) {
-                //             var pidUrl = data.data.pid.url;
-                //             this.userPidMap.set(userid, pidUrl);
-                //         }
-                //     }
-                //     return this.userPidMap.get(userid);
-                // }
-                // else return this.userPidMap.get(userid);
+                if (this.remoteUrl) return this.remoteUrl;
+                var ms = await masterSock.get<{ url: string }, string>('/pid/tim');
+                if (ms.ok) {
+                    this.remoteUrl = ms.data.url;
+                    return this.remoteUrl;
+                }
+                else window.Toast.error('没有找到可用的tim连接')
                 break;
             case SockType.api:
+                if (this.remoteUrl) return this.remoteUrl;
+                var ms = await masterSock.get<{ url: string }, string>('/pid/api');
+                if (ms.ok) {
+                    this.remoteUrl = ms.data.url;
+                    return this.remoteUrl;
+                }
+                else window.Toast.error('没有找到可用的tim连接')
                 break;
             case SockType.file:
+                if (this.remoteUrl) return this.remoteUrl;
+                var ms = await masterSock.get<{ url: string }, string>('/pid/file');
+                if (ms.ok) {
+                    this.remoteUrl = ms.data.url;
+                    return this.remoteUrl;
+                }
+                else window.Toast.error('没有找到可用的tim连接')
                 break;
         }
-    }
-    /**
-     * 获取当前登录的用户userid
-     */
-    private async getUserId() {
-        return '';
     }
     private async config() {
         var id = await fingerFlag();
@@ -88,14 +89,14 @@ class Sock {
         return response;
     }
     async post<T = any, U = any>(url: string, data?: Record<string, any>) {
-        var baseUrl = await this.getBaseUrl();
+        var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, data);
         GenreConsistency.transform(data);
         var r = await this.remote.post(this.resolve(baseUrl, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
-        var baseUrl = await this.getBaseUrl();
+        var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, querys);
         GenreConsistency.transform(querys);
         var resolveUrl = this.resolve(baseUrl, url);
@@ -114,13 +115,13 @@ class Sock {
         return this.handleResponse<T, U>(r);
     }
     async delete<T = any, U = any>(url: string, data?: Record<string, any>) {
-        var baseUrl = await this.getBaseUrl();
+        var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, data);
         var r = await this.remote.delete(this.resolve(baseUrl, url), await this.config());
         return this.handleResponse<T, U>(r);
     }
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
-        var baseUrl = await this.getBaseUrl();
+        var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, data);
         GenreConsistency.transform(data);
         var r = await this.remote.put(this.resolve(baseUrl, url), data, await this.config());
@@ -165,7 +166,7 @@ class Sock {
     async upload<T = any, U = any>(file: File, options?: {
         uploadProgress?: (event: ProgressEvent) => void
     }) {
-        var baseUrl = await this.getBaseUrl();
+        var baseUrl = await this.baseUrl();
         var url = this.resolve(baseUrl, '/storage/file');
         var configs = await this.config();
         configs.headers['Content-Type'] = 'application/x-www-form-urlencoded';
