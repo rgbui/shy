@@ -8,7 +8,7 @@
  */
 declare var MODE: 'pro' | 'dev' | 'beta';
 declare var VERSION: string;
-declare var API_MASTER_URL:string;
+declare var API_MASTER_URL: string;
 type ArrayOf<T> = T extends (infer p)[] ? p : never;
 
 type SvgrComponent = React.StatelessComponent<React.SVGAttributes<SVGElement>>
@@ -31,8 +31,19 @@ declare module '*.jpeg';
 declare module '*.webp';
 declare module '*.gif';
 
-interface File{
-   md5?:string
+interface File {
+  md5?: string
+}
+
+/**
+ * 申明一个全局的toast ，主要是对一些通知进行报警
+ */
+interface Window {
+  Toast: {
+    error(msg: string);
+    warn(msg: string);
+    success(msg: string);
+  }
 }
 
 
