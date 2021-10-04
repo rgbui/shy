@@ -101,7 +101,7 @@ module.exports = {
         new webpack.DefinePlugin({
             MODE: JSON.stringify('pro'),
             VERSION: JSON.stringify(pkg.version),
-            API_MASTER_URL: JSON.stringify('https://m1.api.shy.red')
+            API_MASTER_URL: JSON.stringify('https://api-m1.shy.red')
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
