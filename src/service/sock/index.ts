@@ -28,21 +28,21 @@ class Sock {
                 break;
             case SockType.api:
                 if (this.remoteUrl) return this.remoteUrl;
-                var ms = await masterSock.get<{ url: string }, string>('/pid/api');
+                var ms = await masterSock.get<{ url: string }, string>('/pid/server/api');
                 if (ms.ok) {
                     this.remoteUrl = ms.data.url;
                     return this.remoteUrl;
                 }
-                else window.Toast.error('没有找到可用的tim连接')
+                else window.Toast.error('没有找到可用的api连接')
                 break;
             case SockType.file:
                 if (this.remoteUrl) return this.remoteUrl;
-                var ms = await masterSock.get<{ url: string }, string>('/pid/file');
+                var ms = await masterSock.get<{ url: string }, string>('/pid/server/file');
                 if (ms.ok) {
                     this.remoteUrl = ms.data.url;
                     return this.remoteUrl;
                 }
-                else window.Toast.error('没有找到可用的tim连接')
+                else window.Toast.error('没有找到可用的file连接')
                 break;
         }
     }
