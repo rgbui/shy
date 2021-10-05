@@ -1,5 +1,4 @@
 import { TableSchema } from "./schema";
-
 export class DB {
     name: string = '';
     constructor(name: string) {
