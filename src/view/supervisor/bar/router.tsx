@@ -6,6 +6,7 @@ import { messageChannel } from 'rich/util/bus/event.bus';
 import { PageItem } from '../../sln/item';
 import { Mime } from '../../sln/item/mime';
 import { surface } from '../../surface';
+import PageSvg from "../../../assert/svg/page.svg";
 export class PageRouter extends React.Component {
     onClick(item: PageItem) {
         if (this.supervisor.item === item) return;
@@ -18,7 +19,7 @@ export class PageRouter extends React.Component {
             var pa = item.parent;
             if (pa.mime != Mime.page) pa = null;
             if (rootItem && rootItem == pa) pa = null;
-            var ra = (item: PageItem, split = false) => <><span onMouseDown={e => this.onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon}></Icon><a>{item.text}</a></span>{split && <em>/</em>}</>;
+            var ra = (item: PageItem, split = false) => <><span onMouseDown={e => this.onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon ? item.icon : PageSvg} size={18}></Icon><a>{item.text}</a></span>{split && <em>/</em>}</>;
             return <div className='shy-supervisor-bar-routers'>
                 {rootItem && ra(rootItem, true)}
                 {pa && pa.parent != rootItem && rootItem && <><label>...</label><em>/</em></>}
