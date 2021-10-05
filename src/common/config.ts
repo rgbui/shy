@@ -50,6 +50,4 @@ class Config {
     }
 }
 export var config = new Config();
-// if (config.isBeta || config.isPro) {
-console.log('v'+config.version, 'background-color:rgba(255,0,0,.6);color:#fff;');
-// }
+console.log('%c v' + config.version + ' ', 'background-color:rgba(255,0,0,.6);color:#fff;border-radius:3px');
