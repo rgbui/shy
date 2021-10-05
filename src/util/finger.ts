@@ -1,5 +1,5 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { CacheKey, sCache } from '../service/cache';
+import { CacheKey, sCache } from '../../service/cache';
 
 let fingerId = '';
 export async function fingerFlag() {
