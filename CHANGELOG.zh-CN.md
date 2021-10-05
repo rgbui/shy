@@ -9,5 +9,12 @@
   专业版(pro)网址:[https://shy.live](https://shy.live)   
   测试版(beta)网址:[https://beta.shy.red](https://beta.shy.red) 
 
+## 0.6.21-pro
+`2021-10-4`
+* 诗云pro正式上线了
+## 0.6.2-beta
+`2021-10-2`
+* 实现诗云beta版本的自动发布功能
 ## 0.6.1-beta
+`2021-9-30`
 * 诗云beta正式上线了

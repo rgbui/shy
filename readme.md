@@ -1,5 +1,5 @@
 [诗云](https://shy.live)应用程序
-
+ [更新日志](CHANGELOG.zh-CN.md)更新日志
 ## 结构
 `surface`
  * web
