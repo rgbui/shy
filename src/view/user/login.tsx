@@ -6,6 +6,8 @@ import { SyHistory } from "../history";
 import { CacheKey, sCache } from "../../../service/cache";
 import { surface } from "../surface";
 import { userService } from "./service";
+import { Button } from "rich/component/view/button";
+import { Input } from "rich/component/view/input";
 
 export class Login extends React.Component {
     /**
@@ -83,46 +85,34 @@ export class Login extends React.Component {
         button.disabled = false;
         this.forceUpdate();
     }
-    async keydown(event: KeyboardEvent) {
-        if (event.key == 'Enter') await this.phoneSign()
-    }
     private el: HTMLElement;
     render() {
-        return <div className='shy-mask' ref={e => this.el = e} >
-            <div className='shy-login'>
-                <div className='shy-login-head'><span>诗云</span></div>
-                {this.mode == 'phone' && <div className='shy-login-box'>
-                    <div className='shy-login-box-account'>
-                        <input className='input' type='text' onInput={
-                            e => this.phone = (e.nativeEvent.target as HTMLInputElement).value
-                        } defaultValue={this.phone} placeholder={appLangProvider.getText(AppLang.Phone)} />
-                    </div>
-                    <div className='shy-login-box-code'>
-                        <input className='input' type='text' onKeyDown={e => this.keydown(e.nativeEvent)} defaultValue={this.verifyPhoneCode} onInput={
-                            e => this.verifyPhoneCode = (e.nativeEvent.target as HTMLInputElement).value
-                        } placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)} />
-                        {this.codeExpireCount == -1 && <button className='button' onMouseDown={e => this.generatePhoneCode(e.nativeEvent)}>获取短信验证码</button>}
-                        {this.codeExpireCount > -1 && <button className='button'>{this.codeExpireCount}s</button>}
-                    </div>
-                    <div className='shy-login-box-button'>
-                        <button className='button' onMouseDown={e => this.phoneSign(e.nativeEvent)}><SA id={AppLang.Login}></SA></button>
-                    </div>
-                    {this.signFailMsg && <div className='shy-login-box-fail'>{this.signFailMsg}</div>}
-                </div>}
-                {
-                    this.mode == 'phoneName' && <div className='shy-login-box'>
-                        <div className='shy-login-box-code'>
-                            <input className='input' type='text' onKeyDown={e => this.keydown(e.nativeEvent)} defaultValue={this.name} onInput={
-                                e => this.name = (e.nativeEvent.target as HTMLInputElement).value
-                            } placeholder={appLangProvider.getText(AppLang.PleashName)} />
-                        </div>
-                        <div className='shy-login-box-button'>
-                            <button className='button' onMouseDown={e => this.inputName(e.nativeEvent)}>欢迎使用诗云</button>
-                        </div>
-                        {this.updateNameFileMsg && <div className='shy-login-box-fail'>{this.updateNameFileMsg}</div>}
-                    </div>
-                }
+        return <div className='shy-login' ref={e => this.el = e} >
+            <div className='shy-login-head'><span>登录</span></div>
+            {this.mode == 'phone' && <div className='shy-login-box'>
+                <div className='shy-login-box-account'>
+                    <Input value={this.phone} onChange={e => this.phone = e} placeholder={appLangProvider.getText(AppLang.Phone)}></Input>
+                </div>
+                <div className='shy-login-box-code'>
+                    <Input value={this.verifyPhoneCode} placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)} onChange={e => this.verifyPhoneCode = e} onEnter={e => this.phoneSign()} />
+                    {this.codeExpireCount == -1 && <Button size='medium' onClick={e => this.generatePhoneCode(e.nativeEvent)}>获取短信验证码</Button>}
+                    {this.codeExpireCount > -1 && <Button size='medium' >{this.codeExpireCount}s</Button>}
+                </div>
+                <div className='shy-login-box-button'>
+                    <Button size='medium' block onClick={e => this.phoneSign(e.nativeEvent)}><SA id={AppLang.Login}></SA></Button >
+                </div>
+                {this.signFailMsg && <div className='shy-login-box-fail'>{this.signFailMsg}</div>}
+            </div>}
+            {this.mode == 'phoneName' && <div className='shy-login-box'>
+                <div className='shy-login-box-code'>
+                    <Input placeholder={appLangProvider.getText(AppLang.PleashName)} value={this.name} onChange={e => this.name = e} onEnter={e => this.phoneSign()} />
+                </div>
+                <div className='shy-login-box-button'>
+                    <Button size='medium' block onClick={e => this.inputName(e.nativeEvent)}>欢迎使用诗云</Button>
+                </div>
+                {this.updateNameFileMsg && <div className='shy-login-box-fail'>{this.updateNameFileMsg}</div>}
             </div>
+            }
         </div>
     }
 }

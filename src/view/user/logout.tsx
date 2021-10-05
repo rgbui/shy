@@ -12,7 +12,7 @@ export class LogOut extends React.Component {
         }
     }
     render() {
-        return <div className='sy-logout'>
+        return <div className='shy-logout'>
             <span>正在退出中...</span>
         </div>
     }
