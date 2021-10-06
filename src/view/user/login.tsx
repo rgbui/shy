@@ -18,7 +18,7 @@ export class Login extends React.Component {
     private verifyPhoneCode: string = '';
     private name: string;
     private codeExpireCount: number = -1;
-    private codeExpireCountTime: number;
+    private codeExpireCountTime: any;
     private signFailMsg: string = '';
     private updateNameFileMsg: string = '';
     async generatePhoneCode(event: globalThis.MouseEvent) {
