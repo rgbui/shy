@@ -11,7 +11,7 @@ import link from '../../../assert/svg/link.svg';
 
 import { PageItemDirective } from "./operator";
 import { SlnDirective } from "../operator";
-import { workspaceService } from "../../workspace/service";
+import { workspaceService } from "../../../../services/workspace";
 import { PageView } from "./view";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';

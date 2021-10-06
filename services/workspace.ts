@@ -1,13 +1,13 @@
 
-import { BaseService } from "../../../service";
-import { Workspace } from ".";
-import { masterSock, userSock } from "../../../service/sock";
-import { CacheKey, sCache, yCache } from "../../../service/cache";
-import { currentParams } from "../history";
-import { PageItem } from "../sln/item";
+import { BaseService } from "../net";
+import { Workspace } from "../src/view/workspace";
+import { masterSock, userSock } from "../net/sock";
+import { CacheKey, sCache, yCache } from "../net/cache";
+import { currentParams } from "../src/view/history";
+import { PageItem } from "../src/view/sln/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
-import { FileType } from "../../../type";
+import { FileType } from "../type";
 class WorkspaceService extends BaseService {
     /***
      * 主要是通过不同的网址来计算读取相应的workspace空间

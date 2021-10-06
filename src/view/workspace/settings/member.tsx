@@ -5,7 +5,7 @@ import { Input } from 'rich/component/view/input';
 import { Button } from 'rich/component/view/button';
 import { CopyText } from 'rich/component/copy';
 import { surface } from '../../surface';
-import { workspaceService } from '../service';
+import { workspaceService } from '../../../../services/workspace';
 import { Avatar } from '../../../components/face';
 import { Select } from 'rich/component/view/select';
 

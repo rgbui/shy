@@ -4,7 +4,7 @@ import { Page } from 'rich/src/page';
 import { PageDirective } from 'rich/src/page/directive';
 import { PageItem } from '../../sln/item';
 import { surface } from '../../surface';
-import { workspaceService } from '../../workspace/service';
+import { workspaceService } from '../../../../services/workspace';
 export class DocPage extends React.Component<{ item: PageItem }>{
     constructor(props) { super(props) }
     get item() {

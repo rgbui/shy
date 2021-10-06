@@ -8,12 +8,12 @@ import { Supervisor } from "../supervisor";
 import { SyHistory } from "../history";
 import { generatePath } from "react-router";
 import { Workspace } from "../workspace";
-import { workspaceService, workspaceTogglePages } from "../workspace/service";
+import { workspaceService, workspaceTogglePages } from "../../../services/workspace";
 import { Directive } from "rich/util/bus/directive";
-import { userService } from "../user/service";
+import { userService } from "../../../services/user";
 import { util } from "../../util";
 import { messageChannel } from "rich/util/bus/event.bus";
-import { sockSync } from "../../../service/primus";
+import { sockSync } from "../../../net/primus";
 class Surface extends Events {
     constructor() {
         super();

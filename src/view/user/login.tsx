@@ -3,9 +3,9 @@ import { AppLang } from "../../../i18n/enum";
 import { appLangProvider } from "../../../i18n/provider";
 import { SA } from "../../../i18n/view";
 import { SyHistory } from "../history";
-import { CacheKey, sCache } from "../../../service/cache";
+import { CacheKey, sCache } from "../../../net/cache";
 import { surface } from "../surface";
-import { userService } from "./service";
+import { userService } from "../../../services/user";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 

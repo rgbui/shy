@@ -1,7 +1,6 @@
 import React from "react";
 import { SyHistory } from "../history";
-import { userService } from "./service";
-
+import { userService } from "../../../services/user";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;

@@ -4,7 +4,7 @@ import { Events } from "rich/util/events";
 import { SupervisorView } from "./view";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Rect } from "rich/src/common/point";
-import { workspaceService } from "../workspace/service";
+import { workspaceService } from "../../../services/workspace";
 
 export class Supervisor extends Events {
     items: PageItem[] = [];

@@ -5,7 +5,7 @@ import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { Icon } from "rich/component/view/icon";
 import { Loading } from "rich/component/view/loading";
 import { Workspace } from "..";
-import { workspaceService } from "../service";
+import { workspaceService } from "../../../../services/workspace";
 import { Avatar } from "../../../components/face";
 import { surface } from "../../surface";
 import "./style.less";

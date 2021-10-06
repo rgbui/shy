@@ -1,11 +1,11 @@
 
-import { User } from "./user";
-import { fileSock, masterSock, userSock } from "../../../service/sock";
-import { BaseService } from "../../../service";
-import { CacheKey, sCache } from "../../../service/cache";
-import { FileMd5 } from "../../util/file";
-import { FileType } from "../../../type";
-import { SockResponse } from "../../../service/sock/type";
+import { User } from "../src/view/user/user";
+import { fileSock, masterSock, userSock } from "../net/sock";
+import { BaseService } from "../net";
+import { CacheKey, sCache } from "../net/cache";
+import { FileMd5 } from "../src/util/file";
+import { FileType } from "../type";
+import { SockResponse } from "../net/sock/type";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string) {

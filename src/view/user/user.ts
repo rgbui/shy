@@ -2,18 +2,11 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { util } from "rich/util/util";
-import { userService } from "./service";
+import { userService } from "../../../services/user";
 import { useOpenUserSettings } from "./settings";
-
-export enum UserStatus {
-    busy,
-    online,
-    offline
-}
 export class User {
     public id: string;
     public inc: number;
-    public status: UserStatus;
     public createDate: Date;
     public phone: string;
     public paw: string;

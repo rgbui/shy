@@ -3,7 +3,7 @@ import { generatePath } from "react-router";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { SyHistory } from "../history";
-import { workspaceService } from "./service";
+import { workspaceService } from "../../../services/workspace";
 import "./style.less";
 export class WorkspaceCreateView extends React.Component {
     private text: string = '';

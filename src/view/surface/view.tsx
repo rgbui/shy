@@ -3,7 +3,7 @@ import { surface } from ".";
 import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
 import { MouseDragger } from "rich/src/common/dragger";
-import { CacheKey, yCache } from "../../../service/cache";
+import { CacheKey, yCache } from "../../../net/cache";
 export class ViewSurface extends React.Component {
     constructor(props) {
         super(props);
