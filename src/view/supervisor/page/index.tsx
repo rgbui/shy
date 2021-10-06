@@ -14,7 +14,7 @@ export class DocPage extends React.Component<{ item: PageItem }>{
     page: Page;
     async componentDidMount() {
         var self = this;
-        var pageData = await workspaceService.loadPageContent(this.item.id);
+        var pageData = await self.item.store.getPageContent();
         var page = new Page(this.el, {
             user: surface.user
         });
@@ -29,8 +29,8 @@ export class DocPage extends React.Component<{ item: PageItem }>{
             // console.log('focusAnchor', anchor);
         });
         page.on(PageDirective.history, async function (action) {
-            var _pagedata = await page.get();
-            await workspaceService.savePageContent(self.item.id, _pagedata);
+            await self.item.store.saveHistory(action);
+            await self.item.store.savePageContent(action, async () => page.get());
         });
         page.on(PageDirective.createDefaultTableSchema, async (data) => {
             var r = await workspaceService.createDefaultTableSchema(data);

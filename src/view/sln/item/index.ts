@@ -19,6 +19,8 @@ import { Rect } from "rich/src/common/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
+import { PageStore } from "../../../../services/page";
+import { UserAction } from "rich/src/history/action";
 export class PageItem {
     id: string;
     sn?: number;
@@ -36,6 +38,10 @@ export class PageItem {
     selectedDate: number;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
+    store: PageStore;
+    constructor() {
+        this.store = new PageStore(this);
+    }
     get sln() {
         return surface.sln;
     }
@@ -281,6 +287,9 @@ export class PageItem {
             }
             //<link rel="icon" type="image/x-icon" href="https://secure.wostatic.cn/icon/rwF6bK9DDEHgFAkA5rzSWy/%E6%84%8F%E5%A4%A7%E5%88%A9%E9%A3%8E%E5%85%89%20%E5%B0%9A%C2%B7%E5%B7%B4%E8%92%82%E6%96%AF%E7%89%B9%C2%B7%E5%8D%A1%E7%B1%B3%E5%B0%94%C2%B7%E7%A7%91%E7%BD%97%EF%BC%88%E6%B3%95%E5%9B%BD%EF%BC%89.jpg?auth_key=1628690385-b5mmS9cDfRgyx5ZK8wTBap-0-bdd99d9c46f9257401450fbf47b1a890&amp;image_process=resize,w_48">
         }
+    }
+    onSaveUseAction(action: UserAction) {
+        this.store.saveHistory(action);
     }
 }
 

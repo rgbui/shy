@@ -100,13 +100,6 @@ class WorkspaceService extends BaseService {
     async deletePage(id: string) {
         await masterSock.delete('/page/delete/:id', { id });
     }
-    async loadPageContent(id: string) {
-        var r = await yCache.get(id);
-        if (r) return r;
-    }
-    async savePageContent(id: string, content: Record<string, any>) {
-        await yCache.set(id, content);
-    }
     async createDefaultTableSchema(data: { text?: string, templateId?: string }) {
         var result = await userSock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});
         return result.data?.schema;
