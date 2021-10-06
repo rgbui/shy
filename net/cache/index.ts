@@ -6,7 +6,8 @@ import { Aes } from "../../src/util/crypto";
  */
 export enum CacheKey {
     token,
-    clientId,
+    finger,
+    device,
     workspaceId,
     pageId,
     lang,

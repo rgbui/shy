@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { fingerFlag } from "../../src/util/finger";
-import { CacheKey, sCache, yCache } from "../cache";
+import { CacheKey, sCache } from "../cache";
 import { SockResponse, SockType } from "./type";
 import { config } from "../../src/common/config";
 import { FileMd5 } from "../../src/util/file";
@@ -47,11 +46,11 @@ class Sock {
         }
     }
     private async config() {
-        var id = await fingerFlag();
+        var device = await sCache.get(CacheKey.device);
         var token = await sCache.get(CacheKey.token);
         var lang = await sCache.get(CacheKey.lang);
         var headers: Record<string, any> = {};
-        if (id) headers['shy-client'] = id;
+        headers['shy-device'] = device || 'anonymous';
         if (token) headers['shy-token'] = token;
         if (lang) headers['shy-lang'] = lang;
         return {

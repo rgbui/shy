@@ -1,13 +1,7 @@
+import { userSock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
-
-export enum HttpMethod {
-    get,
-    post,
-    put,
-    delete
-}
-
+import { HttpMethod } from './http';
 export class SockSync {
     private willloading: boolean = false;
     private primus;
@@ -16,7 +10,7 @@ export class SockSync {
         if (this.willloading == false) return;
         this.willloading = true;
         var r = await import('../../src/assert/js/primus.js');
-        var url = 'http://localhost:8888/';
+        var url = await userSock.baseUrl();
         var primus = new (r.default)(url, {});
         this.primus = primus;
         primus.open();
