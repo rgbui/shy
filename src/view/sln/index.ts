@@ -4,7 +4,7 @@ import { PageItem } from "./item";
 import { SlnDirective } from "./operator";
 import { SlnView } from "./view";
 import { currentParams, SyHistory } from "../history";
-import { CacheKey, yCache } from "../../../service/cache";
+import { CacheKey, yCache } from "../../../net/cache";
 import { generatePath } from "react-router";
 import { surface } from "../surface";
 import { Mime } from "./item/mime";
