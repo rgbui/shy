@@ -13,7 +13,7 @@ class UserDeviceService {
             }
         }
         await sCache.set(CacheKey.finger, cacFinger);
-        var r = await masterSock.post<{ devideId: string }, string>('/register/device', {
+        var r = await masterSock.post<{ deviceId: string }, string>('/register/device', {
             finger: cacFinger,
             platform: '',
             browser: UA.browser,
@@ -22,7 +22,7 @@ class UserDeviceService {
             cpu: UA.cpu,
             deviceId: devideId || undefined
         });
-        await sCache.set(CacheKey.device, r.data.devideId);
+        await sCache.set(CacheKey.device, r.data.deviceId);
     }
     async getDeviceId() {
         return await sCache.get(CacheKey.device);
