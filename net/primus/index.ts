@@ -1,3 +1,5 @@
+import { util } from 'rich/util/util';
+import { CacheKey, sCache } from '../cache';
 import { userSock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
@@ -7,7 +9,7 @@ export class SockSync {
     private primus;
     async load() {
         var self = this;
-        if (this.willloading == false) return;
+        if (this.willloading == true) return;
         this.willloading = true;
         var r = await import('../../src/assert/js/primus.js');
         var url = await userSock.baseUrl();
@@ -29,8 +31,13 @@ export class SockSync {
             }
             console.log('Received a new message from the server', data);
         });
-        primus.on('open', function open() {
+        primus.on('open', async function open() {
             console.log('Connection is alive and kicking');
+            var device = await sCache.get(CacheKey.device);
+            var token = await sCache.get(CacheKey.token);
+            var lang = await sCache.get(CacheKey.lang);
+            var r = await self.post('/user/online', { token, device, lang });
+            console.log('user online r:', r);
         });
         primus.on('error', function error(err) {
             console.error('Something horrible has happened', err.stack);
@@ -49,7 +56,7 @@ export class SockSync {
         });
     }
     async getId() {
-        return '';
+        return util.guid();
     }
     private sendEvents: { rid: string, isTimeOut?: boolean, timeout: number, callback: (data) => void }[] = [];
     /**
@@ -82,7 +89,7 @@ export class SockSync {
                     }
                     this.sendEvents.remove(g => g.rid == id);
                     reject(new Error('response time out'))
-                }, 2e3)
+                }, 2e3) as any
             });
             if (data) GenreConsistency.transform(data);
             this.primus.write({ rid: id, method, url, data });
