@@ -1,4 +1,5 @@
 import { util } from 'rich/util/util';
+import { log } from '../../src/common/log';
 import { CacheKey, sCache } from '../cache';
 import { userSock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
@@ -27,9 +28,8 @@ export class SockSync {
                 }
             }
             catch (ex) {
-
+                log.error(ex);
             }
-            console.log('Received a new message from the server', data);
         });
         primus.on('open', async function open() {
             console.log('Connection is alive and kicking');
@@ -37,7 +37,7 @@ export class SockSync {
             var token = await sCache.get(CacheKey.token);
             var lang = await sCache.get(CacheKey.lang);
             var r = await self.post('/user/online', { token, device, lang });
-            console.log('user online r:', r);
+            console.log('user online r:', r.data);
         });
         primus.on('error', function error(err) {
             console.error('Something horrible has happened', err.stack);

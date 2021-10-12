@@ -15,7 +15,7 @@ export function App() {
   }
   React.useEffect(() => {
     load();
-  },[])
+  }, [])
   return <div className='shy-app'>
     {!isLoad && <div className='shy-app-load'></div>}
     {isLoad && <Router history={SyHistory}>
@@ -28,3 +28,4 @@ export function App() {
     </Router>}
   </div>
 }
+
