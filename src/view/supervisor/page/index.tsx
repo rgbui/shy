@@ -14,7 +14,7 @@ export class DocPage extends React.Component<{ item: PageItem }>{
     page: Page;
     async componentDidMount() {
         var self = this;
-        var pageData = await self.item.store.getPageContent();
+        var pd = await self.item.store.getPageContent();
         var page = new Page(this.el, {
             user: surface.user
         });
@@ -50,8 +50,10 @@ export class DocPage extends React.Component<{ item: PageItem }>{
         page.on(PageDirective.loadPageInfo, async () => {
             return { text: self.item.text, icon: self.item.icon, id: self.item.id };
         });
-        await page.load(pageData);
-        await page.render();
+        await page.load(pd.content || null);
+        if (Array.isArray(pd.actions) && pd.actions.length > 0)
+            await page.loadUserActions(pd.actions);
+        page.render();
     }
     async componentWillUnmount() {
         //https://www.jianshu.com/p/7648c6f30d1e
