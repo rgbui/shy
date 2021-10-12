@@ -1,4 +1,5 @@
 
+import axios from "axios";
 import SparkMD5 from "spark-md5";
 /**
  * 计算当前文件的md5值
@@ -45,17 +46,11 @@ export function FileMd5(file: File) {
     })
 }
 
-export function XhrReadFileBlob(url: string): Promise<Blob> {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    return new Promise((resolve, reject) => {
-        xhr.onload = function () {
-            if (this.status == 200) {
-                resolve(this.response);
-            }
-            else reject(new Error('not read url content'))
-        }
-    })
-
+export async function XhrReadFileBlob(url: string): Promise<Blob> {
+    if (url.startsWith('http://localhost'))
+        url = url.replace('http://localhost', 'http://127.0.0.1')
+    var r = await axios.get(url, {
+        responseType: 'blob'
+    });
+    return r.data as any;
 }
