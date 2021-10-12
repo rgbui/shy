@@ -1,6 +1,5 @@
 import { config } from "../../src/common/config";
 import { Aes } from "../../src/util/crypto";
-
 /**
  * 缓存应用的key
  */
@@ -14,7 +13,7 @@ export enum CacheKey {
     togglePages,
     slideWidth
 }
-const FLAG = 'shy.live.';
+const FLAG = 'shy.';
 class SyCache {
     private security = false;
     constructor(options?: { security: boolean }) {
