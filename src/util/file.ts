@@ -44,3 +44,18 @@ export function FileMd5(file: File) {
         loadNext();
     })
 }
+
+export function XhrReadFileBlob(url: string): Promise<Blob> {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    return new Promise((resolve, reject) => {
+        xhr.onload = function () {
+            if (this.status == 200) {
+                resolve(this.response);
+            }
+            else reject(new Error('not read url content'))
+        }
+    })
+
+}
