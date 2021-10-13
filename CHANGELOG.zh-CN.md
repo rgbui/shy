@@ -6,12 +6,14 @@
 
 #### 版本
   发布的版本：专业版(pro)、测试版(beta)。   
-  专业版(pro)网址:[https://shy.live](https://shy.live)   
-  测试版(beta)网址:[https://beta.shy.red](https://beta.shy.red) 
-## 0.6.3-beta
+  专业版(pro):[https://shy.live](https://shy.live)   
+  测试版(beta):[https://beta.shy.red](https://beta.shy.red)   
+
+## 0.6.3-pro
 `2021-10-12`
 * 支持文档云存储同步、本地缓存
 * 部分ui调整美化
+* 修复自动化发布方面的bug
 ## 0.6.21-pro
 `2021-10-4`
 * 诗云pro正式上线了
