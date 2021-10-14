@@ -11,13 +11,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
  */
 let publicPath = `https://beta.shy.red/`;
 var outputDir = path.join(__dirname, "../dist/beta");
+var versionPrefix = pkg.version + '/';
 module.exports = {
     mode: 'production',
     entry: "./src/main.tsx",
     output: {
         path: outputDir,
-        filename: "assert/js/shy.[hash:8].js",
-        chunkFilename: 'assert/js/[name].[hash:8].js',
+        filename: versionPrefix + "assert/js/shy.[hash:8].js",
+        chunkFilename: versionPrefix + 'assert/js/[name].[hash:8].js',
         publicPath
     },
     resolve: {
@@ -34,8 +35,6 @@ module.exports = {
                 {
                     loader: MiniCssExtractPlugin.loader,
                     options: {
-                        // 杩欓噷鍙互鎸囧畾涓�涓� publicPath
-                        // 榛樿浣跨敤 webpackOptions.output涓殑publicPath
                         //publicPath: '../../'
                     },
                 },
@@ -49,8 +48,6 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            // 杩欓噷鍙互鎸囧畾涓�涓� publicPath
-                            // 榛樿浣跨敤 webpackOptions.output涓殑publicPath
                             //publicPath: '../../'
                         }
                     },
@@ -70,13 +67,13 @@ module.exports = {
             test: /\.(jpe?g|png|gif|svg|bmp|webp)$/,
             // 规则 limit给定的是图片的大小 如果我们给定图片的大小大于等于我们给定的limit 则不会被转为base64编码
             //反之会被转换name=[hash:8]-[name].[ext] 前面加hash值区分图片 名字原样输出
-            loader: 'url-loader?limit=8192&name=assert/img/[hash:8].[name].[ext]'
+            loader: `url-loader?limit=8192&name=${versionPrefix}assert/img/[hash:8].[name].[ext]`
         },
         {
             test: /assert\/font[\w\-\/]+\.(svg)$/,
             // 规则 limit给定的是图片的大小 如果我们给定图片的大小大于等于我们给定的limit 则不会被转为base64编码
             //反之会被转换name=[hash:8]-[name].[ext] 前面加hash值区分图片 名字原样输出
-            loader: 'url-loader?limit=8192&name=assert/img/[hash:8].[name].[ext]'
+            loader: `url-loader?limit=8192&name=${versionPrefix}assert/img/[hash:8].[name].[ext]`
         },
         {
             test: /assert\/svg\/[\w\.]+\.svg$/,
@@ -86,7 +83,7 @@ module.exports = {
             test: /\.(woff2?|eot|ttf)$/,
             // 规则 limit给定的是图片的大小 如果我们给定图片的大小大于等于我们给定的limit 则不会被转为base64编码
             //反之会被转换name=[hash:8]-[name].[ext] 前面加hash值区分图片 名字原样输出
-            loader: 'url-loader?limit=8192&name=assert/font/[hash:8].[name].[ext]'
+            loader: `url-loader?limit=8192&name=${versionPrefix}assert/font/[hash:8].[name].[ext]`
         }]
     },
     externals: {
@@ -114,13 +111,13 @@ module.exports = {
             canPrint: true
         }),
         new MiniCssExtractPlugin({
-            filename: "assert/css/shy.[hash:8].css"
+            filename: versionPrefix + "assert/css/shy.[hash:8].css"
         }),
         new CopyWebpackPlugin(
             {
                 patterns: [
-                    { from: path.join(__dirname, "../../rich/extensions/emoji/emoji.json"), to: "data/emoji.json" },
-                    { from: path.join(__dirname, "../../rich/extensions/font-awesome/font-awesome.json"), to: "data/font-awesome.json" }
+                    { from: path.join(__dirname, "../../rich/extensions/emoji/emoji.json"), to: versionPrefix + "data/emoji.json" },
+                    { from: path.join(__dirname, "../../rich/extensions/font-awesome/font-awesome.json"), to: versionPrefix + "data/font-awesome.json" }
                 ]
             }
         ),
