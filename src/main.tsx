@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import "rich";
+import "./assert/shy.less";
 import "./assert/theme.less";
 import "./view/surface/style.less";
 import "./view/supervisor/style.less";
