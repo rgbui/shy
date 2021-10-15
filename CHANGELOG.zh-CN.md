@@ -8,8 +8,14 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red)   
+  
+## 0.6.32-beta
+`2021-10-15`
+* 增加打包静态资源带版本
+* 修复自动化部署beta版的一些问题
 
-## 0.6.3-pro
+
+## 0.6.3-beta
 `2021-10-12`
 * 支持文档云存储同步、本地缓存
 * 部分ui调整美化
