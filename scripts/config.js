@@ -80,21 +80,28 @@ module.exports = {
             issuer: /\.(css|less|styl)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/img/[name]-[hash:6][ext]',
+                filename: versionPrefix + 'assert/img/[name]-[contenthash][ext]',
             }
         },
         {
             test: /\.(jpe?g|png|gif|bmp|webp)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/img/[name]-[hash:6][ext]',
+                filename: versionPrefix + 'assert/img/[name]-[contenthash][ext]',
+            }
+        },
+        {
+            test: /\.(json)$/,
+            type: 'asset/resource',
+            generator: {
+                filename: versionPrefix + 'data/[name]-[contenthash][ext]',
             }
         },
         {
             test: /\.(woff2?|eot|ttf)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/font/[name]-[hash:6][ext]'
+                filename: versionPrefix + 'assert/font/[name]-[contenthash][ext]'
             }
         }
         ]
@@ -116,16 +123,8 @@ module.exports = {
             assetNameRegExp: /\.css$/g,
         }),
         new MiniCssExtractPlugin({
-            filename: versionPrefix + "assert/css/shy.[hash:8].css"
-        }),
-        new CopyWebpackPlugin(
-            {
-                patterns: [
-                    { from: path.join(__dirname, "../../rich/extensions/emoji/emoji.json"), to: versionPrefix + "data/emoji.json" },
-                    { from: path.join(__dirname, "../../rich/extensions/font-awesome/font-awesome.json"), to: versionPrefix + "data/font-awesome.json" }
-                ]
-            }
-        )
+            filename: versionPrefix + "assert/css/shy.[contenthash].css"
+        })
     ]
 };
 if (isDev) {
