@@ -1,12 +1,12 @@
 {
   "name": "shy.app",
-  "version": "0.6.3-pro",
-  "description": "shy.live platform app",
+  "version": "0.6.32-beta",
+  "description": "https://shy.live",
   "main": "index.js",
   "scripts": {
-    "pro": "webpack --config scripts/webpack.config.pro.js",
-    "beta": "webpack --config scripts/webpack.config.beta.js",
-    "dev": "webpack-dev-server  --env development  --config scripts/webpack.config.dev.js  --hot --progress --colors  "
+    "pro": "webpack --config scripts/config.js  --pro",
+    "beta": "webpack --config scripts/config.js  --beta",
+    "dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  "
   },
   "keywords": [
     "shy.live",
@@ -18,6 +18,7 @@
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^3.2.0",
     "axios": "^0.21.1",
+    "crypto-browserify": "^3.12.0",
     "crypto-js": "^4.0.0",
     "dexie": "^3.0.3",
     "jszip": "^3.7.1",
@@ -39,26 +40,30 @@
     "@types/react-router": "^5.1.15",
     "@types/react-router-dom": "^5.1.8",
     "babel-plugin-prismjs": "^2.0.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.4.1",
-    "css-loader": "^5.0.0",
-    "cssnano": "^4.1.10",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.2.0",
+    "cssnano": "^5.0.8",
+    "eslint": "^7.19.0",
+    "eslint-plugin-react": "^7.22.0",
     "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^4.5.0",
-    "less": "^3.12.2",
-    "less-loader": "^7.0.2",
-    "mini-css-extract-plugin": "^1.2.1",
-    "moment": "^2.29.1",
-    "moment-locales-webpack-plugin": "^1.2.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.4",
-    "raw-loader": "^4.0.2",
-    "sass-resources-loader": "^2.1.1",
-    "style-loader": "^2.0.0",
-    "ts-loader": "^8.0.7",
-    "typescript": "^4.0.5",
+    "html-webpack-plugin": "^5.0.0",
+    "less": "^4.1.1",
+    "less-loader": "^10.0.0",
+    "mini-css-extract-plugin": "^2.4.2",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "react-hot-loader": "^4.13.0",
+    "sass-resources-loader": "^2.2.3",
+    "style-loader": "^3.2.1",
+    "ts-loader": "^8.0.14",
+    "typescript": "^4.4.4",
     "url-loader": "^4.1.1",
-    "webpack": "^4.44.2",
+    "webpack": "^5.52.1",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.2"
+  },
+  "browser": {
+    "crypto": false
   }
 }
