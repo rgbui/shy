@@ -4,6 +4,8 @@ import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
 import { MouseDragger } from "rich/src/common/dragger";
 import { CacheKey, yCache } from "../../../net/cache";
+import { Loading } from "rich/component/view/loading";
+import { SiteView } from "../site";
 export class ViewSurface extends React.Component {
     constructor(props) {
         super(props);
@@ -38,7 +40,7 @@ export class ViewSurface extends React.Component {
                 if (isEnd) {
                     self.slideEl.classList.remove('dragging');
                     self.slideWidth = m;
-                    yCache.set(CacheKey.slideWidth,m);
+                    yCache.set(CacheKey.slideWidth, m);
                 }
             }
         })
@@ -59,6 +61,7 @@ export class ViewSurface extends React.Component {
     slideEl: HTMLElement;
     slideFloatIsShow: boolean = false;
     render() {
+        if (!surface.user.isSign) return <SiteView></SiteView>
         return <div className='shy-surface'>{
             surface.isSuccessfullyLoaded && <>
                 <div
@@ -73,7 +76,7 @@ export class ViewSurface extends React.Component {
                 {!surface.isShowSln && <div className='shy-slide-reaction'></div>}
                 <SupervisorView></SupervisorView>
             </>
-        }{!surface.isSuccessfullyLoaded && <div className='shy-surface-loading'>正在加载中...</div>}
+        }{!surface.isSuccessfullyLoaded && <div className='shy-surface-loading'><Loading /></div>}
         </div>
     }
 }
