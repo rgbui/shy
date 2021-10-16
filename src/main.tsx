@@ -8,11 +8,17 @@ import "./view/supervisor/style.less";
 import "./view/sln/style.less";
 import "./view/user/style.less";
 import { App } from './view';
+import { config } from './common/config';
+
 // render react DOM
 ReactDOM.render(
   <App />,
   document.body.appendChild(document.createElement('div')),
 )
+
+if (config.isDev) {
+  (self as any).__WB_DISABLE_DEV_LOGS = false;
+}
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

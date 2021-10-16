@@ -12,7 +12,11 @@ export class SockSync {
         var self = this;
         if (this.willloading == true) return;
         this.willloading = true;
-        var r = await import('../../src/assert/js/primus.js');
+        var r = await import(
+            /* webpackChunkName: 'primus' */
+            /* webpackPrefetch: true */
+            '../../src/assert/js/primus.js'
+        );
         var url = await userSock.baseUrl();
         var primus = new (r.default)(url, {});
         this.primus = primus;

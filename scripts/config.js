@@ -33,8 +33,8 @@ module.exports = {
     devtool: isDev ? 'inline-source-map' : undefined,
     output: {
         path: path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode)),
-        filename: versionPrefix + "assert/js/shy.[contenthash].js",
-        chunkFilename: versionPrefix + 'assert/js/[name].[contenthash].js',
+        filename: versionPrefix + "assert/js/shy.[contenthash:8].js",
+        chunkFilename: versionPrefix + 'assert/js/shy.[name].[contenthash:8].js',
         publicPath,
         // clean:true
     },
@@ -85,28 +85,42 @@ module.exports = {
             issuer: /\.(css|less|styl)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/img/[name]-[contenthash][ext]',
+                filename: versionPrefix + 'assert/img/[name]-[contenthash:8][ext]',
             }
         },
         {
             test: /\.(jpe?g|png|gif|bmp|webp)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/img/[name]-[contenthash][ext]',
+                filename: versionPrefix + 'assert/img/[name]-[contenthash:8][ext]',
+            },
+            // 是parser，不是parse
+            parser: {
+                dataUrlCondition: {
+                    // 是maxSize，不再是limit
+                    maxSize: 5 * 1024
+                }
             }
         },
         {
             test: /\.(json)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'data/[name]-[contenthash][ext]',
+                filename: versionPrefix + 'data/[name]-[contenthash:8][ext]',
             }
         },
         {
             test: /\.(woff2?|eot|ttf)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/font/[name]-[contenthash][ext]'
+                filename: versionPrefix + 'assert/font/[name]-[contenthash:8][ext]'
+            },
+            // 是parser，不是parse
+            parser: {
+                dataUrlCondition: {
+                    // 是maxSize，不再是limit
+                    maxSize: 5 * 1024
+                }
             }
         }
         ]
@@ -129,7 +143,7 @@ module.exports = {
             assetNameRegExp: /\.css$/g,
         }),
         new MiniCssExtractPlugin({
-            filename: versionPrefix + "assert/css/shy.[contenthash].css"
+            filename: versionPrefix + "assert/css/shy.[contenthash:8].css"
         }),
         new WorkboxPlugin.GenerateSW({
             // 这些选项帮助快速启用 ServiceWorkers
@@ -142,12 +156,26 @@ module.exports = {
         moduleIds: 'deterministic',
         runtimeChunk: 'single',
         splitChunks: {
+            // async：异步导入， initial：同步导入， all：异步/同步导入
+            chunks: "all",
+            // 最小尺寸: 单位是字节，如果拆分出来一个, 那么拆分出来的这个包的大小最小为minSize
+            minSize: 250000,
+            // 将大于maxSize的包, 拆分成不小于minSize的包
+            maxSize: 250000,
+            // minChunks表示引入的包, 至少被导入了几次 【才拆分】
+            minChunks: 1,
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
+                    filename: versionPrefix + "assert/js/shy.[id].[contenthash:8].js",
                     chunks: 'all',
                 },
+                default: {
+                    // 如果一个文件被引入了2次，就单独打包出来一个js文件
+                    minChunks: 2,
+                    filename: versionPrefix + "assert/js/shy.common.[id].[contenthash:8].js",
+                    priority: -20
+                }
             },
         },
     },
