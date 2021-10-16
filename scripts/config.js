@@ -5,13 +5,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const WorkboxPlugin = require('workbox-webpack-plugin');
+
 var mode = 'dev';
 if (process.argv.some(s => s == '--pro')) mode = 'pro';
 else if (process.argv.some(s => s == '--beta')) mode = 'beta';
 var isDev = mode == 'dev'
 /**
- * webpack url https://www.cnblogs.com/brandonhulala/p/6057378.html
+ * webpack url https://webpack.docschina.org/guides/output-management/#cleaning-up-the-dist-folder
  */
 
 let port = 8081;
@@ -27,11 +30,13 @@ var versionPrefix = pkg.version + '/';
 module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: "./src/main.tsx",
+    devtool: isDev ? 'inline-source-map' : undefined,
     output: {
         path: path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode)),
         filename: versionPrefix + "assert/js/shy.[contenthash].js",
         chunkFilename: versionPrefix + 'assert/js/[name].[contenthash].js',
-        publicPath
+        publicPath,
+        // clean:true
     },
     resolve: {
         extensions: ['.tsx', ".ts", ".js", ".less", ".css"],
@@ -107,6 +112,7 @@ module.exports = {
         ]
     },
     plugins: [
+        // new BundleAnalyzerPlugin(),
         isDev ? new webpack.HotModuleReplacementPlugin() : new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "../index.html"), // 婧愭ā鏉挎枃浠�
@@ -124,8 +130,27 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: versionPrefix + "assert/css/shy.[contenthash].css"
-        })
-    ]
+        }),
+        new WorkboxPlugin.GenerateSW({
+            // 这些选项帮助快速启用 ServiceWorkers
+            // 不允许遗留任何“旧的” ServiceWorkers
+            clientsClaim: true,
+            skipWaiting: true,
+        }),
+    ],
+    optimization: {
+        moduleIds: 'deterministic',
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
+    },
 };
 if (isDev) {
     module.exports.devServer = {
