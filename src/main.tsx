@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import "rich";
@@ -8,24 +9,22 @@ import "./view/supervisor/style.less";
 import "./view/sln/style.less";
 import "./view/user/style.less";
 import { App } from './view';
-import { config } from './common/config';
 
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker.register('/service-worker.js').then(registration => {
+//       // console.log('SW registered: ', registration);
+//     }).catch(registrationError => {
+//       log.error(registrationError)
+//       // console.log('SW registration failed: ', registrationError);
+//     });
+//   });
+// }
 // render react DOM
 ReactDOM.render(
   <App />,
   document.body.appendChild(document.createElement('div')),
 )
 
-if (config.isDev) {
-  (self as any).__WB_DISABLE_DEV_LOGS = false;
-}
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(registration => {
-      console.log('SW registered: ', registration);
-    }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError);
-    });
-  });
-}
+

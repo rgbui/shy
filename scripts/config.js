@@ -145,12 +145,17 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: versionPrefix + "assert/css/shy.[contenthash:8].css"
         }),
-        new WorkboxPlugin.GenerateSW({
-            // 这些选项帮助快速启用 ServiceWorkers
-            // 不允许遗留任何“旧的” ServiceWorkers
-            clientsClaim: true,
-            skipWaiting: true,
-        }),
+        /**
+         * 离线貌似有问题
+         */
+        // new WorkboxPlugin.GenerateSW({
+        //     // 这些选项帮助快速启用 ServiceWorkers
+        //     // 不允许遗留任何“旧的” ServiceWorkers
+        //     clientsClaim: true,
+        //     skipWaiting: true,
+        //     mode: 'production',
+        //     maximumFileSizeToCacheInBytes: 250000
+        // }),
     ],
     optimization: {
         moduleIds: 'deterministic',
