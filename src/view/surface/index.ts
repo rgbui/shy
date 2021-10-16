@@ -45,7 +45,7 @@ class Surface extends Events {
     }
     async load() {
         if (!this.user.isSign) await this.user.loadUser();
-        if (!this.user.isSign) return SyHistory.push('/login');
+        if (!this.user.isSign) return;
         if (this.user.isSign) await sockSync.load();
         if (!surface.workspace) {
             var loadResult = await this.loadWorkspace();
