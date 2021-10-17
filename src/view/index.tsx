@@ -3,9 +3,13 @@ import { Router, Route } from 'react-router-dom';
 import { appLangProvider } from '../../i18n/provider';
 import { userDeviceService } from '../../services/device';
 import { SyHistory } from './history';
-import { PrivateView } from './site/protocol/private';
+import { DownloadView } from './site/download';
+import { HelpView } from './site/help';
+import { PrivateView } from './site/protocol/privacy';
 import { AgreeView } from './site/protocol/service';
+import { RouteView } from './site/route';
 import { SceneView } from './site/scene';
+import { BookView } from './site/shiyun';
 import { WeChatView } from './site/wechat';
 import { ViewSurface } from './surface/view';
 import { Login } from './user/login';
@@ -27,10 +31,14 @@ export function App() {
       <Route path='/' exact component={ViewSurface}></Route>
       <Route path='/scene' exact component={SceneView}></Route>
       <Route path='/wechat' exact component={WeChatView}></Route>
+      <Route path='/route' exact component={RouteView}></Route>
       <Route path='/privacy/protocol' exact component={PrivateView}></Route>
       <Route path='/service/protocol' exact component={AgreeView}></Route>
+      <Route path='/download' exact component={DownloadView}></Route>
+      <Route path='/help' exact component={HelpView}></Route>
       <Route path='/sign' exact component={Login}></Route>
       <Route path='/sign/out' exact component={LogOut}> </Route>
+      <Route path='/shiyun' exact component={BookView} />
       <Route path='/ws/:id' exact component={ViewSurface}></Route>
       <Route path='/page/:id' exact component={ViewSurface}></Route>
       <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
