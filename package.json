@@ -1,6 +1,6 @@
 {
   "name": "shy.app",
-  "version": "0.6.32-beta",
+  "version": "0.6.4-beta",
   "description": "https://shy.live",
   "main": "index.js",
   "scripts": {
@@ -50,9 +50,11 @@
     "eslint": "^7.19.0",
     "eslint-plugin-react": "^7.22.0",
     "file-loader": "^6.2.0",
+    "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.0.0",
     "less": "^4.1.1",
     "less-loader": "^10.0.0",
+    "markdown-loader": "^6.0.0",
     "mini-css-extract-plugin": "^2.4.2",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "react-hot-loader": "^4.13.0",
