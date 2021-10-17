@@ -87,8 +87,8 @@ export class Login extends React.Component {
     }
     private el: HTMLElement;
     render() {
-        return <div className='shy-login-box'>
-            <div className='shy-login-logo'><span>诗云</span></div>
+        return <div className='shy-login-panel'>
+            <div className='shy-login-logo'><a href='/'>诗云</a></div>
             <div className='shy-login' ref={e => this.el = e} >
                 <div className='shy-login-head'><span>登录</span></div>
                 {this.mode == 'phone' && <div className='shy-login-box'>
