@@ -30,6 +30,7 @@ declare module '*.png';
 declare module '*.jpeg';
 declare module '*.webp';
 declare module '*.gif';
+declare module "*.md";
 
 interface File {
   md5?: string

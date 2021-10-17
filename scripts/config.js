@@ -9,6 +9,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
+
 var mode = 'dev';
 if (process.argv.some(s => s == '--pro')) mode = 'pro';
 else if (process.argv.some(s => s == '--beta')) mode = 'beta';
@@ -122,8 +123,21 @@ module.exports = {
                     maxSize: 5 * 1024
                 }
             }
-        }
-        ]
+        }, {
+
+            test: /\.md$/,
+            use: [
+                {
+                    loader: "html-loader",
+                },
+                {
+                    loader: "markdown-loader",
+                    options: {
+                        /* your options here */
+                    }
+                },
+            ],
+        }]
     },
     plugins: [
         // new BundleAnalyzerPlugin(),
