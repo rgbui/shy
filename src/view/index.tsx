@@ -9,12 +9,14 @@ import { PrivateView } from './site/protocol/privacy';
 import { AgreeView } from './site/protocol/service';
 import { RouteView } from './site/route';
 import { SceneView } from './site/scene';
-import { BookView } from './site/shiyun';
 import { WeChatView } from './site/wechat';
 import { ViewSurface } from './surface/view';
 import { Login } from './user/login';
 import { LogOut } from './user/logout';
 import { WorkspaceCreateView } from './workspace/create';
+import "./site/declare";
+import { AsyncComponent } from "rich/component/lib/async.compont"
+var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {

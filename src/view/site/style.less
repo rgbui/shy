@@ -1,4 +1,4 @@
-@site-content-height: calc(100vh - 56px - 260px);
+@site-content-height: calc(100vh - 56px);
 
 .paddingGap {
     @media (min-width: 1200px) {
@@ -18,10 +18,10 @@
 }
 
 .shy-site {
-    width     : 100vw;
-    height    : 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+    width        : 100vw;
+    min-height   : 100vh;
+    // overflow-y: auto;
+    // overflow-x: hidden;
 
     &-head {
         .paddingGap();
@@ -146,28 +146,9 @@
 }
 
 .shy-site-block {
-    // background-color: rgb(205, 219, 233);
-    box-sizing: border-box;
+    // box-sizing: border-box;
+    margin:0px;
+    padding:0px;
     min-height: @site-content-height;
     .paddingGap();
-}
-
-.shy-site-block-slogan {
-    display        : flex;
-    justify-content: center;
-    align-items    : center;
-    flex-direction : column;
-
-    &-text {}
-
-    &-login {
-        width          : 300px;
-        display        : flex;
-        justify-content: flex-start;
-        align-items    : center;
-
-        .shy-input {
-            width: 200px;
-        }
-    }
 }
