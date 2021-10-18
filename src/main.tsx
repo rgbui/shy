@@ -9,7 +9,8 @@ import "./view/supervisor/style.less";
 import "./view/sln/style.less";
 import "./view/user/style.less";
 import { App } from './view';
-
+import { configure } from 'mobx';
+configure({ enforceActions: 'never' })
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
 //     navigator.serviceWorker.register('/service-worker.js').then(registration => {
