@@ -20,7 +20,7 @@ var isDev = mode == 'dev'
 
 let port = 8081;
 let publicPath = `http://localhost:${port}/`;
-if (mode == 'pro') publicPath = `https://shy.red/`;
+if (mode == 'pro') publicPath = `https://static.shy.red/`;
 else if (mode == 'beta') publicPath = `https://beta.shy.red/`;
 
 var API_URL = 'http://127.0.0.1:8888';
