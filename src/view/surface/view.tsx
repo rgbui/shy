@@ -5,7 +5,7 @@ import { SupervisorView } from "../supervisor/view";
 import { MouseDragger } from "rich/src/common/dragger";
 import { CacheKey, yCache } from "../../../net/cache";
 import { Loading } from "rich/component/view/loading";
-import { SiteView } from "../site";
+import { SiteView } from "../site/production";
 export class ViewSurface extends React.Component {
     constructor(props) {
         super(props);

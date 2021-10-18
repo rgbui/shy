@@ -1,0 +1,31 @@
+.shy-site-block-slogan {
+    &-text {
+        margin-top: 40px;
+        &-cursor {
+            width           : 2px;
+            background-color: #000;
+            display         : inline-block;
+            // visibility      : visible;
+            line-height     : 100%;
+            height          : 36px;
+            animation       : ToggleVisible 4s infinite;
+        }
+
+        p {
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            margin         : 10px 0px;
+        }
+    }
+
+    &-login {
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+
+        .shy-input {
+            width: 300px;
+        }
+    }
+}
