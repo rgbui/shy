@@ -10,7 +10,7 @@ import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
 import { inviteCode, phoneCode, phoneRegex } from "../../../net/verify";
 
-export var LoginView = observer(function () {
+export var Login = observer(function () {
     var local = useLocalObservable<{
         step: 'phone' | 'login' | 'register' | 'name',
         phone: string,
@@ -20,6 +20,7 @@ export var LoginView = observer(function () {
         failMsg: string,
         expireCount: number,
         expireTime: any,
+        agree: boolean
     }>(() => {
         return {
             phone: '',
@@ -29,7 +30,8 @@ export var LoginView = observer(function () {
             inviteCode: '',
             failMsg: '',
             expireCount: -1,
-            expireTime: null
+            expireTime: null,
+            agree: false
         }
     })
     var { current: el } = React.useRef<HTMLElement>(null);
@@ -44,6 +46,10 @@ export var LoginView = observer(function () {
         button.disabled = false;
         return true;
     }
+    /**
+     * 输入手机号
+     * @returns 
+     */
     async function phoneSign() {
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
@@ -67,6 +73,9 @@ export var LoginView = observer(function () {
             </div>
         </div>
     }
+    /**
+     * 输入手机验证码
+     */
     async function genCode() {
         if (local.expireCount == -1) {
             local.expireCount = 120;
@@ -95,6 +104,7 @@ export var LoginView = observer(function () {
         if (local.step == 'register') {
             if (!local.inviteCode) return unlockButton() && (local.failMsg = '请输入邀请码');
             if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = '邀请码输入不正确');
+            if (!local.agree) return unlockButton() && (local.failMsg = '不同意诗云相关的服务协议将不能注册');
         }
         var result = await userService.phoneSign(local.phone, local.verifyPhoneCode, local.step == 'register' ? local.inviteCode : undefined);
         if (result.ok == false) local.failMsg = result.warn;
@@ -125,12 +135,19 @@ export var LoginView = observer(function () {
             {local.step == 'register' && <div className='shy-login-box-account'>
                 <Input value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
             </div>}
+            {local.step == 'register' && <div className='shy-login-box-agree'>
+                <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='/service/protocol' target='_blank'>《服务协议》</a>及阅读<a href='/privacy/protocol' target='_blank'>《隐私协议》</a></label>
+            </div>}
             <div className='shy-login-box-button'>
                 <Button size='medium' block onClick={e => loginOrRegister()}>{local.step == 'register' ? '注册' : '登录'}</Button >
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
         </div>
     }
+    /**
+     * 注册在添加用户名
+     * @returns 
+     */
     async function updateName() {
         if (lockButton()) return;
         if (!local.name) return unlockButton() && (local.failMsg = '称呼不能为空');
