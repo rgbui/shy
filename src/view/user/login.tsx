@@ -1,121 +1,168 @@
 import React from "react";
 import { AppLang } from "../../../i18n/enum";
 import { appLangProvider } from "../../../i18n/provider";
-import { SA } from "../../../i18n/view";
 import { SyHistory } from "../history";
 import { CacheKey, sCache } from "../../../net/cache";
 import { surface } from "../surface";
 import { userService } from "../../../services/user";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
+import { observer, useLocalObservable } from "mobx-react";
+import { inviteCode, phoneCode, phoneRegex } from "../../../net/verify";
 
-export class Login extends React.Component {
-    /**
-     * 登录方式
-     */
-    private mode: 'phone' | 'phoneName' | 'phonePwd' | 'weixin' = 'phone';
-    private phone: string = '';
-    private verifyPhoneCode: string = '';
-    private name: string;
-    private codeExpireCount: number = -1;
-    private codeExpireCountTime: any;
-    private signFailMsg: string = '';
-    private updateNameFileMsg: string = '';
-    async generatePhoneCode(event: globalThis.MouseEvent) {
-        var result = await userService.generatePhoneCode(this.phone);
-        if (result.ok) {
-            if (result.data?.code) this.verifyPhoneCode = result.data.code;
-            this.codeExpireCount = 120;
-            if (this.codeExpireCountTime) clearInterval(this.codeExpireCountTime)
-            this.codeExpireCountTime = setInterval(() => {
-                this.codeExpireCount -= 1;
-                if (this.codeExpireCount < 0) {
-                    this.codeExpireCount = -1;
-                    clearInterval(this.codeExpireCountTime)
-                }
-                this.forceUpdate();
-            }, 1000);
-            this.forceUpdate();
+export var LoginView = observer(function () {
+    var local = useLocalObservable<{
+        step: 'phone' | 'login' | 'register' | 'name',
+        phone: string,
+        verifyPhoneCode: string,
+        name: string,
+        inviteCode: string,
+        failMsg: string,
+        expireCount: number,
+        expireTime: any,
+    }>(() => {
+        return {
+            phone: '',
+            verifyPhoneCode: '',
+            step: 'phone',
+            name: '',
+            inviteCode: '',
+            failMsg: '',
+            expireCount: -1,
+            expireTime: null
         }
-        else alert(result.warn);
-    }
-    clear() {
-        if (this.codeExpireCountTime) clearInterval(this.codeExpireCountTime);
-    }
-    async phoneSign(event?: globalThis.MouseEvent) {
-        var button = event ? (event.target as HTMLButtonElement) : (this.el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
+    })
+    var { current: el } = React.useRef<HTMLElement>(null);
+    function lockButton() {
+        var button = (el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
+        if (button.disabled == true) return true;
         button.disabled = true;
-        try {
-            var result = await userService.phoneSign(this.phone, this.verifyPhoneCode);
-            if (result.ok == false) this.signFailMsg = result.warn;
-            else {
-                await sCache.set(CacheKey.token, result.data.token, 180, 'd');
-                Object.assign(surface.user, result.data.user);
-                this.signFailMsg = '';
-                if (result.data.justRegistered == true) this.mode = 'phoneName';
-                else {
-                    this.clear();
-                    return SyHistory.push('/');
-                }
-            }
-        }
-        catch (ex) {
-
-        }
-        button.disabled = false;
-        this.forceUpdate();
+        return false;
     }
-    async inputName(event: globalThis.MouseEvent) {
-        var button = event ? (event.target as HTMLButtonElement) : (this.el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
-        button.disabled = true;
-        try {
-            var rr = await userService.updateName(this.name);
-            if (rr.ok) {
-                surface.updateUser({ name: this.name });
-                {
-                    this.clear();
-                    return SyHistory.push('/');
-                }
-            }
-            else this.updateNameFileMsg = rr.warn;
-        }
-        catch (ex) {
-
-        }
+    function unlockButton() {
+        var button = (el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
         button.disabled = false;
-        this.forceUpdate();
+        return true;
     }
-    private el: HTMLElement;
-    render() {
-        return <div className='shy-login-panel'>
-            <div className='shy-login-logo'><a href='/'>诗云</a></div>
-            <div className='shy-login' ref={e => this.el = e} >
-                <div className='shy-login-head'><span>登录</span></div>
-                {this.mode == 'phone' && <div className='shy-login-box'>
-                    <div className='shy-login-box-account'>
-                        <Input value={this.phone} onChange={e => this.phone = e} placeholder={appLangProvider.getText(AppLang.Phone)}></Input>
-                    </div>
-                    <div className='shy-login-box-code'>
-                        <Input value={this.verifyPhoneCode} placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)} onChange={e => this.verifyPhoneCode = e} onEnter={e => this.phoneSign()} />
-                        {this.codeExpireCount == -1 && <Button size='medium' onClick={e => this.generatePhoneCode(e.nativeEvent)}>获取短信验证码</Button>}
-                        {this.codeExpireCount > -1 && <Button size='medium' >{this.codeExpireCount}s</Button>}
-                    </div>
-                    <div className='shy-login-box-button'>
-                        <Button size='medium' block onClick={e => this.phoneSign(e.nativeEvent)}><SA id={AppLang.Login}></SA></Button >
-                    </div>
-                    {this.signFailMsg && <div className='shy-login-box-fail'>{this.signFailMsg}</div>}
-                </div>}
-                {this.mode == 'phoneName' && <div className='shy-login-box'>
-                    <div className='shy-login-box-code'>
-                        <Input placeholder={appLangProvider.getText(AppLang.PleashName)} value={this.name} onChange={e => this.name = e} onEnter={e => this.phoneSign()} />
-                    </div>
-                    <div className='shy-login-box-button'>
-                        <Button size='medium' block onClick={e => this.inputName(e.nativeEvent)}>欢迎使用诗云</Button>
-                    </div>
-                    {this.updateNameFileMsg && <div className='shy-login-box-fail'>{this.updateNameFileMsg}</div>}
-                </div>
-                }
+    async function phoneSign() {
+        if (lockButton()) return;
+        if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
+        if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
+        var r = await userService.checkPhone(local.phone);
+        if (r && r.ok && r.data) {
+            if (r.data.isUser) local.step = 'login'
+            else local.step = 'register'
+        }
+        else local.failMsg = r.warn;
+        unlockButton();
+    }
+    function renderPhone() {
+        return <div className='shy-login-box'>
+            <div className='shy-login-box-account'>
+                <Input value={local.phone} onEnter={e => phoneSign()} onChange={e => local.phone = e} placeholder={appLangProvider.getText(AppLang.Phone)}></Input>
+            </div>
+            {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
+            <div className='shy-login-box-button'>
+                <Button size='medium' block onClick={e => phoneSign()}>继续</Button >
             </div>
         </div>
     }
-}
+    async function genCode() {
+        if (local.expireCount == -1) {
+            local.expireCount = 120;
+            var result = await userService.generatePhoneCode(local.phone);
+            if (result.ok) {
+                if (result.data?.code) local.verifyPhoneCode = result.data.code;
+                local.expireCount = 120;
+                if (local.expireTime) clearInterval(local.expireTime)
+                local.expireTime = setInterval(() => {
+                    local.expireCount -= 1;
+                    if (local.expireCount < 0) {
+                        local.expireCount = -1;
+                        clearInterval(local.expireTime)
+                    }
+                }, 1000);
+            }
+            else { local.expireCount = -1; local.failMsg = result.warn; }
+        }
+    }
+    async function loginOrRegister() {
+        if (lockButton()) return;
+        if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
+        if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
+        if (!local.verifyPhoneCode) return unlockButton() && (local.failMsg = '请输入手机短信验证码');
+        if (!phoneCode.test(local.phone)) return unlockButton() && (local.failMsg = '手机短信验证码格式不正确');
+        if (local.step == 'register') {
+            if (!local.inviteCode) return unlockButton() && (local.failMsg = '请输入邀请码');
+            if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = '邀请码输入不正确');
+        }
+        var result = await userService.phoneSign(local.phone, local.verifyPhoneCode, local.step == 'register' ? local.inviteCode : undefined);
+        if (result.ok == false) local.failMsg = result.warn;
+        else {
+            await sCache.set(CacheKey.token, result.data.token, 180, 'd');
+            Object.assign(surface.user, result.data.user);
+            local.failMsg = '';
+            if (local.step == 'register') {
+                local.step = 'name';
+            }
+            else {
+                if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
+                return SyHistory.push('/');
+            }
+        }
+        unlockButton();
+    }
+    function renderLogin() {
+        return <div className='shy-login-box'>
+            <div className='shy-login-box-account'>
+                <Input value={local.phone} onChange={e => local.phone = e} placeholder={appLangProvider.getText(AppLang.Phone)}></Input>
+            </div>
+            <div className='shy-login-box-code'>
+                <Input value={local.verifyPhoneCode} placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)} onChange={e => local.verifyPhoneCode = e} onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
+                {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}>获取短信验证码</Button>}
+                {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
+            </div>
+            {local.step == 'register' && <div className='shy-login-box-account'>
+                <Input value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
+            </div>}
+            <div className='shy-login-box-button'>
+                <Button size='medium' block onClick={e => loginOrRegister()}>{local.step == 'register' ? '注册' : '登录'}</Button >
+            </div>
+            {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
+        </div>
+    }
+    async function updateName() {
+        if (lockButton()) return;
+        if (!local.name) return unlockButton() && (local.failMsg = '称呼不能为空');
+        if (local.name.length < 2) return unlockButton() && (local.failMsg = '称呼太短，至少两位');
+        if (local.name.length > 64) return unlockButton() && (local.failMsg = '称呼过长，长度限制在20位');
+        var rr = await userService.updateName(local.name);
+        if (rr.ok) {
+            surface.updateUser({ name: local.name });
+            if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
+            return SyHistory.push('/');
+        }
+        else local.failMsg = rr.warn;
+        unlockButton();
+    }
+    function renderName() {
+        return <div className='shy-login-box'>
+            <div className='shy-login-box-account'>
+                <Input value={local.name} onEnter={e => updateName()} onChange={e => local.phone = e} placeholder={'请输入称呼'}></Input>
+            </div>
+            {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
+            <div className='shy-login-box-button'>
+                <Button size='medium' block onClick={e => updateName()}>保存</Button >
+            </div>
+        </div>
+    }
+    return <div className='shy-login-panel' ref={e => el = e}>
+        <div className='shy-login-logo'><a href='/'>诗云</a></div>
+        <div className='shy-login' ref={e => this.el = e} >
+            <div className='shy-login-head'><span>登录</span></div>
+            {local.step == 'phone' && renderPhone()}
+            {(local.step == 'login' || local.step == 'register') && renderLogin()}
+            {local.step == 'name' && renderName()}
+        </div>
+    </div>
+})
