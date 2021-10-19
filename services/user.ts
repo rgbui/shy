@@ -8,10 +8,14 @@ import { FileType } from "../type";
 import { SockResponse } from "../net/sock/type";
 
 class UserService extends BaseService {
-    async phoneSign(phone: string, code: string) {
+    async phoneSign(phone: string, code: string, usingInvitationCode?: string) {
         var result: SockResponse<{ justRegistered: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: phone, $code: code });
         if (result.ok == false) return result;
-        result = await masterSock.post('/phone/login', { phone, code });
+        result = await masterSock.post('/phone/login', { phone, code, usingInvitationCode });
+        return result;
+    }
+    async checkPhone(phone: string) {
+        var result = await masterSock.post<{ isUser: boolean }, string>('/phone/check', { phone });
         return result;
     }
     async updateName(name: string) {
