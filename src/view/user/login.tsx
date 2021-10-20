@@ -42,8 +42,10 @@ export var Login = observer(function () {
         return false;
     }
     function unlockButton() {
-        var button = (el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
-        button.disabled = false;
+        if (el) {
+            var button = (el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
+            button.disabled = false;
+        }
         return true;
     }
     /**
@@ -65,7 +67,10 @@ export var Login = observer(function () {
     function renderPhone() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.phone} onEnter={e => phoneSign()} onChange={e => local.phone = e} placeholder={appLangProvider.getText(AppLang.Phone)}></Input>
+                <Input value={local.phone}
+                    onEnter={e => phoneSign()}
+                    onChange={e => local.phone = e}
+                    placeholder={'请输入您的手机号'}></Input>
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
@@ -96,17 +101,19 @@ export var Login = observer(function () {
         }
     }
     async function loginOrRegister() {
+        console.log('login or register....');
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
         if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
         if (!local.verifyPhoneCode) return unlockButton() && (local.failMsg = '请输入手机短信验证码');
-        if (!phoneCode.test(local.phone)) return unlockButton() && (local.failMsg = '手机短信验证码格式不正确');
+        if (!phoneCode.test(local.verifyPhoneCode)) return unlockButton() && (local.failMsg = '手机短信验证码格式不正确');
         if (local.step == 'register') {
             if (!local.inviteCode) return unlockButton() && (local.failMsg = '请输入邀请码');
             if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = '邀请码输入不正确');
-            if (!local.agree) return unlockButton() && (local.failMsg = '不同意诗云相关的服务协议将不能注册');
+            if (!local.agree) return unlockButton() && (local.failMsg = '如您不同意诗云相关的服务协议将无法注册!');
         }
         var result = await userService.phoneSign(local.phone, local.verifyPhoneCode, local.step == 'register' ? local.inviteCode : undefined);
+        unlockButton();
         if (result.ok == false) local.failMsg = result.warn;
         else {
             await sCache.set(CacheKey.token, result.data.token, 180, 'd');
@@ -120,15 +127,17 @@ export var Login = observer(function () {
                 return SyHistory.push('/');
             }
         }
-        unlockButton();
     }
     function renderLogin() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.phone} onChange={e => local.phone = e} placeholder={appLangProvider.getText(AppLang.Phone)}></Input>
+                <Input value={local.phone} onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
             </div>
             <div className='shy-login-box-code'>
-                <Input value={local.verifyPhoneCode} placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)} onChange={e => local.verifyPhoneCode = e} onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
+                <Input value={local.verifyPhoneCode}
+                    placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)}
+                    onChange={e => local.verifyPhoneCode = e}
+                    onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
                 {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}>获取短信验证码</Button>}
                 {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
             </div>
@@ -136,7 +145,7 @@ export var Login = observer(function () {
                 <Input value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
             </div>}
             {local.step == 'register' && <div className='shy-login-box-agree'>
-                <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='/service/protocol' target='_blank'>《服务协议》</a>及阅读<a href='/privacy/protocol' target='_blank'>《隐私协议》</a></label>
+                <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='/service/protocol' target='_blank'>《服务协议》</a>及<a href='/privacy/protocol' target='_blank'>《隐私协议》</a></label>
             </div>}
             <div className='shy-login-box-button'>
                 <Button size='medium' block onClick={e => loginOrRegister()}>{local.step == 'register' ? '注册' : '登录'}</Button >
@@ -165,7 +174,7 @@ export var Login = observer(function () {
     function renderName() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.name} onEnter={e => updateName()} onChange={e => local.phone = e} placeholder={'请输入称呼'}></Input>
+                <Input value={local.name} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={'请输入称呼'}></Input>
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
@@ -175,7 +184,7 @@ export var Login = observer(function () {
     }
     return <div className='shy-login-panel' ref={e => el = e}>
         <div className='shy-login-logo'><a href='/'>诗云</a></div>
-        <div className='shy-login' ref={e => this.el = e} >
+        <div className='shy-login'  >
             <div className='shy-login-head'><span>登录</span></div>
             {local.step == 'phone' && renderPhone()}
             {(local.step == 'login' || local.step == 'register') && renderLogin()}
