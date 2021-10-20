@@ -5,31 +5,33 @@ import { Input } from "rich/component/view/input";
 import { SyHistory } from "../history";
 import { workspaceService } from "../../../services/workspace";
 import "./style.less";
-export class WorkspaceCreateView extends React.Component {
-    private text: string = '';
-    private failTip: string = '';
-    setText(text: string) {
-        this.text = this.text;
-    }
-    async save(event: React.MouseEvent) {
-        var button = event.nativeEvent.target as HTMLButtonElement;
-        button.disabled = true;
-        try {
-            var rr = await workspaceService.createWorkspace({ text: this.text })
+import { observer, useLocalObservable } from "mobx-react";
+export var WorkspaceCreateView = observer(function () {
+    var local = useLocalObservable<{ fail: string, text: string }>(() => {
+        return {
+            fail: '',
+            text: ''
+        }
+    })
+    var { current: button } = React.useRef<Button>(null);
+    async function save() {
+        if (!local.text) {
+            local.fail = '空间名称不能为空'
+        }
+        else if (local.text.length > 32)
+            local.fail = '空间名称过长'
+        else {
+            button.disabled = true;
+            var rr = await workspaceService.createWorkspace({ text: local.text });
+            button.disabled = false;
             if (rr.ok) return SyHistory.push(generatePath('/ws/:id', { id: rr.data.sn }));
             else this.failTip = rr.warn;
-            this.forceUpdate();
         }
-        catch (ex) {
+    }
+    return <div className='shy-ws-create'>
+        <div className='shy-ws-create-text'><Input onEnter={e => save()} value={local.text} onChange={e => local.text = e} /></div>
+        <div className='shy-ws-create-button'><Button ref={e => button = e} onClick={e => save()}>创建空间</Button></div>
+        <div className='shy-ws-create-fail-tip'>{local.fail}</div>
+    </div>
+})
 
-        }
-        button.disabled = false;
-    }
-    render() {
-        return <div className='shy-ws-create'>
-            <div className='shy-ws-create-text'><Input value={this.text} onChange={e => this.setText(e)} /></div>
-            <div className='shy-ws-create-fail-tip'>{this.failTip}</div>
-            <div className='shy-ws-create-button'><Button onClick={e => this.save(e)}>创建空间</Button></div>
-        </div>
-    }
-}
