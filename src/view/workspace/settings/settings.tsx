@@ -93,7 +93,10 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                 </Row> */}
             </div>
             <div className='shy-settings-content-form-footer'>
-                <Space align='end' style={{ height: '100%' }}><Button >取消</Button><Button>保存</Button></Space>
+                <Space align='end' style={{ height: '100%' }}>
+                    <Button onClick={e => this.onClose()}>取消</Button>
+                    <Button onClick={e => this.onSave()}>保存</Button>
+                </Space>
             </div>
         </div>
     }
