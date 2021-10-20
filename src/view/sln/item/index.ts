@@ -176,7 +176,8 @@ export class PageItem {
         items.push({
             name: PageItemDirective.copy,
             icon: copy,
-            text: '拷贝'
+            text: '拷贝',
+            disabled: true
         });
         items.push({
             name: PageItemDirective.rename,
@@ -189,24 +190,26 @@ export class PageItem {
         items.push({
             name: PageItemDirective.link,
             icon: link,
-            text: '链接'
+            text: '链接',
+            disabled: true
         });
         items.push({
             name: PageItemDirective.cut,
             icon: cut,
-            text: '剪贴'
+            text: '剪贴',
+            disabled: true
         });
-        items.push({
-            type: MenuItemTypeValue.divide,
-        });
-        items.push({
-            type: MenuItemTypeValue.text,
-            text: '编辑人kanhai'
-        });
-        items.push({
-            type: MenuItemTypeValue.text,
-            text: '编辑于2021.19.20'
-        });
+        // items.push({
+        //     type: MenuItemTypeValue.divide,
+        // });
+        // items.push({
+        //     type: MenuItemTypeValue.text,
+        //     text: '编辑人kanhai'
+        // });
+        // items.push({
+        //     type: MenuItemTypeValue.text,
+        //     text: '编辑于2021.19.20'
+        // });
         return items;
     }
     onContextmenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
