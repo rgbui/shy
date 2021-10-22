@@ -8,8 +8,13 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
-    
-## 0.6.4-beta
+## 0.6.41-beta
+`2021-10-21`  
+* 完善用户注册流程
+* 修复右边侧栏鼠标移上去不显示添加页面等问题
+
+   
+## 0.6.4-pro
 `2021-10-17`  
 * 新增用户邀请码
 * 新增诗云官网
