@@ -39,6 +39,13 @@ export class PageItem {
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
     store: PageStore;
+    /**
+    * 是否为公开
+    * net 互联网公开
+    * nas 网络存储
+    * local 本地存储
+    */
+    share: 'net' | 'nas' | 'local';
     constructor() {
         this.store = new PageStore(this);
     }
