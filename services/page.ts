@@ -2,7 +2,7 @@ import { UserAction } from "rich/src/history/action";
 import { sockSync } from "../net/primus";
 import { PageItem } from "../src/view/sln/item";
 import JSZip from 'jszip';
-import { db, page_local_sequence, page_snapshoot } from "../net/db";
+import { db, page_current_sequence, page_snapshoot } from "../net/db";
 import { util } from "rich/util/util";
 import { ActionDirective } from "rich/src/history/declare";
 import { log } from "../src/common/log";
@@ -12,6 +12,7 @@ import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
 import { userSock } from "../net/sock";
 import { XhrReadFileBlob } from "../src/util/file";
+
 export class PageStore {
     constructor(private item: PageItem) { }
     /**
@@ -19,7 +20,7 @@ export class PageStore {
      * @param userAction 
      */
     async saveHistory(userAction: UserAction) {
-        var directive = typeof userAction.directive == 'number' ? ActionDirective[userAction.directive] : ActionDirective;
+        var directive: string = (typeof userAction.directive == 'number' ? ActionDirective[userAction.directive] : ActionDirective) as any;
         try {
             var r = await sockSync.post<{ sequence: number, id: string }, string>('/page/useraction', {
                 wsId: this.item.workspaceId,
@@ -36,24 +37,17 @@ export class PageStore {
     }
     private localPageSnapshootId: string;
     private userActionTriggerCount = 0;
-    async savePageContent(userAction: UserAction, fn: () => Promise<any>) {
-        var data = await fn();
-        var zip = new JSZip();
-        zip.file("page.shy", JSON.stringify(data));
-        var zipFile = await zip.generateAsync({
-            type: 'blob',
-            compression: "DEFLATE" // <-- here 
-        });
+    async savePageContent(userAction: UserAction, file: Blob) {
         if (this.localPageSnapshootId) {
             await new DbService<page_snapshoot>('page_snapshoot').update({ id: this.localPageSnapshootId }, {
-                content: zipFile,
-                endSequence: userAction.sequence
+                content: file,
+                end_sequence: userAction.sequence
             });
-            await new DbService<page_local_sequence>('page_local_sequence').save({
-                item_url: this.item_url
-            }, { userActionSequence: userAction.sequence }, {
+            await new DbService<page_current_sequence>('page_current_sequence').save({
+                page_url: this.page_url
+            }, { operator_sequence: userAction.sequence }, {
                 id: util.guid(),
-                item_url: this.item_url,
+                page_url: this.page_url,
                 creater: surface.user?.id || null,
                 createDate: Date.now()
             });
@@ -64,26 +58,26 @@ export class PageStore {
                 id: this.localPageSnapshootId,
                 creater: surface.user?.id,
                 createDate: new Date().getTime(),
-                item_url: this.item_url,
-                content: zipFile,
-                beginSequence: userAction.sequence,
-                endSequence: userAction.sequence
+                page_url: this.page_url,
+                content: file,
+                begin_sequence: userAction.sequence,
+                end_sequence: userAction.sequence
             });
-            await new DbService<page_local_sequence>('page_local_sequence').save({
-                item_url: this.item_url,
+            await new DbService<page_current_sequence>('page_current_sequence').save({
+                page_url: this.page_url
             }, {
-                userActionSequence: userAction.sequence,
+                operator_sequence: userAction.sequence,
                 page_snapshoot_id: this.localPageSnapshootId
             }, {
                 id: util.guid(),
-                item_url: this.item_url,
+                page_url: this.page_url,
                 creater: surface.user?.id || null,
                 createDate: Date.now()
             });
         }
         this.userActionTriggerCount += 1;
-        if (this.userActionTriggerCount > 2) {
-            await this.storePageContent();
+        if (this.userActionTriggerCount > 200) {
+            this.storePageContent();
         }
     }
     private isStorePageContent: boolean = false;
@@ -97,19 +91,19 @@ export class PageStore {
                 wsId: this.item.workspaceId,
                 pageId: this.item.id,
                 file: r.data,
-                beginSequence: ps.beginSequence,
-                endSequence: ps.endSequence
+                begin_sequence: ps.begin_sequence,
+                end_sequence: ps.end_sequence
             });
             if (userResult.data.sequence) {
                 await new DbService<page_snapshoot>('page_snapshoot').update({ id: this.localPageSnapshootId }, { sequence: userResult.data.sequence })
-                await new DbService<page_local_sequence>('page_local_sequence').save(
+                await new DbService<page_current_sequence>('page_current_sequence').save(
                     {
-                        item_url: this.item_url,
+                        page_url: this.page_url,
                     },
-                    { pageSnapshootSequence: userResult.data.sequence },
+                    { page_sequence: userResult.data.sequence },
                     {
                         id: util.guid(),
-                        item_url: this.item_url,
+                        page_url: this.page_url,
                         creater: surface.user?.id || null,
                         createDate: Date.now()
                     });
@@ -122,58 +116,45 @@ export class PageStore {
     /**
      * 获取文档内容
      */
-    async getPageContent(): Promise<{ content?: Record<string, any>, actions?: UserAction[] }> {
-        var local = await new DbService<page_local_sequence>('page_local_sequence').findOne({ item_url: this.item_url, });
+    async getPageContent(): Promise<{ file?: Blob, actions?: UserAction[] }> {
+        var local = await new DbService<page_current_sequence>('page_current_sequence').findOne({ page_url: this.page_url, });
         if (local?.page_snapshoot_id) this.localPageSnapshootId = local.page_snapshoot_id;
-        var r = await userSock.get<{ snapshoot: { file: { url: string } }, actions: UserAction[] }>('/page/content', {
+        var r = await userSock.get<{ sync: boolean, snapshoot: { file: { url: string } }, actions: UserAction[] }>('/page/content', {
             wsId: this.item.workspaceId,
             pageId: this.item.id,
-            userActionSequence: local?.userActionSequence,
-            pageSnapshootSequence: local?.pageSnapshootSequence
+            operator_sequence: local?.operator_sequence,
+            page_sequence: local?.page_sequence
         });
         if (r.ok && r.data) {
-            if (r.data.snapshoot) {
-                console.log(r.data.snapshoot);
+            if (r.data.sync) {
                 try {
-                    var contentBlob = await XhrReadFileBlob(r.data.snapshoot.file.url);
-                    var zip = new JSZip();
-                    var rj = await zip.loadAsync(contentBlob);
-                    var str = await rj.file('page.shy').async("string");
-                    return { actions: r.data.actions, content: JSON.parse(str) };
+                    var file;
+                    if (r.data.snapshoot) {
+                        file = await XhrReadFileBlob(r.data.snapshoot.file.url);
+                    }
+                    return { actions: r.data.actions || [], file };
                 }
                 catch (ex) {
                     console.log(ex);
                 }
-                //需要读取网络上面的文档url
-
             }
             else {
-                if (Array.isArray(r.data.actions) && r.data.actions.length > 0) {
-                    //说明没有snapshoot,只记录了page
-                    return { actions: r.data.actions };
-                }
-                else {
-                    if (local) {
-                        var d = await (db as any).page_snapshoot.where({ id: local?.page_snapshoot_id }).first();
-                        if (d) {
-                            var zip = new JSZip();
-                            var rj = await zip.loadAsync(d.content);
-                            var str = await rj.file('page.shy').async("string");
-                            return { content: JSON.parse(str) };
-                        }
-                        else {
-                            delete this.localPageSnapshootId;
-                            return {}
-                        }
+                if (local) {
+                    var d = await (db as any).page_snapshoot.where({ id: local?.page_snapshoot_id }).first();
+                    if (d) {
+                        return { file: d.content };
                     }
-                    else return {}
+                    else {
+                        delete this.localPageSnapshootId;
+                        return {}
+                    }
                 }
+                else return {}
             }
         }
         else window.Toast.error('网络错误');
-
     }
-    get item_url() {
+    get page_url() {
         return this.item.workspaceId + "." + this.item.id;
     }
 }

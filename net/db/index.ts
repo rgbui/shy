@@ -1,30 +1,32 @@
 import { Dexie } from "dexie";
 export var db = new Dexie("shy");
-db.version(1).stores({
-    page_snapshoot: 'id,creater,createDate,item_url,sequence,preSequence,beginSequence,endSequence,file,content',
-    page_local_sequence: 'id,creater,createDate,item_url,page_snapshoot_id,userActionSequence,pageSnapshootSequence',
+db.version(3).stores({
+    page_snapshoot: 'id,creater,createDate,page_url,sequence,begin_sequence,end_sequence,file,content',
+    page_current_sequence: 'id,creater,createDate,page_url,page_snapshoot_id,operator_sequence,page_sequence',
     log: 'id,creater,createDate,level,msg,remark,isReport'
 });
+console.log(db);
+
+
 export interface page_snapshoot {
     id: string;
     creater: string;
     createDate: number;
-    item_url: string;
-    preSequence: number;
+    page_url: string;
     sequence: number;
-    beginSequence: number;
-    endSequence: number;
+    begin_sequence: number;
+    end_sequence: number;
     file?: string;
     content?: Blob
 }
-export interface page_local_sequence {
+export interface page_current_sequence {
     id: string;
     creater: string;
     createDate: number;
-    item_url: string;
+    page_url: string;
     page_snapshoot_id: string;
-    userActionSequence: number;
-    pageSnapshootSequence: number;
+    operator_sequence: number;
+    page_sequence: number;
 }
 export interface db_log {
     id: string;
