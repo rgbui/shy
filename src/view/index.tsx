@@ -16,17 +16,20 @@ import { LogOut } from './user/logout';
 import { WorkspaceCreateView } from './workspace/create';
 import "./site/declare";
 import { AsyncComponent } from "rich/component/lib/async.compont"
+import { PageDisplay } from './page';
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
-export function App() {
+export function App()
+{
   let [isLoad, setLoad] = React.useState(false);
-  async function load() {
+  async function load()
+  {
     await appLangProvider.import();
     await userDeviceService.register();
     setLoad(true);
   }
   React.useEffect(() => {
     load();
-  }, [])
+  },[])
   return <div className='shy-app'>
     {!isLoad && <div className='shy-app-load'></div>}
     {isLoad && <Router history={SyHistory}>
@@ -43,6 +46,7 @@ export function App() {
       <Route path='/shiyun' exact component={BookView} />
       <Route path='/ws/:id' exact component={ViewSurface}></Route>
       <Route path='/page/:id' exact component={ViewSurface}></Route>
+      <Route path='/view/:id' exact component={PageDisplay}></Route>
       <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
       <Route path='/test/component' exact component={Component}></Route>
     </Router>}
