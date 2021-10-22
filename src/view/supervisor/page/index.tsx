@@ -30,7 +30,7 @@ export class DocPage extends React.Component<{ item: PageItem }>{
         });
         page.on(PageDirective.history, async function (action) {
             await self.item.store.saveHistory(action);
-            await self.item.store.savePageContent(action, async () => page.get());
+            await self.item.store.savePageContent(action, await page.getFile());
         });
         page.on(PageDirective.createDefaultTableSchema, async (data) => {
             var r = await workspaceService.createDefaultTableSchema(data);
@@ -50,9 +50,8 @@ export class DocPage extends React.Component<{ item: PageItem }>{
         page.on(PageDirective.loadPageInfo, async () => {
             return { text: self.item.text, icon: self.item.icon, id: self.item.id };
         });
-        await page.load(pd.content || null);
-        if (Array.isArray(pd.actions) && pd.actions.length > 0)
-            await page.loadUserActions(pd.actions);
+        await page.loadFile(pd.file)
+        if (Array.isArray(pd.actions) && pd.actions.length > 0) await page.loadUserActions(pd.actions);
         page.render();
     }
     async componentWillUnmount() {
