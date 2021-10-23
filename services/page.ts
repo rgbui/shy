@@ -157,4 +157,12 @@ export class PageStore {
     get page_url() {
         return this.item.workspaceId + "." + this.item.id;
     }
+    /**
+     * 强制保存
+     */
+    async forceStorePageContent() {
+        console.log('fore');
+        if (this.localPageSnapshootId)
+            await this.storePageContent();
+    }
 }
