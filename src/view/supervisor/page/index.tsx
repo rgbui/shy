@@ -16,7 +16,7 @@ export class DocPage extends React.Component<{ item: PageItem }>{
         var self = this;
         var pd = await self.item.store.getPageContent();
         var page = new Page(this.el, {
-            user: surface.user
+            user: surface.user as any
         });
         this.page = page;
         page.on(PageDirective.blur, function (ev) {
@@ -49,6 +49,9 @@ export class DocPage extends React.Component<{ item: PageItem }>{
         });
         page.on(PageDirective.loadPageInfo, async () => {
             return { text: self.item.text, icon: self.item.icon, id: self.item.id };
+        });
+        page.on(PageDirective.save, async () => {
+            await self.item.store.forceStorePageContent();
         });
         await page.loadFile(pd.file)
         if (Array.isArray(pd.actions) && pd.actions.length > 0) await page.loadUserActions(pd.actions);
