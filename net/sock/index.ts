@@ -130,6 +130,10 @@ class Sock {
         var url: string = urls[0];
         for (let i = 1; i < urls.length; i++) {
             var current = urls[i];
+            if (current.startsWith('http')) {
+                url = current;
+                continue;
+            }
             if (url.endsWith('/') && current.startsWith('/')) {
                 url = url + current.slice(1);
             }
