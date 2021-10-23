@@ -1,6 +1,6 @@
 {
   "name": "shy.app",
-  "version": "0.6.41-beta",
+  "version": "0.6.42-beta",
   "description": "https://shy.live",
   "main": "index.js",
   "scripts": {

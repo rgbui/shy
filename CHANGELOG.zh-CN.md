@@ -8,6 +8,12 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.42-beta
+`2021-10-23`  
+* 实现分享文档至互联网的功能
+* 修复文本保存丢失的问题
+* 修复其它问题若干
+
 ## 0.6.41-beta
 `2021-10-21`  
 * 完善用户注册流程

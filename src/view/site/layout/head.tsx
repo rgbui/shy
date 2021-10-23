@@ -1,5 +1,4 @@
 import { observer } from "mobx-react";
-
 import React from 'react';
 import { Link } from "react-router-dom";
 import { config } from "../../../common/config";
@@ -7,8 +6,8 @@ export var HeadView = observer(function () {
     return <div className='shy-site-head'>
         <a className='shy-site-head-logo' href='/'>
             <span style={{ fontSize: 48, display: 'inline-block', marginRight: 4 }}>😛</span>
-            <h2>诗云</h2>
-            {!config.isPro&&<em className='shy-site-head-beta'>beta</em>}
+            <h3 style={{ fontSize: 24 }}>诗云</h3>
+            {!config.isPro && <em className='shy-site-head-beta'>beta</em>}
         </a>
         <div className='shy-site-head-navs'>
             <a href='/'>产品介绍</a>
