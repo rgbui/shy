@@ -18,7 +18,7 @@ export var SiteView = observer(function () {
         }
     })
     function toLogin() {
-        SyHistory.push('/sign')
+        SyHistory.push('/sign', { phone })
     }
     async function setDo() {
         local.text = works[local.at];

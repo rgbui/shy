@@ -9,6 +9,7 @@ import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
 import { inviteCode, phoneCode, phoneRegex } from "../../../net/verify";
+import { useLocation } from "react-router-dom";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -101,7 +102,6 @@ export var Login = observer(function () {
         }
     }
     async function loginOrRegister() {
-        console.log('login or register....');
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
         if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
@@ -182,6 +182,13 @@ export var Login = observer(function () {
             </div>
         </div>
     }
+    let location = useLocation();
+    React.useEffect(()=>{
+        if ((location?.state as any)?.phone) {
+            local.phone = (location?.state as any)?.phone;
+            phoneSign()
+        }
+    },[]);
     return <div className='shy-login-panel' ref={e => el = e}>
         <div className='shy-login-logo'><a href='/'>诗云</a></div>
         <div className='shy-login'  >
