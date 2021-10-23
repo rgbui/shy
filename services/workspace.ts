@@ -84,6 +84,10 @@ class WorkspaceService extends BaseService {
             }
         }
     }
+    async getPage(id: string) {
+        var page = await masterSock.get<{page:Partial<PageItem>}, string>('/page/query/:id', { id });
+        return page;
+    }
     async updatePage(id: string, data: Record<string, any>) {
         var rr = await masterSock.post('/page/update/:id', {
             id,
