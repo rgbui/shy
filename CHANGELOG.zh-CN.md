@@ -8,6 +8,11 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.43-beta
+`2021-10-24`  
+* 实现侧边栏功能
+* 实现登录、注册手机短信验证
+
 ## 0.6.42-beta
 `2021-10-23`  
 * 实现分享文档至互联网的功能
