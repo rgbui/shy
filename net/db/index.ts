@@ -5,9 +5,6 @@ db.version(3).stores({
     page_current_sequence: 'id,creater,createDate,page_url,page_snapshoot_id,operator_sequence,page_sequence',
     log: 'id,creater,createDate,level,msg,remark,isReport'
 });
-console.log(db);
-
-
 export interface page_snapshoot {
     id: string;
     creater: string;
