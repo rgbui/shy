@@ -44,7 +44,7 @@ export class SlnView extends React.Component {
                 <div className='shy-ws-items'>
                     {surface.workspace.childs.map(ws => {
                         var View: typeof PageView = getMimeViewComponent(ws.mime);
-                        return <View ref={e => ws.view = e} key={ws.id} item={ws} deep={0} ></View>
+                        return <View ref={e => ws.view = e} key={ws.id} item={ws} deep={-1} ></View>
                     })}
                 </div>
             </div>}

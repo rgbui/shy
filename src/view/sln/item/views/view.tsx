@@ -65,7 +65,7 @@ export class PageItemView extends PageView {
         var self = this;
         var item = this.props.item;
         var style: Record<string, any> = {};
-        style.paddingLeft = 10 + (this.props.deep || 0) * 15;
+        style.paddingLeft = 5 + (this.props.deep || 0) * 15;
         var isInEdit = this.item.isInEdit;
         return <div className='shy-ws-item'>
             <div className={'shy-ws-item-page' + (this.item.isSelected ? " shy-ws-item-page-selected" : "")}
