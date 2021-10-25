@@ -15,7 +15,7 @@ export class DocPage extends React.Component<{ item: PageItem }>{
     async componentDidMount() {
         var self = this;
         var pd = await self.item.store.getPageContent();
-        var page = new Page(this.el, {
+        var page = new Page(this.el,{
             user: surface.user as any
         });
         this.page = page;
