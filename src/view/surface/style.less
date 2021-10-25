@@ -5,11 +5,69 @@
     width          : 100vw;
     height         : 100vh;
 
+    .shy-sidebar {
+        width           : 50px;
+        flex-shrink     : 0;
+        flex-grow       : 0;
+        background-color: rgb(238, 238, 238);
+        display         : flex;
+        justify-content : flex-start;
+        align-items     : center;
+        flex-direction  : column;
+
+        &-top {
+            flex-grow      : 1.0;
+            flex-shrink    : 1;
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+            flex-direction : column;
+            padding-top    : 15px;
+
+            >* {
+                margin-bottom: 10px;
+                color        : rgba(55, 53, 47, 0.6);
+                fill         : currentColor;
+                stroke       : currentColor;
+                &.shy-icon {
+                    border-radius: 50%;
+                }
+                
+                &.hover {
+                    color: #e16259;
+                    //color: rgba(55, 53, 47, 0.8);
+                }
+            }
+        }
+
+        &-bottom {
+            height         : 80px;
+            flex-shrink    : 0;
+            display        : flex;
+            justify-content: flex-end;
+            align-items    : center;
+            flex-direction : column;
+            padding-bottom : 20px;
+
+            >* {
+                margin-top: 10px;
+                color     : rgba(55, 53, 47, 0.6);
+                fill      : currentColor;
+
+                &.hover {
+                    color: red;
+                }
+            }
+        }
+    }
+
     .shy-slide {
-        width      : 200px;
-        flex-shrink: 0;
-        background : rgb(247, 246, 243);
-        position   : relative;
+        width          : 200px;
+        box-sizing     : border-box;
+        flex-shrink    : 0;
+        background     : rgb(247, 247, 247);
+        position       : relative;
+        // border-right: 1px solid rgb(224, 224, 224);
 
         &-resize {
             position  : absolute;
@@ -58,7 +116,9 @@
     }
 
     .shy-content {
-        flex-grow: 1.0;
+        flex-grow       : 1.0;
+        flex-shrink     : 1;
+        background-color: rgb(243, 243, 243);
     }
 
     &-loading {

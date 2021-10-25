@@ -6,6 +6,7 @@ import { MouseDragger } from "rich/src/common/dragger";
 import { CacheKey, yCache } from "../../../net/cache";
 import { Loading } from "rich/component/view/loading";
 import { SiteView } from "../site/production";
+import { SideBar } from "./sidebar";
 export class ViewSurface extends React.Component {
     constructor(props) {
         super(props);
@@ -64,6 +65,7 @@ export class ViewSurface extends React.Component {
         if (!surface.user.isSign) return <SiteView></SiteView>
         return <div className='shy-surface'>{
             surface.isSuccessfullyLoaded && <>
+                {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
                 <div
                     onMouseLeave={e => this.mouseleave(e)}
                     onMouseEnter={e => this.mousenter(e)}

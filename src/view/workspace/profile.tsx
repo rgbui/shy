@@ -24,9 +24,9 @@ export class WorkspaceProfile extends React.Component<{ workspace: Workspace }>{
     el: HTMLElement;
     render() {
         return <div className='shy-ws-profile' ref={e => this.el = e} onMouseDown={e => this.mousedown(e)}>
-            <div className='shy-ws-profile-face'>
+            {surface.config.showSideBar != true && <div className='shy-ws-profile-face'>
                 <Avatar circle size={30} icon={this.workspace.icon} text={this.workspace.text}></Avatar>
-            </div>
+            </div>}
             <div className='shy-ws-profile-info'>
                 <span>{this.workspace.text}</span>
                 <Icon size={12} icon={ExpandSvg}></Icon>

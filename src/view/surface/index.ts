@@ -29,6 +29,11 @@ class Surface extends Events {
      */
     isSuccessfullyLoaded: boolean = false;
     isShowSln: boolean = true;
+    config: {
+        showSideBar: boolean
+    } = {
+            showSideBar: true
+        }
     private init() {
         this.sln.on(SlnDirective.togglePageItem, async (item) => {
             await workspaceService.togglePage(item);
