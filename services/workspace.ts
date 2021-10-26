@@ -13,21 +13,22 @@ class WorkspaceService extends BaseService {
      * 主要是通过不同的网址来计算读取相应的workspace空间
      */
     async loadWorkSpace() {
-        var pageId = currentParams('/page/:id')?.id;
-        var local = await sCache.get(CacheKey.workspaceId);
-        var domain = location.host == 'shy.live' ? undefined : location.host;
-        var wsId = currentParams('/ws/:id')?.id;
-        if (wsId) local = undefined;
-        if (pageId && !wsId) {
-            var page = await masterSock.get<Partial<PageItem>, string>('/page/query/:id', { id: pageId });
-            if (page) {
-                wsId = page.data.workspaceId;
-            }
+        var domain, pageId, sn, wsId;
+        if (location.host && /[\da-z]+\.shy\.(red|live)/.test(location.host)) {
+            domain = location.host;
+        }
+        pageId = currentParams('/page/:id')?.id;
+        if (!domain && !pageId) {
+            sn = currentParams('/ws/:id')?.id;
+        }
+        if (!domain && !pageId && !sn) {
+            wsId = await sCache.get(CacheKey.workspaceId);
         }
         return await masterSock.get<{ toId?: string, toSn?: number, workspace: Workspace, users: any[] }, string>('/workspace/load', {
-            local: local,
+            wsId,
+            sn,
             domain,
-            sn: wsId
+            pageId,
         })
     }
     async getWorkspaces() {
@@ -85,7 +86,7 @@ class WorkspaceService extends BaseService {
         }
     }
     async getPage(id: string) {
-        var page = await masterSock.get<{page:Partial<PageItem>}, string>('/page/query/:id', { id });
+        var page = await masterSock.get<{ page: Partial<PageItem> }, string>('/page/query/:id', { id });
         return page;
     }
     async updatePage(id: string, data: Record<string, any>) {
