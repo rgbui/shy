@@ -1,12 +1,12 @@
 .shy-supervisor-bar {
-    position       : absolute;
-    left           : 0px;
-    right          : 0px;
-    z-index        : 1111;
-    height         : 45px;
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : center;
+    position          : absolute;
+    left              : 0px;
+    right             : 0px;
+    z-index           : 1111;
+    height            : 45px;
+    display           : flex;
+    justify-content   : flex-start;
+    align-items       : center;
     // background     : white;
 
     &-menu {
@@ -49,6 +49,7 @@
             justify-content: center;
             align-items    : center;
             color          : rgb(55, 53, 47);
+
             &:hover {
                 background-color: rgba(55, 53, 47, 0.08);
             }
@@ -71,16 +72,17 @@
     margin-left: 4px;
 
     &-item {
-        display      : inline-flex;
-        padding-left : 6px;
-        padding-right: 6px;
-        color        : rgb(55, 53, 47);
-        white-space  : nowrap;
-        height       : 24px;
-        border-radius: 3px;
-        cursor       : pointer;
+        display        : inline-flex;
+        padding-left   : 6px;
+        padding-right  : 6px;
+        color          : rgb(55, 53, 47);
+        white-space    : nowrap;
+        height         : 24px;
+        border-radius  : 3px;
+        cursor         : pointer;
         align-items    : center;
         justify-content: flex-start;
+
         .shy-icon {
             user-select    : none;
             transition     : background 20ms ease-in 0s;
@@ -94,7 +96,14 @@
             fill           : rgba(55, 53, 47, .4);
         }
 
-        a { color          : rgba(55, 53, 47, .4);}
+        a {
+            color        : rgba(55, 53, 47, .4);
+            display      : inline-block;
+            max-width    : 100px;
+            line-height  : 20px;
+            overflow     : hidden;
+            text-overflow: ellipsis;
+        }
 
         &:hover {
             background-color: rgba(55, 53, 47, 0.08);

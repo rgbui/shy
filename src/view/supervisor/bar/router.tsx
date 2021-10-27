@@ -12,6 +12,19 @@ export class PageRouter extends React.Component {
         if (this.supervisor.item === item) return;
         messageChannel.fire(Directive.OpenPageItem, item);
     }
+    componentDidMount() {
+        messageChannel.on(Directive.UpdatePageItem, this.changePageInfo);
+    }
+    componentWillUnmount() {
+        messageChannel.off(Directive.UpdatePageItem, this.changePageInfo);
+    }
+    changePageInfo = (id: string, pageInfo) => {
+        var pa = this.supervisor.item.closest(g => g.id == id);
+        if (pa) {
+            Object.assign(pa, pageInfo);
+            this.forceUpdate();
+        }
+    }
     render() {
         var item = this.supervisor.item;
         if (item) {
@@ -19,7 +32,7 @@ export class PageRouter extends React.Component {
             var pa = item.parent;
             if (pa.mime != Mime.page) pa = null;
             if (rootItem && rootItem == pa) pa = null;
-            var ra = (item: PageItem, split = false) => <><span onMouseDown={e => this.onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon ? item.icon : PageSvg} size={18}></Icon><a>{item.text}</a></span>{split && <em>/</em>}</>;
+            var ra = (item: PageItem, split = false) => <><span onMouseDown={e => this.onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon ? item.icon : PageSvg} size={18}></Icon><a className='shy-supervisor-bar-router-item-title'>{item.text}</a></span>{split && <em>/</em>}</>;
             return <div className='shy-supervisor-bar-routers'>
                 {rootItem && ra(rootItem, true)}
                 {pa && pa.parent != rootItem && rootItem && <><label>...</label><em>/</em></>}
