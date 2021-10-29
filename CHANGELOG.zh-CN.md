@@ -8,6 +8,9 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.442-pro
+  `2021-10-29`  
+  * 补丁修复pro版bug
 ## 0.6.441-pro
   `2021-10-28`  
   * 发布pro版，用于编辑诗云操作手册
@@ -15,7 +18,7 @@
 ## 0.6.44-beta
 `2021-10-28`  
 * 修复编辑文档标题不同步的问题
-* 修复fontsome图标不能选择的问题
+* 修复font-awesome图标不能选择的问题
 * 新增word版面
 
 ## 0.6.43-beta

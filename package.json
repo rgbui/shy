@@ -1,6 +1,6 @@
 {
   "name": "shy.app",
-  "version": "0.6.441-pro",
+  "version": "0.6.442-pro",
   "description": "https://shy.live",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "dexie": "^3.0.3",
     "jszip": "^3.7.1",
     "katex": "^0.12.0",
+    "loadsh": "0.0.4",
     "mobx": "^6.3.5",
     "mobx-react": "^7.2.0",
     "prismjs": "^1.23.0",
