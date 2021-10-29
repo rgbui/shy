@@ -4,9 +4,9 @@ import { Icon } from 'rich/component/view/icon';
 import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';
 import { PageItem } from '../../sln/item';
-import { Mime } from '../../sln/item/mime';
 import { surface } from '../..';
-import PageSvg from "../../../assert/svg/page.svg";
+import PageSvg from "../../../../assert/svg/page.svg";
+import { Mime } from '../../sln/declare';
 export class PageRouter extends React.Component {
     onClick(item: PageItem) {
         if (this.supervisor.item === item) return;

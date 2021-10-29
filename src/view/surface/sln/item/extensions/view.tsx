@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { PageItemBox } from "../view/box";
-import PageSvg from "../../../../assert/svg/page.svg";
+import PageSvg from "../../../../../assert/svg/page.svg";
 import { BasePageItemView } from "../view/base";
 export class PageItemView extends BasePageItemView {
     async mousedown(event: MouseEvent) {

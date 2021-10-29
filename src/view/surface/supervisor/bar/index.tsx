@@ -6,8 +6,8 @@ import { PageUsers } from './user';
 import "./style.less";
 import { AppLang } from '../../../../../i18n/enum';
 import { AppTip } from '../../../../../i18n/tip';
-import DobuleArrow from "../../../assert/svg/doubleRight.svg";
-import MenuSvg from "../../../assert/svg/menu.svg";
+import DobuleArrow from "../../../../assert/svg/doubleRight.svg";
+import MenuSvg from "../../../../assert/svg/menu.svg";
 export class Bar extends React.Component {
     private isHoverMenu: boolean = true;
     render() {

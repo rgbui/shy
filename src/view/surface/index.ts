@@ -11,7 +11,6 @@ import { sockSync } from "../../../net/primus";
 import { makeObservable, observable } from "mobx";
 import { CacheKey, sCache } from "../../../net/cache";
 import { MessageCenter } from "./message.center";
-@observable
 export class Surface extends Events {
     constructor() {
         super();

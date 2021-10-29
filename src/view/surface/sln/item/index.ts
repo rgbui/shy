@@ -2,10 +2,10 @@
 import { util } from "rich/util/util";
 import { surface } from "../..";
 import trash from "rich/src/assert/svg/trash.svg";
-import rename from "../../../assert/svg/rename.svg";
+import rename from "../../../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
-import cut from "../../../assert/svg/cut.svg";
-import link from '../../../assert/svg/link.svg';
+import cut from "../../../../assert/svg/cut.svg";
+import link from '../../../../assert/svg/link.svg';
 
 
 import { workspaceService } from "../../../../../services/workspace";
