@@ -1,6 +1,6 @@
 import { UserAction } from "rich/src/history/action";
 import { sockSync } from "../net/primus";
-import { PageItem } from "../src/view/sln/item";
+import { PageItem } from "../src/view/surface/sln/item";
 import JSZip from 'jszip';
 import { db, page_current_sequence, page_snapshoot } from "../net/db";
 import { util } from "rich/util/util";

@@ -1,30 +1,25 @@
 
 import { BaseService } from "../net";
-import { Workspace } from "../src/view/workspace";
+import { Workspace } from "../src/view/surface/workspace";
 import { masterSock, userSock } from "../net/sock";
-import { CacheKey, sCache, yCache } from "../net/cache";
-import { currentParams } from "../src/view/history";
-import { PageItem } from "../src/view/sln/item";
+import { CacheKey, yCache } from "../net/cache";
+import { PageItem } from "../src/view/surface/sln/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
 import { FileType } from "../type";
+import { surface } from "../src/view/surface";
 class WorkspaceService extends BaseService {
-    /***
-     * 主要是通过不同的网址来计算读取相应的workspace空间
+
+    /**
+     * 
+     * @param domain 域名
+     * @param pageId 网页
+     * @param sn workspace序号
+     * @param wsId workspace编号
+     * @returns 
      */
-    async loadWorkSpace() {
-        var domain, pageId, sn, wsId;
-        if (location.host && /[\da-z]+\.shy\.(red|live)/.test(location.host)) {
-            domain = location.host;
-        }
-        pageId = currentParams('/page/:id')?.id;
-        if (!domain && !pageId) {
-            sn = currentParams('/ws/:id')?.id;
-        }
-        if (!domain && !pageId && !sn) {
-            wsId = await sCache.get(CacheKey.workspaceId);
-        }
-        return await masterSock.get<{ toId?: string, toSn?: number, workspace: Workspace, users: any[] }, string>('/workspace/load', {
+    async loadWorkSpace(domain: string, pageId: string, sn: number, wsId: string) {
+        return await masterSock.get<{ workspace: Workspace, notCreateWorkSpace?: boolean, users: any[] }, string>('/workspace/load', {
             wsId,
             sn,
             domain,
@@ -46,8 +41,7 @@ class WorkspaceService extends BaseService {
     async loadWorkspaceItems(workspaceId: string, pageIds: string[]) {
         var rr = await masterSock.post<
             { pages: Partial<PageItem> },
-            string>('/workspace/:wsId/items',
-                { wsId: workspaceId, pageIds: pageIds || [] }
+            string>('/workspace/:wsId/items', { wsId: workspaceId, pageIds: pageIds || [] }
             )
         return rr;
     }
@@ -97,7 +91,7 @@ class WorkspaceService extends BaseService {
         return rr
     }
     async togglePage(item: PageItem) {
-        await workspaceTogglePages.save(item.workspace.getVisibleIds())
+        await workspaceTogglePages.save(surface.workspace.id, item.workspace.getVisibleIds())
     }
     async toggleFavourcePage(item: PageItem) {
 
@@ -137,17 +131,17 @@ class WorkspaceService extends BaseService {
 export var workspaceService = new WorkspaceService();
 export class workspaceTogglePages {
     private static ids: string[];
-    static async getIds() {
+    static async getIds(wsId: string) {
         if (Array.isArray(this.ids)) return this.ids;
-        var ids = await yCache.get(CacheKey.togglePages);
+        var ids = await yCache.get(CacheKey.workspace_toggle_pages + "." + wsId);
         if (Array.isArray(ids)) {
             this.ids = ids;
         }
         else this.ids = [];
         return this.ids;
     }
-    static async save(ids: string[]) {
+    static async save(wsId: string, ids: string[]) {
         this.ids = ids;
-        await yCache.set(CacheKey.togglePages, this.ids)
+        await yCache.set(CacheKey.workspace_toggle_pages + "." + wsId, this.ids)
     }
 }

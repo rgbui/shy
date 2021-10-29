@@ -5,9 +5,9 @@ import "rich";
 import "./assert/shy.less";
 import "./assert/theme.less";
 import "./view/surface/style.less";
-import "./view/supervisor/style.less";
-import "./view/sln/style.less";
-import "./view/user/style.less";
+import "./view/surface/supervisor/style.less";
+import "./view/surface/sln/style.less";
+import "./view/surface/user/style.less";
 import { App } from './view';
 import { configure } from 'mobx';
 configure({ enforceActions: 'never' })

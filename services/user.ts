@@ -1,5 +1,5 @@
 
-import { User } from "../src/view/user/user";
+import { User } from "../src/view/surface/user/user";
 import { fileSock, masterSock, userSock } from "../net/sock";
 import { BaseService } from "../net";
 import { CacheKey, sCache } from "../net/cache";

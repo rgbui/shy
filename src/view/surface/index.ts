@@ -1,123 +1,71 @@
 
-import { User } from "../user/user";
-import { ViewSurface } from "./view";
-import { Sln } from "../sln";
+import { User } from "./user/user";
+import { Sln } from "./sln";
 import { Events } from "rich/util/events";
-import { SlnDirective } from "../sln/operator";
-import { Supervisor } from "../supervisor";
-import { SyHistory } from "../history";
-import { generatePath } from "react-router";
-import { Workspace } from "../workspace";
+import { Supervisor } from "./supervisor";
+import { currentParams, SyHistory } from "../history";
+import { Workspace } from "./workspace";
 import { workspaceService, workspaceTogglePages } from "../../../services/workspace";
-import { Directive } from "rich/util/bus/directive";
-import { userService } from "../../../services/user";
 import { util } from "../../util";
-import { messageChannel } from "rich/util/bus/event.bus";
 import { sockSync } from "../../../net/primus";
-class Surface extends Events {
+import { makeObservable, observable } from "mobx";
+import { CacheKey, sCache } from "../../../net/cache";
+import { MessageCenter } from "./message.center";
+@observable
+export class Surface extends Events {
     constructor() {
         super();
-        this.init();
+        makeObservable(this, {
+            isShowSln: observable,
+            config: observable,
+            supervisor: observable,
+            user: observable,
+            sln: observable,
+            workspace: observable
+        });
+        MessageCenter(this);
     }
-    view: ViewSurface;
     supervisor: Supervisor = new Supervisor();
     user: User = new User();
     sln: Sln = new Sln();
-    workspace: Workspace;
-    /**
-     * 是否成功加载数据
-     */
-    isSuccessfullyLoaded: boolean = false;
+    workspace: Workspace = null;
     isShowSln: boolean = true;
-    config: {
-        showSideBar: boolean
-    } = {
-            showSideBar: true
-        }
-    private init() {
-        this.sln.on(SlnDirective.togglePageItem, async (item) => {
-            await workspaceService.togglePage(item);
-        });
-        this.sln.on(SlnDirective.updatePageItem, async (item) => {
-            await workspaceService.savePage(item);
-        });
-        this.sln.on(SlnDirective.removePageItem, async (item) => {
-            await workspaceService.deletePage(item.id)
-        });
-        this.sln.on(SlnDirective.addSubPageItem, async (item) => {
-            await workspaceService.savePage(item);
-        });
-    }
+    config: { showSideBar: boolean } = { showSideBar: true };
     async load() {
         if (!this.user.isSign) await this.user.loadUser();
-        if (!this.user.isSign) return;
-        if (this.user.isSign) await sockSync.load();
-        if (!surface.workspace) {
-            var loadResult = await this.loadWorkspace();
-            if (loadResult.ok != true) {
-                if (loadResult?.data?.toSn) return SyHistory.push(generatePath('/ws/:id', { id: loadResult?.data?.toSn }))
-                else return SyHistory.push('/work/create')
-            }
-            else {
-                await this.loadPages();
-            }
+        if (!this.user.isSign) return SyHistory.push('/sign');
+        await sockSync.load();
+        var rr = await this.getWillLoadWorkSpace();
+        if (rr.ok) {
+            if (rr.data.notCreateWorkSpace == true) return SyHistory.push('/work/create')
+            this.workspace = new Workspace()
+            this.workspace.load({ ...rr.data.workspace, users: rr.data.users });
+            await this.loadPages();
+            var page = await this.workspace.getDefaultPage();
+            this.sln.onFocusItem(page);
         }
-        this.isSuccessfullyLoaded = true;
-        await this.loadAfter();
-    }
-    async loadAfter() {
-        if (messageChannel.has(Directive.GalleryQuery)) return;
-        messageChannel.on(Directive.GalleryQuery, async (type, word) => {
-
-        });
-        messageChannel.on(Directive.PagesQuery, async (word) => {
-
-        });
-        messageChannel.on(Directive.UploadFile, async (file, progress) => {
-            var r = await userService.uploadFile(file, surface.workspace.id, progress);
-            return r;
-        });
-        messageChannel.on(Directive.UsersQuery, async () => {
-
-        });
-        messageChannel.on(Directive.CreatePage, async (pageInfo) => {
-            var item = surface.sln.selectItems[0];
-            var newItem = await item.onAdd(pageInfo);
-            return { id: newItem.id, sn: newItem.sn, text: newItem.text }
-        });
-        messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
-            var item = this.workspace.find(g => g.id == id);
-            if (item) {
-                item.onUpdateDocument();
-                Object.assign(item, pageInfo);
-                if (item.view) item.view.forceUpdate()
-            }
-            workspaceService.updatePage(id, pageInfo);
-        });
-        messageChannel.on(Directive.OpenPageItem, (item) => {
-            var id = typeof item == 'string' ? item : item.id;
-            var it = surface.workspace.find(g => g.id == id);
-            if (it) {
-                SyHistory.push(generatePath('/page/:id', { id: it.id }));
-                it.onUpdateDocument();
-                this.supervisor.onOpenItem(it);
-                this.sln.onFocusItem(it);
-            }
-        });
+        else return SyHistory.push('/404');
+        return true;
     }
     updateUser(user: Partial<User>) {
         Object.assign(this.user, user);
     }
-    async loadWorkspace() {
-        var rr = await workspaceService.loadWorkSpace();
-        if (rr.ok) {
-            this.workspace = new Workspace()
-            this.workspace.load({ ...rr.data.workspace, users: rr.data.users });
+    async getWillLoadWorkSpace() {
+        var domain, pageId, sn, wsId;
+        if (location.host && /[\da-z]+\.shy\.(red|live)/.test(location.host)) {
+            domain = location.host;
         }
-        return rr;
+        pageId = currentParams('/page/:id')?.id;
+        if (!domain && !pageId) {
+            sn = currentParams('/ws/:id')?.id;
+        }
+        if (!domain && !pageId && !sn) {
+            wsId = await sCache.get(CacheKey.workspaceId);
+        }
+        return await workspaceService.loadWorkSpace(domain, pageId, sn, wsId);
     }
     async loadPages() {
-        var ids = await workspaceTogglePages.getIds();
+        var ids = await workspaceTogglePages.getIds(this.workspace.id);
         var rr = await workspaceService.loadWorkspaceItems(this.workspace.id, ids);
         if (rr) {
             if (Array.isArray(rr?.data?.pages)) {
@@ -127,15 +75,17 @@ class Surface extends Events {
             }
         }
     }
-    onChangeWorkspace(workspace: Partial<Workspace>) {
-        SyHistory.push(generatePath('/ws/:id', { id: workspace.sn }))
+    async onChangeWorkspace(workspace: Partial<Workspace>) {
+        // SyHistory.push(generatePath('/ws/:id', { id: workspace.sn }));
+        // await this.loadWorkspace();
+        // await this.loadPages();
+        // this.view.forceUpdate();
     }
     onCreateWorkspace() {
-        SyHistory.push('/work/create')
+        SyHistory.push('/work/create');
     }
     onToggleSln(isShowSln: boolean) {
         this.isShowSln = isShowSln;
-        this.view.forceUpdate();
     }
 }
 export var surface = new Surface();

@@ -6,7 +6,7 @@ import { masterSock } from '../../../net/sock';
 import { workspaceService } from '../../../services/workspace';
 import { XhrReadFileBlob } from '../../util/file';
 import { currentParams } from '../history';
-import { PageItem } from '../sln/item';
+import { PageItem } from '../surface/sln/item';
 
 export function PageDisplay() {
     var [loading, setLoad] = React.useState(false);

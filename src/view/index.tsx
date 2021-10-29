@@ -10,26 +10,25 @@ import { AgreeView } from './site/protocol/service';
 import { RouteView } from './site/route';
 import { SceneView } from './site/scene';
 import { WeChatView } from './site/wechat';
-import { ViewSurface } from './surface/view';
-import { Login } from './user/login';
-import { LogOut } from './user/logout';
-import { WorkspaceCreateView } from './workspace/create';
+
+import { Login } from './site/login';
+import { LogOut } from './surface/user/logout';
+import { WorkspaceCreateView } from './surface/workspace/create';
 import "./site/declare";
 import { AsyncComponent } from "rich/component/lib/async.compont"
 import { PageDisplay } from './page';
+import { ViewSurface } from './surface/view/index';
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
-export function App()
-{
+export function App() {
   let [isLoad, setLoad] = React.useState(false);
-  async function load()
-  {
+  async function load() {
     await appLangProvider.import();
     await userDeviceService.register();
     setLoad(true);
   }
   React.useEffect(() => {
     load();
-  },[])
+  }, [])
   return <div className='shy-app'>
     {!isLoad && <div className='shy-app-load'></div>}
     {isLoad && <Router history={SyHistory}>

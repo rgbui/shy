@@ -8,9 +8,9 @@ export enum CacheKey {
     finger,
     device,
     workspaceId,
-    pageId,
+    workspace_open_page_id,
     lang,
-    togglePages,
+    workspace_toggle_pages,
     slideWidth
 }
 const FLAG = 'shy.';
