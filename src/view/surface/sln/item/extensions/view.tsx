@@ -2,10 +2,18 @@ import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { PageItemBox } from "../view/box";
 import PageSvg from "../../../../../assert/svg/page.svg";
-import { BasePageItemView } from "../view/base";
-export class PageItemView extends BasePageItemView {
-    async mousedown(event: MouseEvent) {
-        var item = this.item;
+import { observer } from "mobx-react";
+import { PageItem } from "..";
+import { surface } from "../../..";
+export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
+    let refInput = React.useRef<HTMLInputElement>(null);
+    let refEditText = React.useRef<string>(null);
+    var item = props.item;
+    var style: Record<string, any> = {};
+    style.paddingLeft = 5 + (props.deep || 0) * 15;
+    var isInEdit = item.id == surface.sln.editId;
+    var isSelected = surface.sln.selectIds.some(s => s == item.id);
+    async function mousedown(event: MouseEvent) {
         var target = event.target as HTMLElement;
         if (target.closest('.shy-ws-item-page-spread')) {
             item.onSpread();
@@ -28,65 +36,51 @@ export class PageItemView extends BasePageItemView {
             item.onContextmenu(event);
         }
     }
-    inputting(event: Event) {
+    function inputting(event: Event) {
         var input = event.target as HTMLInputElement;
-        this.item.text = input.value.trim();
+        item.text = input.value.trim();
     }
-    private editBeforeName: string;
-    select() {
-        var input = this.el.querySelector('.shy-ws-item-page input') as HTMLInputElement;
-        if (input) {
-            this.editBeforeName = this.item.text;
-            input.focus();
-            input.select();
-        }
-    }
-    async blur() {
-        if (this.editBeforeName != this.item.text) {
-            if (!this.item.text) {
-                this.item.text = this.editBeforeName;
-            }
-            else {
-                this.item.onChange({ text: this.item.text }, true);
-            }
-        }
-        this.item.onExitEdit();
-    }
-    contextmenu(event: MouseEvent) {
+    function contextmenu(event: MouseEvent) {
         event.preventDefault();
-        // this.item.onContextmenu(event);
+        item.onContextmenu(event);
     }
-    async keydown(event: KeyboardEvent) {
+    async function keydown(event: KeyboardEvent) {
         if (event.code == 'Enter') {
-            await this.blur()
+            await blur()
         }
     }
-    render() {
-        var self = this;
-        var item = this.props.item;
-        var style: Record<string, any> = {};
-        style.paddingLeft = 5 + (this.props.deep || 0) * 15;
-        var isInEdit = this.item.isInEdit;
-        return <div className='shy-ws-item'>
-            <div className={'shy-ws-item-page' + (this.item.isSelected ? " shy-ws-item-page-selected" : "")}
-                style={style}
-                onContextMenu={e => self.contextmenu(e.nativeEvent)}
-                onMouseUp={e => self.mousedown(e.nativeEvent)}>
-                <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-                <i className='shy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
-                {!isInEdit && <span>{item.text}</span>}
-                {isInEdit && <div className='shy-ws-item-page-input'><input type='text'
-                    onBlur={e => this.blur()}
-                    defaultValue={item.text}
-                    onKeyDown={e => this.keydown(e.nativeEvent)}
-                    onInput={e => self.inputting(e.nativeEvent)} /></div>}
-                {!isInEdit && <div className='shy-ws-item-page-operators'>
-                    <Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
-                    <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon>
-                </div>}
-            </div>
-            {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}
-            {item.spread != false && <PageItemBox items={item.childs || []} deep={(this.props.deep || 0) + 1}></PageItemBox>}
-        </div>
+    function blur() {
+        console.log('blue');
+        item.onExitEditAndSave(item.text, refEditText.current);
     }
-}
+    React.useEffect(() => {
+        if (isInEdit) {
+            refEditText.current = item.text;
+        }
+        if (refInput.current && isInEdit) {
+            refInput.current.focus();
+        }
+    }, [isInEdit])
+    return <div className='shy-ws-item'>
+        <div className={'shy-ws-item-page' + (isSelected ? " shy-ws-item-page-selected" : "")}
+            style={style}
+            onContextMenu={e => contextmenu(e.nativeEvent)}
+            onMouseUp={e => mousedown(e.nativeEvent)}>
+            <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
+            <i className='shy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
+            {!isInEdit && <span>{item.text}</span>}
+            {isInEdit && <div className='shy-ws-item-page-input'><input type='text'
+                onBlur={blur}
+                ref={e => refInput.current = e}
+                defaultValue={item.text}
+                onKeyDown={e => keydown(e.nativeEvent)}
+                onInput={e => inputting(e.nativeEvent)} /></div>}
+            {!isInEdit && <div className='shy-ws-item-page-operators'>
+                <Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
+                <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon>
+            </div>}
+        </div>
+        {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}
+        {item.spread != false && <PageItemBox items={item.childs || []} deep={(props.deep || 0) + 1}></PageItemBox>}
+    </div>
+})

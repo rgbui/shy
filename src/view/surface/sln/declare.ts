@@ -9,6 +9,7 @@ export enum SlnDirective {
 
 
 export enum Mime {
+    none=0,
     page = 10,
     pages = 20,
     favourite = 30,

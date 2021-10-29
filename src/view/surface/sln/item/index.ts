@@ -6,10 +6,7 @@ import rename from "../../../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
 import cut from "../../../../assert/svg/cut.svg";
 import link from '../../../../assert/svg/link.svg';
-
-
 import { workspaceService } from "../../../../../services/workspace";
-
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/point";
@@ -19,19 +16,21 @@ import { Directive } from "rich/util/bus/directive";
 import { PageStore } from "../../../../../services/page";
 import { UserAction } from "rich/src/history/action";
 import { Mime, SlnDirective, PageItemDirective } from "../declare";
+import { makeObservable, observable, toJS } from "mobx";
+import lodash from 'lodash';
 export class PageItem {
-    id: string;
-    sn?: number;
-    icon?: IconArguments;
-    childs?: PageItem[];
-    text: string;
+    id: string = null;
+    sn?: number = null;
+    icon?: IconArguments = null;
+    childs?: PageItem[] = null;
+    text: string = ''
     spread: boolean = false;
-    creater: string;
-    createDate: Date;
-    mime: Mime;
+    creater: string = ''
+    createDate: Date = null;
+    mime: Mime = Mime.none;
     parentIds: string[] = [];
     workspaceId: string;
-    selectedDate: number;
+    selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
     store: PageStore;
@@ -41,9 +40,25 @@ export class PageItem {
     * nas 网络存储
     * local 本地存储
     */
-    share: 'net' | 'nas' | 'local';
+    share: 'net' | 'nas' | 'local' = 'nas';
     constructor() {
         this.store = new PageStore(this);
+        makeObservable(this, {
+            id: observable,
+            sn: observable,
+            icon: observable,
+            childs: observable,
+            text: observable,
+            spread: observable,
+            creater: observable,
+            createDate: observable,
+            mime: observable,
+            parentIds: observable,
+            selectedDate: observable,
+            checkedHasChilds: observable,
+            willLoadSubs: observable,
+            share: observable
+        })
     }
     get sln() {
         return surface.sln;
@@ -112,18 +127,16 @@ export class PageItem {
         //     this.view.forceUpdate()
     }
     async onSpread(spread?: boolean) {
-        // var sp = typeof spread != 'undefined' ? spread : this.spread;
-        // this.spread = sp == false ? true : false;
-        // if (this.view) this.view.forceUpdate();
-        // if (this.spread == true && this.checkedHasChilds == false) {
-        //     var sus = await workspaceService.loadPageChilds(this.id);
-        //     if (sus.ok == true) {
-        //         this.load({ childs: sus.data.list })
-        //     }
-        //     this.checkedHasChilds = true;
-        //     if (this.view) this.view.forceUpdate();
-        // }
-        // this.sln.emit(SlnDirective.togglePageItem, this);
+        var sp = typeof spread != 'undefined' ? spread : this.spread;
+        this.spread = sp == false ? true : false;
+        if (this.spread == true && this.checkedHasChilds == false) {
+            var sus = await workspaceService.loadPageChilds(this.id);
+            if (sus.ok == true) {
+                this.load({ childs: sus.data.list })
+            }
+            this.checkedHasChilds = true;
+        }
+        this.sln.emit(SlnDirective.togglePageItem, this);
     }
     async onAdd(data?: Record<string, any>, at?: number) {
         var item = new PageItem();
@@ -133,41 +146,35 @@ export class PageItem {
         item.spread = false;
         item.parentId = this.id;
         item.parent = this;
-        if (data) Object.assign(item, data);
+        if (data) lodash.assign(item, data);
         this.spread = true;
         if (!Array.isArray(this.childs)) this.childs = [];
         await this.sln.emitAsync(SlnDirective.addSubPageItem, item);
         if (typeof at == 'undefined') at = 0;
-        this.childs.insertAt(at, item);
+        this.childs.splice(at, 0, item);
         return item;
     }
     async onAddAndEdit(data?: Record<string, any>, at?: number) {
-        // var item = await this.onAdd();
-        // if (this.view) this.view.forceUpdate(() => {
-        //     item.onEdit();
-        // });
-        // else console.error('not found item view when add child')
+        var item = await this.onAdd();
+        this.sln.editId = item.id;
+    }
+    onExitEditAndSave(newText: string, oldText: string) {
+        this.sln.editId = '';
+        if (newText != oldText) {
+            this.text = newText ? newText : oldText;
+            messageChannel.fire(Directive.UpdatePageItem, this.id, { text: this.text })
+        }
+        else if (!this.sn) messageChannel.fire(Directive.UpdatePageItem, this.id, { text: this.text })
     }
     onEdit() {
         this.sln.onEditItem(this);
     }
-    onExitEdit() {
-        this.sln.onEditItem(null);
-    }
     async onRemove() {
         var id = this.id;
         await workspaceService.deletePage(id);
-        if (this.sln.selectItems.some(g => g == this)) {
-            this.sln.selectItems.remove(this);
-            
-        }
-        if (this.parent) {
-            this.parent.childs.remove(g => g == this);
-            // this.parent.view.forceUpdate();
-        }
-        else {
-            surface.workspace.childs.remove(g => g === this);
-        }
+        lodash.remove(this.sln.selectIds, g => g == id);
+        if (this.parent) lodash.remove(this.parent.childs, g => g.id == this.id);
+        else lodash.remove(surface.workspace.childs, g => g.id == this.id);
         this.sln.emit(SlnDirective.removePageItem, this);
     }
     getPageItemMenus() {
@@ -247,12 +254,6 @@ export class PageItem {
             if (util.valueIsEqual(json, pageInfo)) return;
         }
         messageChannel.fire(Directive.UpdatePageItem, this.id, pageInfo);
-    }
-    get isInEdit() {
-        return this.sln.editItem === this;
-    }
-    get isSelected() {
-        return this.sln.selectItems.exists(this);
     }
     getVisibleIds() {
         var ids: string[] = [this.id];

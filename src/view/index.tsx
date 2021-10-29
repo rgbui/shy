@@ -18,6 +18,7 @@ import "./site/declare";
 import { AsyncComponent } from "rich/component/lib/async.compont"
 import { PageDisplay } from './page';
 import { ViewSurface } from './surface/view/index';
+import { View404 } from './site/404';
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
@@ -48,6 +49,7 @@ export function App() {
       <Route path='/view/:id' exact component={PageDisplay}></Route>
       <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
       <Route path='/test/component' exact component={Component}></Route>
+      <Route path='/404' exact component={View404}></Route>
     </Router>}
   </div>
 }

@@ -5,10 +5,9 @@ import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { currentParams, SyHistory } from "../history";
 import { Workspace } from "./workspace";
-import { workspaceService, workspaceTogglePages } from "../../../services/workspace";
-import { util } from "../../util";
+import { workspaceService } from "../../../services/workspace";
 import { sockSync } from "../../../net/primus";
-import { makeObservable, observable } from "mobx";
+import { makeObservable, observable, toJS } from "mobx";
 import { CacheKey, sCache } from "../../../net/cache";
 import { MessageCenter } from "./message.center";
 export class Surface extends Events {
@@ -37,10 +36,11 @@ export class Surface extends Events {
         var rr = await this.getWillLoadWorkSpace();
         if (rr.ok) {
             if (rr.data.notCreateWorkSpace == true) return SyHistory.push('/work/create')
-            this.workspace = new Workspace()
-            this.workspace.load({ ...rr.data.workspace, users: rr.data.users });
-            await this.loadPages();
-            var page = await this.workspace.getDefaultPage();
+            var ws = new Workspace();
+            ws.load({ ...rr.data.workspace, users: rr.data.users });
+            await ws.loadPages();
+            this.workspace = ws;
+            var page = await ws.getDefaultPage();
             this.sln.onFocusItem(page);
         }
         else return SyHistory.push('/404');
@@ -55,30 +55,26 @@ export class Surface extends Events {
             domain = location.host;
         }
         pageId = currentParams('/page/:id')?.id;
-        if (!domain && !pageId) {
+        if (!domain && !pageId)
             sn = currentParams('/ws/:id')?.id;
-        }
         if (!domain && !pageId && !sn) {
             wsId = await sCache.get(CacheKey.workspaceId);
         }
         return await workspaceService.loadWorkSpace(domain, pageId, sn, wsId);
     }
-    async loadPages() {
-        var ids = await workspaceTogglePages.getIds(this.workspace.id);
-        var rr = await workspaceService.loadWorkspaceItems(this.workspace.id, ids);
-        if (rr) {
-            if (Array.isArray(rr?.data?.pages)) {
-                var pages = rr.data.pages;
-                pages = util.flatArrayConvertTree(pages);
-                this.workspace.load({ childs: pages });
-            }
-        }
-    }
     async onChangeWorkspace(workspace: Partial<Workspace>) {
-        // SyHistory.push(generatePath('/ws/:id', { id: workspace.sn }));
-        // await this.loadWorkspace();
-        // await this.loadPages();
-        // this.view.forceUpdate();
+        if (workspace.id != this.workspace.id) {
+            var rr = await workspaceService.loadWorkSpace(undefined, undefined, undefined, workspace.id);
+            if (rr.ok) {
+                var ws = new Workspace();
+                ws.load({ ...rr.data.workspace, users: rr.data.users });
+                await ws.loadPages();
+                var page = await ws.getDefaultPage();
+                this.workspace = ws;
+                this.sln.onMousedownItem(page);
+            }
+            else return SyHistory.push('/404');
+        }
     }
     onCreateWorkspace() {
         SyHistory.push('/work/create');

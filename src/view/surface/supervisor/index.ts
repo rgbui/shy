@@ -1,22 +1,33 @@
 
 import { PageItem } from "../sln/item";
 import { Events } from "rich/util/events";
-import { SupervisorView } from "./view";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Rect } from "rich/src/common/point";
 import { workspaceService } from "../../../../services/workspace";
 import { usePagePublish } from "./publish";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
-
+import { computed, makeObservable, observable } from "mobx";
+import { surface } from "..";
 export class Supervisor extends Events {
-    items: PageItem[] = [];
-    view: SupervisorView;
+    itemIds: string[] = [];
+    constructor() {
+        super()
+        makeObservable(this, {
+            itemIds: observable,
+            item: computed,
+            items: computed
+        })
+    }
     get item() {
-        return this.items[0]
+        return surface.workspace.find(g => g.id == this.itemIds[0]);
+    }
+    get items() {
+        if (this.item)
+            return [this.item]
+        else return [];
     }
     onOpenItem(...items: PageItem[]) {
-        this.items = items;
-        if (this.view) this.view.forceUpdate();
+        this.itemIds = items.map(i => i.id);
     }
     onFavourite(event: React.MouseEvent) {
         workspaceService.toggleFavourcePage(this.item)

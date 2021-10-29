@@ -1,4 +1,4 @@
-import { util } from "rich/util/util";
+
 import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
 import "./style.less";
@@ -6,6 +6,9 @@ import { useOpenUserSettings } from "../user/settings";
 import { currentParams } from "../../history";
 import { CacheKey, yCache } from "../../../../net/cache";
 import { Mime } from "../sln/declare";
+import { workspaceTogglePages, workspaceService } from "../../../../services/workspace";
+import { ShyUtil } from "../../../util";
+import { util } from "rich/util/util";
 
 
 
@@ -79,6 +82,17 @@ export class Workspace {
             else {
                 var pt = this.find(g => g.mime == Mime.page);
                 if (pt) return pt;
+            }
+        }
+    }
+    async loadPages() {
+        var ids = await workspaceTogglePages.getIds(this.id);
+        var rr = await workspaceService.loadWorkspaceItems(this.id, ids);
+        if (rr) {
+            if (Array.isArray(rr?.data?.pages)) {
+                var pages = rr.data.pages;
+                pages = ShyUtil.flatArrayConvertTree(pages);
+                this.load({ childs: pages });
             }
         }
     }

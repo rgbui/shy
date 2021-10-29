@@ -1,6 +1,6 @@
 
 
-export var util = {
+export var ShyUtil = {
 
     /**
      * 将扁平的数组转成一棵树

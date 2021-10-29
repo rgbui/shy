@@ -1,7 +1,8 @@
+import lodash from "lodash";
 import { generatePath } from "react-router";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
-import { Surface, surface } from ".";
+import { Surface } from ".";
 import { userService } from "../../../services/user";
 import { workspaceService } from "../../../services/workspace";
 import { SyHistory } from "../history";
@@ -34,7 +35,7 @@ export function MessageCenter(surface: Surface) {
 
     });
     messageChannel.on(Directive.CreatePage, async (pageInfo) => {
-        var item = surface.sln.selectItems[0];
+        var item = surface.workspace.find(g => surface.sln.selectIds.some(s => s == g.id))
         var newItem = await item.onAdd(pageInfo);
         return { id: newItem.id, sn: newItem.sn, text: newItem.text }
     });
@@ -42,8 +43,7 @@ export function MessageCenter(surface: Surface) {
         var item = surface.workspace.find(g => g.id == id);
         if (item) {
             item.onUpdateDocument();
-            Object.assign(item, pageInfo);
-            // if (item.view) item.view.forceUpdate()
+            lodash.assign(item, pageInfo);
         }
         workspaceService.updatePage(id, pageInfo);
     });

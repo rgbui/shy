@@ -83,7 +83,7 @@ export var ViewSurface = observer(function () {
                     ref={e => local.slideEl = e}
                     style={{ width: local.slideWidth }}>
                     <SlnView ></SlnView>
-                    <div className='shy-slide-resize' onMouseDown={mousedown}></div>
+                    {surface.isShowSln && <div className='shy-slide-resize' onMouseDown={mousedown}></div>}
                 </div>
                 {!surface.isShowSln && <div className='shy-slide-reaction'></div>}
                 <SupervisorView></SupervisorView>
