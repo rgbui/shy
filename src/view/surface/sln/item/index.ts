@@ -79,6 +79,8 @@ export class PageItem {
     }
     parent: PageItem;
     parentId?: string;
+    prevId?: string;
+    nextId?: string;
     load(data) {
         for (var n in data) {
             if (n == 'childs') {
