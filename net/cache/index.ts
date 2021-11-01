@@ -69,6 +69,9 @@ class SyCache {
         if (typeof r != 'undefined') return true;
         else return false;
     }
+    resolve(...keys: (CacheKey | string)[]) {
+        return keys.join(".");
+    }
     /**
      * 是否为过期的key
      * @param key 
