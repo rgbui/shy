@@ -41,7 +41,7 @@ export class Surface extends Events {
             await ws.loadPages();
             this.workspace = ws;
             var page = await ws.getDefaultPage();
-            this.sln.onFocusItem(page);
+            this.sln.onMousedownItem(page);
         }
         else return SyHistory.push('/404');
         return true;
