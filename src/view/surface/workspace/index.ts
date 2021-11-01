@@ -67,7 +67,7 @@ export class Workspace {
     async getDefaultPage() {
         var pageId = currentParams('/page/:id')?.id;
         if (!pageId) {
-            var pid = await yCache.get(CacheKey.workspace_open_page_id + "." + this.id);
+            var pid = await yCache.get(yCache.resolve(CacheKey.workspace_open_page_id,this.id));
             if (!pid) {
                 var pt = this.find(g => g.mime == Mime.page);
                 if (pt) return pt;

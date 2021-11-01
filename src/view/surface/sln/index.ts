@@ -9,6 +9,8 @@ import { SlnDirective, Mime } from "./declare";
 import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
 import { makeObservable, observable } from "mobx";
+import { CacheKey, yCache } from "../../../../net/cache";
+import { surface } from "..";
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
@@ -32,9 +34,10 @@ export class Sln extends Events<SlnDirective> {
     onFocusItem(item: PageItem) {
         this.selectIds = [item.id];
         item.selectedDate = new Date().getTime();
+        yCache.set(yCache.resolve(CacheKey.workspace_open_page_id, surface.workspace.id), item.id);
     }
     onEditItem(item: PageItem) {
-        this.editId = item?.id||'';
+        this.editId = item?.id || '';
     }
     getMimeViewComponent(mime: Mime): (props: {
         item: PageItem;
