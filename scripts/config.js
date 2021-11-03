@@ -23,9 +23,9 @@ let publicPath = `http://localhost:${port}/`;
 if (mode == 'pro') publicPath = `https://static.shy.red/`;
 else if (mode == 'beta') publicPath = `https://beta.shy.red/`;
 
-var API_URL = 'http://127.0.0.1:8888';
-if (mode == 'beta') API_URL = 'https://beta-b1.shy.red';
-else if (mode == 'pro') API_URL = 'https://api-m1.shy.red';
+var API_URLS = ['http://127.0.0.1:8888'];
+if (mode == 'beta') API_URLS = ['https://beta-b1.shy.red'];
+else if (mode == 'pro') API_URLS = ['https://api-m1.shy.red', 'https://api-m2.shy.red'];
 
 var versionPrefix = pkg.version + '/';
 module.exports = {
@@ -151,7 +151,7 @@ module.exports = {
         new webpack.DefinePlugin({
             MODE: JSON.stringify(mode),
             VERSION: JSON.stringify(pkg.version),
-            API_MASTER_URL: JSON.stringify(API_URL)
+            API_MASTER_URLS: JSON.stringify(API_URLS)
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,

@@ -14,7 +14,9 @@ class Sock {
     async baseUrl() {
         switch (this.type) {
             case SockType.master:
-                return API_MASTER_URL;
+                var urls: string[] = API_MASTER_URLS as any;
+                if (typeof urls == 'string') urls = JSON.parse(urls);
+                return urls.randomOf();
                 break;
             case SockType.user:
                 if (this.remoteUrl) return this.remoteUrl;
