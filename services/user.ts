@@ -18,13 +18,6 @@ class UserService extends BaseService {
         var result = await masterSock.post<{ isUser: boolean }, string>('/phone/check', { phone });
         return result;
     }
-    async updateName(name: string) {
-        var result: SockResponse<{ token: string, user: Partial<User> }, string> = this.createResponse({});
-        if (!name) { result.ok = false; result.warn = '呢称不能为空'; return result; }
-        if (result.ok == false) return result;
-        result = await masterSock.post('/user/update/name', { name });
-        return result;
-    }
     async generatePhoneCode(phone: string) {
         var result: SockResponse<{ code?: string }, string> = this.createResponse({ $phone: phone });
         if (result.ok == false) return result;
@@ -36,7 +29,7 @@ class UserService extends BaseService {
     }
     async ping() {
         var result: SockResponse<{ token: string, user: Partial<User> }> = this.createResponse();
-        result = await masterSock.post('/user/ping');
+        result = await masterSock.get('/user/ping');
         if (result.ok) {
             if (result.data.token != await this.token()) {
                 await sCache.set(CacheKey.token, result.data.token, 180, 'd');

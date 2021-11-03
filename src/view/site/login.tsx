@@ -162,7 +162,7 @@ export var Login = observer(function () {
         if (!local.name) return unlockButton() && (local.failMsg = '称呼不能为空');
         if (local.name.length < 2) return unlockButton() && (local.failMsg = '称呼太短，至少两位');
         if (local.name.length > 64) return unlockButton() && (local.failMsg = '称呼过长，长度限制在20位');
-        var rr = await userService.updateName(local.name);
+        var rr = await userService.update({ name: local.name });
         if (rr.ok) {
             surface.updateUser({ name: local.name });
             if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
@@ -183,12 +183,12 @@ export var Login = observer(function () {
         </div>
     }
     let location = useLocation();
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if ((location?.state as any)?.phone) {
             local.phone = (location?.state as any)?.phone;
             phoneSign()
         }
-    },[]);
+    }, []);
     return <div className='shy-login-panel' ref={e => el = e}>
         <div className='shy-login-logo'><a href='/'>诗云</a></div>
         <div className='shy-login'  >
