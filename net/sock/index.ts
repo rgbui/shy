@@ -93,14 +93,14 @@ class Sock {
         var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, data);
         GenreConsistency.transform(data);
-        var r = await this.remote.post(this.resolve(baseUrl, url), data, await this.config());
+        var r = await this.remote.post(this.resolve(baseUrl, API_VERSION, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
         var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, querys);
         GenreConsistency.transform(querys);
-        var resolveUrl = this.resolve(baseUrl, url);
+        var resolveUrl = this.resolve(baseUrl, API_VERSION, url);
         if (querys && Object.keys(querys).length > 0) {
             var ps: string[] = [];
             for (let q in querys) {
@@ -118,14 +118,14 @@ class Sock {
     async delete<T = any, U = any>(url: string, data?: Record<string, any>) {
         var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, data);
-        var r = await this.remote.delete(this.resolve(baseUrl, url), await this.config());
+        var r = await this.remote.delete(this.resolve(baseUrl, API_VERSION, url), await this.config());
         return this.handleResponse<T, U>(r);
     }
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
         var baseUrl = await this.baseUrl();
         url = this.urlJoint(url, data);
         GenreConsistency.transform(data);
-        var r = await this.remote.put(this.resolve(baseUrl, url), data, await this.config());
+        var r = await this.remote.put(this.resolve(baseUrl, API_VERSION, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
     resolve(...urls: string[]) {
@@ -172,7 +172,7 @@ class Sock {
         uploadProgress?: (event: ProgressEvent) => void
     }) {
         var baseUrl = await this.baseUrl();
-        var url = this.resolve(baseUrl, '/storage/file');
+        var url = this.resolve(baseUrl, API_VERSION, '/storage/file');
         var configs = await this.config();
         configs.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         if (options?.uploadProgress) (configs as any).onUploadProgress = options.uploadProgress;

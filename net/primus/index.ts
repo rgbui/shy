@@ -40,7 +40,7 @@ export class SockSync {
             var device = await sCache.get(CacheKey.device);
             var token = await sCache.get(CacheKey.token);
             var lang = await sCache.get(CacheKey.lang);
-            var r = await self.post('/user/online', { token, device, lang });
+            var r = await self.post('/' + API_VERSION + '/user/online', { token, device, lang });
             console.log('user online r:', r.data);
         });
         primus.on('error', function error(err) {
@@ -71,6 +71,7 @@ export class SockSync {
      */
     async syncSend(method: HttpMethod, url: string, data?: any) {
         var id = await this.getId();
+        url = userSock.resolve(API_VERSION, url);
         return new Promise((resolve, reject) => {
             this.sendEvents.push({
                 rid: id,
