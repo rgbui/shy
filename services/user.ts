@@ -48,7 +48,7 @@ class UserService extends BaseService {
     async uploadWorkspaceFile(file: File, workspaceId, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             if (!file.md5) file.md5 = await FileMd5(file);
-            var r = await masterSock.get('/get/file/:md5', { md5: file.md5 });
+            var r = await masterSock.get('/file/:md5/exists', { md5: file.md5 });
             var masterFile;
             if (r?.ok) masterFile = r.data;
             else {
