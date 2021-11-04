@@ -14,7 +14,7 @@ export class Avatar extends React.Component<{
     async componentDidMount() {
         if (!this.userFaceUrl) {
             var base_url = await masterSock.baseUrl();
-            this.userFaceUrl = masterSock.resolve(base_url, `/user/avatar/${this.props.userid}`)
+            this.userFaceUrl = masterSock.resolve(base_url, `/user/${this.props.userid}/avatar`)
         }
     }
     render() {
