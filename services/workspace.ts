@@ -19,7 +19,7 @@ class WorkspaceService extends BaseService {
      * @returns 
      */
     async loadWorkSpace(domain: string, pageId: string, sn: number, wsId: string) {
-        return await masterSock.get<{ workspace: Workspace, notCreateWorkSpace?: boolean, users: any[] }, string>('/workspace/load', {
+        return await masterSock.get<{ workspace: Workspace, notCreateWorkSpace?: boolean, users: any[] }, string>('/ws/query', {
             wsId,
             sn,
             domain,
@@ -27,11 +27,11 @@ class WorkspaceService extends BaseService {
         })
     }
     async getWorkspaces() {
-        var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/workspace/list');
+        var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/ws/list');
         return data;
     }
     async createWorkspace(args: { text: string }) {
-        var rr = await masterSock.post<{ id: string, sn: number }, string>('/workspace/create', { text: args.text });
+        var rr = await masterSock.post<{ id: string, sn: number }, string>('/ws/create', { text: args.text });
         return rr;
     }
     async updateWorkspace(wsId: string, data: Partial<Workspace>) {
@@ -41,63 +41,23 @@ class WorkspaceService extends BaseService {
     async loadWorkspaceItems(workspaceId: string, pageIds: string[]) {
         var rr = await masterSock.post<
             { pages: Partial<PageItem> },
-            string>('/workspace/:wsId/items', { wsId: workspaceId, pageIds: pageIds || [] }
+            string>('/ws/:wsId/items', { wsId: workspaceId, pageIds: pageIds || [] }
             )
         return rr;
     }
     async loadPageChilds(pageId: string) {
-        var rr = await masterSock.get<{ list: Partial<PageItem>[] }, string>('/page/subs', { parentId: pageId });
+        var rr = await masterSock.get<{ list: Partial<PageItem>[] }, string>('/page/:parentId/subs', { parentId: pageId });
         return rr;
     }
-    async savePage(item: PageItem) {
-        if (typeof item.sn === 'undefined') {
-            var re = await masterSock.post<{ item: PageItem }, string>('/page/create', {
-                data: {
-                    id: item.id,
-                    text: item.text,
-                    parentId: item.parentId ? item.parentId : item.parent?.id,
-                    workspaceId: item.workspace?.id,
-                    mime: item.mime,
-                    icon: item.icon
-                }
-            });
-            if (re.ok) {
-                item.id = re.data.item.id;
-                item.sn = re.data.item.sn;
-                item.creater = re.data.item.creater;
-                item.createDate = re.data.item.createDate;
-            }
-        }
-        else {
-            var rr = await masterSock.post('/page/update/' + item.id, {
-                data: {
-                    text: item.text,
-                    icon: item.icon
-                }
-            });
-            if (rr.ok) {
-            }
-        }
-    }
     async getPage(id: string) {
-        var page = await masterSock.get<{ page: Partial<PageItem> }, string>('/page/query/:id', { id });
+        var page = await masterSock.get<{ page: Partial<PageItem> }, string>('/page/:id/query', { id });
         return page;
-    }
-    async updatePage(id: string, data: Record<string, any>) {
-        var rr = await masterSock.post('/page/update/:id', {
-            id,
-            data: data
-        });
-        return rr
     }
     async togglePage(item: PageItem) {
         await workspaceTogglePages.save(surface.workspace.id, item.workspace.getVisibleIds())
     }
     async toggleFavourcePage(item: PageItem) {
 
-    }
-    async deletePage(id: string) {
-        await masterSock.delete('/page/delete/:id', { id });
     }
     async createDefaultTableSchema(data: { text?: string, templateId?: string }) {
         var result = await userSock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});
