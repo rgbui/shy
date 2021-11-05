@@ -3,23 +3,11 @@ import { generatePath } from "react-router";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
+import { pageItemStore } from "../../../services/page.item";
 import { userService } from "../../../services/user";
-import { workspaceService } from "../../../services/workspace";
 import { SyHistory } from "../history";
-import { SlnDirective } from "./sln/declare";
+
 export function MessageCenter(surface: Surface) {
-    surface.sln.on(SlnDirective.togglePageItem, async (item) => {
-        await workspaceService.togglePage(item);
-    });
-    surface.sln.on(SlnDirective.updatePageItem, async (item) => {
-        await workspaceService.savePage(item);
-    });
-    surface.sln.on(SlnDirective.removePageItem, async (item) => {
-        await workspaceService.deletePage(item.id)
-    });
-    surface.sln.on(SlnDirective.addSubPageItem, async (item) => {
-        await workspaceService.savePage(item);
-    });
     if (messageChannel.has(Directive.GalleryQuery)) return;
     messageChannel.on(Directive.GalleryQuery, async (type, word) => {
 
@@ -39,17 +27,16 @@ export function MessageCenter(surface: Surface) {
 
     });
     messageChannel.on(Directive.CreatePage, async (pageInfo) => {
-        var item = surface.workspace.find(g => surface.sln.selectIds.some(s => s == g.id))
-        var newItem = await item.onAdd(pageInfo);
-        return { id: newItem.id, sn: newItem.sn, text: newItem.text }
+        // var item = surface.workspace.find(g => surface.sln.selectIds.some(s => s == g.id))
+        // var newItem = await item.onAdd(pageInfo);
+        // return { id: newItem.id, sn: newItem.sn, text: newItem.text }
     });
     messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
         var item = surface.workspace.find(g => g.id == id);
         if (item) {
+            pageItemStore.updatePageItem(item, pageInfo);
             item.onUpdateDocument();
-            lodash.assign(item, pageInfo);
         }
-        workspaceService.updatePage(id, pageInfo);
     });
     messageChannel.on(Directive.OpenPageItem, (item) => {
         var id = typeof item == 'string' ? item : item.id;

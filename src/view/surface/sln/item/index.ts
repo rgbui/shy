@@ -13,11 +13,12 @@ import { Rect } from "rich/src/common/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
-import { PageStore } from "../../../../../services/page";
+import { PageContentStore } from "../../../../../services/page.content";
 import { UserAction } from "rich/src/history/action";
 import { Mime, SlnDirective, PageItemDirective } from "../declare";
 import { makeObservable, observable, toJS } from "mobx";
 import lodash from 'lodash';
+import { pageItemStore } from "../../../../../services/page.item";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -33,7 +34,7 @@ export class PageItem {
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-    store: PageStore;
+    store: PageContentStore;
     /**
     * 是否为公开
     * net 互联网公开
@@ -42,7 +43,7 @@ export class PageItem {
     */
     share: 'net' | 'nas' | 'local' = 'nas';
     constructor() {
-        this.store = new PageStore(this);
+        this.store = new PageContentStore(this);
         makeObservable(this, {
             id: observable,
             sn: observable,
@@ -77,17 +78,32 @@ export class PageItem {
     get workspace() {
         return surface.workspace
     }
-    parent: PageItem;
+    get parent(): PageItem {
+        if (this.parentId)
+            return this.workspace.find(g => g.id == this.parentId);
+    }
+    get prev() {
+        var pa = this.parent;
+        if (pa.childs?.length > 0) {
+            var currentAt = pa.childs.findIndex(g => g == this);
+            return pa.childs[currentAt - 1];
+        }
+    }
+    get next() {
+        var pa = this.parent;
+        if (pa.childs?.length > 0) {
+            var currentAt = pa.childs.findIndex(g => g == this);
+            return pa.childs[currentAt + 1];
+        }
+    }
     parentId?: string;
-    prevId?: string;
-    nextId?: string;
+    at: number;
     load(data) {
         for (var n in data) {
             if (n == 'childs') {
                 this.childs = [];
                 data.childs.each(child => {
                     var item = new PageItem();
-                    item.parent = this;
                     item.load(child);
                     this.childs.push(item);
                 });
@@ -114,20 +130,6 @@ export class PageItem {
             else break;
         }
     }
-    createItem(data, at?: number) {
-        var item = new PageItem();
-        item.parent = this;
-        item.load(data);
-        if (!Array.isArray(this.childs)) this.childs = [];
-        if (typeof at == 'undefined') this.childs.push(item);
-        else this.childs.insertAt(at, item);
-        return item;
-    }
-    onUpdate(pageInfo: Record<string, any>) {
-        Object.assign(this, pageInfo);
-        // if (this.view)
-        //     this.view.forceUpdate()
-    }
     async onSpread(spread?: boolean) {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
         this.spread = sp == false ? true : false;
@@ -140,21 +142,15 @@ export class PageItem {
         }
         this.sln.emit(SlnDirective.togglePageItem, this);
     }
-    async onAdd(data?: Record<string, any>, at?: number) {
-        var item = new PageItem();
-        item.id = util.guid();
-        item.text = '新页面';
-        item.mime = Mime.page;
-        item.spread = false;
-        item.parentId = this.id;
-        item.parent = this;
-        if (data) lodash.assign(item, data);
-        this.spread = true;
-        if (!Array.isArray(this.childs)) this.childs = [];
-        await this.sln.emitAsync(SlnDirective.addSubPageItem, item);
-        if (typeof at == 'undefined') at = 0;
-        this.childs.splice(at, 0, item);
-        return item;
+    async onAdd(data?: Record<string, any>) {
+        if (typeof data == 'undefined') data = {};
+        Object.assign(data, {
+            id: util.guid(),
+            text: '新页面',
+            mime: Mime.page,
+            spread: false,
+        })
+        return pageItemStore.appendPageItem(this, data);
     }
     async onAddAndEdit(data?: Record<string, any>, at?: number) {
         var item = await this.onAdd();
@@ -164,20 +160,16 @@ export class PageItem {
         this.sln.editId = '';
         if (newText != oldText) {
             this.text = newText ? newText : oldText;
-            messageChannel.fire(Directive.UpdatePageItem, this.id, { text: this.text })
+            if (newText) {
+                pageItemStore.updatePageItem(this, { text: this.text });
+            }
         }
-        else if (!this.sn) messageChannel.fire(Directive.UpdatePageItem, this.id, { text: this.text })
     }
     onEdit() {
         this.sln.onEditItem(this);
     }
     async onRemove() {
-        var id = this.id;
-        await workspaceService.deletePage(id);
-        lodash.remove(this.sln.selectIds, g => g == id);
-        if (this.parent) lodash.remove(this.parent.childs, g => g.id == this.id);
-        else lodash.remove(surface.workspace.childs, g => g.id == this.id);
-        this.sln.emit(SlnDirective.removePageItem, this);
+        pageItemStore.deletePageItem(this);
     }
     getPageItemMenus() {
         var items: MenuItemType<PageItemDirective>[] = [];
@@ -249,13 +241,13 @@ export class PageItem {
             this.onChange({ icon });
         }
     }
-    onChange(pageInfo: Record<string, any>, force?: boolean) {
+    async onChange(pageInfo: Record<string, any>, force?: boolean) {
         if (force != true) {
             var keys = Object.keys(pageInfo);
             var json = util.pickJson(this, keys);
             if (util.valueIsEqual(json, pageInfo)) return;
         }
-        messageChannel.fire(Directive.UpdatePageItem, this.id, pageInfo);
+        await pageItemStore.updatePageItem(this, pageInfo);
     }
     getVisibleIds() {
         var ids: string[] = [this.id];

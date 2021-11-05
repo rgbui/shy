@@ -50,7 +50,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         }
     }
     function blur() {
-        console.log('blue');
+        console.log('blur');
         item.onExitEditAndSave(item.text, refEditText.current);
     }
     React.useEffect(() => {
