@@ -8,6 +8,14 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.5-beta
+  `2021-11-6`  
+  * 增加侧栏页面的自由拖动
+  * 优化文件上传流程
+  * 优化页面的打开网址
+  * 增加API的版本管理功能
+  
+
 ## 0.6.442-pro
   `2021-10-29`  
   * 补丁修复pro版bug
