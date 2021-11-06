@@ -10,6 +10,7 @@ declare var MODE: 'pro' | 'dev' | 'beta';
 declare var VERSION: string;
 declare var API_MASTER_URLS: string;
 declare var API_VERSION: string;
+declare var AUTH_URL: string;
 
 type ArrayOf<T> = T extends (infer p)[] ? p : never;
 
@@ -53,7 +54,8 @@ interface Window {
     error(msg: string);
     warn(msg: string);
     success(msg: string);
-  }
+  },
+  isAuth?: boolean
 }
 
 

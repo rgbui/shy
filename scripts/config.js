@@ -28,13 +28,20 @@ if (mode == 'beta') API_URLS = ['https://beta-b1.shy.red'];
 else if (mode == 'pro') API_URLS = ['https://api-m1.shy.red', 'https://api-m2.shy.red'];
 var API_VERSION = 'v1';
 var versionPrefix = pkg.version + '/';
+var AUTH_URL = '/auth';
+if (mode == 'pro') AUTH_URL = 'https://auth.shy.red/auth.html';
+else if (mode == 'beta') AUTH_URL = 'https://beta.shy.red/auth.html';
+
 module.exports = {
     mode: isDev ? 'development' : 'production',
-    entry: "./src/main.tsx",
+    entry: {
+        main: './src/main.tsx',
+        //auth: './src/auth.tsx'
+    },
     devtool: isDev ? 'inline-source-map' : undefined,
     output: {
         path: path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode)),
-        filename: versionPrefix + "assert/js/shy.[contenthash:8].js",
+        filename: versionPrefix + "assert/js/shy.[name].[contenthash:8].js",
         chunkFilename: versionPrefix + 'assert/js/shy.[name].[contenthash:8].js',
         publicPath,
         // clean:true
@@ -143,16 +150,26 @@ module.exports = {
         // new BundleAnalyzerPlugin(),
         isDev ? new webpack.HotModuleReplacementPlugin() : new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, "../index.html"), // 婧愭ā鏉挎枃浠�
+            template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
             filename: 'index.html',
             showErrors: true,
-            hash: true
+            hash: true,
+            chunks: ['main'],
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, "auth.html"), // 婧愭ā鏉挎枃浠�
+            filename: 'auth.html',
+            showErrors: true,
+            hash: true,
+            chunks: []
+            //chunks: ['auth']
         }),
         new webpack.DefinePlugin({
             MODE: JSON.stringify(mode),
             VERSION: JSON.stringify(pkg.version),
             API_MASTER_URLS: JSON.stringify(API_URLS),
-            API_VERSION: JSON.stringify(API_VERSION)
+            API_VERSION: JSON.stringify(API_VERSION),
+            AUTH_URL: JSON.stringify(AUTH_URL)
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
@@ -210,6 +227,7 @@ if (isDev) {
         open: true,
         historyApiFallback: {
             rewrites: [
+                { from: '/auth', to: "/auth.html" },
                 { from: /^[a-zA-Z\d\/]+$/, to: '/index.html' }
             ]
         }

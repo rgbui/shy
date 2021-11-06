@@ -1,4 +1,6 @@
-
+window.isAuth = false;
+import { createAuthIframe } from '../net/auth/iframe';
+createAuthIframe();
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import "rich";
@@ -10,6 +12,7 @@ import "./view/surface/sln/style.less";
 import "./view/surface/user/style.less";
 import { App } from './view';
 import { configure } from 'mobx';
+
 configure({ enforceActions: 'never' })
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
