@@ -33,15 +33,15 @@ export class DocPage extends React.Component<{ item: PageItem }>{
             await self.item.store.savePageContent(action, await page.getFile());
         });
         page.on(PageDirective.createDefaultTableSchema, async (data) => {
-            var r = await workspaceService.createDefaultTableSchema(data);
+            var r = await workspaceService.createDefaultTableSchema(surface.workspace.sock, data);
             return r;
         });
         page.on(PageDirective.loadTableSchemaData, async (schemaId: string, options) => {
-            var r = await workspaceService.loadTableSchemaData(schemaId, options);
+            var r = await workspaceService.loadTableSchemaData(surface.workspace.sock, schemaId, options);
             return r;
         });
         page.on(PageDirective.loadTableSchema, async (schemaId: string) => {
-            var r = await workspaceService.loadTableSchema(schemaId);
+            var r = await workspaceService.loadTableSchema(surface.workspace.sock, schemaId);
             return r;
         });
         page.on(PageDirective.error, error => {

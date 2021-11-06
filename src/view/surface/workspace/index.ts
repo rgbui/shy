@@ -9,6 +9,8 @@ import { Mime } from "../sln/declare";
 import { workspaceTogglePages, workspaceService } from "../../../../services/workspace";
 import { ShyUtil } from "../../../util";
 import { util } from "rich/util/util";
+import { Sock } from "../../../../net/sock";
+import { SockType } from "../../../../net/sock/type";
 
 
 
@@ -28,6 +30,12 @@ export class Workspace {
     customizeDomain: string;
     slogan: string;
     users: WorkspaceUser[] = [];
+    pidUrl: string;
+    private _sock: Sock;
+    get sock() {
+        if (this._sock) return this._sock;
+        return this._sock = new Sock(SockType.workspace, this.pidUrl);
+    }
     public inviteUrl: string;
     get url() {
         return 'https://' + this.customizeSecondDomain + '.shy.live';
@@ -51,6 +59,9 @@ export class Workspace {
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)
     }
+    findAll(predict: (item: PageItem) => boolean) {
+        return this.childs.arrayJsonFindAll('childs', predict)
+    }
     getVisibleIds() {
         var ids: string[] = [];
         this.childs.each(c => {
@@ -67,7 +78,7 @@ export class Workspace {
     async getDefaultPage() {
         var pageId = currentParams('/page/:id')?.id;
         if (!pageId) {
-            var pid = await yCache.get(yCache.resolve(CacheKey.workspace_open_page_id,this.id));
+            var pid = await yCache.get(yCache.resolve(CacheKey.workspace_open_page_id, this.id));
             if (!pid) {
                 var pt = this.find(g => g.mime == Mime.page);
                 if (pt) return pt;
