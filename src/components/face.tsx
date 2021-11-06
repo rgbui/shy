@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconArguments } from 'rich/extensions/icon/declare';
-import { masterSock } from '../../net/sock';
+import { masterSock, Sock } from '../../net/sock';
 import "./style.less";
 export class Avatar extends React.Component<{
     icon?: IconArguments,
@@ -14,7 +14,7 @@ export class Avatar extends React.Component<{
     async componentDidMount() {
         if (!this.userFaceUrl) {
             var base_url = await masterSock.baseUrl();
-            this.userFaceUrl = masterSock.resolve(base_url, `/user/${this.props.userid}/avatar`)
+            this.userFaceUrl = Sock.resolve(base_url, `/user/${this.props.userid}/avatar`)
         }
     }
     render() {

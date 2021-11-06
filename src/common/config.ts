@@ -18,9 +18,6 @@ class Config {
     get isDev() {
         return this.mode == 'dev'
     }
-    get remoteUrl() {
-        return API_MASTER_URL
-    }
     get version() {
         return VERSION
     }

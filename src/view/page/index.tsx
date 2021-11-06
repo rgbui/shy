@@ -2,7 +2,7 @@ import React from 'react';
 import { Loading } from 'rich/component/view/loading';
 import { Page } from 'rich/src/page';
 import { PageDirective } from 'rich/src/page/directive';
-import { masterSock } from '../../../net/sock';
+import { masterSock, Sock } from '../../../net/sock';
 import { workspaceService } from '../../../services/workspace';
 import { XhrReadFileBlob } from '../../util/file';
 import { currentParams } from '../history';
@@ -18,7 +18,7 @@ export function PageDisplay() {
         if (page && page.share == 'net') {
             var ms = await masterSock.get<{ url: string }, string>('/pid/tim', { userid: page.creater });
             if (ms.data) {
-                var r = await masterSock.get<{ snapshoot: { file: { url: string } } }>(masterSock.resolve(ms.data.url, '/page/view'), {
+                var r = await masterSock.get<{ snapshoot: { file: { url: string } } }>(Sock.resolve(ms.data.url, '/page/view'), {
                     wsId: page.workspaceId,
                     pageId: pageId,
                 });
@@ -47,18 +47,18 @@ export function PageDisplay() {
             // await self.item.store.saveHistory(action);
             // await self.item.store.savePageContent(action, await page.getFile());
         });
-        page.on(PageDirective.createDefaultTableSchema, async (data) => {
-            var r = await workspaceService.createDefaultTableSchema(data);
-            return r;
-        });
-        page.on(PageDirective.loadTableSchemaData, async (schemaId: string, options) => {
-            var r = await workspaceService.loadTableSchemaData(schemaId, options);
-            return r;
-        });
-        page.on(PageDirective.loadTableSchema, async (schemaId: string) => {
-            var r = await workspaceService.loadTableSchema(schemaId);
-            return r;
-        });
+        // page.on(PageDirective.createDefaultTableSchema, async (data) => {
+        //     var r = await workspaceService.createDefaultTableSchema(data);
+        //     return r;
+        // });
+        // page.on(PageDirective.loadTableSchemaData, async (schemaId: string, options) => {
+        //     var r = await workspaceService.loadTableSchemaData(schemaId, options);
+        //     return r;
+        // });
+        // page.on(PageDirective.loadTableSchema, async (schemaId: string) => {
+        //     var r = await workspaceService.loadTableSchema(schemaId);
+        //     return r;
+        // });
         page.on(PageDirective.error, error => {
             console.error(error);
         });
