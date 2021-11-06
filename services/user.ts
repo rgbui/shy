@@ -29,11 +29,17 @@ class UserService extends BaseService {
     }
     async ping() {
         var result: SockResponse<{ token: string, user: Partial<User> }> = this.createResponse();
-        result = await masterSock.get('/user/ping');
-        if (result.ok) {
-            if (result.data.token != await this.token()) {
-                await sCache.set(CacheKey.token, result.data.token, 180, 'd');
+        if (await sCache.get(CacheKey.token)) {
+            result = await masterSock.get('/user/ping');
+            if (result.ok) {
+                if (result.data.token != await this.token()) {
+                    await sCache.set(CacheKey.token, result.data.token, 180, 'd');
+                }
             }
+        }
+        else {
+            result.ok = false;
+            result.warn = 'no sign';
         }
         return result;
     }
@@ -41,7 +47,6 @@ class UserService extends BaseService {
         var r = await masterSock.post('/user/update', { data });
         return r;
     }
-   
     /**
      * 用户直接上传文件，不考虑md5是否有重复
      * @param file 

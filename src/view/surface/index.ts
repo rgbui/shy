@@ -31,7 +31,7 @@ export class Surface extends Events {
     config: { showSideBar: boolean } = { showSideBar: true };
     async load() {
         if (!this.user.isSign) await this.user.loadUser();
-        if (!this.user.isSign) return SyHistory.push('/sign');
+        if (!this.user.isSign) return;
         await userTim.load();
         var rr = await this.getWillLoadWorkSpace();
         if (rr.ok) {
