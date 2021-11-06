@@ -2,7 +2,7 @@ import { StatusCode } from "./status.code";
 
 export enum SockType {
     master,
-    user,
+    workspace,
     file,
     api
 }
@@ -11,7 +11,7 @@ export enum SockType {
  * 泛型T表示正常的返回数据
  * 泛型U表示异常返回的数据
  */
- export type SockResponse<T, U = any> = {
+export type SockResponse<T, U = any> = {
     /**
      * 返回状态码
      */
