@@ -11,16 +11,26 @@ import { PageItemView } from "./item/extensions/view";
 import { makeObservable, observable } from "mobx";
 import { CacheKey, yCache } from "../../../../net/cache";
 import { surface } from "..";
+import { MouseDragger } from "rich/src/common/dragger";
+import { ghostView } from "rich/src/common/ghost";
+import { dom } from "rich/src/common/dom";
+
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
         makeObservable(this, {
             selectIds: observable,
-            editId: observable
-        })
+            editId: observable,
+            hoverId: observable,
+            dragIds: observable,
+            isDrag: observable
+        });
     }
     selectIds: string[] = [];
     editId: string = '';
+    hoverId: string = '';
+    dragIds: string[] = [];
+    isDrag: boolean = false;
     keyboardPlate = new KeyboardPlate();
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
         var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) }, item.getPageItemMenus());
@@ -29,7 +39,43 @@ export class Sln extends Events<SlnDirective> {
         }
     }
     onMousedownItem(item: PageItem, event?: MouseEvent) {
+        var self = this;
         messageChannel.fire(Directive.OpenPageItem, item);
+        if (event) {
+            MouseDragger<{ item: HTMLElement }>({
+                event,
+                dis: 5,
+                move(ev, data) {
+                    data.item = (event.target as HTMLElement).closest('.shy-ws-item');
+                    var bound = data.item.getBoundingClientRect();
+                    self.dragIds = [item.id];
+                    self.isDrag = true;
+                    ghostView.load(data.item, { point: Point.from(ev), opacity: .6, size: { width: bound.width, height: bound.height } })
+                },
+                moving(ev, data) {
+                    ghostView.move(Point.from(ev));
+                },
+                moveEnd(ev, isMove, data) {
+                    if (isMove) {
+                        if (self.hoverId) {
+                            if (!self.dragIds.some(s => s == self.hoverId)) {
+
+                            }
+                        }
+                        else {
+                            var dropPanel = dom((ev.target as HTMLElement)).closest(g => g && typeof (g as HTMLElement).receive_drop_elements == 'function');
+                            if (dropPanel) {
+                                (dropPanel as HTMLElement).receive_drop_elements('pageItem', surface.workspace.findAll(g => self.dragIds.some(s => s == g.id)))
+                            }
+                        }
+                    }
+                    self.isDrag = false;
+                    self.dragIds = [];
+                    ghostView.unload();
+                }
+            })
+        }
+
     }
     onFocusItem(item: PageItem) {
         this.selectIds = [item.id];

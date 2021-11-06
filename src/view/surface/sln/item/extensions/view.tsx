@@ -60,10 +60,12 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         if (refInput.current && isInEdit) {
             refInput.current.focus();
         }
-    }, [isInEdit])
+    },[isInEdit])
     return <div className='shy-ws-item'>
         <div className={'shy-ws-item-page' + (isSelected ? " shy-ws-item-page-selected" : "")}
             style={style}
+            onMouseEnter={e => surface.sln.hoverId = props.item.id}
+            onMouseLeave={e => surface.sln.hoverId = ''}
             onContextMenu={e => contextmenu(e.nativeEvent)}
             onMouseUp={e => mousedown(e.nativeEvent)}>
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>

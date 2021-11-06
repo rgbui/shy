@@ -4,22 +4,28 @@ import GlobalLink from "rich/src/assert/svg/GlobalLink.svg";
 import { Switch } from "rich/component/view/switch";
 import { PopoverPosition } from "rich/extensions/popover/position";
 import { PageItem } from "../../sln/item";
-import { workspaceService } from "../../../../../services/workspace";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
 import "./style.less";
 import { Icon } from "rich/component/view/icon";
+import { pageItemStore } from "../../../../../services/page.item";
+import { observer } from "mobx-react";
+import { makeObservable, observable } from "mobx";
+@observer
 class PagePublish extends EventsComponent {
+    constructor(props) {
+        super(props);
+        makeObservable(this, { item: observable });
+    }
     open(item: PageItem) {
         this.item = item;
-        this.forceUpdate();
     }
-    item: PageItem;
+    item: PageItem = null;
     render() {
         var self = this;
         function setGlobalShare(share: boolean) {
-            self.item.share = share ? "net" : 'nas';
-            self.forceUpdate();
-            workspaceService.updatePage(self.item.id, { share: self.item.share });
+            var itemShare = share ? "net" : 'nas';
+            pageItemStore.updatePageItem(self.item, { share: itemShare });
+            // self.forceUpdate();
         }
         return <div className='shy-page-publish'>
             <div className='shy-page-publish-access'>

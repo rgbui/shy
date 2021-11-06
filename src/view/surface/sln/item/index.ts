@@ -11,8 +11,6 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
-import { messageChannel } from "rich/util/bus/event.bus";
-import { Directive } from "rich/util/bus/directive";
 import { PageContentStore } from "../../../../../services/page.content";
 import { UserAction } from "rich/src/history/action";
 import { Mime, SlnDirective, PageItemDirective } from "../declare";
