@@ -1,5 +1,5 @@
 import { UserAction } from "rich/src/history/action";
-import { sockSync } from "../net/primus";
+import { userTim } from "../net/primus";
 import { PageItem } from "../src/view/surface/sln/item";
 import { db, page_current_sequence, page_snapshoot } from "../net/db";
 import { util } from "rich/util/util";
@@ -9,11 +9,14 @@ import { DbService } from "../net/db/service";
 import { surface } from "../src/view/surface";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
-import { masterSock, userSock } from "../net/sock";
+
 import { XhrReadFileBlob } from "../src/util/file";
 
 export class PageContentStore {
     constructor(private item: PageItem) { }
+    private get sock() {
+        return this.item.workspace.sock;
+    }
     /**
      *  本地保存，同时推送至service，然后返回timingSequence
      * @param userAction 
@@ -21,7 +24,7 @@ export class PageContentStore {
     async saveHistory(userAction: UserAction) {
         var directive: string = (typeof userAction.directive == 'number' ? ActionDirective[userAction.directive] : ActionDirective) as any;
         try {
-            var r = await sockSync.post<{ sequence: number, id: string }, string>('/page/useraction', {
+            var r = await userTim.post<{ sequence: number, id: string }, string>('/page/useraction', {
                 wsId: this.item.workspaceId,
                 pageId: this.item.id,
                 directive: directive,
@@ -86,7 +89,7 @@ export class PageContentStore {
         var ps = await new DbService<page_snapshoot>('page_snapshoot').getOne(this.localPageSnapshootId);
         var r = await messageChannel.fireAsync(Directive.UploadFile, ps.content, (event) => { });
         if (r.ok) {
-            var userResult = await userSock.post<{ sequence: number, id: string }, string>('/page/snapshoot', {
+            var userResult = await this.sock.post<{ sequence: number, id: string }, string>('/page/snapshoot', {
                 wsId: this.item.workspaceId,
                 pageId: this.item.id,
                 file: r.data,
@@ -118,7 +121,7 @@ export class PageContentStore {
     async getPageContent(): Promise<{ file?: Blob, actions?: UserAction[] }> {
         var local = await new DbService<page_current_sequence>('page_current_sequence').findOne({ page_url: this.page_url, });
         if (local?.page_snapshoot_id) this.localPageSnapshootId = local.page_snapshoot_id;
-        var r = await userSock.get<{ sync: boolean, snapshoot: { file: { url: string } }, actions: UserAction[] }>('/page/content', {
+        var r = await this.sock.get<{ sync: boolean, snapshoot: { file: { url: string } }, actions: UserAction[] }>('/page/content', {
             wsId: this.item.workspaceId,
             pageId: this.item.id,
             operator_sequence: local?.operator_sequence,

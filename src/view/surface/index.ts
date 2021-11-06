@@ -6,7 +6,7 @@ import { Supervisor } from "./supervisor";
 import { currentParams, SyHistory } from "../history";
 import { Workspace } from "./workspace";
 import { workspaceService } from "../../../services/workspace";
-import { sockSync } from "../../../net/primus";
+import { userTim } from "../../../net/primus";
 import { makeObservable, observable, toJS } from "mobx";
 import { CacheKey, sCache } from "../../../net/cache";
 import { MessageCenter } from "./message.center";
@@ -32,7 +32,7 @@ export class Surface extends Events {
     async load() {
         if (!this.user.isSign) await this.user.loadUser();
         if (!this.user.isSign) return SyHistory.push('/sign');
-        await sockSync.load();
+        await userTim.load();
         var rr = await this.getWillLoadWorkSpace();
         if (rr.ok) {
             if (rr.data.notCreateWorkSpace == true) return SyHistory.push('/work/create')

@@ -1,6 +1,6 @@
 
 import { User } from "../src/view/surface/user/user";
-import { fileSock, masterSock, userSock } from "../net/sock";
+import { fileSock, masterSock } from "../net/sock";
 import { BaseService } from "../net";
 import { CacheKey, sCache } from "../net/cache";
 import { FileMd5 } from "../src/util/file";
@@ -41,31 +41,7 @@ class UserService extends BaseService {
         var r = await masterSock.post('/user/update', { data });
         return r;
     }
-    /**
-     * 用户上传单个文件
-     * @returns 
-     */
-    async uploadWorkspaceFile(file: File, workspaceId, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
-        try {
-            if (!file.md5) file.md5 = await FileMd5(file);
-            var r = await masterSock.get('/file/:md5/exists', { md5: file.md5 });
-            var masterFile;
-            if (r?.ok) masterFile = r.data;
-            else {
-                var d = await fileSock.upload<FileType, string>(file, { uploadProgress: progress });
-                if (d.ok) {
-                    masterFile = d.data;
-                }
-            }
-            if (masterFile) {
-                await userSock.post('/user/storage/file', { ...masterFile, workspaceId });
-            }
-            return { ok: true, data: masterFile }
-        }
-        catch (ex) {
-            return { ok: false, warn: '上传文件失败' }
-        }
-    }
+   
     /**
      * 用户直接上传文件，不考虑md5是否有重复
      * @param file 

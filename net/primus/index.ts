@@ -1,11 +1,12 @@
 import { util } from 'rich/util/util';
 import { log } from '../../src/common/log';
 import { CacheKey, sCache } from '../cache';
-import { userSock } from '../sock';
+import { masterSock, Sock } from '../sock';
+
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
 import { HttpMethod } from './http';
-export class SockSync {
+export class SockTim {
     private willloading: boolean = false;
     private primus;
     async load() {
@@ -17,7 +18,12 @@ export class SockSync {
             /* webpackPrefetch: true */
             '../../src/assert/js/primus.js'
         );
-        var url = await userSock.baseUrl();
+        var url;
+        var ms = await masterSock.get<{ url: string }, string>('/user/tim/pid');
+        if (ms.ok) {
+            url = ms.data.url;
+        }
+        if (!url) return console.error('没有找到可用的tim连接')
         var primus = new (r.default)(url, {});
         this.primus = primus;
         primus.open();
@@ -71,7 +77,7 @@ export class SockSync {
      */
     async syncSend(method: HttpMethod, url: string, data?: any) {
         var id = await this.getId();
-        url = userSock.resolve(API_VERSION, url);
+        url = Sock.resolve(API_VERSION, url);
         return new Promise((resolve, reject) => {
             this.sendEvents.push({
                 rid: id,
@@ -187,4 +193,4 @@ export class SockSync {
         return url;
     }
 }
-export var sockSync = new SockSync();
+export var userTim = new SockTim();
