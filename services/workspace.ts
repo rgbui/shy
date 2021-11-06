@@ -1,13 +1,14 @@
 
 import { BaseService } from "../net";
 import { Workspace } from "../src/view/surface/workspace";
-import { masterSock, userSock } from "../net/sock";
+import { fileSock, masterSock, Sock } from "../net/sock";
 import { CacheKey, yCache } from "../net/cache";
 import { PageItem } from "../src/view/surface/sln/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
 import { FileType } from "../type";
 import { surface } from "../src/view/surface";
+import { FileMd5 } from "../src/util/file";
 class WorkspaceService extends BaseService {
 
     /**
@@ -59,16 +60,16 @@ class WorkspaceService extends BaseService {
     async toggleFavourcePage(item: PageItem) {
 
     }
-    async createDefaultTableSchema(data: { text?: string, templateId?: string }) {
-        var result = await userSock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});
+    async createDefaultTableSchema(sock: Sock, data: { text?: string, templateId?: string }) {
+        var result = await sock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});
         return result.data?.schema;
     }
-    async loadTableSchema(schemaId: string) {
-        var result = await userSock.get<{ schema: Partial<TableSchema> }, string>('/load/table/schema/:id', { id: schemaId });
+    async loadTableSchema(sock: Sock, schemaId: string) {
+        var result = await sock.get<{ schema: Partial<TableSchema> }, string>('/load/table/schema/:id', { id: schemaId });
         return result.data?.schema;
     }
-    async loadTableSchemaData(schemaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
-        var result = await userSock.get<{ list: any[], total: number }, string>('/table/:schemaId/query', {
+    async loadTableSchemaData(sock: Sock, schemaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
+        var result = await sock.get<{ list: any[], total: number }, string>('/table/:schemaId/query', {
             schemaId: schemaId,
             page: options.page,
             size: options.size,
@@ -76,8 +77,8 @@ class WorkspaceService extends BaseService {
         });
         return result.data;
     }
-    async createTableSchemaField(schemaId: string, options: { type: FieldType, text: string }) {
-        var result = await userSock.get<{ field: FileType }, string>('/create/schema/:id/field', {
+    async createTableSchemaField(sock: Sock, schemaId: string, options: { type: FieldType, text: string }) {
+        var result = await sock.get<{ field: FileType }, string>('/create/schema/:id/field', {
             id: schemaId,
             type: options.type,
             text: options.text
@@ -86,6 +87,31 @@ class WorkspaceService extends BaseService {
     }
     async createInvite(wsId: string) {
         return await masterSock.post<{ url: string }, string>('/ws/:wsId/create/invite', { wsId })
+    }
+    /**
+    * 用户上传单个文件
+    * @returns 
+    */
+    async uploadFile(sock: Sock, file: File, workspaceId, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+        try {
+            if (!file.md5) file.md5 = await FileMd5(file);
+            var r = await masterSock.get('/file/:md5/exists', { md5: file.md5 });
+            var masterFile;
+            if (r?.ok) masterFile = r.data;
+            else {
+                var d = await fileSock.upload<FileType, string>(file, { uploadProgress: progress });
+                if (d.ok) {
+                    masterFile = d.data;
+                }
+            }
+            if (masterFile) {
+                await sock.post('/user/storage/file', { ...masterFile, workspaceId });
+            }
+            return { ok: true, data: masterFile }
+        }
+        catch (ex) {
+            return { ok: false, warn: '上传文件失败' }
+        }
     }
 }
 export var workspaceService = new WorkspaceService();

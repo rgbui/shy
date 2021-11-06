@@ -1,10 +1,10 @@
-import lodash from "lodash";
 import { generatePath } from "react-router";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
 import { pageItemStore } from "../../../services/page.item";
 import { userService } from "../../../services/user";
+import { workspaceService } from "../../../services/workspace";
 import { SyHistory } from "../history";
 
 export function MessageCenter(surface: Surface) {
@@ -20,7 +20,7 @@ export function MessageCenter(surface: Surface) {
         return r;
     });
     messageChannel.on(Directive.UploadWorkspaceFile, async (file, progress) => {
-        var r = await userService.uploadWorkspaceFile(file, surface.workspace.id, progress);
+        var r = await workspaceService.uploadFile(surface.workspace.sock, file, surface.workspace.id, progress);
         return r;
     });
     messageChannel.on(Directive.UsersQuery, async () => {
