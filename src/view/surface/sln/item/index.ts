@@ -143,7 +143,6 @@ export class PageItem {
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
         Object.assign(data, {
-            id: util.guid(),
             text: '新页面',
             mime: Mime.page,
             spread: false,
@@ -153,6 +152,7 @@ export class PageItem {
     async onAddAndEdit(data?: Record<string, any>, at?: number) {
         var item = await this.onAdd();
         this.sln.editId = item.id;
+        console.log(this.sln.editId, 'sss');
     }
     onExitEditAndSave(newText: string, oldText: string) {
         this.sln.editId = '';

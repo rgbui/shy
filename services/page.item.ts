@@ -41,7 +41,7 @@ class PageItemStore {
         operator: ItemOperator,
         actions: PageItemAction[]
     }) {
-        return await masterSock.post<{ result: any[] }>('/page/item/operator', { wsId, operator })
+        return await masterSock.post<{ result: { actions: any[] } }>('/page/item/operator', { wsId, operator })
     }
     public async deletePageItem(pageItem: PageItem) {
         var actions: PageItemAction[] = [];
@@ -70,35 +70,37 @@ class PageItemStore {
             if (pageItem.childs.length > 0) {
                 actions.push({ directive: ItemOperatorDirective.update, filter: { parentId: pageItem.parentId, at: { $gte: 0 } } });
             }
+            pageItem.spread = true;
             pageItem.childs.splice(0, 0, newItem);
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.append, actions });
-            if (r.ok && r.data.result) {
-                var re = r.data.result.find(g => g && g.id);
+            if (r.ok && Array.isArray(r.data.result.actions)) {
+                var re = r.data.result.actions.find(g => g && g.id);
                 if (re) {
                     newItem.load(re);
                 }
             }
             return newItem;
         }
-        else await this.insertAfterPageItem(pageItem, data);
+        else return await this.insertAfterPageItem(pageItem, data);
     }
     public async insertAfterPageItem(pageItem: PageItem, data: Record<string, any>) {
         var actions: PageItemAction[] = [];
-        var at = pageItem.parent.childs.findIndex(g => g.id == pageItem.id);
+        var at = pageItem.at;
+        var index = pageItem.parent.childs.findIndex(g => g.id == pageItem.id);
         data.id = config.guid();
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.parentId;
-        data.at = at;
+        data.at = pageItem.at + 1;
         var newItem = new PageItem();
         newItem.load(data);
-        pageItem.parent.childs.splice(at, 0, newItem);
+        pageItem.parent.childs.splice(index + 1, 0, newItem);
         var actions: PageItemAction[] = [];
-        actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gte: at } } })
+        actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gt: at } } })
         actions.push({ directive: ItemOperatorDirective.insert, data });
         var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.insertAfter, actions })
-        if (r.ok && r.data.result) {
-            var re = r.data.result.find(g => g && g.id);
+        if (r.ok && r.data.result.actions) {
+            var re = r.data.result.actions.find(g => g && g.id);
             if (re) {
                 newItem.load(re);
             }
