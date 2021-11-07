@@ -9,21 +9,23 @@
                 if (json.id && json.url) {
                     switch (json.url) {
                         case 'localStorage.setItem':
-                            this.localStorage.setItem.apply(window, json.args);
-                            top.postMessage({ id: json.id, data: null }, location.href)
+                            localStorage.setItem.apply(localStorage, json.args);
+                            top.postMessage(JSON.stringify({ id: json.id, data: null }), '*')
                             break;
                         case 'localStorage.getItem':
-                            var result = this.localStorage.getItem.apply(window, json.args);
-                            top.postMessage({ id: json.id, data: result }, location.href)
+                            var result = localStorage.getItem.apply(localStorage, json.args);
+                            top.postMessage(JSON.stringify({ id: json.id, data: result }), '*')
                             break;
                     }
                 }
             }
             catch (ex) {
-
+                console.error(ex);
             }
         }, false);</script>
 </head>
+
 <body>
 </body>
+
 </html>
