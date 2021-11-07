@@ -2,7 +2,6 @@ import { util } from 'rich/util/util';
 import { log } from '../../src/common/log';
 import { CacheKey, sCache } from '../cache';
 import { masterSock, Sock } from '../sock';
-
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
 import { HttpMethod } from './http';
@@ -14,7 +13,7 @@ export class SockTim {
         if (this.willloading == true) return;
         this.willloading = true;
         var r = await import(
-            /* webpackChunkName: 'primus' */
+            /* webpackChunkName: 'tim' */
             /* webpackPrefetch: true */
             '../../src/assert/js/primus.js'
         );
@@ -46,7 +45,7 @@ export class SockTim {
             var device = await sCache.get(CacheKey.device);
             var token = await sCache.get(CacheKey.token);
             var lang = await sCache.get(CacheKey.lang);
-            var r = await self.post('/' + API_VERSION + '/user/online', { token, device, lang });
+            var r = await self.post('/user/online', { token, device, lang });
             console.log('user online r:', r.data);
         });
         primus.on('error', function error(err) {
@@ -77,7 +76,7 @@ export class SockTim {
      */
     async syncSend(method: HttpMethod, url: string, data?: any) {
         var id = await this.getId();
-        url = Sock.resolve(API_VERSION, url);
+        url = Sock.resolve('/' + API_VERSION, url);
         return new Promise((resolve, reject) => {
             this.sendEvents.push({
                 rid: id,
