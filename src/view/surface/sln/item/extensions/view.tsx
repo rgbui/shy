@@ -13,6 +13,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     style.paddingLeft = 5 + (props.deep || 0) * 15;
     var isInEdit = item.id == surface.sln.editId;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
+    var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
     async function mousedown(event: MouseEvent) {
         var target = event.target as HTMLElement;
         if (target.closest('.shy-ws-item-page-spread')) {
@@ -31,9 +32,6 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         }
         else {
             item.onMousedownItem(event);
-        }
-        if (event.button == 2) {
-            item.onContextmenu(event);
         }
     }
     function inputting(event: Event) {
@@ -60,14 +58,14 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         if (refInput.current && isInEdit) {
             refInput.current.focus();
         }
-    },[isInEdit])
+    }, [isInEdit])
     return <div className='shy-ws-item'>
-        <div className={'shy-ws-item-page' + (isSelected ? " shy-ws-item-page-selected" : "")}
+        <div className={'shy-ws-item-page' + (isSelected ? " shy-ws-item-page-selected" : "") + (isDragOver ? " shy-ws-item-page-dragover" : "")}
             style={style}
             onMouseEnter={e => surface.sln.hoverId = props.item.id}
             onMouseLeave={e => surface.sln.hoverId = ''}
             onContextMenu={e => contextmenu(e.nativeEvent)}
-            onMouseUp={e => mousedown(e.nativeEvent)}>
+            onMouseDown={e => mousedown(e.nativeEvent)}>
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
             <i className='shy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
             {!isInEdit && <span>{item.text}</span>}

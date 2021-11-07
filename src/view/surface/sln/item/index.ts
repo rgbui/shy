@@ -14,8 +14,7 @@ import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declar
 import { PageContentStore } from "../../../../../services/page.content";
 import { UserAction } from "rich/src/history/action";
 import { Mime, SlnDirective, PageItemDirective } from "../declare";
-import { makeObservable, observable, toJS } from "mobx";
-import lodash from 'lodash';
+import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "../../../../../services/page.item";
 export class PageItem {
     id: string = null;

@@ -14,6 +14,7 @@ import { surface } from "..";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { dom } from "rich/src/common/dom";
+import { pageItemStore } from "../../../../services/page.item";
 
 export class Sln extends Events<SlnDirective> {
     constructor() {
@@ -45,7 +46,7 @@ export class Sln extends Events<SlnDirective> {
             MouseDragger<{ item: HTMLElement }>({
                 event,
                 dis: 5,
-                move(ev, data) {
+                moveStart(ev, data) {
                     data.item = (event.target as HTMLElement).closest('.shy-ws-item');
                     var bound = data.item.getBoundingClientRect();
                     self.dragIds = [item.id];
@@ -58,8 +59,11 @@ export class Sln extends Events<SlnDirective> {
                 moveEnd(ev, isMove, data) {
                     if (isMove) {
                         if (self.hoverId) {
+                            console.log(self.hoverId, self.dragIds);
                             if (!self.dragIds.some(s => s == self.hoverId)) {
-
+                                var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
+                                var overItem = surface.workspace.find(g => g.id == self.hoverId);
+                                pageItemStore.moveToPageItem(dragItem, overItem);
                             }
                         }
                         else {

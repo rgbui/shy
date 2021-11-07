@@ -52,15 +52,15 @@
 
 .shy-ws-item {
     &-page {
-        cursor     : pointer;
-        position   : relative;
-        display    : flex;
-        align-items: center;
-        min-height : 27px;
-
-
-        color    : rgba(25, 23, 17, 0.6);
-        font-size: 14px;
+        cursor       : pointer;
+        position     : relative;
+        display      : flex;
+        align-items  : center;
+        min-height   : 27px;
+        color        : rgba(25, 23, 17, 0.6);
+        font-size    : 14px;
+        border-top   : 2px solid transparent;
+        border-bottom: 2px solid transparent;
 
         &-spread {
             color          : inherit;
@@ -143,6 +143,7 @@
                 width          : 20px;
                 height         : 20px;
                 border-radius  : 3px;
+
                 &:hover {
                     background-color: rgba(55, 53, 47, 0.08);
                 }
@@ -164,6 +165,10 @@
             >span {
                 padding-right: 50px;
             }
+        }
+
+        &-dragover {
+            border-bottom: 2px solid #e16259;
         }
     }
 }
