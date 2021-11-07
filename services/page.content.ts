@@ -121,7 +121,7 @@ export class PageContentStore {
     async getPageContent(): Promise<{ file?: Blob, actions?: UserAction[] }> {
         var local = await new DbService<page_current_sequence>('page_current_sequence').findOne({ page_url: this.page_url, });
         if (local?.page_snapshoot_id) this.localPageSnapshootId = local.page_snapshoot_id;
-        var r = await this.sock.get<{ sync: boolean, snapshoot: { file: { url: string } }, actions: UserAction[] }>('/page/content', {
+        var r = await this.sock.get<{ sync: boolean, snapshoot: { file: { url: string } }, actions: UserAction[] }>('/page/content/sync', {
             wsId: this.item.workspaceId,
             pageId: this.item.id,
             operator_sequence: local?.operator_sequence,
