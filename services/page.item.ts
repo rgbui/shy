@@ -1,6 +1,7 @@
 import lodash from "lodash";
 import { util } from "rich/util/util";
 import { masterSock } from "../net/sock";
+import { config } from "../src/common/config";
 import { PageItem } from "../src/view/surface/sln/item";
 enum ItemOperatorDirective {
     update = 1,
@@ -40,7 +41,7 @@ class PageItemStore {
         operator: ItemOperator,
         actions: PageItemAction[]
     }) {
-        await masterSock.post('/page/item/operator', { wsId, operator })
+        return await masterSock.post<{ result: any[] }>('/page/item/operator', { wsId, operator })
     }
     public async deletePageItem(pageItem: PageItem) {
         var actions: PageItemAction[] = [];
@@ -60,7 +61,7 @@ class PageItemStore {
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
         if (pageItem.checkedHasChilds) {
             var actions: PageItemAction[] = [];
-            data.id = util.guid();
+            data.id = config.guid();
             data.workspaceId = pageItem.workspaceId;
             data.parentId = pageItem.id;
             data.at = 0;
@@ -71,7 +72,13 @@ class PageItemStore {
             }
             pageItem.childs.splice(0, 0, newItem);
             actions.push({ directive: ItemOperatorDirective.insert, data });
-            await this.save(pageItem.workspace.id, { operator: ItemOperator.append, actions });
+            var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.append, actions });
+            if (r.ok && r.data.result) {
+                var re = r.data.result.find(g => g && g.id);
+                if (re) {
+                    newItem.load(re);
+                }
+            }
             return newItem;
         }
         else await this.insertAfterPageItem(pageItem, data);
@@ -79,7 +86,7 @@ class PageItemStore {
     public async insertAfterPageItem(pageItem: PageItem, data: Record<string, any>) {
         var actions: PageItemAction[] = [];
         var at = pageItem.parent.childs.findIndex(g => g.id == pageItem.id);
-        data.id = util.guid();
+        data.id = config.guid();
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.parentId;
         data.at = at;
@@ -89,7 +96,13 @@ class PageItemStore {
         var actions: PageItemAction[] = [];
         actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gte: at } } })
         actions.push({ directive: ItemOperatorDirective.insert, data });
-        await this.save(pageItem.workspace.id, { operator: ItemOperator.insertAfter, actions })
+        var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.insertAfter, actions })
+        if (r.ok && r.data.result) {
+            var re = r.data.result.find(g => g && g.id);
+            if (re) {
+                newItem.load(re);
+            }
+        }
         return newItem;
     }
     public async moveAppendPageItem(pageItem: PageItem, parentItem: PageItem) {
