@@ -1,4 +1,6 @@
+import { log } from "../common/log";
 
+var HEXCHARS = "0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_+=!@#$%^&*(){}[]|?/<>,.;:".split("")
 
 export var ShyUtil = {
 
@@ -23,5 +25,20 @@ export var ShyUtil = {
             }
         })
         return data.findAll(g => !rs.exists(r => r == g));
+    },
+    hexadecimalConversion(hex: number, number: number, defineChars?: string[]) {
+        var chars = (defineChars ? defineChars : HEXCHARS).slice(0, hex);
+        if (number == 0) { return chars.first() };
+        var n = number;
+        var s = '';
+        while (n > 0) {
+            var m = n % hex;
+            if (typeof chars[m] == 'undefined') {
+                console.error({ chars, m, n, hex, number })
+            }
+            s = chars[m] + s;
+            n = (n - m) / hex;
+        }
+        return s;
     }
 }
