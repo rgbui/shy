@@ -28,7 +28,7 @@ class UserService extends BaseService {
         return await masterSock.get('/sign/out');
     }
     async ping() {
-        var result: SockResponse<{ token: string, user: Partial<User> }> = this.createResponse();
+        var result: SockResponse<{ token: string, guid: string, user: Partial<User> }> = this.createResponse();
         if (await sCache.get(CacheKey.token)) {
             result = await masterSock.get('/user/ping');
             if (result.ok) {

@@ -3,6 +3,7 @@ import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { util } from "rich/util/util";
 import { userService } from "../../../../services/user";
+import { config } from "../../../common/config";
 import { useOpenUserSettings } from "./settings";
 export class User {
     public id: string;
@@ -20,6 +21,7 @@ export class User {
     async loadUser() {
         var r = await userService.ping();
         if (r.ok) {
+            config.updateServiceGuid(r.data.guid);
             Object.assign(this, r.data.user);
         }
     }

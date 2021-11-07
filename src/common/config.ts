@@ -1,3 +1,6 @@
+import { util } from "rich/util/util";
+import { ShyUtil } from "../util";
+
 class Config {
     /**
      * * 打包发布的版本
@@ -44,6 +47,19 @@ class Config {
      */
     get isWeixin() {
         return false;
+    }
+    private service_guid: string = '';
+    private counter = 0;
+    guid() {
+        if (this.service_guid) {
+            var n = this.counter = this.counter + 1;
+            return this.service_guid + "-" + (ShyUtil.hexadecimalConversion(62, n));
+        }
+        else util.guid();
+    }
+    updateServiceGuid(guid: string) {
+        this.service_guid = guid;
+        this.counter = 0;
     }
 }
 export var config = new Config();
