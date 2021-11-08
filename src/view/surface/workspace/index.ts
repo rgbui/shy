@@ -6,13 +6,11 @@ import { useOpenUserSettings } from "../user/settings";
 import { currentParams } from "../../history";
 import { CacheKey, yCache } from "../../../../net/cache";
 import { Mime } from "../sln/declare";
-import { workspaceTogglePages, workspaceService } from "../../../../services/workspace";
+import { workspaceService } from "../../../../services/workspace";
 import { ShyUtil } from "../../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../../net/sock";
 import { SockType } from "../../../../net/sock/type";
-
-
 
 export type WorkspaceUser = {
     userid: string;
@@ -78,7 +76,7 @@ export class Workspace {
     async getDefaultPage() {
         var pageId = currentParams('/page/:id')?.id;
         if (!pageId) {
-            var pid = await yCache.get(yCache.resolve(CacheKey.workspace_open_page_id, this.id));
+            var pid = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], this.id));
             if (!pid) {
                 var pt = this.find(g => g.mime == Mime.page);
                 if (pt) return pt;
@@ -97,7 +95,7 @@ export class Workspace {
         }
     }
     async loadPages() {
-        var ids = await workspaceTogglePages.getIds(this.id);
+        var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
         var rr = await workspaceService.loadWorkspaceItems(this.id, ids);
         if (rr) {
             if (Array.isArray(rr?.data?.pages)) {

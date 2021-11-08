@@ -16,6 +16,8 @@ import { UserAction } from "rich/src/history/action";
 import { Mime, SlnDirective, PageItemDirective } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "../../../../../services/page.item";
+import { messageChannel } from "rich/util/bus/event.bus";
+import { Directive } from "rich/util/bus/directive";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -137,7 +139,7 @@ export class PageItem {
             }
             this.checkedHasChilds = true;
         }
-        this.sln.emit(SlnDirective.togglePageItem, this);
+        messageChannel.fireAsync(Directive.TogglePageItem)
     }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};

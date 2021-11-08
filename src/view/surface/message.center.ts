@@ -2,6 +2,7 @@ import { generatePath } from "react-router";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
+import { CacheKey, yCache } from "../../../net/cache";
 import { pageItemStore } from "../../../services/page.item";
 import { userService } from "../../../services/user";
 import { workspaceService } from "../../../services/workspace";
@@ -31,6 +32,10 @@ export function MessageCenter(surface: Surface) {
         // var newItem = await item.onAdd(pageInfo);
         // return { id: newItem.id, sn: newItem.sn, text: newItem.text }
     });
+    messageChannel.on(Directive.TogglePageItem, async () => {
+        var visibleIds = surface.workspace.getVisibleIds();
+        await yCache.set(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], surface.workspace.id), visibleIds);
+    })
     messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
         var item = surface.workspace.find(g => g.id == id);
         if (item) {

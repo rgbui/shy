@@ -5,11 +5,11 @@ import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { currentParams, SyHistory } from "../history";
 import { Workspace } from "./workspace";
-import { workspaceService } from "../../../services/workspace";
 import { userTim } from "../../../net/primus";
 import { makeObservable, observable, toJS } from "mobx";
 import { CacheKey, sCache } from "../../../net/cache";
 import { MessageCenter } from "./message.center";
+import { workspaceService } from "../../../services/workspace";
 export class Surface extends Events {
     constructor() {
         super();
@@ -58,7 +58,7 @@ export class Surface extends Events {
         if (!domain && !pageId)
             sn = currentParams('/ws/:id')?.id;
         if (!domain && !pageId && !sn) {
-            wsId = await sCache.get(CacheKey.workspaceId);
+            wsId = await sCache.get(CacheKey.wsId);
         }
         return await workspaceService.loadWorkSpace(domain, pageId, sn, wsId);
     }

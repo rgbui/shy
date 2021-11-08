@@ -2,12 +2,10 @@
 import { BaseService } from "../net";
 import { Workspace } from "../src/view/surface/workspace";
 import { fileSock, masterSock, Sock } from "../net/sock";
-import { CacheKey, yCache } from "../net/cache";
 import { PageItem } from "../src/view/surface/sln/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
 import { FileType } from "../type";
-import { surface } from "../src/view/surface";
 import { FileMd5 } from "../src/util/file";
 class WorkspaceService extends BaseService {
 
@@ -53,9 +51,6 @@ class WorkspaceService extends BaseService {
     async getPage(id: string) {
         var page = await masterSock.get<{ page: Partial<PageItem> }, string>('/page/:id/query', { id });
         return page;
-    }
-    async togglePage(item: PageItem) {
-        await workspaceTogglePages.save(surface.workspace.id, item.workspace.getVisibleIds())
     }
     async toggleFavourcePage(item: PageItem) {
 
@@ -115,19 +110,3 @@ class WorkspaceService extends BaseService {
     }
 }
 export var workspaceService = new WorkspaceService();
-export class workspaceTogglePages {
-    private static ids: string[];
-    static async getIds(wsId: string) {
-        if (Array.isArray(this.ids)) return this.ids;
-        var ids = await yCache.get(CacheKey.workspace_toggle_pages + "." + wsId);
-        if (Array.isArray(ids)) {
-            this.ids = ids;
-        }
-        else this.ids = [];
-        return this.ids;
-    }
-    static async save(wsId: string, ids: string[]) {
-        this.ids = ids;
-        await yCache.set(CacheKey.workspace_toggle_pages + "." + wsId, this.ids)
-    }
-}

@@ -84,7 +84,7 @@ export class Sln extends Events<SlnDirective> {
     onFocusItem(item: PageItem) {
         this.selectIds = [item.id];
         item.selectedDate = new Date().getTime();
-        yCache.set(yCache.resolve(CacheKey.workspace_open_page_id, surface.workspace.id), item.id);
+        yCache.set(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], surface.workspace.id), item.id);
     }
     onEditItem(item: PageItem) {
         this.editId = item?.id || '';
@@ -102,19 +102,4 @@ export class Sln extends Events<SlnDirective> {
                 return PageItemView;
         }
     }
-}
-export interface Sln {
-    on(name: SlnDirective.openItem, fn: (item: PageItem) => void);
-    emit(name: SlnDirective.openItem, item: PageItem);
-
-    emit(name: SlnDirective.addSubPageItem, item: PageItem);
-    emitAsync(name: SlnDirective.addSubPageItem, item: PageItem): Promise<void>;
-    on(name: SlnDirective.addSubPageItem, fn: (item: PageItem) => Promise<void>);
-
-    emit(name: SlnDirective.removePageItem, item: PageItem);
-    on(name: SlnDirective.removePageItem, fn: (item: PageItem) => void);
-    emit(name: SlnDirective.updatePageItem, item: PageItem);
-    on(name: SlnDirective.updatePageItem, fn: (item: PageItem) => void);
-    emit(name: SlnDirective.togglePageItem, item: PageItem);
-    on(name: SlnDirective.togglePageItem, fn: (item: PageItem) => void);
 }
