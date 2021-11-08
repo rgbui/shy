@@ -39,8 +39,9 @@ export function MessageCenter(surface: Surface) {
     messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
         var item = surface.workspace.find(g => g.id == id);
         if (item) {
-            pageItemStore.updatePageItem(item, pageInfo);
-            item.onUpdateDocument();
+            await pageItemStore.updatePageItem(item, pageInfo);
+            if (surface.supervisor?.item === item)
+                item.onUpdateDocument();
         }
     });
     messageChannel.on(Directive.OpenPageItem, (item) => {

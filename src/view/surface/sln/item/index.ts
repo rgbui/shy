@@ -276,6 +276,7 @@ export class PageItem {
                     var dl = document.head.children[i] as any;
                     if (dl && dl.getAttribute('rel') == 'icon' && dl.getAttribute('type') == 'image/x-icon') {
                         link = dl as any;
+                        break;
                     }
                 }
                 if (!link) {
@@ -285,8 +286,8 @@ export class PageItem {
                     document.head.appendChild(link);
                 }
                 link.setAttribute('href', dataUrl);
+                canvas.remove();
             }
-            //<link rel="icon" type="image/x-icon" href="https://secure.wostatic.cn/icon/rwF6bK9DDEHgFAkA5rzSWy/%E6%84%8F%E5%A4%A7%E5%88%A9%E9%A3%8E%E5%85%89%20%E5%B0%9A%C2%B7%E5%B7%B4%E8%92%82%E6%96%AF%E7%89%B9%C2%B7%E5%8D%A1%E7%B1%B3%E5%B0%94%C2%B7%E7%A7%91%E7%BD%97%EF%BC%88%E6%B3%95%E5%9B%BD%EF%BC%89.jpg?auth_key=1628690385-b5mmS9cDfRgyx5ZK8wTBap-0-bdd99d9c46f9257401450fbf47b1a890&amp;image_process=resize,w_48">
         }
     }
     onSaveUseAction(action: UserAction) {
