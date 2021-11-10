@@ -8,6 +8,18 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.512-pro
+  `2021-11-10`  
+  * 发布pro补丁
+## 0.6.511-pro
+  `2021-11-10`  
+  * 发布pro版本
+
+## 0.6.51-beta
+  `2021-11-10`  
+  * 修复基本块的各种bug，实现基本的文本编辑输入
+ 
+
 ## 0.6.5-beta
   `2021-11-6`  
   * 增加侧栏页面的自由拖动
