@@ -1,32 +1,67 @@
 import lodash from "lodash";
 import { util } from "rich/util/util";
 var ifr: HTMLIFrameElement;
+var isOnloadSuccess: boolean = false;
 export function createAuthIframe() {
     if (!ifr) {
         ifr = document.createElement('iframe');
         ifr.style.display = 'none';
         ifr.setAttribute('src', AUTH_URL);
+        ifr.onload = function () {
+            isOnloadSuccess = true;
+            loadSuccessSend();
+        }
         document.body.appendChild(ifr);
     }
 }
-var events: { id: string, time: any, callback: (data) => void }[] = [];
+var events: { id: string, url?: string, args?: any[], sended?: boolean, time?: any, callback: (data) => void }[] = [];
+export async function loadSuccessSend() {
+    var evs = events.filter(x => x.sended == false);
+    for (let i = 0; i < evs.length; i++) {
+        var ev = evs[i];
+        var tf = ev.time;
+        ev.time = setTimeout(() => {
+            tf();
+        }, 2e3);
+        ifr.contentWindow.postMessage(JSON.stringify({ id: ev.id, url: ev.url, args: ev.args || [] }), '*')
+    }
+}
 export async function send(url: string, args?: any[]) {
     return new Promise((resolve, reject) => {
         try {
             var id = util.guid();
-            events.push({
-                id,
-                callback: (data) => {
-                    resolve(data);
-                },
-                time: setTimeout(() => {
-                    reject('over time');
-                    var ev = events.find(g => g.id == id);
-                    lodash.remove(events, g => g.id == id);
-                    if (ev.time) { clearTimeout(ev.time); ev.time = null }
-                }, 2e3)
-            })
-            ifr.contentWindow.postMessage(JSON.stringify({ id, url, args: args || [] }), '*')
+            if (!isOnloadSuccess) {
+                events.push({
+                    id,
+                    url,
+                    args,
+                    sended: false,
+                    callback: (data) => {
+                        resolve(data);
+                    },
+                    time: () => {
+                        reject('over time');
+                        var ev = events.find(g => g.id == id);
+                        lodash.remove(events, g => g.id == id);
+                        if (ev.time) { clearTimeout(ev.time); ev.time = null }
+                    }
+                })
+            }
+            else {
+                events.push({
+                    id,
+                    callback: (data) => {
+                        resolve(data);
+                    },
+                    time: setTimeout(() => {
+                        reject('over time');
+                        var ev = events.find(g => g.id == id);
+                        lodash.remove(events, g => g.id == id);
+                        if (ev.time) { clearTimeout(ev.time); ev.time = null }
+                    }, 2e3)
+                })
+                ifr.contentWindow.postMessage(JSON.stringify({ id, url, args: args || [] }), '*')
+            }
         }
         catch (ex) {
             reject(ex);
