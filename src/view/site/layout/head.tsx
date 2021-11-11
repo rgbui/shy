@@ -19,7 +19,7 @@ export var HeadView = observer(function () {
             <a href='/shiyun'>《诗云》</a>
         </div>
         <div className='shy-site-head-user'>
-            <Link to='/sign'>注册/登录</Link>
+            <Link to='/sign/in'>注册/登录</Link>
         </div>
     </div>
 })

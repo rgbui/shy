@@ -11,8 +11,8 @@ export var FooterView = observer(function () {
         </div>
         <div>
             <h4>产品登录</h4>
-            <a href='/sign'>帐号登录</a><br />
-            <a href='/sign'>注册帐号</a>
+            <a href='/sign/in'>帐号登录</a><br />
+            <a href='/sign/in'>注册帐号</a>
         </div>
         <div>
             <h4>产品介绍</h4>

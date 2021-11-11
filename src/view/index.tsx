@@ -29,7 +29,7 @@ export function App() {
   }
   React.useEffect(() => {
     load();
-  },[])
+  }, [])
   return <div className='shy-app'>
     {!isLoad && <div className='shy-app-load'></div>}
     {isLoad && <Router history={SyHistory}>
@@ -41,15 +41,16 @@ export function App() {
       <Route path='/service/protocol' exact component={AgreeView}></Route>
       <Route path='/download' exact component={DownloadView}></Route>
       <Route path='/help' exact component={HelpView}></Route>
-      <Route path='/sign' exact component={Login}></Route>
-      <Route path='/sign/out' exact component={LogOut}> </Route>
+      <Route path='/sign/out' exact component={LogOut}></Route>
+      <Route path='/sign/in' exact component={Login}></Route>
       <Route path='/shiyun' exact component={BookView} />
       <Route path='/ws/:id' exact component={ViewSurface}></Route>
       <Route path='/page/:id' exact component={ViewSurface}></Route>
       <Route path='/view/:id' exact component={PageDisplay}></Route>
       <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
       <Route path='/test/component' exact component={Component}></Route>
-      <Route path='/404' exact component={View404}></Route>
+      <Route path='/404' exact ></Route>
+      <Route component={View404}></Route>
     </Router>}
   </div>
 }

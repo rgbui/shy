@@ -27,7 +27,7 @@ export var DownloadView = observer(function () {
                             <div className='shy-site-client'>
                                 <span className='sy sy-chrome' style={{ fontSize: 48 }}></span>
                                 <div>Web</div>
-                                <a href='/sign'><Button>使用</Button></a>
+                                <a href='/sign/in'><Button>使用</Button></a>
                             </div>
                             <div className='shy-site-client'>
                                 <span className='sy sy-mac' style={{marginTop:-20,marginBottom:20}}></span>
