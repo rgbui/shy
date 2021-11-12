@@ -153,7 +153,7 @@ export class PageItem {
     async onAddAndEdit(data?: Record<string, any>, at?: number) {
         var item = await this.onAdd();
         this.sln.editId = item.id;
-        console.log(this.sln.editId, 'sss');
+        messageChannel.fireAsync(Directive.TogglePageItem)
     }
     onExitEditAndSave(newText: string, oldText: string) {
         this.sln.editId = '';
