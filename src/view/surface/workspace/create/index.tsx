@@ -5,6 +5,7 @@ import { Input } from "rich/component/view/input";
 import { SyHistory } from "../../../history";
 import { workspaceService } from "../../../../../services/workspace";
 import { observer, useLocalObservable } from "mobx-react";
+import "./style.less";
 export var WorkspaceCreateView = observer(function () {
     var local = useLocalObservable<{ fail: string, text: string }>(() => {
         return {
