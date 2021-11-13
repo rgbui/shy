@@ -11,6 +11,9 @@ import { ShyUtil } from "../../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../../net/sock";
 import { SockType } from "../../../../net/sock/type";
+import { useOpenWorkspaceSettings } from "./settings";
+import lodash from "lodash";
+import { makeObservable, observable } from "mobx";
 
 export type WorkspaceUser = {
     userid: string;
@@ -18,17 +21,32 @@ export type WorkspaceUser = {
     nick: string;
 }
 export class Workspace {
-    id: string;
-    date: number;
-    sn: number;
-    text: string;
-    icon: IconArguments;
+    id: string = null;
+    date: number = null;
+    sn: number = null;
+    text: string = null;
+    icon: IconArguments = null;
     childs: PageItem[] = [];
-    customizeSecondDomain: string;
-    customizeDomain: string;
-    slogan: string;
+    customizeSecondDomain: string = null;
+    customizeDomain: string = null;
+    slogan: string = null;
     users: WorkspaceUser[] = [];
-    pidUrl: string;
+    pidUrl: string = null;
+    constructor() {
+        makeObservable(this, {
+            id: observable,
+            date: observable,
+            sn: observable,
+            text: observable,
+            icon: observable,
+            childs: observable,
+            customizeDomain: observable,
+            customizeSecondDomain: observable,
+            slogan: observable,
+            users: observable,
+            pidUrl: observable
+        })
+    }
     private _sock: Sock;
     get sock() {
         if (this._sock) return this._sock;
@@ -68,10 +86,15 @@ export class Workspace {
         return ids;
     }
     async onOpenWorkspaceSettings(event: React.MouseEvent) {
+        await useOpenWorkspaceSettings();
+    }
+    async onOpenUserSettings(event: React.MouseEvent) {
         await useOpenUserSettings();
     }
     async onUpdateInfo(data: Partial<Workspace>) {
-
+        console.log(this.id, data, 'da');
+        await workspaceService.updateWorkspace(this.id, data);
+        lodash.assign(this, data);
     }
     async getDefaultPage() {
         var pageId = currentParams('/page/:id')?.id;

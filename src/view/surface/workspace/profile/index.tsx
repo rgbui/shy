@@ -28,7 +28,6 @@ export var WorkspaceProfile = observer(function () {
             <Icon size={12} icon={ExpandSvg}></Icon>
         </div>
         <div className='shy-ws-profile-operators'>
-            <a onMouseDown={e => { e.stopPropagation(); surface.workspace.onOpenWorkspaceSettings(e) }}><Icon icon='elipsis:sy'></Icon></a>
             {surface.isShowSln && <a onMouseDown={e => { e.stopPropagation(); surface.onToggleSln(false) }}>
                 <AppTip id={AppLang.ShrinkSlide} placement={'bottom'}><Icon size={12} icon={DoubleArrow} style={{ transform: 'scale(-1,1)' }}></Icon></AppTip>
             </a>}

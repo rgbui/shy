@@ -9,6 +9,8 @@ import { surface } from '../..';
 import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';
 import "./style.less";
+import { observer } from 'mobx-react';
+@observer
 export class WorkspaceSettingsView extends React.Component<{ close: () => void }> {
     async onUploadFace() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
@@ -94,7 +96,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
             </div>
             <div className='shy-settings-content-form-footer'>
                 <Space align='end' style={{ height: '100%' }}>
-                    <Button onClick={e => this.onClose()}>取消</Button>
+                    <Button onClick={e => this.onClose()} ghost >取消</Button>
                     <Button onClick={e => this.onSave()}>保存</Button>
                 </Space>
             </div>
