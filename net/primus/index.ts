@@ -64,6 +64,11 @@ export class SockTim {
             console.log('Connection closed');
         });
     }
+    close() {
+        if (this.primus) {
+            this.primus.close();
+        }
+    }
     async getId() {
         return util.guid();
     }
