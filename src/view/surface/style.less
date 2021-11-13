@@ -29,12 +29,13 @@
                 color        : rgba(55, 53, 47, 0.6);
                 fill         : currentColor;
                 stroke       : currentColor;
+
                 &.shy-icon {
                     border-radius: 50%;
                 }
-                
+
                 &.hover {
-                    color: #e16259;
+                    color  : #e16259;
                     //color: rgba(55, 53, 47, 0.8);
                 }
             }
@@ -127,5 +128,29 @@
         align-items    : center;
         width          : 100vw;
         height         : 100vh;
+    }
+}
+
+.shy-wss {
+    height: 100%;
+
+    .shy-ws {
+        height         : 100%;
+        position       : relative;
+        display        : flex;
+        flex-direction : column;
+        justify-content: flex-start;
+        align-items    : stretch;
+
+        .shy-ws-profile {
+            flex-grow  : 0;
+            flex-shrink: 0;
+        }
+
+        >.shy-ws-items {
+            flex-grow : 1;
+            padding-bottom:100px;
+            overflow-y: auto;
+        }
     }
 }
