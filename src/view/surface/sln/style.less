@@ -150,22 +150,23 @@
             }
         }
 
-        &-selected {
-            background: rgba(55, 53, 47, 0.08);
-            color     : rgb(55, 53, 47);
-        }
-
         &:hover {
-            background: rgba(55, 53, 47, 0.08);
+            background: rgba(55, 53, 47, 0.04);
 
             .shy-ws-item-page-operators {
                 visibility: visible;
             }
+        }
 
+        &-selected,&-selected:hover {
+            background: rgba(55, 53, 47, 0.08);
+            color     : rgb(55, 53, 47);
             >span {
-                padding-right: 50px;
+                font-weight: bold;
             }
         }
+
+
 
         &-dragover {
             border-bottom: 2px solid #e16259;
