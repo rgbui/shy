@@ -111,7 +111,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 </Row> */}
             </div>
             <div className='shy-settings-content-form-footer'>
-                <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()} >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>
+                <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()}   ghost >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>
             </div>
         </div>
     }

@@ -1,3 +1,4 @@
+import { makeObservable, observable } from "mobx";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
@@ -6,15 +7,28 @@ import { userService } from "../../../../services/user";
 import { config } from "../../../common/config";
 import { useOpenUserSettings } from "./settings";
 export class User {
-    public id: string;
-    public inc: number;
-    public createDate: Date;
-    public phone: string;
-    public paw: string;
-    public name: string;
-    public avatar: IconArguments;
-    public email: string;
-    public slogan: string;
+    public id: string = null;
+    public inc: number = null;
+    public createDate: Date = null;
+    public phone: string = null;
+    public paw: string = null;
+    public name: string = null;
+    public avatar: IconArguments = null;
+    public email: string = null;
+    public slogan: string = null;
+    constructor() {
+        makeObservable(this, {
+            id: observable,
+            inc: observable,
+            createDate: observable,
+            phone: observable,
+            paw: observable,
+            name: observable,
+            avatar: observable,
+            email: observable,
+            slogan: observable
+        })
+    }
     get isSign() {
         return this.id ? true : false;
     }
