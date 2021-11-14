@@ -33,7 +33,7 @@ export function PageDisplay() {
         }
     }
     async function renderPage(file: Blob, item: Partial<PageItem>) {
-        var page = new Page(refEl.current, { readonly: true });
+        var page = new Page({ readonly: true });
         page.on(PageDirective.blur, function (ev) {
             // console.log('blur', ev)
         });
@@ -66,7 +66,7 @@ export function PageDisplay() {
             return { text: item.text, icon: item.icon, id: item.id };
         });
         await page.loadFile(file);
-        page.render();
+        page.render(refEl.current);
     }
     async function load() {
         setLoad(true);

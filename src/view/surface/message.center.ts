@@ -55,14 +55,14 @@ export function MessageCenter(surface: Surface) {
                 item.onUpdateDocument();
         }
     });
-    messageChannel.on(Directive.OpenPageItem, (item) => {
+    messageChannel.on(Directive.OpenPageItem, async (item) => {
         var id = typeof item == 'string' ? item : item.id;
         var it = surface.workspace.find(g => g.id == id);
         if (it) {
             SyHistory.push(generatePath('/page/:id', { id: it.id }));
             it.onUpdateDocument();
-            surface.supervisor.onOpenItem(it);
             surface.sln.onFocusItem(it);
+            await surface.supervisor.onOpenItem(it);
         }
     });
 }

@@ -18,6 +18,7 @@ import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "../../../../../services/page.item";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
+import { Page } from "rich/src/page";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -34,6 +35,7 @@ export class PageItem {
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
     store: PageContentStore;
+    contentView: Page;
     /**
     * 是否为公开
     * net 互联网公开
