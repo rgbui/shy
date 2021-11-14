@@ -135,11 +135,16 @@ export class PageItem {
         var sp = typeof spread != 'undefined' ? spread : this.spread;
         this.spread = sp == false ? true : false;
         if (this.spread == true && this.checkedHasChilds == false) {
-            var sus = await workspaceService.loadPageChilds(this.id);
-            if (sus.ok == true) {
-                this.load({ childs: sus.data.list })
+            if (this.checkedHasChilds == false && this.childs.length == 0) {
+                var sus = await workspaceService.loadPageChilds(this.id);
+                if (sus.ok == true) {
+                    this.load({ childs: sus.data.list })
+                }
+                this.checkedHasChilds = true;
             }
-            this.checkedHasChilds = true;
+            else {
+                this.checkedHasChilds = true;
+            }
         }
         messageChannel.fireAsync(Directive.TogglePageItem)
     }
