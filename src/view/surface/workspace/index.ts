@@ -107,7 +107,7 @@ export class Workspace {
             return this.find(g => g.id == pid);
         }
         else {
-            var item = this.find(g => g.id == pageId);
+            var item = this.find(g => g.id == pageId || g.sn == pageId);
             if (item) {
                 return item;
             }

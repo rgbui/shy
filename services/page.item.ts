@@ -1,5 +1,4 @@
 import lodash from "lodash";
-import { util } from "rich/util/util";
 import { masterSock } from "../net/sock";
 import { config } from "../src/common/config";
 import { PageItem } from "../src/view/surface/sln/item";
@@ -9,6 +8,7 @@ enum ItemOperatorDirective {
     remove = 3,
     inc = 4,
 }
+
 enum ItemOperator {
     /**
      * 创建
@@ -74,9 +74,13 @@ class PageItemStore {
             pageItem.childs.splice(0, 0, newItem);
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.append, actions });
+            console.log('rrr', r);
             if (r.ok && Array.isArray(r.data.result.actions)) {
-                var re = r.data.result.actions.find(g => g && g.id);
+                console.log('actions', r.data.result.actions);
+                var re = r.data.result.actions.find(g => g && g.id == newItem.id);
+                console.log('re', re);
                 if (re) {
+                    console.log(re);
                     newItem.load(re);
                 }
             }
@@ -99,8 +103,8 @@ class PageItemStore {
         actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gt: at } } })
         actions.push({ directive: ItemOperatorDirective.insert, data });
         var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.insertAfter, actions })
-        if (r.ok && r.data.result.actions) {
-            var re = r.data.result.actions.find(g => g && g.id);
+        if (r.ok && Array.isArray(r.data.result.actions)) {
+            var re = r.data.result.actions.find(g => g && g.id == newItem.id);
             if (re) {
                 newItem.load(re);
             }

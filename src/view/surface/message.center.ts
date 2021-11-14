@@ -59,7 +59,7 @@ export function MessageCenter(surface: Surface) {
         var id = typeof item == 'string' ? item : item.id;
         var it = surface.workspace.find(g => g.id == id);
         if (it) {
-            SyHistory.push(generatePath('/page/:id', { id: it.id }));
+            SyHistory.push(generatePath('/page/:id', { id: it.sn }));
             it.onUpdateDocument();
             surface.sln.onFocusItem(it);
             await surface.supervisor.onOpenItem(it);
