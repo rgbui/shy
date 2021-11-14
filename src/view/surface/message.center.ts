@@ -36,6 +36,17 @@ export function MessageCenter(surface: Surface) {
         var visibleIds = surface.workspace.getVisibleIds();
         await yCache.set(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], surface.workspace.id), visibleIds);
     })
+    messageChannel.on(Directive.getPageInfo, async (id: string) => {
+        var item = surface.workspace.find(g => g.id == id);
+        if (item) {
+            return { icon: item.icon, text: item.text };
+        }
+        else {
+            var r = await workspaceService.getPage(id);
+            if (r.ok && r.data.page)
+                return { icon: r.data.page.icon, text: r.data.page.text }
+        }
+    });
     messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
         var item = surface.workspace.find(g => g.id == id);
         if (item) {
