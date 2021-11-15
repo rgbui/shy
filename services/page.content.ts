@@ -24,7 +24,7 @@ export class PageContentStore {
     async saveHistory(userAction: UserAction) {
         var directive: string = (typeof userAction.directive == 'number' ? ActionDirective[userAction.directive] : ActionDirective) as any;
         try {
-            var r = await userTim.post<{ sequence: number, id: string }, string>('/page/useraction', {
+            var r = await userTim.post<{ sequence: number, id: string }, string>('/page/content/operator', {
                 wsId: this.item.workspaceId,
                 pageId: this.item.id,
                 directive: directive,
