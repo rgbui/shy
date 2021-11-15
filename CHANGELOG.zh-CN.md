@@ -8,6 +8,14 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+  ## 0.6.522-pro
+  `2021-11-15`  
+  * 修复标题光标回退删除时，触发了大量的保存动作
+
+## 0.6.521-beta
+  `2021-11-15`  
+  * beta发布
+  
 ## 0.6.52-pro
   `2021-11-15`  
   * 增加打开页面的渲染缓存
