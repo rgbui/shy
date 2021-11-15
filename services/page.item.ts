@@ -1,4 +1,5 @@
 import lodash from "lodash";
+import { runInAction, toJS } from "mobx";
 import { masterSock } from "../net/sock";
 import { config } from "../src/common/config";
 import { PageItem } from "../src/view/surface/sln/item";
@@ -57,13 +58,14 @@ class PageItemStore {
         Object.assign(pageItem, data);
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
-        if (pageItem.checkedHasChilds) {
+        if (pageItem.checkedHasChilds && pageItem.spread == true) {
             var actions: PageItemAction[] = [];
             data.id = config.guid();
             data.workspaceId = pageItem.workspaceId;
             data.parentId = pageItem.id;
             data.at = 0;
             var newItem = new PageItem();
+            newItem.checkedHasChilds = true;
             newItem.load(data);
             if (pageItem.childs.length > 0) {
                 actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gte: 0 } } });
@@ -72,13 +74,9 @@ class PageItemStore {
             pageItem.childs.splice(0, 0, newItem);
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operator: ItemOperator.append, actions });
-            console.log('rrr', r);
             if (r.ok && Array.isArray(r.data.result.actions)) {
-                console.log('actions', r.data.result.actions);
                 var re = r.data.result.actions.find(g => g && g.id == newItem.id);
-                console.log('re', re);
                 if (re) {
-                    console.log(re);
                     newItem.load(re);
                 }
             }
@@ -95,6 +93,7 @@ class PageItemStore {
         data.parentId = pageItem.parentId;
         data.at = pageItem.at + 1;
         var newItem = new PageItem();
+        newItem.checkedHasChilds = true;
         newItem.load(data);
         pageItem.parent.childs.splice(index + 1, 0, newItem);
         var actions: PageItemAction[] = [];
@@ -110,14 +109,17 @@ class PageItemStore {
         return newItem;
     }
     public async moveAppendPageItem(pageItem: PageItem, parentItem: PageItem) {
-        if (parentItem.parent == parentItem && !parentItem.prev) return;
+        if (pageItem.parent == parentItem && !pageItem.prev) return;
         var actions: PageItemAction[] = [];
-        lodash.remove(pageItem.parent?.childs, g => g.id == pageItem.id);
-        pageItem.parentId = parentItem.id;
+
         if (parentItem.childs.length > 0) {
             actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: parentItem.id, at: { $gte: 0 } } });
         }
-        parentItem.childs.splice(0, 0, pageItem);
+        runInAction(() => {
+            lodash.remove(pageItem.parent?.childs, g => g.id == pageItem.id);
+            pageItem.parentId = parentItem.id;
+            parentItem.childs.splice(0, 0, pageItem);
+        })
         actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: 0, parentId: pageItem.parentId } })
         await this.save(pageItem.workspace.id, { operator: ItemOperator.moveAppend, actions })
     }
@@ -134,9 +136,12 @@ class PageItemStore {
                     actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: toPageItem.parent.id, at: { $gte: next.at } } });
                 }
             }
-            lodash.remove(pageItem.parent.childs, g => g.id == pageItem.id);
-            var currentAt = toPageItem.parent.childs.findIndex(g => g.id == toPageItem.id);
-            toPageItem.parent.childs.splice(currentAt + 1, 0, pageItem);
+            runInAction(() => {
+                lodash.remove(pageItem.parent.childs, g => g.id == pageItem.id);
+                pageItem.parentId = toPageItem.parentId;
+                var currentAt = toPageItem.parent.childs.findIndex(g => g.id == toPageItem.id);
+                toPageItem.parent.childs.splice(currentAt + 1, 0, pageItem);
+            })
             actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: toPageItem.at + 1, parentId: toPageItem.parent.id } })
             await this.save(pageItem.workspace.id, { operator: ItemOperator.moveAppend, actions })
         }

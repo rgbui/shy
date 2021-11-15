@@ -53,13 +53,12 @@ export class Sln extends Events<SlnDirective> {
                     self.isDrag = true;
                     ghostView.load(data.item, { point: Point.from(ev), opacity: .6, size: { width: bound.width, height: bound.height } })
                 },
-                moving(ev, data) {
+                moving(ev, data, isend) {
                     ghostView.move(Point.from(ev));
                 },
                 moveEnd(ev, isMove, data) {
                     if (isMove) {
                         if (self.hoverId) {
-                            console.log(self.hoverId, self.dragIds);
                             if (!self.dragIds.some(s => s == self.hoverId)) {
                                 var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
                                 var overItem = surface.workspace.find(g => g.id == self.hoverId);
