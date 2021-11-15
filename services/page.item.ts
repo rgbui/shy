@@ -46,9 +46,7 @@ class PageItemStore {
     public async deletePageItem(pageItem: PageItem) {
         var actions: PageItemAction[] = [];
         var pa = pageItem.parent;
-        if (pa.checkedHasChilds && pa.childs.length > 0) {
-            lodash.remove(pa.childs, g => g.id == pageItem.id);
-        }
+        lodash.remove(pa.childs, g => g.id == pageItem.id);
         actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id });
         await this.save(pageItem.workspace.id, { operator: ItemOperator.delete, actions });
     }

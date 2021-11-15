@@ -23,7 +23,7 @@ export class PageItem {
     id: string = null;
     sn?: number = null;
     icon?: IconArguments = null;
-    childs?: PageItem[] = null;
+    childs?: PageItem[] = [];
     text: string = ''
     spread: boolean = false;
     creater: string = ''
