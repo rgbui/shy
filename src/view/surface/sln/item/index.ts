@@ -103,6 +103,8 @@ export class PageItem {
         for (var n in data) {
             if (n == 'childs') {
                 this.childs = [];
+                if (data.childs.length > 0)
+                    this.checkedHasChilds = true;
                 data.childs.each(child => {
                     var item = new PageItem();
                     item.load(child);
