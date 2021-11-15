@@ -101,11 +101,13 @@
             color        : inherit;
             flex-grow    : 1;
             flex-shrink  : 1;
-            text-overflow: ellipsis;
-            overflow     : hidden;
             height       : 20px;
             line-height  : 20px;
             padding-right: 10px;
+            white-space  : nowrap;
+            min-width    : 0px;
+            overflow     : hidden;
+            text-overflow: ellipsis;
         }
 
         &-input {
@@ -127,15 +129,11 @@
 
         &-operators {
             padding-right  : 10px;
-            position       : absolute;
-            top            : 0px;
-            right          : 0px;
-            bottom         : 0px;
-            display        : flex;
+            flex-shrink    : 0;
+            flex-grow      : 0;
             justify-content: center;
             align-items    : center;
-            visibility     : hidden;
-
+            display        : none;
             .shy-icon {
                 display        : inline-flex;
                 justify-content: center;
@@ -154,13 +152,15 @@
             background: rgba(55, 53, 47, 0.04);
 
             .shy-ws-item-page-operators {
-                visibility: visible;
+                display: flex;
             }
         }
 
-        &-selected,&-selected:hover {
+        &-selected,
+        &-selected:hover {
             background: rgba(55, 53, 47, 0.08);
             color     : rgb(55, 53, 47);
+
             >span {
                 font-weight: bold;
             }
