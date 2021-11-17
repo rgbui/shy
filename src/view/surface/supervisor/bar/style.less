@@ -69,7 +69,9 @@
 }
 
 .shy-supervisor-bar-routers {
-    margin-left: 4px;
+    margin-left    : 4px;
+    display        : flex;
+    justify-content: center;
 
     &-item {
         display        : inline-flex;
@@ -78,6 +80,7 @@
         color          : rgb(55, 53, 47);
         white-space    : nowrap;
         height         : 24px;
+        line-height    : 24px;
         border-radius  : 3px;
         cursor         : pointer;
         align-items    : center;
@@ -100,7 +103,7 @@
             color        : rgba(55, 53, 47, .4);
             display      : inline-block;
             max-width    : 100px;
-            line-height  : 20px;
+            line-height  : 24px;
             overflow     : hidden;
             text-overflow: ellipsis;
         }
