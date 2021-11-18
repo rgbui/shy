@@ -112,7 +112,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                         <span>{this.data.phone}</span>
                         {!this.data.checkPhone && <label>未验证</label>}
                     </div></Col>}
-                    <Col align='end'><Button onClick={e => this.openUpdatePhone()}>{this.data.phone ? '更改手机号' : '设置手机号'}</Button></Col>
+                    {/* <Col align='end'><Button onClick={e => this.openUpdatePhone()}>{this.data.phone ? '更改手机号' : '设置手机号'}</Button></Col> */}
                 </Row>
                 <Divider></Divider>
                 {/*<Row>
