@@ -13,7 +13,7 @@ import { Rect } from "rich/src/common/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { PageContentStore } from "../../../../../services/page.content";
 import { UserAction } from "rich/src/history/action";
-import { Mime, SlnDirective, PageItemDirective } from "../declare";
+import { Mime, PageItemDirective } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "../../../../../services/page.item";
 import { messageChannel } from "rich/util/bus/event.bus";
@@ -167,9 +167,9 @@ export class PageItem {
     onExitEditAndSave(newText: string, oldText: string) {
         this.sln.editId = '';
         if (newText != oldText) {
-            this.text = newText ? newText : oldText;
+            var text = newText ? newText : oldText;
             if (newText) {
-                pageItemStore.updatePageItem(this, { text: this.text });
+                this.onChange({ text: text }, true);
             }
         }
     }
@@ -255,7 +255,7 @@ export class PageItem {
             var json = util.pickJson(this, keys);
             if (util.valueIsEqual(json, pageInfo)) return;
         }
-        await pageItemStore.updatePageItem(this, pageInfo);
+        messageChannel.fire(Directive.UpdatePageItem, this.id, pageInfo);
     }
     getVisibleIds() {
         var ids: string[] = [this.id];

@@ -5,11 +5,18 @@ import { UserSettingsView } from './settings';
 import "./style.less";
 import { Button } from 'rich/component/view/button';
 import { SyHistory } from '../../../history';
+import { observer } from 'mobx-react';
+import { makeObservable, observable } from 'mobx';
+
+@observer
 class UserSettings extends EventsComponent {
+    constructor(props) {
+        super(props);
+        makeObservable(this, { mode: observable })
+    }
     mode: 'user-settings' = 'user-settings';
     setMode(mode: UserSettings['mode']) {
         this.mode = mode;
-        this.forceUpdate()
     }
     onClose() {
         this.emit('close');
