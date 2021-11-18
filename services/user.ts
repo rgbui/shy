@@ -43,6 +43,10 @@ class UserService extends BaseService {
         }
         return result;
     }
+    async getUserInfo() {
+        var r = await masterSock.get<{ user: Partial<User> }>('/user/info');
+        return r;
+    }
     async update(data: Partial<User>) {
         var r = await masterSock.post('/user/update', { data });
         return r;

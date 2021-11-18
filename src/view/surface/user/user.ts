@@ -14,6 +14,8 @@ export class User {
     public paw: string = null;
     public name: string = null;
     public avatar: IconArguments = null;
+    public checkPhone: boolean;
+    public checkUserRealName: boolean;
     public email: string = null;
     public slogan: string = null;
     constructor() {

@@ -7,9 +7,20 @@ import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';
 import { Avatar } from '../../../../components/face';
 import { surface } from '../..';
+import { observer } from 'mobx-react';
 import { User } from '../user';
+import { makeObservable, observable } from 'mobx';
+import { userService } from '../../../../../services/user';
 
+@observer
 export class UserSettingsView extends React.Component<{ close?: () => void }> {
+    constructor(props) {
+        super(props);
+        makeObservable(this, {
+            data: observable,
+            error: observable
+        })
+    }
     async onUploadFace() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
         if (file) {
@@ -24,6 +35,33 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
     data: Partial<User> = {
         name: '',
         slogan: ''
+    }
+    error: Partial<User> = {
+        name: '',
+        slogan: ''
+    }
+    componentDidMount() {
+        userService.getUserInfo().then(r => {
+            if (r.ok && r.data && r.data.user) {
+                this.data = r.data.user;
+            }
+        })
+        messageChannel.on(Directive.UpdateUser, this.onUpdate)
+    }
+    componentWillUnmount() {
+        messageChannel.off(Directive.UpdateUser, this.onUpdate)
+    }
+    async onSave() {
+        if (this.error.name || this.error.slogan) return;
+        await surface.user.onUpdateUserInfo({
+            name: this.data.name,
+            slogan: this.data.slogan
+        });
+        this.onClose();
+    }
+    onClose() {
+        if (typeof this.props.close == 'function')
+            this.props.close()
     }
     setData(data: UserSettingsView['data']) {
         if (typeof data.name != 'undefined' && data.name) {
@@ -42,26 +80,8 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
         }
         Object.assign(this.data, data);
     }
-    error: Partial<User> = {
-        name: '',
-        slogan: ''
-    }
-    componentDidMount() {
-        this.data.name = surface.user.name;
-        this.data.slogan = surface.user.slogan;
-        messageChannel.on(Directive.UpdateUser, this.onUpdate)
-    }
-    componentWillUnmount() {
-        messageChannel.off(Directive.UpdateUser, this.onUpdate)
-    }
-    async onSave() {
-        if (this.error.name || this.error.slogan) return;
-        await surface.user.onUpdateUserInfo({ name: this.data.name, slogan: this.data.slogan });
-        this.onClose();
-    }
-    onClose() {
-        if (typeof this.props.close == 'function')
-            this.props.close()
+    openUpdatePhone() {
+
     }
     render() {
         return <div className='shy-settings-content-form'>
@@ -76,20 +96,23 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 <Row>
                     <h5>昵称</h5>
                     <label>点击输入框可修改名称</label>
-                    <Input value={surface.user.name} onChange={e => this.data.name = e} placeholder={'请输入你的工作空间名称'}></Input>
+                    <Input value={this.data.name} onChange={e => this.setData({ name: e })} placeholder={'请输入你的工作空间名称'}></Input>
                     {this.error.name && <span className='error'>{this.error.name}</span>}
                 </Row>
                 <Divider></Divider>
                 <Row>
                     <h5>一句话介绍</h5>
-                    <Textarea value={surface.user.slogan} onChange={e => this.data.slogan = e} placeholder={'简单介绍自已'}></Textarea>
+                    <Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'简单介绍自已'}></Textarea>
                     {this.error.slogan && <span className='error'>{this.error.slogan}</span>}
                 </Row>
                 <Divider></Divider>
                 <Row>
                     <Col><h5>手机号</h5></Col>
-                    <Col><label>未验证</label></Col>
-                    <Col><span>{surface.user.phone}</span></Col><Col><Button>更改手机号</Button></Col>
+                    {this.data.phone && <Col span={12} align='start'><div>
+                        <span>{this.data.phone}</span>
+                        {!this.data.checkPhone && <label>未验证</label>}
+                    </div></Col>}
+                    <Col align='end'><Button onClick={e => this.openUpdatePhone()}>{this.data.phone ? '更改手机号' : '设置手机号'}</Button></Col>
                 </Row>
                 <Divider></Divider>
                 {/*<Row>
@@ -111,9 +134,10 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 </Row> */}
             </div>
             <div className='shy-settings-content-form-footer'>
-                <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()}   ghost >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>
+                <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()} ghost >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>
             </div>
         </div>
     }
     onUpdate = () => { this.forceUpdate() }
 }
+
