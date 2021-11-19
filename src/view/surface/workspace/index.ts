@@ -104,7 +104,9 @@ export class Workspace {
                 var pt = this.find(g => g.mime == Mime.page);
                 if (pt) return pt;
             }
-            return this.find(g => g.id == pid);
+            var ft = this.find(g => g.id == pid);
+            if (ft) return ft;
+            else return this.find(g => g.mime == Mime.page);
         }
         else {
             var item = this.find(g => g.id == pageId || g.sn == pageId);
