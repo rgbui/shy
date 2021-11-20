@@ -40,6 +40,7 @@ export class Sln extends Events<SlnDirective> {
         }
     }
     onMousedownItem(item: PageItem, event?: MouseEvent) {
+        if (!item) return;
         var self = this;
         messageChannel.fire(Directive.OpenPageItem, item);
         if (event) {
