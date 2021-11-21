@@ -66,7 +66,7 @@ export class SockTim {
     }
     close() {
         if (this.primus) {
-            this.primus.close();
+            this.primus.destroy()
         }
     }
     async getId() {
