@@ -23,4 +23,5 @@
 ## 引用
 [浏览器标识](https://github.com/fingerprintjs/fingerprintjs)
 [YJS](https://github.com/yjs/yjs)
+[primus](https://github.com/primus/primus)
 
