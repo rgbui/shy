@@ -108,5 +108,21 @@ class WorkspaceService extends BaseService {
             return { ok: false, warn: '上传文件失败' }
         }
     }
+    async uploadUrl(sock: Sock, url: string, workspaceId): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+        try {
+            var masterFile;
+            var d = await fileSock.post('/storage/url/file', { url });
+            if (d.ok) {
+                masterFile = d.data;
+            }
+            if (masterFile) {
+                await sock.post('/user/storage/file', { ...masterFile, workspaceId });
+            }
+            return { ok: true, data: masterFile }
+        }
+        catch (ex) {
+            return { ok: false, warn: '下载文件失败' }
+        }
+    }
 }
 export var workspaceService = new WorkspaceService();

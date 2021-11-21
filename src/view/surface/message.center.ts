@@ -24,6 +24,10 @@ export function MessageCenter(surface: Surface) {
         var r = await workspaceService.uploadFile(surface.workspace.sock, file, surface.workspace.id, progress);
         return r;
     });
+    messageChannel.on(Directive.UploadWorkspaceFileUrl, async (url) => {
+        var r = await workspaceService.uploadUrl(surface.workspace.sock, url, surface.workspace.id);
+        return r;
+    })
     messageChannel.on(Directive.UsersQuery, async () => {
 
     });
