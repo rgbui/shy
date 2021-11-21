@@ -47,12 +47,24 @@ export async function createPageContent(item: PageItem) {
         await page.loadFile(pd.file)
         if (Array.isArray(pd.actions) && pd.actions.length > 0) await page.loadUserActions(pd.actions);
         var view = await surface.supervisor.getView();
+        var subs = view.querySelectorAll('.shy-supervisor-view-page');
+        if (subs.length > 0) {
+            for (let i = 0; i < subs.length; i++) {
+                if (subs[i]) subs[i].remove();
+            }
+        }
         var el = view.appendChild(document.createElement('div'));
         el.classList.add('shy-supervisor-view-page');
         page.render(el);
     }
     else {
         var view = await surface.supervisor.getView();
+        var subs = view.querySelectorAll('.shy-supervisor-view-page');
+        if (subs.length > 0) {
+            for (let i = 0; i < subs.length; i++) {
+                if (subs[i]) subs[i].remove();
+            }
+        }
         item.contentView.renderFragment(view);
     }
 }

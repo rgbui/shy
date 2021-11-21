@@ -92,7 +92,6 @@ export class Workspace {
         await useOpenUserSettings();
     }
     async onUpdateInfo(data: Partial<Workspace>) {
-        console.log(this.id, data, 'da');
         await workspaceService.updateWorkspace(this.id, data);
         lodash.assign(this, data);
     }

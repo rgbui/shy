@@ -40,6 +40,7 @@ export class Surface extends Events {
             ws.load({ ...rr.data.workspace, users: rr.data.users });
             await ws.loadPages();
             this.workspace = ws;
+            await sCache.set(CacheKey.wsId, ws.id);
             var page = await ws.getDefaultPage();
             this.sln.onMousedownItem(page);
         }
@@ -69,8 +70,9 @@ export class Surface extends Events {
                 var ws = new Workspace();
                 ws.load({ ...rr.data.workspace, users: rr.data.users });
                 await ws.loadPages();
-                var page = await ws.getDefaultPage();
                 this.workspace = ws;
+                await sCache.set(CacheKey.wsId, ws.id);
+                var page = await ws.getDefaultPage();
                 this.sln.onMousedownItem(page);
             }
             else return SyHistory.push('/404');
