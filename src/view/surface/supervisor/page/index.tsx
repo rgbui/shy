@@ -55,7 +55,8 @@ export async function createPageContent(item: PageItem) {
         }
         var el = view.appendChild(document.createElement('div'));
         el.classList.add('shy-supervisor-view-page');
-        page.render(el);
+        var bound = el.getBoundingClientRect();
+        page.render(el, { width: bound.width, height: bound.height });
     }
     else {
         var view = await surface.supervisor.getView();
