@@ -61,8 +61,8 @@
             color        : #fff;
             transform    : scale(.8);
             position     : absolute;
-            top          : 20px;
-            right        : 0px;
+            top          : 0px;
+            right        : 10px;
         }
 
         &-navs {
@@ -70,8 +70,8 @@
             flex-shrink: 1;
 
             a {
-                color        : #3e3e3e;
-                font-weight  : 700;
+                color: #3e3e3e;
+
                 width        : 80px;
                 margin-left  : 50px;
                 height       : 30px;
@@ -84,6 +84,10 @@
                 &:hover {
                     background-color: #fff;
                     border-radius   : 5px;
+                }
+
+                &.hover {
+                    font-weight: 700;
                 }
             }
         }
@@ -147,8 +151,8 @@
 
 .shy-site-block {
     // box-sizing: border-box;
-    margin:0px;
-    padding:0px;
+    margin    : 0px;
+    padding   : 0px;
     min-height: @site-content-height;
     .paddingGap();
 }

@@ -9,6 +9,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
+const CopyWebpackPlugin =require('copy-webpack-plugin');
 
 var mode = 'dev';
 if (process.argv.some(s => s == '--pro')) mode = 'pro';
@@ -155,6 +156,7 @@ module.exports = {
             showErrors: true,
             hash: true,
             chunks: ['main'],
+            favicon: 'src/assert/img/shy.svg'
         }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "auth.html"), // 婧愭ā鏉挎枃浠�
@@ -177,6 +179,14 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: versionPrefix + "assert/css/shy.[contenthash:8].css"
         }),
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {
+        //             from: path.join(__dirname, "../src/assert/img/shy.svg"),
+        //             to: versionPrefix + 'assert/img/shy.fav.svg'
+        //         }
+        //     ]
+        // })
         /**
          * 离线貌似有问题
          */
