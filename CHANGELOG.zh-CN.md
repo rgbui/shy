@@ -9,6 +9,11 @@
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
 
+## 0.6.532-pro
+  `2021-12-1`  
+  * 更换诗云logo
+
+
 
 ## 0.6.531-pro
   `2021-12-1`  
