@@ -49,10 +49,9 @@ export class Sln extends Events<SlnDirective> {
                 dis: 5,
                 moveStart(ev, data) {
                     data.item = (event.target as HTMLElement).closest('.shy-ws-item');
-                    var bound = data.item.getBoundingClientRect();
                     self.dragIds = [item.id];
                     self.isDrag = true;
-                    ghostView.load(data.item, { point: Point.from(ev), opacity: .6, size: { width: bound.width, height: bound.height } })
+                    ghostView.load(data.item, { point: Point.from(ev) })
                 },
                 moving(ev, data, isend) {
                     ghostView.move(Point.from(ev));
