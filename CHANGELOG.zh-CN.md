@@ -9,6 +9,12 @@
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
 
+## 0.6.535-pro
+  `2021-12-7`  
+  * 修复光标的回退删除不正常的问题
+  * 增加measure块
+ 
+
 
 ## 0.6.534-pro
   `2021-12-6`  
