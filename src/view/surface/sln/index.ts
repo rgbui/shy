@@ -47,10 +47,13 @@ export class Sln extends Events<SlnDirective> {
             MouseDragger<{ item: HTMLElement }>({
                 event,
                 dis: 5,
-                moveStart(ev, data) {
+                isCross: true,
+                moveStart(ev, data, crossData) {
                     data.item = (event.target as HTMLElement).closest('.shy-ws-item');
                     self.dragIds = [item.id];
                     self.isDrag = true;
+                    crossData.type = 'pageItem';
+                    crossData.data = surface.workspace.findAll(g => self.dragIds.some(s => s == g.id));
                     ghostView.load(data.item, { point: Point.from(ev) })
                 },
                 moving(ev, data, isend) {
@@ -63,12 +66,6 @@ export class Sln extends Events<SlnDirective> {
                                 var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
                                 var overItem = surface.workspace.find(g => g.id == self.hoverId);
                                 pageItemStore.moveToPageItem(dragItem, overItem);
-                            }
-                        }
-                        else {
-                            var dropPanel = dom((ev.target as HTMLElement)).closest(g => g && typeof (g as HTMLElement).receive_drop_elements == 'function');
-                            if (dropPanel) {
-                                (dropPanel as HTMLElement).receive_drop_elements('pageItem', surface.workspace.findAll(g => self.dragIds.some(s => s == g.id)))
                             }
                         }
                     }

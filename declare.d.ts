@@ -39,12 +39,7 @@ interface File {
   md5?: string
 }
 
-/**
- * 自动在HTMLElement上面申明一个接收拖放元素的函数
- */
-interface HTMLElement {
-  receive_drop_elements?: (type: 'pageItem', elements: any[]) => void;
-}
+
 
 /**
  * 申明一个全局的toast ，主要是对一些通知进行报警
@@ -58,4 +53,11 @@ interface Window {
   isAuth?: boolean
 }
 
-
+/**
+ * 自动在HTMLElement上面申明一个接收拖放元素的函数
+ */
+ interface HTMLElement {
+  shy_drop_move?: (type: string, data: any) => void;
+  shy_drop_over?: (type: string, data: any) => void;
+  shy_end?: () => void;
+}
