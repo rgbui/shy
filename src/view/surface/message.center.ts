@@ -43,12 +43,12 @@ export function MessageCenter(surface: Surface) {
     messageChannel.on(Directive.getPageInfo, async (id: string) => {
         var item = surface.workspace.find(g => g.id == id);
         if (item) {
-            return { icon: item.icon, text: item.text };
+            return { icon: item.icon, id: item.id, sn: item.sn, text: item.text };
         }
         else {
             var r = await workspaceService.getPage(id);
             if (r.ok && r.data.page)
-                return { icon: r.data.page.icon, text: r.data.page.text }
+                return { icon: r.data.page.icon, id: item.id, sn: item.sn, text: r.data.page.text }
         }
     });
     messageChannel.on(Directive.UpdatePageItem, async (id: string, pageInfo) => {
