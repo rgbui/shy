@@ -68,4 +68,17 @@ export function MessageCenter(surface: Surface) {
             await surface.supervisor.onOpenItem(it);
         }
     });
+    messageChannel.on(Directive.openPageLink, async (item) => {
+        var id = typeof item == 'string' ? item : item.id;
+        var it = surface.workspace.find(g => g.id == id);
+        if (!it) {
+            //这里当前页面不一定加载过pageItem,所以需要通过后台自动加载，查询
+        }
+        if (it) {
+            SyHistory.push(generatePath('/page/:id', { id: it.sn }));
+            it.onUpdateDocument();
+            surface.sln.onFocusItem(it);
+            await surface.supervisor.onOpenItem(it);
+        }
+    })
 }

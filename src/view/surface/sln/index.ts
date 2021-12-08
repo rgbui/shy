@@ -13,7 +13,6 @@ import { CacheKey, yCache } from "../../../../net/cache";
 import { surface } from "..";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
-import { dom } from "rich/src/common/dom";
 import { pageItemStore } from "../../../../services/page.item";
 
 export class Sln extends Events<SlnDirective> {
@@ -42,8 +41,8 @@ export class Sln extends Events<SlnDirective> {
     onMousedownItem(item: PageItem, event?: MouseEvent) {
         if (!item) return;
         var self = this;
-        messageChannel.fire(Directive.OpenPageItem, item);
-        if (event) {
+        if (!event) messageChannel.fire(Directive.OpenPageItem, item);
+        else
             MouseDragger<{ item: HTMLElement }>({
                 event,
                 dis: 5,
@@ -69,13 +68,14 @@ export class Sln extends Events<SlnDirective> {
                             }
                         }
                     }
+                    else {
+                        messageChannel.fire(Directive.OpenPageItem, item);
+                    }
                     self.isDrag = false;
                     self.dragIds = [];
                     ghostView.unload();
                 }
             })
-        }
-
     }
     onFocusItem(item: PageItem) {
         this.selectIds = [item.id];
