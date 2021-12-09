@@ -8,11 +8,16 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.536-pro
+  `2021-12-9`  
+  * 实现创建链接块功能
+  
+ 
 
 ## 0.6.535-pro
   `2021-12-7`  
   * 修复光标的回退删除不正常的问题
-  * 增加measure块
+  * 增加进度条块
  
 
 
