@@ -76,23 +76,21 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                 </Row>
                 <Divider></Divider>
                 <Row>
-                    <h5>工作空间名称</h5>
-                    <label>点击输入框可修改名称</label>
-                    <Input value={surface.workspace.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
+                    <Col span={24}><h5>工作空间名称</h5></Col>
+                    <Col span={24}><label>点击输入框可修改名称</label></Col>
+                    <Col span={24}><Input value={surface.workspace.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input></Col>
                 </Row>
-                {/* <Divider></Divider>
+                <Divider></Divider>
                 <Row>
-                    <h5>空间域名</h5>
-                    <label>设置你的专属工作空间域名:https://domain.shy.live</label>
-                    <div className='shy-ws-settings-view-domain'>
-                        <span>https://</span>
-                        <Input
-                            value={surface.workspace.customizeSecondDomain}
-                            onChange={e => this.setData({ customizeSecondDomain: e })}
-                            placeholder={'domain'} style={{ display: 'inline-block', width: 120 }}></Input>
-                        <span>.shy.live</span>
-                    </div>
-                </Row> */}
+                    <Col><h5>空间域名</h5></Col>
+                    <Col><label>设置你的专属工作空间域名</label></Col>
+                    <Col>
+                        <div className='shy-ws-settings-view-domain'>
+                            <a style={{ textDecoration: 'underline', color: 'inherit' }} href={'https://' + (surface.workspace.customizeDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.customizeDomain || surface.workspace.sn}.shy.live</a>
+                            <Button link>更换空间域名</Button>
+                        </div>
+                    </Col>
+                </Row>
             </div>
             <div className='shy-settings-content-form-footer'>
                 <Space align='end' style={{ height: '100%' }}>
