@@ -1,13 +1,20 @@
+
+import { makeObservable, observable } from "mobx";
+import { observer } from "mobx-react";
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { WorkspaceMembers } from "./member";
 import { WorkspaceSettingsView } from "./settings";
+@observer
 class WsSettings extends EventsComponent {
     mode: 'ws-settings' | 'ws-members' = 'ws-settings';
+    constructor(props){
+        super(props);
+        makeObservable(this,{mode:observable});
+    }
     setMode(mode: WsSettings['mode']) {
         this.mode = mode;
-        this.forceUpdate()
     }
     onClose() {
         this.emit('close');
@@ -17,7 +24,7 @@ class WsSettings extends EventsComponent {
             <div className='shy-settings-slide'>
                 <h4>空间</h4>
                 <a onMouseDown={e => this.setMode('ws-settings')} className={this.mode == 'ws-settings' ? "hover" : ""} ><span>设置</span></a>
-                {/* <a onMouseDown={e => this.setMode('ws-members')} className={this.mode == 'ws-members' ? "hover" : ""} ><span>成员</span></a> */}
+                <a onMouseDown={e => this.setMode('ws-members')} className={this.mode == 'ws-members' ? "hover" : ""} ><span>成员</span></a>
                 {/* <a><span>帐单</span></a> */}
             </div>
             <div className='shy-settings-content'>
