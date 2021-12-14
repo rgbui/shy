@@ -94,16 +94,18 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 </Row>
                 <Divider></Divider>
                 <Row>
-                    <h5>昵称</h5>
-                    <label>点击输入框可修改名称</label>
-                    <Input value={this.data.name} onChange={e => this.setData({ name: e })} placeholder={'请输入你的工作空间名称'}></Input>
-                    {this.error.name && <span className='error'>{this.error.name}</span>}
+                    <Col><h5>昵称</h5></Col>
+                    <Col><label>点击输入框可修改名称</label></Col>
+                    <Col><Input value={this.data.name} onChange={e => this.setData({ name: e })} placeholder={'请输入你的工作空间名称'}></Input>
+                        {this.error.name && <span className='error'>{this.error.name}</span>}
+                    </Col>
                 </Row>
                 <Divider></Divider>
                 <Row>
-                    <h5>一句话介绍</h5>
-                    <Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'简单介绍自已'}></Textarea>
-                    {this.error.slogan && <span className='error'>{this.error.slogan}</span>}
+                    <Col><h5>一句话介绍</h5></Col>
+                    <Col><Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'简单介绍自已'}></Textarea>
+                        {this.error.slogan && <span className='error'>{this.error.slogan}</span>}
+                    </Col>
                 </Row>
                 <Divider></Divider>
                 <Row>
