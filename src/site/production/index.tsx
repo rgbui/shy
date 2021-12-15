@@ -6,7 +6,7 @@ import { FooterView } from "../layout/footer";
 import { HeadView } from "../layout/head";
 import "./style.less";
 import pic from "../../assert/img/pic.jpg";
-import { SyHistory } from "../../history";
+import {  ShyUrl, UrlRoute } from "../../history";
 import { util } from "rich/util/util";
 var works: string[] = ['做笔记', '写作业', '线上论讨'];
 export var SiteView = observer(function () {
@@ -18,7 +18,7 @@ export var SiteView = observer(function () {
         }
     })
     function toLogin() {
-        SyHistory.push('/sign/in', { phone })
+        UrlRoute.push(ShyUrl.signIn, { phone })
     }
     async function setDo() {
         local.text = works[local.at];
