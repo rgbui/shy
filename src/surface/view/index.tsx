@@ -89,9 +89,6 @@ export var ViewSurface = observer(function () {
                 <SupervisorView></SupervisorView>
             </div >
         }
-        else {
-            return <SiteView></SiteView>
-        }
     }
     return <></>;
 })
