@@ -3,7 +3,7 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
 import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
-import { currentParams } from "../../history";
+import { currentParams, ShyUrl, UrlRoute } from "../../history";
 import { CacheKey, yCache } from "../../../net/cache";
 import { Mime } from "../sln/declare";
 import { workspaceService } from "../../../services/workspace";
@@ -14,6 +14,7 @@ import { SockType } from "../../../net/sock/type";
 import { useOpenWorkspaceSettings } from "./settings";
 import lodash from "lodash";
 import { makeObservable, observable } from "mobx";
+import { config } from "../../common/config";
 
 export type WorkspaceUser = {
     userid: string;
@@ -53,8 +54,14 @@ export class Workspace {
         return this._sock = new Sock(SockType.workspace, this.pidUrl);
     }
     public invite: string;
+    get host() {
+        return this.customizeSecondDomain || this.sn
+    }
     get url() {
-        return 'https://' + this.customizeSecondDomain + '.shy.live';
+        if (config.isPro) {
+            return `https://${this.host}.shy.live`
+        }
+        else return '';
     }
     load(data) {
         for (var n in data) {
@@ -96,7 +103,7 @@ export class Workspace {
         lodash.assign(this, data);
     }
     async getDefaultPage() {
-        var pageId = currentParams('/page/:id')?.id;
+        var pageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.pageDev)?.pageId;
         if (!pageId) {
             var pid = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], this.id));
             if (!pid) {

@@ -3,13 +3,14 @@ import { User } from "./user/user";
 import { Sln } from "./sln";
 import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
-import { currentParams, SyHistory } from "../history";
+import { ShyUrl, UrlRoute } from "../history";
 import { Workspace } from "./workspace";
 import { userTim } from "../../net/primus";
 import { makeObservable, observable, toJS } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { MessageCenter } from "./message.center";
 import { workspaceService } from "../../services/workspace";
+import { config } from "../common/config";
 export class Surface extends Events {
     constructor() {
         super();
@@ -35,7 +36,7 @@ export class Surface extends Events {
         await userTim.load();
         var rr = await this.getWillLoadWorkSpace();
         if (rr.ok) {
-            if (rr.data.notCreateWorkSpace == true) return SyHistory.push('/work/create')
+            if (rr.data.notCreateWorkSpace == true) return UrlRoute.push(ShyUrl.workCreate)
             var ws = new Workspace();
             ws.load({ ...rr.data.workspace, users: rr.data.users });
             await ws.loadPages();
@@ -44,7 +45,7 @@ export class Surface extends Events {
             var page = await ws.getDefaultPage();
             this.sln.onMousedownItem(page);
         }
-        else return SyHistory.push('/404');
+        else return UrlRoute.push(ShyUrl._404);
         return true;
     }
     updateUser(user: Partial<User>) {
@@ -55,9 +56,13 @@ export class Surface extends Events {
         if (location.host && /[\da-z]+\.shy\.(red|live)/.test(location.host)) {
             domain = location.host;
         }
-        pageId = currentParams('/page/:id')?.id;
-        if (!domain && !pageId)
-            sn = currentParams('/ws/:id')?.id;
+        if (config.isPro) {
+            pageId = UrlRoute.match(ShyUrl.page)?.pageId;
+        }
+        else {
+            pageId = UrlRoute.match(ShyUrl.pageDev)?.pageId;
+            wsId = UrlRoute.match(ShyUrl.pageDev)?.wsId;
+        }
         if (!domain && !pageId && !sn) {
             wsId = await sCache.get(CacheKey.wsId);
         }
@@ -75,11 +80,11 @@ export class Surface extends Events {
                 var page = await ws.getDefaultPage();
                 this.sln.onMousedownItem(page);
             }
-            else return SyHistory.push('/404');
+            else return UrlRoute.push(ShyUrl._404);
         }
     }
     onCreateWorkspace() {
-        SyHistory.push('/work/create');
+        UrlRoute.push(ShyUrl.workCreate);
     }
     onToggleSln(isShowSln: boolean) {
         this.isShowSln = isShowSln;
