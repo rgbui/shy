@@ -1,16 +1,16 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { surface } from "../..";
-import { currentParams, SyHistory } from "../../../history";
+import { ShyUrl, SyHistory, UrlRoute } from "../../../history";
 export var InviteView = observer(function () {
     async function trySign() {
-        var wsId = currentParams('/invite/:id')?.id;
+        var inviteCode = UrlRoute.match(ShyUrl.invite)?.id;
         if (!surface.user.isSign) {
             await surface.user.loadUser()
         }
         if (!surface.user.isSign) {
-            var url = '/invite/' + wsId;
-            SyHistory.push('/sign/in?back=' + window.encodeURIComponent(url));
+            var url = '/invite/' + inviteCode;
+            UrlRoute.push(ShyUrl.signIn,{back:url});
             return;
         }
     }
