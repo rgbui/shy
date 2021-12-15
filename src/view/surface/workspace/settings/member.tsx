@@ -12,25 +12,26 @@ import { observer } from 'mobx-react';
 @observer
 export class WorkspaceMembers extends React.Component {
     async createInvite() {
-        if (!surface.workspace.inviteUrl) {
+        if (!surface.workspace.invite) {
             var r = await workspaceService.createInvite(surface.workspace.id);
             if (r.ok) {
-                surface.workspace.inviteUrl = r.data.url;
+                surface.workspace.invite = r.data.code;
                 this.forceUpdate();
-                CopyText(surface.workspace.inviteUrl)
+                CopyText(surface.workspace.invite)
             }
         }
-        else CopyText(surface.workspace.inviteUrl)
+        else CopyText(surface.workspace.invite)
     }
     async onAddMember() {
 
     }
     render() {
+
         return <div className='shy-ws-members'>
             <div className='shy-ws-memeber-invitation'>
                 <h4>通用邀请链接</h4>
                 <div className='shy-remark'>任何得到此链接的人均可以加入这个空间，你也可以</div>
-                <Row><Col span={16}><Input readonly={true} value={surface.workspace.inviteUrl}></Input></Col><Col align='start' span={8}><Button style={{ marginLeft: 20 }} onClick={e => this.createInvite()} ghost>{surface.workspace.inviteUrl ? '复制链接' : '创建链接'}</Button></Col></Row>
+                <Row><Col span={16}><Input readonly={true} value={surface.workspace.invite ? location.protocol + '://' + location.host + '/invite/' + surface.workspace.invite : ''}></Input></Col><Col align='start' span={8}><Button style={{ marginLeft: 20 }} onClick={e => this.createInvite()} ghost>{surface.workspace.invite ? '复制链接' : '创建链接'}</Button></Col></Row>
             </div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>

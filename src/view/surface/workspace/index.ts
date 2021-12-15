@@ -52,7 +52,7 @@ export class Workspace {
         if (this._sock) return this._sock;
         return this._sock = new Sock(SockType.workspace, this.pidUrl);
     }
-    public inviteUrl: string;
+    public invite: string;
     get url() {
         return 'https://' + this.customizeSecondDomain + '.shy.live';
     }

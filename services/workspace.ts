@@ -81,7 +81,7 @@ class WorkspaceService extends BaseService {
         return result.data;
     }
     async createInvite(wsId: string) {
-        return await masterSock.post<{ url: string }, string>('/ws/:wsId/create/invite', { wsId })
+        return await masterSock.post<{ code: string }, string>('/ws/:wsId/create/invite', { wsId })
     }
     /**
     * 用户上传单个文件
