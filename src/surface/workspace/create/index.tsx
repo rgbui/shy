@@ -2,7 +2,7 @@ import React from "react";
 import { generatePath } from "react-router";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
-import { SyHistory } from "../../../history";
+import { SyHistory, UrlRoute } from "../../../history";
 import { workspaceService } from "../../../../services/workspace";
 import { observer, useLocalObservable } from "mobx-react";
 import "./style.less";
@@ -18,13 +18,12 @@ export var WorkspaceCreateView = observer(function () {
         if (!local.text) {
             local.fail = '空间名称不能为空'
         }
-        else if (local.text.length > 32)
-            local.fail = '空间名称过长'
+        else if (local.text.length > 32) local.fail = '空间名称过长'
         else {
             button.disabled = true;
             var rr = await workspaceService.createWorkspace({ text: local.text });
             button.disabled = false;
-            if (rr.ok) return SyHistory.push(generatePath('/ws/:id', { id: rr.data.sn }));
+            if (rr.ok) return UrlRoute.pushToWs(rr.data.sn);
             else this.failTip = rr.warn;
         }
     }
