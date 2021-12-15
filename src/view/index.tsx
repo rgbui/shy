@@ -20,6 +20,8 @@ import { PageDisplay } from './page';
 import { ViewSurface } from './surface/view/index';
 import { View404 } from './site/404';
 import { InviteView } from './surface/workspace/create/invite';
+import { config } from '../common/config';
+
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
@@ -31,31 +33,67 @@ export function App() {
   React.useEffect(() => {
     load();
   }, [])
+  function renderRoutes() {
+    if (config.isDev || config.isBeta) {
+      return <Router history={SyHistory}>
+        <Switch>
+          <Route path='/' exact component={ViewSurface}></Route>
+          <Route path='/scene' exact component={SceneView}></Route>
+          <Route path='/wechat' exact component={WeChatView}></Route>
+          <Route path='/route' exact component={RouteView}></Route>
+          <Route path='/privacy/protocol' exact component={PrivateView}></Route>
+          <Route path='/service/protocol' exact component={AgreeView}></Route>
+          <Route path='/download' exact component={DownloadView}></Route>
+          <Route path='/help' exact component={HelpView}></Route>
+          <Route path='/sign/out' exact component={LogOut}></Route>
+          <Route path='/sign/in' exact component={Login}></Route>
+          <Route path='/shiyun' exact component={BookView} />
+          <Route path='/ws/:wsId/page/:pageId' exact component={ViewSurface}></Route>
+          <Route path='/invite/:id' exact component={PageDisplay}></Route>
+          <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
+          <Route path='/test/component' exact component={Component}></Route>
+          <Route path='/404' exact component={View404}></Route>
+          <Route component={View404}></Route>
+        </Switch>
+      </Router>
+    }
+    else if (config.isPro) {
+      var isOrg = location.hostname == 'shy.live';
+      if (isOrg) {
+        return <Router history={SyHistory}>
+          <Switch>
+            <Route path='/' exact component={ViewSurface}></Route>
+            <Route path='/scene' exact component={SceneView}></Route>
+            <Route path='/wechat' exact component={WeChatView}></Route>
+            <Route path='/route' exact component={RouteView}></Route>
+            <Route path='/privacy/protocol' exact component={PrivateView}></Route>
+            <Route path='/service/protocol' exact component={AgreeView}></Route>
+            <Route path='/download' exact component={DownloadView}></Route>
+            <Route path='/help' exact component={HelpView}></Route>
+            <Route path='/sign/out' exact component={LogOut}></Route>
+            <Route path='/sign/in' exact component={Login}></Route>
+            <Route path='/shiyun' exact component={BookView} />
+            <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
+            <Route path='/404' exact component={View404}></Route>
+            <Route component={View404}></Route>
+          </Switch>
+        </Router>
+      }
+      else {
+        return <Router history={SyHistory}>
+          <Switch>
+            <Route path='/' exact component={ViewSurface}></Route>
+            <Route path='/page/:id' exact component={ViewSurface}></Route>
+            <Route path='/invite/:id' exact component={InviteView}></Route>
+            <Route component={View404}></Route>
+          </Switch>
+        </Router>
+      }
+    }
+  }
   return <div className='shy-app'>
     {!isLoad && <div className='shy-app-load'></div>}
-    {isLoad && <Router history={SyHistory}>
-      <Switch>
-        <Route path='/' exact component={ViewSurface}></Route>
-        <Route path='/scene' exact component={SceneView}></Route>
-        <Route path='/wechat' exact component={WeChatView}></Route>
-        <Route path='/route' exact component={RouteView}></Route>
-        <Route path='/privacy/protocol' exact component={PrivateView}></Route>
-        <Route path='/service/protocol' exact component={AgreeView}></Route>
-        <Route path='/download' exact component={DownloadView}></Route>
-        <Route path='/help' exact component={HelpView}></Route>
-        <Route path='/sign/out' exact component={LogOut}></Route>
-        <Route path='/sign/in' exact component={Login}></Route>
-        <Route path='/shiyun' exact component={BookView} />
-        <Route path='/ws/:id' exact component={ViewSurface}></Route>
-        <Route path='/page/:id' exact component={ViewSurface}></Route>
-        <Route path='/view/:id' exact component={InviteView}></Route>
-        <Route path='/invite/:id' exact component={PageDisplay}></Route>
-        <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
-        <Route path='/test/component' exact component={Component}></Route>
-        <Route path='/404' exact ></Route>
-        <Route component={View404}></Route>
-      </Switch>
-    </Router>}
+    {isLoad && renderRoutes()}
   </div>
 }
 
