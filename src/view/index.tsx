@@ -48,6 +48,7 @@ export function App() {
           <Route path='/sign/out' exact component={LogOut}></Route>
           <Route path='/sign/in' exact component={Login}></Route>
           <Route path='/shiyun' exact component={BookView} />
+          <Route path='/ws/:wsId' exact component={ViewSurface}></Route>
           <Route path='/ws/:wsId/page/:pageId' exact component={ViewSurface}></Route>
           <Route path='/invite/:id' exact component={PageDisplay}></Route>
           <Route path='/work/create' exact component={WorkspaceCreateView}></Route>
