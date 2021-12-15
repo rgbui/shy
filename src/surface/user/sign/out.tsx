@@ -1,8 +1,8 @@
 import React from "react";
-import { SyHistory } from "../../history";
-import { userService } from "../../../services/user";
-import { surface } from "..";
-import { userTim } from "../../../net/primus";
+import { SyHistory } from "../../../history";
+import { userService } from "../../../../services/user";
+import { surface } from "../..";
+import { userTim } from "../../../../net/primus";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;

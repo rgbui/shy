@@ -1,14 +1,14 @@
 import React from "react";
-import { AppLang } from "../../i18n/enum";
-import { appLangProvider } from "../../i18n/provider";
-import { SyHistory } from "../history";
-import { CacheKey, sCache } from "../../net/cache";
-import { surface } from "../surface";
-import { userService } from "../../services/user";
+import { AppLang } from "../../../../i18n/enum";
+import { appLangProvider } from "../../../../i18n/provider";
+import { ShyUrl, UrlRoute } from "../../../history";
+import { CacheKey, sCache } from "../../../../net/cache";
+import { surface } from "../..";
+import { userService } from "../../../../services/user";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
-import { inviteCode, phoneCode, phoneRegex } from "../../net/verify";
+import { inviteCode, phoneCode, phoneRegex } from "../../../../net/verify";
 import { useLocation } from "react-router-dom";
 
 export var Login = observer(function () {
@@ -124,7 +124,7 @@ export var Login = observer(function () {
             }
             else {
                 if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
-                return SyHistory.push('/');
+                return successAfter()
             }
         }
     }
@@ -166,7 +166,7 @@ export var Login = observer(function () {
         if (rr.ok) {
             surface.updateUser({ name: local.name });
             if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
-            return SyHistory.push('/');
+            return successAfter()
         }
         else local.failMsg = rr.warn;
         unlockButton();
@@ -183,6 +183,14 @@ export var Login = observer(function () {
         </div>
     }
     let location = useLocation();
+    function successAfter() {
+        if ((location?.state as any)?.back) {
+            UrlRoute.redict((location?.state as any)?.back)
+        }
+        else {
+
+        }
+    }
     React.useEffect(() => {
         if ((location?.state as any)?.phone) {
             local.phone = (location?.state as any)?.phone;
