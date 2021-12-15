@@ -12,14 +12,14 @@ import { SceneView } from './site/scene';
 import { WeChatView } from './site/wechat';
 
 import { Login } from './site/login';
-import { LogOut } from './view/surface/user/logout';
-import { WorkspaceCreateView } from './view/surface/workspace/create';
+import { LogOut } from './surface/user/logout';
+import { WorkspaceCreateView } from './surface/workspace/create';
 import "./site/declare";
 import { AsyncComponent } from "rich/component/lib/async.compont"
-import { PageDisplay } from './view/surface/page';
-import { ViewSurface } from './view/surface/view/index';
+import { PageDisplay } from './surface/page';
+import { ViewSurface } from './surface/view/index';
 import { View404 } from './site/404';
-import { InviteView } from './view/surface/workspace/create/invite';
+import { InviteView } from './surface/workspace/create/invite';
 import { config } from './common/config';
 
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);

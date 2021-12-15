@@ -6,10 +6,10 @@ import ReactDOM from 'react-dom';
 import "rich";
 import "./assert/shy.less";
 import "./assert/theme.less";
-import "./view/surface/style.less";
-import "./view/surface/supervisor/style.less";
-import "./view/surface/sln/style.less";
-import "./view/surface/user/style.less";
+import "./surface/style.less";
+import "./surface/supervisor/style.less";
+import "./surface/sln/style.less";
+import "./surface/user/style.less";
 import { App } from '.';
 import { configure } from 'mobx';
 

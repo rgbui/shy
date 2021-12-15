@@ -2,7 +2,7 @@ import lodash from "lodash";
 import { runInAction, toJS } from "mobx";
 import { masterSock } from "../net/sock";
 import { config } from "../src/common/config";
-import { PageItem } from "../src/view/surface/sln/item";
+import { PageItem } from "../src/surface/sln/item";
 enum ItemOperatorDirective {
     update = 1,
     insert = 2,

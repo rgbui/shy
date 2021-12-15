@@ -1,8 +1,8 @@
 
 import { BaseService } from "../net";
-import { Workspace } from "../src/view/surface/workspace";
+import { Workspace } from "../src/surface/workspace";
 import { fileSock, masterSock, Sock } from "../net/sock";
-import { PageItem } from "../src/view/surface/sln/item";
+import { PageItem } from "../src/surface/sln/item";
 import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
 import { FileType } from "../type";

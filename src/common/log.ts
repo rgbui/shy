@@ -1,6 +1,6 @@
 import { util } from "rich/util/util";
 import { db } from "../../net/db";
-import { surface } from "../view/surface";
+import { surface } from "../surface";
 
 
 export async function logStore(type: 'info' | 'error' | 'warn', message: string | Error, remark?: string) {
