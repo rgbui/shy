@@ -15,6 +15,16 @@ class Config {
     get isPro() {
         return this.mode == 'pro'
     }
+    get isUserWs() {
+        if (this.isPro) {
+            if (location.host == 'shy.live') return false;
+            else return true;
+        }
+        else {
+            if (location.pathname.startsWith('/ws')) return true;
+            else return false;
+        }
+    }
     get isBeta() {
         return this.mode == 'beta'
     }
