@@ -4,7 +4,7 @@ import { EventsComponent } from 'rich/component/lib/events.component';
 import { UserSettingsView } from './settings';
 import "./style.less";
 import { Button } from 'rich/component/view/button';
-import { SyHistory } from '../../../history';
+import { SyHistory } from '../../../../history';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
 

@@ -10,7 +10,7 @@ import "./view/surface/style.less";
 import "./view/surface/supervisor/style.less";
 import "./view/surface/sln/style.less";
 import "./view/surface/user/style.less";
-import { App } from './view';
+import { App } from '.';
 import { configure } from 'mobx';
 
 configure({ enforceActions: 'never' })

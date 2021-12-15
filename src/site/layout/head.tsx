@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import React from 'react';
 import { Link } from "react-router-dom";
-import { config } from "../../../common/config";
-import ShySvg from "../../../assert/img/shy.name.svg";
+import { config } from "../../common/config";
+import ShySvg from "../../assert/img/shy.name.svg";
 export var HeadView = observer(function () {
     return <div className='shy-site-head'>
         <a className='shy-site-head-logo' href='/'>

@@ -2,7 +2,7 @@ import React from "react";
 import { generatePath } from "react-router";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
-import { SyHistory } from "../../../history";
+import { SyHistory } from "../../../../history";
 import { workspaceService } from "../../../../../services/workspace";
 import { observer, useLocalObservable } from "mobx-react";
 import "./style.less";

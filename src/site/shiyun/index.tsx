@@ -1,10 +1,9 @@
 
-import { observer } from "mobx-react";
+
 import React from 'react';
 import { FooterView } from "../layout/footer";
 import { HeadView } from "../layout/head";
-import pic from "../../../assert/img/pic-3.jpg";
-import { resetGlobalState } from "mobx/dist/internal";
+import pic from "../../assert/img/pic-3.jpg";
 
 function content() {
     return <div ><br /><br />诗 云 <br /><br /><br /><br /><br /><br />引 子

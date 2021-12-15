@@ -2,11 +2,11 @@ import React from 'react';
 import { Loading } from 'rich/component/view/loading';
 import { Page } from 'rich/src/page';
 import { PageDirective } from 'rich/src/page/directive';
-import { masterSock, Sock } from '../../../net/sock';
-import { workspaceService } from '../../../services/workspace';
-import { XhrReadFileBlob } from '../../util/file';
-import { currentParams } from '../history';
-import { PageItem } from '../surface/sln/item';
+import { masterSock, Sock } from '../../../../net/sock';
+import { workspaceService } from '../../../../services/workspace';
+import { XhrReadFileBlob } from '../../../util/file';
+import { currentParams } from '../../../history';
+import { PageItem } from '../sln/item';
 
 export function PageDisplay() {
     var [loading, setLoad] = React.useState(false);

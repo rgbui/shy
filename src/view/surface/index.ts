@@ -3,7 +3,7 @@ import { User } from "./user/user";
 import { Sln } from "./sln";
 import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
-import { currentParams, SyHistory } from "../history";
+import { currentParams, SyHistory } from "../../history";
 import { Workspace } from "./workspace";
 import { userTim } from "../../../net/primus";
 import { makeObservable, observable, toJS } from "mobx";

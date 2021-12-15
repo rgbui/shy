@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React from 'react';
 import { FooterView } from "../layout/footer";
 import { HeadView } from "../layout/head";
-import pic from "../../../assert/img/pic-8.jpg";
+import pic from "../../assert/img/pic-8.jpg";
 import "./style.less";
 import { Button } from "rich/component/view/button";
 export var DownloadView = observer(function () {

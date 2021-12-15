@@ -1,5 +1,5 @@
 import React from "react";
-import { SyHistory } from "../../history";
+import { SyHistory } from "../../../history";
 import { userService } from "../../../../services/user";
 import { surface } from "..";
 import { userTim } from "../../../../net/primus";

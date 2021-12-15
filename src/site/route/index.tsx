@@ -2,8 +2,8 @@ import { observer } from "mobx-react";
 import React from 'react';
 import { FooterView } from "../layout/footer";
 import { HeadView } from "../layout/head";
-import pic from "../../../assert/img/pic-1.jpg";
-import md from "../../../../CHANGELOG.zh-CN.md";
+import pic from "../../assert/img/pic-1.jpg";
+import md from "../../../CHANGELOG.zh-CN.md";
 export var RouteView = observer(function () {
     return <div className='shy-site'>
         <HeadView></HeadView>

@@ -5,7 +5,7 @@ import { Input } from "rich/component/view/input";
 import { FooterView } from "../layout/footer";
 import { HeadView } from "../layout/head";
 import "./style.less";
-import pic from "../../../assert/img/pic.jpg";
+import pic from "../../assert/img/pic.jpg";
 import { SyHistory } from "../../history";
 import { util } from "rich/util/util";
 var works: string[] = ['做笔记', '写作业', '线上论讨'];

@@ -6,7 +6,7 @@ import { CacheKey, yCache } from "../../../net/cache";
 import { pageItemStore } from "../../../services/page.item";
 import { userService } from "../../../services/user";
 import { workspaceService } from "../../../services/workspace";
-import { SyHistory } from "../history";
+import { SyHistory } from "../../history";
 
 export function MessageCenter(surface: Surface) {
     if (messageChannel.has(Directive.GalleryQuery)) return;

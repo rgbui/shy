@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { surface } from "../..";
-import { currentParams, SyHistory } from "../../../history";
+import { currentParams, SyHistory } from "../../../../history";
 export var InviteView = observer(function () {
     async function trySign() {
         var wsId = currentParams('/invite/:id')?.id;

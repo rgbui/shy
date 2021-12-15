@@ -1,14 +1,14 @@
 import React from "react";
-import { AppLang } from "../../../i18n/enum";
-import { appLangProvider } from "../../../i18n/provider";
+import { AppLang } from "../../i18n/enum";
+import { appLangProvider } from "../../i18n/provider";
 import { SyHistory } from "../history";
-import { CacheKey, sCache } from "../../../net/cache";
-import { surface } from "../surface";
-import { userService } from "../../../services/user";
+import { CacheKey, sCache } from "../../net/cache";
+import { surface } from "../view/surface";
+import { userService } from "../../services/user";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
-import { inviteCode, phoneCode, phoneRegex } from "../../../net/verify";
+import { inviteCode, phoneCode, phoneRegex } from "../../net/verify";
 import { useLocation } from "react-router-dom";
 
 export var Login = observer(function () {
