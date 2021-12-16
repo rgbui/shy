@@ -28,9 +28,9 @@ export var UrlRoute = {
     redict(url: string | ShyUrl, state?: Record<string, any>) {
         SyHistory.push(url, state)
     },
-    pushToWs(sn: number) {
+    pushToWs(sn: number | string) {
         if (config.isPro) return SyHistory.push(`https://${sn}.shy.live/`);
-        else return SyHistory.push(ShyUrl.ws, { wsId: sn })
+        else return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
     },
     pushToPage(wsSn: number | string, pageSn: number) {
         if (config.isPro) {
@@ -71,5 +71,6 @@ export enum ShyUrl {
     page = '/page/:pageId',
     invite = '/invite/:id',
     workCreate = '/work/create',
+    myWorkspace = '/my/workspace',
     _404 = '/404'
 }
