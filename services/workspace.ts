@@ -12,18 +12,19 @@ class WorkspaceService extends BaseService {
     /**
      * 
      * @param domain 域名
-     * @param pageId 网页
      * @param sn workspace序号
      * @param wsId workspace编号
      * @returns 
      */
-    async loadWorkSpace(domain: string, pageId: string, sn: number, wsId: string) {
-        return await masterSock.get<{ workspace: Workspace, notCreateWorkSpace?: boolean, users: any[] }, string>('/ws/query', {
+    async loadWorkSpace(domain: string, sn: number, wsId: string) {
+        return await masterSock.get<{ workspace: Workspace, users: any[] }, string>('/ws/query', {
             wsId,
             sn,
             domain,
-            pageId,
         })
+    }
+    async loadMyWorkspace() {
+        return await masterSock.get<{ workspaceId?: string, notCreateWorkSpace?: boolean }, string>('/ws/me')
     }
     async getWorkspaces() {
         var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/ws/list');
