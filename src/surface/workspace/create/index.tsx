@@ -1,8 +1,7 @@
 import React from "react";
-import { generatePath } from "react-router";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
-import { SyHistory, UrlRoute } from "../../../history";
+import {  UrlRoute } from "../../../history";
 import { workspaceService } from "../../../../services/workspace";
 import { observer, useLocalObservable } from "mobx-react";
 import "./style.less";
