@@ -16,19 +16,20 @@ import { LogOut } from './surface/user/sign/out';
 import { WorkspaceCreateView } from './surface/workspace/create';
 import "./site/declare";
 import { AsyncComponent } from "rich/component/lib/async.compont"
-import { PageDisplay } from './surface/page';
 import { ViewSurface } from './surface/view/index';
 import { View404 } from './site/404';
 import { InviteView } from './surface/workspace/create/invite';
 import { config } from './common/config';
 import { SiteView } from './site/production';
-
+import { surface } from './surface';
+import { MyWorkSpace } from './surface/view/my';
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
     await appLangProvider.import();
     await userDeviceService.register();
+    await surface.loadUser()
     setLoad(true);
   }
   React.useEffect(() => {
@@ -50,6 +51,7 @@ export function App() {
           <Route path={ShyUrl.signIn} exact component={Login}></Route>
           <Route path={ShyUrl.shiyun} exact component={BookView} />
           <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
+          <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
           <Route path={ShyUrl._404} exact component={View404}></Route>
           <Route path={ShyUrl.ws} exact component={ViewSurface}></Route>
           <Route path={ShyUrl.pageDev} exact component={ViewSurface}></Route>
@@ -75,6 +77,7 @@ export function App() {
             <Route path={ShyUrl.signIn} exact component={Login}></Route>
             <Route path={ShyUrl.shiyun} exact component={BookView} />
             <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
+            <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
             <Route path={ShyUrl._404} exact component={View404}></Route>
             <Route component={View404}></Route>
           </Switch>
