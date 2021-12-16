@@ -10,6 +10,8 @@ import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
 import { inviteCode, phoneCode, phoneRegex } from "../../../../net/verify";
 import { useLocation } from "react-router-dom";
+import { config } from "../../../common/config";
+import { workspaceService } from "../../../../services/workspace";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -66,9 +68,10 @@ export var Login = observer(function () {
         unlockButton();
     }
     function renderPhone() {
-        return <div className='shy-login-box'>
+        return <form><div className='shy-login-box'>
             <div className='shy-login-box-account'>
                 <Input value={local.phone}
+                    name={'phone'}
                     onEnter={e => phoneSign()}
                     onChange={e => local.phone = e}
                     placeholder={'请输入您的手机号'}></Input>
@@ -77,7 +80,7 @@ export var Login = observer(function () {
             <div className='shy-login-box-button'>
                 <Button size='medium' block onClick={e => phoneSign()}>继续</Button >
             </div>
-        </div>
+        </div></form>
     }
     /**
      * 输入手机验证码
@@ -129,12 +132,13 @@ export var Login = observer(function () {
         }
     }
     function renderLogin() {
-        return <div className='shy-login-box'>
+        return <form><div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.phone} onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                <Input value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
             </div>
             <div className='shy-login-box-code'>
                 <Input value={local.verifyPhoneCode}
+                    name={'code'}
                     placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)}
                     onChange={e => local.verifyPhoneCode = e}
                     onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
@@ -142,7 +146,7 @@ export var Login = observer(function () {
                 {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
             </div>
             {local.step == 'register' && <div className='shy-login-box-account'>
-                <Input value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
+                <Input name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
             </div>}
             {local.step == 'register' && <div className='shy-login-box-agree'>
                 <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='/service/protocol' target='_blank'>《服务协议》</a>及<a href='/privacy/protocol' target='_blank'>《隐私协议》</a></label>
@@ -151,7 +155,7 @@ export var Login = observer(function () {
                 <Button size='medium' block onClick={e => loginOrRegister()}>{local.step == 'register' ? '注册' : '登录'}</Button >
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
-        </div>
+        </div></form>
     }
     /**
      * 注册在添加用户名
@@ -183,12 +187,12 @@ export var Login = observer(function () {
         </div>
     }
     let location = useLocation();
-    function successAfter() {
+    async function successAfter() {
         if ((location?.state as any)?.back) {
             UrlRoute.redict((location?.state as any)?.back)
         }
         else {
-
+            UrlRoute.push(ShyUrl.myWorkspace);
         }
     }
     React.useEffect(() => {
