@@ -4,7 +4,6 @@ import { Loading } from "rich/component/view/loading";
 import { MouseDragger } from "rich/src/common/dragger";
 import { surface } from "..";
 import { CacheKey, yCache } from "../../../net/cache";
-import { SiteView } from "../../site/production";
 import { SideBar } from "./sidebar";
 import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
