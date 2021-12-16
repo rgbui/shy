@@ -17,10 +17,11 @@ export class WorkspaceMembers extends React.Component {
             if (r.ok) {
                 surface.workspace.invite = r.data.code;
                 this.forceUpdate();
-                CopyText(surface.workspace.invite)
             }
         }
-        else CopyText(surface.workspace.invite)
+        var url = location.protocol + '//' + location.host + '/invite/' + surface.workspace.invite
+        CopyText(url);
+        alert('邀请链接已复制')
     }
     async onAddMember() {
 
@@ -30,8 +31,8 @@ export class WorkspaceMembers extends React.Component {
         return <div className='shy-ws-members'>
             <div className='shy-ws-memeber-invitation'>
                 <h4>通用邀请链接</h4>
-                <div className='shy-remark'>任何得到此链接的人均可以加入这个空间，你也可以</div>
-                <Row><Col span={16}><Input readonly={true} value={surface.workspace.invite ? location.protocol + '://' + location.host + '/invite/' + surface.workspace.invite : ''}></Input></Col><Col align='start' span={8}><Button style={{ marginLeft: 20 }} onClick={e => this.createInvite()} ghost>{surface.workspace.invite ? '复制链接' : '创建链接'}</Button></Col></Row>
+                <div className='shy-remark'>任何得到此链接的人均可以加入这个空间。</div>
+                <Row><Col span={16}><Input readonly={true} value={surface.workspace.invite ? location.protocol + '//' + location.host + '/invite/' + surface.workspace.invite : ''}></Input></Col><Col align='start' span={8}><Button style={{ marginLeft: 20 }} onClick={e => this.createInvite()} ghost>{surface.workspace.invite ? '复制链接' : '创建链接'}</Button></Col></Row>
             </div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
@@ -44,10 +45,10 @@ export class WorkspaceMembers extends React.Component {
                 <Divider></Divider>
                 {surface.workspace.users.map(us => {
                     return <div className='shy-ws-member' key={us.userid}>
-                        <Row>
+                        <Row style={{ marginBottom: 20 }}>
                             <Col span={16}> <Avatar userid={us.userid}></Avatar>
                                 <span>{us.nick}</span></Col>
-                            <Col span={8} align='end'><Select dropAlign='right' value={us.role || 'admin'} options={[{ text: '管理员', value: 'admin' }, { text: '普通', value: 'memeber' }]}></Select></Col>
+                            <Col span={8} align='end'><Select dropAlign='right' value={us.role || 'admin'} options={[{ text: '管理员', value: 'admin' }, { text: '普通', value: 'member' }]}></Select></Col>
                         </Row>
                     </div>
                 })}

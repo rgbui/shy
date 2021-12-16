@@ -1,4 +1,5 @@
 
+import { toJS } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Button } from "rich/component/view/button";
@@ -13,7 +14,7 @@ export var InviteView = observer(function () {
     var local = useLocalObservable<{ ws: Workspace, loading: boolean }>(() => {
         return {
             ws: null,
-            loading: false
+            loading: true
         }
     })
     async function trySign() {
@@ -27,10 +28,12 @@ export var InviteView = observer(function () {
         if (w.ok) {
             if (w.data.memeber == true) return UrlRoute.pushToWs(w.data.customizeSecondDomain || w.data.sn);
             local.ws = w.data as any;
+            local.loading = false;
         }
     }
     async function join() {
         var r = await memberWorkspaceService.inviteJoin(local.ws.id);
+        console.log(r,toJS(local.ws));
         return UrlRoute.pushToWs(local.ws.customizeSecondDomain || local.ws.sn);
     }
     async function refuse() {
@@ -43,9 +46,10 @@ export var InviteView = observer(function () {
     if (local.loading == true) return <Loading></Loading>
     return <div className="shy-invite">
         <Row align="center">
-            <Avatar icon={local.ws.icon} text={local.ws.text}> </Avatar>
+            <Avatar size={72} icon={local.ws.icon} text={local.ws.text}> </Avatar>
         </Row>
-        <Row>邀请您加入他们的空间</Row>
-        <Row><Space><Button onClick={e => join()}>加入</Button><Button onClick={e => refuse()} ghost>拒绝</Button></Space></Row>
+        <Row style={{ margin: '30px 0px' }} align="center">邀请您加入他们的空间</Row>
+
+        <Row align="center"><Space><Button onClick={e => join()}>加入</Button><Button onClick={e => refuse()} ghost>拒绝</Button></Space></Row>
     </div>
 })
