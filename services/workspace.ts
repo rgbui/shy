@@ -23,8 +23,8 @@ class WorkspaceService extends BaseService {
             domain,
         })
     }
-    async loadMyWorkspace() {
-        return await masterSock.get<{ workspaceId?: string, notCreateWorkSpace?: boolean }, string>('/ws/me')
+    async loadMyWorkspace(wsHost?:string) {
+        return await masterSock.get<{ workspaceId?: string, notCreateWorkSpace?: boolean }, string>('/ws/me',{wsHost})
     }
     async getWorkspaces() {
         var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/ws/list');

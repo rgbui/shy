@@ -9,10 +9,7 @@ import { UrlRoute, ShyUrl } from "../../history";
 export var MyWorkSpace = observer(function () {
     async function load() {
         var wsHost = await sCache.get(CacheKey.wsHost);
-        if (wsHost && wsHost.toString().match(/\d+/g)) {
-            return UrlRoute.pushToWs(wsHost);
-        }
-        var my = await workspaceService.loadMyWorkspace();
+        var my = await workspaceService.loadMyWorkspace(wsHost);
         if (my?.data?.workspaceId) return UrlRoute.pushToWs(my?.data?.workspaceId);
         else return UrlRoute.push(ShyUrl.workCreate);
     }
