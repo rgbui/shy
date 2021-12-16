@@ -5,14 +5,14 @@ import { send } from "../auth/iframe";
  * 缓存应用的key
  */
 export enum CacheKey {
-    token,
-    finger,
-    device,
-    wsId,
-    ws_open_page_id,
-    lang,
-    ws_toggle_pages,
-    slideWidth
+    token = 0,
+    finger = 1,
+    device = 2,
+    wsHost = 30,
+    ws_open_page_id = 4,
+    lang = 5,
+    ws_toggle_pages = 6,
+    slideWidth = 7
 }
 const FLAG = 'shy.';
 class SyCache {
