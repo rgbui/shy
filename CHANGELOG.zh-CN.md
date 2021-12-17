@@ -8,6 +8,9 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
+## 0.6.538-pro
+  `2021-12-17`  
+
 
 ## 0.6.537-pro
   `2021-12-12`  
