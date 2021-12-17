@@ -1,14 +1,14 @@
 
 import React from 'react';
-import { Row, Col, Divider } from 'rich/component/view/grid';
+import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { Button } from 'rich/component/view/button';
 import { CopyText } from 'rich/component/copy';
 import { surface } from '../..';
 import { workspaceService } from '../../../../services/workspace';
 import { Avatar } from '../../../components/face';
-import { Select } from 'rich/component/view/select';
 import { observer } from 'mobx-react';
+import SvgDown from "rich/src/assert/svg/chevronDown.svg";
 @observer
 export class WorkspaceMembers extends React.Component {
     async createInvite() {
@@ -26,8 +26,14 @@ export class WorkspaceMembers extends React.Component {
     async onAddMember() {
 
     }
-    render() {
+    async setUser(user, event: React.MouseEvent) {
 
+    }
+    render() {
+        function getRoleName(user) {
+            if (user.role == 'adming') return '管理员';
+            else return '成员';
+        }
         return <div className='shy-ws-members'>
             <div className='shy-ws-memeber-invitation'>
                 <h4>通用邀请链接</h4>
@@ -46,9 +52,16 @@ export class WorkspaceMembers extends React.Component {
                 {surface.workspace.users.map(us => {
                     return <div className='shy-ws-member' key={us.userid}>
                         <Row style={{ marginBottom: 20 }}>
-                            <Col span={16}> <Avatar userid={us.userid}></Avatar>
-                                <span>{us.nick}</span></Col>
-                            <Col span={8} align='end'><Select dropAlign='right' value={us.role || 'admin'} options={[{ text: '管理员', value: 'admin' }, { text: '普通', value: 'member' }]}></Select></Col>
+                            <Col span={16}><Space>
+                                <Avatar size={30} userid={us.userid}></Avatar>
+                                <span>{us.nick}</span></Space>
+                            </Col>
+                            <Col span={8} align='end'>
+                                <Space gap={5} style={{ cursor: 'pointer' }} onMousedown={e => this.setUser(us, e)}>
+                                    <span>{getRoleName(us)}</span>
+                                    <SvgDown style={{ width: 10 }}></SvgDown>
+                                </Space>
+                            </Col>
                         </Row>
                     </div>
                 })}
