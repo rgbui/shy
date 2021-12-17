@@ -6,6 +6,7 @@ import { CacheKey, sCache } from "../net/cache";
 import { FileMd5 } from "../src/util/file";
 import { FileType } from "../type";
 import { SockResponse } from "../net/sock/type";
+import { ResourceArguments } from "rich/extensions/icon/declare";
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string, usingInvitationCode?: string) {
@@ -50,6 +51,9 @@ class UserService extends BaseService {
     async update(data: Partial<User>) {
         var r = await masterSock.post('/user/update', { data });
         return r;
+    }
+    async getBasic(userid: string) {
+        return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/${userid}/basic`)
     }
     /**
      * 用户直接上传文件，不考虑md5是否有重复
