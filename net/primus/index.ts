@@ -5,11 +5,11 @@ import { CacheKey, sCache } from '../cache';
 import { masterSock, Sock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
-import { HttpMethod } from './http';
+import { HttpMethod, SubscribeType } from './http';
 export class SockTim {
     private willloading: boolean = false;
     private primus;
-     id: string;
+    id: string;
     async load() {
         var self = this;
         if (this.willloading == true) return;
@@ -36,6 +36,18 @@ export class SockTim {
                     var se = self.sendEvents.find(g => g.rid == json.rid)
                     if (se) {
                         se.callback(json);
+                    }
+                }
+                else {
+                    var d = data.data;
+                    var ses = self.events.findAll(g => g.url == d.url);
+                    for (let i = 0; i < ses.length; i++) {
+                        try {
+                            ses[i].fn(d.data);
+                        }
+                        catch (ex) {
+
+                        }
                     }
                 }
             }
@@ -120,7 +132,14 @@ export class SockTim {
      * @param data 
      */
     send(method: HttpMethod, url: string, data: Record<string, any>) {
-
+        url = Sock.resolve('/' + API_VERSION, url);
+        this.primus.write({ method, url, data });
+    }
+    subscribe(type: SubscribeType, id: string) {
+        this.send(HttpMethod.post, '/user/subscribe', { type, id });
+    }
+    unsubscribe(type: SubscribeType, id: string) {
+        this.send(HttpMethod.post, '/user/unsubscribe', { type, id });
     }
     private handleResponse<T, U = any>(data) {
         var response: SockResponse<T, U> = {
@@ -198,6 +217,14 @@ export class SockTim {
             else return $
         });
         return url;
+    }
+    private events: { url: string, fn: (...args: any[]) => void }[] = [];
+    on(url: string, fn: (...args: any[]) => void) {
+        this.events.push({ url, fn });
+    }
+    off(url: string, fn?: (...args: any[]) => void) {
+        if (typeof fn == 'function') this.events.removeAll(e => e.url == url && e.fn == fn);
+        else this.events.removeAll(e => e.url == url);
     }
 }
 export var userTim = new SockTim();

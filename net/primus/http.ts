@@ -7,3 +7,7 @@ export enum HttpMethod {
     put,
     delete
 }
+export enum SubscribeType {
+    workspace,
+    page
+}

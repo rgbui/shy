@@ -7,6 +7,7 @@ import { TableSchema } from "rich/blocks/data-present/schema/meta";
 import { FieldType } from "rich/blocks/data-present/schema/field.type";
 import { FileType } from "../type";
 import { FileMd5 } from "../src/util/file";
+import { userTim } from "../net/primus";
 class WorkspaceService extends BaseService {
 
     /**
@@ -23,8 +24,8 @@ class WorkspaceService extends BaseService {
             domain,
         })
     }
-    async loadMyWorkspace(wsHost?:string) {
-        return await masterSock.get<{ workspaceId?: string, notCreateWorkSpace?: boolean }, string>('/ws/me',{wsHost})
+    async loadMyWorkspace(wsHost?: string) {
+        return await masterSock.get<{ workspaceId?: string, notCreateWorkSpace?: boolean }, string>('/ws/me', { wsHost })
     }
     async getWorkspaces() {
         var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/ws/list');
@@ -35,7 +36,7 @@ class WorkspaceService extends BaseService {
         return rr;
     }
     async updateWorkspace(wsId: string, data: Partial<Workspace>) {
-        var rr = await masterSock.post('/ws/:wsId/update', { wsId, data });
+        var rr = await masterSock.post('/ws/:wsId/update', { wsId, data, sock: userTim.id });
         return rr;
     }
     async loadWorkspaceItems(workspaceId: string, pageIds: string[]) {
