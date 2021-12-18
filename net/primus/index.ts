@@ -1,4 +1,5 @@
 import { util } from 'rich/util/util';
+import { config } from '../../src/common/config';
 import { log } from '../../src/common/log';
 import { CacheKey, sCache } from '../cache';
 import { masterSock, Sock } from '../sock';
@@ -8,9 +9,11 @@ import { HttpMethod } from './http';
 export class SockTim {
     private willloading: boolean = false;
     private primus;
+     id: string;
     async load() {
         var self = this;
         if (this.willloading == true) return;
+        this.id = config.guid();
         this.willloading = true;
         var r = await import(
             /* webpackChunkName: 'tim' */
@@ -45,7 +48,7 @@ export class SockTim {
             var device = await sCache.get(CacheKey.device);
             var token = await sCache.get(CacheKey.token);
             var lang = await sCache.get(CacheKey.lang);
-            var r = await self.post('/user/online', { token, device, lang });
+            var r = await self.post('/user/online', { token, device, lang, sock: self.id });
             console.log('user online r:', r.data);
         });
         primus.on('error', function error(err) {

@@ -28,7 +28,8 @@ export class PageContentStore {
                 wsId: this.item.workspaceId,
                 pageId: this.item.id,
                 directive: directive,
-                operators: userAction.operators
+                operators: userAction.operators,
+                sock: userTim.id
             });
             userAction.id = r.data.id;
             userAction.sequence = r.data.sequence;

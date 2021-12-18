@@ -1,5 +1,6 @@
 import lodash from "lodash";
-import { runInAction, toJS } from "mobx";
+import { runInAction } from "mobx";
+import { userTim } from "../net/primus";
 import { masterSock } from "../net/sock";
 import { config } from "../src/common/config";
 import { PageItem } from "../src/surface/sln/item";
@@ -42,7 +43,7 @@ class PageItemStore {
         operator: ItemOperator,
         actions: PageItemAction[]
     }) {
-        return await masterSock.post<{ result: { actions: any[] } }>('/page/item/operator', { wsId, operator })
+        return await masterSock.post<{ result: { actions: any[] } }>('/page/item/operator', { wsId, operator, sock: userTim.id })
     }
     public async deletePageItem(pageItem: PageItem) {
         var actions: PageItemAction[] = [];
