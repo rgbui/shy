@@ -68,7 +68,7 @@ export var Login = observer(function () {
         unlockButton();
     }
     function renderPhone() {
-        return <form><div className='shy-login-box'>
+        return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
                 <Input value={local.phone}
                     name={'phone'}
@@ -80,7 +80,7 @@ export var Login = observer(function () {
             <div className='shy-login-box-button'>
                 <Button size='medium' block onClick={e => phoneSign()}>继续</Button >
             </div>
-        </div></form>
+        </div>
     }
     /**
      * 输入手机验证码
@@ -132,7 +132,7 @@ export var Login = observer(function () {
         }
     }
     function renderLogin() {
-        return <form><div className='shy-login-box'>
+        return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
                 <Input value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
             </div>
@@ -155,7 +155,7 @@ export var Login = observer(function () {
                 <Button size='medium' block onClick={e => loginOrRegister()}>{local.step == 'register' ? '注册' : '登录'}</Button >
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
-        </div></form>
+        </div>
     }
     /**
      * 注册在添加用户名
