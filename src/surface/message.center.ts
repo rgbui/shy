@@ -3,6 +3,7 @@ import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
 import { CacheKey, yCache } from "../../net/cache";
+import { userTim } from "../../net/primus";
 import { pageItemStore } from "../../services/page.item";
 import { userService } from "../../services/user";
 import { workspaceService } from "../../services/workspace";
@@ -80,5 +81,14 @@ export function MessageCenter(surface: Surface) {
             surface.sln.onFocusItem(it);
             await surface.supervisor.onOpenItem(it);
         }
-    })
+    });
+    userTim.on('/ws/:wsId/update', () => {
+
+    });
+    userTim.on('/page/content/operator', () => {
+
+    });
+    userTim.on('/page/item/operator', () => {
+
+    });
 }
