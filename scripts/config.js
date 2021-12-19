@@ -36,11 +36,9 @@ else if (mode == 'beta') AUTH_URL = 'https://beta.shy.red/auth.html';
 module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: {
-        main: './src/main.tsx',
-        shared: './net/primus/shared.ts'
-        //auth: './src/auth.tsx'
+        main: './src/main.tsx'
     },
-    devtool: isDev ? 'inline-source-map' : undefined,
+    devtool:isDev ? 'inline-source-map' : undefined,
     output: {
         path: path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode)),
         filename: versionPrefix + "assert/js/shy.[name].[contenthash:8].js",
