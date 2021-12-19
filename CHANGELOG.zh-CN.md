@@ -8,7 +8,12 @@
   发布的版本：专业版(pro)、测试版(beta)。   
   专业版(pro):[https://shy.live](https://shy.live)   
   测试版(beta):[https://beta.shy.red](https://beta.shy.red) 
-  
+## 0.6.539-pro
+  `2021-12-19`  
+   * 实现多用户协同
+   * 修复数据表格产生的一些bug
+
+
 ## 0.6.538-pro
   `2021-12-17`  
    * 实现用户邀请功能
