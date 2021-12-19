@@ -37,6 +37,7 @@ module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: {
         main: './src/main.tsx',
+        shared: './net/primus/shared.ts'
         //auth: './src/auth.tsx'
     },
     devtool: isDev ? 'inline-source-map' : undefined,
@@ -155,7 +156,7 @@ module.exports = {
             filename: 'index.html',
             showErrors: true,
             hash: false,
-            chunks: ['main'],
+            chunks: ['main', 'shared'],
             favicon: false,
             templateParameters: {
                 src: publicPath + versionPrefix
@@ -175,7 +176,8 @@ module.exports = {
             VERSION: JSON.stringify(pkg.version),
             API_MASTER_URLS: JSON.stringify(API_URLS),
             API_VERSION: JSON.stringify(API_VERSION),
-            AUTH_URL: JSON.stringify(AUTH_URL)
+            AUTH_URL: JSON.stringify(AUTH_URL),
+            VERSION_PREFIX: JSON.stringify(versionPrefix)
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
@@ -188,6 +190,10 @@ module.exports = {
                 {
                     from: path.join(__dirname, "../src/assert/img/shy.svg"),
                     to: versionPrefix + 'assert/img/shy.fav.svg'
+                },
+                {
+                    from: path.join(__dirname, "shared.js"),
+                    to: versionPrefix + 'assert/js/shared.js'
                 }
             ]
         })

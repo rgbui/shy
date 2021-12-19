@@ -11,6 +11,10 @@ declare var VERSION: string;
 declare var API_MASTER_URLS: string;
 declare var API_VERSION: string;
 declare var AUTH_URL: string;
+/**
+ * 资源前缀
+ */
+declare var VERSION_PREFIX: string;
 
 type ArrayOf<T> = T extends (infer p)[] ? p : never;
 
@@ -56,7 +60,7 @@ interface Window {
 /**
  * 自动在HTMLElement上面申明一个接收拖放元素的函数
  */
- interface HTMLElement {
+interface HTMLElement {
   shy_drop_move?: (type: string, data: any) => void;
   shy_drop_over?: (type: string, data: any) => void;
   shy_end?: () => void;
