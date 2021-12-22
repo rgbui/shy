@@ -57,31 +57,6 @@ class WorkspaceService extends BaseService {
     async toggleFavourcePage(item: PageItem) {
 
     }
-    async createDefaultTableSchema(sock: Sock, data: { text?: string, templateId?: string }) {
-        var result = await sock.put<{ schema: Partial<TableSchema> }, string>('/create/default/table/schema', data || {});
-        return result.data?.schema;
-    }
-    async loadTableSchema(sock: Sock, schemaId: string) {
-        var result = await sock.get<{ schema: Partial<TableSchema> }, string>('/load/table/schema/:id', { id: schemaId });
-        return result.data?.schema;
-    }
-    async loadTableSchemaData(sock: Sock, schemaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
-        var result = await sock.get<{ list: any[], total: number }, string>('/table/:schemaId/query', {
-            schemaId: schemaId,
-            page: options.page,
-            size: options.size,
-            filter: options.filter
-        });
-        return result.data;
-    }
-    async createTableSchemaField(sock: Sock, schemaId: string, options: { type: FieldType, text: string }) {
-        var result = await sock.get<{ field: FileType }, string>('/create/schema/:id/field', {
-            id: schemaId,
-            type: options.type,
-            text: options.text
-        });
-        return result.data;
-    }
     async createInvite(wsId: string) {
         return await masterSock.post<{ code: string }, string>('/ws/:wsId/create/invite', { wsId })
     }
