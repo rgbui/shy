@@ -1,6 +1,6 @@
 
-import { FieldType } from "rich/blocks/data-present/schema/field.type";
-import { TableSchema } from "rich/blocks/data-present/schema/meta";
+import { FieldType } from "rich/blocks/table-store/schema/field.type";
+import { TableSchema } from "rich/blocks/table-store/schema/meta";
 import { BaseService } from "../net";
 import { Sock } from "../net/sock";
 import { FileType } from "../type";
@@ -29,7 +29,7 @@ class SchemaService extends BaseService {
         })).data
     }
     async updateField(sock: Sock, schemaId: string, fieldId: string, data: Record<string, any>) {
-        return (await sock.post<{ ok: boolean }, string>('/schema/field/updaate', {
+        return (await sock.post<{ ok: boolean }, string>('/schema/field/update', {
             id: schemaId,
             fieldId,
             data
@@ -73,7 +73,8 @@ class SchemaService extends BaseService {
     async tableUpdateRow(sock: Sock, schemaId: string, id: string, data: Record<string, any>) {
         return (await sock.post<{ ok: boolean }, string>('/schema/table/update', {
             schemaId: schemaId,
-            id
+            id,
+            data
         })).data;
     }
     //#endregion

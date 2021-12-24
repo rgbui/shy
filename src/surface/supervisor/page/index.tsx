@@ -1,4 +1,4 @@
-import { FieldType } from "rich/blocks/data-present/schema/field.type";
+import { FieldType } from "rich/blocks/table-store/schema/field.type";
 import { Page } from "rich/src/page";
 import { PageDirective } from "rich/src/page/directive";
 import { surface } from "../..";
