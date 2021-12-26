@@ -59,7 +59,7 @@ class SchemaService extends BaseService {
         return result.data;
     }
     async tableInsertRow(sock: Sock, schemaId: string, data: Record<string, any>, pos?: { id: string, pos: "down" | 'up' }) {
-        return (await sock.post<Record<string, any>, string>('/schema/table/add', {
+        return (await sock.post<{ok:boolean,data:Record<string,any>}, string>('/schema/table/add', {
             schemaId: schemaId,
             data
         })).data;

@@ -72,7 +72,7 @@ export async function createPageContent(item: PageItem) {
 
         page.on(PageDirective.schemaInsertRow, async (schemaId: string, data, pos) => {
             var r = await schemaService.tableInsertRow(surface.workspace.sock, schemaId, data, pos);
-            return r;
+            return r as any;
         });
         page.on(PageDirective.schemaDeleteRow, async (schemaId: string, id) => {
             var r = await schemaService.tableRemoveRow(surface.workspace.sock, schemaId, id);
