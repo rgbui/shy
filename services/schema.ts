@@ -4,9 +4,10 @@ import { TableSchema } from "rich/blocks/table-store/schema/meta";
 import { BaseService } from "../net";
 import { Sock } from "../net/sock";
 import { FileType } from "../type";
+import { DataStoreName, dataStoreService } from "./datastore";
 
 class SchemaService extends BaseService {
-    async create(sock: Sock, data: {workspaceId:string, text?: string, templateId?: string }) {
+    async create(sock: Sock, data: { workspaceId: string, text?: string, templateId?: string }) {
         var result = await sock.put<{ schema: Partial<TableSchema> }, string>('/schema/crate', data || {});
         return result.data?.schema;
     }
@@ -41,6 +42,9 @@ class SchemaService extends BaseService {
             fieldId
         })).data;
     }
+    async allWorkspace(sock: Sock, workspaceId: string) {
+        return dataStoreService.allQuery(sock, DataStoreName.UserDefineDataSchema, { filter: { workspaceId } })
+    }
     //#region /schema/table
     async tableAllQuery(sock: Sock, schemaId: string, options: { filter?: Record<string, any> }) {
         var result = await sock.get<{ list: any[], total: number }, string>('/schema/table/query/all', {
@@ -59,7 +63,7 @@ class SchemaService extends BaseService {
         return result.data;
     }
     async tableInsertRow(sock: Sock, schemaId: string, data: Record<string, any>, pos?: { id: string, pos: "down" | 'up' }) {
-        return (await sock.post<{ok:boolean,data:Record<string,any>}, string>('/schema/table/add', {
+        return (await sock.post<{ ok: boolean, data: Record<string, any> }, string>('/schema/table/add', {
             schemaId: schemaId,
             data
         })).data;

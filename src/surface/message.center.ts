@@ -5,6 +5,7 @@ import { Surface } from ".";
 import { CacheKey, yCache } from "../../net/cache";
 import { userTim } from "../../net/primus";
 import { pageItemStore } from "../../services/page.item";
+import { schemaService } from "../../services/schema";
 import { userService } from "../../services/user";
 import { workspaceService } from "../../services/workspace";
 import { UrlRoute } from "../history";
@@ -82,6 +83,9 @@ export function MessageCenter(surface: Surface) {
             await surface.supervisor.onOpenItem(it);
         }
     });
+    messageChannel.on(Directive.QueryWorkspaceTableSchemas, async () => {
+        return schemaService.allWorkspace(surface.workspace.sock, surface.workspace.id)
+    })
     userTim.on('/ws/:wsId/update', () => {
 
     });
