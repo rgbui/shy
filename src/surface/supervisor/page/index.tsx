@@ -40,7 +40,8 @@ export async function createPageContent(item: PageItem) {
         // schemaDeleteRow,
 
         page.on(PageDirective.schemaCreate, async (data) => {
-            var r = await schemaService.create(surface.workspace.sock, data);
+            data.workspaceId = surface.workspace.id;
+            var r = await schemaService.create(surface.workspace.sock, data as any);
             return r;
         });
         page.on(PageDirective.schemaLoad, async (schemaId: string) => {

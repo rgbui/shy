@@ -6,7 +6,7 @@ import { Sock } from "../net/sock";
 import { FileType } from "../type";
 
 class SchemaService extends BaseService {
-    async create(sock: Sock, data: { text?: string, templateId?: string }) {
+    async create(sock: Sock, data: {workspaceId:string, text?: string, templateId?: string }) {
         var result = await sock.put<{ schema: Partial<TableSchema> }, string>('/schema/crate', data || {});
         return result.data?.schema;
     }
