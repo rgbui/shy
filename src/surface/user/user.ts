@@ -3,9 +3,7 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { util } from "rich/util/util";
-import { userTim } from "../../../net/primus";
 import { userService } from "../../../services/user";
-import { config } from "../../common/config";
 import { useOpenUserSettings } from "./settings";
 export class User {
     public id: string = null;
