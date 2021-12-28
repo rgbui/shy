@@ -3,14 +3,11 @@ import { Page } from "rich/src/page";
 import { PageDirective } from "rich/src/page/directive";
 import { surface } from "../..";
 import { schemaService } from "../../../../services/schema";
-
 import { PageItem } from "../../sln/item";
 export async function createPageContent(item: PageItem) {
     if (!item.contentView) {
         var pd = await item.store.getPageContent();
-        var page = new Page({
-            user: surface.user as any
-        });
+        var page = new Page();
         item.contentView = page;
         page.on(PageDirective.blur, function (ev) {
             // console.log('blur', ev)

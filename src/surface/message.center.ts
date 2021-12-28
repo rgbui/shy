@@ -85,6 +85,12 @@ export function MessageCenter(surface: Surface) {
     });
     messageChannel.on(Directive.QueryWorkspaceTableSchemas, async () => {
         return schemaService.allWorkspace(surface.workspace.sock, surface.workspace.id)
+    });
+    messageChannel.on(Directive.getSchemaFields, async (id) => {
+        return schemaService.load(surface.workspace.sock, id);
+    });
+    messageChannel.on(Directive.getCurrentUser, () => {
+        return surface.user;
     })
     userTim.on('/ws/:wsId/update', () => {
 
