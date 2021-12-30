@@ -17,7 +17,7 @@ export var PageRouter = observer(function () {
     if (item) {
         var rootItem = item.closest(x => x && x.parent && x.parent.mime != Mime.page, true);
         var pa = item.parent;
-        if (pa.mime != Mime.page) pa = null;
+        if (pa?.mime != Mime.page) pa = null;
         if (rootItem && rootItem == pa) pa = null;
         var ra = (item: PageItem, split = false) => <><span onMouseDown={e => onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon ? item.icon : PageSvg} size={18}></Icon><a className='shy-supervisor-bar-router-item-title'>{item.text}</a></span>{split && <em>/</em>}</>;
         return <div className='shy-supervisor-bar-routers'>
