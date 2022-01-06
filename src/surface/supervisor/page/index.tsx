@@ -101,7 +101,7 @@ export async function createPageContent(item: PageItem) {
         }
         var el = view.appendChild(document.createElement('div'));
         el.classList.add('shy-supervisor-view-page');
-        var bound = el.getBoundingClientRect();
+        var bound = view.getBoundingClientRect();
         page.render(el, { width: bound.width, height: bound.height });
     }
     else {
