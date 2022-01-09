@@ -9,7 +9,7 @@ import link from '../../../assert/svg/link.svg';
 import { workspaceService } from "../../../../services/workspace";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
-import { Rect } from "rich/src/common/point";
+import { Rect } from "rich/src/common/vector/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { PageContentStore } from "../../../../services/page.content";
 import { UserAction } from "rich/src/history/action";

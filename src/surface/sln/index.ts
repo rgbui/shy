@@ -2,7 +2,7 @@ import { Events } from "rich/util/events";
 import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItem } from "./item";
 import { useSelectMenuItem } from "rich/component/view/menu";
-import { Point } from "rich/src/common/point";
+import { Point } from "rich/src/common/vector/point";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
 import { SlnDirective, Mime } from "./declare";

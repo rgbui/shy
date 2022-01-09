@@ -2,7 +2,7 @@
 import { PageItem } from "../sln/item";
 import { Events } from "rich/util/events";
 import { useSelectMenuItem } from "rich/component/view/menu";
-import { Rect } from "rich/src/common/point";
+import { Rect } from "rich/src/common/vector/point";
 import { workspaceService } from "../../../services/workspace";
 import { usePagePublish } from "./publish";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";

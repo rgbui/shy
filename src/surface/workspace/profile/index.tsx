@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "rich/component/view/icon";
-import { Rect } from "rich/src/common/point";
+import { Rect } from "rich/src/common/vector/point";
 import { Avatar } from "../../../components/face";
 import { surface } from "../..";
 import { useSwitchWorkspace } from "../switch";
