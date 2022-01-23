@@ -8,7 +8,7 @@ import { userService } from "../../../../services/user";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
-import { inviteCode, phoneCode, phoneRegex } from "../../../../net/verify";
+import { inviteCode, phoneCode, phoneRegex } from "../../../common/verify";
 import { useLocation } from "react-router-dom";
 import { config } from "../../../common/config";
 import { workspaceService } from "../../../../services/workspace";

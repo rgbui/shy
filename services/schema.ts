@@ -1,7 +1,7 @@
 
 import { FieldType } from "rich/blocks/table-store/schema/field.type";
 import { TableSchema } from "rich/blocks/table-store/schema/meta";
-import { BaseService } from "../net";
+import { BaseService } from "./base";
 import { Sock } from "../net/sock";
 import { FileType } from "../type";
 import { DataStoreName, dataStoreService } from "./datastore";
@@ -43,7 +43,7 @@ class SchemaService extends BaseService {
         })).data;
     }
     async allWorkspace(sock: Sock, workspaceId: string) {
-        return dataStoreService.allQuery(sock, DataStoreName.UserDefineDataSchema, { filter: { workspaceId } })
+        //return dataStoreService.allQuery(sock, DataStoreName.UserDefineDataSchema, { filter: { workspaceId } })
     }
     //#region /schema/table
     async tableAllQuery(sock: Sock, schemaId: string, options: { filter?: Record<string, any> }) {
