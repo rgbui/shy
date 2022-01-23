@@ -3,7 +3,8 @@
   "version": "0.6.539-pro",
   "description": "https://shy.live",
   "main": "index.js",
-  "scripts": {
+  "scripts": { 
+    "build-api":"node scripts/api.js",
     "pro": "webpack --config scripts/config.js  --pro",
     "beta": "webpack --config scripts/config.js  --beta",
     "dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  "
