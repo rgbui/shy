@@ -1,8 +1,7 @@
-import { FieldType } from "rich/blocks/table-store/schema/field.type";
+
 import { Page } from "rich/src/page";
 import { PageDirective } from "rich/src/page/directive";
 import { surface } from "../..";
-import { schemaService } from "../../../../services/schema";
 import { PageItem } from "../../sln/item";
 export async function createPageContent(item: PageItem) {
     if (!item.contentView) {
@@ -22,71 +21,10 @@ export async function createPageContent(item: PageItem) {
             await item.store.saveHistory(action);
             await item.store.savePageContent(action, await page.getFile());
         });
-
-        // schemaLoad,
-        // schemaCreate,
-        // schemaCreateField,
-        // schemaRemoveField,
-        // schemaTurnTypeField,
-        // schemaUpdateField,
-
-        // schemaTableLoad,
-        // schemaTableLoadAll,
-        // schemaInsertRow,
-        // schemaUpdateRow,
-        // schemaDeleteRow,
-
-        page.on(PageDirective.schemaCreate, async (data) => {
-            data.workspaceId = surface.workspace.id;
-            var r = await schemaService.create(surface.workspace.sock, data as any);
-            return r;
-        });
-        page.on(PageDirective.schemaLoad, async (schemaId: string) => {
-            var r = await schemaService.load(surface.workspace.sock, schemaId);
-            return r;
-        });
-        page.on(PageDirective.schemaCreateField, async (schemaId: string, options: { text: string, type: any }) => {
-            var r = await schemaService.addField(surface.workspace.sock, schemaId, options);
-            return r.field;
-        })
-        page.on(PageDirective.schemaRemoveField, async (schemaId: string, fieldId: string) => {
-            return await schemaService.removeField(surface.workspace.sock, schemaId, fieldId);
-        })
-        page.on(PageDirective.schemaUpdateField, async (schemaId: string, fieldId: string, data) => {
-            return await schemaService.updateField(surface.workspace.sock, schemaId, fieldId, data);
-        })
-        page.on(PageDirective.schemaTurnTypeField, async (schemaId: string, fieldId: string, type: FieldType) => {
-            return await schemaService.turnField(surface.workspace.sock, schemaId, fieldId, type);
-        });
-
-        page.on(PageDirective.schemaTableLoad, async (schemaId: string, options) => {
-            var r = await schemaService.tableQuery(surface.workspace.sock, schemaId, options);
-            return r;
-        });
-        page.on(PageDirective.schemaTableLoadAll, async (schemaId: string, options) => {
-            var r = await schemaService.tableAllQuery(surface.workspace.sock, schemaId, options);
-            return r;
-        });
-
-        page.on(PageDirective.schemaInsertRow, async (schemaId: string, data, pos) => {
-            var r = await schemaService.tableInsertRow(surface.workspace.sock, schemaId, data, pos);
-            return r as any;
-        });
-        page.on(PageDirective.schemaDeleteRow, async (schemaId: string, id) => {
-            var r = await schemaService.tableRemoveRow(surface.workspace.sock, schemaId, id);
-            return r;
-        });
-        page.on(PageDirective.schemaUpdateRow, async (schemaId: string, id, data) => {
-            var r = await schemaService.tableUpdateRow(surface.workspace.sock, schemaId, id, data);
-            return r;
-        });
-
         page.on(PageDirective.error, error => {
             console.error(error);
         });
-        page.on(PageDirective.loadPageInfo, async () => {
-            return { text: item.text, icon: item.icon, id: item.id };
-        });
+      
         page.on(PageDirective.save, async () => {
             await item.store.forceStorePageContent();
         });

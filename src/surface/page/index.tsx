@@ -47,23 +47,8 @@ export function PageDisplay() {
             // await self.item.store.saveHistory(action);
             // await self.item.store.savePageContent(action, await page.getFile());
         });
-        // page.on(PageDirective.createDefaultTableSchema, async (data) => {
-        //     var r = await workspaceService.createDefaultTableSchema(data);
-        //     return r;
-        // });
-        // page.on(PageDirective.loadTableSchemaData, async (schemaId: string, options) => {
-        //     var r = await workspaceService.loadTableSchemaData(schemaId, options);
-        //     return r;
-        // });
-        // page.on(PageDirective.loadTableSchema, async (schemaId: string) => {
-        //     var r = await workspaceService.loadTableSchema(schemaId);
-        //     return r;
-        // });
         page.on(PageDirective.error, error => {
             console.error(error);
-        });
-        page.on(PageDirective.loadPageInfo, async () => {
-            return { text: item.text, icon: item.icon, id: item.id };
         });
         await page.loadFile(file);
         page.render(refEl.current);
