@@ -1,11 +1,10 @@
-import { generatePath } from "react-router";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
 import { CacheKey, yCache } from "../../net/cache";
 import { userTim } from "../../net/primus";
 import { pageItemStore } from "../../services/page.item";
-import { schemaService } from "../../services/schema";
+
 import { userService } from "../../services/user";
 import { workspaceService } from "../../services/workspace";
 import { UrlRoute } from "../history";
@@ -83,15 +82,15 @@ export function MessageCenter(surface: Surface) {
             await surface.supervisor.onOpenItem(it);
         }
     });
-    messageChannel.on(Directive.QueryWorkspaceTableSchemas, async () => {
-        return schemaService.allWorkspace(surface.workspace.sock, surface.workspace.id)
-    });
-    messageChannel.on(Directive.getSchemaFields, async (id) => {
-        return schemaService.load(surface.workspace.sock, id);
-    });
-    messageChannel.on(Directive.getCurrentUser, () => {
-        return surface.user;
-    })
+    // messageChannel.on(Directive.QueryWorkspaceTableSchemas, async () => {
+    //     return schemaService.allWorkspace(surface.workspace.sock, surface.workspace.id)
+    // });
+    // messageChannel.on(Directive.getSchemaFields, async (id) => {
+    //     return schemaService.load(surface.workspace.sock, id);
+    // });
+    // messageChannel.on(Directive.getCurrentUser, () => {
+    //     return surface.user;
+    // })
     userTim.on('/ws/:wsId/update', () => {
 
     });
