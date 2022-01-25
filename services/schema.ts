@@ -1,86 +1,47 @@
 
-import { FieldType } from "rich/blocks/table-store/schema/field.type";
-import { TableSchema } from "rich/blocks/table-store/schema/meta";
-import { BaseService } from "./base";
-import { Sock } from "../net/sock";
-import { FileType } from "../type";
-import { DataStoreName, dataStoreService } from "./datastore";
 
-class SchemaService extends BaseService {
-    async create(sock: Sock, data: { workspaceId: string, text?: string, templateId?: string }) {
-        var result = await sock.put<{ schema: Partial<TableSchema> }, string>('/schema/crate', data || {});
-        return result.data?.schema;
+
+
+
+import { put, del, post, get } from "rich/net/annotation";
+import { surface } from "../src/surface";
+
+class SchemaService {
+    @put('/schema/create')
+    async createSchema() {
+        return surface.workspace.sock.put('/schema/create', arguments[0]);
     }
-    async load(sock: Sock, schemaId: string) {
-        var result = await sock.get<{ schema: Partial<TableSchema> }, string>('/schema/load', { id: schemaId });
-        return result.data?.schema;
+    @get('/schema/query')
+    async searchSchema()
+    {
+        return surface.workspace.sock.get('/schema/query', arguments[0]);
     }
-    async addField(sock: Sock, schemaId: string, options: { type: FieldType, text: string }) {
-        var result = await sock.post<{ field: Partial<FileType> }, string>('/schema/field/add', {
-            id: schemaId,
-            type: options.type,
-            text: options.text
-        });
-        return result.data;
+    @put('/schema/field/add')
+    async createSchemaField() {
+        return surface.workspace.sock.put('/schema/field/add', arguments[0]);
     }
-    async removeField(sock: Sock, schemaId: string, fieldId: string) {
-        return (await sock.post<{ ok: boolean }, string>('/schema/field/remove', {
-            id: schemaId,
-            fieldId
-        })).data
+
+    @del('/schema/field/remove')
+    async removeSchemaField() {
+        return surface.workspace.sock.delete('/schema/field/remove', arguments[0]);
     }
-    async updateField(sock: Sock, schemaId: string, fieldId: string, data: Record<string, any>) {
-        return (await sock.post<{ ok: boolean }, string>('/schema/field/update', {
-            id: schemaId,
-            fieldId,
-            data
-        })).data
+    /**
+     * 切换字段类型
+     * 主要是考虑到有些字段需要转换
+     * 如果数据量比较大，这个转换估计会有点慢，
+     * 有些直接转换不了，转换不了直接置为空或者取当前默认值
+     * @param id 
+     * @param name 
+     * @param type 
+     */
+
+    @post('/schema/field/turn')
+    async turnSchemaFieldType() {
+        return surface.workspace.sock.post('/schema/field/turn', arguments[0]);
     }
-    async turnField(sock: Sock, schemaId: string, fieldId: string, newType: FieldType) {
-        return (await sock.post<{ ok: boolean }, string>('/schema/field/turn', {
-            id: schemaId,
-            fieldId
-        })).data;
+
+    @post('/schema/field/update')
+    async updateSchemaField() {
+        return surface.workspace.sock.post('/schema/field/update', arguments[0]);
     }
-    async allWorkspace(sock: Sock, workspaceId: string) {
-        //return dataStoreService.allQuery(sock, DataStoreName.UserDefineDataSchema, { filter: { workspaceId } })
-    }
-    //#region /schema/table
-    async tableAllQuery(sock: Sock, schemaId: string, options: { filter?: Record<string, any> }) {
-        var result = await sock.get<{ list: any[], total: number }, string>('/schema/table/query/all', {
-            schemaId: schemaId,
-            filter: options.filter
-        });
-        return result.data;
-    }
-    async tableQuery(sock: Sock, schemaId: string, options: { page?: number, size?: number, filter?: Record<string, any> }) {
-        var result = await sock.get<{ list: any[], total: number }, string>('/schema/table/query', {
-            schemaId: schemaId,
-            page: options.page,
-            size: options.size,
-            filter: options.filter
-        });
-        return result.data;
-    }
-    async tableInsertRow(sock: Sock, schemaId: string, data: Record<string, any>, pos?: { id: string, pos: "down" | 'up' }) {
-        return (await sock.post<{ ok: boolean, data: Record<string, any> }, string>('/schema/table/add', {
-            schemaId: schemaId,
-            data
-        })).data;
-    }
-    async tableRemoveRow(sock: Sock, schemaId: string, id: string) {
-        return (await sock.post<{ ok: boolean }, string>('/schema/table/remove', {
-            schemaId: schemaId,
-            id
-        })).data;
-    }
-    async tableUpdateRow(sock: Sock, schemaId: string, id: string, data: Record<string, any>) {
-        return (await sock.post<{ ok: boolean }, string>('/schema/table/update', {
-            schemaId: schemaId,
-            id,
-            data
-        })).data;
-    }
-    //#endregion
 }
-export var schemaService = new SchemaService()

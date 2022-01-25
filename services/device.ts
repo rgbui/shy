@@ -1,8 +1,11 @@
+
+import { act, get, query } from "rich/net/annotation";
 import { UA } from "rich/util/ua";
 import { CacheKey, sCache, yCache } from "../net/cache";
 import { masterSock } from "../net/sock";
 import { fingerFlag } from "../src/util/finger";
 class UserDeviceService {
+    @act('/device/register')
     async register() {
         var devideId = await sCache.get(CacheKey.device);
         var cacFinger = await fingerFlag();
@@ -24,9 +27,10 @@ class UserDeviceService {
         });
         await sCache.set(CacheKey.device, r.data.deviceId);
     }
+    @query('/device/query')
     async getDeviceId() {
         return await sCache.get(CacheKey.device);
     }
 }
 
-export var userDeviceService = new UserDeviceService();
+// export var userDeviceService = new UserDeviceService();
