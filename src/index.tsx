@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { appLangProvider } from '../i18n/provider';
-import { userDeviceService } from '../services/device';
+
 import { ShyUrl, SyHistory } from './history';
 import { DownloadView } from './site/download';
 import { HelpView } from './site/help';
@@ -23,12 +23,14 @@ import { config } from './common/config';
 import { SiteView } from './site/production';
 import { surface } from './surface';
 import { MyWorkSpace } from './surface/view/my';
+import { channel } from "rich/net/channel";
+
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
     await appLangProvider.import();
-    await userDeviceService.register();
+    await channel.act('/device/register');
     await surface.loadUser()
     setLoad(true);
   }
