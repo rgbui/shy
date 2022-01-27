@@ -116,7 +116,7 @@ export interface ChannelAirMapUrls {
     `);
 
 }
-push('/log',`{type:"error"|"warn"|"info",message:string|Error}`,'void',['rich'])
+push('/log', `{type:"error"|"warn"|"info",message:string|Error}`, 'void', ['rich'])
 push('/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', '{ ok: boolean, data: { url: string },warn:string }', ['post', 'shy'])
 push('/workspace/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', '{ ok: boolean, data: { url: string },warn:string }', ['post', 'workspace', 'rich'])
 push('/workspace/upload/file/url', '{url:string}', '{ ok: boolean, data: { url: string },warn:string }', ['post', 'workspace', 'rich'])
@@ -156,6 +156,7 @@ push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any
 push('/device/register', '', 'void', ['shy', 'act', 'await']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 push('/user/ping', '', '{ok:boolean,warn:string}', ['shy', 'get', 'await'])
+push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

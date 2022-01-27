@@ -33,12 +33,24 @@ var AUTH_URL = '/auth';
 if (mode == 'pro') AUTH_URL = 'https://auth.shy.red/auth.html';
 else if (mode == 'beta') AUTH_URL = 'https://beta.shy.red/auth.html';
 
+var AMAP_KEY;
+var AMAP_PAIR;
+if (mode == 'pro') {
+    AMAP_KEY = '19f3c275e81172f6e8086c0682862e77';
+    AMAP_PAIR = '406947f7001f0867895cce9fab9f45b7';
+}
+else {
+    AMAP_KEY = '34c3436f1b8f2b98b0093b4b4e5c34fb';
+    AMAP_PAIR = '9345e5ad4e2e8c21f8f85513cba9d309';
+}
+
+
 module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: {
         main: './src/main.tsx'
     },
-    devtool:isDev ? 'inline-source-map' : undefined,
+    devtool: isDev ? 'inline-source-map' : undefined,
     output: {
         path: path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode)),
         filename: versionPrefix + "assert/js/shy.[name].[contenthash:8].js",
@@ -175,7 +187,9 @@ module.exports = {
             API_MASTER_URLS: JSON.stringify(API_URLS),
             API_VERSION: JSON.stringify(API_VERSION),
             AUTH_URL: JSON.stringify(AUTH_URL),
-            VERSION_PREFIX: JSON.stringify(versionPrefix)
+            VERSION_PREFIX: JSON.stringify(versionPrefix),
+            AMAP_KEY: JSON.stringify(AMAP_KEY),
+            AMAP_PAIR: JSON.stringify(AMAP_PAIR)
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
