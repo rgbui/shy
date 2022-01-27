@@ -1,6 +1,5 @@
 import React from 'react';
 import { IconArguments } from 'rich/extensions/icon/declare';
-import { masterSock, Sock } from '../../net/sock';
 import { userService } from '../../services/user';
 import "./style.less";
 export class Avatar extends React.Component<{
