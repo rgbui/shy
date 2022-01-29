@@ -2,7 +2,7 @@
  * 数据库为/shy的只存在于主库（主要用来存用户相关的信息）
  * 数据库为/shy_user的存在于每个数据库中（不同设备）
  */
- export enum DataStoreName {
+export enum DataStoreName {
     /**
      * 主库
      * 用户id sys
@@ -40,7 +40,7 @@
      */
     UserDefineDataSchema = 'UserDefineDataSchema',
     UserDefineDataSchemaField = 'UserDefineDataSchemaField',
-    UserDefineDataSchemaRelation = 'UserDefineDataSchemaRelation',
+    UserDefineDataSchemaViewTemplate = ' UserDefineDataSchemaViewTemplate',
     /**
      * 用户分配的表
      */
