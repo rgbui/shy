@@ -151,7 +151,7 @@ push('/datastore/query/ids', '{schemaId:string,ids:string[]}', '{ok:boolean,data
 push('/datastore/query/all', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['rich', 'get']);
 push('/datastore/group', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,group:string}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['rich', 'get']);
 push('/datastore/statistics', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,having?:Record<string, any>,sorts?:Record<string, 1|-1>,groups:string[],aggregate:string[]}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['rich', 'get']);
-push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any>,indicator:string[]}', '{ok:boolean,data:{value:number},warn:string}', ['rich', 'get']);
+push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any>,indicator:string}', '{ok:boolean,data:{value:number},warn:string}', ['rich', 'get']);
 
 push('/device/register', '', 'void', ['shy', 'act', 'await']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
