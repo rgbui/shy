@@ -55,7 +55,8 @@ class UserService extends BaseService {
         return r;
     }
     @get('/user/basic')
-    async getBasic(userid: string) {
+    async getBasic() {
+        var userid=arguments[0].userid;
         return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/${userid}/basic`)
     }
     /**
