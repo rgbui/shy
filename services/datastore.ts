@@ -16,7 +16,7 @@ class DataStoreService {
     }
     @post('/datastore/update')
     async update(args) {
-        return surface.workspace.sock.delete('/datastore/update', args)
+        return surface.workspace.sock.post('/datastore/update', args)
     }
     @get('/datastore/query')
     async query(args) {
