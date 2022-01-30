@@ -9,16 +9,20 @@ import { surface } from "../src/surface";
 class SchemaService {
     @put('/schema/create')
     async createSchema() {
-        return surface.workspace.sock.put('/schema/create', arguments[0]);
+        var data = { ...arguments[0] };
+        data.workspaceId = surface.workspace.id;
+        console.log('schema create',data);
+        return surface.workspace.sock.put('/schema/create', data);
     }
     @get('/schema/query')
-    async searchSchema()
-    {
+    async searchSchema() {
         return surface.workspace.sock.get('/schema/query', arguments[0]);
     }
     @put('/schema/field/add')
     async createSchemaField() {
-        return surface.workspace.sock.put('/schema/field/add', arguments[0]);
+        var data = { ...arguments[0] };
+        data.workspaceId = surface.workspace.id;
+        return surface.workspace.sock.put('/schema/field/add', data);
     }
 
     @del('/schema/field/remove')
