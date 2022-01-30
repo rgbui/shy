@@ -7,6 +7,8 @@ import { FileMd5 } from "../src/util/file";
 import { FileType } from "../type";
 import { SockResponse } from "../net/sock/type";
 import { ResourceArguments } from "rich/extensions/icon/declare";
+import { get } from "rich/net/annotation";
+
 
 class UserService extends BaseService {
     async phoneSign(phone: string, code: string, usingInvitationCode?: string) {
@@ -52,6 +54,7 @@ class UserService extends BaseService {
         var r = await masterSock.post('/user/update', { data });
         return r;
     }
+    @get('/user/basic')
     async getBasic(userid: string) {
         return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/${userid}/basic`)
     }

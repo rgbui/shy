@@ -6,7 +6,7 @@ import { Button } from 'rich/component/view/button';
 import { CopyText } from 'rich/component/copy';
 import { surface } from '../..';
 import { workspaceService } from '../../../../services/workspace';
-import { Avatar } from '../../../components/face';
+import { Avatar } from 'rich/component/view/avator/face';
 import { observer } from 'mobx-react';
 import SvgDown from "rich/src/assert/svg/chevronDown.svg";
 @observer

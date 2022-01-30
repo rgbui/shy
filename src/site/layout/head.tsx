@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { config } from "../../common/config";
 import ShySvg from "../../assert/img/shy.name.svg";
 import { surface } from "../../surface";
-import { Avatar } from "../../components/face";
+import { Avatar } from "rich/component/view/avator/face";
 import { ShyUrl } from "../../history";
 export var HeadView = observer(function () {
     return <div className='shy-site-head'>

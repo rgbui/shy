@@ -5,7 +5,7 @@ import { Input, Textarea } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
 import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';
-import { Avatar } from '../../../components/face';
+import { Avatar } from 'rich/component/view/avator/face';
 import { surface } from '../..';
 import { observer } from 'mobx-react';
 import { User } from '../user';

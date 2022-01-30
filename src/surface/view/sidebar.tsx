@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { surface } from "..";
-import { Avatar } from "../../components/face";
+import { Avatar } from "rich/component/view/avator/face";
 import SvgComponents from "../../assert/svg/components.svg";
 export var SideBar = observer(function () {
     return <div className='shy-sidebar'>

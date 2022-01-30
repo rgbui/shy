@@ -4,7 +4,7 @@ import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { Workspace } from '..';
 import { OpenFileDialoug } from 'rich/component/file';
-import { Avatar } from '../../../components/face';
+import { Avatar } from 'rich/component/view/avator/face';
 import { surface } from '../..';
 import { Directive } from 'rich/util/bus/directive';
 import { messageChannel } from 'rich/util/bus/event.bus';

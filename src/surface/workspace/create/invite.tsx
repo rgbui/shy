@@ -8,7 +8,7 @@ import { Loading } from "rich/component/view/loading";
 import { Workspace } from "..";
 import { surface } from "../..";
 import { memberWorkspaceService } from "../../../../services/member";
-import { Avatar } from "../../../components/face";
+import { Avatar } from "rich/component/view/avator/face";
 import { ShyUrl, UrlRoute } from "../../../history";
 export var InviteView = observer(function () {
     var local = useLocalObservable<{ ws: Workspace, loading: boolean }>(() => {

@@ -74,7 +74,7 @@ import { Field } from "../blocks/data-grid/schema/field";
 import { TableSchema } from "../blocks/data-grid/schema/meta";
 import { FieldType } from "../blocks/data-grid/schema/type";
 import { LinkPage } from "../extensions/at/declare";
-import { IconArguments } from "../extensions/icon/declare";
+import { IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { User } from "../src/types/user";
 export interface ChannelSyncMapUrls {
@@ -155,7 +155,9 @@ push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any
 
 push('/device/register', '', 'void', ['shy', 'act', 'await']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
-push('/user/ping', '', '{ok:boolean,warn:string}', ['shy', 'get', 'await'])
+
+push('/user/ping', '', '{ok:boolean,warn:string}', ['shy', 'get'])
+push('/user/basic','{userid:string}','{ok:boolean,warn:string,data:{sn: number, avatar: ResourceArguments, name: string}}',['rich','get'])
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');

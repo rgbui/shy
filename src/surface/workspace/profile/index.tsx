@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { Rect } from "rich/src/common/vector/point";
-import { Avatar } from "../../../components/face";
+import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../..";
 import { useSwitchWorkspace } from "../switch";
 import ExpandSvg from "../../../assert/svg/expand.svg";
