@@ -103,10 +103,23 @@ export class Sock {
         var r = await this.remote.get(resolveUrl, await this.config());
         return this.handleResponse<T, U>(r);
     }
-    async delete<T = any, U = any>(url: string, data?: Record<string, any>) {
+    async delete<T = any, U = any>(url: string, querys?: Record<string, any>) {
         var baseUrl = await this.baseUrl();
-        url = Sock.urlJoint(url, data);
-        var r = await this.remote.delete(Sock.resolve(baseUrl, API_VERSION, url), await this.config());
+        url = Sock.urlJoint(url, querys);
+        GenreConsistency.transform(querys);
+        var resolveUrl = Sock.resolve(baseUrl, API_VERSION, url);
+        if (querys && Object.keys(querys).length > 0) {
+            var ps: string[] = [];
+            for (let q in querys) {
+                if (typeof querys[q] != 'undefined') {
+                    var value = querys[q];
+                    if (typeof value == 'object') value = JSON.stringify(value);
+                    ps.push(q + '=' + encodeURIComponent(value));
+                }
+            }
+            resolveUrl = resolveUrl + (resolveUrl.indexOf('?') == -1 ? "?" : "&") + ps.join("&");
+        }
+        var r = await this.remote.delete(resolveUrl, await this.config());
         return this.handleResponse<T, U>(r);
     }
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
@@ -114,6 +127,13 @@ export class Sock {
         url = Sock.urlJoint(url, data);
         GenreConsistency.transform(data);
         var r = await this.remote.put(Sock.resolve(baseUrl, API_VERSION, url), data, await this.config());
+        return this.handleResponse<T, U>(r);
+    }
+    async patch<T = any, U = any>(url: string, data: Record<string, any>) {
+        var baseUrl = await this.baseUrl();
+        url = Sock.urlJoint(url, data);
+        GenreConsistency.transform(data);
+        var r = await this.remote.patch(Sock.resolve(baseUrl, API_VERSION, url), data, await this.config());
         return this.handleResponse<T, U>(r);
     }
     private static urlJoint(url: string, data: Record<string, any>) {
