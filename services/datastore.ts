@@ -12,6 +12,7 @@ class DataStoreService {
     }
     @del('/datastore/remove')
     async remove(args) {
+        console.log(args,'args');
         return surface.workspace.sock.delete('/datastore/remove', args)
     }
     @post('/datastore/update')
