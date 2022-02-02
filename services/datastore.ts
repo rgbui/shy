@@ -42,7 +42,7 @@ class DataStoreService {
     }
     @get('/datastore/statistics')
     async statistics(args) {
-        return surface.workspace.sock.get('/datastore/query/list', args)
+        return surface.workspace.sock.get('/datastore/statistics', args)
     }
     @get('/datastore/statistics/value')
     async statisticsValue(args) {
