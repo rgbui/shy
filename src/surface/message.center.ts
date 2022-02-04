@@ -3,7 +3,7 @@ import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
 import { CacheKey, yCache } from "../../net/cache";
 import { userTim } from "../../net/primus";
-import { pageItemStore } from "../../services/page.item";
+import { pageItemStore } from "../../services/snapshoot/page.item";
 
 import { userService } from "../../services/user";
 import { workspaceService } from "../../services/workspace";

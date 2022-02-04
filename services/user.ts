@@ -1,7 +1,7 @@
 
 import { User } from "../src/surface/user/user";
 import { fileSock, masterSock } from "../net/sock";
-import { BaseService } from "./base";
+import { BaseService } from "./common/base";
 import { CacheKey, sCache } from "../net/cache";
 import { FileMd5 } from "../src/util/file";
 import { FileType } from "../type";

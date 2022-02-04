@@ -1,5 +1,5 @@
 import { ResourceArguments } from "rich/extensions/icon/declare";
-import { BaseService } from "./base";
+import { BaseService } from "./common/base";
 import { masterSock } from "../net/sock";
 
 class WorkspaceMemberService extends BaseService {

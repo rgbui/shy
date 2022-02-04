@@ -1,16 +1,16 @@
 import { UserAction } from "rich/src/history/action";
-import { userTim } from "../net/primus";
-import { PageItem } from "../src/surface/sln/item";
-import { db, page_current_sequence, page_snapshoot } from "../net/db";
+import { userTim } from "../../net/primus";
+import { PageItem } from "../../src/surface/sln/item";
+import { db, page_current_sequence, page_snapshoot } from "../../net/db";
 import { util } from "rich/util/util";
 import { ActionDirective } from "rich/src/history/declare";
-import { log } from "../src/common/log";
-import { DbService } from "../net/db/service";
-import { surface } from "../src/surface";
+import { log } from "../../src/common/log";
+import { DbService } from "../../net/db/service";
+import { surface } from "../../src/surface";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
 
-import { XhrReadFileBlob } from "../src/util/file";
+import { XhrReadFileBlob } from "../../src/util/file";
 
 export class PageContentStore {
     constructor(private item: PageItem) { }

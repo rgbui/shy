@@ -13,7 +13,7 @@ import { CacheKey, yCache } from "../../../net/cache";
 import { surface } from "..";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
-import { pageItemStore } from "../../../services/page.item";
+import { pageItemStore } from "../../../services/snapshoot/page.item";
 
 export class Sln extends Events<SlnDirective> {
     constructor() {

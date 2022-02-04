@@ -3,7 +3,7 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
 import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
-import { currentParams, ShyUrl, UrlRoute } from "../../history";
+import { ShyUrl, UrlRoute } from "../../history";
 import { CacheKey, yCache } from "../../../net/cache";
 import { Mime } from "../sln/declare";
 import { workspaceService } from "../../../services/workspace";

@@ -1,5 +1,5 @@
 
-import { BaseService } from "./base";
+import { BaseService } from "./common/base";
 import { Workspace } from "../src/surface/workspace";
 import { fileSock, masterSock, Sock } from "../net/sock";
 import { PageItem } from "../src/surface/sln/item";

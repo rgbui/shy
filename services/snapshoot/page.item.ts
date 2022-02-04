@@ -1,9 +1,9 @@
 import lodash from "lodash";
 import { runInAction } from "mobx";
-import { userTim } from "../net/primus";
-import { masterSock } from "../net/sock";
-import { config } from "../src/common/config";
-import { PageItem } from "../src/surface/sln/item";
+import { userTim } from "../../net/primus";
+import { masterSock } from "../../net/sock";
+import { config } from "../../src/common/config";
+import { PageItem } from "../../src/surface/sln/item";
 enum ItemOperatorDirective {
     update = 1,
     insert = 2,

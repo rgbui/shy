@@ -2,5 +2,5 @@
 import "./datastore";
 import "./device";
 import "./schema";
-import "./common";
+import "./common/common";
 import "./user";

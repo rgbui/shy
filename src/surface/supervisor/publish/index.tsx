@@ -7,7 +7,7 @@ import { PageItem } from "../../sln/item";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
 import "./style.less";
 import { Icon } from "rich/component/view/icon";
-import { pageItemStore } from "../../../../services/page.item";
+import { pageItemStore } from "../../../../services/snapshoot/page.item";
 import { observer } from "mobx-react";
 import { makeObservable, observable } from "mobx";
 @observer
