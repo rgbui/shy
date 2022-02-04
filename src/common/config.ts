@@ -71,6 +71,17 @@ class Config {
         this.service_guid = guid;
         this.counter = 0;
     }
+    isOnline: boolean;
+    constructor() {
+        this.isOnline = window.navigator.onLine ? true : false;
+    }
 }
 export var config = new Config();
+window.addEventListener("online", function () {
+    config.isOnline = window.navigator.onLine ? true : false;
+}, false);
+window.addEventListener("offline", function () {
+    config.isOnline = window.navigator.onLine ? true : false;
+}, false);
+
 console.log('%c v' + config.version + ' ', 'background-color:rgba(255,0,0,.6);color:#fff;border-radius:3px');
