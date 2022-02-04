@@ -5,7 +5,7 @@ import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { ShyUrl, UrlRoute } from "../history";
 import { Workspace } from "./workspace";
-import { userTim } from "../../net/primus";
+import { userTim } from "../../net/primus/tim";
 import { makeObservable, observable } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { MessageCenter } from "./message.center";

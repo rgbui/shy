@@ -2,7 +2,7 @@ import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { Surface } from ".";
 import { CacheKey, yCache } from "../../net/cache";
-import { userTim } from "../../net/primus";
+import { userTim } from "../../net/primus/tim";
 import { pageItemStore } from "../../services/snapshoot/page.item";
 
 import { userService } from "../../services/user";

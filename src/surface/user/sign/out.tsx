@@ -2,7 +2,7 @@ import React from "react";
 import { ShyUrl, SyHistory, UrlRoute } from "../../../history";
 import { userService } from "../../../../services/user";
 import { surface } from "../..";
-import { userTim } from "../../../../net/primus";
+import { userTim } from "../../../../net/primus/tim";
 import { User } from "../user";
 
 export class LogOut extends React.Component {

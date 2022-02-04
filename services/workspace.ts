@@ -5,7 +5,7 @@ import { fileSock, masterSock, Sock } from "../net/sock";
 import { PageItem } from "../src/surface/sln/item";
 import { FileType } from "../type";
 import { FileMd5 } from "../src/util/file";
-import { userTim } from "../net/primus";
+import { userTim } from "../net/primus/tim";
 class WorkspaceService extends BaseService {
 
     /**

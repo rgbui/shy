@@ -1,6 +1,6 @@
 import lodash from "lodash";
 import { runInAction } from "mobx";
-import { userTim } from "../../net/primus";
+import { userTim } from "../../net/primus/tim";
 import { masterSock } from "../../net/sock";
 import { config } from "../../src/common/config";
 import { PageItem } from "../../src/surface/sln/item";

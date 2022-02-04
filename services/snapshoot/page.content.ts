@@ -1,5 +1,5 @@
 import { UserAction } from "rich/src/history/action";
-import { userTim } from "../../net/primus";
+import { userTim } from "../../net/primus/tim";
 import { PageItem } from "../../src/surface/sln/item";
 import { db, page_current_sequence, page_snapshoot } from "../../net/db";
 import { util } from "rich/util/util";
