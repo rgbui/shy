@@ -27,3 +27,11 @@ export var log = {
         logStore('warn', error, remark);
     }
 }
+
+window.onerror = function (err) {
+    if (typeof err == 'string')
+        log.error(err);
+    else {
+        log.error(err as any);
+    }
+}
