@@ -1,34 +1,24 @@
 import { util } from 'rich/util/util';
 import { config } from '../../src/common/config';
-import { log } from '../../src/common/log';
+import { log, logStore } from '../../src/common/log';
 import { CacheKey, sCache } from '../cache';
 import { masterSock, Sock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
 import { HttpMethod, SubscribeType } from './http';
-export class SockTim {
-    private willloading: boolean = false;
+import { loadPrimus } from './load';
+export class Tim {
+    public isConncted: boolean = false;
     private primus;
     id: string;
-    async load() {
+    url: string;
+    async load(url: string) {
+        this.url = url;
         var self = this;
-        if (this.willloading == true) return;
         this.id = config.guid();
-        this.willloading = true;
-        var r = await import(
-            /* webpackChunkName: 'tim' */
-            /* webpackPrefetch: true */
-            '../../src/assert/js/primus.js'
-        );
-        var url;
-        var ms = await masterSock.get<{ url: string }, string>('/user/tim/pid');
-        if (ms.ok) {
-            url = ms.data.url;
-        }
-        if (!url) return console.error('没有找到可用的tim连接')
-        var primus = new (r.default)(url, {});
+        var Primus = await loadPrimus();
+        var primus = new Primus(url, {});
         this.primus = primus;
-        primus.open();
         primus.on('data', function message(data) {
             try {
                 var json = JSON.parse(data);
@@ -55,17 +45,6 @@ export class SockTim {
                 log.error(ex);
             }
         });
-        primus.on('open', async function open() {
-            console.log('Connection is alive and kicking');
-            var device = await sCache.get(CacheKey.device);
-            var token = await sCache.get(CacheKey.token);
-            var lang = await sCache.get(CacheKey.lang);
-            var r = await self.post('/user/online', { token, device, lang, sock: self.id });
-            console.log('user online r:', r.data);
-        });
-        primus.on('error', function error(err) {
-            console.error('Something horrible has happened', err.stack);
-        });
         primus.on('reconnect', function (opts) {
             console.log('It took %d ms to reconnect', opts.duration);
         });
@@ -76,8 +55,28 @@ export class SockTim {
             console.log('The reconnection failed: %s', err.message);
         });
         primus.on('end', function () {
+            self.isConncted = false;
             console.log('Connection closed');
         });
+        return new Promise((resolve, reject) => {
+            primus.on('open', function open() {
+                console.log('Connection is alive and kicking');
+                self.isConncted = true;
+                resolve(true);
+                // var device = await sCache.get(CacheKey.device);
+                // var token = await sCache.get(CacheKey.token);
+                // var lang = await sCache.get(CacheKey.lang);
+                // var r = await self.post('/user/online', { token, device, lang, sock: self.id });
+                // console.log('user online r:', r.data);
+            });
+            primus.on('error', function error(err) {
+                self.isConncted = false;
+                log.error(err);
+                reject(err);
+                console.error('Something horrible has happened', err.stack);
+            });
+            primus.open();
+        })
     }
     close() {
         if (this.primus) {
@@ -227,4 +226,4 @@ export class SockTim {
         else this.events.removeAll(e => e.url == url);
     }
 }
-export var userTim = new SockTim();
+export var userTim = new Tim();
