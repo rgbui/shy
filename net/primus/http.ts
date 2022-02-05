@@ -5,7 +5,9 @@ export enum HttpMethod {
     get,
     post,
     put,
-    delete
+    delete,
+    none,
+    patch
 }
 export enum SubscribeType {
     workspace,
