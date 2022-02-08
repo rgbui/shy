@@ -58,6 +58,12 @@ class Config {
     get isWeixin() {
         return false;
     }
+    get platform() {
+       if(this.isAndroid)return 'android'
+       else if(this.isMacOs)return 'macOs'
+       else if(this.isWeb)return 'web'
+       
+    }
     private service_guid: string = '';
     private counter = 0;
     guid() {
