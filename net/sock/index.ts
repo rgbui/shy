@@ -160,7 +160,7 @@ export class Sock {
         uploadProgress?: (event: ProgressEvent) => void
     }) {
         var baseUrl = await this.baseUrl();
-        var url = Sock.resolve(baseUrl, API_VERSION, '/storage/file');
+        var url = Sock.resolve(baseUrl, API_VERSION, '/file/upload');
         var configs = await this.config();
         configs.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         if (options?.uploadProgress) (configs as any).onUploadProgress = options.uploadProgress;
@@ -170,7 +170,7 @@ export class Sock {
             file.md5 = await FileMd5(file);
         }
         forms.append('md5', file.md5);
-        var r = await this.remote.post(url, forms, configs);
+        var r = await this.remote.put(url, forms, configs);
         return this.handleResponse<T, U>(r);
     }
     static resolve(...urls: string[]) {

@@ -1,4 +1,4 @@
-import { StatusCode } from "./status.code";
+import { StatusCode } from "rich/net/status.code";
 
 export enum SockType {
     master,
