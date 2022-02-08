@@ -1,12 +1,14 @@
 
-import { act, get, query } from "rich/net/annotation";
+
+import { act, get, put, query } from "rich/net/annotation";
 import { UA } from "rich/util/ua";
 import { CacheKey, sCache, yCache } from "../net/cache";
 import { masterSock } from "../net/sock";
+import { config } from "../src/common/config";
 import { fingerFlag } from "../src/util/finger";
 class UserDeviceService {
-    @act('/device/register')
-    async register() {
+    @put('/device/sign')
+    async sign() {
         var devideId = await sCache.get(CacheKey.device);
         var cacFinger = await fingerFlag();
         if (devideId) {
@@ -16,9 +18,9 @@ class UserDeviceService {
             }
         }
         await sCache.set(CacheKey.finger, cacFinger);
-        var r = await masterSock.post<{ deviceId: string }, string>('/register/device', {
+        var r = await masterSock.put<{ deviceId: string }, string>('/device/sign', {
             finger: cacFinger,
-            platform: '',
+            platform: config.platform,
             browser: UA.browser,
             device: UA.device,
             os: UA.os,
@@ -33,4 +35,3 @@ class UserDeviceService {
     }
 }
 
-// export var userDeviceService = new UserDeviceService();

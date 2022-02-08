@@ -30,7 +30,7 @@ export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
     await appLangProvider.import();
-    await channel.act('/device/register');
+    await channel.put('/device/sign');
     await surface.loadUser()
     setLoad(true);
   }
