@@ -7,33 +7,39 @@ import { FileMd5 } from "../src/util/file";
 import { FileType } from "../type";
 import { SockResponse } from "../net/sock/type";
 import { ResourceArguments } from "rich/extensions/icon/declare";
-import { get } from "rich/net/annotation";
+import { act, get, patch, post, put } from "rich/net/annotation";
 
 
 class UserService extends BaseService {
-    async phoneSign(phone: string, code: string, usingInvitationCode?: string) {
-        var result: SockResponse<{ justRegistered: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: phone, $code: code });
+    @put('/phone/sign')
+    async phoneSign(data) {
+        var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: data.phone, $code: data.code });
         if (result.ok == false) return result;
-        result = await masterSock.post('/phone/login', { phone, code, usingInvitationCode });
+        result = await masterSock.put('/phone/sign', data);
         return result;
     }
-    async checkPhone(phone: string) {
-        var result = await masterSock.post<{ isUser: boolean }, string>('/phone/check', { phone });
+    @get('/phone/check/sign')
+    async checkPhone(data: { phone: string }) {
+        var result = await masterSock.get<{ isUser: boolean }, string>('/phone/check/sign', data);
         return result;
     }
-    async generatePhoneCode(phone: string) {
+    @post('/phone/sms/code')
+    async generatePhoneCode(data: { phone: string }) {
+        var phone = data.phone;
         var result: SockResponse<{ code?: string }, string> = this.createResponse({ $phone: phone });
         if (result.ok == false) return result;
-        result = await masterSock.post('/generate/phone/code', { phone });
+        result = await masterSock.post('/phone/sms/code', { phone });
         return result;
     }
+    @get('/sign/out')
     async signOut() {
         return await masterSock.get('/sign/out');
     }
+    @get('/sign')
     async ping() {
         var result: SockResponse<{ token: string, guid: string, user: Partial<User> }> = this.createResponse();
         if (await sCache.get(CacheKey.token)) {
-            result = await masterSock.get('/user/ping');
+            result = await masterSock.get('/sign');
             if (result.ok) {
                 if (result.data.token != await this.token()) {
                     await sCache.set(CacheKey.token, result.data.token, 180, 'd');
@@ -46,18 +52,17 @@ class UserService extends BaseService {
         }
         return result;
     }
+    @get('/user/query')
     async getUserInfo() {
-        var r = await masterSock.get<{ user: Partial<User> }>('/user/info');
-        return r;
+        return await masterSock.get<{ user: Partial<User> }>('/user/query');
     }
+    @patch('/user/patch')
     async update(data: Partial<User>) {
-        var r = await masterSock.post('/user/update', { data });
-        return r;
+        return await masterSock.patch('/user/patch', data);
     }
     @get('/user/basic')
-    async getBasic() {
-        var userid=arguments[0].userid;
-        return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/${userid}/basic`)
+    async getBasic(data: { userid: string }) {
+        return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/basic`, data)
     }
     /**
      * 用户直接上传文件，不考虑md5是否有重复
@@ -65,7 +70,9 @@ class UserService extends BaseService {
      * @param progress 
      * @returns 
      */
-    async uploadFile(file: File, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+    @act('/user/upload/file')
+    async uploadFile(args: { file: File, progress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+        var { file, progress } = args;
         try {
             if (!file.md5) file.md5 = await FileMd5(file);
             var d = await fileSock.upload<FileType, string>(file, { uploadProgress: progress });
@@ -79,4 +86,4 @@ class UserService extends BaseService {
         }
     }
 }
-export var userService = new UserService();
+// export var userService = new UserService();

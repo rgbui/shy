@@ -6,6 +6,7 @@ import { PageItem } from "../src/surface/sln/item";
 import { FileType } from "../type";
 import { FileMd5 } from "../src/util/file";
 import { userTim } from "../net/primus/tim";
+import { surface } from "../src/surface";
 class WorkspaceService extends BaseService {
 
     /**
@@ -62,10 +63,10 @@ class WorkspaceService extends BaseService {
     * 用户上传单个文件
     * @returns 
     */
-    async uploadFile(sock: Sock, file: File, workspaceId, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+    async uploadFile(file: File, workspaceId, progress): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             if (!file.md5) file.md5 = await FileMd5(file);
-            var r = await masterSock.get('/file/:md5/exists', { md5: file.md5 });
+            var r = await masterSock.get('/file/exists', { md5: file.md5 });
             var masterFile;
             if (r?.ok) masterFile = r.data;
             else {
@@ -75,7 +76,7 @@ class WorkspaceService extends BaseService {
                 }
             }
             if (masterFile) {
-                await sock.post('/user/storage/file', { ...masterFile, workspaceId });
+                await surface.workspace.sock.put('/file/store', { wsId: workspaceId, file: masterFile });
             }
             return { ok: true, data: masterFile }
         }
@@ -86,7 +87,7 @@ class WorkspaceService extends BaseService {
     async uploadUrl(sock: Sock, url: string, workspaceId): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             var masterFile;
-            var d = await fileSock.post('/storage/url/file', { url });
+            var d = await fileSock.put('/file/download', { url });
             if (d.ok) {
                 masterFile = d.data;
             }

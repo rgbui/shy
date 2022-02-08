@@ -4,14 +4,12 @@ import { appLangProvider } from "../../../../i18n/provider";
 import { ShyUrl, UrlRoute } from "../../../history";
 import { CacheKey, sCache } from "../../../../net/cache";
 import { surface } from "../..";
-import { userService } from "../../../../services/user";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
 import { inviteCode, phoneCode, phoneRegex } from "../../../common/verify";
 import { useLocation } from "react-router-dom";
-import { config } from "../../../common/config";
-import { workspaceService } from "../../../../services/workspace";
+import { channel } from "rich/net/channel";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -59,9 +57,9 @@ export var Login = observer(function () {
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
         if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
-        var r = await userService.checkPhone(local.phone);
+        var r = await channel.get('/phone/check/sign', { phone: local.phone });
         if (r && r.ok && r.data) {
-            if (r.data.isUser) local.step = 'login'
+            if (r.data.sign) local.step = 'login'
             else local.step = 'register'
         }
         else local.failMsg = r.warn;
@@ -88,7 +86,7 @@ export var Login = observer(function () {
     async function genCode() {
         if (local.expireCount == -1) {
             local.expireCount = 120;
-            var result = await userService.generatePhoneCode(local.phone);
+            var result = await channel.post('/phone/sms/code', { phone: local.phone });
             if (result.ok) {
                 if (result.data?.code) local.verifyPhoneCode = result.data.code;
                 local.expireCount = 120;
@@ -115,7 +113,7 @@ export var Login = observer(function () {
             if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = '邀请码输入不正确');
             if (!local.agree) return unlockButton() && (local.failMsg = '如您不同意诗云相关的服务协议将无法注册!');
         }
-        var result = await userService.phoneSign(local.phone, local.verifyPhoneCode, local.step == 'register' ? local.inviteCode : undefined);
+        var result = await channel.put('/phone/sign', { phone: local.phone, code: local.verifyPhoneCode, inviteCode: local.step == 'register' ? local.inviteCode : undefined })
         unlockButton();
         if (result.ok == false) local.failMsg = result.warn;
         else {
@@ -166,7 +164,7 @@ export var Login = observer(function () {
         if (!local.name) return unlockButton() && (local.failMsg = '称呼不能为空');
         if (local.name.length < 2) return unlockButton() && (local.failMsg = '称呼太短，至少两位');
         if (local.name.length > 64) return unlockButton() && (local.failMsg = '称呼过长，长度限制在20位');
-        var rr = await userService.update({ name: local.name });
+        var rr = await channel.patch('/user/patch', { data: { name: local.name } });
         if (rr.ok) {
             surface.updateUser({ name: local.name });
             if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }

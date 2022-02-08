@@ -1,9 +1,9 @@
 import { makeObservable, observable } from "mobx";
 import { IconArguments } from "rich/extensions/icon/declare";
+import { channel } from "rich/net/channel";
 import { Directive } from "rich/util/bus/directive";
 import { messageChannel } from "rich/util/bus/event.bus";
 import { util } from "rich/util/util";
-import { userService } from "../../../services/user";
 import { useOpenUserSettings } from "./settings";
 export class User {
     public id: string = null;
@@ -33,7 +33,7 @@ export class User {
     get isSign() {
         return this.id ? true : false;
     }
-   
+
     async onOpenUserSettings(event: React.MouseEvent) {
         await useOpenUserSettings()
     }
@@ -44,7 +44,7 @@ export class User {
             else updateData[n] = userInfo[n];
         }
         if (Object.keys(updateData).length > 0) {
-            var r = await userService.update(userInfo);
+            var r = await channel.patch('/user/patch', { data: userInfo });
             if (r.ok) {
                 Object.assign(this, userInfo);
                 await messageChannel.fireAsync(Directive.UpdateUser, this);

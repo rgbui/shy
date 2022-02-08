@@ -10,7 +10,9 @@ import { surface } from '../..';
 import { observer } from 'mobx-react';
 import { User } from '../user';
 import { makeObservable, observable } from 'mobx';
-import { userService } from '../../../../services/user';
+import { chunk } from 'lodash';
+import { channel } from 'rich/net/channel';
+
 
 @observer
 export class UserSettingsView extends React.Component<{ close?: () => void }> {
@@ -41,7 +43,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
         slogan: ''
     }
     componentDidMount() {
-        userService.getUserInfo().then(r => {
+        channel.get('/user/query').then(r => {
             if (r.ok && r.data && r.data.user) {
                 this.data = r.data.user;
             }

@@ -5,7 +5,7 @@ import { CacheKey, yCache } from "../../net/cache";
 import { userTim } from "../../net/primus/tim";
 import { pageItemStore } from "../../services/snapshoot/page.item";
 
-import { userService } from "../../services/user";
+
 import { workspaceService } from "../../services/workspace";
 import { UrlRoute } from "../history";
 
@@ -17,10 +17,10 @@ export function MessageCenter(surface: Surface) {
     messageChannel.on(Directive.PagesQuery, async (word) => {
 
     });
-    messageChannel.on(Directive.UploadFile, async (file, progress) => {
-        var r = await userService.uploadFile(file, progress);
-        return r;
-    });
+    // messageChannel.on(Directive.UploadFile, async (file, progress) => {
+    //     var r = await userService.uploadFile(file, progress);
+    //     return r;
+    // });
     messageChannel.on(Directive.UploadWorkspaceFile, async (file, progress) => {
         var r = await workspaceService.uploadFile(surface.workspace.sock, file, surface.workspace.id, progress);
         return r;

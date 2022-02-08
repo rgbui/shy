@@ -5,13 +5,13 @@ import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { ShyUrl, UrlRoute } from "../history";
 import { Workspace } from "./workspace";
-import { userTim } from "../../net/primus/tim";
 import { makeObservable, observable } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { MessageCenter } from "./message.center";
 import { workspaceService } from "../../services/workspace";
 import { config } from "../common/config";
-import { userService } from "../../services/user";
+import { timService } from "../../net/primus";
+import { channel } from "rich/net/channel";
 
 export class Surface extends Events {
     constructor() {
@@ -33,11 +33,10 @@ export class Surface extends Events {
     isShowSln: boolean = true;
     config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
-        var r = await userService.ping();
+        var r = await channel.get('/sign')
         if (r.ok) {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
-            await userTim.load();
         }
     }
     async load() {
@@ -47,6 +46,7 @@ export class Surface extends Events {
             ws.load({ ...rr.data.workspace, users: rr.data.users });
             await ws.loadPages();
             this.workspace = ws;
+            await timService.enter(this.workspace);
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
             var page = await ws.getDefaultPage();
             this.sln.onMousedownItem(page);
@@ -81,6 +81,7 @@ export class Surface extends Events {
                 ws.load({ ...rr.data.workspace, users: rr.data.users });
                 await ws.loadPages();
                 this.workspace = ws;
+                await timService.enter(this.workspace);
                 await sCache.set(CacheKey.wsHost, ws.host);
                 var page = await ws.getDefaultPage();
                 this.sln.onMousedownItem(page);
