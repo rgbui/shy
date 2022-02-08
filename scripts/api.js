@@ -21,9 +21,11 @@ function build(fileName) {
     var dels = [];
     var posts = [];
     var gets = [];
+    var patchs = [];
     var querys = [];
     var acts = [];
     var airs = [];
+
     function rt(type, isAsync) {
         if (isAsync) return `Promise<${type || 'void'}>`
         else return type;
@@ -41,7 +43,7 @@ function build(fileName) {
     }
     ps.forEach(p => {
         var isAsync = false;
-        if (p.methods.some(s => ['get', 'put', 'del', 'post'].includes(s))) var isHttp = true;
+        if (p.methods.some(s => ['get', 'patch', 'put', 'del', 'post'].includes(s))) var isHttp = true;
         if (p.methods.includes('await')) isAsync = true;
         if (!isHttp && !p.methods.includes('query') && !p.methods.includes('act') || p.methods.includes('air')) {
             syncs.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
@@ -57,6 +59,8 @@ function build(fileName) {
             dels.push(`"${p.url}":{args:${getP(p.args)},returnType:${rt(p.returnType, isAsync)}}`);
         if (is('post', p))
             posts.push(`"${p.url}":{args:${getP(p.args)},returnType:${rt(p.returnType, isAsync)}}`);
+        if (is('patch', p))
+            patchs.push(`"${p.url}":{args:${getP(p.args)},returnType:${rt(p.returnType, isAsync)}}`);
         if (is('get', p))
             gets.push(`"${p.url}":{args:${getP(p.args)},returnType:${rt(p.returnType, isAsync)}}`);
         if (is('query', p))
@@ -77,6 +81,23 @@ import { LinkPage } from "../extensions/at/declare";
 import { IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { User } from "../src/types/user";
+import { StatusCode } from "./status.code";
+export type SockResponse<T, U = string> = {
+        /**
+         * 返回状态码
+         */
+        code?: StatusCode,
+        /**
+         * 表示当前的是否处理正常
+         * 通常200~300表示正常处理
+         * 大于300小于500表示处理不正常，
+         * 500 seriver happend error
+         * 返回值是用来提醒处理异常原因的
+         */
+        ok?: boolean,
+        data?: T,
+        warn?: U
+    }
 export interface ChannelSyncMapUrls {
     ${syncs.join(",\n\t")}
 }
@@ -98,6 +119,9 @@ export interface ChannelDelMapUrls {
 export interface ChannelPostMapUrls {
     ${posts.join(",\n\t")}
 }
+export interface ChannelPatchMapUrls {
+    ${patchs.join(",\n\t")}
+}
 export interface ChannelPutMapUrls {
     ${puts.join(",\n\t")}
 }
@@ -117,7 +141,6 @@ export interface ChannelAirMapUrls {
 
 }
 push('/log', `{type:"error"|"warn"|"info",message:string|Error}`, 'void', ['rich'])
-push('/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', '{ ok: boolean, data: { url: string },warn:string }', ['post', 'shy'])
 push('/workspace/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', '{ ok: boolean, data: { url: string },warn:string }', ['post', 'workspace', 'rich'])
 push('/workspace/upload/file/url', '{url:string}', '{ ok: boolean, data: { url: string },warn:string }', ['post', 'workspace', 'rich'])
 
@@ -144,7 +167,7 @@ push('/schema/field/turn', '{schemaId:string,fieldId:string,type:FieldType}', '{
 push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{dataId:string,pos:"before"|"after"}}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['rich', 'put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['rich', 'put']);
 push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:string}', ['rich', 'del']);
-push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', '{ok:boolean,warn:string}', ['rich', 'post']);
+push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', 'SockResponse<void>', ['patch']);
 push('/datastore/query', '{schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['rich', 'get']);
 push('/datastore/query/list', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['rich', 'get']);
 push('/datastore/query/ids', '{schemaId:string,ids:string[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['rich', 'put']);
@@ -153,12 +176,28 @@ push('/datastore/group', '{schemaId:string,page?:number,size?:number,filter?:Rec
 push('/datastore/statistics', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,having?:Record<string, any>,sorts?:Record<string, 1|-1>,groups:string[],aggregate?: Record<string, any>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['rich', 'get']);
 push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any>,indicator:string}', '{ok:boolean,data:{value:number},warn:string}', ['rich', 'get']);
 
-push('/device/register', '', 'void', ['shy', 'act', 'await']);
+push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
-push('/user/ping', '', '{ok:boolean,warn:string}', ['shy', 'get'])
-push('/user/basic','{userid:string}','{ok:boolean,warn:string,data:{sn: number, avatar: ResourceArguments, name: string}}',['rich','get'])
+push('/sign', '', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['get'])
+push('/sign/out', '', 'SockResponse<void>', ['get'])
+
+push('/phone/sign', '{phone:string,code:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
+push('/phone/sms/code', '{phone:string}', '{ok:boolean,warn:string,data:{success:boolean,code?:string}}', ['post'])
+push('/phone/check/sign', '{phone:string}', '{ok:boolean,warn:string,data:{sign:boolean}}', ['get'])
+push('/user/query', '', 'SockResponse<{user:Record<string,any>}>', ['get']);
+push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch'])
+push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number, avatar: ResourceArguments, name: string}}>', ['get'])
+push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{url:string}>', ['post'])
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
+push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
+push('/ws/invite/check', '{invite:string}', 'SockResponse<{member:boolean,workspace:Record<string,any>}>', ['get']);
+push('/ws/invite/join', '{wsId:string}', 'SockResponse<{workspace:Record<string,any>}>', ['post']);
+push('/ws/sitedomain/patch', '{domain:string}', 'SockResponse<{success:boolean,overflowDue:boolean}>', ['patch']);
+push('/ws/patch', '{wsId:string,sockId:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
