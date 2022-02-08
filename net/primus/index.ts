@@ -26,13 +26,24 @@ class TimService {
     }
     async leave() {
         if (this.tim?.isConncted && this.workspaceId) {
-            var data = await this.getHeads();
-            data.workspaceId = this.workspaceId;
-            data.sockId = this.tim.id;
-            this.tim.send(HttpMethod.post, '/workspace/leave', data);
+            // var data = await this.getHeads();
+            // data.workspaceId = this.workspaceId;
+            // data.sockId = this.tim.id;
+            this.tim.send(HttpMethod.post, '/workspace/leave', {});
         }
     }
+    /**
+     * 激活
+     */
     activate() {
+
+    }
+    /**
+     * 失活
+     * 用户如果离开当前的tab页面，
+     * 超出一定时间后，将自动断联
+     */
+    deactivates() {
 
     }
     close() {
