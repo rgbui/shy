@@ -3,7 +3,6 @@ import { PageItem } from "../sln/item";
 import { Events } from "rich/util/events";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Rect } from "rich/src/common/vector/point";
-import { workspaceService } from "../../../services/workspace";
 import { usePagePublish } from "./publish";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { computed, makeObservable, observable } from "mobx";
@@ -61,7 +60,7 @@ export class Supervisor extends Events {
         }
     }
     onFavourite(event: React.MouseEvent) {
-        workspaceService.toggleFavourcePage(this.item)
+        // workspaceService.toggleFavourcePage(this.item)
     }
     async onOpenPublish(event: React.MouseEvent) {
         await usePagePublish({ roundArea: Rect.fromEvent(event) }, this.item)
@@ -88,7 +87,7 @@ export class Supervisor extends Events {
             { name: 'move', text: '移动', icon: MoveTo, disabled: true },
         ];
         while (true) {
-            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, items,{overflow:'visible'});
+            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, items, { overflow: 'visible' });
             if (r?.item) {
                 if (r.item.name == 'smallText') {
                     // console.log(r.item.checked);

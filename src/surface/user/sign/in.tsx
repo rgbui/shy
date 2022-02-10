@@ -118,7 +118,7 @@ export var Login = observer(function () {
         if (result.ok == false) local.failMsg = result.warn;
         else {
             await sCache.set(CacheKey.token, result.data.token, 180, 'd');
-            Object.assign(surface.user, result.data.user);
+            surface.user.syncUserInfo(result.data.user);
             local.failMsg = '';
             if (local.step == 'register') {
                 local.step = 'name';
@@ -164,14 +164,9 @@ export var Login = observer(function () {
         if (!local.name) return unlockButton() && (local.failMsg = '称呼不能为空');
         if (local.name.length < 2) return unlockButton() && (local.failMsg = '称呼太短，至少两位');
         if (local.name.length > 64) return unlockButton() && (local.failMsg = '称呼过长，长度限制在20位');
-        var rr = await channel.patch('/user/patch', { data: { name: local.name } });
-        if (rr.ok) {
-            surface.updateUser({ name: local.name });
-            if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
-            return successAfter()
-        }
-        else local.failMsg = rr.warn;
-        unlockButton();
+        await surface.user.onUpdateUserInfo({ name: local.name });
+        if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
+       return successAfter()
     }
     function renderName() {
         return <div className='shy-login-box'>

@@ -1,33 +1,62 @@
+import lodash from "lodash";
 import { makeObservable, observable } from "mobx";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
-import { Directive } from "rich/util/bus/directive";
-import { messageChannel } from "rich/util/bus/event.bus";
 import { util } from "rich/util/util";
 import { useOpenUserSettings } from "./settings";
+
+export enum UserStatus {
+    online = 'online',
+    busy = 'busy',
+    idle = 'idle',
+    hidden = 'hidden'
+}
 export class User {
+
     public id: string = null;
-    public inc: number = null;
+    public sn: number = null;
     public createDate: Date = null;
     public phone: string = null;
+    public checkPhone: boolean = null;
+    public checkRealName: boolean = null;
+    public realName: string = null;
     public paw: string = null;
+    public checkPaw: boolean = null;
     public name: string = null;
     public avatar: IconArguments = null;
-    public checkPhone: boolean;
-    public checkUserRealName: boolean;
+    public cover: IconArguments = null;
     public email: string = null;
+    public checkEmail: boolean = null;
     public slogan: string = null;
+    /**
+     * 注册来源
+     */
+
+    public source: string = null;
+    public inviteCode: string = null;
+    public usedInviteCode: string = null;
+    public config: object = null;
+    public wsList: any[] = null;
+    public status: UserStatus = null;
+    public online: boolean = null
     constructor() {
         makeObservable(this, {
             id: observable,
-            inc: observable,
+            sn: observable,
             createDate: observable,
             phone: observable,
             paw: observable,
             name: observable,
             avatar: observable,
             email: observable,
-            slogan: observable
+            slogan: observable,
+            wsList: observable,
+            config: observable,
+            inviteCode: observable,
+            checkEmail: observable,
+            cover: observable,
+            realName: observable,
+            checkRealName: observable
         })
     }
     get isSign() {
@@ -44,11 +73,14 @@ export class User {
             else updateData[n] = userInfo[n];
         }
         if (Object.keys(updateData).length > 0) {
-            var r = await channel.patch('/user/patch', { data: userInfo });
+            var r = await channel.patch('/user/patch', { data: updateData });
             if (r.ok) {
-                Object.assign(this, userInfo);
-                await messageChannel.fireAsync(Directive.UpdateUser, this);
+                this.syncUserInfo(updateData);
             }
+            channel.fire('/update/user', { user: this })
         }
+    }
+    syncUserInfo(userInfo: Record<string, any>) {
+        lodash.assign(this, userInfo);
     }
 }

@@ -3,7 +3,7 @@ import { Loading } from 'rich/component/view/loading';
 import { Page } from 'rich/src/page';
 import { PageDirective } from 'rich/src/page/directive';
 import { masterSock, Sock } from '../../../net/sock';
-import { workspaceService } from '../../../services/workspace';
+
 import { XhrReadFileBlob } from '../../util/file';
 import { currentParams } from '../../history';
 import { PageItem } from '../sln/item';
@@ -13,24 +13,24 @@ export function PageDisplay() {
     var [notFound, setNotFound] = React.useState(false);
     var refEl = React.useRef<HTMLElement>(null);
     async function getFile() {
-        var pageId = currentParams('/view/:id')?.id;
-        var page = (await workspaceService.getPage(pageId))?.data.page;
-        if (page && page.share == 'net') {
-            var ms = await masterSock.get<{ url: string }, string>('/pid/tim', { userid: page.creater });
-            if (ms.data) {
-                var r = await masterSock.get<{ snapshoot: { file: { url: string } } }>(Sock.resolve(ms.data.url, '/page/view'), {
-                    wsId: page.workspaceId,
-                    pageId: pageId,
-                });
-                if (r.data) {
-                    var file;
-                    if (r.data.snapshoot) {
-                        file = await XhrReadFileBlob(r.data.snapshoot.file.url);
-                        return { file, item: page };
-                    }
-                }
-            }
-        }
+        // var pageId = currentParams('/view/:id')?.id;
+        // var page = (await workspaceService.getPage(pageId))?.data.page;
+        // if (page && page.share == 'net') {
+        //     var ms = await masterSock.get<{ url: string }, string>('/pid/tim', { userid: page.creater });
+        //     if (ms.data) {
+        //         var r = await masterSock.get<{ snapshoot: { file: { url: string } } }>(Sock.resolve(ms.data.url, '/page/view'), {
+        //             wsId: page.workspaceId,
+        //             pageId: pageId,
+        //         });
+        //         if (r.data) {
+        //             var file;
+        //             if (r.data.snapshoot) {
+        //                 file = await XhrReadFileBlob(r.data.snapshoot.file.url);
+        //                 return { file, item: page };
+        //             }
+        //         }
+        //     }
+        // }
     }
     async function renderPage(file: Blob, item: Partial<PageItem>) {
         var page = new Page({ readonly: true });
@@ -54,14 +54,14 @@ export function PageDisplay() {
         page.render(refEl.current);
     }
     async function load() {
-        setLoad(true);
-        setNotFound(false);
-        var da = await getFile();
-        if (da) {
-            await renderPage(da.file, da.item);
-        }
-        else setNotFound(true);
-        setLoad(false);
+        // setLoad(true);
+        // setNotFound(false);
+        // var da = await getFile();
+        // if (da) {
+        //     await renderPage(da.file, da.item);
+        // }
+        // else setNotFound(true);
+        // setLoad(false);
     }
     React.useEffect(() => {
         load();

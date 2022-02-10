@@ -3,8 +3,6 @@ import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItem } from "./item";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point } from "rich/src/common/vector/point";
-import { messageChannel } from "rich/util/bus/event.bus";
-import { Directive } from "rich/util/bus/directive";
 import { SlnDirective, Mime } from "./declare";
 import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
@@ -14,6 +12,7 @@ import { surface } from "..";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "../../../services/snapshoot/page.item";
+import { channel } from "rich/net/channel";
 
 export class Sln extends Events<SlnDirective> {
     constructor() {
@@ -41,7 +40,7 @@ export class Sln extends Events<SlnDirective> {
     onMousedownItem(item: PageItem, event?: MouseEvent) {
         if (!item) return;
         var self = this;
-        if (!event) messageChannel.fire(Directive.OpenPageItem, item);
+        if (!event) channel.air('/page/open', { item });
         else
             MouseDragger<{ item: HTMLElement }>({
                 event,
@@ -69,7 +68,7 @@ export class Sln extends Events<SlnDirective> {
                         }
                     }
                     else {
-                        messageChannel.fire(Directive.OpenPageItem, item);
+                        channel.air('/page/open', { item });
                     }
                     self.isDrag = false;
                     self.dragIds = [];

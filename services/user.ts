@@ -57,7 +57,8 @@ class UserService extends BaseService {
         return await masterSock.get<{ user: Partial<User> }>('/user/query');
     }
     @patch('/user/patch')
-    async update(data: Partial<User>) {
+    async update(data: Partial<User>)
+    {
         return await masterSock.patch('/user/patch', data);
     }
     @get('/user/basic')
@@ -86,4 +87,3 @@ class UserService extends BaseService {
         }
     }
 }
-// export var userService = new UserService();

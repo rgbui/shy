@@ -6,7 +6,6 @@ import rename from "../../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
 import cut from "../../../assert/svg/cut.svg";
 import link from '../../../assert/svg/link.svg';
-import { workspaceService } from "../../../../services/workspace";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
@@ -16,9 +15,9 @@ import { UserAction } from "rich/src/history/action";
 import { Mime, PageItemDirective } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "../../../../services/snapshoot/page.item";
-import { messageChannel } from "rich/util/bus/event.bus";
 import { Directive } from "rich/util/bus/directive";
 import { Page } from "rich/src/page";
+import { channel } from "rich/net/channel";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -138,7 +137,7 @@ export class PageItem {
         this.spread = sp == false ? true : false;
         if (this.spread == true && this.checkedHasChilds == false) {
             if (this.checkedHasChilds == false && !(this.childs?.length > 0)) {
-                var sus = await workspaceService.loadPageChilds(this.id);
+                var sus = await channel.get('/page/item/subs', { id: this.id });
                 if (sus.ok == true) {
                     this.load({ childs: sus.data.list })
                 }
@@ -148,7 +147,7 @@ export class PageItem {
                 this.checkedHasChilds = true;
             }
         }
-        messageChannel.fireAsync(Directive.TogglePageItem)
+        channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
     }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
@@ -162,7 +161,7 @@ export class PageItem {
     async onAddAndEdit(data?: Record<string, any>, at?: number) {
         var item = await this.onAdd();
         this.sln.editId = item.id;
-        messageChannel.fireAsync(Directive.TogglePageItem)
+        channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
     }
     onExitEditAndSave(newText: string, oldText: string) {
         this.sln.editId = '';
@@ -255,7 +254,7 @@ export class PageItem {
             var json = util.pickJson(this, keys);
             if (util.valueIsEqual(json, pageInfo)) return;
         }
-        messageChannel.fire(Directive.UpdatePageItem, this.id, pageInfo);
+        channel.air('/page/update/info',{id:this.id,pageInfo});
     }
     getVisibleIds() {
         var ids: string[] = [this.id];

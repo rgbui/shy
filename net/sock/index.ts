@@ -193,6 +193,9 @@ export class Sock {
         }
         return url;
     }
+    static createSock(url:string){
+        return new Sock(SockType.none,url);
+    }
 }
 
 /**

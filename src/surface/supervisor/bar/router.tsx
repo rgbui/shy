@@ -2,16 +2,16 @@
 import React from 'react';
 import { Icon } from 'rich/component/view/icon';
 import { Directive } from 'rich/util/bus/directive';
-import { messageChannel } from 'rich/util/bus/event.bus';
 import { PageItem } from '../../sln/item';
 import { surface } from '../..';
 import PageSvg from "../../../assert/svg/page.svg";
 import { Mime } from '../../sln/declare';
 import { observer } from 'mobx-react';
+import { channel } from 'rich/net/channel';
 export var PageRouter = observer(function () {
     function onClick(item) {
         if (surface.supervisor.item === item) return;
-        messageChannel.fire(Directive.OpenPageItem, item);
+        channel.air('/page/open',{item});
     }
     var item = surface.supervisor.item;
     if (item) {

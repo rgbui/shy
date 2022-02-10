@@ -11,23 +11,22 @@ class SchemaService {
     async createSchema() {
         var data = { ...arguments[0] };
         data.workspaceId = surface.workspace.id;
-        console.log('schema create',data);
-        return surface.workspace.sock.put('/schema/create', data);
+        return  await surface.workspace.sock.put('/schema/create', data);
     }
     @get('/schema/query')
     async searchSchema() {
-        return surface.workspace.sock.get('/schema/query', arguments[0]);
+        return  await surface.workspace.sock.get('/schema/query', arguments[0]);
     }
     @put('/schema/field/add')
     async createSchemaField() {
         var data = { ...arguments[0] };
         data.workspaceId = surface.workspace.id;
-        return surface.workspace.sock.put('/schema/field/add', data);
+        return  await surface.workspace.sock.put('/schema/field/add', data);
     }
 
     @del('/schema/field/remove')
     async removeSchemaField() {
-        return surface.workspace.sock.delete('/schema/field/remove', arguments[0]);
+        return  await surface.workspace.sock.delete('/schema/field/remove', arguments[0]);
     }
     /**
      * 切换字段类型
@@ -41,11 +40,10 @@ class SchemaService {
 
     @post('/schema/field/turn')
     async turnSchemaFieldType() {
-        return surface.workspace.sock.post('/schema/field/turn', arguments[0]);
+        return await surface.workspace.sock.post('/schema/field/turn', arguments[0]);
     }
-
     @post('/schema/field/update')
     async updateSchemaField() {
-        return surface.workspace.sock.post('/schema/field/update', arguments[0]);
+        return await  surface.workspace.sock.post('/schema/field/update', arguments[0]);
     }
 }

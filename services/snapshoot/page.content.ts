@@ -7,11 +7,7 @@ import { ActionDirective } from "rich/src/history/declare";
 import { log } from "../../src/common/log";
 import { DbService } from "../../net/db/service";
 import { surface } from "../../src/surface";
-import { messageChannel } from "rich/util/bus/event.bus";
-import { Directive } from "rich/util/bus/directive";
-
 import { XhrReadFileBlob } from "../../src/util/file";
-
 export class PageContentStore {
     constructor(private item: PageItem) { }
     private get sock() {
@@ -85,36 +81,36 @@ export class PageContentStore {
     }
     private isStorePageContent: boolean = false;
     private async storePageContent() {
-        if (this.isStorePageContent) return;
-        this.isStorePageContent = true;
-        var ps = await new DbService<page_snapshoot>('page_snapshoot').getOne(this.localPageSnapshootId);
-        var r = await messageChannel.fireAsync(Directive.UploadFile, ps.content, (event) => { });
-        if (r.ok) {
-            var userResult = await this.sock.post<{ sequence: number, id: string }, string>('/page/snapshoot', {
-                wsId: this.item.workspaceId,
-                pageId: this.item.id,
-                file: r.data,
-                begin_sequence: ps.begin_sequence,
-                end_sequence: ps.end_sequence
-            });
-            if (userResult.data.sequence) {
-                await new DbService<page_snapshoot>('page_snapshoot').update({ id: this.localPageSnapshootId }, { sequence: userResult.data.sequence })
-                await new DbService<page_current_sequence>('page_current_sequence').save(
-                    {
-                        page_url: this.page_url,
-                    },
-                    { page_sequence: userResult.data.sequence },
-                    {
-                        id: util.guid(),
-                        page_url: this.page_url,
-                        creater: surface.user?.id || null,
-                        createDate: Date.now()
-                    });
-                delete this.localPageSnapshootId;
-                this.userActionTriggerCount = 0;
-            }
-        }
-        this.isStorePageContent = false;
+        // if (this.isStorePageContent) return;
+        // this.isStorePageContent = true;
+        // var ps = await new DbService<page_snapshoot>('page_snapshoot').getOne(this.localPageSnapshootId);
+        // var r = await messageChannel.fireAsync(Directive.UploadFile, ps.content, (event) => { });
+        // if (r.ok) {
+        //     var userResult = await this.sock.post<{ sequence: number, id: string }, string>('/page/snapshoot', {
+        //         wsId: this.item.workspaceId,
+        //         pageId: this.item.id,
+        //         file: r.data,
+        //         begin_sequence: ps.begin_sequence,
+        //         end_sequence: ps.end_sequence
+        //     });
+        //     if (userResult.data.sequence) {
+        //         await new DbService<page_snapshoot>('page_snapshoot').update({ id: this.localPageSnapshootId }, { sequence: userResult.data.sequence })
+        //         await new DbService<page_current_sequence>('page_current_sequence').save(
+        //             {
+        //                 page_url: this.page_url,
+        //             },
+        //             { page_sequence: userResult.data.sequence },
+        //             {
+        //                 id: util.guid(),
+        //                 page_url: this.page_url,
+        //                 creater: surface.user?.id || null,
+        //                 createDate: Date.now()
+        //             });
+        //         delete this.localPageSnapshootId;
+        //         this.userActionTriggerCount = 0;
+        //     }
+        // }
+        // this.isStorePageContent = false;
     }
     /**
      * 获取文档内容

@@ -4,7 +4,6 @@ import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input, Textarea } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
 import { Directive } from 'rich/util/bus/directive';
-import { messageChannel } from 'rich/util/bus/event.bus';
 import { Avatar } from 'rich/component/view/avator/face';
 import { surface } from '../..';
 import { observer } from 'mobx-react';
@@ -26,7 +25,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
     async onUploadFace() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
         if (file) {
-            var r = await messageChannel.fireAsync(Directive.UploadFile, file, (event) => { });
+            var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
                 if (r.data.url) {
                     surface.user.onUpdateUserInfo({ avatar: { name: 'image', url: r.data.url } })
@@ -48,10 +47,10 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 this.data = r.data.user;
             }
         })
-        messageChannel.on(Directive.UpdateUser, this.onUpdate)
+        channel.sync('/update/user', this.onUpdate);
     }
     componentWillUnmount() {
-        messageChannel.off(Directive.UpdateUser, this.onUpdate)
+        channel.off('/update/user', this.onUpdate);
     }
     async onSave() {
         if (this.error.name || this.error.slogan) return;

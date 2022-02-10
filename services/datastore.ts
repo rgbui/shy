@@ -49,8 +49,4 @@ class DataStoreService {
         return surface.workspace.sock.get('/datastore/statistics/value', args)
     }
 
-
-
-
-
 }

@@ -4,7 +4,8 @@ export enum SockType {
     master,
     workspace,
     file,
-    api
+    api,
+    none
 }
 
 /**

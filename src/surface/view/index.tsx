@@ -22,10 +22,7 @@ export var ViewSurface = observer(function () {
         try {
             var width = await yCache.get<number>(CacheKey.slideWidth);
             if (typeof width == 'number') local.slideWidth = width;
-            var r = await surface.load();
-            if (r == true) {
-
-            }
+            await surface.loadWorkspace(undefined, await surface.getWsName())
         }
         catch (ex) {
 
