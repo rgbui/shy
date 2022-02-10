@@ -6,7 +6,7 @@ import { surface } from "../surface";
 export async function logStore(type: 'info' | 'error' | 'warn', message: string | Error, remark?: string) {
     (db as any).log.add({
         id: util.guid(),
-        creater: surface.user?.id,
+        creater: surface?.user?.id,
         createDate: Date.now(),
         level: type,
         msg: typeof message == 'string' ? message : message.toString(),
