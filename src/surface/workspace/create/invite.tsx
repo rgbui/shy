@@ -33,8 +33,7 @@ export var InviteView = observer(function () {
     }
     async function join() {
         var r = await memberWorkspaceService.inviteJoin(local.ws.id);
-        console.log(r,toJS(local.ws));
-        return UrlRoute.pushToWs(local.ws.customizeSecondDomain || local.ws.sn);
+        return UrlRoute.pushToWs(local.ws.siteDomain||local.ws.sn);
     }
     async function refuse() {
         UrlRoute.push(ShyUrl.myWorkspace);

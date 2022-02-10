@@ -6,16 +6,15 @@ import { Workspace } from '..';
 import { OpenFileDialoug } from 'rich/component/file';
 import { Avatar } from 'rich/component/view/avator/face';
 import { surface } from '../..';
-import { Directive } from 'rich/util/bus/directive';
-import { messageChannel } from 'rich/util/bus/event.bus';
 import "./style.less";
 import { observer } from 'mobx-react';
+import { channel } from 'rich/net/channel';
 @observer
 export class WorkspaceSettingsView extends React.Component<{ close: () => void }> {
     async onUploadFace() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
         if (file) {
-            var r = await messageChannel.fireAsync(Directive.UploadFile, file, (event) => { });
+            var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
                 if (r.data.url) {
                     surface.workspace.onUpdateInfo({ icon: { name: 'image', url: r.data.url } })
@@ -26,7 +25,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
     data: Partial<Workspace> = {
         text: '',
         slogan: '',
-        customizeSecondDomain: '',
+        siteDomain: '',
     }
     setData(data: WorkspaceSettingsView['data']) {
         if (typeof data.text != 'undefined' && data.text) {
@@ -43,10 +42,10 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                 return;
             }
         }
-        if (typeof data.customizeSecondDomain != 'undefined' && data.customizeSecondDomain) {
-            this.error.customizeDomain = '';
-            if (data.customizeDomain.length > 30) {
-                this.error.customizeDomain = '二级域名不合法';
+        if (typeof data.siteDomain != 'undefined' && data.siteDomain) {
+            this.error.siteDomain = '';
+            if (data.siteDomain.length > 30) {
+                this.error.siteDomain = '二级域名不合法';
                 return;
             }
         }
@@ -58,7 +57,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
     }
     async onSave() {
         if (this.error.text || this.error.slogan) return;
-        await surface.workspace.onUpdateInfo({ text: this.data.text, customizeSecondDomain: this.data.customizeSecondDomain, slogan: this.data.slogan });
+        await surface.workspace.onUpdateInfo({ text: this.data.text, siteDomain: this.data.siteDomain, slogan: this.data.slogan });
         this.onClose();
     }
     onClose() {
@@ -86,7 +85,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                     <Col><label>设置你的专属工作空间域名</label></Col>
                     <Col>
                         <div className='shy-ws-settings-view-domain'>
-                            <a style={{ textDecoration: 'underline', color: 'inherit' }} href={'https://' + (surface.workspace.customizeDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.customizeDomain || surface.workspace.sn}.shy.live</a>
+                            <a style={{ textDecoration: 'underline', color: 'inherit' }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
                             <Button link>更换空间域名</Button>
                         </div>
                     </Col>

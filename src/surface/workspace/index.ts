@@ -6,15 +6,16 @@ import { useOpenUserSettings } from "../user/settings";
 import { ShyUrl, UrlRoute } from "../../history";
 import { CacheKey, yCache } from "../../../net/cache";
 import { Mime } from "../sln/declare";
-import { workspaceService } from "../../../services/workspace";
 import { ShyUtil } from "../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
 import { SockType } from "../../../net/sock/type";
 import { useOpenWorkspaceSettings } from "./settings";
-import lodash from "lodash";
+import lodash, { chain } from "lodash";
 import { makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
+import { surface } from "..";
+import { channel } from "rich/net/channel";
 
 export type WorkspaceUser = {
     userid: string;
@@ -22,30 +23,43 @@ export type WorkspaceUser = {
     nick: string;
 }
 export class Workspace {
-    id: string = null;
-    date: number = null;
-    sn: number = null;
-    text: string = null;
-    icon: IconArguments = null;
-    childs: PageItem[] = [];
-    customizeSecondDomain: string = null;
-    customizeDomain: string = null;
-    slogan: string = null;
-    users: WorkspaceUser[] = [];
-    pidUrl: string = null;
+    public id: string = null;
+    public sn: number = null;
+    public createDate: Date = null;
+    public creater: string = null;
+    public owner: string = null;
+    public text: string = null;
+    public icon: IconArguments = null;
+    public cover: IconArguments = null;
+
+    public config: object = null;
+    public slogan: string = null;
+    public siteDomain: string = null;
+    public siteDomainDuration: Date = null;
+    public customSiteDomain: string = null;
+    public invite: string = null;
+    public pid: string = null;
+    public pidUrl: string = null;
+    public dbId: string = null;
+    public memberCount: number = null;
+    public memberOnlineCount: number = null;
+    public childs: PageItem[] = [];
     constructor() {
         makeObservable(this, {
             id: observable,
-            date: observable,
             sn: observable,
             text: observable,
             icon: observable,
+            cover: observable,
             childs: observable,
-            customizeDomain: observable,
-            customizeSecondDomain: observable,
+            siteDomain: observable,
+            customSiteDomain: observable,
             slogan: observable,
-            users: observable,
-            pidUrl: observable
+            pidUrl: observable,
+            memberCount: observable,
+            memberOnlineCount: observable,
+            config: observable,
+            owner: observable
         })
     }
     private _sock: Sock;
@@ -53,9 +67,9 @@ export class Workspace {
         if (this._sock) return this._sock;
         return this._sock = new Sock(SockType.workspace, this.pidUrl);
     }
-    public invite: string;
+
     get host() {
-        return this.customizeSecondDomain || this.sn
+        return this.siteDomain || this.sn
     }
     get url() {
         if (config.isPro) {
@@ -77,7 +91,6 @@ export class Workspace {
             }
         }
         if (typeof this.id == 'undefined') this.id = util.guid();
-        if (typeof this.date == undefined) this.date = Date.now();
     }
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)
@@ -99,8 +112,7 @@ export class Workspace {
         await useOpenUserSettings();
     }
     async onUpdateInfo(data: Partial<Workspace>) {
-        await workspaceService.updateWorkspace(this.id, data);
-        lodash.assign(this, data);
+        await channel.patch('/ws/patch', { data });
     }
     async getDefaultPage() {
         var pageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.pageDev)?.pageId;
@@ -127,10 +139,10 @@ export class Workspace {
     }
     async loadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
-        var rr = await workspaceService.loadWorkspaceItems(this.id, ids);
+        var rr = await channel.get('/page/items', { ids });
         if (rr) {
-            if (Array.isArray(rr?.data?.pages)) {
-                var pages = rr.data.pages;
+            if (Array.isArray(rr?.data?.list)) {
+                var pages = rr.data.list;
                 pages = ShyUtil.flatArrayConvertTree(pages);
                 this.load({ childs: pages });
             }

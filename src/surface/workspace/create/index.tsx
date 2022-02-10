@@ -1,10 +1,10 @@
 import React from "react";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
-import {  UrlRoute } from "../../../history";
-import { workspaceService } from "../../../../services/workspace";
+import { UrlRoute } from "../../../history";
 import { observer, useLocalObservable } from "mobx-react";
 import "./style.less";
+import { channel } from "rich/net/channel";
 export var WorkspaceCreateView = observer(function () {
     var local = useLocalObservable<{ fail: string, text: string }>(() => {
         return {
@@ -20,9 +20,9 @@ export var WorkspaceCreateView = observer(function () {
         else if (local.text.length > 32) local.fail = '空间名称过长'
         else {
             button.disabled = true;
-            var rr = await workspaceService.createWorkspace({ text: local.text });
+            var rr = await channel.put('/ws/create', { text: local.text })
             button.disabled = false;
-            if (rr.ok) return UrlRoute.pushToWs(rr.data.sn);
+            if (rr.ok) return UrlRoute.pushToWs(rr.data.workspace.sn);
             else this.failTip = rr.warn;
         }
     }

@@ -5,13 +5,13 @@ import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { Icon } from "rich/component/view/icon";
 import { Loading } from "rich/component/view/loading";
 import { Workspace } from "..";
-import { workspaceService } from "../../../../services/workspace";
 import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../..";
 import "./style.less";
 import DragHandle from "rich/src/assert/svg/DragHandle.svg";
 import PlusSvg from "rich/src/assert/svg/plus.svg";
 import CheckSvg from 'rich/src/assert/svg/check.svg';
+import { channel } from "rich/net/channel";
 
 class SwitchWorkspace extends EventsComponent {
     list: Partial<Workspace>[] = [];
@@ -19,7 +19,7 @@ class SwitchWorkspace extends EventsComponent {
     async componentDidMount() {
         this.loading = true;
         this.forceUpdate();
-        var r = await workspaceService.getWorkspaces();
+        var r = await channel.get('/user/wss');
         this.loading = false;
         if (r.ok) {
             this.list = r.data.list;

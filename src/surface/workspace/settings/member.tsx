@@ -5,15 +5,15 @@ import { Input } from 'rich/component/view/input';
 import { Button } from 'rich/component/view/button';
 import { CopyText } from 'rich/component/copy';
 import { surface } from '../..';
-import { workspaceService } from '../../../../services/workspace';
 import { Avatar } from 'rich/component/view/avator/face';
 import { observer } from 'mobx-react';
 import SvgDown from "rich/src/assert/svg/chevronDown.svg";
+import { channel } from 'rich/net/channel';
 @observer
 export class WorkspaceMembers extends React.Component {
     async createInvite() {
         if (!surface.workspace.invite) {
-            var r = await workspaceService.createInvite(surface.workspace.id);
+            var r = await channel.put('/ws/invite/create');
             if (r.ok) {
                 surface.workspace.invite = r.data.code;
                 this.forceUpdate();
@@ -49,7 +49,7 @@ export class WorkspaceMembers extends React.Component {
                     </Row>
                 </div>
                 <Divider></Divider>
-                {surface.workspace.users.map(us => {
+                {/* {surface.workspace.users.map(us => {
                     return <div className='shy-ws-member' key={us.userid}>
                         <Row style={{ marginBottom: 20 }}>
                             <Col span={16}><Space>
@@ -64,7 +64,7 @@ export class WorkspaceMembers extends React.Component {
                             </Col>
                         </Row>
                     </div>
-                })}
+                })} */}
             </div>
         </div>
     }
