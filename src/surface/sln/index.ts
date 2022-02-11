@@ -11,7 +11,7 @@ import { CacheKey, yCache } from "../../../net/cache";
 import { surface } from "..";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
-import { pageItemStore } from "../../../services/snapshoot/page.item";
+import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 
 export class Sln extends Events<SlnDirective> {

@@ -4,20 +4,20 @@ import { surface } from "../..";
 import trash from "rich/src/assert/svg/trash.svg";
 import rename from "../../../assert/svg/rename.svg";
 import copy from "rich/src/assert/svg/duplicate.svg";
+import { ElementType } from "rich/net/element.type";
 import cut from "../../../assert/svg/cut.svg";
 import link from '../../../assert/svg/link.svg';
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
-import { PageContentStore } from "../../../../services/snapshoot/page.content";
-import { UserAction } from "rich/src/history/action";
 import { Mime, PageItemDirective } from "../declare";
 import { makeObservable, observable } from "mobx";
-import { pageItemStore } from "../../../../services/snapshoot/page.item";
-import { Directive } from "rich/util/bus/directive";
+import { pageItemStore } from "./store/sync";
 import { Page } from "rich/src/page";
 import { channel } from "rich/net/channel";
+
+import { SnapSync } from "../../../../services/snap/sync";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -33,7 +33,6 @@ export class PageItem {
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-    store: PageContentStore;
     contentView: Page;
     /**
     * 是否为公开
@@ -42,8 +41,10 @@ export class PageItem {
     * local 本地存储
     */
     share: 'net' | 'nas' | 'local' = 'nas';
+    get snapSync() {
+        return SnapSync.create(ElementType.PageItem, this.id);
+    }
     constructor() {
-        this.store = new PageContentStore(this);
         makeObservable(this, {
             id: observable,
             sn: observable,
@@ -254,7 +255,7 @@ export class PageItem {
             var json = util.pickJson(this, keys);
             if (util.valueIsEqual(json, pageInfo)) return;
         }
-        channel.air('/page/update/info',{id:this.id,pageInfo});
+        channel.air('/page/update/info', { id: this.id, pageInfo });
     }
     getVisibleIds() {
         var ids: string[] = [this.id];
@@ -298,8 +299,7 @@ export class PageItem {
             }
         }
     }
-    onSaveUseAction(action: UserAction) {
-        this.store.saveHistory(action);
-    }
 }
+
+
 
