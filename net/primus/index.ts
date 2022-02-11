@@ -63,6 +63,7 @@ class TimService {
 }
 export var timService = new TimService();
 document.addEventListener("visibilitychange", function (e) {
+    console.log(document.visibilityState, 'visibilitychange');
     if (document.visibilityState == 'hidden') {
         // 网页被挂起 ---- 暂停音乐
 
@@ -72,7 +73,7 @@ document.addEventListener("visibilitychange", function (e) {
 
     }
 });
-window.addEventListener('pageshow', function () { });
-window.addEventListener('pagehide', function () { })
-window.addEventListener('blur', function () { console.log('blur'); });
-window.addEventListener('focus', function () { console.log('focus'); });
+window.addEventListener('pageshow', function () { console.log('pageshow') });
+window.addEventListener('pagehide', function () { console.log('pagehide') })
+// window.addEventListener('blur', function () { console.log('blur'); });
+// window.addEventListener('focus', function () { console.log('focus'); });
