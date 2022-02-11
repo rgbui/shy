@@ -5,7 +5,7 @@ import { surface } from "../..";
 import { PageItem } from "../../sln/item";
 export async function createPageContent(item: PageItem) {
     if (!item.contentView) {
-        var pd = await item.store.getPageContent();
+        var pd = await item.snapSync.querySnap();
         var page = new Page();
         item.contentView = page;
         page.on(PageDirective.blur, function (ev) {
@@ -18,18 +18,17 @@ export async function createPageContent(item: PageItem) {
             // console.log('focusAnchor', anchor);
         });
         page.on(PageDirective.history, async function (action) {
-            await item.store.saveHistory(action);
-            await item.store.savePageContent(action, await page.getFile());
+            var r = await item.snapSync.viewOperator(action);
+            await item.snapSync.viewSnap(r.seq, await page.getFile());
         });
         page.on(PageDirective.error, error => {
             console.error(error);
         });
-      
         page.on(PageDirective.save, async () => {
-            await item.store.forceStorePageContent();
+            await item.snapSync.forceSave();
         });
         await page.loadFile(pd.file)
-        if (Array.isArray(pd.actions) && pd.actions.length > 0) await page.loadUserActions(pd.actions);
+        if (Array.isArray(pd.operates) && pd.operates.length > 0) await page.loadUserActions(pd.operates);
         var view = await surface.supervisor.getView();
         var subs = view.querySelectorAll('.shy-supervisor-view-page');
         if (subs.length > 0) {
