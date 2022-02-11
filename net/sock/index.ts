@@ -156,20 +156,28 @@ export class Sock {
      * @param options 
      * @returns 
      */
-    async upload<T = any, U = any>(file: File, options?: {
+    async upload<T = any, U = any>(file: Blob | File, options?: {
+        url?: string,
+        data?: Record<string, any>,
         uploadProgress?: (event: ProgressEvent) => void
     }) {
+        if (options.data) GenreConsistency.transform(options.data);
         var baseUrl = await this.baseUrl();
-        var url = Sock.resolve(baseUrl, API_VERSION, '/file/upload');
+        var url = Sock.resolve(baseUrl, API_VERSION, options.url || '/file/upload');
         var configs = await this.config();
         configs.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         if (options?.uploadProgress) (configs as any).onUploadProgress = options.uploadProgress;
-        var forms = new FormData()
-        forms.append('file', file)
-        if (!file.md5) {
-            file.md5 = await FileMd5(file);
+        var forms = new FormData();
+        forms.append('file', file);
+        if (options.data) for (let n in options.data) {
+            forms.append(n, options.data[n]);
         }
-        forms.append('md5', file.md5);
+        else {
+            if (!(file as File).md5) {
+                (file as File).md5 = await FileMd5((file as File));
+            }
+            forms.append('md5', (file as File).md5);
+        }
         var r = await this.remote.put(url, forms, configs);
         return this.handleResponse<T, U>(r);
     }
@@ -193,8 +201,8 @@ export class Sock {
         }
         return url;
     }
-    static createSock(url:string){
-        return new Sock(SockType.none,url);
+    static createSock(url: string) {
+        return new Sock(SockType.none, url);
     }
 }
 
