@@ -5,7 +5,7 @@ import { Directive } from "rich/util/bus/directive";
 import { surface, Surface } from ".";
 import { CacheKey, yCache } from "../../net/cache";
 import { userTim } from "../../net/primus/tim";
-import { pageItemStore } from "../../services/snapshoot/page.item";
+import { pageItemStore } from "./sln/item/store/sync";
 
 
 // import { workspaceService } from "../../services/workspace";
