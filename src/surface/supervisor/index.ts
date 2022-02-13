@@ -42,7 +42,7 @@ export class Supervisor extends Events {
     async onOpenItem(...items: PageItem[]) {
         var oldItem = this.item;
         this.itemIds = items.map(i => i.id);
-        var newItem = this.item;
+        var newItem = items.first();
         if (newItem.id !== oldItem?.id) {
             this.loading = true;
             try {
