@@ -1,4 +1,5 @@
 import { query } from "rich/net/annotation";
+import { config } from "../../src/common/config";
 
 
 
@@ -9,5 +10,9 @@ class CommonService {
             key: AMAP_KEY,
             pair: AMAP_PAIR
         }
+    }
+    @query('/guid')
+    getGuid(){
+        return config.guid();
     }
 }
