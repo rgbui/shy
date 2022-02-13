@@ -149,19 +149,16 @@ push('/page/update/info', `{id: string, pageInfo:LinkPageItem}`, `void`, ['air']
 push('/page/query/info', `{id: string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/open', `{item:string|{id:string}}`, `void`, ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
-push('/current/workspace','','{id:string,sn:number,text:string}',['query'])
+push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
 
 
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'User', ['query']);
 
 push('/workspace/query/schemas', '{page?:number,size?:number}', '{ok:boolean,data:{total:number,list:Partial<TableSchema>[],page:number,size:number},warn:string}', ['get']);
-push('/schema/create', '{text:string,templateId?:string}', '{ ok: boolean, data: { schema:Partial<TableSchema> },warn:string }', ['put', 'workspace', 'rich']);
+push('/schema/create', '{text:string,url:string,templateId?:string}', '{ ok: boolean, data: { schema:Partial<TableSchema> },warn:string }', ['put', 'workspace', 'rich']);
 push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
-push('/schema/field/add', '{schemaId:string,text:string,type:FieldType}', '{ok:boolean,data:{field:Partial<Field>},warn:string}', ['put']);
-push('/schema/field/remove', '{schemaId:string,fieldId:string}', '{ok:boolean,warn:string}', ['del']);
-push('/schema/field/update', '{schemaId:string,fieldId:string,data:Partial<Field>}', '{ok:boolean,data:{field:Partial<Field>},warn:string}', ['post']);
-push('/schema/field/turn', '{schemaId:string,fieldId:string,type:FieldType}', '{ok:boolean,data:{field:Partial<Field>},warn:string}', ['post']);
+push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
 
 push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{dataId:string,pos:"before"|"after"}}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
@@ -206,6 +203,7 @@ push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
 push('/page/word/query', '{word:string}', 'SockResponse<LinkPageItem[]>', ['get']);
-
+push('/guid', '', 'string', ['query']);
+push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
