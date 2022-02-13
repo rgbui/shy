@@ -25,6 +25,6 @@ class PageService extends BaseService {
     @get('/page/sync/block')
     async getPageSyncBlock(args: { syncBlockId: string }) {
         var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
-        return await snapStore.querySnap();
+        return { ok: true, data: await snapStore.querySnap() }
     }
 }
