@@ -1,7 +1,9 @@
 
 import { get } from "rich/net/annotation";
+import { ElementType } from "rich/net/element.type";
 import { surface } from "../src/surface";
 import { BaseService } from "./common/base";
+import { SnapSync } from "./snap/sync";
 
 class PageService extends BaseService {
     @get('/page/items')
@@ -19,5 +21,10 @@ class PageService extends BaseService {
     @get('/page/query/links')
     async pageQueryLinks(args: { word: string }) {
 
+    }
+    @get('/page/sync/block')
+    async getPageSyncBlock(args: { syncBlockId: string }) {
+        var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
+        return await snapStore.querySnap();
     }
 }
