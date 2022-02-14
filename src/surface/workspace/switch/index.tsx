@@ -8,7 +8,7 @@ import { Workspace } from "..";
 import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../..";
 import "./style.less";
-import DragHandle from "rich/src/assert/svg/DragHandle.svg";
+import DragHandle from "rich/src/assert/svg/dragHandle.svg";
 import PlusSvg from "rich/src/assert/svg/plus.svg";
 import CheckSvg from 'rich/src/assert/svg/check.svg';
 import { channel } from "rich/net/channel";
