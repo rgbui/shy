@@ -102,7 +102,7 @@ export class SnapSync {
             seq
         });
         if (r.ok) {
-            if (r.data.localExisting == true) return { content: local.content ? JSON.parse(local?.content) : {} };
+            if (r.data.localExisting == true) return { content: local?.content ? JSON.parse(local?.content) : {} };
             return { operates: r.data.operates as ViewOperate[], content: r.data.content ? JSON.parse(r.data.content) : {} }
         }
     }

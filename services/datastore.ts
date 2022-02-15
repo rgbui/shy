@@ -12,7 +12,6 @@ class DataStoreService {
     }
     @del('/datastore/remove')
     async remove(args) {
-        console.log(args,'args');
         return surface.workspace.sock.delete('/datastore/remove', args)
     }
     @post('/datastore/update')
@@ -25,7 +24,6 @@ class DataStoreService {
     }
     @get('/datastore/query/list')
     async queryList(args) {
-        console.log(args);
         return surface.workspace.sock.get('/datastore/query/list', args)
     }
     @get('/datastore/query/ids')
