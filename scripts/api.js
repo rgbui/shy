@@ -82,6 +82,7 @@ import { IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { User } from "../src/types/user";
 import { StatusCode } from "./status.code";
+import { UserAction } from "../src/history/action";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -205,5 +206,7 @@ push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', [
 push('/page/word/query', '{word:string}', 'SockResponse<LinkPageItem[]>', ['get']);
 push('/guid', '', 'string', ['query']);
 push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
+push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
+push('/page/view/snap', '{ syncBlockId: string, seq: number, content: any }', 'Promise<void>', ['act'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

@@ -1,6 +1,7 @@
 
-import { get } from "rich/net/annotation";
+import { act, get } from "rich/net/annotation";
 import { ElementType } from "rich/net/element.type";
+import { UserAction } from "rich/src/history/action";
 import { surface } from "../src/surface";
 import { BaseService } from "./common/base";
 import { SnapSync } from "./snap/sync";
@@ -26,5 +27,15 @@ class PageService extends BaseService {
     async getPageSyncBlock(args: { syncBlockId: string }) {
         var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
         return { ok: true, data: await snapStore.querySnap() }
+    }
+    @act('/page/view/operator')
+    async PageViewOperator(args: { syncBlockId: string, operate: Partial<UserAction> }) {
+        var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
+        return await snapStore.viewOperator(args.operate);
+    }
+    @act('/page/view/snap')
+    async PageViewSnap(args: { syncBlockId: string, seq: number, content: any }) {
+        var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
+        return snapStore.viewSnap(args.seq, args.content)
     }
 }
