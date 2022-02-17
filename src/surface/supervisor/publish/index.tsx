@@ -1,6 +1,6 @@
 import { EventsComponent } from "rich/component/lib/events.component";
 import React from 'react';
-import GlobalLink from "rich/src/assert/svg/GlobalLink.svg";
+
 import { Switch } from "rich/component/view/switch";
 import { PopoverPosition } from "rich/extensions/popover/position";
 import { PageItem } from "../../sln/item";
@@ -10,6 +10,7 @@ import { Icon } from "rich/component/view/icon";
 import { pageItemStore } from "../../sln/item/store/sync";
 import { observer } from "mobx-react";
 import { makeObservable, observable } from "mobx";
+import { GlobalLinkSvg } from "rich/component/svgs";
 @observer
 class PagePublish extends EventsComponent {
     constructor(props) {
@@ -30,7 +31,7 @@ class PagePublish extends EventsComponent {
         return <div className='shy-page-publish'>
             <div className='shy-page-publish-access'>
                 <div className='shy-page-publish-access-icon'>
-                    <Icon size={36} icon={GlobalLink}></Icon>
+                    <Icon size={36} icon={GlobalLinkSvg}></Icon>
                     <div>
                         <span>公开至互联网</span>
                         <label>任何人都可以浏览</label>
