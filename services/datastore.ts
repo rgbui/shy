@@ -1,6 +1,6 @@
 
 import { surface } from "../src/surface";
-import { post, del, put, get } from "rich/net/annotation";
+import { post, del, put, get, patch } from "rich/net/annotation";
 class DataStoreService {
     @put('/datastore/add')
     async add(args) {
@@ -14,9 +14,9 @@ class DataStoreService {
     async remove(args) {
         return surface.workspace.sock.delete('/datastore/remove', args)
     }
-    @post('/datastore/update')
+    @patch('/datastore/update')
     async update(args) {
-        return surface.workspace.sock.post('/datastore/update', args)
+        return surface.workspace.sock.patch('/datastore/update', args)
     }
     @get('/datastore/query')
     async query(args) {
