@@ -1,6 +1,6 @@
 import { log } from "../common/log";
 
-var HEXCHARS = "0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_+=!@#$%^&*(){}[]|?/<>,.;:".split("")
+var HEXCHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_+=!@#$%^&*(){}[]|?/<>,.;:".split("")
 
 export var ShyUtil = {
 
