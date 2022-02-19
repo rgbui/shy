@@ -9,7 +9,3 @@ export enum HttpMethod {
     none,
     patch
 }
-export enum SubscribeType {
-    workspace,
-    page
-}

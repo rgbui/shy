@@ -1,11 +1,10 @@
 import { util } from 'rich/util/util';
 import { config } from '../../src/common/config';
-import { log, logStore } from '../../src/common/log';
-import { CacheKey, sCache } from '../cache';
-import { masterSock, Sock } from '../sock';
+import { log } from '../../src/common/log';
+import { Sock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
-import { HttpMethod, SubscribeType } from './http';
+import { HttpMethod } from './http';
 import { loadPrimus } from './load';
 export class Tim {
     public isConncted: boolean = false;
@@ -133,12 +132,6 @@ export class Tim {
     send(method: HttpMethod, url: string, data: Record<string, any>) {
         url = Sock.resolve('/' + API_VERSION, url);
         this.primus.write({ method, url, data });
-    }
-    subscribe(type: SubscribeType, id: string) {
-        this.send(HttpMethod.post, '/user/subscribe', { type, id });
-    }
-    unsubscribe(type: SubscribeType, id: string) {
-        this.send(HttpMethod.post, '/user/unsubscribe', { type, id });
     }
     private handleResponse<T, U = any>(data) {
         var response: SockResponse<T, U> = {
