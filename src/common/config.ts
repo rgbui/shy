@@ -1,6 +1,6 @@
-import { util } from "rich/util/util";
-import { ShyUtil } from "../util";
 
+import { ShyUtil } from "../util";
+import * as short from 'short-uuid';
 class Config {
     /**
      * * 打包发布的版本
@@ -65,17 +65,17 @@ class Config {
        
     }
     private service_guid: string = '';
-    private counter = 0;
+    private count = 0;
     guid() {
         if (this.service_guid) {
-            var n = this.counter = this.counter + 1;
+            var n = this.count = this.count + 1;
             return this.service_guid + "-" + (ShyUtil.hexadecimalConversion(62, n));
         }
-        else util.guid();
+        else   return short.generate();
     }
     updateServiceGuid(guid: string) {
         this.service_guid = guid;
-        this.counter = 0;
+        this.count = 0;
     }
     isOnline: boolean;
     constructor() {
