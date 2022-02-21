@@ -19,12 +19,19 @@ class SchemaService {
         return await surface.workspace.sock.get('/schema/query', arguments[0]);
     }
     @put('/schema/operate')
-    async schemaOperate(args: {  operate: Record<string, any> }) {
+    async schemaOperate(args: { operate: Record<string, any> }) {
         return await surface.workspace.sock.put<{ result: { actions: any[] } }>('/view/operate/sync', {
             wsId: surface.workspace.id,
             operate: args.operate,
             schema: 'DataGridSchema',
             sockId: timService.tim.id
+        })
+    }
+    @get('/schema/list')
+    async getSchemas(args: Record<string, any>) {
+        return await surface.workspace.sock.get('/schema/list', {
+            wsId: surface.workspace.id,
+            ...(args || {})
         })
     }
 }
