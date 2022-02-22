@@ -198,8 +198,8 @@ push('/ws/invite/check', '{invite:string}', 'SockResponse<{member:boolean,worksp
 push('/ws/invite/join', '{wsId:string}', 'SockResponse<{workspace:Record<string,any>}>', ['post']);
 push('/ws/sitedomain/patch', '{domain:string}', 'SockResponse<{success:boolean,overflowDue:boolean}>', ['patch']);
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
-push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ url: string }>', ['post'])
-push('/ws/download/url', '{url:string}', 'SockResponse<{ url: string }>', ['post'])
+push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string} }>', ['post'])
+push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string} }>', ['post'])
 
 push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
