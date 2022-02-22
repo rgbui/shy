@@ -7,3 +7,4 @@ import "./user";
 import './member';
 import './workspace';
 import "./page";
+import "./interactive";

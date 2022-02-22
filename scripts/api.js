@@ -209,5 +209,6 @@ push('/guid', '', 'string', ['query']);
 push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
 push('/page/view/snap', '{ syncBlockId: string, seq: number, content: any }', 'Promise<void>', ['act'])
+push(`/interactive/emoji`, '{elementUrl:string}', 'SockResponse<{count:number}>', ['patch'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

@@ -103,7 +103,7 @@ class WorkspaceService extends BaseService {
     * 用户上传单个文件
     * @returns 
     */
-    @post('ws/upload/file')
+    @post('/ws/upload/file')
     async uploadFile(data: { file: File, progress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             var { file, progress } = data;
@@ -118,7 +118,7 @@ class WorkspaceService extends BaseService {
                 }
             }
             if (masterFile) {
-                await surface.workspace.sock.put('/file/store', { wsId: surface.workspace.id, file: masterFile });
+                await surface.workspace.sock.put('/file/store', { wsId: surface.workspace.id, file: masterFile?.file });
             }
             return { ok: true, data: masterFile }
         }
@@ -126,7 +126,7 @@ class WorkspaceService extends BaseService {
             return { ok: false, warn: '上传文件失败' }
         }
     }
-    @post('ws/download/url')
+    @post('/ws/download/url')
     async uploadUrl(data: { url: string }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             var { url } = data;
