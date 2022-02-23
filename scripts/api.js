@@ -151,8 +151,6 @@ push('/page/query/info', `{id: string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/open', `{item:string|{id:string}}`, `void`, ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
-
-
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'User', ['query']);
 
@@ -161,6 +159,7 @@ push('/schema/create', '{text:string,url:string,templateId?:string}', '{ ok: boo
 push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
 push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
 push('/schema/list', '{page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
+push('/schema/ids/list','{ids:string[]}','SockResponse<{list:Partial<TableSchema>[]}>',['get'])
 
 push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{dataId:string,pos:"before"|"after"}}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);

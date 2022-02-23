@@ -34,4 +34,11 @@ class SchemaService {
             ...(args || {})
         })
     }
+    @get('/schema/ids/list')
+    async getSchemasByIds(args: Record<string, any>) {
+        return await surface.workspace.sock.get('/schema/list', {
+            wsId: surface.workspace.id,
+            ...(args || {})
+        })
+    }
 }
