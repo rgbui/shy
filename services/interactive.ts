@@ -3,9 +3,9 @@ import { surface } from "../src/surface";
 
 class interactiveService {
     @patch('/interactive/emoji')
-    async interactiveEmoji(elementUrl: string) {
+    async interactiveEmoji(args: { elementUrl: string }) {
         return surface.workspace.sock.patch('/interactive/emoji', {
-            elementUrl,
+            ...args,
             wsId: surface.workspace.id
         });
     }
