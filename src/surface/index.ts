@@ -28,6 +28,7 @@ export class Surface extends Events {
     user: User = new User();
     sln: Sln = new Sln();
     workspace: Workspace = null;
+    wss: Partial<Workspace>[] = [];
     isShowSln: boolean = true;
     config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
@@ -35,6 +36,14 @@ export class Surface extends Events {
         if (r.ok) {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
+        }
+    }
+    async loadWorkspaceList() {
+        if (this.user.isSign) {
+            var r = await channel.get('/user/wss');
+            if (r?.ok) {
+                this.wss = r.data.list;
+            }
         }
     }
     async loadWorkspace(wsId: string, name?: string) {

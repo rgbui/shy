@@ -6,68 +6,117 @@
     height         : 100vh;
 
     .shy-sidebar {
-        width           : 50px;
+        width           : 72px;
         flex-shrink     : 0;
         flex-grow       : 0;
-        background-color: rgb(238, 238, 238);
-        display         : flex;
-        justify-content : flex-start;
-        align-items     : center;
-        flex-direction  : column;
+        background-color: var(--background-tertiary);
 
-        &-top {
-            flex-grow      : 1.0;
-            flex-shrink    : 1;
-            display        : flex;
-            justify-content: flex-start;
-            align-items    : center;
-            flex-direction : column;
-            padding-top    : 15px;
+        a {
+            width           : 48px;
+            height          : 48px;
+            display         : flex;
+            justify-content : center;
+            cursor          : pointer;
+            align-items     : center;
+            margin          : 12px;
+            transition      : color .15s ease-out, background-color .35s ease-out, border-radius .4s;
+            background-color: var(--background-primary);
+            border-radius   : 50%;
+            color           : rgb(59, 165, 93);
 
-            >* {
-                margin-bottom: 10px;
-                color        : rgba(55, 53, 47, 0.6);
-                fill         : currentColor;
-                stroke       : currentColor;
+            &:hover {
+                border-radius: 8px;
+            }
 
-                &.shy-icon {
-                    border-radius: 50%;
+            .shy-icon {
+                fill: currentColor
+            }
+
+            &.shy-sidebar-ws-name {
+
+                &:hover,
+                .hover {
+                    background-color: rgb(88, 101, 242);
+                    color           : #fff;
                 }
+            }
 
-                &.hover {
-                    color  : #e16259;
-                    //color: rgba(55, 53, 47, 0.8);
+            &.shy-sidebar-icon {}
+
+            &.shy-sidebar-operator {
+
+                &:hover,
+                .hover {
+                    background-color: rgb(59, 165, 93);
+                    color           : #fff;
                 }
             }
         }
+        &-divider{
+            margin:0px 20px;
+            height: 2px;
+    width: 32px;
+    border-radius: 1px;
+    background-color: var(--background-modifier-accent);
 
-        &-bottom {
-            height         : 80px;
-            flex-shrink    : 0;
-            display        : flex;
-            justify-content: flex-end;
-            align-items    : center;
-            flex-direction : column;
-            padding-bottom : 20px;
 
-            >* {
-                margin-top: 10px;
-                color     : rgba(55, 53, 47, 0.6);
-                fill      : currentColor;
 
-                &.hover {
-                    color: red;
-                }
-            }
         }
+
+        // &-top {
+        //     flex-grow      : 1.0;
+        //     flex-shrink    : 1;
+        //     display        : flex;
+        //     justify-content: flex-start;
+        //     align-items    : center;
+        //     flex-direction : column;
+        //     padding-top    : 15px;
+
+        //     >* {
+        //         margin-bottom: 10px;
+        //         color        : rgba(55, 53, 47, 0.6);
+        //         fill         : currentColor;
+        //         stroke       : currentColor;
+
+        //         &.shy-icon {
+        //             border-radius: 50%;
+        //         }
+
+        //         &.hover {
+        //             color  : #e16259;
+        //             //color: rgba(55, 53, 47, 0.8);
+        //         }
+        //     }
+        // }
+
+        // &-bottom {
+        //     height         : 80px;
+        //     flex-shrink    : 0;
+        //     display        : flex;
+        //     justify-content: flex-end;
+        //     align-items    : center;
+        //     flex-direction : column;
+        //     padding-bottom : 20px;
+
+        //     >* {
+        //         margin-top: 10px;
+        //         color     : rgba(55, 53, 47, 0.6);
+        //         fill      : currentColor;
+
+        //         &.hover {
+        //             color: red;
+        //         }
+        //     }
+        // }
     }
 
     .shy-slide {
-        width          : 200px;
-        box-sizing     : border-box;
-        flex-shrink    : 0;
-        background     : rgb(247, 247, 247);
-        position       : relative;
+        width             : 240px;
+        box-sizing        : border-box;
+        flex-shrink       : 0;
+        // background     : rgb(247, 247, 247);
+        background-color  : var(--background-secondary);
+        position          : relative;
         // border-right: 1px solid rgb(224, 224, 224);
 
         &-resize {
@@ -148,9 +197,9 @@
         }
 
         >.shy-ws-items {
-            flex-grow : 1;
-            padding-bottom:100px;
-            overflow-y: auto;
+            flex-grow     : 1;
+            padding-bottom: 100px;
+            overflow-y    : auto;
         }
     }
 }

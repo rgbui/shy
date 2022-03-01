@@ -32,6 +32,7 @@ export function App() {
     await appLangProvider.import();
     await channel.put('/device/sign');
     await surface.loadUser()
+    await surface.loadWorkspaceList()
     setLoad(true);
   }
   React.useEffect(() => {

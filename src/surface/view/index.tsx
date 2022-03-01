@@ -70,7 +70,7 @@ export var ViewSurface = observer(function () {
     if (local.loading) return <div className='shy-surface-loading'><Loading /></div>
     else {
         if (surface.workspace) {
-            return <div className='shy-surface'>
+            return <div className='shy-surface theme-light'>
                 {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
                 <div
                     onMouseLeave={mouseleave}
