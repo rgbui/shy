@@ -187,6 +187,8 @@ push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch']
 push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number, avatar: ResourceArguments, name: string}}>', ['get'])
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{url:string}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
+push('/user/channels','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number,rooms:any[]}>',['get'])
+
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])

@@ -7,6 +7,7 @@ import PubWorkspace from "../../assert/svg/pubWorkspace.svg";
 import DownloadSvg from "../../assert/svg/download.svg";
 import { PlusSvg } from "rich/component/svgs";
 import { Workspace } from "../workspace";
+import HomeSrc from "../../assert/img/shy.256.png";
 
 export var SideBar = observer(function () {
     function renderWs(workspace: Partial<Workspace>) {
@@ -16,7 +17,10 @@ export var SideBar = observer(function () {
         else return <a key={workspace.id} className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace.text.slice(0, 2)}</span></a>
     }
     return <div className='shy-sidebar'>
-
+        <a className="shy-sidebar-operator">
+            <img src={HomeSrc} style={{ width: 48, height: 48 }} />
+        </a>
+        <div className="shy-sidebar-divider"></div>
         {surface.wss.map(ws => {
             return renderWs(ws)
         })}
