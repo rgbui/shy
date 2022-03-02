@@ -188,6 +188,18 @@ push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number, avatar: 
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{url:string}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/channels','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number,rooms:any[]}>',['get'])
+push('/user/channel/delete','{id:string}','SockResponse<void>',['del'])
+push('/friend/join','{userid?:string,sn?:number}','SockResponse<{exists?:boolean,send?:boolean}>',['put'])
+push('/friends','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number}>',['get'])
+push('/friend/delete','{id:string}','SockResponse<void>',['del'])
+push('/friends/pending','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number}>',['get'])
+push('/user/blacklist','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number}>',['get'])
+push('/user/blacklist/delete','{id:string}','SockResponse<void>',['del'])
+push('/blacklist/join','{otherId:string}','SockResponse<void>',['put'])
+push('/friend/is','{friendId:string}','SockResponse<{is:boolean}>',['get'])
+
+
+
 
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])

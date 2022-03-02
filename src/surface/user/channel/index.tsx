@@ -3,7 +3,7 @@ import React from "react";
 import { PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import FriendSvg from "../../../assert/svg/friends.svg";
-import { CommunicateView } from "./communicate";
+import { CommunicateView } from "./communicate/communicate";
 import { FriendsView } from "./friends";
 import "./style.less";
 
