@@ -1,0 +1,95 @@
+.shy-user-channel {
+    flex-grow      : 1;
+    flex-shrink    : 1;
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : stretch;
+
+    &-slide {
+        width           : 240px;
+        flex-grow       : 0;
+        flex-shrink     : 0;
+        background-color: var(--background-secondary);
+
+        &-head {
+            height         : 48px;
+            box-shadow     : var(--elevation-low);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+
+            &-wrapper {
+                width: 220px;
+
+                overflow        : hidden;
+                border-radius   : 4px;
+                background-color: var(--background-tertiary);
+
+                input {
+                    height          : 28px;
+                    border          : 0px;
+                    outline         : none;
+                    width           : 100%;
+                    color           : var(--text-muted);
+                    background-color: transparent;
+                    text-indent     : 10px;
+                }
+            }
+
+        }
+
+        .shy-user-friends {
+            border-radius  : 4px;
+            height         : 42px;
+            padding        : 0 8px;
+            margin         : 8px;
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+
+            >span {
+                font-size  : 16px;
+                display    : inline-block;
+                margin-left: 10px;
+            }
+
+            &:hover {
+                color           : var(--interactive-hover);
+                background-color: var(--background-modifier-hover);
+            }
+        }
+    }
+
+    &-content {
+        flex-grow  : 1;
+        flex-shrink: 1;
+    }
+}
+
+.shy-user-channel-communicate {
+    &-head {
+        height         : 30px;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+        color          : var(--channels-default);
+        box-sizing     : border-box;
+        text-overflow  : ellipsis;
+        white-space    : nowrap;
+        overflow       : hidden;
+        text-transform : uppercase;
+        font-size      : 12px;
+        line-height    : 16px;
+        padding        : 0px 10px;
+        >span {
+            flex-shrink: 1;
+            flex-grow  : 1;
+        }
+        >.shy-icon {
+            width      : 20px;
+            height     : 20px;
+            flex-shrink: 0;
+            flex-shrink: 0;
+        }
+    }
+}

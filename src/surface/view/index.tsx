@@ -7,6 +7,7 @@ import { CacheKey, yCache } from "../../../net/cache";
 import { SideBar } from "./sidebar";
 import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
+import { UserChannel } from "../user/channel";
 
 export var ViewSurface = observer(function () {
     var local = useLocalObservable(() => {
@@ -72,7 +73,7 @@ export var ViewSurface = observer(function () {
         if (surface.workspace) {
             return <div className='shy-surface theme-light'>
                 {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
-                <div
+                {!surface.showUserChannel && <><div
                     onMouseLeave={mouseleave}
                     onMouseEnter={mousenter}
                     className={'shy-slide' + (surface.isShowSln ? "" : (local.slideFloatIsShow ? " float" : " float-hide"))}
@@ -81,8 +82,9 @@ export var ViewSurface = observer(function () {
                     <SlnView></SlnView>
                     {surface.isShowSln && <div className='shy-slide-resize' onMouseDown={mousedown}></div>}
                 </div>
-                {!surface.isShowSln && <div className='shy-slide-reaction'></div>}
-                <SupervisorView></SupervisorView>
+                    {!surface.isShowSln && <div className='shy-slide-reaction'></div>}</>}
+                {!surface.showUserChannel && <SupervisorView></SupervisorView>}
+                {surface.showUserChannel && <UserChannel></UserChannel>}
             </div >
         }
     }

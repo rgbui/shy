@@ -21,7 +21,8 @@ export class Surface extends Events {
             supervisor: observable,
             user: observable,
             sln: observable,
-            workspace: observable
+            workspace: observable,
+            showUserChannel: observable
         });
     }
     supervisor: Supervisor = new Supervisor();
@@ -30,6 +31,7 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: Partial<Workspace>[] = [];
     isShowSln: boolean = true;
+    showUserChannel: boolean = false;
     config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
         var r = await channel.get('/sign')
@@ -59,8 +61,6 @@ export class Surface extends Events {
             this.sln.onMousedownItem(page);
         }
     }
-
-
     async getWsName() {
         var domain, sn, wsId;
         if (!config.isPro) {

@@ -10,19 +10,23 @@ import { Workspace } from "../workspace";
 import HomeSrc from "../../assert/img/shy.256.png";
 
 export var SideBar = observer(function () {
+    async function changeWorkspace(ws: Partial<Workspace>) {
+        surface.showUserChannel = false;
+        surface.onChangeWorkspace(ws);
+    }
     function renderWs(workspace: Partial<Workspace>) {
-        if (workspace.icon) return <a key={workspace.id} className="shy-sidebar-ws-icon"><img
+        if (workspace.icon) return <a className="shy-sidebar-ws-icon"><img
             src={workspace.icon.url} style={{ width: 48, height: 48 }} />
         </a>
-        else return <a key={workspace.id} className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace.text.slice(0, 2)}</span></a>
+        else return <a className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace.text.slice(0, 2)}</span></a>
     }
     return <div className='shy-sidebar'>
-        <a className="shy-sidebar-operator">
+        <a className="shy-sidebar-operator" onMouseDown={e => surface.showUserChannel = true}>
             <img src={HomeSrc} style={{ width: 48, height: 48 }} />
         </a>
         <div className="shy-sidebar-divider"></div>
         {surface.wss.map(ws => {
-            return renderWs(ws)
+            return <div onMouseDown={e => changeWorkspace(ws)} key={ws.id} className={'shy-sidebar-ws' + (surface.workspace.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div>
         })}
         <a className="shy-sidebar-operator"><Icon size={24} icon={PlusSvg}></Icon></a>
         <a className="shy-sidebar-operator"><Icon size={24} icon={PubWorkspace}></Icon></a>
