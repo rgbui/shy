@@ -2,7 +2,7 @@ import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import { Avatar } from "rich/component/view/avator/face";
 import { channel } from "rich/net/channel";
-import React from "rich/node_modules/@types/react";
+import React from "react";
 export var FrendListView = observer(function () {
     var local = useLocalObservable(() => {
         return {

@@ -6,7 +6,7 @@ import { ErrorText, Remark } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { PopoverPosition } from "rich/extensions/popover/position";
 import { channel } from "rich/net/channel";
-import React from "rich/node_modules/@types/react";
+import React from "react";
 
 class JoinFriend extends EventsComponent {
     render() {
