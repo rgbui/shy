@@ -7,22 +7,23 @@ import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { PopoverPosition } from "rich/extensions/popover/position";
 import { channel } from "rich/net/channel";
 import React from "react";
+import { Dialoug } from "rich/component/view/grid";
+import "./style.less";
 
 class JoinFriend extends EventsComponent {
     render() {
-        return <div className="shy-join-friend">
-            <div className="shy-join-friend-head"><span>添加好友</span></div>
-            <div className="shy-join-friend-content">
-                <Remark>请输入用户的诗云号(数字）</Remark>
-                <div>
-                    <Input value={this.name} onEnter={e => this.sendFriend()} onChange={e => this.name = e}></Input>
-                    <Button ref={e => this.button = e} onClick={e => this.sendFriend()}>发送好友请求</Button>
-                </div>
-                <div>
-                    {this.error && <ErrorText >{this.error}</ErrorText>}
-                </div>
+        return <Dialoug className={'shy-join-friend'}
+            head={<span>添加好友</span>}
+        >
+            <Remark>请输入用户的诗云号(数字）</Remark>
+            <div className="shy-join-friend-input">
+                <Input value={this.name} onEnter={e => this.sendFriend()} onChange={e => this.name = e}></Input>
+                <Button ref={e => this.button = e} onClick={e => this.sendFriend()}>发送好友请求</Button>
             </div>
-        </div>
+            <div>
+                {this.error && <ErrorText >{this.error}</ErrorText>}
+            </div>
+        </Dialoug>
     }
     name: string = '';
     error: string = '';
