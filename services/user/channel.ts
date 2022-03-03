@@ -11,6 +11,10 @@ class UserService extends BaseService {
     async userChannelDelete(args) {
         return await masterSock.delete('/user/channel/delete', args);
     }
+    @put('/user/channel/join')
+    async userChannelJoin(args) {
+        return await masterSock.put('/user/channel/join', args);
+    }
     @get('/friend/is')
     async isFriend(args) {
         return await masterSock.get('/friend/is', args);

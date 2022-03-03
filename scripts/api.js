@@ -189,6 +189,7 @@ push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => 
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],page:number,size:number,rooms:any[]}>', ['get'])
 push('/user/channel/delete', '{id:string}', 'SockResponse<void>', ['del'])
+push('/user/channel/join', '{roomName?:string,userids:string[]}', 'SockResponse<{room:Record<string,any>,channel:Record<string,any>}>', ['put'])
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],page:number,size:number}>', ['get'])
 push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
