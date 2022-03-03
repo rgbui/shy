@@ -159,7 +159,7 @@ push('/schema/create', '{text:string,url:string,templateId?:string}', '{ ok: boo
 push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
 push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
 push('/schema/list', '{page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
-push('/schema/ids/list','{ids:string[]}','SockResponse<{list:Partial<TableSchema>[]}>',['get'])
+push('/schema/ids/list', '{ids:string[]}', 'SockResponse<{list:Partial<TableSchema>[]}>', ['get'])
 
 push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{dataId:string,pos:"before"|"after"}}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
@@ -187,17 +187,17 @@ push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch']
 push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number, avatar: ResourceArguments, name: string}}>', ['get'])
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{url:string}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
-push('/user/channels','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number,rooms:any[]}>',['get'])
-push('/user/channel/delete','{id:string}','SockResponse<void>',['del'])
-push('/friend/join','{userid?:string,sn?:number}','SockResponse<{exists?:boolean,send?:boolean}>',['put'])
-push('/friends','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number}>',['get'])
-push('/friend/delete','{id:string}','SockResponse<void>',['del'])
-push('/friends/pending','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number}>',['get'])
-push('/user/blacklist','{page?:number,size?:number}','SockResponse<{list:any[],page:number,size:number}>',['get'])
-push('/user/blacklist/delete','{id:string}','SockResponse<void>',['del'])
-push('/blacklist/join','{otherId:string}','SockResponse<void>',['put'])
-push('/friend/is','{friendId:string}','SockResponse<{is:boolean}>',['get'])
-
+push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],page:number,size:number,rooms:any[]}>', ['get'])
+push('/user/channel/delete', '{id:string}', 'SockResponse<void>', ['del'])
+push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean}>', ['put'])
+push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],page:number,size:number}>', ['get'])
+push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
+push('/friends/pending', '{page?:number,size?:number}', 'SockResponse<{list:any[],page:number,size:number}>', ['get'])
+push('/user/blacklist', '{page?:number,size?:number}', 'SockResponse<{list:any[],page:number,size:number}>', ['get'])
+push('/user/blacklist/delete', '{id:string}', 'SockResponse<void>', ['del'])
+push('/blacklist/join', '{otherId:string}', 'SockResponse<void>', ['put'])
+push('/friend/is', '{friendId:string}', 'SockResponse<{is:boolean}>', ['get'])
+push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any>}>', ['put'])
 
 
 

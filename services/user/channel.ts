@@ -19,6 +19,10 @@ class UserService extends BaseService {
     async joinUser(args) {
         return await masterSock.put('/friend/join', args);
     }
+    @put('/friend/agree')
+    async friendAgree(args) {
+        return await masterSock.put('/friend/agree', args);
+    }
     @get('/friends')
     async userFriends(args) {
         return await masterSock.get('/friends', args);
