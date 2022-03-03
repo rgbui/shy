@@ -8,7 +8,6 @@ import DownloadSvg from "../../assert/svg/download.svg";
 import { PlusSvg } from "rich/component/svgs";
 import { Workspace } from "../workspace";
 import HomeSrc from "../../assert/img/shy.256.png";
-
 export var SideBar = observer(function () {
     async function changeWorkspace(ws: Partial<Workspace>) {
         surface.showUserChannel = false;
@@ -22,7 +21,7 @@ export var SideBar = observer(function () {
     }
     return <div className='shy-sidebar'>
         <a className="shy-sidebar-operator" onMouseDown={e => surface.showUserChannel = true}>
-            <img src={HomeSrc} style={{ width: 48, height: 48 }} />
+            <img src={HomeSrc} style={{ width: 48, height: 48, borderRadius: 16 }} />
         </a>
         <div className="shy-sidebar-divider"></div>
         {surface.wss.map(ws => {
