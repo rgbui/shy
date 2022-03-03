@@ -81,15 +81,163 @@
         font-size      : 12px;
         line-height    : 16px;
         padding        : 0px 10px;
+
         >span {
             flex-shrink: 1;
             flex-grow  : 1;
         }
+
         >.shy-icon {
             width      : 20px;
             height     : 20px;
             flex-shrink: 0;
             flex-shrink: 0;
+        }
+    }
+}
+
+.shy-user-channel-friends {
+    &-head {
+        color     : var(--text-normal);
+        height    : 48px;
+        background: var(--background-primary);
+
+        &-tabs {
+            padding-left   : 20px;
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+
+            .line {
+                background: var(--background-modifier-accent);
+                width     : 1px;
+                height    : 24px;
+                margin    : 0 8px;
+                flex      : 0 0 auto;
+            }
+
+            >span,
+            >a {
+                font-weight  : 600;
+                font-size    : 16px;
+                line-height  : 20px;
+                display      : inline-block;
+                border-radius: 4px;
+                margin       : 0 8px;
+                cursor       : pointer;
+                padding      : 2px 8px;
+                color        : var(--interactive-normal);
+
+                &.hover {
+                    background-color: var(--background-modifier-selected);
+                }
+
+                &:hover {
+                    background-color: var(--background-modifier-hover);
+                }
+            }
+
+            >span {
+                margin-left  : 3px;
+                padding-left : 0px;
+                padding-right: 0px;
+
+                &:hover {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        &-btns {
+            display        : flex;
+            justify-content: flex-end;
+            align-items    : center;
+            padding-right  : 10px;
+        }
+    }
+
+    &-content {
+        position: relative;
+
+        &::after {
+            position      : absolute;
+            display       : block;
+            top           : -1px;
+            left          : 0;
+            right         : 0;
+            height        : 1px;
+            z-index       : 1;
+            pointer-events: none;
+            content       : '\20';
+            box-shadow    : var(--elevation-low);
+        }
+
+    }
+}
+
+.shy-pendlist {
+    padding-left : 30px;
+    padding-right: 20px;
+
+    &-search {
+
+        height         : 60px;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+    }
+
+    &-head {
+        margin-top     : 20px;
+        display        : flex;
+        height         : 30px;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+        span {
+            display: flex;
+            color  : var(--header-secondary);
+        }
+    }
+
+    &-list {
+        padding-bottom: 8px;
+        margin-top    : 8px;
+    }
+
+    &-user {
+        height    : 62px;
+        opacity   : 1;
+        border-top: 1px solid var(--background-modifier-accent);
+        display   : flex;
+        padding   : 16px 10px;
+        box-sizing: border-box;
+        >* {
+            flex-shrink: 1;
+            flex-grow  : 1;
+        }
+
+        &-operator {
+            flex-shrink: 0;
+            flex-shrink: 0;
+
+            .shy-icon {
+                cursor          : pointer;
+                width           : 36px;
+                height          : 36px;
+                border-radius   : 50%;
+                color           : var(--interactive-normal);
+                background-color: var(--background-secondary);
+            }
+        }
+
+        &:hover {
+            background        : var(--background-modifier-hover);
+            -webkit-box-shadow: none;
+            box-shadow        : none;
+            border-radius     : 8px;
+            border-color      : transparent;
+
         }
     }
 }

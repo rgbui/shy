@@ -10,7 +10,7 @@ body {
 
 a {
     text-decoration: none;
-    color:#e16259;
+    color          : #e16259;
 }
 
 p {
@@ -23,8 +23,56 @@ b {
     font-style : normal;
     font-weight: normal;
 }
-a,span,label,button,p,b,em,i{
+
+a,
+span,
+label,
+button,
+p,
+b,
+em,
+i {
     font-size: 14px;
+}
+
+/**
+layout 
+**/
+
+.flex-fix-auto {
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : center;
+
+    >* {
+        &:first-child {
+            flex-shrink: 0;
+            flex-grow  : 0;
+        }
+
+        &:last-child {
+            flex-shrink: 1;
+            flex-grow  : 1;
+        }
+    }
+}
+
+.flex-auto-fix {
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : center;
+
+    >* {
+        &:first-child {
+            flex-shrink: 1;
+            flex-grow  : 1;
+        }
+
+        &:last-child {
+            flex-shrink: 0;
+            flex-grow  : 0;
+        }
+    }
 }
 
 @keyframes ToggleVisible {
