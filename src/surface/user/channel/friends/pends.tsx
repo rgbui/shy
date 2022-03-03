@@ -44,28 +44,27 @@ export var PendListView = observer(function () {
     React.useEffect(() => {
         load();
     }, [])
-    return <div className="shy-pendlist">
-        <div className="shy-pendlist-search"><Input placeholder="搜索" /></div>
-        <div className="shy-pendlist-head"><span>待处理数{local.total}</span></div>
-        <div className="shy-pendlist-list">
+    return <div className="shy-friends">
+        <div className="shy-friends-search"><Input placeholder="搜索" /></div>
+        <div className="shy-friends-head"><span>待处理数-{local.total}</span></div>
+        <div className="shy-friends-list">
             {local.list.map(r => {
-                return <div key={r.id} className='shy-pendlist-user'>
+                return <div key={r.id} className='shy-friends-user'>
                     {r.userid == surface.user?.id && <><Avatar circle size={40} userid={r.friendId}></Avatar>
                         <span>已发送好友请求</span>
-                        <div className="shy-pendlist-user-operator">
+                        <div className="shy-friends-user-operator">
                             <Icon size={24} wrapper icon={CloseTickSvg} click={e => removeSend(r)}></Icon>
                         </div>
                     </>
                     }
                     {r.friendId == surface.user?.id && <><Avatar circle size={40} userid={r.friendId}></Avatar>
                         <span>来自ta的好友请求</span>
-                        <div className="shy-pendlist-user-operator">
+                        <div className="shy-friends-user-operator">
                             <Icon size={24}  wrapper  icon={CheckSvg} click={e => agree(r)}></Icon>
                         </div>
                     </>}
                 </div>
             })}
         </div>
-
     </div>
 });
