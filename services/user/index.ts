@@ -57,13 +57,16 @@ class UserService extends BaseService {
         return await masterSock.get<{ user: Partial<User> }>('/user/query');
     }
     @patch('/user/patch')
-    async update(data: Partial<User>)
-    {
+    async update(data: Partial<User>) {
         return await masterSock.patch('/user/patch', data);
     }
     @get('/user/basic')
     async getBasic(data: { userid: string }) {
         return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/basic`, data)
+    }
+    @get('/users/basic')
+    async getBasics(data: { ids: string[] }) {
+        return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/users/basic`, data)
     }
     /**
      * 用户直接上传文件，不考虑md5是否有重复

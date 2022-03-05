@@ -184,7 +184,8 @@ push('/phone/sms/code', '{phone:string}', '{ok:boolean,warn:string,data:{success
 push('/phone/check/sign', '{phone:string}', '{ok:boolean,warn:string,data:{sign:boolean}}', ['get'])
 push('/user/query', '', 'SockResponse<{user:Record<string,any>}>', ['get']);
 push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch'])
-push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number, avatar: ResourceArguments, name: string}}>', ['get'])
+push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number,avatar: ResourceArguments, name: string}}>', ['get'])
+push('/users/basic', '{ids:string[]}', 'SockResponse<{list:{id:string,sn:number,avatar: ResourceArguments, name: string}[]}>', ['get']);
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{url:string}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number,rooms:any[]}>', ['get'])
@@ -199,9 +200,9 @@ push('/user/blacklist/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/blacklist/join', '{otherId:string}', 'SockResponse<void>', ['put'])
 push('/friend/is', '{friendId:string}', 'SockResponse<{is:boolean}>', ['get'])
 push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any>}>', ['put'])
-
-
-
+push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
+push('/user/chat/send', '{roomId:string,content?:string,file?:any}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])

@@ -1,4 +1,5 @@
 import { makeObservable, observable, runInAction } from "mobx";
+import { ResourceArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
 
 class UserChannelStore {
@@ -12,10 +13,11 @@ class UserChannelStore {
             mode: observable,
             friends: observable,
             pends: observable,
-            blacklist: observable
+            blacklist: observable,
+            channelMaps: observable,
         });
     }
-    showFriend: boolean = false;
+    showFriend: boolean = true;
     channels: any[] = [];
     rooms: any[] = [];
     currentRoom: any = null;
@@ -27,6 +29,39 @@ class UserChannelStore {
                 this.rooms = r.data.rooms;
                 this.channels = r.data.list;
             })
+        }
+    }
+    async changeRoom(channel, room) {
+        this.showFriend = false;
+        var map = this.channelMaps.get(room.id);
+        console.log(map,'sxx')
+        if (!map) {
+            /**加载数据 */
+           map= await this.loadRoomChats(channel, room);
+        }
+        runInAction(() => {
+            this.currentRoom = room;
+            this.currentChannel = channel;
+            console.log('sss',map)
+        })
+    }
+    channelMaps: Map<string, {
+        channel?: any, users: {
+            id: string;
+            sn: number;
+            avatar: ResourceArguments;
+            name: string;
+        }[], room?: any, seq?: number, chats: any[]
+    }> = new Map();
+    async loadRoomChats(ch: any, room: any) {
+        
+        var r = await channel.get('/user/chat/list', { roomId: room.id });
+        if (r.ok) {
+            var list = r.data.list||[];
+            var users = await channel.get('/users/basic', { ids: room.users.map(u => u.userid) })
+            var data = { channel: ch, room, users: users?.data?.list || [], seq: list.last()?.seq, chats: list };
+            this.channelMaps.set(room.id, data);
+            return data;
         }
     }
     mode: 'online' | 'all' | 'pending' | 'shield' = 'online';

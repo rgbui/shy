@@ -51,4 +51,12 @@ class UserService extends BaseService {
     async deleteUserBlacklist(args) {
         return await masterSock.delete('/user/blacklist/delete', args);
     }
+    @put('/user/chat/send')
+    async putUserChat(args) {
+        return await masterSock.put('/user/chat/send', args);
+    }
+    @get('/user/chat/list')
+    async getChatList(args) {
+        return await masterSock.get('/user/chat/list', args);
+    }
 }
