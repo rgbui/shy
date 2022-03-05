@@ -1,4 +1,4 @@
-import { log } from "../common/log";
+
 
 var HEXCHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_+=!@#$%^&*(){}[]|?/<>,.;:".split("")
 

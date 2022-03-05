@@ -184,8 +184,8 @@ push('/phone/sms/code', '{phone:string}', '{ok:boolean,warn:string,data:{success
 push('/phone/check/sign', '{phone:string}', '{ok:boolean,warn:string,data:{sign:boolean}}', ['get'])
 push('/user/query', '', 'SockResponse<{user:Record<string,any>}>', ['get']);
 push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch'])
-push('/user/basic', '{userid:string}', 'SockResponse<{user:{sn: number,avatar: ResourceArguments, name: string}}>', ['get'])
-push('/users/basic', '{ids:string[]}', 'SockResponse<{list:{id:string,sn:number,avatar: ResourceArguments, name: string}[]}>', ['get']);
+push('/user/basic', '{userid:string}', 'SockResponse<{user:UserBasic}>', ['get'])
+push('/users/basic', '{ids:string[]}', 'SockResponse<{list:UserBasic[]}>', ['get']);
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{url:string}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number,rooms:any[]}>', ['get'])
