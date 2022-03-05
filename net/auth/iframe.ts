@@ -1,14 +1,14 @@
 import lodash from "lodash";
 import { util } from "rich/util/util";
 var ifr: HTMLIFrameElement;
-var isOnloadSuccess: boolean = false;
+var isLoadedIframeSuccess: boolean = false;
 export function createAuthIframe() {
     if (!ifr) {
         ifr = document.createElement('iframe');
         ifr.style.display = 'none';
         ifr.setAttribute('src', AUTH_URL);
         ifr.onload = function () {
-            isOnloadSuccess = true;
+            isLoadedIframeSuccess = true;
             loadSuccessSend();
         }
         document.body.appendChild(ifr);
@@ -30,7 +30,7 @@ export async function send(url: string, args?: any[]) {
     return new Promise((resolve, reject) => {
         try {
             var id = util.guid();
-            if (!isOnloadSuccess) {
+            if (!isLoadedIframeSuccess) {
                 events.push({
                     id,
                     url,
