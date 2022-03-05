@@ -26,7 +26,7 @@ export var UserChannel = observer(function () {
                 if (room.users.length == 2) {
                     var friendId = room.users.find(g => g.userid != surface.user.id)?.userid;
                     return <div key={c.id} onMouseDown={e => userChannelStore.changeRoom(c, room)} className="shy-user-channels-room">
-                        <Avatar circle size={40} userid={friendId}></Avatar>
+                        <Avatar size={32} userid={friendId}></Avatar>
                     </div>
                 }
                 else if (room.users.length > 2) {

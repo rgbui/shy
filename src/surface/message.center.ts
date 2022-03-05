@@ -1,14 +1,6 @@
 
 import { air, get, query } from "rich/net/annotation";
-import { Directive } from "rich/util/bus/directive";
-// import { messageChannel } from "rich/util/bus/event.bus";
-import { surface, Surface } from ".";
-import { CacheKey, yCache } from "../../net/cache";
-import { userTim } from "../../net/primus/tim";
-import { pageItemStore } from "./sln/item/store/sync";
-
-
-// import { workspaceService } from "../../services/workspace";
+import { surface } from ".";
 import { UrlRoute } from "../history";
 
 // export function MessageCenter(surface: Surface) {

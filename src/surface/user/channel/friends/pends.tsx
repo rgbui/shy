@@ -34,14 +34,14 @@ export var PendListView = observer(function () {
         <div className="shy-friends-list">
             {userChannelStore.pends.list.map(r => {
                 return <div key={r.id} className='shy-friends-user'>
-                    {r.userid == surface.user?.id && <><Avatar circle size={40} userid={r.friendId}></Avatar>
+                    {r.userid == surface.user?.id && <><Avatar size={32} userid={r.friendId}></Avatar>
                         <span>已发送好友请求</span>
                         <div className="shy-friends-user-operator">
                             <Icon size={24} wrapper icon={CloseTickSvg} click={e => removeSend(r)}></Icon>
                         </div>
                     </>
                     }
-                    {r.friendId == surface.user?.id && <><Avatar circle size={40} userid={r.friendId}></Avatar>
+                    {r.friendId == surface.user?.id && <><Avatar size={32} userid={r.friendId}></Avatar>
                         <span>来自ta的好友请求</span>
                         <div className="shy-friends-user-operator">
                             <Icon size={24} wrapper icon={CheckSvg} click={e => agree(r)}></Icon>

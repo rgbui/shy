@@ -45,7 +45,7 @@ export var InviteView = observer(function () {
     if (local.loading == true) return <Loading></Loading>
     return <div className="shy-invite">
         <Row align="center">
-            <Avatar size={72} icon={local.ws.icon} text={local.ws.text}> </Avatar>
+            {/* <Avatar size={72} icon={local.ws.icon} text={local.ws.text}> </Avatar> */}
         </Row>
         <Row style={{ margin: '30px 0px' }} align="center">邀请您加入他们的空间</Row>
 

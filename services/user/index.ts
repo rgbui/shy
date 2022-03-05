@@ -6,10 +6,23 @@ import { CacheKey, sCache } from "../../net/cache";
 import { FileMd5 } from "../../src/util/file";
 import { FileType } from "../../type";
 import { SockResponse } from "../../net/sock/type";
-import { ResourceArguments } from "rich/extensions/icon/declare";
 import { act, get, patch, post, put } from "rich/net/annotation";
+import { userNativeStore } from "../../native/store/user";
+import { UserBasic } from "rich/types/user";
+import { MergeSock } from "../../net/util/merge.sock";
 
-
+var batchUserBasic = new MergeSock(async (datas) => {
+    var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, { ids: datas.map(d => d.args) });
+    if (rs?.ok) {
+        return datas.map(d => {
+            return {
+                ok: true,
+                data: { user: rs.data.list.find(g => g.id == d.args) }
+            }
+        })
+    }
+    else return datas.map(d => ({ ok: false, wan: rs.warn }))
+})
 class UserService extends BaseService {
     @put('/phone/sign')
     async phoneSign(data) {
@@ -62,11 +75,19 @@ class UserService extends BaseService {
     }
     @get('/user/basic')
     async getBasic(data: { userid: string }) {
-        return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/user/basic`, data)
+        var r = await userNativeStore.get(data.userid);
+        if (r) return { ok: true, data: { user: r } };
+        var g = await batchUserBasic.inject<SockResponse<{
+            user: UserBasic
+        }, any>>({ args: data.userid });
+        if (g.ok) {
+            await userNativeStore.put(g.data.user);
+        }
+        return g;
     }
     @get('/users/basic')
     async getBasics(data: { ids: string[] }) {
-        return await masterSock.get<{ sn: number, avatar: ResourceArguments, name: string }>(`/users/basic`, data)
+        return await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, data)
     }
     /**
      * 用户直接上传文件，不考虑md5是否有重复
@@ -90,3 +111,5 @@ class UserService extends BaseService {
         }
     }
 }
+
+

@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Icon } from 'rich/component/view/icon';
-import { Directive } from 'rich/util/bus/directive';
 import { PageItem } from '../../sln/item';
 import { surface } from '../..';
 import PageSvg from "../../../assert/svg/page.svg";

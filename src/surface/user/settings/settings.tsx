@@ -3,13 +3,10 @@ import { Button } from 'rich/component/view/button';
 import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input, Textarea } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
-import { Directive } from 'rich/util/bus/directive';
-import { Avatar } from 'rich/component/view/avator/face';
 import { surface } from '../..';
 import { observer } from 'mobx-react';
 import { User } from '../user';
 import { makeObservable, observable } from 'mobx';
-import { chunk } from 'lodash';
 import { channel } from 'rich/net/channel';
 
 
@@ -90,7 +87,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 <Row><h2>个人信息</h2></Row>
                 <Divider></Divider>
                 <Row>
-                    <Col span={12} align='start'><Avatar onClick={e => this.onUploadFace()} size={70} text={surface.user.name} icon={surface.user.avatar}></Avatar></Col>
+                    {/* <Col span={12} align='start'><Avatar onClick={e => this.onUploadFace()} size={70} text={surface.user.name} icon={surface.user.avatar}></Avatar></Col> */}
                     <Col span={12} align='end'><Button onClick={e => this.onUploadFace()}>上传图片</Button></Col>
                 </Row>
                 <Divider></Divider>

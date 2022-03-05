@@ -70,7 +70,7 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
                 <Row><h2>空间设置</h2></Row>
                 <Divider></Divider>
                 <Row>
-                    <Col span={12} align='start'><Avatar onClick={() => this.onUploadFace()} size={70} text={surface.workspace.text} icon={surface.workspace.icon}></Avatar></Col>
+                    {/* <Col span={12} align='start'><Avatar onClick={() => this.onUploadFace()} size={70} text={surface.workspace.text} icon={surface.workspace.icon}></Avatar></Col> */}
                     <Col span={12} align='end'><Button onClick={() => this.onUploadFace()}>上传图片</Button></Col>
                 </Row>
                 <Divider></Divider>

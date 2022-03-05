@@ -32,7 +32,7 @@ class SwitchWorkspace extends EventsComponent {
                 surface.user.onOpenUserSettings(e);
                 this.onClose();
             }}>
-                <Avatar icon={surface.user.avatar} text={surface.user.name}></Avatar>
+                <Avatar userid={surface.user.id}></Avatar>
                 <span>{surface.user.name}</span>
                 <a onMouseDown={e => {
                     e.stopPropagation();
@@ -44,7 +44,7 @@ class SwitchWorkspace extends EventsComponent {
                 {this.list.map(item => {
                     return <div className='shy-ws-item' key={item.id} onMouseDown={e => { surface.workspace.id != item.id && this.onChangeWorkspace(item) }}>
                         <div className='shy-ws-item-drag'><Icon size={12} icon={DragHandle}></Icon></div>
-                        <Avatar text={item.text} icon={item.icon} size={40}></Avatar>
+                        {/* <Avatar text={item.text} icon={item.icon} size={40}></Avatar> */}
                         <div className='shy-ws-item-info'>
                             <div className='shy-ws-item-info-name'>{item.text}</div>
                             <div className='shy-ws-item-info-description'></div>

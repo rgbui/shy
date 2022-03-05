@@ -26,7 +26,7 @@ export var HeadView = observer(function () {
         </div>
         <div className='shy-site-head-user'>
             {surface.user.isSign &&
-                <Link to={ShyUrl.myWorkspace}><Avatar size={40} icon={surface.user.avatar} text={surface.user.name}></Avatar></Link>}
+                <Link to={ShyUrl.myWorkspace}><Avatar size={40} userid={surface.user.id} ></Avatar></Link>}
             {!surface.user.isSign && <Link className="shy-site-head-user-sign" to={ShyUrl.signIn}>注册/登录</Link>}
         </div>
     </div>

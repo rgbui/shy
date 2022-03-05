@@ -7,7 +7,7 @@ import { surface } from "../..";
 
 export var UserProfile = observer(function () {
     return <div className="shy-user-profile">
-        <Avatar icon={surface.user.avatar} text={surface.user.name}></Avatar>
+        <Avatar userid={surface.user.id}></Avatar>
         <div className="shy-user-profile-operators">
             <Icon icon={SettingsSvg}></Icon>
         </div>

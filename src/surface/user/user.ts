@@ -2,17 +2,11 @@ import lodash from "lodash";
 import { makeObservable, observable } from "mobx";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
+import { UserStatus } from "rich/types/user";
 import { util } from "rich/util/util";
 import { useOpenUserSettings } from "./settings";
 
-export enum UserStatus {
-    online = 'online',
-    busy = 'busy',
-    idle = 'idle',
-    hidden = 'hidden'
-}
 export class User {
-
     public id: string = null;
     public sn: number = null;
     public createDate: Date = null;
@@ -36,7 +30,6 @@ export class User {
     public inviteCode: string = null;
     public usedInviteCode: string = null;
     public config: object = null;
-    public wsList: any[] = null;
     public status: UserStatus = null;
     public online: boolean = null
     constructor() {
@@ -50,7 +43,6 @@ export class User {
             avatar: observable,
             email: observable,
             slogan: observable,
-            wsList: observable,
             config: observable,
             inviteCode: observable,
             checkEmail: observable,
