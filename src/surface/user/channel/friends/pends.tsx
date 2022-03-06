@@ -1,4 +1,4 @@
-import { runInAction } from "mobx";
+import { runInAction, toJS } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import { Avatar } from "rich/component/view/avator/face";
 import { channel } from "rich/net/channel";
@@ -34,7 +34,7 @@ export var PendListView = observer(function () {
         <div className="shy-friends-list">
             {userChannelStore.pends.list.map(r => {
                 return <div key={r.id} className='shy-friends-user'>
-                    {r.userid == surface.user?.id && <><Avatar size={32} userid={r.friendId}></Avatar>
+                    {r.userid == surface.user?.id && <><Avatar  showName  size={32} userid={r.friendId}></Avatar>
                         <span>已发送好友请求</span>
                         <div className="shy-friends-user-operator">
                             <Icon size={24} wrapper icon={CloseTickSvg} click={e => removeSend(r)}></Icon>

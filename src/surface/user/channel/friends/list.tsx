@@ -22,7 +22,7 @@ export var FrendListView = observer(function () {
         <div className="shy-friends-head"><span>好友-{userChannelStore.friends.total}</span></div>
         <div className="shy-friends-list">{userChannelStore.friends.list.map(r => {
             return <div key={r.id} className='shy-friends-user' onMouseDown={e => joinChannel(r)}>
-                <Avatar size={32} userid={r.friendId}></Avatar>
+                <Avatar size={32} showName userid={r.friendId}></Avatar>
                 <div className="shy-friends-operator" >
                     <Icon wrapper icon={CommentSvg}></Icon>
                 </div>

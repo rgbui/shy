@@ -4,6 +4,7 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
 import { UserStatus } from "rich/types/user";
 import { util } from "rich/util/util";
+import { UrlRoute, ShyUrl } from "../../history";
 import { useOpenUserSettings } from "./settings";
 
 export class User {
@@ -74,5 +75,8 @@ export class User {
     }
     syncUserInfo(userInfo: Record<string, any>) {
         lodash.assign(this, userInfo);
+    }
+    async toSign() {
+        UrlRoute.push(ShyUrl.signIn);
     }
 }

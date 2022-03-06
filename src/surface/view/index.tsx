@@ -19,6 +19,9 @@ export var ViewSurface = observer(function () {
         }
     });
     async function load() {
+        if (!surface.user.isSign) {
+            return surface.user.toSign()
+        }
         local.loading = true;
         try {
             var width = await yCache.get<number>(CacheKey.slideWidth);

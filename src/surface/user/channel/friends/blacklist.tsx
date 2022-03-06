@@ -13,7 +13,7 @@ export var BlackListView = observer(function () {
         <div className="shy-friends-list"> {
             userChannelStore.blacklist.list.map(r => {
                 return <div className='shy-friends-user' key={r.id}>
-                    <Avatar  size={32} userid={r.otherId}></Avatar>
+                    <Avatar showName size={32} userid={r.otherId}></Avatar>
                     <div className="shy-blacklist-operator"></div>
                 </div>
             })

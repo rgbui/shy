@@ -10,9 +10,10 @@ import { act, get, patch, post, put } from "rich/net/annotation";
 import { userNativeStore } from "../../native/store/user";
 import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";
+import lodash from "lodash";
 
 var batchUserBasic = new MergeSock(async (datas) => {
-    var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, { ids: datas.map(d => d.args) });
+    var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, { ids: lodash.uniq(datas.map(d => d.args)) });
     if (rs?.ok) {
         return datas.map(d => {
             return {
@@ -75,6 +76,7 @@ class UserService extends BaseService {
     }
     @get('/user/basic')
     async getBasic(data: { userid: string }) {
+        if (!data.userid) return { ok: false };
         var r = await userNativeStore.get(data.userid);
         if (r) return { ok: true, data: { user: r } };
         var g = await batchUserBasic.inject<SockResponse<{
