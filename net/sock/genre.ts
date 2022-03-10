@@ -14,16 +14,16 @@
         }
         else if (typeof json == 'object') {
             for (let m in json) {
-                if (m.endsWith('<Date>')) {
-                    json[m.replace('<Date>', '')] = new Date(json[m]);
+                if (m.endsWith('<d>')) {
+                    json[m.replace('<d>', '')] = new Date(json[m]);
                     delete json[m];
                 }
-                else if (m.endsWith('<Function>')) {
-                    json[m.replace('<Function>', '')] = eval('(' + json[m] + ')')
+                else if (m.endsWith('<f>')) {
+                    json[m.replace('<f>', '')] = eval('(' + json[m] + ')')
                     delete json[m];
                 }
-                else if (m.endsWith("<Regex>")) {
-                    json[m.replace('<Regex>', '')] = new RegExp(json[m]);
+                else if (m.endsWith("<r>")) {
+                    json[m.replace('<r>', '')] = new RegExp(json[m]);
                     delete json[m];
                 }
                 else if (Array.isArray(json[m])) {
@@ -45,15 +45,15 @@
         else if (typeof json == 'object') {
             for (let m in json) {
                 if (json[m] instanceof Date) {
-                    json[m + "<Date>"] = json[m].getTime();
+                    json[m + "<d>"] = json[m].getTime();
                     delete json[m];
                 }
                 else if (typeof json[m] == 'function') {
-                    json[m + "<Function>"] = json[m].toString();
+                    json[m + "<f>"] = json[m].toString();
                     delete json[m];
                 }
                 else if (json[m] instanceof RegExp) {
-                    json[m + "<Regex>"] = json[m].toString();
+                    json[m + "<r>"] = json[m].toString();
                     delete json[m];
                 }
                 else if (Array.isArray(json[m])) {
