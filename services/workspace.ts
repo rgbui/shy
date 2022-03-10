@@ -35,7 +35,7 @@ class WorkspaceService extends BaseService {
     @patch('/ws/patch')
     async update(data: { wsId?: string, sockId?: string, data: Record<string, any> }) {
         data.wsId = surface.workspace.id;
-        data.sockId = timService.tim.id;
+        data.sockId = timService.sockId;
         return await masterSock.patch('/ws/patch', data)
     }
     @get('/user/wss')

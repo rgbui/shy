@@ -47,7 +47,7 @@ class PageItemStore {
             wsId,
             operate,
             schema: 'PageItem',
-            sockId: timService.tim.id
+            sockId: timService.sockId
         })
     }
     public async deletePageItem(pageItem: PageItem) {

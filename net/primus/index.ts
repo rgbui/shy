@@ -1,36 +1,45 @@
-import { Workspace } from "../../src/surface/workspace";
+
 import { sCache, CacheKey } from "../cache";
+import { masterSock } from "../sock";
 import { HttpMethod } from "./http";
 import { Tim } from "./tim";
 
 class TimService {
-    constructor() {
+    private tim: Tim;
+    get sockId() {
+        return this.tim.id;
+    }
+    async open() {
+        var url = await sCache.get(CacheKey.timUrl);
+        if (!url) {
+            var ms = await masterSock.get<{ url: string }, string>('/pid/provider/tim');
+            if (ms.ok) {
+                url = ms.data.url;
+                await sCache.set(CacheKey.timUrl, url);
+            }
+        }
+        var self = this;
+        this.tim = new Tim();
 
-    }
-    workspaceId: string;
-    tim: Tim;
-    async enter(workspace: Workspace) {
-        if (this.workspaceId == workspace.id && this.tim?.isConncted) return;
-        if (this.tim?.isConncted && this.workspaceId != workspace.id) {
-            await this.leave();
-        }
-        this.workspaceId = workspace.id;
-        if (!(this.tim?.isConncted && this.tim?.url == workspace.pidUrl)) {
-            this.tim = new Tim();
-            await this.tim.load(workspace.pidUrl);
-        }
+        await this.tim.load(url);
         var data = await this.getHeads();
-        data.workspaceId = workspace.id;
         data.sockId = this.tim.id;
-        this.tim.send(HttpMethod.post, '/workspace/enter', data);
-    }
-    async leave() {
-        if (this.tim?.isConncted && this.workspaceId) {
-            // var data = await this.getHeads();
-            // data.workspaceId = this.workspaceId;
-            // data.sockId = this.tim.id;
-            this.tim.send(HttpMethod.post, '/workspace/leave', {});
+        await this.tim.syncSend(HttpMethod.post, '/user/online', data);
+        this.tim.reconnected = async function () {
+            data = await self.getHeads();
+            data.sockId = self.tim.id;
+            if (self.workspaceId) data.workspaceId = self.workspaceId;
+            self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
         }
+    }
+    private workspaceId: string;
+    async enterWorkspace(workspaceId: string) {
+        this.workspaceId = workspaceId;
+        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', { workspaceId });
+    }
+    async leaveWorkspace() {
+        delete this.workspaceId;
+        await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
     }
     /**
      * 激活

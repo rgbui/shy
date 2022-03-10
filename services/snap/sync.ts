@@ -25,7 +25,7 @@ export class SnapSync {
         }>('/view/operate', {
             elementUrl: this.elementUrl,
             wsId: surface.workspace.id,
-            sockId: timService.tim.id,
+            sockId: timService.sockId,
             operate: operate,
         });
         if (r.ok) {
@@ -63,14 +63,14 @@ export class SnapSync {
             var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
                 elementUrl: this.elementUrl,
                 wsId: surface.workspace.id,
-                sockId: timService.tim.id,
+                sockId: timService.sockId,
                 seq: this.localViewSnap.seq
             });
             if (tryLocker.ok && tryLocker.data.lock == true) {
                 var r = await surface.workspace.sock.put('/view/snap', {
                     elementUrl: this.elementUrl,
                     wsId: surface.workspace.id,
-                    sockId: timService.tim.id,
+                    sockId: timService.sockId,
                     seq: this.localViewSnap.seq,
                     content: this.localViewSnap.content
                 })

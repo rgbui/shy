@@ -24,7 +24,7 @@ class SchemaService {
             wsId: surface.workspace.id,
             operate: args.operate,
             schema: 'DataGridSchema',
-            sockId: timService.tim.id
+            sockId: timService.sockId
         })
     }
     @get('/schema/list')

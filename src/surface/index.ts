@@ -38,6 +38,7 @@ export class Surface extends Events {
         if (r.ok) {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
+            await timService.open();
         }
     }
     async loadWorkspaceList() {
@@ -55,7 +56,7 @@ export class Surface extends Events {
             ws.load({ ...r.data.workspace });
             this.workspace = ws;
             await ws.loadPages();
-            await timService.enter(this.workspace);
+            await timService.enterWorkspace(this.workspace.id);
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
             var page = await ws.getDefaultPage();
             this.sln.onMousedownItem(page);
@@ -77,7 +78,6 @@ export class Surface extends Events {
         }
         return sn || domain || wsId;
     }
-
     async onChangeWorkspace(workspace: Partial<Workspace>) {
         if (workspace.id != this.workspace.id) {
             await this.loadWorkspace(workspace.id);

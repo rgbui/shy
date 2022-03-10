@@ -11,12 +11,21 @@ export class Tim {
     private primus;
     id: string;
     url: string;
+    reconnected: () => void;
+    session: {
+        userid: string,
+        tokenId: string,
+        deviceId: string,
+        workspaceId: string
+    } = null;
     async load(url: string) {
         this.url = url;
         var self = this;
         this.id = config.guid();
         var Primus = await loadPrimus();
-        var primus = new Primus(url, {});
+        var primus = new Primus(url, {
+            // pingTimeout: 30000 * 4
+        });
         this.primus = primus;
         primus.on('data', function message(data) {
             try {
@@ -43,6 +52,10 @@ export class Tim {
             catch (ex) {
                 log.error(ex);
             }
+        });
+        primus.on('reconnected', function (opts) {
+            if (typeof self.reconnected == 'function') self.reconnected();
+            console.log('It took %d ms to reconnect', opts.duration);
         });
         primus.on('reconnect', function (opts) {
             console.log('It took %d ms to reconnect', opts.duration);
