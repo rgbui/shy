@@ -1,0 +1,23 @@
+.shy-user-profile {
+    display         : flex;
+    justify-content : flex-start;
+    align-items     : center;
+    background-color: var(--background-secondary-alt);
+    height          : 52px;
+    font-size       : 14px;
+    font-weight     : 500;
+    padding:0px 10px;
+
+    .shy-avatar {
+        flex-grow  : 0;
+        flex-shrink: 0;
+    }
+
+    &-operators {
+        flex-grow      : 1;
+        flex-shrink    : 1;
+        display        : flex;
+        justify-content: flex-end;
+        align-items    : center;
+    }
+}
