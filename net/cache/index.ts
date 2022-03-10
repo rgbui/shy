@@ -12,7 +12,8 @@ export enum CacheKey {
     ws_open_page_id = 4,
     lang = 5,
     ws_toggle_pages = 6,
-    slideWidth = 7
+    slideWidth = 7,
+    timUrl=8
 }
 const FLAG = 'shy.';
 class SyCache {
