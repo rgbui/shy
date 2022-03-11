@@ -14,7 +14,7 @@ class UserChannelStore {
             friends: observable,
             pends: observable,
             blacklist: observable,
-            channelMaps: observable,
+            roomChats: observable,
         });
     }
     showFriend: boolean = true;
@@ -22,6 +22,7 @@ class UserChannelStore {
     rooms: any[] = [];
     currentRoom: any = null;
     currentChannel: any = null;
+    currentChats: any[] = null;
     async loadChannels() {
         var r = await channel.get('/user/channels', { page: 1, size: 200 });
         if (r.ok) {
@@ -33,20 +34,19 @@ class UserChannelStore {
     }
     async changeRoom(channel, room) {
         this.showFriend = false;
-        var map = this.channelMaps.get(room.id);
-        console.log(map,'sxx')
+        var map = this.roomChats.get(room.id);
         if (!map) {
             /**加载数据 */
-           map= await this.loadRoomChats(channel, room);
+            map = await this.loadRoomChats(channel, room);
         }
         runInAction(() => {
             this.currentRoom = room;
-            this.currentChannel = channel;
-            console.log('sss',map)
+            this.currentChannel = channel
         })
     }
-    channelMaps: Map<string, {
-        channel?: any, users: {
+    roomChats: Map<string, {
+        channel?: any,
+        users: {
             id: string;
             sn: number;
             avatar: ResourceArguments;
@@ -54,13 +54,12 @@ class UserChannelStore {
         }[], room?: any, seq?: number, chats: any[]
     }> = new Map();
     async loadRoomChats(ch: any, room: any) {
-        
         var r = await channel.get('/user/chat/list', { roomId: room.id });
         if (r.ok) {
-            var list = r.data.list||[];
+            var list = r.data.list || [];
             var users = await channel.get('/users/basic', { ids: room.users.map(u => u.userid) })
-            var data = { channel: ch, room, users: users?.data?.list || [], seq: list.last()?.seq, chats: list };
-            this.channelMaps.set(room.id, data);
+            var data = { channel: ch, room, users: users?.data?.list || [], seq: list.last()?.seq, chats: list } as any;
+            this.roomChats.set(room.id, data);
             return data;
         }
     }
@@ -84,6 +83,13 @@ class UserChannelStore {
         var r = await channel.get('/user/blacklist', { page: this.blacklist.page, size: this.blacklist.size });
         if (r.ok) {
             this.blacklist = r.data;
+        }
+    }
+    async notifyChat(data) {
+        var cm = this.roomChats.get(data.roomId);
+        if (cm) {
+            if (!Array.isArray(cm.chats)) cm.chats = [];
+            cm.chats.push(data);
         }
     }
 }
