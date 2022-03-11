@@ -1,9 +1,9 @@
 import React from "react";
 import { ShyUrl, UrlRoute } from "../../../history";
 import { surface } from "../..";
-import { userTim } from "../../../../net/primus/tim";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
+import { timService } from "../../../../net/primus";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;
@@ -13,7 +13,7 @@ export class LogOut extends React.Component {
             if (r.ok) {
                 surface.user = new User();
                 surface.workspace = null;
-                userTim.close();
+               timService.close();
                 UrlRoute.push(ShyUrl.root);
             }
         }

@@ -11,6 +11,7 @@ import { config } from "../common/config";
 import { timService } from "../../net/primus";
 import { channel } from "rich/net/channel";
 import "./message.center";
+import { userChannelStore } from "./user/channel/store";
 
 export class Surface extends Events {
     constructor() {
@@ -39,6 +40,7 @@ export class Surface extends Events {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
             await timService.open();
+            timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
         }
     }
     async loadWorkspaceList() {

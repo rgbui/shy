@@ -3,8 +3,8 @@
   "version": "0.6.539-pro",
   "description": "https://shy.live",
   "main": "index.js",
-  "scripts": { 
-    "build-api":"node scripts/api.js",
+  "scripts": {
+    "build-api": "node scripts/api.js",
     "pro": "webpack --config scripts/config.js  --pro",
     "beta": "webpack --config scripts/config.js  --beta",
     "dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  "
@@ -50,6 +50,7 @@
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^6.2.0",
     "cssnano": "^5.0.8",
+    "dayjs": "^1.10.8",
     "eslint": "^7.19.0",
     "eslint-plugin-react": "^7.22.0",
     "file-loader": "^6.2.0",

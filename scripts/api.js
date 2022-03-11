@@ -74,15 +74,12 @@ function build(fileName) {
     })
 
     fs.writeFileSync(fileName, `
-import { Field } from "../blocks/data-grid/schema/field";
 import { TableSchema } from "../blocks/data-grid/schema/meta";
-import { FieldType } from "../blocks/data-grid/schema/type";
 import { LinkPageItem } from "../extensions/at/declare";
-import { IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
-import { User } from "../src/types/user";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
+import { UserBasic } from "../types/user";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -152,7 +149,7 @@ push('/page/open', `{item:string|{id:string}}`, `void`, ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
-push('/query/current/user', '', 'User', ['query']);
+push('/query/current/user', '', 'UserBasic', ['query']);
 
 
 push('/schema/create', '{text:string,url:string,templateId?:string}', '{ ok: boolean, data: { schema:Partial<TableSchema> },warn:string }', ['put', 'workspace', 'rich']);
@@ -201,7 +198,7 @@ push('/blacklist/join', '{otherId:string}', 'SockResponse<void>', ['put'])
 push('/friend/is', '{friendId:string}', 'SockResponse<{is:boolean}>', ['get'])
 push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any>}>', ['put'])
 push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
-push('/user/chat/send', '{roomId:string,content?:string,file?:any}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])

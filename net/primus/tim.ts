@@ -24,7 +24,7 @@ export class Tim {
         this.id = config.guid();
         var Primus = await loadPrimus();
         var primus = new Primus(url, {
-            // pingTimeout: 30000 * 4
+            pingTimeout: 30000 * 4
         });
         this.primus = primus;
         primus.on('data', function message(data) {
@@ -37,11 +37,11 @@ export class Tim {
                     }
                 }
                 else {
-                    var d = data.data;
-                    var ses = self.events.findAll(g => g.url == d.url);
+                    var d = json.data;
+                    var ses = self.events.findAll(g => g.url == json.url);
                     for (let i = 0; i < ses.length; i++) {
                         try {
-                            ses[i].fn(d.data);
+                            ses[i].fn(d);
                         }
                         catch (ex) {
 
@@ -232,4 +232,4 @@ export class Tim {
         else this.events.removeAll(e => e.url == url);
     }
 }
-export var userTim = new Tim();
+

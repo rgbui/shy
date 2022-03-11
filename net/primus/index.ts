@@ -5,7 +5,7 @@ import { HttpMethod } from "./http";
 import { Tim } from "./tim";
 
 class TimService {
-    private tim: Tim;
+    tim: Tim;
     get sockId() {
         return this.tim.id;
     }
