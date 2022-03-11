@@ -8,8 +8,7 @@ import { userChannelStore } from "../store";
 import dayjs from "dayjs";
 import "./style.less";
 import { timService } from "../../../../../net/primus";
-export var CommunicateView = observer(function ()
-{
+export var CommunicateView = observer(function () {
     var cm = userChannelStore.currentRoom ? userChannelStore.roomChats.get(userChannelStore.currentRoom.id) : undefined;
     var currentUser = cm ? cm.users.find(g => g.id != cm.channel.userid) : undefined;
     function popOpen(cs: { char: string, span: HTMLElement }) {
@@ -45,11 +44,15 @@ export var CommunicateView = observer(function ()
             </div>
         })
     }
-
-
+    var contentEl = React.useRef<HTMLElement>(null);
+    React.useEffect(() => {
+        if (contentEl.current) {
+            contentEl.current.scrollTop = contentEl.current.scrollHeight;
+        }
+    })
     return <div className="shy-user-channel-communicate">
         <div className="shy-user-channel-communicate-head"><span>@{currentUser?.name}</span></div>
-        <div className="shy-user-channel-communicate-content">{renderChats()}</div>
+        <div className="shy-user-channel-communicate-content" ref={e => contentEl.current = e}>{renderChats()}</div>
         <div className="shy-user-channel-communicate-input">
             <RichTextInput popOpen={popOpen} onInput={onInput}></RichTextInput>
         </div>
