@@ -1,6 +1,8 @@
+import lodash from "lodash";
 import { makeObservable, observable, runInAction } from "mobx";
 import { ResourceArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
+import { UserBasic } from "rich/types/user";
 
 class UserChannelStore {
     constructor() {
@@ -42,6 +44,38 @@ class UserChannelStore {
         runInAction(() => {
             this.currentRoom = room;
             this.currentChannel = channel
+        })
+    }
+    async openUserChannel(user: UserBasic) {
+        var room = this.rooms.find(g => g.users.some(s => s.userid == user.id) && g.users.length == 2);
+        if (room) {
+            var ch = this.channels.find(c => c.roomId == room.id);
+            if (ch) {
+                ch.activeDate = new Date();
+                await channel.patch('/user/channel/active', { id: ch.id });
+                await this.sortChannels()
+                await this.changeRoom(ch, room);
+                return;
+            }
+        }
+        var r = await channel.put('/user/channel/join', { userids: [user.id] });
+        if (r.ok) {
+            if (!this.channels.some(s => s.id == r.data.channel.id)) this.channels.push(r.data.channel)
+            if (!this.rooms.some(s => s.id == r.data.room.id)) this.rooms.push(r.data.room);
+            await this.sortChannels()
+            await this.changeRoom(r.data.channel, r.data.room);
+        }
+    }
+    async sortChannels() {
+        var cs = lodash.sortBy(this.channels, 'lastDate');
+        cs.reverse();
+        this.channels = cs;
+    }
+    async openFriends() {
+        runInAction(() => {
+            this.showFriend = true;
+            this.changeRoom = null;
+            this.currentChannel = null;
         })
     }
     roomChats: Map<string, {

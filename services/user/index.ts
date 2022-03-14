@@ -74,6 +74,10 @@ class UserService extends BaseService {
     async update(data: Partial<User>) {
         return await masterSock.patch('/user/patch', data);
     }
+    @patch('/user/patch/status')
+    async userPatchStatus(args: Record<string, any>) {
+        return await masterSock.patch('/user/patch/status', args);
+    }
     @get('/user/basic')
     async getBasic(data: { userid: string }) {
         if (!data.userid) return { ok: false };

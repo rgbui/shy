@@ -7,7 +7,7 @@ import { CacheKey, yCache } from "../../../net/cache";
 import { SideBar } from "./sidebar";
 import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
-import { UserChannel } from "../user/channel";
+import { UserChannel } from "../user/channel/view";
 
 export var ViewSurface = observer(function () {
     var local = useLocalObservable(() => {
@@ -74,7 +74,7 @@ export var ViewSurface = observer(function () {
     if (local.loading) return <div className='shy-surface-loading'><Loading /></div>
     else {
         if (surface.workspace) {
-            return <div className='shy-surface theme-light'>
+            return <div className='shy-surface'>
                 {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
                 {!surface.showUserChannel && <><div
                     onMouseLeave={mouseleave}

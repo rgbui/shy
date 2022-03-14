@@ -1,4 +1,4 @@
-import { del, get, put } from "rich/net/annotation";
+import { del, get, patch, put } from "rich/net/annotation";
 import { masterSock } from "../../net/sock";
 import { BaseService } from "../common/base";
 
@@ -58,5 +58,22 @@ class UserService extends BaseService {
     @get('/user/chat/list')
     async getChatList(args) {
         return await masterSock.get('/user/chat/list', args);
+    }
+    @get('/search/friends')
+    async searchFriends(args) {
+        return await masterSock.get('/search/friends', args);
+    }
+    @get('/search/friends/pending')
+    async searchFriendsPending(args) {
+        return await masterSock.get('/search/friends/pending', args);
+    }
+    @get('/search/blacklist')
+    async searchBloacklist(args) {
+        return await masterSock.get('/search/blacklist', args);
+    }
+    @patch('/user/channel/active')
+    async patchChannel(args) {
+        console.log(args,'args');
+        return await masterSock.patch('/user/channel/active', args);
     }
 }

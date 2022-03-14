@@ -14,12 +14,12 @@ class UserStore {
         });
         return us;
     }
-    async put(user: UserBasic) {
+    async put(user: Partial<UserBasic>) {
         var r = await this.get(user.id);
         if (r) {
             Object.assign(r, user);
         }
-        else this.ms.set(user.id, user);
+        else this.ms.set(user.id, user as any);
     }
 }
 

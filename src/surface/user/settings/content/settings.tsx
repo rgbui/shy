@@ -3,12 +3,11 @@ import { Button } from 'rich/component/view/button';
 import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input, Textarea } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
-import { surface } from '../..';
+import { surface } from '../../..';
 import { observer } from 'mobx-react';
-import { User } from '../user';
+import { User } from '../../user';
 import { makeObservable, observable } from 'mobx';
 import { channel } from 'rich/net/channel';
-
 
 @observer
 export class UserSettingsView extends React.Component<{ close?: () => void }> {
@@ -87,8 +86,13 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                 <Row><h2>个人信息</h2></Row>
                 <Divider></Divider>
                 <Row>
-                    {/* <Col span={12} align='start'><Avatar onClick={e => this.onUploadFace()} size={70} text={surface.user.name} icon={surface.user.avatar}></Avatar></Col> */}
-                    <Col span={12} align='end'><Button onClick={e => this.onUploadFace()}>上传图片</Button></Col>
+                    <Col span={12} align='start'>
+                        <div className='shy-settings-user-avatar'>
+                            {surface.user?.avatar && <img src={surface.user.avatar.url} />}
+                            {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
+                        </div>
+                    </Col>
+                    <Col span={12} align='end'><Button onClick={e => this.onUploadFace()}>上传头像</Button></Col>
                 </Row>
                 <Divider></Divider>
                 <Row>
@@ -112,26 +116,26 @@ export class UserSettingsView extends React.Component<{ close?: () => void }> {
                         <span>{this.data.phone}</span>
                         {!this.data.checkPhone && <label>未验证</label>}
                     </div></Col>}
-                    {/* <Col align='end'><Button onClick={e => this.openUpdatePhone()}>{this.data.phone ? '更改手机号' : '设置手机号'}</Button></Col> */}
+                    <Col align='end'><Button onClick={e => this.openUpdatePhone()}>{this.data.phone ? '更改手机号' : '设置手机号'}</Button></Col>
                 </Row>
                 <Divider></Divider>
-                {/*<Row>
+                <Row>
                     <Col><h5>邮箱</h5></Col>
                     <Col><label>未验证</label></Col>
-                    <Col><span>{surface.user.email}</span></Col><Col>
-                        <Button>发送验证邮箱</Button>
+                    {surface.user.email && <><Col><span>{surface.user.email}</span></Col><Col>
+                        {!surface.user.checkEmail && <Button ghost>发送验证邮箱</Button>}
                         <Button>更改邮箱</Button>
-                    </Col>
+                    </Col></>}
                 </Row>
-                <Divider></Divider>*/}
-                {/* <Row>
+                <Divider></Divider>
+                <Row>
                     <Col><h5>密码</h5></Col>
                     <Col> <label>未设置</label></Col>
                     <Col><span>{surface.user.email}</span></Col>
                     <Col>
                         <Button>更换密码</Button>
                     </Col>
-                </Row> */}
+                </Row>
             </div>
             <div className='shy-settings-content-form-footer'>
                 <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()} ghost >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>

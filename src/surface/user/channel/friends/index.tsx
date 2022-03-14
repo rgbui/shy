@@ -1,5 +1,5 @@
 
-import { observer, useLocalObservable } from "mobx-react";
+import { observer } from "mobx-react";
 import React from "react";
 import { Button } from "rich/component/view/button";
 import { Icon } from "rich/component/view/icon";
@@ -10,8 +10,8 @@ import { userChannelStore } from "../store";
 import { BlackListView } from "./blacklist";
 import { FrendListView } from "./list";
 import { PendListView } from "./pends";
+import "./style.less";
 export var FriendsView = observer(function () {
-  
     function setMode(mode: string) {
         userChannelStore.mode = mode as any;
     }

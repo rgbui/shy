@@ -1,0 +1,146 @@
+.shy-user-channel {
+    flex-grow      : 1;
+    flex-shrink    : 1;
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : stretch;
+    overflow       : hidden;
+
+    &-slide {
+        width           : 240px;
+        flex-grow       : 0;
+        flex-shrink     : 0;
+        background-color: var(--background-secondary);
+        display         : flex;
+        flex-direction  : column;
+        justify-content : flex-start;
+        align-items     : stretch;
+
+        &-head {
+            flex-grow      : 0;
+            flex-shrink    : 0;
+            height         : 48px;
+            box-shadow     : var(--elevation-low);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+
+            &-search {
+                width           : 220px;
+                overflow        : hidden;
+                border-radius   : 4px;
+                background-color: var(--background-tertiary);
+                position        : relative;
+
+            }
+        }
+
+        .shy-user-friends {
+            flex-grow      : 0;
+            flex-shrink    : 0;
+            border-radius  : 4px;
+            height         : 42px;
+            padding        : 0 8px;
+            margin         : 8px;
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+
+            >span {
+                font-size  : 16px;
+                display    : inline-block;
+                margin-left: 10px;
+            }
+
+            &:hover,
+            &.hover {
+                color           : var(--interactive-hover);
+                background-color: var(--background-modifier-hover);
+            }
+        }
+
+        .shy-user-channels {
+            flex-grow  : 1;
+            flex-shrink: 1;
+        }
+    }
+
+    &-content {
+        flex-grow  : 1;
+        flex-shrink: 1;
+    }
+}
+
+
+.shy-user-channel-search-drops {
+    position     : absolute;
+    top          : 40px;
+    left         : calc(72px + 10px);
+    width        : 250px;
+    padding      : 10px;
+    box-sizing   : border-box;
+    background   : #fff;
+    min-height   : 30px;
+    border-radius: 4px;
+    box-shadow   : 0 0 0 1px rgba(185, 187, 190, .3), 0 2px 10px 0 rgba(0, 0, 0, .1);
+    &-user {
+        min-height: 40px;
+    }
+}
+
+.shy-user-channels {
+    display        : flex;
+    flex-direction : column;
+    justify-content: flex-start;
+    align-items    : stretch;
+    height         : 100%;
+
+    &-head {
+        height         : 48px;
+        flex-grow      : 0;
+        flex-shrink    : 0;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+        color          : var(--channels-default);
+        box-sizing     : border-box;
+        text-overflow  : ellipsis;
+        white-space    : nowrap;
+        overflow       : hidden;
+        text-transform : uppercase;
+        font-size      : 12px;
+        line-height    : 16px;
+        padding        : 0px 10px;
+
+        >span {
+            flex-shrink: 1;
+            flex-grow  : 1;
+        }
+
+        >.shy-icon {
+            width      : 20px;
+            height     : 20px;
+            flex-shrink: 0;
+            flex-shrink: 0;
+        }
+    }
+
+    &-room {
+        height         : 42px;
+        margin         : 0px 10px;
+        padding        : 0px 10px;
+        border-radius  : 4px;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+
+        &:hover {
+            color           : var(--interactive-hover);
+            background-color: var(--background-modifier-hover);
+        }
+
+        &.hover {
+            background-color: var(--background-modifier-selected);
+        }
+    }
+}

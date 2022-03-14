@@ -27,6 +27,7 @@ configure({ enforceActions: 'never' })
 //   });
 // }
 // render react DOM
+document.body.classList.add('theme-light');
 ReactDOM.render(
   <App />,
   document.body.appendChild(document.createElement('div')),

@@ -1,52 +1,70 @@
 import React from 'react';
-import { PopoverSingleton } from 'rich/extensions/popover/popover';
 import { EventsComponent } from 'rich/component/lib/events.component';
-import { UserSettingsView } from './settings';
+import { UserSettingsView } from './content/settings';
 import "./style.less";
 import { Button } from 'rich/component/view/button';
 import { SyHistory } from '../../../history';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
-
+import { Singleton } from 'rich/component/lib/Singleton';
+import { Divider } from 'rich/component/view/grid';
+import { Remark } from 'rich/component/view/text';
+import { config } from "../../../common/config";
 @observer
 class UserSettings extends EventsComponent {
     constructor(props) {
         super(props);
-        makeObservable(this, { mode: observable })
+        makeObservable(this, { visible: observable, mode: observable })
     }
-    mode: 'user-settings' = 'user-settings';
-    setMode(mode: UserSettings['mode']) {
-        this.mode = mode;
+    visible: boolean = false;
+    mode: string = 'user-settings';
+    open() {
+        this.visible = true;
     }
-    onClose() {
-        this.emit('close');
+    close() {
+        this.visible = false;
+    }
+    singout() {
+        SyHistory.push('/sign/out');
+        this.close()
     }
     render() {
-        var self = this;
-        function singout() {
-            SyHistory.push('/sign/out');
-            self.onClose()
-        }
+        if (this.visible == false) return <div style={{ display: 'none' }}></div>
         return <div className='shy-settings'>
             <div className='shy-settings-slide'>
-                <h4>用户中心</h4>
-                <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} ><span>基本信息</span></a>
-                {/*<a><span>账户钱包</span></a> */}
-                <div style={{ textAlign: 'center', marginTop: 360 }}>
-                    <Button ghost onClick={e => singout()}>退出登录</Button>
+                <div>
+                    <h4>用户设置</h4>
+                    <a onMouseDown={e => this.mode = 'user-settings'} className={this.mode == 'user-settings' ? "hover" : ""} >我的帐号</a>
+                    <a onMouseDown={e => this.mode = 'user-profile'} className={this.mode == 'user-profile' ? "hover" : ""} >用户个人资料</a>
+                    <a onMouseDown={e => this.mode = 'user-safe'} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a>
+                    <Divider style={{ margin: '0px 15px' }}></Divider>
+                    <h4>帐单设置</h4>
+                    <a>充值</a>
+                    <a>帐单</a>
+                    <Divider style={{ margin: '0px 15px' }}></Divider>
+                    <h4>APP设置</h4>
+                    <a>外观</a>
+                    <a>语言</a>
+                    <Divider style={{ margin: '0px 15px' }}></Divider>
+                    <a>更新日志</a>
+                    <Remark style={{ marginLeft: 15 }}>v{config.version}</Remark>
+                    <Divider style={{ margin: '0px 15px' }}></Divider>
+                    <a className='warn' onClick={e => this.singout()}> 退出登录</a>
                 </div>
             </div>
             <div className='shy-settings-content'>
-                {this.mode == 'user-settings' && <UserSettingsView close={() => this.onClose()}></UserSettingsView>}
+                <div>
+                    {this.mode == 'user-settings' && <UserSettingsView ></UserSettingsView>}
+                </div>
+            </div>
+            <div className='shy-settings-operators'>
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
             </div>
         </div>
     }
 }
 
 export async function useOpenUserSettings() {
-    var popover = await PopoverSingleton(UserSettings, { mask: true, shadow: true });
-    var us = await popover.open({ center: true });
-    us.only('close', () => {
-        popover.onClose()
-    })
+    var us = await Singleton(UserSettings);
+    us.open();
 }

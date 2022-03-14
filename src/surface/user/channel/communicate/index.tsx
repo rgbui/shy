@@ -34,15 +34,14 @@ export var CommunicateView = observer(function () {
         }
     }
     function renderChats() {
-        if (!cm) return <></>
-        return cm.chats.map(c => {
+        return <div className="shy-user-channel-chats" ref={e => contentEl.current = e}>{cm?.chats ? cm.chats.map(c => {
             return <div key={c.id} className='shy-user-channel-chat'>
                 <Avatar size={32} userid={c.userid} showName
                     head={<div className='shy-user-channel-chat-date'>{dayjs(c.createDate).format('YYYY-MM-DD HH:mm')}</div>}
                 ><div className='shy-user-channel-chat-content'>{c.content}</div>
                 </Avatar>
             </div>
-        })
+        }) : <></>}</div>
     }
     var contentEl = React.useRef<HTMLElement>(null);
     React.useEffect(() => {
@@ -52,7 +51,7 @@ export var CommunicateView = observer(function () {
     })
     return <div className="shy-user-channel-communicate">
         <div className="shy-user-channel-communicate-head"><span>@{currentUser?.name}</span></div>
-        <div className="shy-user-channel-communicate-content" ref={e => contentEl.current = e}>{renderChats()}</div>
+        <div className="shy-user-channel-communicate-content">{renderChats()}</div>
         <div className="shy-user-channel-communicate-input">
             <RichTextInput popOpen={popOpen} onInput={onInput}></RichTextInput>
         </div>
