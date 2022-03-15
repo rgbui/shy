@@ -57,7 +57,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
             <Divider></Divider>
             <Row>
                 <Col><h5>密码</h5></Col>
-                <Col><Button>{this.dataUser.checkPaw ? "修改密码" : "设置密码"}</Button>
+                <Col><Button>{this.dataUser?.checkPaw ? "修改密码" : "设置密码"}</Button>
                 </Col>
             </Row>
             {/*<Row>
