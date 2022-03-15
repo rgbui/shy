@@ -11,12 +11,9 @@ import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
 import { SockType } from "../../../net/sock/type";
 import { useOpenWorkspaceSettings } from "./settings";
-import lodash, { chain } from "lodash";
 import { makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
-import { surface } from "..";
 import { channel } from "rich/net/channel";
-
 export type WorkspaceUser = {
     userid: string;
     role: string;
