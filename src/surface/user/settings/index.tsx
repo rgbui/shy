@@ -2,7 +2,6 @@ import React from 'react';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { UserSettingsView } from './content/settings';
 import "./style.less";
-import { Button } from 'rich/component/view/button';
 import { SyHistory } from '../../../history';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
@@ -10,11 +9,15 @@ import { Singleton } from 'rich/component/lib/Singleton';
 import { Divider } from 'rich/component/view/grid';
 import { Remark } from 'rich/component/view/text';
 import { config } from "../../../common/config";
+import { UserSettingProfile } from './content/profile';
 @observer
 class UserSettings extends EventsComponent {
     constructor(props) {
         super(props);
-        makeObservable(this, { visible: observable, mode: observable })
+        makeObservable(this, {
+            visible: observable,
+            mode: observable
+        })
     }
     visible: boolean = false;
     mode: string = 'user-settings';
@@ -53,12 +56,17 @@ class UserSettings extends EventsComponent {
                 </div>
             </div>
             <div className='shy-settings-content'>
-                <div>
-                    {this.mode == 'user-settings' && <UserSettingsView ></UserSettingsView>}
+                <div className='shy-settings-content-wrapper'>
+                    <div className='shy-settings-operators'>
+                        <a onMouseDown={e => this.close()}>
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path
+                                fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)"
+                                d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+                        </a>
+                    </div>
+                    {this.mode == 'user-settings' && <UserSettingsView setMode={()=> {this.mode = 'user-profile'}}></UserSettingsView>}
+                    {this.mode == 'user-profile' && <UserSettingProfile></UserSettingProfile>}
                 </div>
-            </div>
-            <div className='shy-settings-operators'>
-                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
             </div>
         </div>
     }

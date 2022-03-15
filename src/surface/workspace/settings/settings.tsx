@@ -4,7 +4,6 @@ import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { Workspace } from '..';
 import { OpenFileDialoug } from 'rich/component/file';
-import { Avatar } from 'rich/component/view/avator/face';
 import { surface } from '../..';
 import "./style.less";
 import { observer } from 'mobx-react';
@@ -16,8 +15,8 @@ export class WorkspaceSettingsView extends React.Component<{ close: () => void }
         if (file) {
             var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
-                if (r.data.url) {
-                    surface.workspace.onUpdateInfo({ icon: { name: 'image', url: r.data.url } })
+                if (r.data.file.url) {
+                    surface.workspace.onUpdateInfo({ icon: { name: 'image', url: r.data.file.url } })
                 }
             }
         }
