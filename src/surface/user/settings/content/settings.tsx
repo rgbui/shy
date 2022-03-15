@@ -1,145 +1,74 @@
 import React from 'react';
 import { Button } from 'rich/component/view/button';
-import { Row, Col, Divider, Space } from 'rich/component/view/grid';
-import { Input, Textarea } from 'rich/component/view/input';
-import { OpenFileDialoug } from 'rich/component/file';
+import { Row, Col, Divider } from 'rich/component/view/grid';
 import { surface } from '../../..';
 import { observer } from 'mobx-react';
-import { User } from '../../user';
 import { makeObservable, observable } from 'mobx';
+import { User } from '../../user';
 import { channel } from 'rich/net/channel';
 
 @observer
-export class UserSettingsView extends React.Component<{ close?: () => void }> {
+export class UserSettingsView extends React.Component<{ close?: () => void, setMode(): void }> {
     constructor(props) {
         super(props);
         makeObservable(this, {
-            data: observable,
-            error: observable
+            dataUser: observable
         })
     }
-    async onUploadFace() {
-        var file = await OpenFileDialoug({ exts: ['image/*'] });
-        if (file) {
-            var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
-            if (r.ok) {
-                if (r.data.url) {
-                    surface.user.onUpdateUserInfo({ avatar: { name: 'image', url: r.data.url } })
-                }
-            }
-        }
-    }
-    data: Partial<User> = {
-        name: '',
-        slogan: ''
-    }
-    error: Partial<User> = {
-        name: '',
-        slogan: ''
-    }
+    dataUser: Partial<User> = null;
     componentDidMount() {
         channel.get('/user/query').then(r => {
             if (r.ok && r.data && r.data.user) {
-                this.data = r.data.user;
+                this.dataUser = r.data.user;
             }
         })
-        channel.sync('/update/user', this.onUpdate);
-    }
-    componentWillUnmount() {
-        channel.off('/update/user', this.onUpdate);
-    }
-    async onSave() {
-        if (this.error.name || this.error.slogan) return;
-        await surface.user.onUpdateUserInfo({
-            name: this.data.name,
-            slogan: this.data.slogan
-        });
-        this.onClose();
-    }
-    onClose() {
-        if (typeof this.props.close == 'function')
-            this.props.close()
-    }
-    setData(data: UserSettingsView['data']) {
-        if (typeof data.name != 'undefined' && data.name) {
-            this.error.name = '';
-            if (data.name.length > 10) {
-                this.error.name = '呢称过长';
-                return;
-            }
-        }
-        if (typeof data.slogan != 'undefined' && data.slogan) {
-            this.error.slogan = '';
-            if (data.slogan.length > 140) {
-                this.error.slogan = '介绍过长,不能超过140个字符';
-                return;
-            }
-        }
-        Object.assign(this.data, data);
-    }
-    openUpdatePhone() {
-
     }
     render() {
-        return <div className='shy-settings-content-form'>
-            <div className='shy-settings-content-form-main'>
-                <Row><h2>个人信息</h2></Row>
-                <Divider></Divider>
-                <Row>
-                    <Col span={12} align='start'>
-                        <div className='shy-settings-user-avatar'>
-                            {surface.user?.avatar && <img src={surface.user.avatar.url} />}
-                            {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
-                        </div>
-                    </Col>
-                    <Col span={12} align='end'><Button onClick={e => this.onUploadFace()}>上传头像</Button></Col>
-                </Row>
-                <Divider></Divider>
-                <Row>
-                    <Col><h5>昵称</h5></Col>
-                    <Col><label>点击输入框可修改名称</label></Col>
-                    <Col><Input value={this.data.name} onChange={e => this.setData({ name: e })} placeholder={'请输入你的工作空间名称'}></Input>
-                        {this.error.name && <span className='error'>{this.error.name}</span>}
-                    </Col>
-                </Row>
-                <Divider></Divider>
-                <Row>
-                    <Col><h5>一句话介绍</h5></Col>
-                    <Col><Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'简单介绍自已'}></Textarea>
-                        {this.error.slogan && <span className='error'>{this.error.slogan}</span>}
-                    </Col>
-                </Row>
-                <Divider></Divider>
-                <Row>
-                    <Col><h5>手机号</h5></Col>
-                    {this.data.phone && <Col span={12} align='start'><div>
-                        <span>{this.data.phone}</span>
-                        {!this.data.checkPhone && <label>未验证</label>}
-                    </div></Col>}
-                    <Col align='end'><Button onClick={e => this.openUpdatePhone()}>{this.data.phone ? '更改手机号' : '设置手机号'}</Button></Col>
-                </Row>
-                <Divider></Divider>
-                <Row>
-                    <Col><h5>邮箱</h5></Col>
-                    <Col><label>未验证</label></Col>
-                    {surface.user.email && <><Col><span>{surface.user.email}</span></Col><Col>
-                        {!surface.user.checkEmail && <Button ghost>发送验证邮箱</Button>}
-                        <Button>更改邮箱</Button>
-                    </Col></>}
-                </Row>
-                <Divider></Divider>
-                <Row>
-                    <Col><h5>密码</h5></Col>
-                    <Col> <label>未设置</label></Col>
-                    <Col><span>{surface.user.email}</span></Col>
-                    <Col>
-                        <Button>更换密码</Button>
-                    </Col>
-                </Row>
+        return <div>
+            <h1>我的帐号</h1>
+            <div className="shy-user-settings-profile-box-card" style={{ margin: 20 }}>
+                <div className="bg">
+                    {!surface.user.cover?.url && <div style={{ height: 60, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
+                    {surface.user.cover?.url && <img style={{ height: 120 }} src={surface.user.cover?.url} />}
+                </div>
+                <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 120 : 60 }}>
+                    {surface.user?.avatar && <img src={surface.user.avatar.url} />}
+                    {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
+                </div>
+                <div className="shy-user-settings-profile-box-card-operators">
+                    <h2>{surface.user.name}#{surface.user.sn}</h2>
+                    <Button onClick={e => this.props.setMode()}>编辑个人资料</Button>
+                </div>
+                <div className="shy-user-settings-profile-box-card-options">
+                    <Row>
+                        <Col span={24}><span>用户名</span></Col>
+                        <Col span={12}>{surface.user?.name}#{surface.user?.sn}</Col><Col span={12} align={'end'}><Button>编辑</Button></Col>
+                    </Row>
+                    <Row>
+                        <Col span={24}><span>电子邮箱</span></Col>
+                        <Col span={12}><span>{this.dataUser?.email || '您还没有添加邮箱'}</span></Col><Col span={12} align={'end'}><Button>{this.dataUser?.checkEmail ? '新增' : '更换'}</Button></Col>
+                    </Row>
+                    <Row>
+                        <Col span={24}><span>手机号</span></Col>
+                        <Col span={12}><span>{this.dataUser?.phone || '您还没有添加手机号'}</span></Col><Col span={12} align={'end'}><Button>{this.dataUser?.checkPhone ? '新增' : '更换'}</Button></Col>
+                    </Row>
+                </div>
             </div>
-            <div className='shy-settings-content-form-footer'>
-                <Space align='end' style={{ height: '100%' }}><Button onClick={() => this.onClose()} ghost >取消</Button><Button onClick={() => this.onSave()}>保存</Button></Space>
-            </div>
+            <Divider></Divider>
+            <Row>
+                <Col><h5>密码</h5></Col>
+                <Col><Button>{this.dataUser.checkPaw ? "修改密码" : "设置密码"}</Button>
+                </Col>
+            </Row>
+            {/*<Row>
+                <Col><h5>删除帐户</h5></Col>
+                <Col>
+                    <Remark>删除帐户后将清理相关的帐号</Remark>
+                </Col>
+                <Col align='start'>
+                    <Button ghost>删除帐户</Button>
+                </Col>
+            </Row> */}
         </div>
     }
     onUpdate = () => { this.forceUpdate() }
