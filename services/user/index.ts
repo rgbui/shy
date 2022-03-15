@@ -6,7 +6,7 @@ import { CacheKey, sCache } from "../../net/cache";
 import { FileMd5 } from "../../src/util/file";
 import { FileType } from "../../type";
 import { SockResponse } from "../../net/sock/type";
-import { act, get, patch, post, put } from "rich/net/annotation";
+import { act, del, get, patch, post, put } from "rich/net/annotation";
 import { userNativeStore } from "../../native/store/user";
 import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";
@@ -115,6 +115,26 @@ class UserService extends BaseService {
         catch (ex) {
             return { ok: false, warn: '上传文件失败' }
         }
+    }
+    @del('/user/write/off')
+    async clearUser(sn: number) {
+        return masterSock.delete('/user/write/off', arguments[0]);
+    }
+    @patch('/phone/check/update')
+    async phoneUpdate(phone: string, code: string) {
+        return masterSock.patch('/phone/check/update', arguments[0]);
+    }
+    @patch('/email/check/update')
+    async emailCheck(email: string, code: string) {
+        return masterSock.patch('/email/check/update', arguments[0]);
+    }
+    @post('/email/send/code')
+    async emailSendCode(email: string) {
+        return masterSock.post('/email/send/code', arguments[0]);
+    }
+    @patch('/user/set/paw')
+    async userSetPaw(oldPaw: string, newPaw: string, confirmPaw: string) {
+        return masterSock.patch('/user/set/paw', arguments[0]);
     }
 }
 
