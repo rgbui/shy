@@ -101,7 +101,7 @@ class UserService extends BaseService {
      * @param progress 
      * @returns 
      */
-    @act('/user/upload/file')
+    @post('/user/upload/file')
     async uploadFile(args: { file: File, progress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         var { file, progress } = args;
         try {
