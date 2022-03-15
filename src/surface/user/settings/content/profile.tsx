@@ -9,11 +9,16 @@ import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../../..";
 import { useColorPicker } from "rich/component/view/color/picker";
+import { makeObservable, observable } from "mobx";
 
 const DEFAULT_COLOR = 'rgb(192,157,156)';
 
 @observer
 export class UserSettingProfile extends React.Component {
+    constructor(props) {
+        super(props);
+        makeObservable(this, { inputSlogan: observable });
+    }
     async onUploadFace() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
         if (file) {
@@ -40,7 +45,7 @@ export class UserSettingProfile extends React.Component {
         }
     }
     async removeCover() {
-        surface.user.onUpdateUserInfo({ cover: null })
+        await surface.user.onUpdateUserInfo({ cover: null })
     }
     async onUpdateColor() {
         await surface.user.onUpdateUserInfo({ cover: { color: DEFAULT_COLOR, name: 'fill' } })
@@ -58,6 +63,13 @@ export class UserSettingProfile extends React.Component {
             await surface.user.onUpdateUserInfo({ cover: { color: r, name: 'fill' } })
         }
     }
+    async saveSlogan(event: React.MouseEvent, button: Button) {
+        button.loading = true;
+        await surface.user.onUpdateUserInfo({ slogan: this.inputSlogan });
+        this.inputSlogan = '';
+        button.loading = false;
+    }
+    inputSlogan: string = '';
     render(): React.ReactNode {
         function renderCheckSvg() {
             return <svg aria-hidden="false" width="32" height="24" viewBox="0 0 24 24"><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path></svg>
@@ -122,9 +134,12 @@ export class UserSettingProfile extends React.Component {
                         </Col>
                         <Col align='start'>
                             <Textarea
-                                value={surface.user.slogan}
-                                onChange={e => surface.user.slogan = e}></Textarea>
+                                value={this.inputSlogan || surface.user.slogan}
+                                onChange={e => this.inputSlogan = e}></Textarea>
                         </Col>
+                        {this.inputSlogan && <Col>
+                            <Button onClick={(e, b) => this.saveSlogan(e, b)}>保存</Button>
+                        </Col>}
                     </Row>
                 </div>
                 <div className="shy-user-settings-profile-box-right">
@@ -141,7 +156,7 @@ export class UserSettingProfile extends React.Component {
                         <div className="shy-user-settings-profile-box-card-content">
                             <h2>{surface.user.name}#{surface.user.sn}</h2>
                             <Divider></Divider>
-                            <Remark>{surface.user.slogan}</Remark>
+                            <Remark>{this.inputSlogan || surface.user.slogan}</Remark>
                         </div>
                     </div>
                 </div>
