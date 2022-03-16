@@ -110,6 +110,9 @@ export class Workspace {
     }
     async onUpdateInfo(data: Partial<Workspace>) {
         await channel.patch('/ws/patch', { data });
+        for (let n in data) {
+            this[n] = util.clone(data[n]);
+        }
     }
     async getDefaultPage() {
         var pageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.pageDev)?.pageId;

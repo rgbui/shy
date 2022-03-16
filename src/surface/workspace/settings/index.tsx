@@ -23,13 +23,15 @@ class WsSettings extends EventsComponent {
     setMode(mode: WsSettings['mode']) {
         this.mode = mode;
     }
-    onClose() {
+    close() {
+        this.visible = false;
         this.emit('close');
     }
     open() {
         this.visible = true;
     }
     render() {
+        if (this.visible == false) return <div style={{ display: 'none' }}></div>
         return <div className='shy-settings'>
             <div className='shy-settings-slide'>
                 <div>
@@ -46,8 +48,15 @@ class WsSettings extends EventsComponent {
                 </div>
             </div>
             <div className='shy-settings-content'>
-                <div>
-                    {this.mode == 'ws-settings' && <WorkspaceSettingsView close={() => this.onClose()}></WorkspaceSettingsView>}
+                <div className='shy-settings-content-wrapper'>
+                    <div className='shy-settings-operators'>
+                        <a onMouseDown={e => this.close()}>
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path
+                                fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)"
+                                d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+                        </a>
+                    </div>
+                    {this.mode == 'ws-settings' && <WorkspaceSettingsView ></WorkspaceSettingsView>}
                     {this.mode == 'ws-members' && <WorkspaceMembers></WorkspaceMembers>}
                 </div>
             </div>

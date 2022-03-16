@@ -1,26 +1,17 @@
 import React from "react";
-import { Icon } from "rich/component/view/icon";
 import { Rect } from "rich/src/common/vector/point";
-import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../..";
-import { useSwitchWorkspace } from "../switch";
-import ExpandSvg from "../../../assert/svg/expand.svg";
-import DoubleArrow from "../../../assert/svg/doubleRight.svg";
-import { AppTip } from "../../../../i18n/tip";
-import { AppLang } from "../../../../i18n/enum";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { SettingsSvg } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
-import { toJS } from "mobx";
 
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
         var ele = event.currentTarget as HTMLElement;
         var rect = Rect.from(ele.getBoundingClientRect());
         var isMananger: boolean = false;
-        console.log(toJS(surface.workspace));
         if (surface.workspace.owner == surface.user.id) {
             isMananger = true;
         }
@@ -57,8 +48,8 @@ export var WorkspaceProfile = observer(function () {
             }
         }
     }
-    return <div className='shy-ws-profile' onMouseDown={e => mousedown(e)}>
-        <div className='shy-ws-profile-info'>
+    return <div className={'shy-ws-profile' + (surface.workspace?.cover?.url ? " cover" : "")} onMouseDown={e => mousedown(e)}>
+        <div className={'shy-ws-profile-info'}>
             <span>{surface.workspace.text}</span>
         </div>
         {surface.workspace.cover && <div className="shy-ws-profile-cover">
