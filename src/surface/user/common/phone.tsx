@@ -5,24 +5,22 @@ import { Col, Dialoug, Row } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
-import { PopoverPosition } from "rich/extensions/popover/position";
 import { channel } from "rich/net/channel";
 
 class UserUpdatePhone extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'}
-            head={<span>设置手机号</span>}
-        >
+        return <Dialoug className={'shy-join-friend'} head={<span>设置手机号</span>}>
             <Row>
                 <Col>手机</Col>
                 <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
             </Row>
-            <Row>
+            <Row style={{ margin: '10px 0px' }}>
                 <Col>验证码</Col>
-                <Col><Input value={this.code} onChange={e => this.code = e}></Input></Col><Col><Button ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? `已发送${this.sendCount}s` : `获取短信验证码`}</Button></Col>
+                <Col span={14}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
+                <Col span={8} style={{ marginLeft: 20 }}><Button block size='medium' ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? `已发送${this.sendCount}s` : `获取短信验证码`}</Button></Col>
             </Row>
             <Row>
-                <Col><Button ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
+                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
             </Row>
             <div>
                 {this.error && <ErrorText >{this.error}</ErrorText>}
@@ -61,7 +59,7 @@ class UserUpdatePhone extends EventsComponent {
         this.button.loading = true;
         var re = await channel.patch('/phone/check/update', { phone: this.phone, code: this.code });
         this.button.loading = false;
-        if (re.ok) this.emit('close')
+        if (re.ok) this.emit('save', this.phone);
         else this.error = re.warn;
         this.forceUpdate();
     }
@@ -71,17 +69,17 @@ class UserUpdatePhone extends EventsComponent {
     }
 }
 
-export async function useUpdatePhone(pos: PopoverPosition, options: { phone: string }) {
-    let popover = await PopoverSingleton(UserUpdatePhone);
-    let fv = await popover.open(pos);
+export async function useUpdatePhone(options: { phone: string }) {
+    let popover = await PopoverSingleton(UserUpdatePhone, { mask: true });
+    let fv = await popover.open({ center: true });
     fv.open(options);
-    return new Promise((resolve, reject) => {
-        fv.only('close', () => {
+    return new Promise((resolve: (phone: string) => void, reject) => {
+        fv.only('save', (phone: string) => {
             popover.close();
-            resolve(true);
+            resolve(phone);
         });
         popover.only('close', () => {
-            resolve(true);
+            resolve(null);
         });
     })
 }
