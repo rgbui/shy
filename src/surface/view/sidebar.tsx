@@ -15,9 +15,9 @@ export var SideBar = observer(function () {
     }
     function renderWs(workspace: Partial<Workspace>) {
         if (workspace.icon) return <a className="shy-sidebar-ws-icon"><img
-            src={workspace.icon.url} style={{ width: 48, height: 48 }} />
+            src={workspace?.icon.url} style={{ width: 48, height: 48 }} />
         </a>
-        else return <a className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace.text.slice(0, 2)}</span></a>
+        else return <a className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace?.text?.slice(0, 2)}</span></a>
     }
     return <div className='shy-sidebar'>
         <a className="shy-sidebar-operator" onMouseDown={e => surface.showUserChannel = true}>

@@ -41,8 +41,11 @@
                 }
             }
 
-            &.shy-sidebar-icon {}
-
+            &.shy-sidebar-ws-icon {
+                img {
+                    border-radius: 50%;
+                }
+            }
             &.shy-sidebar-operator {
 
                 &:hover,
@@ -59,6 +62,15 @@
             width           : 32px;
             border-radius   : 1px;
             background-color: var(--background-modifier-accent);
+        }
+    }
+    .shy-sidebar-ws{
+        &:hover,&.hover{
+            .shy-sidebar-ws-icon{
+                img{
+                    border-radius: 16px;
+                }
+            }
         }
     }
 

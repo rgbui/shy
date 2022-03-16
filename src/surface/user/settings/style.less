@@ -179,13 +179,19 @@
         box-shadow      : var(--elevation-high);
         box-sizing      : border-box;
         position        : relative;
+
+        &.settings {
+            background-color: var(--background-tertiary);
+        }
+
         .bg {
             img {
-                width: 100%;
-                object-fit: cover;
+                width          : 100%;
+                object-fit     : cover;
                 object-position: center;
             }
         }
+
         .shy-settings-user-avatar {
             &:after {
                 content         : '\20';
@@ -230,6 +236,38 @@
         &-content {
             margin-top: 60px;
             padding   : 10px;
+        }
+
+        &-options {
+            border-radius   : 8px;
+            background-color: var(--background-secondary);
+            padding         : 16px;
+            margin          : 8px 16px 16px;
+            margin-top      : 20px
+        }
+
+        &-operators {
+            display      : flex;
+            margin-top   : 16px;
+            margin-right : 16px;
+            margin-bottom: 10px;
+
+            h2 {
+                margin-left  : 120px;
+                flex-grow    : 1;
+                flex-shrink  : 1;
+                margin-bottom: 6px;
+                font-family  : var(--font-display);
+                color        : var(--header-primary);
+                font-size    : 20px;
+                line-height  : 24px;
+                font-weight  : 600;
+            }
+
+            .shy-button {
+                flex-grow  : 0;
+                flex-shrink: 0;
+            }
         }
     }
 }
