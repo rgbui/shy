@@ -226,7 +226,7 @@ push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string} }>', 
 push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
-
+push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])

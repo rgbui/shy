@@ -41,6 +41,7 @@ export class Surface extends Events {
             Object.assign(this.user, r.data.user);
             await timService.open();
             timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
+            timService.tim.on('/ws/channel/notify',e=>{ channel.fire('/ws/channel/notify',e)})
         }
     }
     async loadWorkspaceList() {
