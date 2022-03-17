@@ -1,7 +1,11 @@
 
 import { air, get, query } from "rich/net/annotation";
+import { channel } from "rich/net/channel";
 import { surface } from ".";
+import { yCache, CacheKey } from "../../net/cache";
 import { UrlRoute } from "../history";
+import { PageItem } from "./sln/item";
+import { pageItemStore } from "./sln/item/store/sync";
 
 // export function MessageCenter(surface: Surface) {
 //     // if (messageChannel.has(Directive.GalleryQuery)) return;
@@ -138,5 +142,21 @@ class MessageCenter {
     @query('/current/workspace')
     queryWorkspace() {
         return surface.workspace;
+    }
+    @air('/page/update/info')
+    async pageUpdateInfo(args: { id: string, pageInfo: Partial<PageItem> }) {
+        var item = surface.workspace.find(g => g.id == args.id);
+        if (item) {
+            await pageItemStore.updatePageItem(item, args.pageInfo);
+            channel.fire('/page/update/info', args);
+            item.onUpdateDocument();
+        }
+    }
+    @air('/page/notify/toggle')
+    async pageNotifyToggle(args: { id: string, visible: boolean }) {
+        await yCache.set(
+            yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], surface.workspace.id),
+            surface.workspace.getVisibleIds()
+        );
     }
 }
