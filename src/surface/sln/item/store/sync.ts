@@ -43,7 +43,7 @@ class PageItemStore {
         operate: ItemOperator,
         actions: PageItemAction[]
     }) {
-        return await surface.workspace.sock.put<{ result: { actions: any[] } }>('/view/operate/sync', {
+        return await surface.workspace.sock.put<{ actions: any[] }>('/view/operate/sync', {
             wsId,
             operate,
             schema: 'PageItem',
@@ -80,8 +80,8 @@ class PageItemStore {
             pageItem.childs.splice(0, 0, newItem);
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.append, actions });
-            if (r.ok && Array.isArray(r.data.result.actions)) {
-                var re = r.data.result.actions.find(g => g && g.id == newItem.id);
+            if (r.ok && Array.isArray(r.data.actions)) {
+                var re = r.data.actions.find(g => g && g.id == newItem.id);
                 if (re) {
                     newItem.load(re);
                 }
@@ -106,8 +106,8 @@ class PageItemStore {
         actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gt: at } } })
         actions.push({ directive: ItemOperatorDirective.insert, data });
         var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.insertAfter, actions })
-        if (r.ok && Array.isArray(r.data.result.actions)) {
-            var re = r.data.result.actions.find(g => g && g.id == newItem.id);
+        if (r.ok && Array.isArray(r.data.actions)) {
+            var re = r.data.actions.find(g => g && g.id == newItem.id);
             if (re) {
                 newItem.load(re);
             }

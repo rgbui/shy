@@ -16,11 +16,11 @@ import './style.less';
 export var UserProfile = observer(function () {
     async function setUserStatus(event: React.MouseEvent) {
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-            { name: 'online', text: '在线' },
+            { checkLabel: surface.user.status == UserStatus.online, name: 'online', text: '在线' },
             { type: MenuItemTypeValue.divide },
-            { name: 'idle', text: '闲置' },
-            { name: 'busy', text: '请勿打扰' },
-            { name: 'hidden', text: '隐身' }
+            { checkLabel: surface.user.status == UserStatus.idle, name: 'idle', text: '闲置' },
+            { checkLabel: surface.user.status == UserStatus.busy, name: 'busy', text: '请勿打扰' },
+            { checkLabel: surface.user.status == UserStatus.hidden, name: 'hidden', text: '隐身' }
         ]);
         if (r) {
             var status = UserStatus[r.item.name]
@@ -32,7 +32,7 @@ export var UserProfile = observer(function () {
         }
     }
     async function Mousedown(event: React.MouseEvent) {
-        var r = useOpenUserSettings()
+        useOpenUserSettings()
     }
     return <div className="shy-user-profile">
         {surface.user && <div onMouseDown={e => setUserStatus(e)}><Avatar size={32} userid={surface.user.id}></Avatar></div>}
