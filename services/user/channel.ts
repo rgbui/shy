@@ -59,6 +59,10 @@ class UserService extends BaseService {
     async getChatList(args) {
         return await masterSock.get('/user/chat/list', args);
     }
+    @del('/user/chat/cancel')
+    async getChatCancel(args) {
+        return await masterSock.delete('/user/chat/cancel',args);
+    }
     @get('/search/friends')
     async searchFriends(args) {
         return await masterSock.get('/search/friends', args);
@@ -73,7 +77,6 @@ class UserService extends BaseService {
     }
     @patch('/user/channel/active')
     async patchChannel(args) {
-        console.log(args,'args');
         return await masterSock.patch('/user/channel/active', args);
     }
 }

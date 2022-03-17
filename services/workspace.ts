@@ -4,8 +4,9 @@ import { fileSock, masterSock, Sock } from "../net/sock";
 import { FileType } from "../type";
 import { FileMd5 } from "../src/util/file";
 import { surface } from "../src/surface";
-import { get, patch, post, put } from "rich/net/annotation";
+import { del, get, patch, post, put } from "rich/net/annotation";
 import { timService } from "../net/primus";
+
 class WorkspaceService extends BaseService {
     @get('/ws/basic')
     async queryWsBasic(data: { id?: string, name?: string }) {
@@ -45,6 +46,26 @@ class WorkspaceService extends BaseService {
             return r;
         }
     }
+
+    @put('/ws/channel/send')
+    async putUserChat(args) {
+        args.wsId = surface.workspace.id;
+        args.sockId = timService.sockId;
+        return await surface.workspace.sock.put('/ws/channel/send', args);
+    }
+    @get('/ws/channel/list')
+    async getChatList(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/channel/list', args);
+    }
+    @del('/ws/channel/cancel')
+    async getChatCancel(args) {
+        args.wsId = surface.workspace.id;
+        args.sockId = timService.sockId;
+        return await surface.workspace.sock.delete('/ws/channel/cancel', args);
+    }
+
+
     // @get('/ws/basic')
     // async queryWsBasic(data) {
 
