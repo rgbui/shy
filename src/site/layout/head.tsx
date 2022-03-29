@@ -6,6 +6,10 @@ import ShySvg from "../../assert/img/shy.name.svg";
 import { surface } from "../../surface";
 import { Avatar } from "rich/component/view/avator/face";
 import { ShyUrl } from "../../history";
+
+/**
+ * https://www.zhangxinxu.com/wordpress/2019/11/css-backdrop-filter/
+ */
 export var HeadView = observer(function () {
     return <div className='shy-site-head'>
         <a className='shy-site-head-logo' href={ShyUrl.root}>
