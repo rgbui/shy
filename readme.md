@@ -20,6 +20,7 @@
 * [文件生成md5](https://github.com/satazor/js-spark-md5)   
 * [react-router](https://reactrouter.com/web/guides/quick-start)
 * [loadsh](https://www.lodashjs.com/)
+* [favicon](https://www.zhangxinxu.com/wordpress/2019/06/html-favicon-size-ico-generator/)
 ## 引用
 [浏览器标识](https://github.com/fingerprintjs/fingerprintjs)
 [YJS](https://github.com/yjs/yjs)
