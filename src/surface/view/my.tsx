@@ -17,7 +17,7 @@ export var MyWorkSpace = observer(function () {
         }
         var latest = await channel.get('/ws/latest');
         if (latest.ok) {
-            if (latest.data.workspace) return UrlRoute.pushToWs(r.data?.workspace?.sn);
+            if (latest.data.workspace) return UrlRoute.pushToWs(latest.data.workspace?.sn);
             else return UrlRoute.push(ShyUrl.workCreate);
         }
     }
