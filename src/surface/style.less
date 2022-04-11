@@ -33,26 +33,33 @@
             }
 
             &.shy-sidebar-ws-name {
-
-                &:hover,
-                .hover {
+                &:hover {
                     background-color: rgb(88, 101, 242);
                     color           : #fff;
                 }
             }
+
+           
 
             &.shy-sidebar-ws-icon {
                 img {
                     border-radius: 50%;
                 }
             }
+
             &.shy-sidebar-operator {
 
                 &:hover,
-                .hover {
+                &.hover {
                     background-color: rgb(59, 165, 93);
                     color           : #fff;
                 }
+            }
+        }
+        .shy-sidebar-ws.hover {
+            .shy-sidebar-ws-name {
+                background-color: rgb(88, 101, 242);
+                color           : #fff;
             }
         }
 
@@ -64,10 +71,13 @@
             background-color: var(--background-modifier-accent);
         }
     }
-    .shy-sidebar-ws{
-        &:hover,&.hover{
-            .shy-sidebar-ws-icon{
-                img{
+
+    .shy-sidebar-ws {
+
+        &:hover,
+        &.hover {
+            .shy-sidebar-ws-icon {
+                img {
                     border-radius: 16px;
                 }
             }

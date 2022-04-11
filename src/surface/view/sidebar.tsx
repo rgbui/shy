@@ -27,11 +27,11 @@ export var SideBar = observer(function () {
         {surface.wss.map(ws => {
             return <div onMouseDown={e => changeWorkspace(ws)} key={ws.id} className={'shy-sidebar-ws' + (surface.workspace.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div>
         })}
-        <a className="shy-sidebar-operator"><Icon size={24} icon={PlusSvg}></Icon></a>
+        <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
         <a className="shy-sidebar-operator"><Icon size={24} icon={PubWorkspace}></Icon></a>
         <div className="shy-sidebar-divider"></div>
         <a className="shy-sidebar-operator"><Icon size={24} icon={DownloadSvg}></Icon></a>
-        <a className="shy-sidebar-operator"><Icon size={40} fontSize={30} icon={"help:sy"}></Icon></a>
+        {/* <a className="shy-sidebar-operator"><Icon size={40} fontSize={30} icon={"help:sy"}></Icon></a> */}
         {/* <div className='shy-sidebar-top'>
         </div>   */}
         {/* <Icon className='hover' size={30} fontSize={30} icon={SvgComponents}></Icon> */}
