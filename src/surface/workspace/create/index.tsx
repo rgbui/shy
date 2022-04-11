@@ -5,6 +5,7 @@ import { UrlRoute } from "../../../history";
 import { observer, useLocalObservable } from "mobx-react";
 import "./style.less";
 import { channel } from "rich/net/channel";
+import { surface } from "../..";
 export var WorkspaceCreateView = observer(function () {
     var local = useLocalObservable<{ fail: string, text: string }>(() => {
         return {
@@ -22,7 +23,10 @@ export var WorkspaceCreateView = observer(function () {
             button.disabled = true;
             var rr = await channel.put('/ws/create', { text: local.text })
             button.disabled = false;
-            if (rr.ok) return UrlRoute.pushToWs(rr.data.workspace.sn);
+            if (rr.ok) {
+                await surface.loadWorkspaceList();
+                return UrlRoute.pushToWs(rr.data.workspace.sn);
+            }
             else this.failTip = rr.warn;
         }
     }
