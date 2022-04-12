@@ -8,6 +8,9 @@ import { SideBar } from "./sidebar";
 import { SlnView } from "../sln/view";
 import { SupervisorView } from "../supervisor/view";
 import { UserChannel } from "../user/channel/view";
+import { Route } from "react-router";
+import { ShyUrl } from "../../history";
+import { DiscoveryView } from "../discovery";
 
 export var ViewSurface = observer(function () {
     var local = useLocalObservable(() => {
@@ -76,18 +79,21 @@ export var ViewSurface = observer(function () {
         if (surface.workspace) {
             return <div className='shy-surface'>
                 {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
-                {!surface.showUserChannel && <><div
-                    onMouseLeave={mouseleave}
-                    onMouseEnter={mousenter}
-                    className={'shy-slide' + (surface.isShowSln ? "" : (local.slideFloatIsShow ? " float" : " float-hide"))}
-                    ref={e => local.slideEl = e}
-                    style={{ width: local.slideWidth }}>
-                    <SlnView></SlnView>
-                    {surface.isShowSln && <div className='shy-slide-resize' onMouseDown={mousedown}></div>}
-                </div>
-                    {!surface.isShowSln && <div className='shy-slide-reaction'></div>}</>}
-                {!surface.showUserChannel && <SupervisorView></SupervisorView>}
-                {surface.showUserChannel && <UserChannel></UserChannel>}
+                <Route path={[ShyUrl.ws, ShyUrl.page]} >
+                    <div
+                        onMouseLeave={mouseleave}
+                        onMouseEnter={mousenter}
+                        className={'shy-slide' + (surface.isShowSln ? "" : (local.slideFloatIsShow ? " float" : " float-hide"))}
+                        ref={e => local.slideEl = e}
+                        style={{ width: local.slideWidth }}>
+                        <SlnView></SlnView>
+                        {surface.isShowSln && <div className='shy-slide-resize' onMouseDown={mousedown}></div>}
+                    </div>
+                    <div className='shy-slide-reaction'></div>
+                    <SupervisorView></SupervisorView>
+                </Route>
+                <Route path={ShyUrl.me} exact component={UserChannel}></Route>
+                <Route path={ShyUrl.discovery} exact component={DiscoveryView}></Route>
             </div >
         }
     }
