@@ -67,10 +67,12 @@ export enum ShyUrl {
     signIn = '/sign/in',
     shiyun = '/shiyun',
     ws = '/ws/:wsId',
+    me = '/me',
     pageDev = '/ws/:wsId/page/:pageId',
     page = '/page/:pageId',
     invite = '/invite/:id',
     workCreate = '/work/create',
     myWorkspace = '/my/workspace',
+    discovery='/discovery',
     _404 = '/404'
 }

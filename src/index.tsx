@@ -24,6 +24,7 @@ import { SiteView } from './site/production';
 import { surface } from './surface';
 import { MyWorkSpace } from './surface/view/my';
 import { channel } from "rich/net/channel";
+import { UserChannel } from './surface/user/channel/view';
 
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
@@ -56,8 +57,7 @@ export function App() {
           <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
           <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
           <Route path={ShyUrl._404} exact component={View404}></Route>
-          <Route path={ShyUrl.ws} exact component={ViewSurface}></Route>
-          <Route path={ShyUrl.pageDev} exact component={ViewSurface}></Route>
+          <Route path={[ShyUrl.ws, ShyUrl.pageDev, ShyUrl.me,ShyUrl.discovery]} exact component={ViewSurface}></Route>
           <Route path={ShyUrl.invite} exact component={InviteView}></Route>
           <Route component={View404}></Route>
         </Switch>
