@@ -6,10 +6,13 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { SettingsSvg } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
+import ArrowDownSvg from "../../../assert/svg/arrow.down.svg";
+import { Icon } from "rich/component/view/icon";
 
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
         var ele = event.currentTarget as HTMLElement;
+        ele = ele.querySelector('.shy-ws-profile-info') as HTMLElement;
         var rect = Rect.from(ele.getBoundingClientRect());
         var isMananger: boolean = false;
         if (surface.workspace.owner == surface.user.id) {
@@ -33,7 +36,7 @@ export var WorkspaceProfile = observer(function () {
             ]
         }
         var se = await useSelectMenuItem(
-            { fixPoint: rect.leftBottom.add(30, 0) },
+            { fixPoint: rect.leftBottom.add(0, 0) },
             menus
         );
         if (se) {
@@ -51,6 +54,7 @@ export var WorkspaceProfile = observer(function () {
     return <div className={'shy-ws-profile' + (surface.workspace?.cover?.url ? " cover" : "")} onMouseDown={e => mousedown(e)}>
         <div className={'shy-ws-profile-info'}>
             <span>{surface.workspace.text}</span>
+            <Icon icon={'arrow-down:sy'}></Icon>
         </div>
         {surface.workspace.cover && <div className="shy-ws-profile-cover">
             <img src={surface.workspace.cover.url} />

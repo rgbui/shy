@@ -23,7 +23,7 @@ export class Surface extends Events {
             user: observable,
             sln: observable,
             workspace: observable,
-            showUserChannel: observable
+            // showUserChannel: observable
         });
     }
     supervisor: Supervisor = new Supervisor();
@@ -32,7 +32,7 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: Partial<Workspace>[] = [];
     isShowSln: boolean = true;
-    showUserChannel: boolean = false;
+    // showUserChannel: boolean = false;
     config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
         var r = await channel.get('/sign')
@@ -41,7 +41,7 @@ export class Surface extends Events {
             Object.assign(this.user, r.data.user);
             await timService.open();
             timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
-            timService.tim.on('/ws/channel/notify',e=>{ channel.fire('/ws/channel/notify',e)})
+            timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) })
         }
     }
     async loadWorkspaceList() {
