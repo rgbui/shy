@@ -1,3 +1,4 @@
+import ArrowDownSvg from "../assert/svg/arrow.down.svg";
 import BillingSvg from "../assert/svg/billing.svg";
 import ComponentsSvg from "../assert/svg/components.svg";
 import ConsoleSvg from "../assert/svg/console.svg";
@@ -22,6 +23,7 @@ import VersionHistorySvg from "../assert/svg/versionHistory.svg";
 import WsSettingsSvg from "../assert/svg/wsSettings.svg";
 
 export  {
+ArrowDownSvg,
 BillingSvg,
 ComponentsSvg,
 ConsoleSvg,
