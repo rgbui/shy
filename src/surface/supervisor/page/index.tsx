@@ -23,7 +23,6 @@ export async function createPageContent(item: PageItem) {
             });
             page.on(PageDirective.history, async function (action) {
                 var syncBlocks = action.syncBlock();
-                console.log(syncBlocks, 'syncBlocks', action.get(), action);
                 if (syncBlocks.length > 0) {
                     syncBlocks.eachAsync(async (block) => {
                         var snap = SnapSync.create(ElementType.Block, block.syncBlockId);
