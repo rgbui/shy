@@ -90,14 +90,12 @@
     }
 
     .shy-slide {
-        width             : 240px;
-        box-sizing        : border-box;
-        flex-shrink       : 0;
-        // background     : rgb(247, 247, 247);
-        background-color  : var(--background-secondary);
-        position          : relative;
-        // border-right: 1px solid rgb(224, 224, 224);
-
+        width           : 240px;
+        box-sizing      : border-box;
+        flex-shrink     : 0;
+        background-color: var(--background-secondary);
+        position        : relative;
+        // border-right    : 1px solid var(--background-modifier-accent);
         &-resize {
             position  : absolute;
             top       : 0px;
@@ -107,7 +105,6 @@
             opacity   : 0;
             box-shadow: rgba(0, 0, 0, 0.1) -2px 0px 0px 0px inset;
             cursor    : col-resize;
-
             &:hover {
                 opacity: 1;
             }
@@ -164,7 +161,7 @@
 
 
     .shy-ws {
-      
+
         height         : 100%;
         position       : relative;
         display        : flex;
@@ -181,8 +178,8 @@
             flex-grow     : 1;
             padding-bottom: 100px;
             overflow-y    : auto;
-            box-sizing: border-box;
-            padding-top    : 15px;
+            box-sizing    : border-box;
+            padding-top   : 15px;
         }
     }
 }
