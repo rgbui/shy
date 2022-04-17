@@ -41,6 +41,7 @@ export async function createPageContent(item: PageItem) {
             page.on(PageDirective.save, async () => {
                 await item.snapSync.forceSave();
             });
+            page.loadPageInfo({ icon: item.icon, id: item.id, sn: item.sn, text: item.text });
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operate = pd.operates.map(op => op.operate);
