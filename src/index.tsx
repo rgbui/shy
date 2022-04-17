@@ -24,7 +24,6 @@ import { SiteView } from './site/production';
 import { surface } from './surface';
 import { MyWorkSpace } from './surface/view/my';
 import { channel } from "rich/net/channel";
-import { UserChannel } from './surface/user/channel/view';
 
 var BookView = AsyncComponent(async () => (await import('./site/shiyun')).BookView);
 export function App() {
