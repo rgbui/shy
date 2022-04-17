@@ -87,7 +87,7 @@ module.exports = {
                         loader: 'sass-resources-loader',
                         options: {
                             resources: [
-                                path.resolve(__dirname, "../src/assert/theme.less")
+                                path.resolve(__dirname, "../src/assert/less.less")
                             ]
                         }
                     }
