@@ -7,6 +7,7 @@ import { Singleton } from "rich/component/lib/Singleton";
 import { Divider } from "rich/component/view/grid";
 import { surface } from "../..";
 import { WorkspaceMembers } from "./member";
+import { WorkspaceRoles } from "./roles";
 import { WorkspaceSettingsView } from "./settings";
 
 @observer
@@ -37,11 +38,11 @@ class WsSettings extends EventsComponent {
                 <div>
                     <h4>{surface.workspace.text}</h4>
                     <a onMouseDown={e => this.setMode('ws-settings')} className={this.mode == 'ws-settings' ? "hover" : ""} ><span>基本信息</span></a>
-                    <a onMouseDown={e => this.setMode('ws-members')} className={this.mode == 'ws-members' ? "hover" : ""} ><span>身份组</span></a>
+                    <a onMouseDown={e => this.setMode('ws-roles')} className={this.mode == 'ws-roles' ? "hover" : ""}><span>身份组</span></a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <h4>用户管理</h4>
-                    <a>成员</a>
-                    <a>访客</a>
+                    <a onMouseDown={e => this.setMode('ws-members')} className={this.mode == 'ws-members' ? "hover" : ""} >成员</a>
+                    {/*<a>访客</a> */}
                     <a>邀请</a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <a className="warn">删除空间</a>
@@ -56,6 +57,7 @@ class WsSettings extends EventsComponent {
                                 d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
                         </a>
                     </div>
+                    {this.mode == 'ws-roles' && <WorkspaceRoles></WorkspaceRoles>}
                     {this.mode == 'ws-settings' && <WorkspaceSettingsView ></WorkspaceSettingsView>}
                     {this.mode == 'ws-members' && <WorkspaceMembers></WorkspaceMembers>}
                 </div>
