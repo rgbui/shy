@@ -65,61 +65,6 @@ class WorkspaceService extends BaseService {
         return await surface.workspace.sock.delete('/ws/channel/cancel', args);
     }
 
-
-    // @get('/ws/basic')
-    // async queryWsBasic(data) {
-
-    // }
-    /**
-     * 
-     * @param domain 域名
-     * @param sn workspace序号
-     * @param wsId workspace编号
-     * @returns 
-     */
-    // async loadWorkSpace(domain: string, sn: number, wsId: string) {
-    //     return await masterSock.get<{ workspace: Workspace, users: any[] }, string>('/ws/query', {
-    //         wsId,
-    //         sn,
-    //         domain,
-    //     })
-    // }
-    // async loadMyWorkspace(wsHost?: string) {
-    //     return await masterSock.get<{ workspaceId?: string, notCreateWorkSpace?: boolean }, string>('/ws/me', { wsHost })
-    // }
-    // async getWorkspaces() {
-    //     var data = await masterSock.get<{ list: Partial<Workspace>[] }>('/ws/list');
-    //     return data;
-    // }
-    // async createWorkspace(args: { text: string }) {
-    //     var rr = await masterSock.post<{ id: string, sn: number }, string>('/ws/create', { text: args.text });
-    //     return rr;
-    // }
-    // async updateWorkspace(wsId: string, data: Partial<Workspace>) {
-    //     var rr = await masterSock.post('/ws/:wsId/update', { wsId, data, sock: userTim.id });
-    //     return rr;
-    // }
-    // async loadWorkspaceItems(workspaceId: string, pageIds: string[]) {
-    //     var rr = await masterSock.post<
-    //         { pages: Partial<PageItem> },
-    //         string>('/ws/:wsId/items', { wsId: workspaceId, pageIds: pageIds || [] }
-    //         )
-    //     return rr;
-    // }
-    // async loadPageChilds(pageId: string) {
-    //     var rr = await masterSock.get<{ list: Partial<PageItem>[] }, string>('/page/:parentId/subs', { parentId: pageId });
-    //     return rr;
-    // }
-    // async getPage(id: string) {
-    //     var page = await masterSock.get<{ page: Partial<PageItem> }, string>('/page/:id/query', { id });
-    //     return page;
-    // }
-    // async toggleFavourcePage(item: PageItem) {
-
-    // }
-    // async createInvite(wsId: string) {
-    //     return await masterSock.post<{ code: string }, string>('/ws/:wsId/create/invite', { wsId })
-    // }
     /**
     * 用户上传单个文件
     * @returns 
@@ -164,6 +109,48 @@ class WorkspaceService extends BaseService {
         catch (ex) {
             return { ok: false, warn: '下载文件失败' }
         }
+    }
+
+
+    @get('/ws/member/word/query')
+    async memberWordQuery(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/member/word/query', args);
+    }
+    @get('/ws/members')
+    async getMembers(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/members', args);
+    }
+    @del('/ws/memeber/delete')
+    async deleteWsMemeber(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.delete('/ws/memeber/delete', args);
+    }
+    @get('/ws/roles')
+    async getWsRoles(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/roles', args);
+    }
+    @patch('/ws/role/patch')
+    async rolePatch(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.patch('/ws/role/patch', args);
+    }
+    @put('/ws/role/create')
+    async rolePut(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.put('/ws/role/create', args);
+    }
+    @del('/ws/role/delete')
+    async roleDelete(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.delete('/ws/role/delete', args);
+    }
+    @get('/ws/role/members')
+    async roleUsers(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/role/members', args);
     }
 }
 

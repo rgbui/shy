@@ -227,6 +227,17 @@ push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockRespon
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
+
+push('/ws/member/word/query', '{word:string}', '{page:number,size:number,total:number,list:any[]}', ['get']);
+push('/ws/members', '{page:number,size:number}', '{page:number,size:number,total:number,list:any[]}', ['get']);
+push('/ws/memeber/delete', '{userid:string}', 'void', ['del']);
+push('/ws/roles', '{list:any[]}', 'void', ['get']);
+push('/ws/role/patch', '{roleId:string,data:Record<string,any>}', 'void', ['patch']);
+push('/ws/role/create', '{data:Record<string,any>}', 'void', ['put']);
+push('/ws/role/delete', '{roleId:string}', 'void', ['del']);
+push('/ws/role/members', '{roleId:string,page:number,size:number}', '{page:number,size:number,total:number,list:any[]}', ['get']);
+
+
 push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
