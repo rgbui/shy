@@ -15,6 +15,7 @@
  * 
  */
 
+import lodash from 'lodash';
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
@@ -26,8 +27,36 @@ import { Icon, IconButton } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
 import { Switch } from 'rich/component/view/switch';
 import { Remark } from "rich/component/view/text";
-import { WorkspacePermission } from '../../permission';
+import { channel } from 'rich/net/channel';
+import { surface } from '../../..';
+import { getCommonPerssions, WorkspacePermission } from '../../permission';
 import "./style.less";
+
+
+const RoleColors: string[] = [
+    'rgb(26,188,156)',
+    'rgb(46,204,113)',
+    'rgb(52,152,219)',
+    'rgb(155,89,182)',
+    'rgb(233,30,99)',
+    'rgb(241,196,15)',
+    'rgb(230,126,34)',
+    'rgb(231,76,60)',
+    'rgb(149,165,166)',
+    'rgb(96,125,139)',
+    'rgb(17,128,106)',
+    'rgb(31,139,76)',
+    'rgb(32,102,148)',
+    'rgb(113,54,138)',
+    'rgb(173,20,87)',
+    'rgb(194,124,14)',
+    'rgb(168,67,0)',
+    'rgb(153,45,34)',
+    'rgb(151,156,159)',
+    'rgb(84,110,122)',
+]
+
+
 
 @observer
 export class WorkspaceRoles extends React.Component {
@@ -38,26 +67,58 @@ export class WorkspaceRoles extends React.Component {
             mode: observable,
             editRole: observable,
             roleUsers: observable,
+            rolePage: observable,
+            roleSize: observable,
+            roleTotal: observable,
         })
     }
     editRole: Record<string, any> = null;
     roles = [];
     mode = 'perssion';
     roleUsers: any[] = [];
-    openEditRole(role) {
+    rolePage: number = 1;
+    roleSize: number = 100;
+    roleTotal: number;
+    async openEditRole(role) {
         this.editRole = role;
+        if (role.text == '所有人') {
+            this.editRole.permission = surface.workspace.perssions || getCommonPerssions();
+        }
+        else {
+            this.rolePage = 1;
+            var r = await channel.get('/ws/role/members', { roleId: role.id, page: this.rolePage, size: this.roleSize });
+            if (r.ok) {
+                this.roleUsers = r.data.list;
+                this.rolePage = r.data.page;
+                this.roleSize = r.data.size;
+                this.roleTotal = r.data.total;
+            }
+        }
     }
     operatorRole(role, event: React.MouseEvent) {
 
     }
-    addRole() {
-
+    async loadRoles() {
+        var r = await channel.get('/ws/roles');
+        this.roles = r.data.list;
+    }
+    async addRole() {
+        var r = await channel.put('/ws/role/create', {
+            data: {
+                text: '新角色',
+                color: RoleColors[lodash.random(0, RoleColors.length)],
+                perssions: getCommonPerssions()
+            }
+        });
+        if (r.ok) {
+            this.roles.push(r.data.role);
+        }
     }
     renderRoles() {
         return <div className="shy-ws-roles-list">
             <h3>角色</h3>
             <Remark>使用角色来组织你的空间成员并自定义权限</Remark>
-            <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole({ text: 'all' })}>
+            <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole({ text: '所有人' })}>
                 <Row>
                     <Col span={12}><Space>
                         <Icon size={30} icon={TypesPersonSvg}></Icon>
@@ -106,23 +167,23 @@ export class WorkspaceRoles extends React.Component {
                         <Col><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
                     </Row>
                 </div>
-                <a className={this.editRole?.text == 'all' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole({ text: 'all' })}>@所有人</a>
+                <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole({ text: '所有人' })}>@所有人</a>
                 {this.roles.map(r => {
                     return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span>{r.text}</span></a>
                 })}
             </div>
             <div className="shy-ws-roles-edit-tab">
                 <Row>
-                    <Col span={12}><span>编辑角色-{this.editRole.text == 'all' ? "所有人" : this.editRole.text}</span>
+                    <Col span={12}><span>编辑角色-{this.editRole.text}</span>
                     </Col>
                     <Col span={12}>
                         <Icon icon='elipsis:sy'></Icon>
                     </Col>
                 </Row>
                 <div className="shy-ws-roles-edit-tab-head">
-                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == 'all' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}>显示</a>
+                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}>显示</a>
                     <a onMouseDown={e => this.mode = 'perssion'} className={this.mode == 'perssion' ? "hover" : ""}>权限</a>
-                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == 'all' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}>管理成员</a>
+                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}>管理成员</a>
                 </div>
                 <div className="shy-ws-roles-edit-tab-page">
                     {this.mode == 'info' && this.renderRoleInfo()}
@@ -133,7 +194,6 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     renderRoleInfo() {
-        var colors: string[] = [];
         return <div className="shy-ws-role-info">
             <Row>
                 <Col>角色名称*</Col>
@@ -145,9 +205,11 @@ export class WorkspaceRoles extends React.Component {
                 <Col><Remark>成员将使用角色列表中最靠前的角色的颜色。</Remark></Col>
                 <Col><div className='shy-ws-role-info-color-box'>
                     <div className='shy-ws-role-info-color' style={{ backgroundColor: this.editRole.color }}></div>
-                    <div className='shy-ws-role-info-color-picker'></div>
+                    <div className='shy-ws-role-info-color-picker'>
+
+                    </div>
                     <div className='shy-ws-role-info-colors'>
-                        {colors.map(c => {
+                        {RoleColors.map(c => {
                             return <a key={c} style={{ backgroundColor: c }}></a>
                         })}
                     </div>
