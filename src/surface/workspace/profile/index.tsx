@@ -6,7 +6,6 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
 import { SettingsSvg } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
-import ArrowDownSvg from "../../../assert/svg/arrow.down.svg";
 import { Icon } from "rich/component/view/icon";
 
 export var WorkspaceProfile = observer(function () {
