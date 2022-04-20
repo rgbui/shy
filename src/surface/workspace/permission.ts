@@ -1,5 +1,13 @@
 
 
+
+export function getCommonPerssions() {
+    return [
+        WorkspacePermission.sendMessageByChannel
+    ]
+}
+
+
 export enum WorkspacePermission {
     /**
      * 是否可以编辑文档
@@ -19,5 +27,5 @@ export enum WorkspacePermission {
      * 允许创建或删除文本频道
      */
     createOrDeleteChannel = 111,
-    
+
 }
