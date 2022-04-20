@@ -41,6 +41,7 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
+    public perssions: number[];
     constructor() {
         makeObservable(this, {
             id: observable,
