@@ -77,11 +77,11 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
                     </Row>
                     <Row>
                         <Col span={24}><span>电子邮箱</span></Col>
-                        <Col span={12}><span>{this.dataUser?.email || '您还没有添加邮箱'}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? '新增' : '更换'}</Button></Col>
+                        <Col span={12}><span>{this.dataUser?.email || '您还没有添加邮箱'}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? '更换' : '新增'}</Button></Col>
                     </Row>
                     <Row>
                         <Col span={24}><span>手机号</span></Col>
-                        <Col span={12}><span>{this.dataUser?.phone || '您还没有添加手机号'}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? '新增' : '更换'}</Button></Col>
+                        <Col span={12}><span>{this.dataUser?.phone || '您还没有添加手机号'}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? '更换' : '新增'}</Button></Col>
                     </Row>
                 </div>
             </div>

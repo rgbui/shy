@@ -129,9 +129,9 @@ export class UserSettingProfile extends React.Component {
                     </Row>
                     <Row>
                         <Col><h5>自我介绍</h5></Col>
-                        <Col>
+                        {/* <Col>
                             <Remark>如果您愿意，还可以使用 markdown 和链接。</Remark>
-                        </Col>
+                        </Col> */}
                         <Col align='start'>
                             <Textarea
                                 value={this.inputSlogan || surface.user.slogan}
