@@ -75,7 +75,7 @@ export class UserSettingProfile extends React.Component {
             return <svg aria-hidden="false" width="32" height="24" viewBox="0 0 24 24"><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path></svg>
         }
         return <div className="shy-user-settings-profile">
-            <h1>用户个人资料</h1>
+            <h2>用户个人资料</h2>
             <Divider></Divider>
             <div className="shy-user-settings-profile-box">
                 <div className="shy-user-settings-profile-box-left">

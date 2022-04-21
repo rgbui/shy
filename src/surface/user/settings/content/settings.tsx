@@ -56,7 +56,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
     }
     render() {
         return <div>
-            <h1>我的帐号</h1>
+            <h2>我的帐号</h2>
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: 20 }}>
                 <div className="bg">
                     {!surface.user.cover?.url && <div style={{ height: 100, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
