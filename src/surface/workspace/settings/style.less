@@ -14,6 +14,29 @@
     height       : 80px;
     border-radius: 50%;
     z-index      : 1;
+    position     : relative;
+
+    &-hover {
+        position        : absolute;
+        top             : 0px;
+        right           : 0px;
+        bottom          : 0px;
+        left            : 0px;
+        border-radius   : 50%;
+        background-color: rgba(0, 0, 0, .3);
+        color           : #fff;
+        justify-content : center;
+        align-items     : center;
+        font-size       : 12px;
+        cursor          : pointer;
+        display         : none;
+    }
+
+    &:hover {
+        .shy-settings-ws-avatar-hover {
+            display: flex;
+        }
+    }
 
     span {
         display        : flex;
@@ -35,11 +58,36 @@
 }
 
 .shy-settings-ws-cover {
+    position: relative;
+    height         : 120px;
+    width          : 300px;
+    border-radius  : 4px;
     img {
         height         : 120px;
         width          : 300px;
         border-radius  : 4px;
         object-fit     : cover;
         object-position: center;
+    }
+
+    &-hover {
+        position        : absolute;
+        top             : 0px;
+        right           : 0px;
+        bottom          : 0px;
+        left            : 0px;
+        border-radius  : 4px;
+        background-color: rgba(0, 0, 0, .3);
+        color           : #fff;
+        justify-content : center;
+        align-items     : center;
+        font-size       : 12px;
+        cursor          : pointer;
+        display         : none;
+    }
+    &:hover {
+        .shy-settings-ws-cover-hover {
+            display: flex;
+        }
     }
 }
