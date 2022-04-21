@@ -22,12 +22,14 @@ import React from "react";
 import { ArrowLeftSvg, ArrowRightSvg, PlusSvg, SettingsSvg, TypesPersonSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
+import { useColorPicker } from 'rich/component/view/color/picker';
 import { Row, Col, Space, Divider } from 'rich/component/view/grid';
 import { Icon, IconButton } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
 import { Switch } from 'rich/component/view/switch';
 import { Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
+import { Rect } from 'rich/src/common/vector/point';
 import { surface } from '../../..';
 import { getCommonPerssions, WorkspacePermission } from '../../permission';
 import "./style.less";
@@ -78,7 +80,7 @@ export class WorkspaceRoles extends React.Component {
     roleUsers: any[] = [];
     rolePage: number = 1;
     roleSize: number = 100;
-    roleTotal: number;
+    roleTotal: number = -1;
     async openEditRole(role) {
         this.editRole = role;
         if (role.text == '所有人') {
@@ -95,6 +97,10 @@ export class WorkspaceRoles extends React.Component {
             }
         }
     }
+    componentDidMount() {
+        this.loadRoles();
+    }
+
     operatorRole(role, event: React.MouseEvent) {
 
     }
@@ -102,6 +108,7 @@ export class WorkspaceRoles extends React.Component {
         var r = await channel.get('/ws/roles');
         this.roles = r.data.list;
     }
+
     async addRole() {
         var r = await channel.put('/ws/role/create', {
             data: {
@@ -161,25 +168,22 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
-                        <Col><span onMouseDown={e => this.editRole = null}><Icon icon={ArrowLeftSvg}></Icon>
-                            <span>后退</span></span>
+                        <Col span={18}><Icon click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                            <span style={{display:'inline-block',marginLeft:5}} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
-                        <Col><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
+                        <Col span={6}><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
                     </Row>
                 </div>
-                <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole({ text: '所有人' })}>@所有人</a>
                 {this.roles.map(r => {
-                    return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span>{r.text}</span></a>
+                    return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span style={{ backgroundColor: r.color }}></span><span>{r.text}</span></a>
                 })}
+                <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole({ text: '所有人' })}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span>@所有人</span></a>
             </div>
             <div className="shy-ws-roles-edit-tab">
-                <Row>
-                    <Col span={12}><span>编辑角色-{this.editRole.text}</span>
-                    </Col>
-                    <Col span={12}>
-                        <Icon icon='elipsis:sy'></Icon>
-                    </Col>
-                </Row>
+                <div className='shy-ws-roles-edit-tab-title'><Row>
+                    <Col span={12}><span>编辑角色-{this.editRole.text}</span></Col>
+                    {/*<Col span={12} align={'end'}><Icon icon='elipsis:sy'></Icon></Col> */}
+                </Row></div>
                 <div className="shy-ws-roles-edit-tab-head">
                     <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}>显示</a>
                     <a onMouseDown={e => this.mode = 'perssion'} className={this.mode == 'perssion' ? "hover" : ""}>权限</a>
@@ -193,6 +197,21 @@ export class WorkspaceRoles extends React.Component {
             </div>
         </div>
     }
+    async openFontColor(event: React.MouseEvent) {
+        var self = this;
+        var r = await useColorPicker(
+            { roundArea: Rect.fromEvent(event) },
+            {
+                color: this.editRole.color || undefined,
+                change(color) {
+                    self.editRole.color = color;
+                }
+            }
+        );
+        if (r) {
+            this.editRole.color = r;
+        }
+    }
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
             <Row>
@@ -205,12 +224,14 @@ export class WorkspaceRoles extends React.Component {
                 <Col><Remark>成员将使用角色列表中最靠前的角色的颜色。</Remark></Col>
                 <Col><div className='shy-ws-role-info-color-box'>
                     <div className='shy-ws-role-info-color' style={{ backgroundColor: this.editRole.color }}></div>
-                    <div className='shy-ws-role-info-color-picker'>
-
+                    <div className='shy-ws-role-info-color-picker' onMouseDown={e => this.openFontColor(e)} style={{ backgroundColor: RoleColors.includes(this.editRole.color) ? "rgb(153, 170, 181)" : this.editRole.color }}>
+                        <svg style={{ position: 'absolute', top: 2, right: 2 }} width="14" height="14" viewBox="0 0 16 16"><g fill="none"><path d="M-4-4h24v24H-4z"></path><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></g></svg>
                     </div>
                     <div className='shy-ws-role-info-colors'>
                         {RoleColors.map(c => {
-                            return <a key={c} style={{ backgroundColor: c }}></a>
+                            return <a onMouseDown={e => this.editRole.color = c} key={c} style={{ backgroundColor: c }}>
+                                {this.editRole?.color == c && <svg aria-hidden="false" width="16" height="16" viewBox="0 0 24 24"><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path></svg>}
+                            </a>
                         })}
                     </div>
                 </div></Col>
@@ -218,32 +239,38 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     renderPerssions() {
+        var self = this;
         function changePerssion(perssion, checked) {
 
         }
+        function is(perssion: WorkspacePermission) {
+            if (Array.isArray(self.editRole?.perssions)) {
+                return (self.editRole.perssions as number[]).includes(perssion)
+            }
+            return false;
+        }
         return <div className="shy-ws-role-perssion">
             <Row>
-                <Col>通用的空间权限</Col>
-                <Col><Button>清除权限</Button></Col>
+                <Col span={12}>通用的空间权限</Col>
+                <Col span={12} align={'end'}><Button link size={'small'} >清除权限</Button></Col>
             </Row>
-
             <Row>
-                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.editDoc, e)} checked={this.editRole.perssions.includs(WorkspacePermission.editDoc)}></Switch></Col>
+                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.editDoc, e)} checked={is(WorkspacePermission.editDoc)}></Switch></Col>
                 <Col><Remark>默认允许编辑文档</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.createOrDeleteDoc, e)} checked={this.editRole.perssions.includs(WorkspacePermission.createOrDeleteDoc)}></Switch></Col>
+                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.createOrDeleteDoc, e)} checked={is(WorkspacePermission.createOrDeleteDoc)}></Switch></Col>
                 <Col><Remark>默认允许创建或删除文档</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.sendMessageByChannel, e)} checked={this.editRole.perssions.includs(WorkspacePermission.sendMessageByChannel)}></Switch></Col>
+                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.sendMessageByChannel, e)} checked={is(WorkspacePermission.sendMessageByChannel)}></Switch></Col>
                 <Col><Remark>默认允许会话发送消息</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.createOrDeleteChannel, e)} checked={this.editRole.perssions.includs(WorkspacePermission.createOrDeleteChannel)}></Switch></Col>
+                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.createOrDeleteChannel, e)} checked={is(WorkspacePermission.createOrDeleteChannel)}></Switch></Col>
                 <Col><Remark>默认允许创建会话或删除会话</Remark></Col>
                 <Divider></Divider>
             </Row>

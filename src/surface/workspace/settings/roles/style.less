@@ -19,12 +19,153 @@
     }
 
     .shy-ws-roles-list-box {
+        margin-top: 10px;
+
         &-head {
             span {
                 font-size: 12px;
                 color    : var(--header-secondary);
             }
+
             border-bottom: 1px solid var(--background-modifier-accent);
+        }
+    }
+}
+
+.shy-ws-roles-edit {
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : flex-start;
+
+    .shy-ws-roles-edit-roles {
+        flex-grow  : 0;
+        flex-shrink: 0;
+        width      : 200px;
+
+        &-head {}
+
+        >a {
+            padding        : 6px 10px;
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+            margin         : 2px 10px;
+            border-radius  : 4px;
+            color          : var(--interactive-normal);
+            font-weight    : 500;
+            font-size      : 16px;
+
+            &:hover {
+                background-color: var(--background-modifier-hover);
+                color           : var(--interactive-hover);
+            }
+
+            &.hover {
+                background-color: var(--background-modifier-selected);
+                color           : var(--interactive-active);
+            }
+
+            span {
+                &:first-child {
+                    display      : inline-block;
+                    width        : 14px;
+                    height       : 14px;
+                    border-radius: 50%;
+                }
+
+                &:last-child {
+                    margin-left  : 8px;
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                    white-space  : nowrap;
+                }
+            }
+        }
+    }
+
+    .shy-ws-roles-edit-tab {
+        flex-grow  : 1;
+        flex-shrink: 1;
+
+        &-title {
+            color      : var(--header-primary);
+            font-size  : 16px;
+            line-height: 20px;
+            font-weight: 500;
+        }
+
+        &-head {
+            margin-top   : 16px;
+            margin-bottom: -2px;
+            border-bottom: 2px solid var(--background-modifier-accent);
+            box-sizing   : border-box;
+
+            a {
+                display       : inline-block;
+                border-bottom : 2px solid transparent;
+                font-size     : 16px;
+                line-height   : 20px;
+                padding-bottom: 16px;
+                position      : relative;
+                color         : var(--interactive-active);
+                margin-right  : 32px;
+
+                &.hover {
+                    border-bottom-color: var(--control-brand-foreground);
+                }
+
+                &.disabled {
+                    color: var(--interactive-muted);
+                }
+            }
+        }
+
+        &-page {
+            padding-top: 10px;
+        }
+    }
+}
+
+.shy-ws-role-info-color-box {
+    margin-top     : 10px;
+    display        : flex;
+    justify-content: flex-start;
+    align-items    : flex-start;
+
+    .shy-ws-role-info-color {
+        height       : 50px;
+        min-width    : 60px;
+        border-radius: 4px;
+    }
+
+    .shy-ws-role-info-color-picker {
+        height       : 50px;
+        min-width    : 60px;
+        border-radius: 4px;
+        margin       : 0px 10px;
+        cursor       : pointer;
+        box-sizing   : border-box;
+        border       : 1px solid rgba(79, 84, 92, .1);
+        position     : relative;
+    }
+
+    .shy-ws-role-info-colors {
+        display  : flex;
+        height   : 20px;
+        width    : 300px;
+        flex-wrap: wrap;
+
+        a {
+            display        : inline-flex;
+            justify-content: center;
+            align-items    : center;
+            box-sizing     : border-box;
+            width          : 20px;
+            height         : 20px;
+            border-radius  : 3px;
+            margin-right   : 10px;
+            margin-bottom  : 10px;
+            cursor         : pointer;
         }
     }
 }
