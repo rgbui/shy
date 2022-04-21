@@ -119,6 +119,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/members')
     async getMembers(args) {
+        if(!args)args={};
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/ws/members', args);
     }
@@ -129,6 +130,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/roles')
     async getWsRoles(args) {
+        if(!args)args={};
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/ws/roles', args);
     }
