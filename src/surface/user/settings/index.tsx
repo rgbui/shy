@@ -10,6 +10,7 @@ import { Divider } from 'rich/component/view/grid';
 import { Remark } from 'rich/component/view/text';
 import { config } from "../../../common/config";
 import { UserSettingProfile } from './content/profile';
+import { ShyAppUpdate } from './content/update';
 
 @observer
 class UserSettings extends EventsComponent {
@@ -50,7 +51,7 @@ class UserSettings extends EventsComponent {
                     <a>外观</a>
                     <a>语言</a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
-                    <a>更新日志</a>
+                    <a onMouseDown={e => this.mode = 'update'} className={this.mode == 'update' ? "hover" : ""}>更新日志</a>
                     <Remark style={{ marginLeft: 15 }}>v{config.version}</Remark>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <a className='warn' onClick={e => this.singout()}> 退出登录</a>
@@ -65,8 +66,12 @@ class UserSettings extends EventsComponent {
                                 d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
                         </a>
                     </div>
-                    {this.mode == 'user-settings' && <UserSettingsView setMode={() => { this.mode = 'user-profile' }}></UserSettingsView>}
-                    {this.mode == 'user-profile' && <UserSettingProfile></UserSettingProfile>}
+                    <div  className='shy-settings-content-wrapper-scroll'>
+                        {this.mode == 'user-settings' && <UserSettingsView setMode={() => { this.mode = 'user-profile' }}></UserSettingsView>}
+                        {this.mode == 'user-profile' && <UserSettingProfile></UserSettingProfile>}
+                        {this.mode == 'update' && <ShyAppUpdate></ShyAppUpdate>}
+                    </div>
+
                 </div>
             </div>
         </div>
