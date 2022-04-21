@@ -27,7 +27,34 @@
                 color    : var(--header-secondary);
             }
 
-            border-bottom: 1px solid var(--background-modifier-accent);
+            padding-bottom: 5px;
+            border-bottom : 1px solid var(--background-modifier-accent);
+        }
+
+        .shy-ws-roles-list-role-info {
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+            border-bottom  : 1px solid var(--background-modifier-accent);
+            padding        : 10px 0px;
+            cursor: pointer;
+
+            >div {
+                padding:0px 10px;
+                &:first-child {
+                    flex-grow  : 1;
+                    flex-shrink: 1;
+                }
+
+                &:last-child {
+                    flex-grow  : 0;
+                    flex-shrink: 0;
+                }
+            }
+
+            &:hover {
+                background-color: var(--background-modifier-hover);
+            }
         }
     }
 }
@@ -109,6 +136,7 @@
                 position      : relative;
                 color         : var(--interactive-active);
                 margin-right  : 32px;
+                cursor        : pointer;
 
                 &.hover {
                     border-bottom-color: var(--control-brand-foreground);

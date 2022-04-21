@@ -26,6 +26,7 @@ import { useColorPicker } from 'rich/component/view/color/picker';
 import { Row, Col, Space, Divider } from 'rich/component/view/grid';
 import { Icon, IconButton } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
+import { useSelectMenuItem } from 'rich/component/view/menu';
 import { Switch } from 'rich/component/view/switch';
 import { Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
@@ -57,7 +58,6 @@ const RoleColors: string[] = [
     'rgb(151,156,159)',
     'rgb(84,110,122)',
 ]
-
 
 
 @observer
@@ -100,15 +100,20 @@ export class WorkspaceRoles extends React.Component {
     componentDidMount() {
         this.loadRoles();
     }
-
-    operatorRole(role, event: React.MouseEvent) {
-
+    async operatorRole(role, event: React.MouseEvent) {
+        event.stopPropagation();
+        var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ name: 'delete', text: '删除' }]);
+        if (r && r.item.name == 'delete') {
+            var re = await channel.del('/ws/role/delete', { roleId: role.id });
+            var rs = this.roles.map(r => r);
+            rs.remove(g => g.id == role.id);
+            this.roles = rs;
+        }
     }
     async loadRoles() {
         var r = await channel.get('/ws/roles');
         this.roles = r.data.list;
     }
-
     async addRole() {
         var r = await channel.put('/ws/role/create', {
             data: {
@@ -142,23 +147,20 @@ export class WorkspaceRoles extends React.Component {
                 <div className='shy-ws-roles-list-box-head'>
                     <Row style={{ marginBottom: 0 }}>
                         <Col span={12}><span>角色</span></Col>
-                        <Col span={12} align='end'><Button onClick={e => this.addRole()}>添加角色</Button></Col>
+                        <Col span={12} align='end'><Button size='small' onClick={e => this.addRole()}>添加角色</Button></Col>
                     </Row>
                 </div>
                 {this.roles.map(r => {
-                    return <Row key={r.id}>
-                        <Col span={12}>{r.text}</Col>
-                        <Col span={12} align='end'>
-                            <IconButton onMouseDown={e => this.openEditRole(r)}
-                                width={24}
-                                size={14} wrapper
-                                icon={SettingsSvg}
-                            ></IconButton>
-                            <IconButton width={24} onMouseDown={e => this.operatorRole(r, e)} size={14} wrapper
-                                icon={'elipsis:sy'}
-                            ></IconButton>
-                        </Col>
-                    </Row>
+                    return <div key={r.id} className='shy-ws-roles-list-role-info' onMouseDown={e => this.openEditRole(r)} >
+                        <div style={{ display: 'inline-flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <svg width="20" height="23" viewBox="0 0 20 23" style={{ marginRight: 5 }}><g fill="none" fillRule="evenodd"><path
+                                fill={r.color}
+                                d="M19.487 5.126L10.487 0.126C10.184 -0.042 9.81798 -0.042 9.51498 0.126L0.514977 5.126C0.197977 5.302 0.000976562 5.636 0.000976562 5.999C0.000976562 6.693 0.114977 22.999 10.001 22.999C19.887 22.999 20.001 6.693 20.001 5.999C20.001 5.636 19.804 5.302 19.487 5.126ZM10.001 5.999C11.382 5.999 12.501 7.118 12.501 8.499C12.501 9.88 11.382 10.999 10.001 10.999C8.61998 10.999 7.50098 9.88 7.50098 8.499C7.50098 7.118 8.61998 5.999 10.001 5.999ZM6.25098 16C6.25098 13.699 7.69998 12.25 10.001 12.25C12.302 12.25 13.751 13.699 13.751 16H6.25098Z"></path></g></svg>
+                            {r.text}</div>
+                        <div><IconButton width={24} onMouseDown={e => this.operatorRole(r, e)} size={14} wrapper
+                            icon={'elipsis:sy'}
+                        ></IconButton></div>
+                    </div>
                 })}
             </div>
         </div>
@@ -169,7 +171,7 @@ export class WorkspaceRoles extends React.Component {
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
                         <Col span={18}><Icon click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
-                            <span style={{display:'inline-block',marginLeft:5}} onMouseDown={e => this.editRole = null}>后退</span>
+                            <span style={{ display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
                         <Col span={6}><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
                     </Row>
