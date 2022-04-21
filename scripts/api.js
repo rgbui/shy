@@ -219,7 +219,6 @@ push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:
 push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
 push('/ws/invite/check', '{invite:string}', 'SockResponse<{member:boolean,workspace:Record<string,any>}>', ['get']);
 push('/ws/invite/join', '{wsId:string}', 'SockResponse<{workspace:Record<string,any>}>', ['post']);
-push('/ws/sitedomain/patch', '{domain:string}', 'SockResponse<{success:boolean,overflowDue:boolean}>', ['patch']);
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string} }>', ['post'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string} }>', ['post'])
@@ -227,6 +226,7 @@ push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockRespon
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
+
 
 push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
@@ -236,7 +236,7 @@ push('/ws/role/patch', '{roleId:string,data:Record<string,any>}', 'SockResponse<
 push('/ws/role/create', '{data:Record<string,any>}', 'SockResponse<{role:Record<string,any>}>', ['put']);
 push('/ws/role/delete', '{roleId:string}', 'SockResponse<void>', ['del']);
 push('/ws/role/members', '{roleId:string,page:number,size:number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
-
+push('/ws/set/domain','{wsId?:string,domain:string}','SockResponse<{exists?:boolean,illegal?:boolean}>',['patch'])
 
 push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
