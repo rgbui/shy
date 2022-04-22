@@ -76,6 +76,10 @@ export class WorkspaceSettingsView extends React.Component {
         text: '',
         slogan: ''
     }
+    componentDidMount() {
+        this.data = { text: surface.workspace.text, slogan: surface.workspace.slogan };
+        this.forceUpdate();
+    }
     tip: SaveTip;
     async save() {
         var r = await channel.patch('/ws/patch', { data: this.data });
@@ -84,11 +88,6 @@ export class WorkspaceSettingsView extends React.Component {
             surface.workspace.slogan = this.data.slogan;
             this.tip.close();
         }
-    }
-    componentDidMount() {
-        this.data.text = surface.workspace.text;
-        this.data.slogan = surface.workspace.slogan;
-        this.forceUpdate();
     }
     reset() {
         runInAction(() => {
