@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'rich/component/view/button';
 import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input, Textarea } from 'rich/component/view/input';
-import { Workspace } from '..';
 import { OpenFileDialoug } from 'rich/component/file';
 import { surface } from '../..';
 import "./style.less";
@@ -10,9 +9,18 @@ import { observer } from 'mobx-react';
 import { channel } from 'rich/net/channel';
 import { useSetWsDomain } from '../../user/common/setDomain';
 import { Remark } from 'rich/component/view/text';
+import { SaveTip } from '../../../component/tip/save.tip';
+import { makeObservable, observable, runInAction } from 'mobx';
 
 @observer
 export class WorkspaceSettingsView extends React.Component {
+    constructor(props) {
+        super(props);
+        makeObservable(this, {
+            data: observable,
+            error: observable
+        })
+    }
     async onUploadFace() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
         if (file) {
@@ -41,12 +49,11 @@ export class WorkspaceSettingsView extends React.Component {
             surface.workspace.siteDomain = r;
         }
     }
-    data: Partial<Workspace> = {
+    data = {
         text: '',
         slogan: '',
-        siteDomain: '',
     }
-    setData(data: WorkspaceSettingsView['data']) {
+    setData(data: { text?: string, slogan?: string }) {
         if (typeof data.text != 'undefined' && data.text) {
             this.error.text = '';
             if (data.text.length > 30) {
@@ -61,21 +68,38 @@ export class WorkspaceSettingsView extends React.Component {
                 return;
             }
         }
-        if (typeof data.siteDomain != 'undefined' && data.siteDomain) {
-            this.error.siteDomain = '';
-            if (data.siteDomain.length > 30) {
-                this.error.siteDomain = '二级域名不合法';
-                return;
-            }
-        }
         Object.assign(this.data, data);
+
+        if (this.tip) this.tip.open();
     }
-    error: Partial<Workspace> = {
+    error = {
         text: '',
         slogan: ''
     }
+    tip: SaveTip;
+    async save() {
+        var r = await channel.patch('/ws/patch', { data: this.data });
+        if (r.ok) {
+            surface.workspace.text = this.data.text;
+            surface.workspace.slogan = this.data.slogan;
+            this.tip.close();
+        }
+    }
+    componentDidMount() {
+        this.data.text = surface.workspace.text;
+        this.data.slogan = surface.workspace.slogan;
+        this.forceUpdate();
+    }
+    reset() {
+        runInAction(() => {
+            this.data = { text: surface.workspace.text, slogan: surface.workspace.slogan };
+            this.error = { text: '', slogan: '' };
+            this.tip.close();
+        })
+    }
     render() {
         return <div>
+            <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
             <h2>工作空间</h2>
             <Divider></Divider>
             <Row>
@@ -106,13 +130,13 @@ export class WorkspaceSettingsView extends React.Component {
             <Row>
                 <Col span={24}><h5>工作空间名称</h5></Col>
                 <Col span={24}><Remark>点击输入框可修改名称</Remark></Col>
-                <Col span={24}><Input value={this.data.text || surface.workspace.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input></Col>
+                <Col span={24}><Input value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input></Col>
             </Row>
             <Divider></Divider>
             <Row>
-                <Col span={24}><h5>工作描述</h5></Col>
+                <Col span={24}><h5>工作空间描述</h5></Col>
                 <Col span={24}><Remark>点击输入框可修改名称</Remark></Col>
-                <Col span={24}><Textarea value={this.data.slogan || surface.workspace.slogan} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Textarea></Col>
+                <Col span={24}><Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'请输入你的工作空间描述'}></Textarea></Col>
             </Row>
             <Divider></Divider>
             <Row>
