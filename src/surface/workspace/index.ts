@@ -19,6 +19,14 @@ export type WorkspaceUser = {
     role: string;
     nick: string;
 }
+
+export type WorkspaceRole = {
+    id: string,
+    text: string,
+    color: string,
+    permissions: number[],
+    icon?: IconArguments
+}
 export class Workspace {
     public id: string = null;
     public sn: number = null;
@@ -42,6 +50,7 @@ export class Workspace {
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
     public permissions: number[];
+    public roles: WorkspaceRole[] = [];
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -57,7 +66,8 @@ export class Workspace {
             memberCount: observable,
             memberOnlineCount: observable,
             config: observable,
-            owner: observable
+            owner: observable,
+            roles: observable
         })
     }
     private _sock: Sock;
@@ -137,6 +147,13 @@ export class Workspace {
                 if (pt) return pt;
             }
         }
+    }
+    async loadRoles() {
+        var rs = await channel.get('/ws/roles');
+        if (rs.ok) {
+            this.roles = rs.data.list;
+        }
+        else  this.roles = [];
     }
     async loadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));

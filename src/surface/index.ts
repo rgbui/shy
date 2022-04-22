@@ -58,6 +58,7 @@ export class Surface extends Events {
             var ws = new Workspace();
             ws.load({ ...r.data.workspace });
             this.workspace = ws;
+            await ws.loadRoles();
             await ws.loadPages();
             await timService.enterWorkspace(this.workspace.id);
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
