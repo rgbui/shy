@@ -178,8 +178,8 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
-                        <Col span={18}><Icon click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
-                            <span style={{ display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
+                        <Col span={18}><Icon style={{cursor:'pointer'}} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                            <span style={{cursor:'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
                         <Col span={6}><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
                     </Row>
