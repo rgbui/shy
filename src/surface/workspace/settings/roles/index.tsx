@@ -112,12 +112,9 @@ export class WorkspaceRoles extends React.Component {
         }
     }
     async loadRoles() {
-        var r = await channel.get('/ws/roles');
-        if (r.ok) {
-            this.roles = r.data.list;
-            this.roles.push({ text: '所有人', permissions: surface.workspace.permissions || getCommonPerssions() })
-            this.bakeRoles = lodash.cloneDeep(this.roles);
-        }
+        this.roles = lodash.cloneDeep(surface.workspace.roles);
+        this.roles.push({ text: '所有人', permissions: surface.workspace.permissions || getCommonPerssions() })
+        this.bakeRoles = lodash.cloneDeep(this.roles);
     }
     async addRole() {
         var r = await channel.put('/ws/role/create', {
@@ -178,8 +175,8 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
-                        <Col span={18}><Icon style={{cursor:'pointer'}} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
-                            <span style={{cursor:'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
+                        <Col span={18}><Icon style={{ cursor: 'pointer' }} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                            <span style={{ cursor: 'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
                         <Col span={6}><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
                     </Row>
