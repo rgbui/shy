@@ -37,7 +37,6 @@ import { SaveTip } from '../../../../component/tip/save.tip';
 import { getCommonPerssions, WorkspacePermission } from '../../permission';
 import "./style.less";
 
-
 const RoleColors: string[] = [
     'rgb(26,188,156)',
     'rgb(46,204,113)',
@@ -61,7 +60,6 @@ const RoleColors: string[] = [
     'rgb(84,110,122)',
 ]
 
-
 @observer
 export class WorkspaceRoles extends React.Component {
     constructor(props) {
@@ -79,7 +77,7 @@ export class WorkspaceRoles extends React.Component {
     editRole: Record<string, any> = null;
     roles = [];
     bakeRoles = [];
-    mode = 'perssion';
+    mode = 'permission';
     roleUsers: any[] = [];
     rolePage: number = 1;
     roleSize: number = 100;
@@ -87,7 +85,7 @@ export class WorkspaceRoles extends React.Component {
     async openEditRole(role) {
         this.editRole = role;
         if (!role.id) {
-
+            this.mode = 'permission';
         }
         else {
             this.rolePage = 1;
@@ -133,11 +131,14 @@ export class WorkspaceRoles extends React.Component {
             this.roles.push(r.data.role);
         }
     }
+    get allRole() {
+        return this.roles.find(g => g.text == '所有人');
+    }
     renderRoles() {
         return <div className="shy-ws-roles-list">
             <h3>角色</h3>
             <Remark>使用角色来组织你的空间成员并自定义权限</Remark>
-            <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole({ text: '所有人' })}>
+            <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole(this.allRole)}>
                 <Row>
                     <Col span={12}><Space>
                         <Icon size={30} icon={TypesPersonSvg}></Icon>
@@ -186,7 +187,7 @@ export class WorkspaceRoles extends React.Component {
                 {this.roles.filter(f => f.id ? true : false).map(r => {
                     return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span style={{ backgroundColor: r.color }}></span><span>{r.text}</span></a>
                 })}
-                <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole({ text: '所有人' })}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span>@所有人</span></a>
+                <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole(this.allRole)}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span>@所有人</span></a>
             </div>
             <div className="shy-ws-roles-edit-tab">
                 <div className='shy-ws-roles-edit-tab-title'><Row>
@@ -195,12 +196,12 @@ export class WorkspaceRoles extends React.Component {
                 </Row></div>
                 <div className="shy-ws-roles-edit-tab-head">
                     <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}>显示</a>
-                    <a onMouseDown={e => this.mode = 'perssion'} className={this.mode == 'perssion' ? "hover" : ""}>权限</a>
+                    <a onMouseDown={e => this.mode = 'permission'} className={this.mode == 'permission' ? "hover" : ""}>权限</a>
                     <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}>管理成员</a>
                 </div>
                 <div className="shy-ws-roles-edit-tab-page">
                     {this.mode == 'info' && this.renderRoleInfo()}
-                    {this.mode == 'perssion' && this.renderPerssions()}
+                    {this.mode == 'permission' && this.renderPerssions()}
                     {this.mode == 'user' && this.renderRoleUsers()}
                 </div>
             </div>
@@ -245,7 +246,9 @@ export class WorkspaceRoles extends React.Component {
             else {
                 var br = this.bakeRoles.find(g => g.id ? false : true);
                 if (JSON.stringify(br.permissions) != JSON.stringify(role.perssionss)) {
-                    await channel.patch('/ws/patch', { data: { permissions: role.permissions } })
+                    await channel.patch('/ws/patch', { data: { permissions: role.permissions } });
+                    surface.workspace.permissions = role.permissions;
+                    await util.delay(200);
                 }
             }
         }
@@ -257,7 +260,7 @@ export class WorkspaceRoles extends React.Component {
     }
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
-            <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
+
             <Row>
                 <Col>角色名称*</Col>
                 <Col><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></Col>
@@ -284,50 +287,50 @@ export class WorkspaceRoles extends React.Component {
     }
     renderPerssions() {
         var self = this;
-        function changePerssion(perssion, checked) {
+        function changePermission(permission, checked) {
             if (!Array.isArray(self.editRole?.permissions)) {
-                self.editRole.perssons = [];
+                self.editRole.permissions = [];
             }
             if (checked == true) {
-                if (!self.editRole.perssons.includes(perssion)) {
-                    self.editRole.perssons.push(perssion);
+                if (!self.editRole.permissions.includes(permission)) {
+                    self.editRole.permissions.push(permission);
                 }
             }
             else {
-                if (self.editRole.perssons.includes(perssion)) {
-                    lodash.remove(self.editRole.permissions, x => x == perssion);
+                if (self.editRole.permissions.includes(permission)) {
+                    lodash.remove(self.editRole.permissions, x => x == permission);
                 }
             }
             self.tip.open();
         }
-        function is(perssion: WorkspacePermission) {
+        function is(permission: WorkspacePermission) {
             if (Array.isArray(self.editRole?.permissions)) {
-                return (self.editRole.permissions as number[]).includes(perssion)
+                return (self.editRole.permissions as number[]).includes(permission)
             }
             return false;
         }
-        return <div className="shy-ws-role-perssion">
+        return <div className="shy-ws-role-permission">
             <Row>
                 <Col span={12}>通用的空间权限</Col>
                 <Col span={12} align={'end'}><Button link size={'small'} >清除权限</Button></Col>
             </Row>
             <Row>
-                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.editDoc, e)} checked={is(WorkspacePermission.editDoc)}></Switch></Col>
+                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.editDoc, e)} checked={is(WorkspacePermission.editDoc)}></Switch></Col>
                 <Col><Remark>默认允许编辑文档</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.createOrDeleteDoc, e)} checked={is(WorkspacePermission.createOrDeleteDoc)}></Switch></Col>
+                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.createOrDeleteDoc, e)} checked={is(WorkspacePermission.createOrDeleteDoc)}></Switch></Col>
                 <Col><Remark>默认允许创建或删除文档</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.sendMessageByChannel, e)} checked={is(WorkspacePermission.sendMessageByChannel)}></Switch></Col>
+                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.sendMessageByChannel, e)} checked={is(WorkspacePermission.sendMessageByChannel)}></Switch></Col>
                 <Col><Remark>默认允许会话发送消息</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePerssion(WorkspacePermission.createOrDeleteChannel, e)} checked={is(WorkspacePermission.createOrDeleteChannel)}></Switch></Col>
+                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.createOrDeleteChannel, e)} checked={is(WorkspacePermission.createOrDeleteChannel)}></Switch></Col>
                 <Col><Remark>默认允许创建会话或删除会话</Remark></Col>
                 <Divider></Divider>
             </Row>
@@ -346,6 +349,7 @@ export class WorkspaceRoles extends React.Component {
     }
     render() {
         return <div className='shy-ws-roles'>
+            <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
             {!this.editRole && this.renderRoles()}
             {this.editRole && this.renderEditRoles()}
         </div>
