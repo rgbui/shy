@@ -6,6 +6,7 @@ import { EventsComponent } from "rich/component/lib/events.component";
 import { Singleton } from "rich/component/lib/Singleton";
 import { Divider } from "rich/component/view/grid";
 import { surface } from "../..";
+import { SaveTip } from "../../../component/tip/save.tip";
 import { WorkspaceMembers } from "./member";
 import { WorkspaceRoles } from "./roles";
 import { WorkspaceSettingsView } from "./settings";
@@ -22,6 +23,9 @@ class WsSettings extends EventsComponent {
         });
     }
     setMode(mode: WsSettings['mode']) {
+        if (SaveTip.isOf(this.el)) {
+            return;
+        }
         this.mode = mode;
     }
     close() {
@@ -31,9 +35,10 @@ class WsSettings extends EventsComponent {
     open() {
         this.visible = true;
     }
+    el: HTMLElement;
     render() {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
-        return <div className='shy-settings'>
+        return <div ref={e => this.el = e} className='shy-settings'>
             <div className='shy-settings-slide'>
                 <div>
                     <h4>{surface.workspace.text}</h4>

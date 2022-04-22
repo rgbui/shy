@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "rich/component/view/button";
 import { Col, Row } from "rich/component/view/grid";
+import { AnimateCommand, AnimateCSS } from "rich/component/animate";
 import "./style.less";
 
 export class SaveTip extends React.Component<{
@@ -34,5 +35,13 @@ export class SaveTip extends React.Component<{
                 </Col>
             </Row>
         </div>
+    }
+    static isOf(el: HTMLElement) {
+        var r = el.querySelector('.shy-save-tip');
+        if (r) {
+            AnimateCSS(r as HTMLElement, AnimateCommand.shakeY);
+            return true;
+        }
+        else return false;
     }
 }
