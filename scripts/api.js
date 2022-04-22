@@ -213,6 +213,7 @@ push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/info', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])

@@ -53,7 +53,7 @@ export class Surface extends Events {
         }
     }
     async loadWorkspace(wsId: string, name?: string) {
-        var r = await channel.get('/ws/basic', { name, wsId });
+        var r = await channel.get('/ws/info', { name, wsId });
         if (r.ok) {
             var ws = new Workspace();
             ws.load({ ...r.data.workspace });

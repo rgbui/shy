@@ -12,6 +12,10 @@ class WorkspaceService extends BaseService {
     async queryWsBasic(data: { id?: string, name?: string }) {
         return await masterSock.get('/ws/basic', data);
     }
+    @get('/ws/info')
+    async queryWsInfo(data: { id?: string, name?: string }) {
+        return await masterSock.get('/ws/info', data);
+    }
     @get('/ws/query')
     async queryWs(data: { wsId: string }) {
         return await masterSock.get('/ws/query', data);
@@ -156,7 +160,7 @@ class WorkspaceService extends BaseService {
     }
     @patch('/ws/set/domain')
     async wsSetDomain(args) {
-        if (!args.wsId)  args.wsId = surface.workspace.id;
+        if (!args.wsId) args.wsId = surface.workspace.id;
         return await surface.workspace.sock.patch('/ws/set/domain', args);
     }
 }
