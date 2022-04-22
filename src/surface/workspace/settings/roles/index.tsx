@@ -16,7 +16,7 @@
  */
 
 import lodash from 'lodash';
-import { makeObservable, observable } from 'mobx';
+import { makeObservable, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
 import { ArrowLeftSvg, ArrowRightSvg, PlusSvg, SettingsSvg, TypesPersonSvg } from "rich/component/svgs";
@@ -31,7 +31,9 @@ import { Switch } from 'rich/component/view/switch';
 import { Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
 import { Rect } from 'rich/src/common/vector/point';
+import { util } from 'rich/util/util';
 import { surface } from '../../..';
+import { SaveTip } from '../../../../component/tip/save.tip';
 import { getCommonPerssions, WorkspacePermission } from '../../permission';
 import "./style.less";
 
@@ -76,6 +78,7 @@ export class WorkspaceRoles extends React.Component {
     }
     editRole: Record<string, any> = null;
     roles = [];
+    bakeRoles = [];
     mode = 'perssion';
     roleUsers: any[] = [];
     rolePage: number = 1;
@@ -83,8 +86,8 @@ export class WorkspaceRoles extends React.Component {
     roleTotal: number = -1;
     async openEditRole(role) {
         this.editRole = role;
-        if (role.text == '所有人') {
-            this.editRole.permission = surface.workspace.perssions || getCommonPerssions();
+        if (!role.id) {
+
         }
         else {
             this.rolePage = 1;
@@ -112,14 +115,18 @@ export class WorkspaceRoles extends React.Component {
     }
     async loadRoles() {
         var r = await channel.get('/ws/roles');
-        this.roles = r.data.list;
+        if (r.ok) {
+            this.roles = r.data.list;
+            this.roles.push({ text: '所有人', permissions: surface.workspace.permissions || getCommonPerssions() })
+            this.bakeRoles = lodash.cloneDeep(this.roles);
+        }
     }
     async addRole() {
         var r = await channel.put('/ws/role/create', {
             data: {
                 text: '新角色',
                 color: RoleColors[lodash.random(0, RoleColors.length)],
-                perssions: getCommonPerssions()
+                permissions: getCommonPerssions()
             }
         });
         if (r.ok) {
@@ -150,7 +157,7 @@ export class WorkspaceRoles extends React.Component {
                         <Col span={12} align='end'><Button size='small' onClick={e => this.addRole()}>添加角色</Button></Col>
                     </Row>
                 </div>
-                {this.roles.map(r => {
+                {this.roles.filter(g => g.id ? true : false).map(r => {
                     return <div key={r.id} className='shy-ws-roles-list-role-info' onMouseDown={e => this.openEditRole(r)} >
                         <div style={{ display: 'inline-flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                             <svg width="20" height="23" viewBox="0 0 20 23" style={{ marginRight: 5 }}><g fill="none" fillRule="evenodd"><path
@@ -176,7 +183,7 @@ export class WorkspaceRoles extends React.Component {
                         <Col span={6}><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
                     </Row>
                 </div>
-                {this.roles.map(r => {
+                {this.roles.filter(f => f.id ? true : false).map(r => {
                     return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span style={{ backgroundColor: r.color }}></span><span>{r.text}</span></a>
                 })}
                 <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole({ text: '所有人' })}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span>@所有人</span></a>
@@ -214,11 +221,46 @@ export class WorkspaceRoles extends React.Component {
             this.editRole.color = r;
         }
     }
+    editSave(data: Record<string, any>) {
+        runInAction(() => {
+            for (let n in data) {
+                this.editRole[n] = data[n];
+            }
+            this.tip.open();
+        })
+    }
+    tip: SaveTip;
+    async save() {
+        for (let i = 0; i < this.roles.length; i++) {
+            var role = this.roles[i];
+            if (role.id) {
+                var br = this.bakeRoles.find(b => b.id == role.id);
+                if (br) {
+                    if (JSON.stringify(br) != JSON.stringify(role)) {
+                        await channel.patch('/ws/role/patch', { roleId: role.id, data: { text: role.text, color: role.color, permissions: role.permissions } });
+                        await util.delay(200);
+                    }
+                }
+            }
+            else {
+                var br = this.bakeRoles.find(g => g.id ? false : true);
+                if (JSON.stringify(br.permissions) != JSON.stringify(role.perssionss)) {
+                    await channel.patch('/ws/patch', { data: { permissions: role.permissions } })
+                }
+            }
+        }
+        this.tip.close();
+    }
+    reset() {
+        this.roles = lodash.cloneDeep(this.bakeRoles);
+        this.tip.close();
+    }
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
+            <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
             <Row>
                 <Col>角色名称*</Col>
-                <Col><Input value={this.editRole.text} onChange={e => this.editRole.text = e}></Input></Col>
+                <Col><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></Col>
             </Row>
             <Divider></Divider>
             <Row>
@@ -231,7 +273,7 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                     <div className='shy-ws-role-info-colors'>
                         {RoleColors.map(c => {
-                            return <a onMouseDown={e => this.editRole.color = c} key={c} style={{ backgroundColor: c }}>
+                            return <a onMouseDown={e => this.editSave({ color: c })} key={c} style={{ backgroundColor: c }}>
                                 {this.editRole?.color == c && <svg aria-hidden="false" width="16" height="16" viewBox="0 0 24 24"><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path></svg>}
                             </a>
                         })}
@@ -243,11 +285,24 @@ export class WorkspaceRoles extends React.Component {
     renderPerssions() {
         var self = this;
         function changePerssion(perssion, checked) {
-
+            if (!Array.isArray(self.editRole?.permissions)) {
+                self.editRole.perssons = [];
+            }
+            if (checked == true) {
+                if (!self.editRole.perssons.includes(perssion)) {
+                    self.editRole.perssons.push(perssion);
+                }
+            }
+            else {
+                if (self.editRole.perssons.includes(perssion)) {
+                    lodash.remove(self.editRole.permissions, x => x == perssion);
+                }
+            }
+            self.tip.open();
         }
         function is(perssion: WorkspacePermission) {
-            if (Array.isArray(self.editRole?.perssions)) {
-                return (self.editRole.perssions as number[]).includes(perssion)
+            if (Array.isArray(self.editRole?.permissions)) {
+                return (self.editRole.permissions as number[]).includes(perssion)
             }
             return false;
         }
