@@ -238,7 +238,7 @@ push('/ws/role/create', '{data:Record<string,any>}', 'SockResponse<{role:Record<
 push('/ws/role/delete', '{roleId:string}', 'SockResponse<void>', ['del']);
 push('/ws/role/members', '{roleId:string,page:number,size:number,word?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/set/domain','{wsId?:string,domain:string}','SockResponse<{exists?:boolean,illegal?:boolean}>',['patch'])
-
+push('/ws/patch/member/roles','{wsId?:string,userid:string,roleIds:string[]}','SockResponse<void>',['patch'])
 push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
