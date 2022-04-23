@@ -66,6 +66,17 @@ export class WorkspaceMembers extends React.Component {
             }
         }
     }
+    async removeRole(member, roleId: string, event: React.MouseEvent) {
+        if (Array.isArray(member.roleIds)) {
+            lodash.remove(member.roleIds, g => g == roleId);
+            var g = await channel.patch('/ws/patch/member/roles', {
+                userid: member.userid, roleIds: member.roleIds
+            });
+            if (g.ok) {
+
+            }
+        }
+    }
     render() {
         var roles = surface.workspace.roles;
         var options = roles.map(r => {
@@ -96,17 +107,17 @@ export class WorkspaceMembers extends React.Component {
                 <Divider></Divider>
                 {
                     this.memebers.map(me => {
-                        return <div key={me.id}>
-                            <Row>
-                                <Col span={8}><Avatar showName size={48} userid={me.userid}></Avatar></Col>
+                        return <div key={me.id} className='shy-ws-member'>
+                            <Row style={{ marginBottom: 0 }}>
+                                <Col span={8}><Avatar showName size={30} userid={me.userid}></Avatar></Col>
                                 <Col span={12}>
-                                    <div>
+                                    <div className='shy-ws-member-roles'>
                                         {(me.roleIds || []).map(r => {
                                             var role = roles.find(g => g.id == r);
-                                            if (role) return <a key={r}><span style={{ backgroundColor: role.color }}></span><span>{role.id}</span></a>
+                                            if (role) return <a key={r}><span className='color' onMouseDown={e => this.removeRole(me, r, e)} style={{ backgroundColor: role.color }}></span><span className='text'>{role.text}</span></a>
                                             else return <a style={{ display: 'none' }} key={r}></a>
                                         })}
-                                        <a><Icon icon={PlusSvg} click={e => this.selectRole(me, e)}></Icon></a>
+                                        <a><Icon size={12} icon={PlusSvg} click={e => this.selectRole(me, e)}></Icon></a>
                                     </div>
                                 </Col>
                                 <Col span={4} align={"end"}></Col>

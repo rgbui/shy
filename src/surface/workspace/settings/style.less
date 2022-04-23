@@ -7,6 +7,65 @@
 .shy-ws-members {
     padding: 30px;
 
+    .shy-ws-member {
+        padding   : 10px 0px;
+        box-shadow: 0 1px 0 0 rgba(79, 84, 92, .04);
+
+        &:hover {
+            background-color: #f6f6f7;
+        }
+
+        &-roles {
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+
+            a {
+                margin-right   : 10px;
+                display        : inline-flex;
+                justify-content: flex-start;
+                align-items    : center;
+                padding        : 0px 5px;
+                height         : 24px;
+                line-height    : 24px;
+                font-size      : 12px;
+                font-weight    : 500;
+                background     : var(--background-secondary-alt);
+                border-radius  : 4px;
+                color          : rgba(79, 84, 92, .8);
+
+                span {
+                    font-size: 12px;
+
+                    &.color {
+                        display      : inline-block;
+                        position     : relative;
+                        width        : 14px;
+                        height       : 14px;
+                        border-radius: 50%;
+                        margin-right : 5px;
+                    }
+
+                    &.text {
+                        font-size: 12px;
+                    }
+                }
+
+                &:hover {
+                    span.color {
+                        &::after {
+                            position : absolute;
+                            top      : 50%;
+                            left     : 50%;
+                            transform: translate(-50%, -50%);
+                            content  : '×';
+                            color    : #fff;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .shy-settings-ws-avatar {
@@ -58,10 +117,11 @@
 }
 
 .shy-settings-ws-cover {
-    position: relative;
-    height         : 120px;
-    width          : 300px;
-    border-radius  : 4px;
+    position     : relative;
+    height       : 120px;
+    width        : 300px;
+    border-radius: 4px;
+
     img {
         height         : 120px;
         width          : 300px;
@@ -76,7 +136,7 @@
         right           : 0px;
         bottom          : 0px;
         left            : 0px;
-        border-radius  : 4px;
+        border-radius   : 4px;
         background-color: rgba(0, 0, 0, .3);
         color           : #fff;
         justify-content : center;
@@ -85,6 +145,7 @@
         cursor          : pointer;
         display         : none;
     }
+
     &:hover {
         .shy-settings-ws-cover-hover {
             display: flex;
