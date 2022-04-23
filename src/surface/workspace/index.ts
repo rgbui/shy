@@ -73,7 +73,7 @@ export class Workspace {
     private _sock: Sock;
     get sock() {
         if (this._sock) return this._sock;
-        return this._sock = new Sock(SockType.workspace, this.pidUrl);
+        return this._sock = Sock.createWorkspaceSock(this);
     }
 
     get host() {

@@ -164,10 +164,34 @@ class WorkspaceService extends BaseService {
         return await surface.workspace.sock.patch('/ws/set/domain', args);
     }
     @patch('/ws/patch/member/roles')
-    async wsPatchMemberRoles(args){
+    async wsPatchMemberRoles(args) {
+        if (!args) args = {}
         if (!args.wsId) args.wsId = surface.workspace.id;
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.patch('/ws/patch/member/roles', args);
+    }
+
+    @put('/ws/invite/create')
+    async createInvite(args) {
+        if (!args) args = {}
+        if (!args.wsId) args.wsId = surface.workspace.id;
+        return await masterSock.put('/ws/invite/create', args);
+    }
+    @get('/ws/invite/check')
+    async checkInvite(args) {
+        return await masterSock.put('/ws/invite/check', args);
+    }
+    @put('/ws/invite/join')
+    async inviteJoin(args) {
+        if (args.sock) {
+            return args.sock.put('/ws/invite/join', { wsId: args.wsId });
+        }
+    }
+    @get('/ws/is/member')
+    async memberIsOfWorkspace(args){
+        if (args.sock) {
+            return args.sock.put('/ws/is/member', { wsId: args.wsId });
+        }
     }
 }
 
