@@ -204,6 +204,9 @@ export class Sock {
     static createSock(url: string) {
         return new Sock(SockType.none, url);
     }
+    static createWorkspaceSock(ws: { pidUrl: string }) {
+        return new Sock(SockType.workspace, ws.pidUrl)
+    }
 }
 
 /**
