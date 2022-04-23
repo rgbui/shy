@@ -1,6 +1,6 @@
 
 import { surface } from "../src/surface";
-import { post, del, put, get, patch } from "rich/net/annotation";
+import {  del, put, get, patch } from "rich/net/annotation";
 class DataStoreService {
     @put('/datastore/add')
     async add(args) {
