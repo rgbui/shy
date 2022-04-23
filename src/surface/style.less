@@ -95,6 +95,7 @@
         flex-shrink     : 0;
         background-color: var(--background-secondary);
         position        : relative;
+
         // border-right    : 1px solid var(--background-modifier-accent);
         &-resize {
             position  : absolute;
@@ -105,6 +106,7 @@
             opacity   : 0;
             box-shadow: rgba(0, 0, 0, 0.1) -2px 0px 0px 0px inset;
             cursor    : col-resize;
+
             &:hover {
                 opacity: 1;
             }
@@ -168,12 +170,10 @@
         flex-direction : column;
         justify-content: flex-start;
         align-items    : stretch;
-
         .shy-ws-profile {
             flex-grow  : 0;
             flex-shrink: 0;
         }
-
         >.shy-ws-items {
             flex-grow     : 1;
             padding-bottom: 100px;
