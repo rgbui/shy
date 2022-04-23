@@ -10,7 +10,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     let refEditText = React.useRef<string>(null);
     var item = props.item;
     var style: Record<string, any> = {};
-    style.paddingLeft = 5 + (props.deep || 0) * 15;
+    style.paddingLeft = 0 + (props.deep || 0) * 15;
     var isInEdit = item.id == surface.sln.editId;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
@@ -20,7 +20,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             item.onSpread();
         }
         else if (target.closest('.shy-ws-item-page-add')) {
-            item.onAddAndEdit();
+            item.onAdd();
         }
         else if (target.closest('.shy-ws-item-page-property')) {
             item.onContextmenu(event);
@@ -48,7 +48,6 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         }
     }
     function blur() {
-        console.log('blur');
         item.onExitEditAndSave(item.text, refEditText.current);
     }
     React.useEffect(() => {
@@ -68,7 +67,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             onMouseDown={e => mousedown(e.nativeEvent)}>
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
             <i className='shy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
-            {!isInEdit && <span>{item.text}</span>}
+            {!isInEdit && <span>{item.text || '新页面'}</span>}
             {isInEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}
                 ref={e => refInput.current = e}

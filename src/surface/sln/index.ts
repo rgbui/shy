@@ -41,40 +41,39 @@ export class Sln extends Events<SlnDirective> {
         if (!item) return;
         var self = this;
         if (!event) channel.air('/page/open', { item });
-        else
-            MouseDragger<{ item: HTMLElement }>({
-                event,
-                dis: 5,
-                isCross: true,
-                moveStart(ev, data, crossData) {
-                    data.item = (event.target as HTMLElement).closest('.shy-ws-item');
-                    self.dragIds = [item.id];
-                    self.isDrag = true;
-                    crossData.type = 'pageItem';
-                    crossData.data = surface.workspace.findAll(g => self.dragIds.some(s => s == g.id));
-                    ghostView.load(data.item, { point: Point.from(ev) })
-                },
-                moving(ev, data, isend) {
-                    ghostView.move(Point.from(ev));
-                },
-                moveEnd(ev, isMove, data) {
-                    if (isMove) {
-                        if (self.hoverId) {
-                            if (!self.dragIds.some(s => s == self.hoverId)) {
-                                var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
-                                var overItem = surface.workspace.find(g => g.id == self.hoverId);
-                                pageItemStore.moveToPageItem(dragItem, overItem);
-                            }
+        else MouseDragger<{ item: HTMLElement }>({
+            event,
+            dis: 5,
+            isCross: true,
+            moveStart(ev, data, crossData) {
+                data.item = (event.target as HTMLElement).closest('.shy-ws-item');
+                self.dragIds = [item.id];
+                self.isDrag = true;
+                crossData.type = 'pageItem';
+                crossData.data = surface.workspace.findAll(g => self.dragIds.some(s => s == g.id));
+                ghostView.load(data.item, { point: Point.from(ev) })
+            },
+            moving(ev, data, isend) {
+                ghostView.move(Point.from(ev));
+            },
+            moveEnd(ev, isMove, data) {
+                if (isMove) {
+                    if (self.hoverId) {
+                        if (!self.dragIds.some(s => s == self.hoverId)) {
+                            var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
+                            var overItem = surface.workspace.find(g => g.id == self.hoverId);
+                            pageItemStore.moveToPageItem(dragItem, overItem);
                         }
                     }
-                    else {
-                        channel.air('/page/open', { item });
-                    }
-                    self.isDrag = false;
-                    self.dragIds = [];
-                    ghostView.unload();
                 }
-            })
+                else {
+                    channel.air('/page/open', { item });
+                }
+                self.isDrag = false;
+                self.dragIds = [];
+                ghostView.unload();
+            }
+        })
     }
     onFocusItem(item: PageItem) {
         this.selectIds = [item.id];
