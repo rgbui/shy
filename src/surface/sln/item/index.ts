@@ -153,16 +153,13 @@ export class PageItem {
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
         Object.assign(data, {
-            text: '新页面',
+            text: '',
             mime: Mime.page,
             spread: false,
         })
-        return pageItemStore.appendPageItem(this, data);
-    }
-    async onAddAndEdit(data?: Record<string, any>, at?: number) {
-        var item = await this.onAdd();
-        this.sln.editId = item.id;
-        channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
+        var item = await pageItemStore.appendPageItem(this, data);
+        item.onMousedownItem(undefined);
+        return item;
     }
     onExitEditAndSave(newText: string, oldText: string) {
         this.sln.editId = '';

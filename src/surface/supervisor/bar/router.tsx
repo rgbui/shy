@@ -13,7 +13,7 @@ export var PageRouter = observer(function () {
     }
     var item = surface.supervisor.item;
     if (item) {
-        var ra = (item: PageItem, split = false) => <><span onMouseDown={e => onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon ? item.icon : PageSvg} size={18}></Icon><a className='shy-supervisor-bar-router-item-title'>{item.text}</a></span>{split && <em>/</em>}</>;
+        var ra = (item: PageItem, split = false) => <><span onMouseDown={e => onClick(item)} className='shy-supervisor-bar-routers-item'><Icon icon={item.icon ? item.icon : PageSvg} size={18}></Icon><a className='shy-supervisor-bar-router-item-title'>{item.text || '新页面'}</a></span>{split && <em>/</em>}</>;
         return <div className='shy-supervisor-bar-routers'>
             {ra(item)}
         </div>
