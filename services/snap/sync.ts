@@ -9,7 +9,7 @@ const DELAY_TIME = 1000 * 60 * 1;
 var snapSyncMaps: Map<string, SnapSync> = new Map();
 
 export type ViewOperate = {
-    operate: UserAction,
+    operate?: UserAction,
     seq: number
 }
 export class SnapSync {
