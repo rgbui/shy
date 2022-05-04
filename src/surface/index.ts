@@ -22,8 +22,7 @@ export class Surface extends Events {
             supervisor: observable,
             user: observable,
             sln: observable,
-            workspace: observable,
-            // showUserChannel: observable
+            workspace: observable
         });
     }
     supervisor: Supervisor = new Supervisor();
@@ -32,7 +31,6 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: Partial<Workspace>[] = [];
     isShowSln: boolean = true;
-    // showUserChannel: boolean = false;
     config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
         var r = await channel.get('/sign')
@@ -40,9 +38,23 @@ export class Surface extends Events {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
             await timService.open();
-            timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
-            timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) })
+            await this.bindTimServiceCollaboration();
         }
+    }
+    async bindTimServiceCollaboration() {
+        /*用户个人协作*/
+        //私信
+        timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
+
+        /*空间协作*/
+        //空间会话
+        timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) });
+        //页面文档
+        timService.tim.on('/ws/view/operate/notify', e => { });
+        //页面侧栏
+        timService.tim.on('/ws/page/item/operate/notify', e => { });
+        //页面数据表格元数据
+        timService.tim.on('/ws/datagrid/schema/operate/notify', e => { });
     }
     async loadWorkspaceList() {
         if (this.user.isSign) {
