@@ -67,4 +67,9 @@ export class Supervisor extends Events {
             })
         })
     }
+    async autoLayout() {
+        var view = await this.getView();
+        var bound = Rect.fromEle(view);
+        this.item.contentView.layout({ width: bound.width, height: bound.height })
+    }
 }

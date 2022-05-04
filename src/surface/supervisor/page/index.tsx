@@ -1,5 +1,6 @@
 
 import { ElementType } from "rich/net/element.type";
+import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageDirective } from "rich/src/page/directive";
 import { surface } from "../..";
@@ -12,15 +13,6 @@ export async function createPageContent(item: PageItem) {
             var page = new Page();
             page.pageItemId = item.id;
             item.contentView = page;
-            page.on(PageDirective.blur, function (ev) {
-                // console.log('blur', ev)
-            });
-            page.on(PageDirective.focus, function (ev) {
-                //console.log('focus', ev);
-            });
-            page.on(PageDirective.focusAnchor, function (anchor) {
-                // console.log('focusAnchor', anchor);
-            });
             page.on(PageDirective.history, async function (action) {
                 var syncBlocks = action.syncBlock();
                 if (syncBlocks.length > 0) {
@@ -44,8 +36,8 @@ export async function createPageContent(item: PageItem) {
             page.loadPageInfo({ icon: item.icon, id: item.id, sn: item.sn, text: item.text });
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
-                var operate = pd.operates.map(op => op.operate);
-                await page.loadUserActions(operate);
+                var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
+                await page.loadUserActions(operates);
             }
             var view = await surface.supervisor.getView();
             var subs = view.querySelectorAll('.shy-supervisor-view-page');
@@ -56,7 +48,7 @@ export async function createPageContent(item: PageItem) {
             }
             var el = view.appendChild(document.createElement('div'));
             el.classList.add('shy-supervisor-view-page');
-            var bound = view.getBoundingClientRect();
+            var bound = Rect.fromEle(view);
             page.render(el, { width: bound.width, height: bound.height });
         }
         else {
@@ -67,7 +59,8 @@ export async function createPageContent(item: PageItem) {
                     if (subs[i]) subs[i].remove();
                 }
             }
-            item.contentView.renderFragment(view);
+            var bound = Rect.fromEle(view);
+            item.contentView.renderFragment(view, { width: bound.width, height: bound.height });
         }
     }
     catch (ex) {
