@@ -18,7 +18,10 @@ export var SideBar = observer(function () {
         else return <a className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace?.text?.slice(0, 2)}</span></a>
     }
     return <div className='shy-sidebar'>
-        <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.me)}>
+        <a className="shy-sidebar-operator" onMouseDown={e => {
+            //  UrlRoute.push(ShyUrl.me)
+        }
+        }>
             <img src={HomeSrc} style={{ width: 48, height: 48, borderRadius: 16 }} />
         </a>
         <div className="shy-sidebar-divider"></div>
@@ -26,16 +29,8 @@ export var SideBar = observer(function () {
             return <div onMouseDown={e => surface.onChangeWorkspace(ws)} key={ws.id} className={'shy-sidebar-ws' + (surface.workspace.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div>
         })}
         <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-        <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
+        {/* <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
         <div className="shy-sidebar-divider"></div>
-        <a className="shy-sidebar-operator"><Icon size={24} icon={DownloadSvg}></Icon></a>
-        {/* <a className="shy-sidebar-operator"><Icon size={40} fontSize={30} icon={"help:sy"}></Icon></a> */}
-        {/* <div className='shy-sidebar-top'>
-        </div>   */}
-        {/* <Icon className='hover' size={30} fontSize={30} icon={SvgComponents}></Icon> */}
-        {/* <div className='shy-sidebar-bottom'>
-            <Icon size={40} fontSize={30} icon={"help:sy"}></Icon>
-            <Avatar circle size={30} onClick={e => surface.workspace.onOpenUserSettings(e)} icon={surface.user.avatar} text={surface.user.name}></Avatar>
-        </div> */}
+        <a className="shy-sidebar-operator"><Icon size={24} icon={DownloadSvg}></Icon></a> */}
     </div>
 })

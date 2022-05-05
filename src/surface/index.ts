@@ -50,7 +50,7 @@ export class Surface extends Events {
         //空间会话
         timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) });
         //页面文档
-        timService.tim.on('/ws/view/operate/notify', e => { });
+        timService.tim.on('/ws/view/operate/notify', e => { console.log(e); });
         //页面侧栏
         timService.tim.on('/ws/page/item/operate/notify', e => { });
         //页面数据表格元数据
