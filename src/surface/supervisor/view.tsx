@@ -10,7 +10,7 @@ export var SupervisorView = observer(function () {
         surface.supervisor.emit('mounted');
         var resize = lodash.debounce((event) => {
             surface.supervisor.autoLayout();
-        },1e4);
+        },700);
         window.addEventListener('resize', resize);
         return () => {
             window.removeEventListener('resize', resize)
