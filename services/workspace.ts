@@ -161,7 +161,7 @@ class WorkspaceService extends BaseService {
     @patch('/ws/set/domain')
     async wsSetDomain(args) {
         if (!args.wsId) args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.patch('/ws/set/domain', args);
+        return await masterSock.patch('/ws/set/domain', args);
     }
     @patch('/ws/patch/member/roles')
     async wsPatchMemberRoles(args) {
