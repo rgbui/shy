@@ -16,20 +16,25 @@ export function currentParams(routePath: string): Record<string, any> {
 }
 
 export var UrlRoute = {
-    push(url: ShyUrl, state?: Record<string, any>) {
+    push(url: ShyUrl, state?: Record<string, any>,isRedict?: boolean) {
         if (url == ShyUrl.workCreate && config.isPro) {
-            return SyHistory.push('https://shy.live' + url);
+            if (isRedict) return location.href = 'https://shy.live' + url;
         }
         else if (url == ShyUrl.signIn) {
-            if (config.isPro && config.isUserWs) return SyHistory.push('https://shy.live' + url, state);
+            if (config.isPro && config.isUserWs) {
+                return location.href = 'https://shy.live' + url
+            }
         }
         SyHistory.push(url, state);
     },
     redict(url: string | ShyUrl, state?: Record<string, any>) {
         SyHistory.push(url, state)
     },
-    pushToWs(sn: number | string) {
-        if (config.isPro) return SyHistory.push(`https://${sn}.shy.live/`);
+    pushToWs(sn: number | string, isRedict?: boolean) {
+        if (config.isPro) {
+            if (isRedict) location.href = `https://${sn}.shy.live/`
+            return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
+        }
         else return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
     },
     pushToPage(wsSn: number | string, pageSn: number) {
@@ -73,6 +78,6 @@ export enum ShyUrl {
     invite = '/invite/:id',
     workCreate = '/work/create',
     myWorkspace = '/my/workspace',
-    discovery='/discovery',
+    discovery = '/discovery',
     _404 = '/404'
 }
