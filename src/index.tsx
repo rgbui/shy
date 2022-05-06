@@ -56,7 +56,7 @@ export function App() {
           <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
           <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
           <Route path={ShyUrl._404} exact component={View404}></Route>
-          <Route path={[ShyUrl.ws, ShyUrl.pageDev, ShyUrl.me,ShyUrl.discovery]} exact component={ViewSurface}></Route>
+          <Route path={[ShyUrl.ws, ShyUrl.pageDev, ShyUrl.me, ShyUrl.discovery]} exact component={ViewSurface}></Route>
           <Route path={ShyUrl.invite} exact component={InviteView}></Route>
           <Route component={View404}></Route>
         </Switch>
@@ -80,6 +80,8 @@ export function App() {
             <Route path={ShyUrl.shiyun} exact component={BookView} />
             <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
             <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
+            <Route path={[ShyUrl.ws, ShyUrl.pageDev, ShyUrl.me, ShyUrl.discovery]} exact component={ViewSurface}></Route>
+            <Route path={ShyUrl.invite} exact component={InviteView}></Route>
             <Route path={ShyUrl._404} exact component={View404}></Route>
             <Route component={View404}></Route>
           </Switch>
@@ -89,8 +91,11 @@ export function App() {
         return <Router history={SyHistory}>
           <Switch>
             <Route path={ShyUrl.root} exact component={ViewSurface}></Route>
-            <Route path={ShyUrl.page} exact component={ViewSurface}></Route>
+            <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
+            <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
+            <Route path={[ShyUrl.ws, ShyUrl.pageDev, ShyUrl.me, ShyUrl.discovery]} exact component={ViewSurface}></Route>
             <Route path={ShyUrl.invite} exact component={InviteView}></Route>
+            <Route path={ShyUrl._404} exact component={View404}></Route>
             <Route component={View404}></Route>
           </Switch>
         </Router>

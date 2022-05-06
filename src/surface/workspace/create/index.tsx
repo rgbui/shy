@@ -25,7 +25,7 @@ export var WorkspaceCreateView = observer(function () {
             button.disabled = false;
             if (rr.ok) {
                 await surface.loadWorkspaceList();
-                return UrlRoute.pushToWs(rr.data.workspace.sn);
+                return UrlRoute.pushToWs(rr.data.workspace.sn, true);
             }
             else this.failTip = rr.warn;
         }
