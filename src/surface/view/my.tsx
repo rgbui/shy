@@ -13,12 +13,12 @@ export var MyWorkSpace = observer(function () {
         if (wsHost) {
             var r = await channel.get('/ws/basic', { name: wsHost });
             var ws = r.data?.workspace as Workspace;
-            if (ws?.id) return UrlRoute.pushToWs(ws?.customSiteDomain || ws.sn, true);
+            if (ws?.id) return UrlRoute.pushToWs(ws?.siteDomain || ws.sn, true);
         }
         var latest = await channel.get('/ws/latest');
         if (latest.ok) {
             var ws = latest.data?.workspace as Workspace;
-            if (ws) return UrlRoute.pushToWs(ws?.customSiteDomain || ws.sn, true);
+            if (ws) return UrlRoute.pushToWs(ws?.siteDomain || ws.sn, true);
             else return UrlRoute.push(ShyUrl.workCreate);
         }
     }
