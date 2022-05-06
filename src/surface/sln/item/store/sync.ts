@@ -65,19 +65,17 @@ class PageItemStore {
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
         if (pageItem.checkedHasChilds && pageItem.spread == true) {
+            if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
             var actions: PageItemAction[] = [];
             data.id = config.guid();
             data.workspaceId = pageItem.workspaceId;
             data.parentId = pageItem.id;
-            data.at = 0;
+            data.at = pageItem.childs.last().at + 1;
             var newItem = new PageItem();
             newItem.checkedHasChilds = true;
             newItem.load(data);
-            if (pageItem.childs.length > 0) {
-                actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gte: 0 } } });
-            }
             pageItem.spread = true;
-            pageItem.childs.splice(0, 0, newItem);
+            pageItem.childs.push(newItem);
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.append, actions });
             if (r.ok && Array.isArray(r.data.actions)) {
