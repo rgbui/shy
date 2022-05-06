@@ -9,7 +9,6 @@ import { Mime } from "../sln/declare";
 import { ShyUtil } from "../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
-import { SockType } from "../../../net/sock/type";
 import { useOpenWorkspaceSettings } from "./settings";
 import { makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
