@@ -43,7 +43,7 @@ export var UrlRoute = {
                 return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
             else {
-                return SyHistory.push(`https://${wsSn}.shy.live` + this.gen(ShyUrl.page, { pageId: pageSn }));
+                return SyHistory.push(this.gen(ShyUrl.pageDev, { wsId: wsSn, pageId: pageSn }))
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.pageDev, { wsId: wsSn, pageId: pageSn }))

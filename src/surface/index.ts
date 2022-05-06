@@ -80,11 +80,9 @@ export class Surface extends Events {
     }
     async getWsName() {
         var domain, sn, wsId;
-        if (!config.isPro) {
-            sn = UrlRoute.match(ShyUrl.pageDev)?.wsId;
-            if (!sn) {
-                sn = UrlRoute.match(ShyUrl.ws)?.wsId;
-            }
+        sn = UrlRoute.match(ShyUrl.pageDev)?.wsId;
+        if (!sn) {
+            sn = UrlRoute.match(ShyUrl.ws)?.wsId;
         }
         if (sn && location.host && /[\da-z\-]+\.shy\.(red|live)/.test(location.host)) {
             domain = location.host.replace(/\.shy\.(red|live)$/g, '');
