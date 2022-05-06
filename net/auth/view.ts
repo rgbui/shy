@@ -24,7 +24,7 @@ async function dbStore(args) {
 
 window.addEventListener('message', async function (event) {
     if (!event.data) return;
-    if (typeof event.data != 'string') return;
+    if (!(typeof event.data == 'string' && event.data.startsWith('{'))) return;
     try {
         var json = JSON.parse(event.data);
         if (json.id && json.url) {
