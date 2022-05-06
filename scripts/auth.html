@@ -2,31 +2,8 @@
 
 <head>
     <title>shy.live auth</title>
-    <link rel="icon" type='image/svg+xml' sizes="any" href="https://static.shy.red/0.8.013-pro/assert/img/shy.fav.svg">
-    <script type='text/javascript'>
-        window.addEventListener('message', function (event) {
-            try {
-                var json = JSON.parse(event.data);
-                if (json.id && json.url) {
-                    switch (json.url) {
-                        case 'localStorage.setItem':
-                            localStorage.setItem.apply(localStorage, json.args);
-                            top.postMessage(JSON.stringify({ id: json.id, data: null }), '*')
-                            break;
-                        case 'localStorage.getItem':
-                            var result = localStorage.getItem.apply(localStorage, json.args);
-                            top.postMessage(JSON.stringify({ id: json.id, data: result }), '*')
-                            break;
-                    }
-                }
-            }
-            catch (ex) {
-                console.error(ex);
-            }
-        }, false);</script>
+    <link rel="icon" type='image/svg+xml' sizes="any" href="<%= src %>assert/img/shy.fav.svg">
 </head>
-
 <body>
 </body>
-
 </html>

@@ -26,7 +26,7 @@ export async function loadSuccessSend() {
         ifr.contentWindow.postMessage(JSON.stringify({ id: ev.id, url: ev.url, args: ev.args || [] }), '*')
     }
 }
-export async function send(url: string, args?: any[]) {
+export async function iframeChannel(url: string, args?: any[]) {
     return new Promise((resolve, reject) => {
         try {
             var id = util.guid();

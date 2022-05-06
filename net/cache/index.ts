@@ -1,6 +1,6 @@
 import { config } from "../../src/common/config";
 import { Aes } from "../../src/util/crypto";
-import { send } from "../auth/iframe";
+import { iframeChannel } from "../auth/iframe";
 /**
  * 缓存应用的key
  */
@@ -31,7 +31,7 @@ class SyCache {
     }
     private async getValue(key: CacheKey | string): Promise<{ value: any, expire: number }> {
         var k = this.getKey(key);
-        var value = window.isAuth == false ? await send('localStorage.getItem', [k]) : localStorage.getItem(k);
+        var value = window.isAuth == false ? await iframeChannel('localStorage.getItem', [k]) : localStorage.getItem(k);
         if (value) {
             try {
                 return JSON.parse(this.de(value))
@@ -64,7 +64,7 @@ class SyCache {
             }
             t = Date.now() + expire * getN();
         }
-        window.isAuth == false ? await send('localStorage.setItem', [k, this.en(JSON.stringify({ value, expire: t }))]) : localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
+        window.isAuth == false ? await iframeChannel('localStorage.setItem', [k, this.en(JSON.stringify({ value, expire: t }))]) : localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
     }
     async has(key: CacheKey | string) {
         var r = await this.get(key);

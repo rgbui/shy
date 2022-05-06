@@ -48,7 +48,8 @@ else {
 module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: {
-        main: './src/main.tsx'
+        main: './src/main.tsx',
+        auth: './net/auth/view.ts'
     },
     devtool: isDev ? 'inline-source-map' : undefined,
     output: {
@@ -171,15 +172,17 @@ module.exports = {
             templateParameters: {
                 src: publicPath + versionPrefix
             },
-
         }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "auth.html"), // 婧愭ā鏉挎枃浠�
             filename: 'auth.html',
             showErrors: true,
             hash: true,
-            chunks: []
-            //chunks: ['auth']
+            chunks: ['auth'],
+            favicon: false,
+            templateParameters: {
+                src: publicPath + versionPrefix
+            },
         }),
         new webpack.DefinePlugin({
             MODE: JSON.stringify(mode),
