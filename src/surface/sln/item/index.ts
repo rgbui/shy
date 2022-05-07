@@ -18,6 +18,7 @@ import { Page } from "rich/src/page";
 import { channel } from "rich/net/channel";
 
 import { SnapSync } from "../../../../services/snap/sync";
+import { PageLayoutType } from "rich/src/page/declare";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -28,6 +29,7 @@ export class PageItem {
     creater: string = ''
     createDate: Date = null;
     mime: Mime = Mime.none;
+    pageType: PageLayoutType = PageLayoutType.doc;
     parentIds: string[] = [];
     workspaceId: string;
     selectedDate: number = null;
@@ -152,9 +154,10 @@ export class PageItem {
     }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
-        Object.assign(data, {
+        Object.assign(data,{
             text: '',
             mime: Mime.page,
+            pageType: PageLayoutType.doc,
             spread: false,
         })
         var item = await pageItemStore.appendPageItem(this, data);

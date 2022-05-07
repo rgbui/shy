@@ -1,4 +1,5 @@
 
+import lodash from "lodash";
 import { air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
 import { surface } from ".";
@@ -30,11 +31,23 @@ class MessageCenter {
     async pageQueryInfo(args: { id: string }) {
         var item = surface.workspace.find(g => g.id == args.id);
         if (item) {
-            return { ok: true, data: { icon: item.icon, id: item.id, sn: item.sn, text: item.text } };
+            return {
+                ok: true,
+                data: {
+                    icon: item.icon,
+                    pageType: item.pageType,
+                    id: item.id,
+                    sn: item.sn,
+                    text: item.text
+                }
+            };
         }
         else {
             var r = await surface.workspace.sock.get('/page/item', { id: args.id });
-            if (r.ok && r.data.item) return { ok: true, data: r.data.item }
+            if (r.ok && r.data.item) return {
+                ok: true,
+                data: lodash.pick(r.data.item, ['icon', 'id', 'sn', 'text', 'pageType'])
+            }
             else return { ok: false, warn: r.warn };
         }
     }
