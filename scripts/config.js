@@ -209,7 +209,11 @@ module.exports = {
                 {
                     from: path.join(__dirname, "shared.js"),
                     to: versionPrefix + 'assert/js/shared.js'
-                }
+                },
+                // {
+                //     from: path.join(__dirname, "../../rich/resources/gallery"),
+                //     to: versionPrefix + 'assert/gallery'
+                // }
             ]
         })
         /**
