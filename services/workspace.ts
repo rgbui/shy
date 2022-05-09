@@ -24,6 +24,10 @@ class WorkspaceService extends BaseService {
     async latestWs() {
         return await masterSock.get('/ws/latest');
     }
+    @get('/ws/discovery')
+    async discoveryWs(args) {
+        return await masterSock.get('/ws/discovery', args);
+    }
     @put('/ws/create')
     async createWs(data: { text: string, templateId }) {
         var r = await masterSock.put<{ workspace: Record<string, any> }>('/ws/create', { text: data.text });
@@ -188,7 +192,7 @@ class WorkspaceService extends BaseService {
         }
     }
     @get('/ws/is/member')
-    async memberIsOfWorkspace(args){
+    async memberIsOfWorkspace(args) {
         if (args.sock) {
             return args.sock.put('/ws/is/member', { wsId: args.wsId });
         }
