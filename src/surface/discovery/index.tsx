@@ -36,22 +36,25 @@ export var DiscoveryView = observer(function () {
         loadWs();
     }, [])
     return <div className='shy-discovery' >
-        <div className="shy-discovery-cover" style={{
-            backgroundImage: 'url(' + pic + ')',
-            backgroundSize: 'cover',
-            backgroundAttachment: 'fixed',
-            height: 240
-        }}>
-            <h3>在 诗云 找到自己的社区</h3>
-            <p>从游戏、音乐到教育，总有你的一片天地。</p>
-        </div>
-        <div className="shy-discovery-ws">
-            <h2>推荐社区</h2>
-            <div className="shy-discovery-ws-list">
-                {local.list.map(w => {
-                    return <WsAvatar key={w.id} wsId={w.id} ></WsAvatar>
-                })}
+        <div className="shy-discovery-wrapper">
+            <div className="shy-discovery-cover" style={{
+                backgroundImage: 'url(' + pic + ')',
+                backgroundSize: 'cover',
+                // backgroundAttachment: 'fixed',
+                height: 240
+            }}>
+                <h3>在 诗云 找到自己的社区</h3>
+                <p>从游戏、音乐到教育，总有你的一片天地。</p>
+            </div>
+            <div className="shy-discovery-ws">
+                <h2>推荐社区</h2>
+                <div className="shy-discovery-ws-list">
+                    {local.list.map(w => {
+                        return <div key={w.id}><WsAvatar wsId={w.id} ></WsAvatar></div>
+                    })}
+                </div>
             </div>
         </div>
+
     </div>
 })

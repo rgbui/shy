@@ -1,11 +1,45 @@
 .shy-discovery {
     flex-grow  : 1;
     flex-shrink: 1;
+    overflow-y : auto;
+
     &-cover {
-        margin         : 20px;
+        margin-left    : 100px;
+        margin-right   : 100px;
+        margin-top     : 20px;
         border-radius  : 10px;
         display        : flex;
+        flex-direction: column;
         justify-content: center;
         align-items    : center;
+        h3 {
+            display   : block;
+            width     : 100%;
+            text-align: center;
+            margin    : 0px;
+        }
+
+        p {
+            display   : block;
+            width     : 100%;
+            text-align: center;
+        }
+    }
+
+    &-ws {
+        margin-left   : 100px;
+        margin-right  : 90px;
+        padding-bottom: 200px;
+
+        &-list {
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : flex-start;
+
+            >* {
+                width        : 25%;
+                padding-right: 10px;
+            }
+        }
     }
 }
