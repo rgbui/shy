@@ -29,8 +29,8 @@ export var SideBar = observer(function () {
             return <div onMouseDown={e => surface.onChangeWorkspace(ws)} key={ws.id} className={'shy-sidebar-ws' + (surface.workspace.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div>
         })}
         <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-        {/* <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
-        <div className="shy-sidebar-divider"></div>
+        <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
+        {/*  <div className="shy-sidebar-divider"></div>
         <a className="shy-sidebar-operator"><Icon size={24} icon={DownloadSvg}></Icon></a> */}
     </div>
 })
