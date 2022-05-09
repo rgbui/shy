@@ -112,7 +112,7 @@ export class WorkspaceSettingsView extends React.Component {
                             <div className='shy-settings-ws-avatar-hover'>添加图片</div>
                         </div>
                         <div>
-                            <p>我们建议使用至少 512x512 大小的图片。</p>
+                            <p>我们建议使用至少 200x200 大小的图片。</p>
                             <Button ghost onClick={e => this.onUploadFace()}>上传图片</Button>
                         </div>
                     </Space>
