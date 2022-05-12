@@ -20,7 +20,6 @@ class TimService {
         }
         var self = this;
         this.tim = new Tim();
-
         await this.tim.load(url);
         var data = await this.getHeads();
         data.sockId = this.tim.id;
@@ -28,17 +27,37 @@ class TimService {
         this.tim.reconnected = async function () {
             data = await self.getHeads();
             data.sockId = self.tim.id;
-            if (self.workspaceId) data.workspaceId = self.workspaceId;
+            if (self.workspaceId && !self.isSync) data.workspaceId = self.workspaceId;
+            if (self.workspaceId && self.isSync) data.syncWorkspaceId = self.workspaceId;
             self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
         }
     }
     private workspaceId: string;
-    async enterWorkspace(workspaceId: string) {
+    private viewId: string;
+    private isSync: boolean = false;
+    async enterWorkspace(workspaceId: string, isSync: boolean) {
+        this.isSync = isSync;
         this.workspaceId = workspaceId;
-        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', { workspaceId });
+        await this.tim.syncSend(
+            HttpMethod.post,
+            '/workspace/enter',
+            {
+                workspaceId: this.isSync ? undefined : this.workspaceId,
+                syncWorkspaceId: this.isSync ? this.workspaceId : undefined
+            }
+        );
+    }
+    async enterPage(viewId: string) {
+        this.viewId = viewId;
+        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', {
+            workspaceId: this.isSync ? undefined : this.workspaceId,
+            syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
+            viewId: this.viewId
+        });
     }
     async leaveWorkspace() {
         delete this.workspaceId;
+        delete this.isSync;
         await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
     }
     /**

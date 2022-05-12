@@ -26,6 +26,30 @@ export type WorkspaceRole = {
     permissions: number[],
     icon?: IconArguments
 }
+
+export type WorkspaceMember = {
+    id: string;
+    createDate: number;
+    creater: string;
+    userid: string;
+    /**
+     * 当前空间内用户的呢称
+     */
+    name: string;
+    /**
+     * 当前用户的角色
+     */
+    roleIds: string[];
+    workspaceId: string;
+    avatar: IconArguments;
+    cover: IconArguments;
+    totalScore: number;
+}
+
+export type WorkspaceOnLineUser = {
+    userid: string;
+}
+
 export class Workspace {
     public id: string = null;
     public sn: number = null;
@@ -50,6 +74,11 @@ export class Workspace {
     public childs: PageItem[] = [];
     public permissions: number[];
     public roles: WorkspaceRole[] = [];
+    public member: WorkspaceMember;
+    /**
+     * 在线的成员
+     */
+    public onlineUsers: Map<string, WorkspaceOnLineUser[]> = new Map();
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -66,7 +95,8 @@ export class Workspace {
             memberOnlineCount: observable,
             config: observable,
             owner: observable,
-            roles: observable
+            roles: observable,
+            onlineUsers: observable
         })
     }
     private _sock: Sock;
@@ -74,7 +104,6 @@ export class Workspace {
         if (this._sock) return this._sock;
         return this._sock = Sock.createWorkspaceSock(this);
     }
-
     get host() {
         return this.siteDomain || this.sn
     }
@@ -147,12 +176,16 @@ export class Workspace {
             }
         }
     }
-    async loadRoles() {
-        var rs = await channel.get('/ws/roles');
-        if (rs.ok) {
-            this.roles = rs.data.list;
+    async loadRoles(roles?: WorkspaceRole[]) {
+        if (roles)
+            this.roles = roles;
+        else {
+            var rs = await channel.get('/ws/roles');
+            if (rs.ok) {
+                this.roles = rs.data.list;
+            }
+            else this.roles = [];
         }
-        else  this.roles = [];
     }
     async loadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
@@ -164,5 +197,18 @@ export class Workspace {
                 this.load({ childs: pages });
             }
         }
+    }
+    async loadMember(member: WorkspaceMember) {
+        this.member = member;
+    }
+    async loadViewOnlines(viewId: string) {
+        var ov = this.onlineUsers.get(viewId);
+        if (!ov) {
+            ov = [];
+            var r = await channel.get('/ws/view/online/users', { viewId });
+            if (r.ok) ov = r.data.users.map(u => ({ userid: u })) || [];
+            this.onlineUsers.set(viewId, ov);
+        }
+        return ov;
     }
 }
