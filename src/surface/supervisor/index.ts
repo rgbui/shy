@@ -6,6 +6,7 @@ import { usePagePublish } from "./publish";
 import { computed, makeObservable, observable } from "mobx";
 import { surface } from "..";
 import { createPageContent } from "./page";
+import { timService } from "../../../net/primus";
 
 export class Supervisor extends Events {
     itemIds: string[] = [];
@@ -34,6 +35,7 @@ export class Supervisor extends Events {
         var newItem = items.first();
         if (newItem.id !== oldItem?.id) {
             this.loading = true;
+            await timService.enterPage(newItem.id);
             try {
                 if (oldItem && oldItem.contentView) {
                     oldItem.contentView.cacheFragment();
