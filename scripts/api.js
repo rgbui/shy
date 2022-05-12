@@ -213,7 +213,7 @@ push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
-push('/ws/info', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/info', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>,roles:any[],member:Record<string,any>}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
@@ -232,15 +232,16 @@ push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void
 push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/memeber/delete', '{userid:string}', 'SockResponse<void>', ['del']);
-push('/ws/is/member','{sock?:any,wsId:string}','SockResponse<{exists:boolean}>', ['get']);
+push('/ws/is/member', '{sock?:any,wsId:string}', 'SockResponse<{exists:boolean}>', ['get']);
 push('/ws/roles', '{}', 'SockResponse<{list:any[]}>', ['get']);
 push('/ws/role/patch', '{roleId:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/role/create', '{data:Record<string,any>}', 'SockResponse<{role:Record<string,any>}>', ['put']);
 push('/ws/role/delete', '{roleId:string}', 'SockResponse<void>', ['del']);
 push('/ws/role/members', '{roleId:string,page:number,size:number,word?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
-push('/ws/set/domain','{wsId?:string,domain:string}','SockResponse<{exists?:boolean,illegal?:boolean}>',['patch'])
-push('/ws/patch/member/roles','{wsId?:string,userid:string,roleIds:string[]}','SockResponse<void>',['patch'])
-push('/ws/discovery','{word?:string,page?:number,size?:number,type?:string}','SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
+push('/ws/set/domain', '{wsId?:string,domain:string}', 'SockResponse<{exists?:boolean,illegal?:boolean}>', ['patch'])
+push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 'SockResponse<void>', ['patch'])
+push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
+push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
 push('/page/items', '{ids:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
