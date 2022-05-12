@@ -17,6 +17,7 @@ class MessageCenter {
         if (it) {
             UrlRoute.pushToPage(surface.workspace.host, it.sn)
             it.onUpdateDocument();
+            await surface.workspace.loadViewOnlines(it.id);
             surface.sln.onFocusItem(it);
             await surface.supervisor.onOpenItem(it);
         }
