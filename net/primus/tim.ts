@@ -19,15 +19,15 @@ export class Tim {
         workspaceId: string
     } = null;
     async load(url: string) {
-        this.url = url;
         var self = this;
+        this.url = url;
         this.id = config.guid();
         var Primus = await loadPrimus();
         var primus = new Primus(url, {
-            pingTimeout: 30000 * 4
+            // pingTimeout: 30000 * 4
         });
         this.primus = primus;
-        primus.on('data', function message(data) {
+        primus.on('data',function message(data) {
             try {
                 var json = JSON.parse(data);
                 if (json.rid) {
@@ -75,11 +75,6 @@ export class Tim {
                 console.log('Connection is alive and kicking');
                 self.isConncted = true;
                 resolve(true);
-                // var device = await sCache.get(CacheKey.device);
-                // var token = await sCache.get(CacheKey.token);
-                // var lang = await sCache.get(CacheKey.lang);
-                // var r = await self.post('/user/online', { token, device, lang, sock: self.id });
-                // console.log('user online r:', r.data);
             });
             primus.on('error', function error(err) {
                 self.isConncted = false;

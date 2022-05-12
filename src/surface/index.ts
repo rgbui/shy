@@ -11,7 +11,7 @@ import { config } from "../common/config";
 import { timService } from "../../net/primus";
 import { channel } from "rich/net/channel";
 import "./message.center";
-import { userChannelStore } from "./user/channel/store";
+import { bindCollaboration } from "../../services/tim";
 
 export class Surface extends Events {
     constructor() {
@@ -38,23 +38,8 @@ export class Surface extends Events {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
             await timService.open();
-            await this.bindTimServiceCollaboration();
+            bindCollaboration();
         }
-    }
-    async bindTimServiceCollaboration() {
-        /*用户个人协作*/
-        //私信
-        timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
-
-        /*空间协作*/
-        //空间会话
-        timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) });
-        //页面文档
-        timService.tim.on('/ws/view/operate/notify', e => { console.log(e); });
-        //页面侧栏
-        timService.tim.on('/ws/page/item/operate/notify', e => { });
-        //页面数据表格元数据
-        timService.tim.on('/ws/datagrid/schema/operate/notify', e => { });
     }
     async loadWorkspaceList() {
         if (this.user.isSign) {
@@ -70,10 +55,11 @@ export class Surface extends Events {
             var ws = new Workspace();
             ws.load({ ...r.data.workspace });
             this.workspace = ws;
-            await ws.loadRoles();
+            if (r.data.roles) await ws.loadRoles(r.data.roles)
+            if (r.data.member) await ws.loadMember(r.data.member as any);
             await ws.loadPages();
-            await timService.enterWorkspace(this.workspace.id);
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
+            await timService.enterWorkspace(this.workspace.id, this.workspace.member ? false : true);
             var page = await ws.getDefaultPage();
             this.sln.onMousedownItem(page);
         }
