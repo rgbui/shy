@@ -1,5 +1,6 @@
 import { channel } from "rich/net/channel";
 import { timService } from "../net/primus";
+import { surface } from "../src/surface";
 import { userChannelStore } from "../src/surface/user/channel/store";
 export enum MessageUrl {
     privateTalk = '/user/chat/notify',
@@ -28,12 +29,15 @@ export function bindCollaboration() {
      * 用户进入这个空间，浏览某个页面
      */
     timService.tim.on('/ws/enter/notify', e => {
-        console.log('/ws/enter/notify', e);
+        if (e.workspaceId != surface.workspace.id) return;
+        if (e.leaveViewId) surface.workspace.removeViewLine(e, e.leaveViewId);
+        if (e.viewId) surface.workspace.addViewLine(e.viewId, e);
     });
     /**
      * 用户离开这个空间，离开这个页面
      */
     timService.tim.on('/ws/leave/notify', e => {
-        console.log('/ws/leave/notify', e);
+        if (e.workspaceId != surface.workspace.id) return;
+        if (e.viewId) surface.workspace.removeViewLine(e, e.viewId);
     });
 }

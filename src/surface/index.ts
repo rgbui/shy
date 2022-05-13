@@ -59,9 +59,11 @@ export class Surface extends Events {
             if (r.data.member) await ws.loadMember(r.data.member as any);
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
-            await timService.enterWorkspace(this.workspace.id, this.workspace.member ? false : true);
             var page = await ws.getDefaultPage();
-            this.sln.onMousedownItem(page);
+            if (page) {
+                this.sln.onMousedownItem(page);
+            }
+            else await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, undefined);
         }
     }
     async getWsName() {

@@ -48,6 +48,8 @@ export type WorkspaceMember = {
 
 export type WorkspaceOnLineUser = {
     userid: string;
+    deviceId?: string;
+    sockId?: string;
 }
 
 export class Workspace {
@@ -177,8 +179,7 @@ export class Workspace {
         }
     }
     async loadRoles(roles?: WorkspaceRole[]) {
-        if (roles)
-            this.roles = roles;
+        if (roles) this.roles = roles;
         else {
             var rs = await channel.get('/ws/roles');
             if (rs.ok) {
@@ -210,5 +211,31 @@ export class Workspace {
             this.onlineUsers.set(viewId, ov);
         }
         return ov;
+    }
+    async addViewLine(viewId: string, user: WorkspaceOnLineUser) {
+        var s = this.onlineUsers.get(viewId);
+        if (!s) {
+            this.onlineUsers.set(viewId, [{ userid: user.userid }]);
+        }
+        else {
+            if (!s.some(g => g.userid == user.userid)) {
+                s.push({ userid: user.userid });
+            }
+        }
+    }
+    async removeViewLine(user: WorkspaceOnLineUser, viewId?: string) {
+        if (typeof viewId == 'string') {
+            var s = this.onlineUsers.get(viewId);
+            if (s) {
+                s.removeAll(g => g.userid == user.userid);
+            }
+        }
+        else {
+            this.onlineUsers.forEach((vs, m) => {
+                if (vs.some(v => v.userid == user.userid)) {
+                    vs.remove(g => g.userid == user.userid);
+                }
+            })
+        }
     }
 }
