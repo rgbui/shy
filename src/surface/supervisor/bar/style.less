@@ -35,14 +35,15 @@
     }
 
     &-right {
-        width          : 80px;
+        min-width      : 80px;
         flex-shrink    : 0;
+        flex-grow      : 0;
         height         : 45px;
         display        : flex;
         justify-content: center;
         align-items    : center;
 
-        a {
+        >a {
             width          : 24px;
             height         : 24px;
             display        : inline-flex;
@@ -66,6 +67,10 @@
             color          : rgb(55, 53, 47);
         }
     }
+}
+
+.shy-supervisor-bar-users {
+    margin-right      : 10px;
 }
 
 .shy-supervisor-bar-routers {
