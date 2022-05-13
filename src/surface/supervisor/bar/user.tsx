@@ -9,7 +9,7 @@ export var PageUsers = observer(function () {
         var users = surface.workspace.onlineUsers.get(item.id);
         return <div className='shy-supervisor-bar-users'>
             {users.map(user => {
-                return <Avatar size={30} userid={user.userid}></Avatar>
+                return <Avatar key={user.userid} size={24} userid={user.userid}></Avatar>
             })}
         </div>
     }
