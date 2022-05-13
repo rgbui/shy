@@ -81,6 +81,9 @@ export class Workspace {
      * 在线的成员
      */
     public onlineUsers: Map<string, WorkspaceOnLineUser[]> = new Map();
+    public public: boolean;
+    public allowJoin: boolean;
+
     constructor() {
         makeObservable(this, {
             id: observable,
