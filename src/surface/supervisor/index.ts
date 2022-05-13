@@ -22,7 +22,7 @@ export class Supervisor extends Events {
         })
     }
     get item() {
-        var id = this.itemIds[0];
+        var id = this.itemIds.first();
         return surface.workspace.find(g => g.id == id);
     }
     get items() {
@@ -35,7 +35,7 @@ export class Supervisor extends Events {
         var newItem = items.first();
         if (newItem.id !== oldItem?.id) {
             this.loading = true;
-            await timService.enterPage(newItem.id);
+            await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, newItem.id);
             try {
                 if (oldItem && oldItem.contentView) {
                     oldItem.contentView.cacheFragment();
