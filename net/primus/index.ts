@@ -1,4 +1,6 @@
 
+import lodash from "lodash";
+import { config } from "../../src/common/config";
 import { sCache, CacheKey } from "../cache";
 import { masterSock } from "../sock";
 import { HttpMethod } from "./http";
@@ -35,26 +37,23 @@ class TimService {
     private workspaceId: string;
     private viewId: string;
     private isSync: boolean = false;
-    async enterWorkspace(workspaceId: string, isSync: boolean) {
+    async enterWorkspaceView(workspaceId: string, isSync: boolean, viewId: string) {
         this.isSync = isSync;
         this.workspaceId = workspaceId;
+        this.viewId = viewId;
+        this.workspaceEnter();
+    }
+    private workspaceEnter = lodash.debounce(async () => {
         await this.tim.syncSend(
             HttpMethod.post,
             '/workspace/enter',
             {
                 workspaceId: this.isSync ? undefined : this.workspaceId,
-                syncWorkspaceId: this.isSync ? this.workspaceId : undefined
+                syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
+                viewId: this.viewId
             }
         );
-    }
-    async enterPage(viewId: string) {
-        this.viewId = viewId;
-        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', {
-            workspaceId: this.isSync ? undefined : this.workspaceId,
-            syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
-            viewId: this.viewId
-        });
-    }
+    }, config.isPro ? 2000 : 700)
     async leaveWorkspace() {
         delete this.workspaceId;
         delete this.isSync;
