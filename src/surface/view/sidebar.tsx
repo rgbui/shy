@@ -25,6 +25,7 @@ export var SideBar = observer(function () {
             <img src={HomeSrc} style={{ width: 48, height: 48, borderRadius: 16 }} />
         </a>
         <div className="shy-sidebar-divider"></div>
+        {surface.temporaryWs && <div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{renderWs(surface.temporaryWs)}</div>}
         {surface.wss.map(ws => {
             return <div onMouseDown={e => surface.onChangeWorkspace(ws)} key={ws.id} className={'shy-sidebar-ws' + (surface.workspace.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div>
         })}

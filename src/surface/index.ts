@@ -22,7 +22,9 @@ export class Surface extends Events {
             supervisor: observable,
             user: observable,
             sln: observable,
-            workspace: observable
+            workspace: observable,
+            temporaryWs: observable,
+            wss: observable
         });
     }
     supervisor: Supervisor = new Supervisor();
@@ -30,6 +32,7 @@ export class Surface extends Events {
     sln: Sln = new Sln();
     workspace: Workspace = null;
     wss: Partial<Workspace>[] = [];
+    temporaryWs: Partial<Workspace> = null;
     isShowSln: boolean = true;
     config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
@@ -49,14 +52,28 @@ export class Surface extends Events {
             }
         }
     }
-    async loadWorkspace(wsId: string, name?: string) {
+    async loadWorkspace(wsId: string, name?: string | number) {
+        if (typeof wsId == 'undefined' && typeof name == 'undefined') {
+            return this.workspace = null;
+        }
         var r = await channel.get('/ws/info', { name, wsId });
         if (r.ok) {
             var ws = new Workspace();
             ws.load({ ...r.data.workspace });
+            /**
+             * 不是成员，且空间为非公开，那么不允许访问
+             */
+            // if (!r.data.member && (typeof ws.access == 'undefined' || ws.access == 0)) {
+            //     UrlRoute.push(ShyUrl._404);
+            //     return;
+            // }
+            if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
+            else this.temporaryWs = null;
             this.workspace = ws;
             if (r.data.roles) await ws.loadRoles(r.data.roles)
-            if (r.data.member) await ws.loadMember(r.data.member as any);
+            else ws.loadRoles([]);
+            if (r.data.member) await ws.loadMember(r.data.member as any)
+            else await ws.loadMember(null);
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
             var page = await ws.getDefaultPage();
