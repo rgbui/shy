@@ -9,7 +9,7 @@ export var PageUsers = observer(function () {
         var users = surface.workspace.onlineUsers.get(item.id);
         var size = 28;
         return <div className='shy-supervisor-bar-users' style={{ height: size }}>
-            {users.map(user => {
+            {users.findAll(user => user ? true : false).map(user => {
                 return <Avatar key={user.userid} size={size} userid={user.userid}></Avatar>
             })}
         </div>
