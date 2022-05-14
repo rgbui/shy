@@ -211,9 +211,9 @@ push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any
 push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
-push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query'])
+push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
-push('/ws/info', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>,roles:any[],member:Record<string,any>}>', ['get'])
+push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>,roles:any[],member:Record<string,any>}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
