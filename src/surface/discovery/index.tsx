@@ -4,6 +4,8 @@ import "./style.less";
 import pic from "../../assert/img/pic-3.jpg";
 import { channel } from "rich/net/channel";
 import { WsAvatar } from "rich/component/view/avator/ws";
+import { Workspace } from "../workspace";
+import { surface } from "..";
 
 export var DiscoveryView = observer(function () {
     var local = useLocalObservable(() => {
@@ -32,6 +34,9 @@ export var DiscoveryView = observer(function () {
             local.loading = false;
         }
     }
+    async function openWs(ws: Partial<Workspace>) {
+        await surface.loadWorkspace(ws.id);
+    }
     React.useEffect(() => {
         loadWs();
     }, [])
@@ -50,7 +55,7 @@ export var DiscoveryView = observer(function () {
                 <h2>推荐社区</h2>
                 <div className="shy-discovery-ws-list">
                     {local.list.map(w => {
-                        return <div key={w.id}><WsAvatar wsId={w.id} ></WsAvatar></div>
+                        return <div onMouseDown={e => openWs(w)} key={w.id}><WsAvatar wsId={w.id} ></WsAvatar></div>
                     })}
                 </div>
             </div>
