@@ -10,9 +10,10 @@ import { ShyUtil } from "../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
 import { useOpenWorkspaceSettings } from "./settings";
-import { makeObservable, observable } from "mobx";
+import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
+import { surface } from "..";
 export type WorkspaceUser = {
     userid: string;
     role: string;
@@ -81,9 +82,8 @@ export class Workspace {
      * 在线的成员
      */
     public onlineUsers: Map<string, WorkspaceOnLineUser[]> = new Map();
-    public public: boolean;
-    public allowJoin: boolean;
-
+    public access: number = 0;
+    public accessJoinTip: boolean = false;
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -101,7 +101,8 @@ export class Workspace {
             config: observable,
             owner: observable,
             roles: observable,
-            onlineUsers: observable
+            onlineUsers: observable,
+            isJoinTip: computed
         })
     }
     private _sock: Sock;
@@ -117,6 +118,9 @@ export class Workspace {
             return `https://${this.host}.shy.live`
         }
         else return '';
+    }
+    get isJoinTip() {
+        return !this.member && surface.user.isSign && this.access == 1
     }
     load(data) {
         for (var n in data) {

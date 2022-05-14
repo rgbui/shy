@@ -8,6 +8,7 @@ import { Divider } from "rich/component/view/grid";
 import { surface } from "../..";
 import { SaveTip } from "../../../component/tip/save.tip";
 import { WorkspaceInvite } from "./invite";
+import { WorkspaceManage } from "./manage";
 import { WorkspaceMembers } from "./member";
 import { WorkspaceRoles } from "./roles";
 import { WorkspaceSettingsView } from "./settings";
@@ -47,6 +48,7 @@ class WsSettings extends EventsComponent {
                 <div>
                     <h4>{surface.workspace.text}</h4>
                     <a onMouseDown={e => this.setMode('settings')} className={this.mode == 'settings' ? "hover" : ""} ><span>基本信息</span></a>
+                    <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}><span>管理</span></a>
                     <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}><span>身份组</span></a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <h4>用户管理</h4>
@@ -70,6 +72,7 @@ class WsSettings extends EventsComponent {
                     {this.mode == 'settings' && <WorkspaceSettingsView ></WorkspaceSettingsView>}
                     {this.mode == 'members' && <WorkspaceMembers></WorkspaceMembers>}
                     {this.mode == 'invite' && <WorkspaceInvite></WorkspaceInvite>}
+                    {this.mode == 'manage' && <WorkspaceManage></WorkspaceManage>}
                 </div>
             </div>
         </div>
