@@ -4,13 +4,14 @@ import { channel } from "rich/net/channel";
 import { surface } from "..";
 export var JoinTip = observer(function () {
     async function mousedown(event: React.MouseEvent) {
-        var joinM = await channel.put('/user/join/ws', {
+        await channel.put('/user/join/ws', {
             wsId: surface.workspace.id
         });
-        var r = await channel.put('/ws/invite/join', {
+        await channel.put('/ws/invite/join', {
             wsId: surface.workspace.id,
             sock: surface.workspace.sock
         });
+        surface.loadWorkspaceList();
         await surface.loadWorkspace(surface.workspace.id);
     }
     return <div className='shy-supervisor-join-tip' >
