@@ -29,3 +29,18 @@ export enum WorkspacePermission {
     createOrDeleteChannel = 111,
 
 }
+
+export enum PagePermission {
+    /**
+     * 可以浏览
+     */
+    canView = 1000,
+    /**
+     * 可以编辑
+     */
+    canEdit = 1001,
+    /**
+     * 可以交互
+     */
+    canInteraction = 1002,
+}
