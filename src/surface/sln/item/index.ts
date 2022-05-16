@@ -19,6 +19,7 @@ import { channel } from "rich/net/channel";
 
 import { SnapSync } from "../../../../services/snap/sync";
 import { PageLayoutType } from "rich/src/page/declare";
+import { PagePermission } from "../../workspace/permission";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -43,6 +44,7 @@ export class PageItem {
     * local 本地存储
     */
     share: 'net' | 'nas' | 'local' = 'nas';
+    permission:PagePermission=PagePermission.canView;
     get snapSync() {
         return SnapSync.create(ElementType.PageItem, this.id);
     }
@@ -61,7 +63,8 @@ export class PageItem {
             selectedDate: observable,
             checkedHasChilds: observable,
             willLoadSubs: observable,
-            share: observable
+            share: observable,
+            permission:observable
         })
     }
     get sln() {
@@ -73,7 +76,7 @@ export class PageItem {
     uri: string;
     get path() {
         if (this.uri) return this.uri;
-        else return '/' + this.id;
+        else return '/page/' + this.id;
     }
     get url() {
         return this.workspace.url + this.path;

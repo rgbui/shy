@@ -10,7 +10,11 @@ import { Icon } from "rich/component/view/icon";
 import { pageItemStore } from "../../sln/item/store/sync";
 import { observer } from "mobx-react";
 import { makeObservable, observable } from "mobx";
-import { GlobalLinkSvg } from "rich/component/svgs";
+import { GlobalLinkSvg, LinkSvg, LinkToSvg } from "rich/component/svgs";
+import { PagePermission } from "../../workspace/permission";
+import { Divider } from "rich/component/view/grid";
+import { Page } from "rich/src/page";
+import { CopyText } from "rich/component/copy";
 @observer
 class PagePublish extends EventsComponent {
     constructor(props) {
@@ -20,13 +24,17 @@ class PagePublish extends EventsComponent {
     open(item: PageItem) {
         this.item = item;
     }
+    copyLink() {
+        CopyText(this.item.url);
+        setTimeout(() => {
+            alert('复制成功')
+        }, 500);
+    }
     item: PageItem = null;
     render() {
         var self = this;
-        function setGlobalShare(share: boolean) {
-            var itemShare = share ? "net" : 'nas';
-            pageItemStore.updatePageItem(self.item, { share: itemShare });
-            // self.forceUpdate();
+        function setGlobalShare(data) {
+            pageItemStore.updatePageItem(self.item, data);
         }
         return <div className='shy-page-publish'>
             <div className='shy-page-publish-access'>
@@ -34,14 +42,19 @@ class PagePublish extends EventsComponent {
                     <Icon size={36} icon={GlobalLinkSvg}></Icon>
                     <div>
                         <span>公开至互联网</span>
-                        <label>任何人都可以浏览</label>
+                        <label>任何人都可以{this.item?.permission == PagePermission.canEdit ? "编辑" : (this.item?.permission == PagePermission.canInteraction ? "浏览、添加评论、数据" : "浏览")}</label>
                     </div>
                 </div>
-                <Switch checked={this.item?.share == 'net' ? true : false} onChange={e => setGlobalShare(e)}></Switch>
+                <Switch checked={this.item?.share == 'net' ? true : false} onChange={e => setGlobalShare({ share: e ? "net" : 'nas' })}></Switch>
             </div>
-            {/* <div>
-                分享给好友，一起参于
-            </div> */}
+            {this.item?.share == 'net' && <>
+                <div className='shy-page-publish-permission'><span>可编辑</span><Switch checked={this.item.permission == PagePermission.canEdit} onChange={e => setGlobalShare({ permission: e ? PagePermission.canEdit : PagePermission.canView })}></Switch></div>
+                <div className='shy-page-publish-permission'><span>可交互<em>(评论、添加数据)</em></span><Switch checked={this.item.permission == PagePermission.canInteraction} onChange={e => setGlobalShare({ permission: e ? PagePermission.canInteraction : PagePermission.canView })}></Switch></div>
+            </>}
+            <Divider></Divider>
+            <div className="shy-page-publish-item" onClick={e => this.copyLink()}>
+                <Icon size={18} icon={LinkSvg}></Icon><span>复制页面访问链接</span>
+            </div>
         </div>
     }
 }
