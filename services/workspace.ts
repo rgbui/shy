@@ -183,7 +183,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/invite/check')
     async checkInvite(args) {
-        return await masterSock.put('/ws/invite/check', args);
+        return await masterSock.get('/ws/invite/check', args);
     }
     @put('/ws/invite/join')
     async inviteJoin(args) {
@@ -194,7 +194,7 @@ class WorkspaceService extends BaseService {
     @get('/ws/is/member')
     async memberIsOfWorkspace(args) {
         if (args.sock) {
-            return args.sock.put('/ws/is/member', { wsId: args.wsId });
+            return args.sock.get('/ws/is/member', { wsId: args.wsId });
         }
     }
     @get('/ws/access/info')
