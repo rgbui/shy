@@ -12,6 +12,7 @@ import { Route } from "react-router";
 import { ShyUrl } from "../../history";
 import { DiscoveryView } from "../discovery";
 import { JoinTip } from "./join";
+import { computed } from "mobx";
 
 export var ViewSurface = observer(function () {
     var local = useLocalObservable(() => {
@@ -77,14 +78,15 @@ export var ViewSurface = observer(function () {
     }
     if (local.loading) return <div className='shy-surface-loading'><Loading /></div>
     else {
+        var isShowTip = computed(() => surface.temporaryWs && surface.temporaryWs?.accessJoinTip == true);
         return <div className='shy-surface'>
             {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
             <Route path={[ShyUrl.ws, ShyUrl.page]}>
                 {surface.workspace && <div className="shy-surface-content">
-                    {surface.temporaryWs && <div className="shy-surface-content-head" style={{height:40}}>
+                    {isShowTip && <div className="shy-surface-content-head" style={{ height: 40 }}>
                         <JoinTip></JoinTip>
                     </div>}
-                    <div className="shy-surface-content-box" style={{height:surface.temporaryWs?"calc(100vh - 40px)":"100vh"}}>
+                    <div className="shy-surface-content-box" style={{ height: isShowTip ? "calc(100vh - 40px)" : "100vh" }}>
                         <div
                             onMouseLeave={mouseleave}
                             onMouseEnter={mousenter}
