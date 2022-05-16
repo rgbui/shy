@@ -11,6 +11,7 @@ import { UserChannel } from "../user/channel/view";
 import { Route } from "react-router";
 import { ShyUrl } from "../../history";
 import { DiscoveryView } from "../discovery";
+import { JoinTip } from "./join";
 
 export var ViewSurface = observer(function () {
     var local = useLocalObservable(() => {
@@ -76,26 +77,30 @@ export var ViewSurface = observer(function () {
     }
     if (local.loading) return <div className='shy-surface-loading'><Loading /></div>
     else {
-        if (surface.workspace) {
-            return <div className='shy-surface'>
-                {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
-                <Route path={[ShyUrl.ws, ShyUrl.page]} >
-                    <div
-                        onMouseLeave={mouseleave}
-                        onMouseEnter={mousenter}
-                        className={'shy-slide' + (surface.isShowSln ? "" : (local.slideFloatIsShow ? " float" : " float-hide"))}
-                        ref={e => local.slideEl = e}
-                        style={{ width: local.slideWidth }}>
-                        <SlnView></SlnView>
-                        {surface.isShowSln && <div className='shy-slide-resize' onMouseDown={mousedown}></div>}
+        return <div className='shy-surface'>
+            {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
+            <Route path={[ShyUrl.ws, ShyUrl.page]}>
+                {surface.workspace && <div className="shy-surface-content">
+                    {surface.temporaryWs && <div className="shy-surface-content-head" style={{height:40}}>
+                        <JoinTip></JoinTip>
+                    </div>}
+                    <div className="shy-surface-content-box" style={{height:surface.temporaryWs?"calc(100vh - 40px)":"100vh"}}>
+                        <div
+                            onMouseLeave={mouseleave}
+                            onMouseEnter={mousenter}
+                            className={'shy-slide' + (surface.isShowSln ? "" : (local.slideFloatIsShow ? " float" : " float-hide"))}
+                            ref={e => local.slideEl = e}
+                            style={{ width: local.slideWidth }}>
+                            <SlnView></SlnView>
+                            {surface.isShowSln && <div className='shy-slide-resize' onMouseDown={mousedown}></div>}
+                        </div><div className='shy-slide-reaction'></div>
+                        <SupervisorView></SupervisorView>
                     </div>
-                    <div className='shy-slide-reaction'></div>
-                    <SupervisorView></SupervisorView>
-                </Route>
-                <Route path={ShyUrl.me} exact component={UserChannel}></Route>
-                <Route path={ShyUrl.discovery} exact component={DiscoveryView}></Route>
-            </div >
-        }
+                </div>}
+            </Route>
+            <Route path={ShyUrl.me} exact component={UserChannel}></Route>
+            <Route path={ShyUrl.discovery} exact component={DiscoveryView}></Route>
+        </div >
     }
     return <></>;
 })

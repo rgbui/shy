@@ -195,6 +195,8 @@ push('/user/channel/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/user/channel/active', '{id:string}', 'SockResponse<void>', ['patch'])
 push('/user/channel/join', '{roomName?:string,userids:string[]}', 'SockResponse<{room:Record<string,any>,channel:Record<string,any>}>', ['put'])
 push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
+push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
+
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
 push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
@@ -213,7 +215,8 @@ push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
-push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>,roles:any[],member:Record<string,any>}>', ['get'])
+push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/access/info', '{wsId:string}', 'SockResponse<{roles:any[],member:Record<string,any>}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
@@ -227,7 +230,6 @@ push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockRespon
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
-
 
 push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);

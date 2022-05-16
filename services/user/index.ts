@@ -136,6 +136,10 @@ class UserService extends BaseService {
     async userSetPaw(oldPaw: string, newPaw: string, confirmPaw: string) {
         return masterSock.patch('/user/set/paw', arguments[0]);
     }
+    @put('/user/join/ws')
+    async userJoinWs(args) {
+        return masterSock.put('/user/join/ws', args);
+    }
 }
 
 
