@@ -196,6 +196,7 @@ push('/user/channel/active', '{id:string}', 'SockResponse<void>', ['patch'])
 push('/user/channel/join', '{roomName?:string,userids:string[]}', 'SockResponse<{room:Record<string,any>,channel:Record<string,any>}>', ['put'])
 push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
+push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
 
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
@@ -230,7 +231,7 @@ push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockRespon
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
-
+push('/ws/member/exit','{wsId:string,sock:any}','SockResponse<void>', ['del']);
 push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/memeber/delete', '{userid:string}', 'SockResponse<void>', ['del']);

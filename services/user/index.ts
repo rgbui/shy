@@ -140,6 +140,10 @@ class UserService extends BaseService {
     async userJoinWs(args) {
         return masterSock.put('/user/join/ws', args);
     }
+    @del('/user/exit/ws')
+    async userExitWs(args) {
+        return masterSock.delete('/user/exit/ws', args);
+    }
 }
 
 

@@ -85,6 +85,13 @@ export class Surface extends Events {
             else await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, undefined);
         }
     }
+    async exitWorkspace() {
+        surface.wss.remove(g => g.id == surface.workspace.id);
+        await channel.del('/user/exit/ws', { wsId: surface.workspace.id });
+        await channel.del('/ws/member/exit', { wsId: surface.workspace.id, sock: surface.workspace.sock });
+        var w = surface.wss.first();
+        await this.loadWorkspace(w.id);
+    }
     async getWsName() {
         var domain, sn, wsId;
         sn = UrlRoute.match(ShyUrl.pageDev)?.wsId;

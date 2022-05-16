@@ -40,7 +40,7 @@ export var WorkspaceProfile = observer(function () {
         );
         if (se) {
             if (se.item.name == 'exit') {
-
+                surface.exitWorkspace();
             }
             else if (se.item.name == 'edit') {
 

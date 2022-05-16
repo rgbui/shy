@@ -201,5 +201,9 @@ class WorkspaceService extends BaseService {
     async wsAccessInfo(args) {
         return surface.workspace.sock.get('/ws/access/info', args);
     }
+    @del('/ws/member/exit')
+    async wsMemberExit(args){
+        return args.sock.del('/ws/member/exit',{wsId:args.wsId});
+    }
 }
 
