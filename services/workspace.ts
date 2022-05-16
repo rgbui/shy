@@ -188,22 +188,23 @@ class WorkspaceService extends BaseService {
     @put('/ws/invite/join')
     async inviteJoin(args) {
         if (args.sock) {
-            return args.sock.put('/ws/invite/join', { wsId: args.wsId });
+            return await args.sock.put('/ws/invite/join', { wsId: args.wsId });
         }
     }
     @get('/ws/is/member')
     async memberIsOfWorkspace(args) {
         if (args.sock) {
-            return args.sock.get('/ws/is/member', { wsId: args.wsId });
+            return await args.sock.get('/ws/is/member', { wsId: args.wsId });
         }
     }
     @get('/ws/access/info')
     async wsAccessInfo(args) {
-        return surface.workspace.sock.get('/ws/access/info', args);
+        return await surface.workspace.sock.get('/ws/access/info', args);
     }
     @del('/ws/member/exit')
-    async wsMemberExit(args){
-        return args.sock.del('/ws/member/exit',{wsId:args.wsId});
+    async wsMemberExit(args) {
+        if (args.sock)
+            return await args.sock.delete('/ws/member/exit', { wsId: args.wsId });
     }
 }
 

@@ -63,15 +63,17 @@ export class Surface extends Events {
             /**
              * 不是成员，且空间为非公开，那么不允许访问
              */
-            // if (!r.data.member && (typeof ws.access == 'undefined' || ws.access == 0)) {
-            //     UrlRoute.push(ShyUrl._404);
-            //     return;
-            // }
+
             if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
             else this.temporaryWs = null;
             this.workspace = ws;
             this.workspace.onlineUsers = new Map();
             var g = await channel.get('/ws/access/info', { wsId: this.workspace.id });
+            if (!g.data.member && (typeof ws.access == 'undefined' || ws.access == 0)) {
+                this.workspace = null;
+                UrlRoute.push(ShyUrl._404);
+                return;
+            }
             if (g.data.roles) await ws.loadRoles(g.data.roles)
             else ws.loadRoles([]);
             if (g.data.member) await ws.loadMember(g.data.member as any)
@@ -86,11 +88,14 @@ export class Surface extends Events {
         }
     }
     async exitWorkspace() {
-        surface.wss.remove(g => g.id == surface.workspace.id);
         await channel.del('/user/exit/ws', { wsId: surface.workspace.id });
         await channel.del('/ws/member/exit', { wsId: surface.workspace.id, sock: surface.workspace.sock });
+        var list = surface.wss.map(w=>w);
+        list.remove(g => g.id == surface.workspace.id);
+        surface.wss = list;
         var w = surface.wss.first();
-        await this.loadWorkspace(w.id);
+        if (w) await this.loadWorkspace(w.id);
+        else await this.loadWorkspace(undefined);
     }
     async getWsName() {
         var domain, sn, wsId;

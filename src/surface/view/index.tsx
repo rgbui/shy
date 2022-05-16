@@ -83,10 +83,10 @@ export var ViewSurface = observer(function () {
             {surface.config.showSideBar && surface.isShowSln && <SideBar></SideBar>}
             <Route path={[ShyUrl.ws, ShyUrl.page]}>
                 {surface.workspace && <div className="shy-surface-content">
-                    {isShowTip && <div className="shy-surface-content-head" style={{ height: 40 }}>
+                    {isShowTip.get() && <div className="shy-surface-content-head" style={{ height: 40 }}>
                         <JoinTip></JoinTip>
                     </div>}
-                    <div className="shy-surface-content-box" style={{ height: isShowTip ? "calc(100vh - 40px)" : "100vh" }}>
+                    <div className="shy-surface-content-box" style={{ height: isShowTip.get() ? "calc(100vh - 40px)" : "100vh" }}>
                         <div
                             onMouseLeave={mouseleave}
                             onMouseEnter={mousenter}
