@@ -6,7 +6,7 @@ import { surface } from '../..';
 export var PageUsers = observer(function () {
     var item = surface.supervisor.item;
     if (item) {
-        var users = surface.workspace.onlineUsers.get(item.id);
+        var users = surface.workspace.onlineUsers.get(item.id) || [];
         var size = 28;
         return <div className='shy-supervisor-bar-users' style={{ height: size }}>
             {users.findAll(user => user ? true : false).map(user => {
