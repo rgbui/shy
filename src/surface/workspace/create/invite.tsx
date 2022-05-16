@@ -35,7 +35,9 @@ export var InviteView = observer(function () {
     }
     async function join() {
         var sock = Sock.createWorkspaceSock(local.ws as any);
+        await channel.put('/user/join/ws', { wsId: local.ws.id });
         var r = await channel.put('/ws/invite/join', { wsId: local.ws.id, sock });
+        await surface.loadWorkspaceList();
         return UrlRoute.pushToWs(local.ws.siteDomain || local.ws.sn);
     }
     async function refuse() {
@@ -47,10 +49,8 @@ export var InviteView = observer(function () {
 
     if (local.loading == true) return <Loading></Loading>
     return <div className="shy-invite">
-        <Row align="center">
-            <WsAvatar wsId={local.ws.id}></WsAvatar>
-        </Row>
-        <Row style={{ margin: '30px 0px' }} align="center">邀请您加入他们的空间</Row>
-        <Row align="center"><Space><Button onClick={e => join()}>加入</Button><Button onClick={e => refuse()} ghost>拒绝</Button></Space></Row>
+        <Row align="center">邀请您加入他们的空间</Row>
+        <Row align="center" style={{ marginTop: 20, marginBottom: 30 }}><Space><Button onClick={e => join()}>加入</Button><Button onClick={e => refuse()} ghost>拒绝</Button></Space></Row>
+        <WsAvatar wsId={local.ws.id}></WsAvatar>
     </div>
 })
