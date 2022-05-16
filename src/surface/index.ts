@@ -70,9 +70,11 @@ export class Surface extends Events {
             if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
             else this.temporaryWs = null;
             this.workspace = ws;
-            if (r.data.roles) await ws.loadRoles(r.data.roles)
+            this.workspace.onlineUsers = new Map();
+            var g = await channel.get('/ws/access/info', { wsId: this.workspace.id });
+            if (g.data.roles) await ws.loadRoles(g.data.roles)
             else ws.loadRoles([]);
-            if (r.data.member) await ws.loadMember(r.data.member as any)
+            if (g.data.member) await ws.loadMember(g.data.member as any)
             else await ws.loadMember(null);
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
