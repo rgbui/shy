@@ -197,5 +197,9 @@ class WorkspaceService extends BaseService {
             return args.sock.put('/ws/is/member', { wsId: args.wsId });
         }
     }
+    @get('/ws/access/info')
+    async wsAccessInfo(args) {
+        return surface.workspace.sock.get('/ws/access/info', args);
+    }
 }
 
