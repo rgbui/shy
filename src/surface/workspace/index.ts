@@ -114,10 +114,8 @@ export class Workspace {
         return this.siteDomain || this.sn
     }
     get url() {
-        if (config.isPro) {
-            return `https://${this.host}.shy.live`
-        }
-        else return '';
+        if (config.isPro) return `https://${this.host}.shy.live`
+        else return 'http://' + location.host;
     }
     get isJoinTip() {
         return !this.member && surface.user.isSign && this.access == 1
