@@ -11,6 +11,7 @@ import HomeSrc from "../../assert/img/shy.256.png";
 import { ShyUrl, UrlRoute } from "../../history";
 
 export var SideBar = observer(function () {
+    if (!surface.showSlideBar) return <></>
     function renderWs(workspace: Partial<Workspace>) {
         if (workspace.icon) return <a className="shy-sidebar-ws-icon"><img
             src={workspace?.icon.url} style={{ width: 48, height: 48 }} />

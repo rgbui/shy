@@ -115,7 +115,7 @@ export class Workspace {
     }
     get url() {
         if (config.isPro) return `https://${this.host}.shy.live`
-        else return 'http://' + location.host;
+        else return 'http://' + location.host + "/ws/" + this.sn + "";
     }
     get isJoinTip() {
         return !this.member && surface.user.isSign && this.access == 1
@@ -195,7 +195,7 @@ export class Workspace {
     }
     async loadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
-        var rr = await channel.get('/page/items', { ids });
+        var rr = await channel.get('/page/items', { ids, sock: this.sock, wsId: this.id });
         if (rr) {
             if (Array.isArray(rr?.data?.list)) {
                 var pages = rr.data.list;

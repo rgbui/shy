@@ -9,38 +9,32 @@ import { createPageContent } from "./page";
 import { timService } from "../../../net/primus";
 
 export class Supervisor extends Events {
-    itemIds: string[] = [];
+    itemId: string = null;
     pagesEl: HTMLElement;
     loading: boolean = false;
     constructor() {
         super()
         makeObservable(this, {
-            itemIds: observable,
+            itemId: observable,
             item: computed,
-            items: computed,
             loading: observable
         })
     }
     get item() {
-        var id = this.itemIds.first();
-        return surface.workspace.find(g => g.id == id);
+        return surface.workspace.find(g => g.id == this.itemId);
     }
-    get items() {
-        if (this.item) return [this.item]
-        else return [];
-    }
-    async onOpenItem(...items: PageItem[]) {
+    async onOpenItem(item?: PageItem) {
         var oldItem = this.item;
-        this.itemIds = items.map(i => i.id);
-        var newItem = items.first();
-        if (newItem.id !== oldItem?.id) {
+        if (item) {
+            if (item.id == this.itemId) return;
+            else this.itemId = item.id;
             this.loading = true;
-            await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, newItem.id);
+            await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, item.id);
             try {
                 if (oldItem && oldItem.contentView) {
                     oldItem.contentView.cacheFragment();
                 }
-                await createPageContent(newItem);
+                await createPageContent(item);
             }
             catch (ex) {
 
@@ -48,6 +42,9 @@ export class Supervisor extends Events {
             finally {
                 this.loading = false;
             }
+        }
+        else {
+            await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, undefined);
         }
     }
     onFavourite(event: React.MouseEvent) {
@@ -70,8 +67,10 @@ export class Supervisor extends Events {
         })
     }
     async autoLayout() {
-        var view = await this.getView();
-        var bound = Rect.fromEle(view);
-        this.item.contentView.layout({ width: bound.width, height: bound.height })
+        if (this?.item?.contentView) {
+            var view = await this.getView();
+            var bound = Rect.fromEle(view);
+            this.item.contentView.layout({ width: bound.width, height: bound.height })
+        }
     }
 }

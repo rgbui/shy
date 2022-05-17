@@ -5,26 +5,29 @@ import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { ShyUrl, UrlRoute } from "../history";
 import { Workspace } from "./workspace";
-import { makeObservable, observable } from "mobx";
+import { computed, makeObservable, observable, runInAction, toJS } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../common/config";
 import { timService } from "../../net/primus";
 import { channel } from "rich/net/channel";
 import "./message.center";
 import { bindCollaboration } from "../../services/tim";
+import { PageItem } from "./sln/item";
 
 export class Surface extends Events {
     constructor() {
         super();
         makeObservable(this, {
-            isShowSln: observable,
-            config: observable,
             supervisor: observable,
             user: observable,
             sln: observable,
             workspace: observable,
             temporaryWs: observable,
-            wss: observable
+            wss: observable,
+            showHeadTip: computed,
+            showSlideBar: computed,
+            showSln: computed,
+            showWorkspace: computed
         });
     }
     supervisor: Supervisor = new Supervisor();
@@ -33,8 +36,6 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: Partial<Workspace>[] = [];
     temporaryWs: Partial<Workspace> = null;
-    isShowSln: boolean = true;
-    config: { showSideBar: boolean } = { showSideBar: true };
     async loadUser() {
         var r = await channel.get('/sign')
         if (r.ok) {
@@ -56,23 +57,26 @@ export class Surface extends Events {
         if (typeof wsId == 'undefined' && typeof name == 'undefined') {
             return this.workspace = null;
         }
+        var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.pageDev)?.pageId;
         var r = await channel.get('/ws/info', { name, wsId });
-        if (r.ok) {
+        if (r.data?.workspace) {
             var ws = new Workspace();
             ws.load({ ...r.data.workspace });
+            var g = await channel.get('/ws/access/info', { wsId: ws.id, sock: ws.sock, pageId: willPageId });
+            var willPageItem = g.data.page as PageItem;
             /**
-             * 不是成员，且空间为非公开，那么不允许访问
+             * 不是成员，且空间为非公开，页面也不是非公开，那么不能访问
              */
-
-            if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
-            else this.temporaryWs = null;
-            this.workspace = ws;
-            this.workspace.onlineUsers = new Map();
-            var g = await channel.get('/ws/access/info', { wsId: this.workspace.id });
-            if (!g.data.member && (typeof ws.access == 'undefined' || ws.access == 0)) {
-                this.workspace = null;
-                UrlRoute.push(ShyUrl._404);
-                return;
+            if (!g.data.member) {
+                /**
+                 *空间不是公开的，页面也不是公开的，那么就不能访问
+                 */
+                if (ws.access == 0 || typeof ws.access == 'undefined') {
+                    if (!(willPageItem && willPageItem.share == 'net')) {
+                        UrlRoute.push(ShyUrl._404);
+                        return;
+                    }
+                }
             }
             if (g.data.roles) await ws.loadRoles(g.data.roles)
             else ws.loadRoles([]);
@@ -80,17 +84,21 @@ export class Surface extends Events {
             else await ws.loadMember(null);
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
+
+            runInAction(() => {
+                if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
+                else this.temporaryWs = null;
+                this.workspace = ws;
+            })
             var page = await ws.getDefaultPage();
-            if (page) {
-                this.sln.onMousedownItem(page);
-            }
-            else await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, undefined);
+            channel.air('/page/open', { item: page });
         }
+        else this.workspace = null;
     }
     async exitWorkspace() {
         await channel.del('/user/exit/ws', { wsId: surface.workspace.id });
         await channel.del('/ws/member/exit', { wsId: surface.workspace.id, sock: surface.workspace.sock });
-        var list = surface.wss.map(w=>w);
+        var list = surface.wss.map(w => w);
         list.remove(g => g.id == surface.workspace.id);
         surface.wss = list;
         var w = surface.wss.first();
@@ -119,8 +127,34 @@ export class Surface extends Events {
     onCreateWorkspace() {
         UrlRoute.push(ShyUrl.workCreate);
     }
-    onToggleSln(isShowSln: boolean) {
-        this.isShowSln = isShowSln;
+    /**
+     * 
+     */
+    get showHeadTip() {
+        return this.temporaryWs && this.temporaryWs?.accessJoinTip == true
+    }
+    get showSlideBar() {
+        if (this.workspace) {
+            if (!this.workspace.member) {
+                if (this.workspace.access == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    get showSln() {
+        if (this.workspace) {
+            if (!this.workspace.member) {
+                if (this.workspace.access == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    get showWorkspace() {
+        return surface.workspace ? true : false;
     }
 }
 export var surface = new Surface();
