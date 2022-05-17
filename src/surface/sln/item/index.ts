@@ -76,7 +76,7 @@ export class PageItem {
     uri: string;
     get path() {
         if (this.uri) return this.uri;
-        else return '/page/' + this.id;
+        else return '/page/' + this.sn;
     }
     get url() {
         return this.workspace.url + this.path;
