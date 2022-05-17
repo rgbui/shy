@@ -8,8 +8,10 @@ import { SnapSync } from "./snap/sync";
 
 class PageService extends BaseService {
     @get('/page/items')
-    async pageItems(args: { ids: string[] }) {
-        return await surface.workspace.sock.get('/page/items', { wsId: surface.workspace.id, ids: args.ids });
+    async pageItems(args: { ids: string[], sock?: any, wsId?: string }) {
+        var sock = args.sock || surface.workspace.sock;
+        var wsId = args.wsId || surface.workspace.id;
+        return await sock.get('/page/items', { wsId: wsId, ids: args.ids });
     }
     @get('/page/item/subs')
     async pageItemSubs(args: { id: string }) {
