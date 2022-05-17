@@ -12,8 +12,8 @@ class MessageCenter {
     @air('/page/open')
     async pageOpen(args: { item: string | { id: string } }) {
         var { item } = args;
-        var id = typeof item == 'string' ? item : item.id;
-        var it = surface.workspace.find(g => g.id == id);
+        var id = typeof item == 'string' ? item : item?.id;
+        var it = id ? surface.workspace.find(g => g.id == id) : undefined;
         if (it) {
             UrlRoute.pushToPage(surface.workspace.host, it.sn)
             it.onUpdateDocument();
@@ -22,10 +22,8 @@ class MessageCenter {
             await surface.supervisor.onOpenItem(it);
         }
         else {
-            /**
-             * 本地没有item.id时，怎么处理，
-             * 需要后台依次查出来，然后加载
-             */
+            surface.sln.onFocusItem();
+            await surface.supervisor.onOpenItem();
         }
     }
     @get('/page/query/info')
