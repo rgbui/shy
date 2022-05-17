@@ -19,7 +19,7 @@ import { channel } from "rich/net/channel";
 
 import { SnapSync } from "../../../../services/snap/sync";
 import { PageLayoutType } from "rich/src/page/declare";
-import { PagePermission } from "../../workspace/permission";
+import { PagePermission } from "rich/src/page/permission";
 export class PageItem {
     id: string = null;
     sn?: number = null;

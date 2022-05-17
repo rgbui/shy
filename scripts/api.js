@@ -80,6 +80,7 @@ import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
 import { UserBasic, UserStatus } from "../types/user";
+import { AtomPermission } from "../src/page/permission";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -231,7 +232,7 @@ push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockRespon
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
-push('/ws/member/exit','{wsId:string,sock:any}','SockResponse<void>', ['del']);
+push('/ws/member/exit', '{wsId:string,sock:any}', 'SockResponse<void>', ['del']);
 push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/member/delete', '{userid:string}', 'SockResponse<void>', ['del']);
@@ -253,6 +254,7 @@ push('/guid', '', 'string', ['query']);
 push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
 push('/page/view/snap', '{ syncBlockId: string, seq: number, content: any }', 'Promise<void>', ['act'])
+push(`/page/query/permissions`,'{pageId:string}', 'AtomPermission[]', ['query'])
 push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number}>', ['patch'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

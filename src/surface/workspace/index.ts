@@ -14,6 +14,8 @@ import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "..";
+import { AtomPermission, getAllAtomPermission, getCommonPerssions } from "rich/src/page/permission";
+
 export type WorkspaceUser = {
     userid: string;
     role: string;
@@ -62,7 +64,6 @@ export class Workspace {
     public text: string = null;
     public icon: IconArguments = null;
     public cover: IconArguments = null;
-
     public config: object = null;
     public slogan: string = null;
     public siteDomain: string = null;
@@ -75,9 +76,9 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
-    public permissions: number[];
+    public permissions: number[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
-    public member: WorkspaceMember;
+    public member: WorkspaceMember = null;
     /**
      * 在线的成员
      */
@@ -102,7 +103,10 @@ export class Workspace {
             owner: observable,
             roles: observable,
             onlineUsers: observable,
-            isJoinTip: computed
+            isJoinTip: computed,
+            permissions: observable,
+            member: observable,
+            memberPermissions: computed,
         })
     }
     private _sock: Sock;
@@ -119,6 +123,29 @@ export class Workspace {
     }
     get isJoinTip() {
         return !this.member && surface.user.isSign && this.access == 1
+    }
+    /**
+     * 获取当前成员在这个空间的权限
+     */
+    get memberPermissions() {
+        if (surface.user?.id == this.owner) {
+            return getAllAtomPermission()
+        }
+        if (this.member) {
+            if (this.member.roleIds.length > 0) {
+                var ps: AtomPermission[] = [];
+                this.member.roleIds.forEach(rid => {
+                    var role = this.roles.find(g => g.id == rid);
+                    if (role && Array.isArray(role.permissions)) {
+                        role.permissions.forEach(p => {
+                            if (!ps.includes(p)) ps.push(p)
+                        })
+                    }
+                });
+                return ps;
+            }
+        }
+        return this.permissions.length > 0 ? this.permissions : getCommonPerssions();
     }
     load(data) {
         for (var n in data) {

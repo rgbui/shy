@@ -2,6 +2,7 @@
 import lodash from "lodash";
 import { air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
+import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
 import { surface } from ".";
 import { yCache, CacheKey } from "../../net/cache";
 import { UrlRoute } from "../history";
@@ -48,6 +49,27 @@ class MessageCenter {
                 data: lodash.pick(r.data.item, ['icon', 'id', 'sn', 'text', 'pageType'])
             }
             else return { ok: false, warn: r.warn };
+        }
+    }
+    @query('/page/query/permissions')
+    getPagePermisson(args: { pageId: string }) {
+        var item = surface.workspace.find(g => g.id == args.pageId);
+        if (item) {
+            var ps = surface.workspace.memberPermissions;
+            if (surface.workspace.member) {
+                return ps;
+            }
+            else {
+                if (item.permission == PagePermission.canEdit) {
+                    return getEditPerssions()
+                }
+                else if (item.permission == PagePermission.canInteraction) {
+                    return getCommonPerssions()
+                }
+                else {
+                    return []
+                }
+            }
         }
     }
     @query('/query/current/user')

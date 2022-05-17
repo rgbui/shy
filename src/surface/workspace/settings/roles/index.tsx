@@ -34,9 +34,8 @@ import { Rect } from 'rich/src/common/vector/point';
 import { util } from 'rich/util/util';
 import { surface } from '../../..';
 import { SaveTip } from '../../../../component/tip/save.tip';
-import { getCommonPerssions, WorkspacePermission } from '../../permission';
 import "./style.less";
-
+import {AtomPermission, getCommonPerssions}  from "rich/src/page/permission";
 const RoleColors: string[] = [
     'rgb(26,188,156)',
     'rgb(46,204,113)',
@@ -300,7 +299,7 @@ export class WorkspaceRoles extends React.Component {
             }
             self.tip.open();
         }
-        function is(permission: WorkspacePermission) {
+        function is(permission: AtomPermission) {
             if (Array.isArray(self.editRole?.permissions)) {
                 return (self.editRole.permissions as number[]).includes(permission)
             }
@@ -312,22 +311,22 @@ export class WorkspaceRoles extends React.Component {
                 <Col span={12} align={'end'}><Button link size={'small'} >清除权限</Button></Col>
             </Row>
             <Row>
-                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.editDoc, e)} checked={is(WorkspacePermission.editDoc)}></Switch></Col>
+                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.editDoc, e)} checked={is(AtomPermission.editDoc)}></Switch></Col>
                 <Col><Remark>默认允许编辑文档</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.createOrDeleteDoc, e)} checked={is(WorkspacePermission.createOrDeleteDoc)}></Switch></Col>
+                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteDoc, e)} checked={is(AtomPermission.createOrDeleteDoc)}></Switch></Col>
                 <Col><Remark>默认允许创建或删除文档</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.sendMessageByChannel, e)} checked={is(WorkspacePermission.sendMessageByChannel)}></Switch></Col>
+                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.sendMessageByChannel, e)} checked={is(AtomPermission.sendMessageByChannel)}></Switch></Col>
                 <Col><Remark>默认允许会话发送消息</Remark></Col>
                 <Divider></Divider>
             </Row>
             <Row>
-                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePermission(WorkspacePermission.createOrDeleteChannel, e)} checked={is(WorkspacePermission.createOrDeleteChannel)}></Switch></Col>
+                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteChannel, e)} checked={is(AtomPermission.createOrDeleteChannel)}></Switch></Col>
                 <Col><Remark>默认允许创建会话或删除会话</Remark></Col>
                 <Divider></Divider>
             </Row>

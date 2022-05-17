@@ -10,11 +10,10 @@ import { Icon } from "rich/component/view/icon";
 import { pageItemStore } from "../../sln/item/store/sync";
 import { observer } from "mobx-react";
 import { makeObservable, observable } from "mobx";
-import { GlobalLinkSvg, LinkSvg, LinkToSvg } from "rich/component/svgs";
-import { PagePermission } from "../../workspace/permission";
+import { GlobalLinkSvg, LinkSvg } from "rich/component/svgs";
 import { Divider } from "rich/component/view/grid";
-import { Page } from "rich/src/page";
 import { CopyText } from "rich/component/copy";
+import { PagePermission } from "rich/src/page/permission";
 @observer
 class PagePublish extends EventsComponent {
     constructor(props) {

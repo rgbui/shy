@@ -120,7 +120,7 @@ export class Surface extends Events {
         return sn || domain || wsId;
     }
     async onChangeWorkspace(workspace: Partial<Workspace>) {
-        if (workspace.id != this.workspace.id) {
+        if (workspace.id != this.workspace?.id) {
             await this.loadWorkspace(workspace.id);
         }
     }
