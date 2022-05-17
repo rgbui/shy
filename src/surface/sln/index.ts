@@ -13,7 +13,6 @@ import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
-
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
@@ -37,11 +36,9 @@ export class Sln extends Events<SlnDirective> {
             item.onContextmenuClickItem(menuItem.item, menuItem.event);
         }
     }
-    onMousedownItem(item: PageItem, event?: MouseEvent) {
-        if (!item) return;
+    async onMousedownItem(item: PageItem, event: MouseEvent) {
         var self = this;
-        if (!event) channel.air('/page/open', { item });
-        else MouseDragger<{ item: HTMLElement }>({
+        MouseDragger<{ item: HTMLElement }>({
             event,
             dis: 5,
             isCross: true,
@@ -75,8 +72,8 @@ export class Sln extends Events<SlnDirective> {
             }
         })
     }
-    onFocusItem(item: PageItem) {
-        this.selectIds = [item.id];
+    onFocusItem(item?: PageItem) {
+        this.selectIds = item ? [item.id] : [];
         item.selectedDate = new Date().getTime();
         yCache.set(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], surface.workspace.id), item.id);
     }
