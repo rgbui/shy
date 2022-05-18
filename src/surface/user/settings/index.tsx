@@ -2,7 +2,7 @@ import React from 'react';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { UserSettingsView } from './content/settings';
 import "./style.less";
-import { SyHistory } from '../../../history';
+import { ShyUrl, SyHistory } from '../../../history';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
 import { Singleton } from 'rich/component/lib/Singleton';
@@ -31,8 +31,19 @@ class UserSettings extends EventsComponent {
         this.visible = false;
     }
     singout() {
-        SyHistory.push('/sign/out');
-        this.close()
+        if (config.isPro) {
+            if (location.hostname == 'shy.live') {
+                SyHistory.push(ShyUrl.signOut);
+                this.close()
+            }
+            else {
+                location.href = 'https://shy.live/sign/out'
+            }
+        }
+        else {
+            SyHistory.push(ShyUrl.signOut);
+            this.close()
+        }
     }
     render() {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
