@@ -7,25 +7,29 @@
  */
 
 import "rich/util/array";
+import "../services/user/index";
+import "../services/common/common";
 import "./style.less";
 import { channel } from "rich/net/channel";
 window.isAuth = false;
 import { createAuthIframe } from '../auth/iframe';
 createAuthIframe();
 async function loadUser() {
-    var r = await channel.get('/sign')
+    var r = await channel.get('/sign');
     if (r.ok) {
         var user = r.data.user;
         var userEl = document.body.querySelector('.shy-site-head-user') as HTMLElement;
-        if (user.icon) {
-            userEl.innerHTML = `<a href="/my/workspace">
-            <div class="shy-avatar"><img src="${user.icon.url}"style="width: 40px; height: 40px;"></div>
+        if (userEl) {
+            if (user.avatar) {
+                userEl.innerHTML = `<a href="/my/workspace">
+            <div class="shy-avatar"><img src="${user.avatar.url}"style="width: 40px; height: 40px;"></div>
             </a>`
-        }
-        else {
-            userEl.innerHTML = `<a href="/my/workspace">
+            }
+            else {
+                userEl.innerHTML = `<a href="/my/workspace">
             <div class="shy-avatar"><span style="width: 40px; height: 40px;display:block;text-align:center;line-height:40px">${user.name.slice(0, 1)}</span></div>
             </a>`
+            }
         }
     }
 }
