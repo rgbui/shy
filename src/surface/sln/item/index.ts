@@ -104,6 +104,11 @@ export class PageItem {
     }
     parentId?: string;
     at: number;
+    get index() {
+        if (this.parent)
+            return this.parent?.childs.findIndex(g => g === this);
+        return null;
+    }
     load(data) {
         for (var n in data) {
             if (n == 'childs') {

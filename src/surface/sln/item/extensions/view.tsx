@@ -58,7 +58,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             refInput.current.focus();
         }
     }, [isInEdit])
-    return <div className='shy-ws-item'>
+    return <div className='shy-ws-item' data-at={props.item.at} >
         <div className={'shy-ws-item-page' + (isSelected ? " shy-ws-item-page-selected" : "") + (isDragOver ? " shy-ws-item-page-dragover" : "")}
             style={style}
             onMouseEnter={e => surface.sln.hoverId = props.item.id}

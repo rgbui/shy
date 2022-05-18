@@ -53,7 +53,9 @@ class PageItemStore {
     public async deletePageItem(pageItem: PageItem) {
         var actions: PageItemAction[] = [];
         var pa = pageItem.parent;
-        lodash.remove(pa.childs, g => g.id == pageItem.id);
+        runInAction(() => {
+            lodash.remove(pa.childs, g => g.id == pageItem.id);
+        })
         actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.delete, actions });
     }
@@ -61,7 +63,9 @@ class PageItemStore {
         var actions: PageItemAction[] = [];
         actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.update, actions });
-        Object.assign(pageItem, data);
+        runInAction(() => {
+            Object.assign(pageItem, data);
+        })
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
         if (pageItem.checkedHasChilds && pageItem.spread == true) {
@@ -74,8 +78,10 @@ class PageItemStore {
             var newItem = new PageItem();
             newItem.checkedHasChilds = true;
             newItem.load(data);
-            pageItem.spread = true;
-            pageItem.childs.push(newItem);
+            runInAction(() => {
+                pageItem.spread = true;
+                pageItem.childs.push(newItem);
+            })
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.append, actions });
             if (r.ok && Array.isArray(r.data.actions)) {
@@ -88,20 +94,51 @@ class PageItemStore {
         }
         else return await this.insertAfterPageItem(pageItem, data);
     }
+    /**
+     * 
+     * @param pageItem 
+     * @param data 
+     * @returns 
+     */
     public async insertAfterPageItem(pageItem: PageItem, data: Record<string, any>) {
         var actions: PageItemAction[] = [];
         var at = pageItem.at;
-        var index = pageItem.parent.childs.findIndex(g => g.id == pageItem.id);
+        var index = pageItem.index;
+        var next = pageItem.next;
+        var ns = pageItem.parent.childs.findAll((g, i) => i > index);
+
+
         data.id = config.guid();
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.parentId;
         data.at = pageItem.at + 1;
+
         var newItem = new PageItem();
         newItem.checkedHasChilds = true;
         newItem.load(data);
-        pageItem.parent.childs.splice(index + 1, 0, newItem);
         var actions: PageItemAction[] = [];
-        actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gt: at } } })
+        runInAction(() => {
+            if (next) {
+                if (next.at == pageItem.at) {
+                    var nextAt = next.at;
+                    ns.forEach((n, g) => {
+                        var shouldAt = nextAt + 2 + g;
+                        n.at = shouldAt;
+                        actions.push({ directive: ItemOperatorDirective.update, pageId: n.id, data: { at: n.at } });
+                    })
+                }
+                else if (next.at - 1 == pageItem.at) {
+                    /***
+                     * 正常的排序
+                     */
+                    ns.forEach(n => {
+                        n.at += 1;
+                    })
+                    actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gt: at } } })
+                }
+            }
+            pageItem.parent.childs.splice(index + 1, 0, newItem);
+        })
         actions.push({ directive: ItemOperatorDirective.insert, data });
         var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.insertAfter, actions })
         if (r.ok && Array.isArray(r.data.actions)) {
@@ -112,38 +149,65 @@ class PageItemStore {
         }
         return newItem;
     }
-    public async moveAppendPageItem(pageItem: PageItem, parentItem: PageItem) {
+    public async movePrependPageItem(pageItem: PageItem, parentItem: PageItem) {
         if (pageItem.parent == parentItem && !pageItem.prev) return;
         var actions: PageItemAction[] = [];
-        if (parentItem.childs.length > 0) {
-            actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: parentItem.id, at: { $gte: 0 } } });
-        }
         runInAction(() => {
+            if (parentItem.childs.length > 0 && parentItem.childs.first().at == 0) {
+                parentItem.childs.forEach(c => {
+                    c.at += 1;
+                })
+                actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: parentItem.id, at: { $gte: 0 } } });
+            }
             lodash.remove(pageItem.parent?.childs, g => g.id == pageItem.id);
             pageItem.parentId = parentItem.id;
+            pageItem.at = 0;
             parentItem.childs.splice(0, 0, pageItem);
         })
         actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: 0, parentId: pageItem.parentId } })
         await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAppend, actions })
     }
+    /**
+     * 
+     * @param pageItem 
+     * @param toPageItem 
+     * @returns 
+     */
     public async moveToPageItem(pageItem: PageItem, toPageItem: PageItem) {
         if (toPageItem.checkedHasChilds && toPageItem.spread == true) {
-            await this.moveAppendPageItem(pageItem, toPageItem);
+            await this.movePrependPageItem(pageItem, toPageItem);
         }
         else {
             if (pageItem.prev == toPageItem) return;
             var actions: PageItemAction[] = [];
             var next = toPageItem.next;
-            if (next) {
-                if (next.at - 1 == toPageItem.at) {
-                    actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: toPageItem.parent.id, at: { $gte: next.at } } });
-                }
-            }
             runInAction(() => {
                 lodash.remove(pageItem.parent.childs, g => g.id == pageItem.id);
+                if (next) {
+                    var ns = toPageItem.parent.childs.findAll((g, i) => i >= next.index);
+                    if (next.at - 1 == toPageItem.at) {
+                        /**这是正常的排序 */
+                        actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: toPageItem.parent.id, at: { $gte: next.at } } });
+                        ns.forEach(n => {
+                            n.at += 1;
+                        })
+                    }
+                    else if (next.at == toPageItem.at) {
+                        /**
+                         * 这是不正常的排序,需要纠正一下
+                         */
+                        var nextAt = next.at;
+                        ns.forEach((n, g) => {
+                            var shouldAt = nextAt + 2 + g;
+                            n.at = shouldAt;
+                            actions.push({ directive: ItemOperatorDirective.update, pageId: n.id, data: { at: n.at } });
+                        })
+                    }
+                }
                 pageItem.parentId = toPageItem.parentId;
                 var currentAt = toPageItem.parent.childs.findIndex(g => g.id == toPageItem.id);
                 toPageItem.parent.childs.splice(currentAt + 1, 0, pageItem);
+                pageItem.at = toPageItem.at + 1;
             })
             actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: toPageItem.at + 1, parentId: toPageItem.parent.id } })
             await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAppend, actions })

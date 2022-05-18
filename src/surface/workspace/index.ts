@@ -226,6 +226,11 @@ export class Workspace {
         if (rr) {
             if (Array.isArray(rr?.data?.list)) {
                 var pages = rr.data.list;
+                pages.sort((x, y) => {
+                    if (x.at > y.at) return 1;
+                    else if (x.at == y.at) return 0;
+                    else return -1;
+                })
                 pages = ShyUtil.flatArrayConvertTree(pages);
                 this.load({ childs: pages });
             }
