@@ -44,7 +44,7 @@ export class PageItem {
     * local 本地存储
     */
     share: 'net' | 'nas' | 'local' = 'nas';
-    permission:PagePermission=PagePermission.canView;
+    permission: PagePermission = PagePermission.canView;
     get snapSync() {
         return SnapSync.create(ElementType.PageItem, this.id);
     }
@@ -64,7 +64,7 @@ export class PageItem {
             checkedHasChilds: observable,
             willLoadSubs: observable,
             share: observable,
-            permission:observable
+            permission: observable
         })
     }
     get sln() {
@@ -157,14 +157,14 @@ export class PageItem {
     }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
-        Object.assign(data,{
+        Object.assign(data, {
             text: '',
             mime: Mime.page,
             pageType: PageLayoutType.doc,
             spread: false,
         })
         var item = await pageItemStore.appendPageItem(this, data);
-        item.onMousedownItem(undefined);
+        item.onOpenItem();
         return item;
     }
     onExitEditAndSave(newText: string, oldText: string) {
@@ -239,6 +239,9 @@ export class PageItem {
                 this.onEdit();
                 break;
         }
+    }
+    onOpenItem() {
+        this.sln.onOpenItem(this);
     }
     onMousedownItem(event: MouseEvent) {
         this.sln.onMousedownItem(this, event);

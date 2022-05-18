@@ -37,6 +37,7 @@ export class Sln extends Events<SlnDirective> {
         }
     }
     async onMousedownItem(item: PageItem, event: MouseEvent) {
+
         var self = this;
         MouseDragger<{ item: HTMLElement }>({
             event,
@@ -71,6 +72,9 @@ export class Sln extends Events<SlnDirective> {
                 ghostView.unload();
             }
         })
+    }
+    onOpenItem(item:PageItem){
+        channel.air('/page/open', { item });
     }
     onFocusItem(item?: PageItem) {
         this.selectIds = item ? [item.id] : [];
