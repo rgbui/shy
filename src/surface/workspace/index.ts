@@ -187,8 +187,10 @@ export class Workspace {
             this[n] = util.clone(data[n]);
         }
     }
-    async getDefaultPage() {
-        var pageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.pageDev)?.pageId;
+    async getDefaultPage()
+    {
+        var pageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
+        if (!pageId) pageId = UrlRoute.match(ShyUrl.page)?.pageId;
         if (!pageId) {
             var pid = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], this.id));
             if (!pid) {

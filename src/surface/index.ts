@@ -57,7 +57,7 @@ export class Surface extends Events {
         if (typeof wsId == 'undefined' && typeof name == 'undefined') {
             return this.workspace = null;
         }
-        var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.pageDev)?.pageId;
+        var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
         var r = await channel.get('/ws/info', { name, wsId });
         if (r.data?.workspace) {
             var ws = new Workspace();
@@ -84,14 +84,13 @@ export class Surface extends Events {
             else await ws.loadMember(null);
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
-
             runInAction(() => {
                 if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
                 else this.temporaryWs = null;
                 this.workspace = ws;
             })
             var page = await ws.getDefaultPage();
-            channel.air('/page/open', { item: page });
+            channel.air('/page/open',{ item: page });
         }
         else this.workspace = null;
     }
@@ -107,11 +106,11 @@ export class Surface extends Events {
     }
     async getWsName() {
         var domain, sn, wsId;
-        sn = UrlRoute.match(ShyUrl.pageDev)?.wsId;
+        sn = UrlRoute.match(ShyUrl.wsPage)?.wsId;
         if (!sn) {
             sn = UrlRoute.match(ShyUrl.ws)?.wsId;
         }
-        if (sn && location.host && /[\da-z\-]+\.shy\.(red|live)/.test(location.host)) {
+        if (!sn && location.host && /[\da-z\-]+\.shy\.(red|live)/.test(location.host)) {
             domain = location.host.replace(/\.shy\.(red|live)$/g, '');
         }
         if (!domain && !sn) {

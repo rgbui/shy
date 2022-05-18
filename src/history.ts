@@ -41,10 +41,10 @@ export var UrlRoute = {
                 return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
             else {
-                return SyHistory.push(this.gen(ShyUrl.pageDev, { wsId: wsSn, pageId: pageSn }))
+                return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
             }
         }
-        else return SyHistory.push(this.gen(ShyUrl.pageDev, { wsId: wsSn, pageId: pageSn }))
+        else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
     },
     isMatch(url: ShyUrl) {
         return currentParams(url) ? true : false;
@@ -62,7 +62,7 @@ export enum ShyUrl {
     signIn = '/sign/in',
     ws = '/ws/:wsId',
     me = '/me',
-    pageDev = '/ws/:wsId/page/:pageId',
+    wsPage = '/ws/:wsId/page/:pageId',
     page = '/page/:pageId',
     invite = '/invite/:id',
     workCreate = '/work/create',
