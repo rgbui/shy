@@ -1,4 +1,4 @@
-import { db } from "../db";
+import { db } from "../net/db";
 async function dbStore(args) {
     switch (args.key) {
         case 'findOne':
