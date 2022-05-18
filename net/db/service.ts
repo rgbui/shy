@@ -1,5 +1,5 @@
 
-import { iframeChannel } from "../auth/iframe";
+import { iframeChannel } from "../../auth/iframe";
 export class DbService<T extends { id: string }>{
     constructor(private name: string) { }
     private async channelStore(d) {

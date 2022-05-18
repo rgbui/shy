@@ -1,5 +1,5 @@
 window.isAuth = false;
-import { createAuthIframe } from '../net/auth/iframe';
+import { createAuthIframe } from '../auth/iframe';
 createAuthIframe();
 import * as React from 'react';
 import ReactDOM from 'react-dom';

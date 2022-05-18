@@ -1,6 +1,6 @@
 import { config } from "../../src/common/config";
 import { Aes } from "../../src/util/crypto";
-import { iframeChannel } from "../auth/iframe";
+import { iframeChannel } from "../../auth/iframe";
 /**
  * 缓存应用的key
  */
