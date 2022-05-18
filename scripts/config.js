@@ -49,7 +49,8 @@ module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: {
         main: './src/main.tsx',
-        auth: './net/auth/view.ts'
+        auth: './auth/view.ts',
+        org: './org/index.ts'
     },
     devtool: isDev ? 'inline-source-map' : undefined,
     output: {
@@ -164,7 +165,7 @@ module.exports = {
         isDev ? new webpack.HotModuleReplacementPlugin() : new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
-            filename: 'index.html',
+            filename: 'shy.html',
             showErrors: true,
             hash: false,
             chunks: ['main', 'shared'],
@@ -179,6 +180,17 @@ module.exports = {
             showErrors: true,
             hash: true,
             chunks: ['auth'],
+            favicon: false,
+            templateParameters: {
+                src: publicPath + versionPrefix
+            },
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, "org.html"), // 婧愭ā鏉挎枃浠�
+            filename: 'org.html',
+            showErrors: true,
+            hash: true,
+            chunks: ['org'],
             favicon: false,
             templateParameters: {
                 src: publicPath + versionPrefix

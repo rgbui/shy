@@ -1,0 +1,153 @@
+body,
+html {
+    margin : 0;
+    padding: 0;
+}
+
+a {
+    color          : #e16259;
+    text-decoration: none;
+}
+
+@media (min-width: 1200px) {
+    .padding-gap {
+        padding-left : 180px;
+        padding-right: 180px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .padding-gap {
+        padding-left : 80px;
+        padding-right: 80px;
+    }
+
+}
+
+@media (max-width: 800px) {
+    .padding-gap {
+        padding-left : 20px;
+        padding-right: 20px;
+    }
+}
+
+
+.shy-site {
+    min-height: 100vh;
+    width     : 100vw;
+}
+
+.shy-site-head {
+    align-items     : center;
+    backdrop-filter : blur(10px);
+    background-color: hsla(0, 0%, 100%, .65);
+    box-shadow      : 0 4px 24px rgba(0, 0, 0, .08);
+    box-sizing      : border-box;
+    display         : flex;
+    height          : 56px;
+    justify-content : flex-start;
+    position        : fixed;
+    top             : 0;
+    width           : 100%;
+    z-index         : 99;
+}
+
+.shy-site-head-navs {
+    display        : flex;
+    justify-content: flex-end;
+    align-items    : center;
+    padding-right  : 50px;
+}
+
+.shy-site-head-navs a {
+    border-radius: 5px;
+    color        : #3e3e3e;
+    cursor       : pointer;
+    display      : inline-block;
+    height       : 30px;
+    line-height  : 30px;
+    margin-left  : 30px;
+    text-align   : center;
+    width        : 80px;
+}
+
+.shy-site-head-user {
+    flex-grow  : 0;
+    flex-shrink: 0;
+}
+
+.shy-site-head-user a.shy-site-head-user-sign {
+    display         : inline-block;
+    width           : 80px;
+    text-align      : center;
+    cursor          : pointer;
+    height          : 32px;
+    line-height     : 32px;
+    border-radius   : 5px;
+    background-color: #242424;
+    color           : #fff;
+    padding         : 0 5px;
+}
+
+.shy-site-head-logo {
+    align-items    : center;
+    display        : inline-flex;
+    flex-grow      : 0;
+    flex-shrink    : 0;
+    font-weight    : 400;
+    justify-content: flex-start;
+    position       : relative;
+    width          : 140px;
+}
+
+.shy-site-head-navs {
+    flex-grow  : 1;
+    flex-shrink: 1;
+}
+
+.shy-site-footer {
+    align-items     : flex-start;
+    background-color: #242424;
+    display         : flex;
+    height          : 160px;
+    justify-content : flex-start;
+    padding-bottom  : 50px;
+    padding-top     : 50px;
+}
+
+.shy-site-footer>div {
+    flex-grow: 1;
+}
+
+.shy-site-footer h4 {
+    color      : hsla(0, 0%, 100%, .9);
+    font-size  : 20px;
+    font-weight: 400;
+    height     : 24px;
+    line-height: 24px;
+    margin     : 0 0 8px;
+}
+
+.shy-site-footer a,
+.shy-site-footer span {
+    color    : #666;
+    font-size: 14px;
+}
+
+.shy-site-block {
+    margin : 0px;
+    padding: 0px;
+}
+
+.shy-site-content {
+    margin-top: 56px;
+}
+
+
+.shy-site-block-slogan {
+    min-height: calc(100vh - 150px);
+}
+
+.shy-site-block-slogan-text {
+    padding-top: 20px;
+}

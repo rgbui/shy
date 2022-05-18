@@ -1,22 +1,20 @@
 import { createBrowserHistory } from "history";
 import { generatePath, matchPath } from "react-router";
 import { config } from "./common/config";
-
 export const SyHistory = createBrowserHistory();
-
 export function currentParams(routePath: string): Record<string, any> {
     var r = matchPath(location.pathname, {
         exact: true,
         path: routePath
     });
-    if (r && r.params) {
+    if (r && r.params)
+    {
         return r.params;
     }
     return undefined;
 }
-
 export var UrlRoute = {
-    push(url: ShyUrl, state?: Record<string, any>,isRedict?: boolean) {
+    push(url: ShyUrl, state?: Record<string, any>, isRedict?: boolean) {
         if (url == ShyUrl.workCreate && config.isPro) {
             if (isRedict) return location.href = 'https://shy.live' + url;
         }
@@ -58,19 +56,10 @@ export var UrlRoute = {
         return generatePath(url, params);
     }
 }
-
 export enum ShyUrl {
     root = '/',
-    scene = '/scene',
-    wechat = '/wechat',
-    route = '/route',
-    privacy_protocol = '/privacy/protocol',
-    service_protocol = '/service/protocol',
-    download = '/download',
-    help = '/help',
     signOut = '/sign/out',
     signIn = '/sign/in',
-    shiyun = '/shiyun',
     ws = '/ws/:wsId',
     me = '/me',
     pageDev = '/ws/:wsId/page/:pageId',
