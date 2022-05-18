@@ -90,9 +90,9 @@ export class Surface extends Events {
                 this.workspace = ws;
             })
             var page = await ws.getDefaultPage();
-            channel.air('/page/open',{ item: page });
+            channel.air('/page/open', { item: page });
         }
-        else this.workspace = null;
+        else { this.workspace = null; UrlRoute.push(ShyUrl._404); }
     }
     async exitWorkspace() {
         await channel.del('/user/exit/ws', { wsId: surface.workspace.id });
