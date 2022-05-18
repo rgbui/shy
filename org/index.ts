@@ -6,8 +6,7 @@
  * 静态的网页会取org.html里面的脚本和样式
  */
 
-
-
+import "rich/util/array";
 import "./style.less";
 import { channel } from "rich/net/channel";
 window.isAuth = false;
