@@ -44,15 +44,16 @@ class TimService {
         this.workspaceEnter();
     }
     private workspaceEnter = lodash.debounce(async () => {
-        await this.tim.syncSend(
-            HttpMethod.post,
-            '/workspace/enter',
-            {
-                workspaceId: this.isSync ? undefined : this.workspaceId,
-                syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
-                viewId: this.viewId
-            }
-        );
+        if (this.tim)
+            await this.tim.syncSend(
+                HttpMethod.post,
+                '/workspace/enter',
+                {
+                    workspaceId: this.isSync ? undefined : this.workspaceId,
+                    syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
+                    viewId: this.viewId
+                }
+            );
     }, config.isPro ? 2000 : 700)
     async leaveWorkspace() {
         delete this.workspaceId;
