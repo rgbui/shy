@@ -131,9 +131,12 @@ export class Surface extends Events {
      * 
      */
     get showHeadTip() {
-        return this.temporaryWs && this.temporaryWs?.accessJoinTip == true
+        if (this.user.isSign)
+            return this.temporaryWs && this.temporaryWs?.accessJoinTip == true
+        else return false;
     }
     get showSlideBar() {
+        if (!this.user.isSign) return false;
         if (this.workspace) {
             if (!this.workspace.member) {
                 if (this.workspace.access == 0) {
