@@ -5,7 +5,7 @@ import { ShyUrl, SyHistory } from './history';
 import { Login } from './surface/user/sign/in';
 import { LogOut } from './surface/user/sign/out';
 import { WorkspaceCreateView } from './surface/workspace/create';
-import { ViewSurface } from './surface/view/index';
+import { SurfaceView } from './surface/view/index';
 import { View404 } from './surface/404';
 import { InviteView } from './surface/workspace/create/invite';
 import { config } from './common/config';
@@ -28,13 +28,13 @@ export function App() {
     if (config.isDev || config.isBeta) {
       return <Router history={SyHistory}>
         <Switch>
-          <Route path={ShyUrl.root} exact component={ViewSurface}></Route>
+          <Route path={ShyUrl.root} exact component={SurfaceView}></Route>
           <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
           <Route path={ShyUrl.signIn} exact component={Login}></Route>
           <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
           <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
           <Route path={ShyUrl._404} exact component={View404}></Route>
-          <Route path={[ShyUrl.ws, ShyUrl.pageDev, ShyUrl.me, ShyUrl.discovery]} exact component={ViewSurface}></Route>
+          <Route path={[ShyUrl.ws, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
           <Route path={ShyUrl.invite} exact component={InviteView}></Route>
           <Route component={View404}></Route>
         </Switch>
@@ -49,7 +49,7 @@ export function App() {
             <Route path={ShyUrl.signIn} exact component={Login}></Route>
             <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
             <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
-            <Route path={[ShyUrl.ws, ShyUrl.page, ShyUrl.pageDev, ShyUrl.me, ShyUrl.discovery]} exact component={ViewSurface}></Route>
+            <Route path={[ShyUrl.ws, ShyUrl.page, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
             <Route path={ShyUrl.invite} exact component={InviteView}></Route>
             <Route path={ShyUrl._404} exact component={View404}></Route>
             <Route component={View404}></Route>
@@ -59,11 +59,10 @@ export function App() {
       else {
         return <Router history={SyHistory}>
           <Switch>
-            <Route path={ShyUrl.root} exact component={ViewSurface}></Route>
             <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
             <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
-            <Route path={[ShyUrl.ws, ShyUrl.page, ShyUrl.pageDev, ShyUrl.me, ShyUrl.discovery]} exact component={ViewSurface}></Route>
             <Route path={ShyUrl.invite} exact component={InviteView}></Route>
+            <Route path={[ShyUrl.root, ShyUrl.ws, ShyUrl.page, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
             <Route path={ShyUrl._404} exact component={View404}></Route>
             <Route component={View404}></Route>
           </Switch>
