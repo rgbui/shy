@@ -17,7 +17,7 @@ export var Bar = observer(function () {
     if (!surface.showSlideBar) {
         return <div className='shy-supervisor-bar'>
             <div className='shy-supervisor-bar-left'>
-                <a href='https://shy.live' className='shy-supervisor-bar-logo'><img src={HomeSrc}  /></a>
+                {!surface.showSln && <a href='https://shy.live' className='shy-supervisor-bar-logo'><img src={HomeSrc} /></a>}
                 <PageRouter></PageRouter>
             </div>
             <div className='shy-supervisor-bar-right'>
