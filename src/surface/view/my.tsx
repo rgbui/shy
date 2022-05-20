@@ -11,6 +11,9 @@ import { Sock } from "../../../net/sock";
 
 export var MyWorkSpace = observer(function () {
     async function load() {
+        if (!surface.user.isSign) {
+            return UrlRoute.push(ShyUrl.signIn);
+        }
         var wsHost = await sCache.get(CacheKey.wsHost);
         var latest = await channel.get('/ws/latest', { name: wsHost ? wsHost : undefined });
         if (latest.ok) {
