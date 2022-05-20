@@ -147,6 +147,9 @@ export class Workspace {
         }
         return this.permissions.length > 0 ? this.permissions : getCommonPerssions();
     }
+    isAllow(permission:AtomPermission){
+        return this.memberPermissions.includes(permission);
+    }
     load(data) {
         for (var n in data) {
             if (n == 'childs') {
