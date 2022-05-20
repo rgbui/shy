@@ -5,6 +5,7 @@ import PageSvg from "../../../../assert/svg/page.svg";
 import { observer } from "mobx-react";
 import { PageItem } from "..";
 import { surface } from "../../..";
+import { AtomPermission } from "rich/src/page/permission";
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     let refInput = React.useRef<HTMLInputElement>(null);
     let refEditText = React.useRef<string>(null);
@@ -12,6 +13,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     var style: Record<string, any> = {};
     style.paddingLeft = 0 + (props.deep || 0) * 15;
     var isInEdit = item.id == surface.sln.editId;
+    var isCanEdit = item.workspace?.isAllow(AtomPermission.createOrDeleteDoc) || false;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
     async function mousedown(event: MouseEvent) {
@@ -39,8 +41,10 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         item.text = input.value.trim();
     }
     function contextmenu(event: MouseEvent) {
-        event.preventDefault();
-        item.onContextmenu(event);
+        if (item.workspace.isAllow(AtomPermission.createOrDeleteDoc)) {
+            event.preventDefault();
+            item.onContextmenu(event);
+        }
     }
     async function keydown(event: KeyboardEvent) {
         if (event.code == 'Enter') {
@@ -68,13 +72,13 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
             <i className='shy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
             {!isInEdit && <span>{item.text || '新页面'}</span>}
-            {isInEdit && <div className='shy-ws-item-page-input'><input type='text'
+            {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}
                 ref={e => refInput.current = e}
                 defaultValue={item.text}
                 onKeyDown={e => keydown(e.nativeEvent)}
                 onInput={e => inputting(e.nativeEvent)} /></div>}
-            {!isInEdit && <div className='shy-ws-item-page-operators'>
+            {!isInEdit && isCanEdit && <div className='shy-ws-item-page-operators'>
                 <Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
                 <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon>
             </div>}
