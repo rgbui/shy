@@ -1,8 +1,8 @@
 
 
-import { act, get, put, query } from "rich/net/annotation";
+import { put, query } from "rich/net/annotation";
 import { UA } from "rich/util/ua";
-import { CacheKey, sCache, yCache } from "../net/cache";
+import { CacheKey, sCache } from "../net/cache";
 import { masterSock } from "../net/sock";
 import { config } from "../src/common/config";
 import { fingerFlag } from "../src/util/finger";
