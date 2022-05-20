@@ -74,7 +74,7 @@ class PageItemStore {
             data.id = config.guid();
             data.workspaceId = pageItem.workspaceId;
             data.parentId = pageItem.id;
-            data.at = pageItem.childs.last()?.at || 0;
+            data.at = pageItem.childs.last() ? (pageItem.childs.last().at + 1) : 0;
             var newItem = new PageItem();
             newItem.checkedHasChilds = true;
             newItem.load(data);
