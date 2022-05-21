@@ -27,9 +27,10 @@ export class Tim {
             // pingTimeout: 30000 * 4
         });
         this.primus = primus;
-        primus.on('data',function message(data) {
+        primus.on('data', function message(data) {
             try {
-                var json = JSON.parse(data);
+                var json = JSON.parse(data); 
+                GenreConsistency.parse(json);
                 if (json.rid) {
                     var se = self.sendEvents.find(g => g.rid == json.rid)
                     if (se) {
@@ -147,9 +148,9 @@ export class Tim {
             data: data.data,
             ok: data.status >= 200 && data.status < 300 ? true : false
         };
-        if (response.data && typeof response.data == 'object') {
-            GenreConsistency.parse(response.data);
-        }
+        // if (response.data && typeof response.data == 'object') {
+        //     GenreConsistency.parse(response.data);
+        // }
         if (response.ok == false) {
             response.warn = data.data;
         }
