@@ -15,7 +15,8 @@ import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "..";
 import { AtomPermission, getAllAtomPermission, getCommonPerssions } from "rich/src/page/permission";
-
+import { ElementType, parseElementUrl } from "rich/net/element.type";
+import { UserAction } from "rich/src/history/action";
 export type WorkspaceUser = {
     userid: string;
     role: string;
@@ -147,7 +148,7 @@ export class Workspace {
         }
         return this.permissions.length > 0 ? this.permissions : getCommonPerssions();
     }
-    isAllow(permission:AtomPermission){
+    isAllow(permission: AtomPermission) {
         return this.memberPermissions.includes(permission);
     }
     load(data) {
@@ -190,8 +191,7 @@ export class Workspace {
             this[n] = util.clone(data[n]);
         }
     }
-    async getDefaultPage()
-    {
+    async getDefaultPage() {
         var pageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
         if (!pageId) pageId = UrlRoute.match(ShyUrl.page)?.pageId;
         if (!pageId) {
@@ -278,6 +278,15 @@ export class Workspace {
                     vs.remove(g => g.userid == user.userid);
                 }
             })
+        }
+    }
+    async onNotifyViewOperater(data: UserAction) {
+        var ec = parseElementUrl(data.elementUrl);
+        if (ec.type == ElementType.PageItem) {
+            var item = surface.workspace.find(g => g.id == ec.id);
+            if (item?.contentView) {
+                item?.contentView.loadUserActions([data], ec.id == surface.supervisor.item.id ? 'notifyView' : 'notify');
+            }
         }
     }
 }
