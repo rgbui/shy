@@ -20,9 +20,14 @@ export function bindCollaboration() {
     //空间会话
     timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) });
     //页面文档
-    timService.tim.on('/ws/view/operate/notify', e => { console.log(e); });
+    timService.tim.on('/ws/view/operate/notify', e => {
+        console.log('view', e);
+        if (surface.workspace?.id == e.workspaceId) {
+            surface.workspace.onNotifyViewOperater(e);
+        }
+    });
     //页面侧栏
-    timService.tim.on('/ws/page/item/operate/notify', e => { });
+    timService.tim.on('/ws/page/item/operate/notify', e => { console.log(e, 'operator') });
     //页面数据表格元数据
     timService.tim.on('/ws/datagrid/schema/operate/notify', e => { });
     /**
