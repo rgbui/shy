@@ -210,7 +210,7 @@ class PageItemStore {
                 pageItem.at = toPageItem.at + 1;
             })
             actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: toPageItem.at + 1, parentId: toPageItem.parent.id } })
-            await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAppend, actions })
+            await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAfter, actions })
         }
     }
 }
