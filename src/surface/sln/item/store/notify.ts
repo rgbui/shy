@@ -86,6 +86,9 @@ export function PageItemOperateNotify(e: {
                     var item = surface.workspace?.find(g => g.id == pageId);
                     if (item) {
                         Object.assign(item, data);
+                        if (item.parent) {
+                            item.parent.childs.sort(surface.workspace.pageSort);
+                        }
                     }
                 }
                 break;
@@ -102,6 +105,7 @@ export function PageItemOperateNotify(e: {
                             if (np && np.checkedHasChilds == true) {
                                 Object.assign(item, act.data)
                                 np.childs.splice(0, 0, item);
+                                np.childs.sort(surface.workspace.pageSort);
                             }
                         }
                     }
@@ -131,6 +135,7 @@ export function PageItemOperateNotify(e: {
                                 if (np && np.checkedHasChilds == true) {
                                     Object.assign(item, act.data)
                                     np.childs.splice(0, 0, item);
+                                    np.childs.sort(surface.workspace.pageSort);
                                 }
                             }
                             else {
