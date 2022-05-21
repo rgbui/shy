@@ -4,14 +4,14 @@ import { config } from "../../../../common/config";
 import { PageItem } from "..";
 import { timService } from "../../../../../net/primus";
 import { surface } from "../../..";
-enum ItemOperatorDirective {
+export enum ItemOperatorDirective {
     update = 1,
     insert = 2,
     remove = 3,
     inc = 4,
 }
 
-enum ItemOperator {
+export enum ItemOperator {
     /**
      * 创建
      */
@@ -32,7 +32,7 @@ enum ItemOperator {
     moveAfter = 6,
 }
 
-type PageItemAction = {
+export type PageItemAction = {
     directive: ItemOperatorDirective,
     filter?: Record<string, any>,
     pageId?: string,

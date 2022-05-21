@@ -1,6 +1,7 @@
 import { channel } from "rich/net/channel";
 import { timService } from "../net/primus";
 import { surface } from "../src/surface";
+import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
 export enum MessageUrl {
     privateTalk = '/user/chat/notify',
@@ -21,13 +22,12 @@ export function bindCollaboration() {
     timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) });
     //页面文档
     timService.tim.on('/ws/view/operate/notify', e => {
-        console.log('view', e);
         if (surface.workspace?.id == e.workspaceId) {
             surface.workspace.onNotifyViewOperater(e);
         }
     });
     //页面侧栏
-    timService.tim.on('/ws/page/item/operate/notify', e => { console.log(e, 'operator') });
+    timService.tim.on('/ws/page/item/operate/notify', e => { PageItemOperateNotify(e); });
     //页面数据表格元数据
     timService.tim.on('/ws/datagrid/schema/operate/notify', e => { });
     /**

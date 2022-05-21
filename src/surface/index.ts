@@ -5,7 +5,7 @@ import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { ShyUrl, UrlRoute } from "../history";
 import { Workspace } from "./workspace";
-import { computed, makeObservable, observable, runInAction, toJS } from "mobx";
+import { computed, makeObservable, observable, runInAction } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../common/config";
 import { timService } from "../../net/primus";
