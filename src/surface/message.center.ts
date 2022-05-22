@@ -27,6 +27,15 @@ class MessageCenter {
             await surface.supervisor.onOpenItem();
         }
     }
+    @air('/page/remove')
+    async removePage(args: { item: string | { id: string } }) {
+        var { item } = args;
+        var id = typeof item == 'string' ? item : item?.id;
+        var it = id ? surface.workspace.find(g => g.id == id) : undefined;
+        if (it) {
+            pageItemStore.deletePageItem(it);
+        }
+    }
     @get('/page/query/info')
     async pageQueryInfo(args: { id: string }) {
         var item = surface.workspace.find(g => g.id == args.id);
