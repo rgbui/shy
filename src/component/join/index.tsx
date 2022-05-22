@@ -1,4 +1,3 @@
-import { Alert } from "rich/component/lib/alert";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
@@ -9,6 +8,7 @@ import { channel } from "rich/net/channel";
 import React from "react";
 import { Dialoug } from "rich/component/view/grid";
 import "./style.less";
+import { ShyAlert } from "rich/component/lib/alert";
 
 class JoinFriend extends EventsComponent {
     render() {
@@ -37,10 +37,10 @@ class JoinFriend extends EventsComponent {
             this.button.loading = false;
             if (r.ok) {
                 if (r.data.exists) {
-                    await Alert('好友请求已发送')
+                    ShyAlert('好友请求已发送')
                 }
                 else if (r.data.exists == false) {
-                    await Alert('帐号不存在')
+                    ShyAlert('帐号不存在')
                 }
                 else if (r.data.send) {
                     this.emit('close')

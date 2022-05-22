@@ -67,21 +67,26 @@
             color          : rgb(55, 53, 47);
         }
     }
-    &-logo{
-        margin-left: 10px;
+
+    &-logo {
+        margin-left  : 10px;
         padding-right: 10px;
-        border-right:1px solid rgba(55, 53, 47, 0.2); 
-        height:24px;
-        display: inline-block;
-        img{
-            width:24px;height:24px;border-radius: 4px;
+        border-right : 1px solid rgba(55, 53, 47, 0.2);
+        height       : 24px;
+        display      : inline-block;
+
+        img {
+            width        : 24px;
+            height       : 24px;
+            border-radius: 4px;
         }
     }
-    &-button{
-        font-size: 14px;
-        width:auto !important;
-        padding:0px 10px;
-    //    color: rgba(55, 53, 47,.6)!important;
+
+    &-button {
+        font-size  : 14px;
+        width      : auto !important;
+        padding    : 0px 10px;
+        //    color: rgba(55, 53, 47,.6)!important;
     }
 }
 
@@ -92,7 +97,7 @@
     align-items    : center;
 }
 
-.shy-supervisor-bar-routers {
+.shy-supervisor-bar-router {
     margin-left    : 4px;
     display        : flex;
     justify-content: center;
@@ -137,28 +142,21 @@
         }
     }
 
-    >label {
-        user-select  : none;
-        transition   : background 20ms ease-in 0s;
-        cursor       : pointer;
-        display      : inline-flex;
-        align-items  : center;
-        flex-shrink  : 0;
-        white-space  : nowrap;
-        height       : 24px;
-        border-radius: 3px;
-        font-size    : 14px;
-        line-height  : 1.2;
-        min-width    : 0px;
-        padding-left : 6px;
-        padding-right: 6px;
-        color        : rgb(55, 53, 47);
-    }
-
-    >em {
+    &-locker {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         font-style  : normal;
         margin-left : 2px;
         margin-right: 2px;
         color       : rgba(55, 53, 47, 0.4);
+        fill        : currentColor;
+        width:24px;
+        height:24px;
+        border-radius: 4px;
+        cursor: pointer;
+        &:hover{
+            background-color: rgba(55, 53, 47, 0.08);
+        }
     }
 }
