@@ -151,6 +151,9 @@ export class Workspace {
     isAllow(permission: AtomPermission) {
         return this.memberPermissions.includes(permission);
     }
+    get isCanEdit(){
+        return this.isAllow(AtomPermission.createOrDeleteDoc) || false;
+    }
     load(data) {
         for (var n in data) {
             if (n == 'childs') {

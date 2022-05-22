@@ -13,7 +13,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     var style: Record<string, any> = {};
     style.paddingLeft = 0 + (props.deep || 0) * 15;
     var isInEdit = item.id == surface.sln.editId;
-    var isCanEdit = item.workspace?.isAllow(AtomPermission.createOrDeleteDoc) || false;
+    var isCanEdit = item.workspace.isCanEdit;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
     async function mousedown(event: MouseEvent) {

@@ -83,6 +83,7 @@ export class PageItem {
     get url() {
         return this.workspace.url + this.path;
     }
+  
     get workspace() {
         return surface.workspace
     }

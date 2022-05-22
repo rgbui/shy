@@ -11,9 +11,9 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
         <div className='shy-ws-pages-head'>
             <span onMouseDown={e => item.onSpread()}>{item.text || "我的页面"}</span>
         </div>
-        <div className='shy-ws-pages-operators'>
+        {item.workspace.isCanEdit && <div className='shy-ws-pages-operators'>
             <Icon icon='add:sy' mousedown={e => item.onAdd()}></Icon>
-        </div>
+        </div>}
         {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}
         <PageItemBox style={{ display: item.spread != false ? "block" : "none" }} items={item.childs || []} deep={(props.deep || 0) + 1}></PageItemBox>
     </div>
