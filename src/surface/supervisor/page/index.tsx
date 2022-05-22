@@ -33,11 +33,11 @@ export async function createPageContent(item: PageItem) {
             page.on(PageDirective.save, async () => {
                 await item.snapSync.forceSave();
             });
-            page.loadPageInfo({ icon: item.icon, id: item.id, sn: item.sn, text: item.text });
+            page.loadPageInfo({ url: item.url, locker: item.locker, icon: item.icon, id: item.id, sn: item.sn, text: item.text });
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
-                await page.loadUserActions(operates,'load');
+                await page.loadUserActions(operates, 'load');
             }
             var view = await surface.supervisor.getView();
             var subs = view.querySelectorAll('.shy-supervisor-view-page');
