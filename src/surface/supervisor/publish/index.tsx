@@ -14,6 +14,7 @@ import { GlobalLinkSvg, LinkSvg } from "rich/component/svgs";
 import { Divider } from "rich/component/view/grid";
 import { CopyText } from "rich/component/copy";
 import { PagePermission } from "rich/src/page/permission";
+import { ShyAlert } from "rich/component/lib/alert";
 @observer
 class PagePublish extends EventsComponent {
     constructor(props) {
@@ -25,9 +26,7 @@ class PagePublish extends EventsComponent {
     }
     copyLink() {
         CopyText(this.item.url);
-        setTimeout(() => {
-            alert('复制成功')
-        }, 500);
+        ShyAlert('页面访问链接已复制');
     }
     item: PageItem = null;
     render() {

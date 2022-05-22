@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { CopyText } from "rich/component/copy";
+import { ShyAlert } from "rich/component/lib/alert";
 import { Button } from "rich/component/view/button";
 import { Row, Col, Divider } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
@@ -19,10 +20,8 @@ export class WorkspaceInvite extends React.Component {
         }
         var url = location.protocol + '//' + location.host + '/invite/' + surface.workspace.invite
         CopyText(url);
+        ShyAlert('邀请链接已复制');
         if (this.input) this.input.updateValue(url);
-        setTimeout(() => {
-            alert('邀请链接已复制')
-        },500);
     }
     input: Input;
     render() {
