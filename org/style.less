@@ -33,6 +33,16 @@ a {
     img {
         border-radius: 50%;
     }
+
+    &-name {
+        display        : inline-flex;
+        justify-content: center;
+        align-items    : center;
+        background     : rgba(55, 53, 47, 0.3);
+        color          : rgba(255, 255, 255, 0.9);
+        font-size      : 14px;
+        border-radius  : 50%;
+    }
 }
 
 .shy-site {
@@ -79,8 +89,12 @@ a {
 
 
 .shy-site-head-user {
-    flex-grow  : 0;
-    flex-shrink: 0;
+    flex-grow      : 0;
+    flex-shrink    : 0;
+    height         : 40px;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
 
     a.shy-site-head-user-sign {
         display         : inline-block;
@@ -174,22 +188,24 @@ a {
 .shy-site-slogan {
     padding-top: 80px;
     position   : relative;
-   
+
 
     >p {
         margin: 0px;
     }
 
-    &-title {position: relative;
-        z-index        : 2;
+    &-title {
+        position   : relative;
+        z-index    : 2;
         text-align : center;
         font-size  : 40px;
         line-height: 64px;
         color      : rgba(0, 0, 0);
     }
 
-    &-content {position: relative;
-        z-index        : 2;
+    &-content {
+        position   : relative;
+        z-index    : 2;
         text-align : center;
         font-size  : 16px;
         color      : rgba(0, 0, 0, .7);
@@ -197,9 +213,10 @@ a {
         margin     : 20px 0px !important;
     }
 
-    &-button { position: relative;
-        z-index        : 2;
-        margin    : 20px 0px !important;
+    &-button {
+        position  : relative;
+        z-index   : 2;
+        margin    : 10px 0px !important;
         text-align: center;
 
         a {
@@ -216,8 +233,16 @@ a {
 
     }
 
+    &-remark {
+        position  : relative;
+        z-index   : 2;
+        font-size : 12px;
+        text-align: center;
+        color     : rgba(0, 0, 0, .6);
+    }
+
     &-app {
-        position: relative;
+        position       : relative;
         z-index        : 2;
         display        : flex;
         justify-content: center;
@@ -235,6 +260,7 @@ a {
 
     &-bg {
         pointer-events: none;
+
         .shy-site-green-filter {
             z-index                  : 1;
             position                 : absolute;
@@ -247,7 +273,7 @@ a {
             animation-iteration-count: infinite;
             animation-name           : filter-green-animate;
             animation-timing-function: ease-in-out;
-            opacity: .5;
+            opacity                  : .5;
         }
 
         .shy-site-purple-filter {
@@ -262,7 +288,7 @@ a {
             animation-iteration-count: infinite;
             animation-name           : filter-purple-animate;
             animation-timing-function: ease-in-out;
-            opacity: .5;
+            opacity                  : .5;
         }
     }
 }
@@ -282,6 +308,10 @@ a {
 
 .shy-site-price {
     padding-top: 50px;
+    h2{
+        font-size: 36px;  text-align: center;
+        font-weight: normal;
+    }
 
     h3,
     h4 {
@@ -346,7 +376,9 @@ a {
 
 .shy-site-download {
     padding-top: 50px;
-
+    h2{
+        font-size: 36px;  text-align: center; font-weight: normal;
+    } 
     h3 {
         text-align: center;
     }
