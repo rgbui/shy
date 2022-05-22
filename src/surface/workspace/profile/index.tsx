@@ -10,6 +10,7 @@ import { Icon } from "rich/component/view/icon";
 
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
+        if (!surface.workspace?.isCanEdit) return;
         var ele = event.currentTarget as HTMLElement;
         ele = ele.querySelector('.shy-ws-profile-info') as HTMLElement;
         var rect = Rect.from(ele.getBoundingClientRect());
