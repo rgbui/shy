@@ -45,6 +45,7 @@ export class PageItem {
     */
     share: 'net' | 'nas' | 'local' = 'nas';
     permission: PagePermission = PagePermission.canView;
+    locker: { userid: string, lockDate: number } = null;
     get snapSync() {
         return SnapSync.create(ElementType.PageItem, this.id);
     }
@@ -64,7 +65,8 @@ export class PageItem {
             checkedHasChilds: observable,
             willLoadSubs: observable,
             share: observable,
-            permission: observable
+            permission: observable,
+            locker: observable
         })
     }
     get sln() {

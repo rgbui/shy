@@ -38,7 +38,9 @@ class MessageCenter {
                     pageType: item.pageType,
                     id: item.id,
                     sn: item.sn,
-                    text: item.text
+                    text: item.text,
+                    url: item.url,
+                    locker: item.locker
                 }
             };
         }
@@ -46,7 +48,16 @@ class MessageCenter {
             var r = await surface.workspace.sock.get('/page/item', { id: args.id });
             if (r.ok && r.data.item) return {
                 ok: true,
-                data: lodash.pick(r.data.item, ['icon', 'id', 'sn', 'text', 'pageType'])
+                data: Object.assign({ url: surface.workspace.url + '/page/' + r.data.item.sn },
+                    lodash.pick(r.data.item,
+                        [
+                            'id',
+                            'icon',
+                            'locker',
+                            'sn',
+                            'text',
+                            'pageType'
+                        ]))
             }
             else return { ok: false, warn: r.warn };
         }
