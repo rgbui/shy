@@ -14,6 +14,7 @@ import { useOpenUserSettings } from "../settings";
 import './style.less';
 
 export var UserProfile = observer(function () {
+    if (!surface.user.isSign) return <></>
     async function setUserStatus(event: React.MouseEvent) {
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
             { checkLabel: surface.user.status == UserStatus.online, name: 'online', text: '在线' },
