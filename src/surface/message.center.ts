@@ -73,24 +73,28 @@ class MessageCenter {
     }
     @query('/page/query/permissions')
     getPagePermisson(args: { pageId: string }) {
-        var item = surface.workspace.find(g => g.id == args.pageId);
-        if (item) {
-            var ps = surface.workspace.memberPermissions;
-            if (surface.workspace.member) {
-                return ps;
-            }
-            else {
-                if (item.permission == PagePermission.canEdit) {
-                    return getEditPerssions()
-                }
-                else if (item.permission == PagePermission.canInteraction) {
-                    return getCommonPerssions()
+        if (surface.workspace) {
+            var item = surface.workspace.find(g => g.id == args.pageId);
+            if (item) {
+                var ps = surface.workspace.memberPermissions;
+                if (surface.workspace.member) {
+                    return ps;
                 }
                 else {
-                    return []
+                    if (item.permission == PagePermission.canEdit) {
+                        return getEditPerssions()
+                    }
+                    else if (item.permission == PagePermission.canInteraction) {
+                        return getCommonPerssions()
+                    }
+                    else {
+                        return []
+                    }
                 }
             }
+            else return []
         }
+        return []
     }
     @query('/query/current/user')
     queryCurrentUser() {
