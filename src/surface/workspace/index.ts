@@ -129,12 +129,13 @@ export class Workspace {
      * 获取当前成员在这个空间的权限
      */
     get memberPermissions() {
+        var ps: AtomPermission[] = [];
         if (surface.user?.id == this.owner) {
             return getAllAtomPermission()
         }
         if (this.member) {
             if (this.member.roleIds.length > 0) {
-                var ps: AtomPermission[] = [];
+                ps = [];
                 this.member.roleIds.forEach(rid => {
                     var role = this.roles.find(g => g.id == rid);
                     if (role && Array.isArray(role.permissions)) {
@@ -146,12 +147,14 @@ export class Workspace {
                 return ps;
             }
         }
-        return this.permissions.length > 0 ? this.permissions : getCommonPerssions();
+        ps = this.permissions?.length > 0 ? this.permissions : getCommonPerssions();
+        if (!ps) ps = [];
+        return ps;
     }
     isAllow(permission: AtomPermission) {
-        return this.memberPermissions.includes(permission);
+        return (this.memberPermissions || []).includes(permission);
     }
-    get isCanEdit(){
+    get isCanEdit() {
         return this.isAllow(AtomPermission.createOrDeleteDoc) || false;
     }
     load(data) {
@@ -240,7 +243,7 @@ export class Workspace {
             }
         }
     }
-    pageSort=(x,y)=>{
+    pageSort = (x, y) => {
         if (x.at > y.at) return 1;
         else if (x.at == y.at) return 0;
         else return -1;
