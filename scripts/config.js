@@ -21,17 +21,17 @@ var isDev = mode == 'dev'
 
 let port = 8081;
 let publicPath = `http://localhost:${port}/`;
-if (mode == 'pro') publicPath = `https://static.shy.red/`;
-else if (mode == 'beta') publicPath = `https://beta.shy.red/`;
+if (mode == 'pro') publicPath = `https://static.shy.live/`;
+else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
 
 var API_URLS = ['http://127.0.0.1:8888'];
-if (mode == 'beta') API_URLS = ['https://beta-b1.shy.red'];
-else if (mode == 'pro') API_URLS = ['https://api-m1.shy.red', 'https://api-m2.shy.red'];
+if (mode == 'beta') API_URLS = ['https://beta-b1.shy.live'];
+else if (mode == 'pro') API_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'];
 var API_VERSION = 'v1';
 var versionPrefix = pkg.version + '/';
 var AUTH_URL = '/auth';
-if (mode == 'pro') AUTH_URL = 'https://auth.shy.red/auth.html';
-else if (mode == 'beta') AUTH_URL = 'https://beta.shy.red/auth.html';
+if (mode == 'pro') AUTH_URL = 'https://auth.shy.live/auth.html';
+else if (mode == 'beta') AUTH_URL = 'https://beta-auth.shy.live/auth.html';
 
 var AMAP_KEY;
 var AMAP_PAIR;
