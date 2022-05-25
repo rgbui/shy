@@ -148,7 +148,7 @@ push('/page/update/info', `{id: string, pageInfo:LinkPageItem}`, `void`, ['air']
 push('/page/query/info', `{id: string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/open', `{item:string|{id:string}}`, `void`, ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
-push('/page/remove','{item:string|{id:string}}',`void`, ['air']);
+push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
 push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
@@ -251,6 +251,7 @@ push('/ws/set/domain', '{wsId?:string,domain:string}', 'SockResponse<{exists?:bo
 push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 'SockResponse<void>', ['patch'])
 push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
+push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])

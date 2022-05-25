@@ -83,7 +83,7 @@ export class PageItem {
     get url() {
         return this.workspace.url + this.path;
     }
-  
+
     get workspace() {
         return surface.workspace
     }
@@ -134,6 +134,15 @@ export class PageItem {
             }
         }
         if (this.childs?.length > 0) this.spread = true;
+    }
+    get() {
+        return {
+            id: this.id,
+            url: this.url,
+            text: this.text, sn: this.sn,
+            icon: this.icon,
+            pageType: this.pageType
+        }
     }
     closest(predict: (item: PageItem) => boolean, ignoreSelf?: boolean) {
         if (ignoreSelf != true && predict(this)) return this;
