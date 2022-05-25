@@ -296,4 +296,7 @@ export class Workspace {
             }
         }
     }
+    get pages(){
+        return this.pages.map(pa=>pa.get());
+    }
 }

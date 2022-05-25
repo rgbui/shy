@@ -6,10 +6,17 @@ import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/p
 import { surface } from ".";
 import { yCache, CacheKey } from "../../net/cache";
 import { UrlRoute } from "../history";
+import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
 
 class MessageCenter {
+    @query('/ws/current/pages')
+    getWsPages() {
+        if (surface.workspace)
+            return surface.workspace.findAll(x => x.mime == Mime.page).map(g => g.get())
+        else return []
+    }
     @air('/page/open')
     async pageOpen(args: { item: string | { id: string } }) {
         var { item } = args;
