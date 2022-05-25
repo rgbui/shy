@@ -9,12 +9,13 @@ import { PlusSvg } from "rich/component/svgs";
 import { Workspace } from "../workspace";
 import HomeSrc from "../../assert/img/shy.256.png";
 import { ShyUrl, UrlRoute } from "../../history";
+import { autoImageUrl } from "rich/net/element.type";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
     function renderWs(workspace: Partial<Workspace>) {
         if (workspace.icon) return <a className="shy-sidebar-ws-icon"><img
-            src={workspace?.icon.url} style={{ width: 48, height: 48 }} />
+            src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />
         </a>
         else return <a className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace?.text?.slice(0, 2)}</span></a>
     }
