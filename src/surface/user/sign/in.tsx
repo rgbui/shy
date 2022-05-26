@@ -56,7 +56,7 @@ export var Login = observer(function () {
     async function phoneSign() {
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
-        if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
+        if (!(phoneRegex.test(local.phone) || local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length)) return unlockButton() && (local.failMsg = '手机号格式不正确');
         var r = await channel.get('/phone/check/sign', { phone: local.phone });
         if (r && r.ok && r.data) {
             if (r.data.sign) local.step = 'login'
@@ -166,7 +166,7 @@ export var Login = observer(function () {
         if (local.name.length > 64) return unlockButton() && (local.failMsg = '称呼过长，长度限制在20位');
         await surface.user.onUpdateUserInfo({ name: local.name });
         if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
-       return successAfter()
+        return successAfter()
     }
     function renderName() {
         return <div className='shy-login-box'>
