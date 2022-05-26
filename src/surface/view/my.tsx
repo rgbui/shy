@@ -18,7 +18,7 @@ export var MyWorkSpace = observer(function () {
         var latest = await channel.get('/ws/latest', { name: wsHost ? wsHost : undefined });
         if (latest.ok) {
             var ws = latest.data?.workspace as Workspace;
-            if (ws.access == 0 || typeof ws.access == 'undefined') {
+            if (ws && (ws.access == 0 || typeof ws.access == 'undefined')) {
                 if (ws.owner != surface.user?.id) {
                     var r = await channel.get('/ws/is/member', { sock: Sock.createWorkspaceSock(ws), wsId: ws.id });
                     if (!(r.data?.exists)) {
