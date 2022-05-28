@@ -57,6 +57,7 @@ export class Sock {
                 if (this.type != SockType.file)
                     this._remote.defaults.timeout = 1000;
             }
+            if (this.type == SockType.file) this._remote.defaults.timeout = 1000 * 60 * 10;
             this._remote.defaults.validateStatus = function (status) {
                 return status < 500
             };
