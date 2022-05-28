@@ -81,6 +81,7 @@ import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
 import { UserBasic, UserStatus } from "../types/user";
 import { AtomPermission } from "../src/page/permission";
+import { ResourceArguments } from "../extensions/icon/declare";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -262,5 +263,7 @@ push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> 
 push('/page/view/snap', '{ syncBlockId: string, seq: number, content: any }', 'Promise<void>', ['act'])
 push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])
 push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number}>', ['patch'])
+push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
+
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

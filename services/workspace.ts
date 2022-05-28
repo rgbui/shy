@@ -208,5 +208,9 @@ class WorkspaceService extends BaseService {
         if (args.sock)
             return await args.sock.delete('/ws/member/exit', { wsId: args.wsId });
     }
+    @put('/bookmark/url')
+    async bookMarkUrl(args) {
+        return await fileSock.put('/bookmark/url', { url: args.url });
+    }
 }
 
