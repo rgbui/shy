@@ -227,8 +227,8 @@ push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
 push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get']);
 push('/ws/invite/join', '{wsId:string,sock?:any}', 'SockResponse<void>', ['put']);
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
-push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string} }>', ['post'])
-push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string} }>', ['post'])
+push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
+push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
 push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
