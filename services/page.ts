@@ -1,5 +1,5 @@
 
-import { act, get } from "rich/net/annotation";
+import { act, del, get, patch, put } from "rich/net/annotation";
 import { ElementType } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { surface } from "../src/surface";
@@ -39,5 +39,22 @@ class PageService extends BaseService {
     async PageViewSnap(args: { syncBlockId: string, seq: number, content: any }) {
         var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
         return snapStore.viewSnap(args.seq, args.content)
+    }
+
+    @get('/block/ref/pages')
+    async pageRefPages(args) {
+        return surface.workspace.sock.get('/block/ref/pages', { ...args, wsId: surface.workspace.id });
+    }
+    @put('/block/ref/add')
+    async addPageRef(args) {
+        return surface.workspace.sock.put('/block/ref/add', { ...args, wsId: surface.workspace.id });
+    }
+    @del('/block/ref/remove')
+    async removePageRef(args) {
+        return surface.workspace.sock.delete('/block/ref/remove', { ...args, wsId: surface.workspace.id });
+    }
+    @patch('/block/ref/sync')
+    async syncPageRef(args) {
+        return surface.workspace.sock.patch('/block/ref/sync', { ...args, wsId: surface.workspace.id });
     }
 }

@@ -262,6 +262,13 @@ push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,o
 push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
 push('/page/view/snap', '{ syncBlockId: string, seq: number, content: any }', 'Promise<void>', ['act'])
 push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])
+
+push(`/block/ref/pages`, '{wsId?:string,pageId:string}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
+push(`/block/ref/add`, '{wsId?:string,pageId:string,data:{blockId: string, rowBlockId: string, text: string, refPageId: string}}', 'SockResponse<void>', ['put'])
+push(`/block/ref/remove`, '{wsId?:string,pageId:string,blockId?:string,rowBlockId?:string}', 'AtomPermission[]', ['del'])
+push(`/block/ref/sync`, '{wsId?:string,pageId:string,data:{rowBlockId: string, text: string}}', 'AtomPermission[]', ['patch'])
+
+
 push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number}>', ['patch'])
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
 
