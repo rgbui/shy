@@ -212,5 +212,9 @@ class WorkspaceService extends BaseService {
     async bookMarkUrl(args) {
         return await fileSock.put('/bookmark/url', { url: args.url });
     }
+    @get('/page/word/query')
+    async pageWordQuery(args) {
+        return await surface.workspace.sock.get('/page/word/query', { word: args.word, wsId: surface.workspace.id });
+    }
 }
 

@@ -256,7 +256,7 @@ push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
-push('/page/word/query', '{word:string}', 'SockResponse<LinkPageItem[]>', ['get']);
+push('/page/word/query', '{word:string}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/guid', '', 'string', ['query']);
 push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
