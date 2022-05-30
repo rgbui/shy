@@ -10,6 +10,7 @@ import { useModifyName } from '../../common/setName';
 import { useUpdateEmail } from '../../common/email';
 import { useUpdatePhone } from '../../common/phone';
 import { useUpdatePaw } from '../../common/setPaw';
+import { autoImageUrl } from 'rich/net/element.type';
 
 @observer
 export class UserSettingsView extends React.Component<{ close?: () => void, setMode(): void }> {
@@ -60,10 +61,10 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: 20 }}>
                 <div className="bg">
                     {!surface.user.cover?.url && <div style={{ height: 100, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                    {surface.user.cover?.url && <img style={{ height: 180 }} src={surface.user.cover?.url} />}
+                    {surface.user.cover?.url && <img style={{ height: 180 }} src={autoImageUrl(surface.user.cover?.url, 500)} />}
                 </div>
                 <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 180 : 100 }}>
-                    {surface.user?.avatar && <img src={surface.user.avatar.url} />}
+                    {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 120)} />}
                     {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
                 </div>
                 <div className="shy-user-settings-profile-box-card-operators">

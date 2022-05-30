@@ -11,6 +11,7 @@ import { useSetWsDomain } from '../../user/common/setDomain';
 import { Remark } from 'rich/component/view/text';
 import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
+import { autoImageUrl } from 'rich/net/element.type';
 
 @observer
 export class WorkspaceSettingsView extends React.Component {
@@ -107,7 +108,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <Col span={12}>
                     <Space>
                         <div className='shy-settings-ws-avatar' onClick={() => this.onUploadFace()} >
-                            {surface.workspace.icon && <img src={surface.workspace.icon.url} />}
+                            {surface.workspace.icon && <img src={autoImageUrl(surface.workspace.icon.url, 120)} />}
                             {!surface.workspace.icon && <span>{surface.workspace.text.slice(0, 1)}</span>}
                             <div className='shy-settings-ws-avatar-hover'>添加图片</div>
                         </div>
@@ -119,7 +120,7 @@ export class WorkspaceSettingsView extends React.Component {
                 </Col>
                 <Col span={12}>
                     <div className='shy-settings-ws-cover' onClick={() => this.onUploadCover()} >
-                        {surface.workspace.cover && <img src={surface.workspace.cover.url} />}
+                        {surface.workspace.cover && <img src={autoImageUrl(surface.workspace.cover.url, 500)} />}
                         <div className='shy-settings-ws-cover-hover'>更换横幅</div>
                     </div>
                     {!surface.workspace.cover && <Button onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
