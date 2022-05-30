@@ -2,6 +2,7 @@
 import lodash from "lodash";
 import { air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
+import { PageLayoutType } from "rich/src/page/declare";
 import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
 import { surface } from ".";
 import { yCache, CacheKey } from "../../net/cache";
@@ -13,8 +14,7 @@ import { pageItemStore } from "./sln/item/store/sync";
 class MessageCenter {
     @query('/ws/current/pages')
     getWsPages() {
-        if (surface.workspace)
-            return surface.workspace.findAll(x => x.mime == Mime.page).map(g => g.get())
+        if (surface.workspace) return surface.workspace.findAll(x => x.mime == Mime.page).map(g => g.get())
         else return []
     }
     @air('/page/open')
@@ -32,6 +32,19 @@ class MessageCenter {
         else {
             surface.sln.onFocusItem();
             await surface.supervisor.onOpenItem();
+        }
+    }
+    @air('/page/create/sub')
+    async createPageSub(args: { pageId: string, text: string }) {
+        var item = surface.workspace.find(g => g.id == args.pageId);
+        if (item) {
+            var newItem = await pageItemStore.appendPageItem(item, {
+                text: args.text,
+                mime: Mime.page,
+                pageType: PageLayoutType.doc,
+                spread: false,
+            });
+            return newItem;
         }
     }
     @air('/page/remove')

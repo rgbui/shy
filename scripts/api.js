@@ -153,7 +153,7 @@ push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
 push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
-
+push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
 
 push('/schema/create', '{text:string,url:string,templateId?:string}', '{ ok: boolean, data: { schema:Partial<TableSchema> },warn:string }', ['put', 'workspace', 'rich']);
 push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
