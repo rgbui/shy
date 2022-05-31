@@ -144,7 +144,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <Col>
                     <div className='shy-ws-settings-view-domain'>
                         <a style={{ textDecoration: 'underline', color: 'inherit' }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
-                        {!surface.workspace.siteDomain && <Button onClick={e => this.openDomain(e)} link>更换空间域名</Button>}
+                        {!surface.workspace.siteDomain && <Button disabled onClick={e => this.openDomain(e)} link>更换空间域名</Button>}
                     </div>
                 </Col>
             </Row>
