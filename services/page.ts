@@ -57,4 +57,14 @@ class PageService extends BaseService {
     async syncPageRef(args) {
         return surface.workspace.sock.patch('/block/ref/sync', { ...args, wsId: surface.workspace.id });
     }
+
+    @get('/view/snap/list')
+    async viewSnapList(args) {
+        return surface.workspace.sock.get('/view/snap/list', { ...args, wsId: surface.workspace.id });
+    }
+    @get('/view/snap/content')
+    async viewSnapContent(args) {
+        return surface.workspace.sock.get('/view/snap/content', { ...args, wsId: surface.workspace.id });
+    }
+
 }
