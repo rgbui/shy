@@ -92,7 +92,10 @@ export class Surface extends Events {
             var page = await ws.getDefaultPage();
             channel.air('/page/open', { item: page });
         }
-        else { this.workspace = null; UrlRoute.push(ShyUrl._404); }
+        else {
+            this.workspace = null;
+            UrlRoute.push(ShyUrl._404);
+        }
     }
     async exitWorkspace() {
         await channel.del('/user/exit/ws', { wsId: surface.workspace.id });
@@ -110,8 +113,8 @@ export class Surface extends Events {
         if (!sn) {
             sn = UrlRoute.match(ShyUrl.ws)?.wsId;
         }
-        if (!sn && location.host && /[\da-z\-]+\.shy\.(red|live)/.test(location.host)) {
-            domain = location.host.replace(/\.shy\.(red|live)$/g, '');
+        if (!sn && location.host && /[\da-z\-]+\.shy\.live/.test(location.host)) {
+            domain = location.host.replace(/\.shy\.live$/g, '');
         }
         if (!domain && !sn) {
             wsId = await sCache.get(CacheKey.wsHost);
@@ -122,6 +125,14 @@ export class Surface extends Events {
         if (workspace.id != this.workspace?.id) {
             await this.loadWorkspace(workspace.id);
         }
+        else if (workspace.id == this.workspace.id) {
+            if (UrlRoute.isMatch(ShyUrl.page) || UrlRoute.isMatch(ShyUrl.wsPage)) {
+
+            }
+            else {
+                UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
+            }
+        }
     }
     onCreateWorkspace() {
         UrlRoute.push(ShyUrl.workCreate);
@@ -130,8 +141,7 @@ export class Surface extends Events {
      * 
      */
     get showHeadTip() {
-        if (this.user.isSign)
-            return this.temporaryWs && this.temporaryWs?.accessJoinTip == true
+        if (this.user.isSign) return this.temporaryWs && this.temporaryWs?.accessJoinTip == true
         else return false;
     }
     get showSlideBar() {
