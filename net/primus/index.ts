@@ -41,11 +41,12 @@ class TimService {
         this.isSync = isSync;
         this.workspaceId = workspaceId;
         this.viewId = viewId;
-        this.workspaceEnter();
-    }
-    private workspaceEnter = lodash.debounce(async () => {
-        if (this.tim)
-            await this.tim.syncSend(
+        if (this.time) {
+            clearTimeout(this.time);
+            this.time = undefined;
+        }
+        this.time = setTimeout(async () => {
+            if (this.tim) await this.tim.syncSend(
                 HttpMethod.post,
                 '/workspace/enter',
                 {
@@ -54,11 +55,23 @@ class TimService {
                     viewId: this.viewId
                 }
             );
-    }, config.isPro ? 2000 : 700)
+        }, config.isPro ? 1000 : 700);
+    }
+    time;
     async leaveWorkspace() {
+        if (this.time) {
+            clearTimeout(this.time);
+            this.time = undefined;
+        }
         delete this.workspaceId;
         delete this.isSync;
         await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
+    }
+    async viewOperate(viewId: string, operate: Record<string, any>) {
+        await this.tim.syncSend(HttpMethod.post, '/view/cursor/operate', {
+            viewId: viewId,
+            operate: operate
+        });
     }
     /**
      * 激活
