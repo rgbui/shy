@@ -45,4 +45,18 @@ export function bindCollaboration() {
         if (e.workspaceId != surface.workspace.id) return;
         if (e.viewId) surface.workspace.removeViewLine(e, e.viewId);
     });
+    timService.tim.on('/ws/view/cursor/operate/notify', e => {
+        if (e.workspaceId != surface.workspace.id) return;
+        if (e.viewId) {
+            if (surface.supervisor.itemId == e.viewId) {
+
+            }
+        }
+        // workspaceId: spark.session.workspaceId,
+        // operate: data.operate,
+        // viewId: data.viewId,
+        // userid: spark.session.userid,
+        // sockId: spark.session.sockId,
+        // deviceId: spark.session.deviceId
+    })
 }
