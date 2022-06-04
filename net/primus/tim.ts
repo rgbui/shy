@@ -148,9 +148,6 @@ export class Tim {
             data: data.data,
             ok: data.status >= 200 && data.status < 300 ? true : false
         };
-        // if (response.data && typeof response.data == 'object') {
-        //     GenreConsistency.parse(response.data);
-        // }
         if (response.ok == false) {
             response.warn = data.data;
         }
