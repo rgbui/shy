@@ -67,11 +67,18 @@ class TimService {
         delete this.isSync;
         await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
     }
+    private viewTime;
     async viewOperate(viewId: string, operate: Record<string, any>) {
-        await this.tim.syncSend(HttpMethod.post, '/view/cursor/operate', {
-            viewId: viewId,
-            operate: operate
-        });
+        if (this.viewTime) {
+            clearTimeout(this.viewTime);
+            this.viewTime = null;
+        }
+        this.viewTime = setTimeout(async () => {
+            await this.tim.syncSend(HttpMethod.post, '/view/cursor/operate', {
+                viewId: viewId,
+                operate: operate
+            });
+        }, 700);
     }
     /**
      * 激活
