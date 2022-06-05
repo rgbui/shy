@@ -4,6 +4,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageDirective } from "rich/src/page/directive";
 import { surface } from "../..";
+import { timService } from "../../../../net/primus";
 import { SnapSync } from "../../../../services/snap/sync";
 import { PageItem } from "../../sln/item";
 export async function createPageContent(item: PageItem) {
@@ -32,6 +33,9 @@ export async function createPageContent(item: PageItem) {
             });
             page.on(PageDirective.save, async () => {
                 await item.snapSync.forceSave();
+            });
+            page.on(PageDirective.viewCursor, async (d) => {
+                await timService.viewOperate(page.pageItemId, d);
             });
             page.loadPageInfo({ url: item.url, locker: item.locker, icon: item.icon, id: item.id, sn: item.sn, text: item.text });
             await page.load(pd.content);

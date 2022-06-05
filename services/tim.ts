@@ -46,10 +46,11 @@ export function bindCollaboration() {
         if (e.viewId) surface.workspace.removeViewLine(e, e.viewId);
     });
     timService.tim.on('/ws/view/cursor/operate/notify', e => {
+        console.log('visi',e);
         if (e.workspaceId != surface.workspace.id) return;
         if (e.viewId) {
             if (surface.supervisor.itemId == e.viewId) {
-
+                surface.supervisor.item.contentView.loadUserViewCursor(e);
             }
         }
         // workspaceId: spark.session.workspaceId,
