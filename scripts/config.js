@@ -14,6 +14,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 var mode = 'dev';
 if (process.argv.some(s => s == '--pro')) mode = 'pro';
 else if (process.argv.some(s => s == '--beta')) mode = 'beta';
+else if (process.argv.some(s => s == '--desktop')) mode = 'desktop';
 var isDev = mode == 'dev'
 /**
  * webpack url https://webpack.docschina.org/guides/output-management/#cleaning-up-the-dist-folder
@@ -23,15 +24,19 @@ let port = 8081;
 let publicPath = `http://localhost:${port}/`;
 if (mode == 'pro') publicPath = `https://static.shy.live/`;
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
+else if (mode == 'desktop') publicPath = `shy://`;
 
 var API_URLS = ['http://127.0.0.1:8888'];
 if (mode == 'beta') API_URLS = ['https://beta-b1.shy.live'];
 else if (mode == 'pro') API_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'];
+else if (mode == 'desktop') API_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'];
+
 var API_VERSION = 'v1';
 var versionPrefix = pkg.version + '/';
 var AUTH_URL = '/auth';
 if (mode == 'pro') AUTH_URL = 'https://auth.shy.live/auth.html';
 else if (mode == 'beta') AUTH_URL = 'https://beta-auth.shy.live/auth.html';
+else if (mode == 'desktop') AUTH_URL = 'https://auth.shy.live/auth.html';
 
 var AMAP_KEY;
 var AMAP_PAIR;
@@ -44,17 +49,19 @@ else {
     AMAP_PAIR = '9345e5ad4e2e8c21f8f85513cba9d309';
 }
 
+var dist = path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode));
+if (mode == 'desktop') dist = path.resolve(__dirname, "../../app/electron/dist/view");
 
 module.exports = {
     mode: isDev ? 'development' : 'production',
     entry: {
         main: './src/main.tsx',
         auth: './auth/view.ts',
-        org: './org/index.ts'
+        org: mode == 'desktop' ? undefined : './org/index.ts'
     },
     devtool: isDev ? 'inline-source-map' : undefined,
     output: {
-        path: path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode)),
+        path: dist,
         filename: versionPrefix + "assert/js/shy.[name].[contenthash:8].js",
         chunkFilename: versionPrefix + 'assert/js/shy.[name].[contenthash:8].js',
         publicPath,
@@ -185,7 +192,7 @@ module.exports = {
                 src: publicPath + versionPrefix
             },
         }),
-        new HtmlWebpackPlugin({
+        mode == 'desktop' ?{} :new HtmlWebpackPlugin({
             template: path.join(__dirname, "org.html"), // 婧愭ā鏉挎枃浠�
             filename: 'org.html',
             showErrors: true,

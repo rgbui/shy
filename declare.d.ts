@@ -6,7 +6,7 @@
  * beta 测试版（线上的）
  * pro 正式版
  */
-declare var MODE: 'pro' | 'dev' | 'beta';
+declare var MODE: 'pro' | 'dev' | 'beta' | 'desktop';
 declare var VERSION: string;
 declare var API_MASTER_URLS: string;
 declare var API_VERSION: string;
@@ -67,7 +67,7 @@ interface Window {
  * 自动在HTMLElement上面申明一个接收拖放元素的函数
  */
 interface HTMLElement {
-  shy_drop_move?: (type: string, data: any,event:MouseEvent) => void;
-  shy_drop_over?: (type: string, data: any,event:MouseEvent) => void;
-  shy_end?: (event:MouseEvent) => void;
+  shy_drop_move?: (type: string, data: any, event: MouseEvent) => void;
+  shy_drop_over?: (type: string, data: any, event: MouseEvent) => void;
+  shy_end?: (event: MouseEvent) => void;
 }
