@@ -1,13 +1,14 @@
 {
   "name": "shy",
-  "version": "0.8.037-pro",
+  "version": "0.8.038-pro",
   "description": "https://shy.live",
   "main": "index.js",
   "scripts": {
     "build-api": "node scripts/api.js",
     "pro": "webpack --config scripts/config.js  --pro",
     "beta": "webpack --config scripts/config.js  --beta ",
-    "desktop": "webpack --config scripts/config.js  --pro --desktop",
+    "desktop": "webpack --config scripts/config.js  --dev --desktop",
+    "desktop-pro": "webpack --config scripts/config.js  --pro --desktop",
     "dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  "
   },
   "keywords": [
