@@ -44,6 +44,9 @@ export class Surface extends Events {
             await timService.open();
             bindCollaboration();
         }
+        else if(config.isPc){
+            UrlRoute.push(ShyUrl.signIn);
+        }
     }
     async loadWorkspaceList() {
         if (this.user.isSign) {
