@@ -1,9 +1,12 @@
+
 import { IconArguments } from "rich/extensions/icon/declare";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
+import { yCache } from "../../net/cache";
 import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
 import { timService } from "../../net/primus";
+import { config } from "../../src/common/config";
 import { surface } from "../../src/surface";
 const DELAY_TIME = 1000 * 60 * 1;
 var snapSyncMaps: Map<string, SnapSync> = new Map();
@@ -39,13 +42,23 @@ export class SnapSync {
         /**
          * 本地先存起来
          */
-        await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
-            id: this.localId,
-            content,
-            seq,
-            creater: surface?.user?.id,
-            createDate: new Date()
-        });
+        if (config.isPc) {
+            await yCache.set(this.localId, {
+                id: this.localId,
+                content,
+                seq,
+                creater: surface?.user?.id,
+                createDate: new Date()
+            })
+        }
+        else
+            await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
+                id: this.localId,
+                content,
+                seq,
+                creater: surface?.user?.id,
+                createDate: new Date()
+            });
         this.localViewSnap = { seq, content, date: new Date() };
         if (this.localTime) clearTimeout(this.localTime);
         if (this.lastServiceViewSnap && (this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
@@ -89,7 +102,10 @@ export class SnapSync {
     }
     async querySnap() {
         var seq: number;
-        var local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
+        var local: view_snap;
+        if (config.isPc) local = await yCache.get(this.localId);
+        else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
+
         if (local) seq = local.seq;
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
