@@ -6,23 +6,25 @@
     height         : 100vh;
 
     .shy-sidebar {
-        width           : 72px;
-        flex-shrink     : 0;
-        flex-grow       : 0;
-        background-color: var(--background-tertiary);
+        width             : 72px;
+        flex-shrink       : 0;
+        flex-grow         : 0;
+        background-color  : var(--background-tertiary);
+        -webkit-app-region: drag;
 
         a {
-            width           : 48px;
-            height          : 48px;
-            display         : flex;
-            justify-content : center;
-            cursor          : pointer;
-            align-items     : center;
-            margin          : 12px;
-            transition      : color .15s ease-out, background-color .35s ease-out, border-radius .4s;
-            background-color: var(--background-primary);
-            border-radius   : 50%;
-            color           : rgb(59, 165, 93);
+            -webkit-app-region: no-drag;
+            width             : 48px;
+            height            : 48px;
+            display           : flex;
+            justify-content   : center;
+            cursor            : pointer;
+            align-items       : center;
+            margin            : 12px;
+            transition        : color .15s ease-out, background-color .35s ease-out, border-radius .4s;
+            background-color  : var(--background-primary);
+            border-radius     : 50%;
+            color             : rgb(59, 165, 93);
 
             &:hover {
                 border-radius: 16px;
@@ -58,6 +60,7 @@
         }
 
         .shy-sidebar-ws.hover {
+            -webkit-app-region: drag;
             a {
                 border-radius: 16px;
             }
@@ -219,20 +222,22 @@
     color           : #fff;
     justify-content : center;
     align-items     : center;
+
     a {
-        margin-left     : 10px;
-        font-weight     : 600;
-        padding         : 4px 8px;
-        color           : #fff;
-        display         : inline-block;
-        border-radius   : 3px;
-        font-size       : 14px;
-        border          : 1px solid #fff;
-        cursor          : pointer;
-        &:hover{
-             background-color: lighten(#e16259, 10%);
+        margin-left  : 10px;
+        font-weight  : 600;
+        padding      : 4px 8px;
+        color        : #fff;
+        display      : inline-block;
+        border-radius: 3px;
+        font-size    : 14px;
+        border       : 1px solid #fff;
+        cursor       : pointer;
+
+        &:hover {
+            background-color: lighten(#e16259, 10%);
         }
-       
+
     }
 }
 
@@ -248,18 +253,21 @@
     &-content {
         margin-top: 150px;
         text-align: center;
-        h3{
-            margin:0px;
+
+        h3 {
+            margin       : 0px;
             margin-bottom: 20px;
         }
 
-        &-text {  text-align: center;
-            span{
-                 font-size: 16px;
+        &-text {
+            text-align: center;
+
+            span {
+                font-size: 16px;
             }
-           
+
             a {
-                font-size: inherit;
+                font-size      : inherit;
                 color          : #fff;
                 text-decoration: underline;
             }

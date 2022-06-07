@@ -1,13 +1,14 @@
 .shy-supervisor-bar {
-    position        : absolute;
-    left            : 0px;
-    right           : 0px;
-    z-index         : 1111;
-    height          : 48px;
-    display         : flex;
-    justify-content : flex-start;
-    align-items     : center;
-    background-color: #fff;
+    position          : absolute;
+    left              : 0px;
+    right             : 0px;
+    z-index           : 1111;
+    height            : 48px;
+    display           : flex;
+    justify-content   : flex-start;
+    align-items       : center;
+    background-color  : #fff;
+    -webkit-app-region: drag;
 
     &-menu {
         user-select    : none;
@@ -44,12 +45,13 @@
         align-items    : center;
 
         >a {
-            width          : 24px;
-            height         : 24px;
-            display        : inline-flex;
-            justify-content: center;
-            align-items    : center;
-            color          : rgb(55, 53, 47);
+            -webkit-app-region: no-drag;
+            width             : 24px;
+            height            : 24px;
+            display           : inline-flex;
+            justify-content   : center;
+            align-items       : center;
+            color             : rgb(55, 53, 47);
 
             &:hover {
                 background-color: rgba(55, 53, 47, 0.08);
@@ -61,10 +63,11 @@
         }
 
         .shy-icon {
-            display        : inline-flex;
-            justify-content: center;
-            align-items    : center;
-            color          : rgb(55, 53, 47);
+            -webkit-app-region: no-drag;
+            display           : inline-flex;
+            justify-content   : center;
+            align-items       : center;
+            color             : rgb(55, 53, 47);
         }
     }
 
@@ -74,7 +77,7 @@
         border-right : 1px solid rgba(55, 53, 47, 0.2);
         height       : 24px;
         display      : inline-block;
-
+        -webkit-app-region: no-drag;
         img {
             width        : 24px;
             height       : 24px;
@@ -103,38 +106,41 @@
     justify-content: center;
 
     &-item {
-        display        : inline-flex;
-        padding-left   : 6px;
-        padding-right  : 6px;
-        color          : rgb(55, 53, 47);
-        white-space    : nowrap;
-        height         : 24px;
-        line-height    : 24px;
-        border-radius  : 3px;
-        cursor         : pointer;
-        align-items    : center;
-        justify-content: flex-start;
+        display           : inline-flex;
+        padding-left      : 6px;
+        padding-right     : 6px;
+        color             : rgb(55, 53, 47);
+        white-space       : nowrap;
+        height            : 24px;
+        line-height       : 24px;
+        border-radius     : 3px;
+        cursor            : pointer;
+        align-items       : center;
+        justify-content   : flex-start;
+        -webkit-app-region: no-drag;
 
         .shy-icon {
-            user-select    : none;
-            transition     : background 20ms ease-in 0s;
-            display        : flex;
-            align-items    : center;
-            justify-content: center;
-            border-radius  : 3px;
-            flex-shrink    : 0;
-            margin-right   : 6px;
-            color          : rgba(55, 53, 47, .4);
-            fill           : rgba(55, 53, 47, .4);
+            user-select       : none;
+            transition        : background 20ms ease-in 0s;
+            display           : flex;
+            align-items       : center;
+            justify-content   : center;
+            border-radius     : 3px;
+            flex-shrink       : 0;
+            margin-right      : 6px;
+            color             : rgba(55, 53, 47, .4);
+            fill              : rgba(55, 53, 47, .4);
+            -webkit-app-region: no-drag;
         }
 
         a {
-            color        : rgba(55, 53, 47, .4);
-            display      : inline-block;
-            max-width    : 180px;
-            line-height  : 24px;
-            overflow     : hidden;
-            text-overflow: ellipsis;
+            color             : rgba(55, 53, 47, .4);
+            display           : inline-block;
+            max-width         : 180px;
+            line-height       : 24px;
+            overflow          : hidden;
+            text-overflow     : ellipsis;
+            -webkit-app-region: no-drag;
         }
 
         &:hover {
@@ -143,19 +149,20 @@
     }
 
     &-locker {
-        display: inline-flex;
+        display        : inline-flex;
         justify-content: center;
-        align-items: center;
-        font-style  : normal;
-        margin-left : 2px;
-        margin-right: 2px;
-        color       : rgba(55, 53, 47, 0.4);
-        fill        : currentColor;
-        width:24px;
-        height:24px;
-        border-radius: 4px;
-        cursor: pointer;
-        &:hover{
+        align-items    : center;
+        font-style     : normal;
+        margin-left    : 2px;
+        margin-right   : 2px;
+        color          : rgba(55, 53, 47, 0.4);
+        fill           : currentColor;
+        width          : 24px;
+        height         : 24px;
+        border-radius  : 4px;
+        cursor         : pointer;
+
+        &:hover {
             background-color: rgba(55, 53, 47, 0.08);
         }
     }
