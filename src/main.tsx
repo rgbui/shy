@@ -1,6 +1,8 @@
 window.isAuth = false;
+import { config } from './common/config';
 import { createAuthIframe } from '../auth/iframe';
-createAuthIframe();
+if (config.isWeb)
+  createAuthIframe();
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import "rich";
@@ -14,6 +16,8 @@ import "./surface/user/style.less";
 import "../net/declare";
 import { App } from '.';
 import { configure } from 'mobx';
+
+
 
 configure({ enforceActions: 'never' })
 // if ('serviceWorker' in navigator) {

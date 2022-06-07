@@ -6,8 +6,8 @@
   "scripts": {
     "build-api": "node scripts/api.js",
     "pro": "webpack --config scripts/config.js  --pro",
-    "beta": "webpack --config scripts/config.js  --beta",
-    "desktop": "webpack --config scripts/config.js  --desktop",
+    "beta": "webpack --config scripts/config.js  --beta ",
+    "desktop": "webpack --config scripts/config.js  --pro --desktop",
     "dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  "
   },
   "keywords": [

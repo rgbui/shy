@@ -1,5 +1,5 @@
 import { db } from "../net/db";
-async function dbStore(args) {
+export async function dbStore(args) {
     switch (args.key) {
         case 'findOne':
             return await (db as any)[args.name].where(args.where).first();

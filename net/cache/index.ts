@@ -13,7 +13,7 @@ export enum CacheKey {
     lang = 5,
     ws_toggle_pages = 6,
     slideWidth = 7,
-    timUrl=8
+    timUrl = 8
 }
 const FLAG = 'shy.';
 class SyCache {
@@ -31,7 +31,7 @@ class SyCache {
     }
     private async getValue(key: CacheKey | string): Promise<{ value: any, expire: number }> {
         var k = this.getKey(key);
-        var value = window.isAuth == false ? await iframeChannel('localStorage.getItem', [k]) : localStorage.getItem(k);
+        var value = window.isAuth == false && config.isWeb ? await iframeChannel('localStorage.getItem', [k]) : localStorage.getItem(k);
         if (value) {
             try {
                 return JSON.parse(this.de(value))
@@ -64,7 +64,7 @@ class SyCache {
             }
             t = Date.now() + expire * getN();
         }
-        window.isAuth == false ? await iframeChannel('localStorage.setItem', [k, this.en(JSON.stringify({ value, expire: t }))]) : localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
+        window.isAuth == false && config.isWeb ? await iframeChannel('localStorage.setItem', [k, this.en(JSON.stringify({ value, expire: t }))]) : localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
     }
     async has(key: CacheKey | string) {
         var r = await this.get(key);

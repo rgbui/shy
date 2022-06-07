@@ -39,6 +39,20 @@ export function App() {
           <Route component={View404}></Route>
         </Switch>
       </Router>
+    } else if (config.isPc) {
+      return <Router history={SyHistory}>
+        <Switch>
+          <Route path={ShyUrl.root} exact component={SurfaceView}></Route>
+          <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
+          <Route path={ShyUrl.signIn} exact component={Login}></Route>
+          <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
+          <Route path={ShyUrl.myWorkspace} exact component={MyWorkSpace}></Route>
+          <Route path={ShyUrl._404} exact component={View404}></Route>
+          <Route path={[ShyUrl.ws, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
+          <Route path={ShyUrl.invite} exact component={InviteView}></Route>
+          <Route component={View404}></Route>
+        </Switch>
+      </Router>
     }
     else if (config.isPro) {
       var isOrg = location.hostname == 'shy.live';
@@ -69,6 +83,7 @@ export function App() {
         </Router>
       }
     }
+
   }
   return <div className='shy-app'>
     {!isLoad && <div className='shy-app-load'></div>}

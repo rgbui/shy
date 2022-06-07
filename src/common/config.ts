@@ -34,35 +34,17 @@ class Config {
     get version() {
         return VERSION
     }
+    get isWeb() {
+        return PLATFORM == 'web'
+    }
     get isPc() {
-        return false;
+        return PLATFORM == 'desktop'
     }
     get isMobile() {
-        return false;
-    }
-    get isWeb() {
-        return false;
-    }
-    get isMacOs() {
-        return true;
-    }
-    get isWindows() {
-        return false;
-    }
-    get isAndroid() {
-        return false;
-    }
-    /**
-     * 是否为微信打开的
-     */
-    get isWeixin() {
-        return false;
+        return PLATFORM == 'mobile'
     }
     get platform() {
-       if(this.isAndroid)return 'android'
-       else if(this.isMacOs)return 'macOs'
-       else if(this.isWeb)return 'web'
-       
+        return PLATFORM
     }
     private service_guid: string = '';
     private count = 0;
@@ -71,7 +53,7 @@ class Config {
             var n = this.count = this.count + 1;
             return this.service_guid + "-" + (ShyUtil.hexadecimalConversion(62, n));
         }
-        else   return short.generate();
+        else return short.generate();
     }
     updateServiceGuid(guid: string) {
         this.service_guid = guid;

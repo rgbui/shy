@@ -1,9 +1,17 @@
 
+
+
 import { iframeChannel } from "../../auth/iframe";
+import { dbStore } from "../../auth/view";
+import { config } from "../../src/common/config";
 export class DbService<T extends { id: string }>{
     constructor(private name: string) { }
     private async channelStore(d) {
-        return await iframeChannel('dbStore', d);
+        if (config.isWeb) {
+            return await dbStore(d);
+        }
+        else
+            return await iframeChannel('dbStore', d);
     }
     async findOne(where: Partial<T>): Promise<T> {
         return await this.channelStore({ key: 'findOne', name: this.name, where }) as any;
@@ -21,3 +29,4 @@ export class DbService<T extends { id: string }>{
         return await this.channelStore({ key: 'save', name: this.name, where, data, defaultValue }) as any;
     }
 }
+
