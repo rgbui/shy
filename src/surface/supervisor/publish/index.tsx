@@ -15,6 +15,7 @@ import { Divider } from "rich/component/view/grid";
 import { CopyText } from "rich/component/copy";
 import { PagePermission } from "rich/src/page/permission";
 import { ShyAlert } from "rich/component/lib/alert";
+
 @observer
 class PagePublish extends EventsComponent {
     constructor(props) {
