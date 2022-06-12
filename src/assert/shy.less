@@ -3,18 +3,23 @@ body {
     padding: 0px;
     margin : 0px;
 }
+
 .shy-app {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
 a {
     text-decoration: none;
     color          : #e16259;
 }
+
 p {
     margin: 0px;
 }
 
-i,em,b{
+i,
+em,
+b {
     font-style : normal;
     font-weight: normal;
 }
@@ -70,4 +75,39 @@ layout
         visibility         : hidden;
         // background-color: blue;
     }
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track {
+    visibility: hidden;
+}
+
+::-webkit-scrollbar {
+    width : 8px;
+    height: 8px;
+
+}
+
+:hover::-webkit-scrollbar-thumb,
+:hover::-webkit-scrollbar-track {
+    visibility: visible;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+
+::-webkit-scrollbar-thumb {
+    background-clip : padding-box;
+    border          : 2px solid transparent;
+    border-radius   : 4px;
+    background-color: var(--scrollbar-thin-thumb);
+    min-height      : 40px;
+}
+
+::-webkit-scrollbar-track {
+    border-color    : var(--scrollbar-thin-track);
+    background-color: var(--scrollbar-thin-track);
+    border          : 2px solid var(--scrollbar-thin-track);
 }
