@@ -72,6 +72,18 @@ class WorkspaceService extends BaseService {
         args.sockId = timService.sockId;
         return await surface.workspace.sock.delete('/ws/channel/cancel', args);
     }
+    @patch('/ws/channel/patch')
+    async channelPatch(args) {
+        args.wsId = surface.workspace.id;
+        args.sockId = timService.sockId;
+        return await surface.workspace.sock.patch('/ws/channel/patch', args);
+    }
+    @put('/ws/channel/emoji')
+    async channelEmoji(args) {
+        args.wsId = surface.workspace.id;
+        args.sockId = timService.sockId;
+        return await surface.workspace.sock.put('/ws/channel/emoji', args);
+    }
 
     /**
     * 用户上传单个文件

@@ -231,9 +231,20 @@ push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'Sock
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
-push('/ws/channel/send', '{roomId:string,content?:string,file?:any,sockId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
-push('/ws/channel/cancel', '{id:string,sockId?:string}', 'SockResponse<void>', ['del']);
+push('/ws/channel/send', '{ sockId: string,wsId?: string,roomId: string,content?: string,replyId?: string, file?:any}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId: string}', 'SockResponse<void>', ['del']);
+push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,file?:any}`, 'SockResponse<void>', ['patch'])
+push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);
+
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
+push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: string,file: any,isEdited:boolean}', 'void', ['air']);
+push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
+push('/ws/channel/emoji/notify', '{workspaceId: string,id: string,roomId: string,emoji:{ emojiId: string, code?: string }}', 'void', ['air']);
+
+
+
+
+
 push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);

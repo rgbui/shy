@@ -10,7 +10,10 @@ export enum MessageUrl {
     dateGridOperator = '/ws/datagrid/schema/operate/notify',
     enterWorkspace = '/ws/enter/notify',
     leaveWorkspace = '/ws/leave/notify',
-    channelNotify = '/ws/channel/notify'
+    channelNotify = '/ws/channel/notify',
+    channelDeletedNotify = '/ws/channel/deleted/notify',
+    channelPatchNotify = '/ws/channel/patch/notify',
+    channelEmojiNotify = '/ws/channel/emoji/notify'
 }
 
 export function bindCollaboration() {
@@ -19,7 +22,10 @@ export function bindCollaboration() {
     timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
     /*空间协作*/
     //空间会话
-    timService.tim.on('/ws/channel/notify', e => { channel.fire('/ws/channel/notify', e) });
+    timService.tim.on(MessageUrl.channelNotify, e => { channel.fire(MessageUrl.channelNotify, e) });
+    timService.tim.on(MessageUrl.channelDeletedNotify, e => { channel.fire(MessageUrl.channelDeletedNotify, e) });
+    timService.tim.on(MessageUrl.channelPatchNotify, e => { channel.fire(MessageUrl.channelPatchNotify, e) });
+    timService.tim.on(MessageUrl.channelEmojiNotify, e => { channel.fire(MessageUrl.channelEmojiNotify, e) });
     //页面文档
     timService.tim.on('/ws/view/operate/notify', e => {
         if (surface.workspace?.id == e.workspaceId) {
