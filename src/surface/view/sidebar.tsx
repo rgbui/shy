@@ -11,6 +11,7 @@ import HomeSrc from "../../assert/img/shy.256.png";
 import { ShyUrl, UrlRoute } from "../../history";
 import { autoImageUrl } from "rich/net/element.type";
 import { config } from "../../common/config";
+import { UA } from "rich/util/ua";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
@@ -21,7 +22,7 @@ export var SideBar = observer(function () {
         else return <a className="shy-sidebar-ws-name"><span style={{ fontSize: 18 }}>{workspace?.text?.slice(0, 2)}</span></a>
     }
     return <div className='shy-sidebar'>
-        <a className="shy-sidebar-operator" style={{ marginTop: config.isPc ? 30 : 0 }} onMouseDown={e => {
+        <a className="shy-sidebar-operator" style={{ marginTop: config.isPc && UA.isMacOs ? 30 : 0 }} onMouseDown={e => {
             //  UrlRoute.push(ShyUrl.me)
         }
         }>
