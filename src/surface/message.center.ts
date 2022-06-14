@@ -1,11 +1,11 @@
 
 import lodash from "lodash";
-import { air, get, query } from "rich/net/annotation";
+import { act, air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
 import { PageLayoutType } from "rich/src/page/declare";
 import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
 import { surface } from ".";
-import { yCache, CacheKey } from "../../net/cache";
+import { yCache, CacheKey, sCache } from "../../net/cache";
 import { UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
@@ -143,5 +143,13 @@ class MessageCenter {
             yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], surface.workspace.id),
             surface.workspace.getVisibleIds()
         );
+    }
+    @query('/cache/get')
+    async cacheGet(args: { key: string }) {
+        return await yCache.get(args.key);
+    }
+    @act('/cache/set')
+    async cacheSet(args: { key: string, value }) {
+        return await yCache.set(args.key, args.value);
     }
 }

@@ -154,6 +154,8 @@ push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
 push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
+push('/cache/get', '{key:string}', 'Promise<any>', ['query']);
+push('/cache/set', '{key:string,value:any}', 'Promise<void>', ['act']);
 
 push('/schema/create', '{text:string,url:string,templateId?:string}', '{ ok: boolean, data: { schema:Partial<TableSchema> },warn:string }', ['put', 'workspace', 'rich']);
 push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
@@ -176,7 +178,7 @@ push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
-push('/sign', '', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['get'])
+push('/sign', '', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['get'])
 push('/sign/out', '', 'SockResponse<void>', ['get'])
 
 push('/phone/sign', '{phone:string,code:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
@@ -230,7 +232,7 @@ push('/ws/invite/join', '{wsId:string,sock?:any}', 'SockResponse<void>', ['put']
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
-push('/ws/channel/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
+push('/ws/channel/list', '{roomId:string,seq?:number,page?:number,size?:number}', 'SockResponse<{list:any[],unreadCount?:number}>', ['get'])
 push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, file?:any}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?: string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,file?:any}`, 'SockResponse<void>', ['patch'])
