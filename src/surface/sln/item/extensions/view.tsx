@@ -70,7 +70,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             onContextMenu={e => contextmenu(e.nativeEvent)}
             onMouseDown={e => mousedown(e.nativeEvent)}>
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-            <i className='shy-ws-item-page-icon'><Icon size={18} icon={item.icon ? item.icon : PageSvg}></Icon></i>
+            <i className='shy-ws-item-page-icon'><Icon size={16} icon={item.icon ? item.icon : PageSvg}></Icon></i>
             {!isInEdit && <span>{item.text || '新页面'}</span>}
             {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}
