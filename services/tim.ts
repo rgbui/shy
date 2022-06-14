@@ -11,7 +11,6 @@ export enum MessageUrl {
     enterWorkspace = '/ws/enter/notify',
     leaveWorkspace = '/ws/leave/notify',
     channelNotify = '/ws/channel/notify',
-    channelDeletedNotify = '/ws/channel/deleted/notify',
     channelPatchNotify = '/ws/channel/patch/notify',
     channelEmojiNotify = '/ws/channel/emoji/notify'
 }
@@ -23,7 +22,6 @@ export function bindCollaboration() {
     /*空间协作*/
     //空间会话
     timService.tim.on(MessageUrl.channelNotify, e => { channel.fire(MessageUrl.channelNotify, e) });
-    timService.tim.on(MessageUrl.channelDeletedNotify, e => { channel.fire(MessageUrl.channelDeletedNotify, e) });
     timService.tim.on(MessageUrl.channelPatchNotify, e => { channel.fire(MessageUrl.channelPatchNotify, e) });
     timService.tim.on(MessageUrl.channelEmojiNotify, e => { channel.fire(MessageUrl.channelEmojiNotify, e) });
     //页面文档
