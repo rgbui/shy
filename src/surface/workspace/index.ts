@@ -201,7 +201,7 @@ export class Workspace {
         var pageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
         if (!pageId) pageId = UrlRoute.match(ShyUrl.page)?.pageId;
         if (!pageId) {
-            var pid = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], this.id));
+            var pid = await yCache.get(CacheKey.ws_open_page_id);
             if (!pid) {
                 var pt = this.find(g => g.mime == Mime.page);
                 if (pt) return pt;
@@ -296,7 +296,7 @@ export class Workspace {
             }
         }
     }
-    get pages(){
-        return this.pages.map(pa=>pa.get());
+    get pages() {
+        return this.pages.map(pa => pa.get());
     }
 }

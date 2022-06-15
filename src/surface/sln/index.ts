@@ -84,7 +84,7 @@ export class Sln extends Events<SlnDirective> {
     onFocusItem(item?: PageItem) {
         this.selectIds = item ? [item.id] : [];
         item.selectedDate = new Date().getTime();
-        yCache.set(yCache.resolve(CacheKey[CacheKey.ws_open_page_id], surface.workspace.id), item.id);
+        yCache.set(CacheKey.ws_open_page_id, item.id);
     }
     onEditItem(item: PageItem) {
         this.editId = item?.id || '';
