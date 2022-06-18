@@ -90,15 +90,15 @@ class WorkspaceService extends BaseService {
     * @returns 
     */
     @post('/ws/upload/file')
-    async uploadFile(data: { file: File, progress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+    async uploadFile(data: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
-            var { file, progress } = data;
+            var { file, uploadProgress } = data;
             if (!file.md5) file.md5 = await FileMd5(file);
             var r = await fileSock.get('/file/exists', { md5: file.md5 });
             var masterFile;
             if (r?.ok) masterFile = r.data;
             else {
-                var d = await fileSock.upload<FileType, string>(file, { uploadProgress: progress });
+                var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
                 if (d.ok) {
                     masterFile = d.data;
                 }
@@ -130,8 +130,6 @@ class WorkspaceService extends BaseService {
             return { ok: false, warn: '下载文件失败' }
         }
     }
-
-
     @get('/ws/member/word/query')
     async memberWordQuery(args) {
         args.wsId = surface.workspace.id;

@@ -102,11 +102,11 @@ class UserService extends BaseService {
      * @returns 
      */
     @post('/user/upload/file')
-    async uploadFile(args: { file: File, progress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
-        var { file, progress } = args;
+    async uploadFile(args: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+        var { file, uploadProgress } = args;
         try {
             if (!file.md5) file.md5 = await FileMd5(file);
-            var d = await fileSock.upload<FileType, string>(file, { uploadProgress: progress });
+            var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress});
             if (d.ok) {
                 return { ok: true, data: d.data }
             }
