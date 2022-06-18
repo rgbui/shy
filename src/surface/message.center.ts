@@ -5,7 +5,7 @@ import { channel } from "rich/net/channel";
 import { PageLayoutType } from "rich/src/page/declare";
 import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
 import { surface } from ".";
-import { yCache, CacheKey, sCache } from "../../net/cache";
+import { yCache, CacheKey } from "../../net/cache";
 import { UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
@@ -38,6 +38,8 @@ class MessageCenter {
     async createPageSub(args: { pageId: string, text: string }) {
         var item = surface.workspace.find(g => g.id == args.pageId);
         if (item) {
+            if (item.checkedHasChilds)
+                item.spread = true;
             var newItem = await pageItemStore.appendPageItem(item, {
                 text: args.text,
                 mime: Mime.page,

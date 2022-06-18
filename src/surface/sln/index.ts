@@ -14,7 +14,6 @@ import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
-
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
@@ -84,9 +83,10 @@ export class Sln extends Events<SlnDirective> {
     }
     onFocusItem(item?: PageItem) {
         this.selectIds = item ? [item.id] : [];
-        if (item)
+        if (item) {
             item.selectedDate = new Date().getTime();
-        yCache.set(CacheKey.ws_open_page_id, item.id);
+            yCache.set(CacheKey.ws_open_page_id, item.id);
+        }
     }
     onEditItem(item: PageItem) {
         this.editId = item?.id || '';
