@@ -1,7 +1,8 @@
 .shy-discovery {
-    flex-grow  : 1;
-    flex-shrink: 1;
-    overflow-y : auto;
+    flex-grow         : 1;
+    flex-shrink       : 1;
+    overflow-y        : auto;
+    -webkit-app-region: drag;
 
     &-cover {
         margin-left    : 100px;
@@ -9,9 +10,10 @@
         margin-top     : 20px;
         border-radius  : 10px;
         display        : flex;
-        flex-direction: column;
+        flex-direction : column;
         justify-content: center;
         align-items    : center;
+
         h3 {
             display   : block;
             width     : 100%;
@@ -35,6 +37,8 @@
             display        : flex;
             justify-content: flex-start;
             align-items    : flex-start;
+
+            -webkit-app-region: no-drag;
 
             >* {
                 width        : 25%;
