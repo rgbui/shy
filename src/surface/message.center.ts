@@ -38,8 +38,7 @@ class MessageCenter {
     async createPageSub(args: { pageId: string, text: string }) {
         var item = surface.workspace.find(g => g.id == args.pageId);
         if (item) {
-            if (item.checkedHasChilds)
-                item.spread = true;
+            await item.onSpread(true);
             var newItem = await pageItemStore.appendPageItem(item, {
                 text: args.text,
                 mime: Mime.page,
