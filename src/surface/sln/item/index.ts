@@ -156,7 +156,7 @@ export class PageItem {
         }
     }
     async onSpread(spread?: boolean) {
-        var sp = typeof spread != 'undefined' ? spread : this.spread;
+        var sp = typeof spread == 'boolean' ? !spread : this.spread;
         this.spread = sp == false ? true : false;
         if (this.spread == true && this.checkedHasChilds == false) {
             if (this.checkedHasChilds == false && !(this.childs?.length > 0)) {
