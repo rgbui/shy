@@ -10,14 +10,13 @@ export function FileMd5(file: File) {
     return new Promise((resolve: (md5: string) => void, reject: (error: ProgressEvent<FileReader>) => void) => {
         var blobSlice = File.prototype.slice || (File.prototype as any)?.mozSlice || (File.prototype as any).webkitSlice,
 
-            chunkSize = 2097152,                             // Read in chunks of 2MB
+            chunkSize = 2097152 * 10*2,                             // Read in chunks of 2MB
             chunks = Math.ceil(file.size / chunkSize),
             currentChunk = 0,
             spark = new SparkMD5.ArrayBuffer(),
             fileReader = new FileReader();
-
         fileReader.onload = function (e) {
-            console.log('read chunk nr', currentChunk + 1, 'of', chunks);
+            // console.log('read chunk nr', currentChunk + 1, 'of', chunks);
             spark.append(e.target.result);                   // Append array buffer
             currentChunk++;
 
