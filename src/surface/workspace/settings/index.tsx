@@ -47,13 +47,12 @@ class WsSettings extends EventsComponent {
             <div className='shy-settings-slide'>
                 <div>
                     <h4>{surface.workspace.text}</h4>
-                    <a onMouseDown={e => this.setMode('settings')} className={this.mode == 'settings' ? "hover" : ""} ><span>基本信息</span></a>
-                    <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}><span>管理</span></a>
-                    <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}><span>身份组</span></a>
+                    <a onMouseDown={e => this.setMode('settings')} className={this.mode == 'settings' ? "hover" : ""} >基本信息</a>
+                    <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}>管理</a>
+                    <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}>身份组</a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <h4>用户管理</h4>
                     <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} >成员</a>
-                    {/*<a>访客</a> */}
                     <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请</a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <a className="warn">删除空间</a>
