@@ -268,7 +268,7 @@ export class PageItem {
     }
     async onChangeIcon(event: MouseEvent) {
         var icon = await useIconPicker({ roundArea: Rect.fromEvent(event) });
-        if (icon) {
+        if (typeof icon != 'undefined') {
             this.onChange({ icon });
         }
     }
