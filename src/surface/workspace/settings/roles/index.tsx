@@ -16,10 +16,10 @@
  */
 
 import lodash from 'lodash';
-import { makeObservable, observable, runInAction } from 'mobx';
+import { makeObservable, observable, runInAction, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
-import { ArrowLeftSvg, ArrowRightSvg, PlusSvg, SettingsSvg, TypesPersonSvg } from "rich/component/svgs";
+import { ArrowLeftSvg, ArrowRightSvg, PlusSvg, TypesPersonSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
 import { useColorPicker } from 'rich/component/view/color/picker';
@@ -35,7 +35,8 @@ import { util } from 'rich/util/util';
 import { surface } from '../../..';
 import { SaveTip } from '../../../../component/tip/save.tip';
 import "./style.less";
-import {AtomPermission, getCommonPerssions}  from "rich/src/page/permission";
+import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
+import { WorkspaceRole } from '../..';
 const RoleColors: string[] = [
     'rgb(26,188,156)',
     'rgb(46,204,113)',
@@ -58,7 +59,6 @@ const RoleColors: string[] = [
     'rgb(151,156,159)',
     'rgb(84,110,122)',
 ]
-
 @observer
 export class WorkspaceRoles extends React.Component {
     constructor(props) {
@@ -108,6 +108,9 @@ export class WorkspaceRoles extends React.Component {
             var rs = this.roles.map(r => r);
             rs.remove(g => g.id == role.id);
             this.roles = rs;
+            surface.workspace.roles.remove(g => g.id == role.id);
+            surface.workspace.roles = surface.workspace.roles;
+            this.bakeRoles.remove(g => g.id == role.id);
         }
     }
     async loadRoles() {
@@ -125,6 +128,8 @@ export class WorkspaceRoles extends React.Component {
         });
         if (r.ok) {
             this.roles.push(r.data.role);
+            surface.workspace.roles.push(lodash.cloneDeep(r.data.role as WorkspaceRole));
+            this.bakeRoles.push(lodash.cloneDeep(r.data.role as WorkspaceRole))
         }
     }
     get allRole() {
@@ -233,15 +238,19 @@ export class WorkspaceRoles extends React.Component {
             if (role.id) {
                 var br = this.bakeRoles.find(b => b.id == role.id);
                 if (br) {
-                    if (JSON.stringify(br) != JSON.stringify(role)) {
+                    if (JSON.stringify(br) !== JSON.stringify(role)) {
                         await channel.patch('/ws/role/patch', { roleId: role.id, data: { text: role.text, color: role.color, permissions: role.permissions } });
+                        var wr = surface.workspace.roles.find(g => g.id == role.id);
+                        if (wr) {
+                            Object.assign(wr, role);
+                        }
                         await util.delay(200);
                     }
                 }
             }
             else {
                 var br = this.bakeRoles.find(g => g.id ? false : true);
-                if (JSON.stringify(br.permissions) != JSON.stringify(role.perssionss)) {
+                if (JSON.stringify(br.permissions) !== JSON.stringify(role.permissions)) {
                     await channel.patch('/ws/patch', { data: { permissions: role.permissions } });
                     surface.workspace.permissions = role.permissions;
                     await util.delay(200);
@@ -256,7 +265,6 @@ export class WorkspaceRoles extends React.Component {
     }
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
-
             <Row>
                 <Col>角色名称*</Col>
                 <Col><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></Col>

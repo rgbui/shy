@@ -7,14 +7,12 @@ import { makeObservable, observable, runInAction } from 'mobx';
 import { surface } from '../..';
 import { Select } from 'rich/component/view/select';
 import { channel } from 'rich/net/channel';
-import { Button } from 'rich/component/view/button';
 import { Avatar } from 'rich/component/view/avator/face';
 import { PlusSvg } from 'rich/component/svgs';
 import { Icon } from 'rich/component/view/icon';
 import lodash from 'lodash';
 import { useSelectMenuItem } from 'rich/component/view/menu';
 import { Rect } from 'rich/src/common/vector/point';
-
 
 
 @observer
@@ -55,10 +53,14 @@ export class WorkspaceMembers extends React.Component {
         if (Array.isArray(member.roleIds)) {
             roles = roles.findAll(g => !member.roleIds.includes(g.id));
         }
-        var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, roles.map(r => ({ text: r.text, value: r.id })));
+        var r = await useSelectMenuItem(
+            { roundArea: Rect.fromEvent(event) },
+            roles.map(r => ({ text: r.text, value: r.id }))
+        );
         if (r) {
             var g = await channel.patch('/ws/patch/member/roles', {
-                userid: member.userid, roleIds: [r.item.value]
+                userid: member.userid,
+                roleIds: [r.item.value]
             });
             if (g.ok) {
                 if (!Array.isArray(member.roleIds)) member.roleIds = [];
