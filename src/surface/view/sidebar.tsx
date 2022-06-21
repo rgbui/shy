@@ -12,6 +12,7 @@ import { ShyUrl, UrlRoute } from "../../history";
 import { autoImageUrl } from "rich/net/element.type";
 import { config } from "../../common/config";
 import { UA } from "rich/util/ua";
+import { ToolTip } from "rich/component/view/tooltip";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
@@ -30,9 +31,9 @@ export var SideBar = observer(function () {
         </a>
         <div className="shy-sidebar-divider"></div>
         <div className="shy-sidebar-body">
-            {surface.temporaryWs && <div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{renderWs(surface.temporaryWs)}</div>}
+            {surface.temporaryWs && <ToolTip  key={surface.temporaryWs.id} placement="right" overlay={surface.temporaryWs.text}><div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{renderWs(surface.temporaryWs)}</div></ToolTip>}
             {surface.wss.map(ws => {
-                return <div onMouseDown={e => surface.onChangeWorkspace(ws)} key={ws.id} className={'shy-sidebar-ws' + (surface.workspace?.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div>
+                return <ToolTip  key={ws.id} placement="right" overlay={ws.text}><div onMouseDown={e => surface.onChangeWorkspace(ws)}className={'shy-sidebar-ws' + (surface.workspace?.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div></ToolTip>
             })}
             <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
             <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
