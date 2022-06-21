@@ -32,7 +32,7 @@ class UserSettings extends EventsComponent {
     }
     singout() {
         if (config.isPro) {
-            if (location.hostname == 'shy.live') {
+            if (location.hostname == 'shy.live'||config.isPc) {
                 SyHistory.push(ShyUrl.signOut);
                 this.close()
             }
@@ -53,14 +53,14 @@ class UserSettings extends EventsComponent {
                     <h4>用户设置</h4>
                     <a onMouseDown={e => this.mode = 'user-settings'} className={this.mode == 'user-settings' ? "hover" : ""} >我的帐号</a>
                     <a onMouseDown={e => this.mode = 'user-profile'} className={this.mode == 'user-profile' ? "hover" : ""} >用户个人资料</a>
-                    <a onMouseDown={e => this.mode = 'user-safe'} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a>
-                    <Divider style={{ margin: '0px 15px' }}></Divider>
+                    {/* <a onMouseDown={e => this.mode = 'user-safe'} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a> */}
+                    {/* <Divider style={{ margin: '0px 15px' }}></Divider>
                     <h4>帐单设置</h4>
                     <a>充值</a>
-                    <a>帐单</a>
+                    <a>帐单</a> */}
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <h4>APP设置</h4>
-                    <a>外观</a>
+                    {/* <a>外观</a> */}
                     <a onMouseDown={e => this.mode = 'lang'} className={this.mode == 'lang' ? "hover" : ""}>语言</a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <a onMouseDown={e => this.mode = 'update'} className={this.mode == 'update' ? "hover" : ""}>更新日志</a>
