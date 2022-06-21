@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'rich/component/view/button';
+import { Button } from 'rich/component/view/button/index';
 import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input, Textarea } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
@@ -12,7 +12,6 @@ import { Remark } from 'rich/component/view/text';
 import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
-
 @observer
 export class WorkspaceSettingsView extends React.Component {
     constructor(props) {
@@ -44,6 +43,9 @@ export class WorkspaceSettingsView extends React.Component {
             }
         }
     }
+    async onRemoveCover() {
+        surface.workspace.onUpdateInfo({ cover: null })
+    }
     async openDomain(event: React.MouseEvent) {
         var r = await useSetWsDomain(surface.workspace.id, '');
         if (r) {
@@ -70,7 +72,6 @@ export class WorkspaceSettingsView extends React.Component {
             }
         }
         Object.assign(this.data, data);
-
         if (this.tip) this.tip.open();
     }
     error = {
@@ -103,27 +104,28 @@ export class WorkspaceSettingsView extends React.Component {
             <h2>工作空间</h2>
             <Divider></Divider>
             <Row>
-                <Col span={12}><h5 style={{ marginBottom: 10 }}>空间头像</h5></Col>
-                <Col span={12}><h5 style={{ marginBottom: 10 }}>空间横幅背景</h5></Col>
-                <Col span={12}>
-                    <Space>
+                <Col span={10}><h5 style={{ marginBottom: 10 }}>空间头像</h5></Col>
+                <Col span={14}><h5 style={{ marginBottom: 10 }}>空间横幅背景</h5></Col>
+                <Col span={10}>
+                    <Space valign='start'>
                         <div className='shy-settings-ws-avatar' onClick={() => this.onUploadFace()} >
                             {surface.workspace.icon && <img src={autoImageUrl(surface.workspace.icon.url, 120)} />}
                             {!surface.workspace.icon && <span>{surface.workspace.text.slice(0, 1)}</span>}
                             <div className='shy-settings-ws-avatar-hover'>添加图片</div>
                         </div>
                         <div>
-                            <p>我们建议使用至少 200x200 大小的图片。</p>
+                            <p style={{ fontSize: 12, marginBottom: 10 }}>我们建议使用至少 200x200 大小的图片。</p>
                             <Button ghost onClick={e => this.onUploadFace()}>上传图片</Button>
                         </div>
                     </Space>
                 </Col>
-                <Col span={12}>
-                    <div className='shy-settings-ws-cover' onClick={() => this.onUploadCover()} >
+                <Col span={14}>
+                    {surface.workspace.cover && <div className='shy-settings-ws-cover' onClick={() => this.onUploadCover()} >
                         {surface.workspace.cover && <img src={autoImageUrl(surface.workspace.cover.url, 500)} />}
                         <div className='shy-settings-ws-cover-hover'>更换横幅</div>
-                    </div>
-                    {!surface.workspace.cover && <Button onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
+                    </div>}
+                    {surface.workspace.cover && <Button ghost style={{ marginLeft: 10 }} onClick={() => this.onRemoveCover()}>移除横幅背景</Button>}
+                    {!surface.workspace.cover && <Button ghost style={{}} onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
                 </Col>
             </Row>
             <Divider></Divider>
@@ -141,10 +143,11 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <Row>
                 <Col><h5>空间域名</h5></Col>
+                <Col><Remark>自定义空间二级域名</Remark></Col>
                 <Col>
                     <div className='shy-ws-settings-view-domain'>
-                        <a style={{ textDecoration: 'underline', color: 'inherit' }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
-                        {!surface.workspace.siteDomain && <Button disabled onClick={e => this.openDomain(e)} link>更换空间域名</Button>}
+                        <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
+                        {!surface.workspace.siteDomain && <Button disabled onClick={e => this.openDomain(e)} ghost>更换空间域名</Button>}
                     </div>
                 </Col>
             </Row>
