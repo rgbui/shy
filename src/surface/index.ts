@@ -116,9 +116,8 @@ export class Surface extends Events {
         if (!sn) {
             sn = UrlRoute.match(ShyUrl.ws)?.wsId;
         }
-        if (!sn && location.host && /[\da-z\-]+\.shy\.live/.test(location.host))
-        {
-            domain = location.host.replace(/\.shy\.live$/g,'');
+        if (!sn && location.host && /[\da-z\-]+\.shy\.live/.test(location.host)) {
+            domain = location.host.replace(/\.shy\.live$/g, '');
         }
         if (!domain && !sn) {
             wsId = await sCache.get(CacheKey.wsHost);
@@ -141,6 +140,7 @@ export class Surface extends Events {
     onCreateWorkspace() {
         UrlRoute.push(ShyUrl.workCreate);
     }
+  
     /**
      * 
      */
