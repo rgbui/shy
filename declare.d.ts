@@ -7,7 +7,7 @@
  * pro 正式版
  */
 declare var MODE: 'pro' | 'dev' | 'beta' | 'desktop';
-declare var PLATFORM:'web'|'desktop'|'mobile';
+declare var PLATFORM: 'web' | 'desktop' | 'mobile';
 declare var VERSION: string;
 declare var API_MASTER_URLS: string;
 declare var API_VERSION: string;
@@ -71,4 +71,10 @@ interface HTMLElement {
   shy_drop_move?: (type: string, data: any, event: MouseEvent) => void;
   shy_drop_over?: (type: string, data: any, event: MouseEvent) => void;
   shy_end?: (event: MouseEvent) => void;
+}
+
+
+
+declare interface ShyDesktop {
+  openUrl(url: string): void;
 }
