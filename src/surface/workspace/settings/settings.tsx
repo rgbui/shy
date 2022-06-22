@@ -131,19 +131,19 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <Row>
                 <Col span={24}><h5>工作空间名称</h5></Col>
-                <Col span={24}><Remark>点击输入框可修改名称</Remark></Col>
+                <Col span={24}><Remark style={{ marginBottom: 10 }}>点击输入框可修改名称</Remark></Col>
                 <Col span={24}><Input value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input></Col>
             </Row>
             <Divider></Divider>
             <Row>
                 <Col span={24}><h5>工作空间描述</h5></Col>
-                <Col span={24}><Remark>点击输入框可修改名称</Remark></Col>
+                <Col span={24}><Remark style={{ marginBottom: 10 }}>点击输入框可修改名称</Remark></Col>
                 <Col span={24}><Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'请输入你的工作空间描述'}></Textarea></Col>
             </Row>
             <Divider></Divider>
             <Row>
                 <Col><h5>空间域名</h5></Col>
-                <Col><Remark>自定义空间二级域名</Remark></Col>
+                <Col><Remark style={{ marginBottom: 10 }}>自定义空间二级域名</Remark></Col>
                 <Col>
                     <div className='shy-ws-settings-view-domain'>
                         <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>

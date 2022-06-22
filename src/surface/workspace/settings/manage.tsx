@@ -61,14 +61,14 @@ export class WorkspaceManage extends React.Component {
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
             <h2>空间管理</h2>
             <Divider></Divider>
-            <div style={{ marginTop: 10 }}>
-                <Row>
-                    <Col span={18}>允许任何人可以访问空间</Col><Col span={6} align='end'><Switch onChange={e => this.change({ access: e ? 1 : 0 })} checked={this.data.access == 1}></Switch></Col>
-                    <Col><Remark>公开访问可能会产生大量的访问流量</Remark></Col>
+            <div >
+                <Row style={{ marginTop: 20 }}>
+                    <Col span={18}><h4 style={{ margin: '0px 0px 10px 0px' }}>允许任何人可以访问空间</h4></Col><Col span={6} align='end'><Switch onChange={e => this.change({ access: e ? 1 : 0 })} checked={this.data.access == 1}></Switch></Col>
+                    <Col><Remark style={{ fontSize: 14 }}>公开访问可能会产生大量的访问流量</Remark></Col>
                     <Divider></Divider>
                 </Row>
-                <Row>
-                    <Col span={18}>允许访客加入空间成为成员</Col><Col span={6} align='end'><Switch onChange={e => this.change({ accessJoinTip: e })} checked={this.data.accessJoinTip}></Switch></Col>
+                <Row style={{ marginTop: 20 }}>
+                    <Col span={18}><h4 style={{ margin: '0px 0px 10px 0px' }}>允许访客加入空间成为成员</h4></Col><Col span={6} align='end'><Switch onChange={e => this.change({ accessJoinTip: e })} checked={this.data.accessJoinTip}></Switch></Col>
                     <Col><Remark> </Remark></Col>
                     <Divider></Divider>
                 </Row>

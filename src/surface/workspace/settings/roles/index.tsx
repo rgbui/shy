@@ -37,6 +37,7 @@ import { SaveTip } from '../../../../component/tip/save.tip';
 import "./style.less";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { WorkspaceRole } from '../..';
+import { ToolTip } from 'rich/component/view/tooltip';
 const RoleColors: string[] = [
     'rgb(26,188,156)',
     'rgb(46,204,113)',
@@ -138,18 +139,19 @@ export class WorkspaceRoles extends React.Component {
     renderRoles() {
         return <div className="shy-ws-roles-list">
             <h3>角色</h3>
-            <Remark>使用角色来组织你的空间成员并自定义权限</Remark>
+            <Divider></Divider>
+            <Remark style={{ margin: '10px 0px' }}>使用角色来组织你的空间成员并自定义权限</Remark>
             <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole(this.allRole)}>
-                <Row>
+                <Row valign='middle'>
                     <Col span={12}><Space>
-                        <Icon size={30} icon={TypesPersonSvg}></Icon>
+                        <Icon size={24} icon={TypesPersonSvg}></Icon>
                         <div>
                             <h3>默认权限</h3>
-                            <span>@所有人.适用所有空间成员</span>
+                            <span style={{ fontSize: 12 }}>@所有人.适用所有空间成员</span>
                         </div>
                     </Space>
                     </Col>
-                    <Col span={12} align='end'><Icon icon={ArrowRightSvg}></Icon></Col>
+                    <Col span={12} align='end'><Icon size={14} icon={ArrowRightSvg}></Icon></Col>
                 </Row>
             </div>
             <div className='shy-ws-roles-list-box'>
@@ -179,10 +181,10 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
-                        <Col span={18}><Icon style={{ cursor: 'pointer' }} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                        <Col span={18} style={{height:24}} valign="middle"><Icon size={14} style={{ cursor: 'pointer' }} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
                             <span style={{ cursor: 'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
-                        <Col span={6}><Icon click={e => this.addRole()} icon={PlusSvg}></Icon></Col>
+                        <Col span={6}  style={{height:24}} valign="middle" align='end'><ToolTip overlay={'添加角色'}><Icon size={14} click={e => this.addRole()} icon={PlusSvg}></Icon></ToolTip> </Col>
                     </Row>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {
@@ -266,12 +268,12 @@ export class WorkspaceRoles extends React.Component {
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
             <Row>
-                <Col>角色名称*</Col>
+                <Col><label>角色名称<i>*</i></label></Col>
                 <Col><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></Col>
             </Row>
             <Divider></Divider>
             <Row>
-                <Col>角色颜色*</Col>
+                <Col><label>角色颜色<i>*</i></label></Col>
                 <Col><Remark>成员将使用角色列表中最靠前的角色的颜色。</Remark></Col>
                 <Col><div className='shy-ws-role-info-color-box'>
                     <div className='shy-ws-role-info-color' style={{ backgroundColor: this.editRole.color }}></div>
@@ -314,30 +316,28 @@ export class WorkspaceRoles extends React.Component {
             return false;
         }
         return <div className="shy-ws-role-permission">
-            <Row>
-                <Col span={12}>通用的空间权限</Col>
-                <Col span={12} align={'end'}><Button link size={'small'} >清除权限</Button></Col>
+            <Row style={{margin:0}}>
+                <Col span={12}><span style={{ fontSize: 12 }}>通用的空间权限</span></Col>
+                <Col span={12} align={'end'}><Button style={{padding:0,margin:0}} link size={'small'} >清除权限</Button></Col>
             </Row>
             <Row>
-                <Col span={18}>编辑文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.editDoc, e)} checked={is(AtomPermission.editDoc)}></Switch></Col>
-                <Col><Remark>默认允许编辑文档</Remark></Col>
-                <Divider></Divider>
-            </Row>
+                <Col span={18}><h4>编辑文档</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.editDoc, e)} checked={is(AtomPermission.editDoc)}></Switch></Col>
+                <Col><Remark style={{ fontSize: 14 }}>默认允许编辑文档</Remark></Col>
+            </Row><Divider></Divider>
             <Row>
-                <Col span={18}>创建或删除文档</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteDoc, e)} checked={is(AtomPermission.createOrDeleteDoc)}></Switch></Col>
-                <Col><Remark>默认允许创建或删除文档</Remark></Col>
-                <Divider></Divider>
-            </Row>
+                <Col span={18}><h4>创建或删除文档</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteDoc, e)} checked={is(AtomPermission.createOrDeleteDoc)}></Switch></Col>
+                <Col><Remark style={{ fontSize: 14 }}>默认允许创建或删除文档</Remark></Col>
+            </Row><Divider></Divider>
             <Row>
-                <Col span={18}>会话发送消息</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.sendMessageByChannel, e)} checked={is(AtomPermission.sendMessageByChannel)}></Switch></Col>
-                <Col><Remark>默认允许会话发送消息</Remark></Col>
-                <Divider></Divider>
+                <Col span={18}><h4>会话发送消息</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.sendMessageByChannel, e)} checked={is(AtomPermission.sendMessageByChannel)}></Switch></Col>
+                <Col><Remark style={{ fontSize: 14 }}>默认允许会话发送消息</Remark></Col>
             </Row>
+            <Divider></Divider>
             <Row>
-                <Col span={18}>创建会话</Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteChannel, e)} checked={is(AtomPermission.createOrDeleteChannel)}></Switch></Col>
-                <Col><Remark>默认允许创建会话或删除会话</Remark></Col>
-                <Divider></Divider>
+                <Col span={18}><h4>创建会话</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteChannel, e)} checked={is(AtomPermission.createOrDeleteChannel)}></Switch></Col>
+                <Col><Remark style={{ fontSize: 14 }}>默认允许创建会话或删除会话</Remark></Col>
             </Row>
+            <Divider></Divider>
 
         </div>
     }
@@ -345,7 +345,7 @@ export class WorkspaceRoles extends React.Component {
         return <div className="shy-ws-role-users">
             {this.roleUsers.map(ru => {
                 return <Row key={ru.id}>
-                    <Col span={12}><Avatar userid={ru.userid}></Avatar></Col>
+                    <Col span={12}><Avatar size={40} showName showSn userid={ru.userid}></Avatar></Col>
                     <Col span={12}></Col>
                 </Row>
             })}

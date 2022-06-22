@@ -7,19 +7,25 @@
         padding-bottom  : 1px;
         cursor          : pointer;
 
+        .shy-icon {
+            color: var(--interactive-hover);
+        }
+
         &:hover {
             background-color: var(--background-modifier-hover);
             color           : var(--interactive-hover);
         }
 
         h3 {
-            margin : 0px;
-            padding: 0px;
+            margin   : 0px;
+            color    : var(--interactive-hover);
+            padding  : 0px;
+            font-size: 16px;
         }
     }
 
     .shy-ws-roles-list-box {
-        margin-top: 10px;
+        margin-top: 20px;
 
         &-head {
             span {
@@ -37,10 +43,11 @@
             align-items    : center;
             border-bottom  : 1px solid var(--background-modifier-accent);
             padding        : 10px 0px;
-            cursor: pointer;
+            cursor         : pointer;
 
             >div {
-                padding:0px 10px;
+                padding: 0px 10px;
+
                 &:first-child {
                     flex-grow  : 1;
                     flex-shrink: 1;
@@ -68,19 +75,20 @@
         flex-grow  : 0;
         flex-shrink: 0;
         width      : 200px;
+        margin-right: 20px;
 
         &-head {}
 
-        >a {
+        >a{
             padding        : 6px 10px;
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
-            margin         : 2px 10px;
             border-radius  : 4px;
             color          : var(--interactive-normal);
             font-weight    : 500;
             font-size      : 16px;
+            cursor         : pointer;
 
             &:hover {
                 background-color: var(--background-modifier-hover);
@@ -93,6 +101,8 @@
             }
 
             span {
+                font-size: 14px;
+
                 &:first-child {
                     display      : inline-block;
                     width        : 14px;
@@ -143,7 +153,7 @@
                 }
 
                 &.disabled {
-                    color: var(--interactive-muted);
+                    color : var(--interactive-muted);
                     cursor: default;
                 }
             }
@@ -155,46 +165,76 @@
     }
 }
 
-.shy-ws-role-info-color-box {
-    margin-top     : 10px;
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : flex-start;
+.shy-ws-role-info {
+    padding-top: 20px;
 
-    .shy-ws-role-info-color {
-        height       : 50px;
-        min-width    : 60px;
-        border-radius: 4px;
-    }
+    label {
+        font-size     : 12px;
+        padding-bottom: 5px;
 
-    .shy-ws-role-info-color-picker {
-        height       : 50px;
-        min-width    : 60px;
-        border-radius: 4px;
-        margin       : 0px 10px;
-        cursor       : pointer;
-        box-sizing   : border-box;
-        border       : 1px solid rgba(79, 84, 92, .1);
-        position     : relative;
-    }
-
-    .shy-ws-role-info-colors {
-        display  : flex;
-        height   : 20px;
-        width    : 300px;
-        flex-wrap: wrap;
-
-        a {
-            display        : inline-flex;
-            justify-content: center;
-            align-items    : center;
-            box-sizing     : border-box;
-            width          : 20px;
-            height         : 20px;
-            border-radius  : 3px;
-            margin-right   : 10px;
-            margin-bottom  : 10px;
-            cursor         : pointer;
+        i {
+            color      : #e16259;
+            display    : inline-block;
+            margin-left: 5px;
         }
     }
+
+    .shy-ws-role-info-color-box {
+        margin-top     : 10px;
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : flex-start;
+
+        .shy-ws-role-info-color {
+            height       : 50px;
+            min-width    : 60px;
+            border-radius: 4px;
+        }
+
+        .shy-ws-role-info-color-picker {
+            height       : 50px;
+            min-width    : 60px;
+            border-radius: 4px;
+            margin       : 0px 10px;
+            cursor       : pointer;
+            box-sizing   : border-box;
+            border       : 1px solid rgba(79, 84, 92, .1);
+            position     : relative;
+        }
+
+        .shy-ws-role-info-colors {
+            display  : flex;
+            height   : 20px;
+            width    : 300px;
+            flex-wrap: wrap;
+
+            a {
+                display        : inline-flex;
+                justify-content: center;
+                align-items    : center;
+                box-sizing     : border-box;
+                width          : 20px;
+                height         : 20px;
+                border-radius  : 3px;
+                margin-right   : 10px;
+                margin-bottom  : 10px;
+                cursor         : pointer;
+            }
+        }
+    }
+
+}
+
+.shy-ws-role-permission {
+    padding-top: 20px;
+    h4 {
+        margin: 0px 0px 10px 0px;
+    }
+    .shy-row {
+        margin-top: 10px
+    }
+}
+
+.shy-ws-role-users {
+    padding-top: 20px;
 }
