@@ -6,8 +6,6 @@ import { channel } from "rich/net/channel";
 import { timService } from "../../../../net/primus";
 import { config } from "../../../common/config";
 
-
-
 export class LogOut extends React.Component {
     private isLogout: boolean = false;
     async componentDidMount() {

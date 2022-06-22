@@ -147,7 +147,7 @@ export var Login = observer(function () {
                 <Input name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
             </div>}
             {local.step == 'register' && <div className='shy-login-box-agree'>
-                <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='/service/protocol' target='_blank'>《服务协议》</a>及<a href='/privacy/protocol' target='_blank'>《隐私协议》</a></label>
+                <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></label>
             </div>}
             <div className='shy-login-box-button'>
                 <Button size='medium' block onClick={e => loginOrRegister()}>{local.step == 'register' ? '注册' : '登录'}</Button >
