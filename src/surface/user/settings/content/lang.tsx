@@ -8,7 +8,7 @@ export class ShyAppLang extends React.Component {
         return <div className="shy-app-lang">
             <h2>语言</h2>
             <Divider></Divider>
-            <Row>
+            <Row style={{ marginTop: 20 }}>
                 <Col span={12}><Remark>选择语言</Remark></Col>
                 <Col span={12} align={'end'}><Select
                     dropStyle={{ width: 80 }}
