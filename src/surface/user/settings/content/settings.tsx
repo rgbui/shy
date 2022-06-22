@@ -58,10 +58,11 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
     render() {
         return <div>
             <h2>我的帐号</h2>
-            <div className="shy-user-settings-profile-box-card settings" style={{ margin: 20 }}>
+            <Divider></Divider>
+            <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
                 <div className="bg">
                     {!surface.user.cover?.url && <div style={{ height: 100, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                    {surface.user.cover?.url && <img style={{ height: 180 }} src={autoImageUrl(surface.user.cover?.url, 500)} />}
+                    {surface.user.cover?.url && <img style={{ height: 180 }} src={autoImageUrl(surface.user.cover?.url, 900)} />}
                 </div>
                 <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 180 : 100 }}>
                     {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 120)} />}
@@ -89,7 +90,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
             <Divider></Divider>
             <Row>
                 <Col><h5>密码</h5></Col>
-                <Col style={{marginTop:10}}><Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? "修改密码" : "设置密码"}</Button></Col>
+                <Col style={{ marginTop: 10 }}><Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? "修改密码" : "设置密码"}</Button></Col>
             </Row>
             {/*<Row>
                 <Col><h5>删除帐户</h5></Col>

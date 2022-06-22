@@ -10,6 +10,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../../..";
 import { useColorPicker } from "rich/component/view/color/picker";
 import { makeObservable, observable } from "mobx";
+import { autoImageUrl } from "rich/net/element.type";
 
 const DEFAULT_COLOR = 'rgb(192,157,156)';
 
@@ -120,7 +121,7 @@ export class UserSettingProfile extends React.Component {
                         <Col>
                             <Remark>我们建议使用至少 600x240 大小的图片。您可上传小于 5 MB 的 PNG、JPG 或动态 GIF。</Remark>
                         </Col>
-                        <Col span={12} align='start'>
+                        <Col span={12} align='start' style={{marginTop:10}} >
                             <Space>
                                 <Button onClick={e => this.onUploadCover()}>上传横幅</Button>
                                 {surface.user?.cover?.url && <Button ghost onClick={e => this.removeCover()}>移除横幅</Button>}
@@ -147,10 +148,10 @@ export class UserSettingProfile extends React.Component {
                     <div className="shy-user-settings-profile-box-card">
                         <div className="bg">
                             {!surface.user.cover?.url && <div style={{ height: 60, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                            {surface.user.cover?.url && <img style={{ height: 120 }} src={surface.user.cover?.url} />}
+                            {surface.user.cover?.url && <img style={{ height: 120 }} src={autoImageUrl(surface.user.cover?.url,500)} />}
                         </div>
                         <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 120 : 60 }}>
-                            {surface.user?.avatar && <img src={surface.user.avatar.url} />}
+                            {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url,50) } />}
                             {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
                         </div>
                         <div className="shy-user-settings-profile-box-card-content">
