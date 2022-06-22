@@ -17,6 +17,9 @@ import { surface } from "..";
 import { AtomPermission, getAllAtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
+import { CopyText } from "rich/component/copy";
+import { ShyAlert } from "rich/component/lib/alert";
+
 export type WorkspaceUser = {
     userid: string;
     role: string;
@@ -119,7 +122,7 @@ export class Workspace {
         return this.siteDomain || this.sn
     }
     get url() {
-        if (config.isPro) return `https://${this.host}.shy.live`
+        if (config.isPro || config.isPc) return `https://${this.host}.shy.live`
         else return 'http://' + location.host + "/ws/" + this.sn + "";
     }
     get isJoinTip() {
@@ -298,5 +301,20 @@ export class Workspace {
     }
     get pages() {
         return this.pages.map(pa => pa.get());
+    }
+    async onCreateInvite(isCopy?: boolean, force?: boolean) {
+        if (force == true || !this.invite) {
+            var r = await channel.put('/ws/invite/create');
+            if (r.ok) {
+                surface.workspace.invite = r.data.code;
+            }
+        }
+        if (isCopy) {
+            CopyText(this.getInviteUrl());
+            ShyAlert('邀请链接已复制');
+        }
+    }
+    getInviteUrl() {
+        return this.url + '/invite/' + this.invite
     }
 }
