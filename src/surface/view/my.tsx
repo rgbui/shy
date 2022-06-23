@@ -27,7 +27,10 @@ export var MyWorkSpace = observer(function () {
                     }
                 }
             }
-            if (ws) return UrlRoute.pushToWs(ws?.siteDomain || ws.sn, true);
+            if (ws) {
+                await surface.loadWorkspaceList();
+                return UrlRoute.pushToWs(ws?.siteDomain || ws.sn, true);
+            }
             else return UrlRoute.push(ShyUrl.workCreate);
         }
     }
