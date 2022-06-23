@@ -11,6 +11,7 @@ import { useUpdateEmail } from '../../common/email';
 import { useUpdatePhone } from '../../common/phone';
 import { useUpdatePaw } from '../../common/setPaw';
 import { autoImageUrl } from 'rich/net/element.type';
+import { ShyAlert } from 'rich/component/lib/alert';
 
 @observer
 export class UserSettingsView extends React.Component<{ close?: () => void, setMode(): void }> {
@@ -53,6 +54,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
         var r = await useUpdatePaw({ checkPaw: this.dataUser.checkPaw });
         if (r) {
             this.dataUser.checkPaw = true;
+            ShyAlert('密码设置成功')
         }
     }
     render() {
