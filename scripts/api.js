@@ -180,7 +180,8 @@ push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
 push('/sign', '', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['get'])
 push('/sign/out', '', 'SockResponse<void>', ['get'])
-
+push('/paw/sign', '{phone:string,paw:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
+push(`/sign/patch`, '{name: string, paw: string}', 'SockResponse<{list:any[]}>', ['patch']);
 push('/phone/sign', '{phone:string,code:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
 push('/phone/sms/code', '{phone:string}', '{ok:boolean,warn:string,data:{success:boolean,code?:string}}', ['post'])
 push('/phone/check/sign', '{phone:string}', '{ok:boolean,warn:string,data:{sign:boolean}}', ['get'])
