@@ -9,15 +9,14 @@
     box-shadow   : 0 4px 40px rgba(0, 0, 0, .08);
     padding      : 48px 72px 72px 72px;
     border-radius: 8px;
-
     &-head {
         text-align: center;
         span {
-            font-size  : 28px;
+            font-size  :24px;
             font-weight: normal;
             color      : #303133;
-
         }
+        padding-bottom: 10px;
     }
 
     &-box {
@@ -25,39 +24,58 @@
             margin-top   : 24px;
             margin-bottom: 8px;
         }
+
         &-account {
             input {
                 width: 100%;
             }
         }
+
         &-code {
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
             height         : 34px;
+
             .shy-input {
                 margin-right: 10px;
                 flex-grow   : 1;
             }
+
             .shy-button {
                 width      : 120px;
                 flex-shrink: 0;
             }
         }
+
         &-agree {
             font-size      : 12px;
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
         }
+
         &-fail {
             color: #e16259;
+            font-size: 14px;
         }
+
         &-button {}
     }
-
 }
 
+.shy-login-box-type{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 14px;
+    margin-top:10px;
+    a{
+        cursor: pointer;
+        display: inline-block;
+        margin-left:5px;
+    }
+}
 .shy-login-panel {
     background: #f0f3f7;
     width     : 100vw;
@@ -68,5 +86,18 @@
     .shy-login-logo {
         font-size: 28px;
         margin   : 30px;
+
+        a {
+            display        : flex;
+            justify-content: flex-start;
+            align-items    : center;
+            img{
+                margin-right: 10px;
+            }
+            span{
+                 font-size: 24px;
+                font-weight: lighter;
+            }
+        }
     }
 }
