@@ -189,7 +189,7 @@ export var Login = observer(function () {
                     <Button size='medium' block onClick={e => loginOrRegister()}>{'登录'}</Button >
                 </div>
                 <div className="shy-login-box-type">
-                    <span>您也可以使用<a onMouseDown={e => local.loginType = local.loginType == "code" ? "paw" : "code"}>{local.loginType == 'code' ? "密码登录" : "手机验证码登录"}</a></span>
+                    <span>您也可以使用<a onMouseDown={e => {local.loginType = local.loginType == "code" ? "paw" : "code";local.failMsg='';}}>{local.loginType == 'code' ? "密码登录" : "手机短信登录"}</a></span>
                 </div>
                 {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             </div>

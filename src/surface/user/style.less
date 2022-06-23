@@ -9,13 +9,16 @@
     box-shadow   : 0 4px 40px rgba(0, 0, 0, .08);
     padding      : 48px 72px 72px 72px;
     border-radius: 8px;
+
     &-head {
         text-align: center;
+
         span {
-            font-size  :24px;
+            font-size  : 24px;
             font-weight: normal;
             color      : #303133;
         }
+
         padding-bottom: 10px;
     }
 
@@ -56,7 +59,7 @@
         }
 
         &-fail {
-            color: #e16259;
+            color    : #e16259;
             font-size: 14px;
         }
 
@@ -64,18 +67,25 @@
     }
 }
 
-.shy-login-box-type{
-    display: flex;
+.shy-login-box-type {
+    display        : flex;
     justify-content: flex-end;
-    align-items: center;
-    font-size: 14px;
-    margin-top:10px;
-    a{
-        cursor: pointer;
-        display: inline-block;
-        margin-left:5px;
+    align-items    : center;
+    font-size      : 12px;
+    margin-top     : 10px;
+    color:rgba(53,47,46,.6);
+    a {
+        cursor     : pointer;
+        display    : inline-block;
+        margin-left: 5px;
+        color:rgba(53,47,46,.6);
+        // text-decoration: underline;
+        &:hover{
+          color:rgba(0,0,0,1)
+        }
     }
 }
+
 .shy-login-panel {
     background: #f0f3f7;
     width     : 100vw;
@@ -91,11 +101,13 @@
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
-            img{
+
+            img {
                 margin-right: 10px;
             }
-            span{
-                 font-size: 24px;
+
+            span {
+                font-size  : 24px;
                 font-weight: lighter;
             }
         }
