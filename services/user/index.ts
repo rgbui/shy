@@ -39,7 +39,7 @@ class UserService extends BaseService {
         result = await masterSock.put('/paw/sign', data);
         return result;
     }
-    @put('/sign/patch')
+    @patch('/sign/patch')
     async patchSign(data) {
         return await masterSock.patch('/sign/patch', data);
     }

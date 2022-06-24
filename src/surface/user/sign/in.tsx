@@ -58,7 +58,7 @@ export var Login = observer(function () {
      * @returns 
      */
     async function phoneSign() {
-        local.failMsg='';
+        local.failMsg = '';
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
         if (!(phoneRegex.test(local.phone) || local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length)) return unlockButton() && (local.failMsg = '手机号格式不正确');
@@ -134,6 +134,7 @@ export var Login = observer(function () {
             local.failMsg = '';
             if (local.step == 'register') {
                 local.step = 'name';
+
             }
             else {
                 if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
@@ -189,7 +190,7 @@ export var Login = observer(function () {
                     <Button size='medium' block onClick={e => loginOrRegister()}>{'登录'}</Button >
                 </div>
                 <div className="shy-login-box-type">
-                    <span>您也可以使用<a onMouseDown={e => {local.loginType = local.loginType == "code" ? "paw" : "code";local.failMsg='';}}>{local.loginType == 'code' ? "密码登录" : "手机短信登录"}</a></span>
+                    <span>您也可以使用<a onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? "密码登录" : "手机短信登录"}</a></span>
                 </div>
                 {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             </div>
@@ -242,12 +243,13 @@ export var Login = observer(function () {
         }
     }, []);
     return <div className='shy-login-panel' ref={e => el = e}>
-        <div className='shy-login-logo'><a href='/'><img style={{width:30,height:30}} src={Logo} /><span>诗云</span></a></div>
+        <div className='shy-login-logo'><a href='/'><img style={{ width: 30, height: 30 }} src={Logo} /><span>诗云</span></a></div>
         <div className='shy-login'>
             <div className='shy-login-head'>
-                {!['login', 'register'].includes(local.step) && <span>登录/注册&nbsp;诗云</span>}
+                {!['login', 'register', 'name'].includes(local.step) && <span>登录/注册&nbsp;诗云</span>}
                 {local.step == 'register' && <span>注册&nbsp;诗云</span>}
                 {local.step == 'login' && <span>登录&nbsp;诗云</span>}
+                {local.step == 'name' && <span>完善个人信息</span>}
             </div>
             {local.step == 'phone' && renderPhone()}
             {(local.step == 'login' || local.step == 'register') && renderLogin()}
