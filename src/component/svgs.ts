@@ -20,6 +20,7 @@ import RenameSvg from "../assert/svg/rename.svg";
 import SystemSvg from "../assert/svg/system.svg";
 import UndoSvg from "../assert/svg/undo.svg";
 import VersionHistorySvg from "../assert/svg/versionHistory.svg";
+import WechatSvg from "../assert/svg/wechat.svg";
 import WsSettingsSvg from "../assert/svg/wsSettings.svg";
 
 export  {
@@ -45,5 +46,6 @@ RenameSvg,
 SystemSvg,
 UndoSvg,
 VersionHistorySvg,
+WechatSvg,
 WsSettingsSvg
 }

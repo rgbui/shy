@@ -11,9 +11,10 @@ import { inviteCode, phoneCode, phoneRegex } from "../../../../common/verify";
 import { useLocation } from "react-router-dom";
 import { channel } from "rich/net/channel";
 import Logo from "../../../../assert/img/shy.256.png";
-import "./wsLogin.js";
+import "./wxLogin.js";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
+import { WechatSvg } from "../../../../component/svgs";
 export var Login = observer(function () {
     var local = useLocalObservable<{
         step: 'phone' | 'login' | 'register' | 'name',
@@ -245,21 +246,27 @@ export var Login = observer(function () {
             phoneSign()
         }
         function receiveMessage(event) {
-            var data = JSON.parse(event.data);
-            if (data.state == 'success') {
-                //Sock.post('/login/verify_ok', data.userinfo);
-            }
-            else if (data.state == 'refuse') {
-                alert('请在微信扫码后确认，否则无法登录');
-                //vm.openWeixinQr(true);
-            }
-            else if (data.state == 'bind') {
-                var info = data.info;
-                // Sock.post("/login/toReg", { bindInfo: info }, function (err, result) {
-                // });
+            console.log(event, 'sss');
+            if (event.origin && event.origin.startsWith('https://pay.shy.live')) {
+                var data = JSON.parse(event.data);
+                if (data.state == 'success') {
+                    //Sock.post('/login/verify_ok', data.userinfo);
+                }
+                else if (data.state == 'refuse') {
+                    alert('请在微信扫码后确认，否则无法登录');
+                    //vm.openWeixinQr(true);
+                }
+                else if (data.state == 'bind') {
+                    var info = data.info;
+                    // Sock.post("/login/toReg", { bindInfo: info }, function (err, result) {
+                    // });
+                }
             }
         }
         window.addEventListener("message", receiveMessage, false);
+        return () => {
+            window.removeEventListener('message', receiveMessage, false)
+        }
     }, []);
 
     async function openWeixin(state: string) {
@@ -268,7 +275,7 @@ export var Login = observer(function () {
             id: "QRCodePanel",
             appid: "wx2393b2ce548478c3",
             scope: "snsapi_login",
-            redirect_uri: encodeURIComponent("https://viewparse.com/user_open/weixin_back"),
+            redirect_uri: encodeURIComponent("https://pay.shy.live/user_open/weixin_back"),
             state: state
         });
     }
@@ -285,10 +292,10 @@ export var Login = observer(function () {
             {local.step == 'phone' && renderPhone()}
             {(local.step == 'login' || local.step == 'register') && renderLogin()}
             {local.step == 'name' && renderName()}
-            <Divider></Divider>
-            <div className="shy-login-open">
-                <Icon icon={ }></Icon>
-            </div>
+            {!['login', 'register', 'name'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center">其他登录方式</Divider>
+                <div className="shy-login-open">
+                    <Icon size={40} icon={WechatSvg}></Icon>
+                </div></>}
         </div>
     </div>
 })

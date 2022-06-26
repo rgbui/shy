@@ -65,6 +65,18 @@
 
         &-button {}
     }
+
+    &-open {
+        margin-top     : 20px;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        .shy-icon {
+            &:hover {
+                opacity: .8;
+            }
+        }
+    }
 }
 
 .shy-login-box-type {
@@ -73,15 +85,17 @@
     align-items    : center;
     font-size      : 12px;
     margin-top     : 10px;
-    color:rgba(53,47,46,.6);
+    color          : rgba(53, 47, 46, .6);
+
     a {
         cursor     : pointer;
         display    : inline-block;
         margin-left: 5px;
-        color:rgba(53,47,46,.6);
+        color      : rgba(53, 47, 46, .6);
+
         // text-decoration: underline;
-        &:hover{
-          color:rgba(0,0,0,1)
+        &:hover {
+            color: rgba(0, 0, 0, 1)
         }
     }
 }
