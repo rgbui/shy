@@ -13,7 +13,6 @@ import "./surface/style.less";
 import "./surface/supervisor/style.less";
 import "./surface/sln/style.less";
 import "./surface/user/style.less";
-import "../net/declare";
 import { App } from '.';
 import { configure } from 'mobx';
 configure({ enforceActions: 'never' })
