@@ -1,16 +1,19 @@
 import React from "react";
-import { AppLang } from "../../../../i18n/enum";
-import { appLangProvider } from "../../../../i18n/provider";
-import { ShyUrl, UrlRoute } from "../../../history";
-import { CacheKey, sCache } from "../../../../net/cache";
-import { surface } from "../..";
+import { AppLang } from "../../../../../i18n/enum";
+import { appLangProvider } from "../../../../../i18n/provider";
+import { ShyUrl, UrlRoute } from "../../../../history";
+import { CacheKey, sCache } from "../../../../../net/cache";
+import { surface } from "../../..";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
-import { inviteCode, phoneCode, phoneRegex } from "../../../common/verify";
+import { inviteCode, phoneCode, phoneRegex } from "../../../../common/verify";
 import { useLocation } from "react-router-dom";
 import { channel } from "rich/net/channel";
-import Logo from "../../../assert/img/shy.256.png";
+import Logo from "../../../../assert/img/shy.256.png";
+import "./wsLogin.js";
+import { Divider } from "rich/component/view/grid";
+import { Icon } from "rich/component/view/icon";
 export var Login = observer(function () {
     var local = useLocalObservable<{
         step: 'phone' | 'login' | 'register' | 'name',
@@ -241,7 +244,35 @@ export var Login = observer(function () {
             local.phone = (location?.state as any)?.phone;
             phoneSign()
         }
+        function receiveMessage(event) {
+            var data = JSON.parse(event.data);
+            if (data.state == 'success') {
+                //Sock.post('/login/verify_ok', data.userinfo);
+            }
+            else if (data.state == 'refuse') {
+                alert('请在微信扫码后确认，否则无法登录');
+                //vm.openWeixinQr(true);
+            }
+            else if (data.state == 'bind') {
+                var info = data.info;
+                // Sock.post("/login/toReg", { bindInfo: info }, function (err, result) {
+                // });
+            }
+        }
+        window.addEventListener("message", receiveMessage, false);
     }, []);
+
+    async function openWeixin(state: string) {
+        new (window as any).WxLogin({
+            self_redirect: true,
+            id: "QRCodePanel",
+            appid: "wx2393b2ce548478c3",
+            scope: "snsapi_login",
+            redirect_uri: encodeURIComponent("https://viewparse.com/user_open/weixin_back"),
+            state: state
+        });
+    }
+
     return <div className='shy-login-panel' ref={e => el = e}>
         <div className='shy-login-logo'><a href='/'><img style={{ width: 30, height: 30 }} src={Logo} /><span>诗云</span></a></div>
         <div className='shy-login'>
@@ -254,6 +285,10 @@ export var Login = observer(function () {
             {local.step == 'phone' && renderPhone()}
             {(local.step == 'login' || local.step == 'register') && renderLogin()}
             {local.step == 'name' && renderName()}
+            <Divider></Divider>
+            <div className="shy-login-open">
+                <Icon icon={ }></Icon>
+            </div>
         </div>
     </div>
 })
