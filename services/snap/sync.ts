@@ -9,7 +9,7 @@ import { DbService } from "../../net/db/service";
 import { timService } from "../../net/primus";
 import { config } from "../../src/common/config";
 import { surface } from "../../src/surface";
-const DELAY_TIME = 1000 * 60 * 1;
+const DELAY_TIME = 1000 * 60 * 5;
 var snapSyncMaps: Map<string, SnapSync> = new Map();
 
 export type ViewOperate = {
@@ -88,7 +88,7 @@ export class SnapSync extends Events {
                     seq: this.localViewSnap.seq,
                     content: this.localViewSnap.content
                 })
-                if(r.ok) {
+                if (r.ok) {
                     if (typeof this.lastServiceViewSnap == 'undefined') {
                         this.lastServiceViewSnap = {} as any;
                     }
@@ -107,7 +107,6 @@ export class SnapSync extends Events {
         var local: view_snap;
         if (config.isPc) local = await yCache.get(this.localId);
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
-
         if (local) seq = local.seq;
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
@@ -122,6 +121,20 @@ export class SnapSync extends Events {
         if (r.ok) {
             if (r.data.localExisting == true) return { content: local?.content ? JSON.parse(local?.content) : {} };
             return { operates: r.data.operates as ViewOperate[], content: r.data.content ? JSON.parse(r.data.content) : {} }
+        }
+    }
+    async rollupQuerySnap(snapId: string) {
+        var r = await surface.workspace.sock.get<{ content: string, seq: number }>('/view/snap/content', {
+            id: snapId
+        });
+        if (r.ok) {
+            if (this.localTime) clearTimeout(this.localTime);
+            if (typeof this.lastServiceViewSnap == 'undefined') {
+                this.lastServiceViewSnap = {} as any;
+            }
+            this.lastServiceViewSnap.seq = r.data.seq;
+            this.lastServiceViewSnap.date = new Date();
+            return { content: r.data.content ? JSON.parse(r.data.content) : undefined }
         }
     }
     static create(type: ElementType, parentId: string, id?: string) {

@@ -1,5 +1,5 @@
 
-import { act, del, get, patch, put } from "rich/net/annotation";
+import { act, del, get, patch, post, put } from "rich/net/annotation";
 import { ElementType } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { surface } from "../src/surface";
@@ -72,6 +72,10 @@ class PageService extends BaseService {
     @patch('/view/snap/patch')
     async viewSnapPatch(args) {
         return surface.workspace.sock.patch('/view/snap/patch', { ...args, wsId: surface.workspace.id });
+    }
+    @post('/view/snap/rollup')
+    async viewSnapRollup(args) {
+        return surface.workspace.sock.post('/view/snap/rollup', { ...args, wsId: surface.workspace.id });
     }
 
 }

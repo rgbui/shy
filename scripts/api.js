@@ -280,6 +280,7 @@ push('/view/snap/list', '{wsId?: string, elementUrl: string, page: number, size:
 push('/view/snap/content', '{wsId?:string,id:string}', 'SockResponse<{id:string,content:string}>', ['get'])
 push('/view/snap/patch','{id:string,data:Record<string,any>}','SockResponse<void>',['patch']);
 push('/view/snap/del','{id:string}','SockResponse<void>',['del']);
+push('/view/snap/rollup','{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}','SockResponse<{seq:number,id:string}>',['post']);
 push(`/block/ref/pages`, '{wsId?:string,pageId:string}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/block/ref/add`, '{wsId?:string,pageId:string,data:{blockId: string, rowBlockId: string, text: string, refPageId: string}}', 'SockResponse<void>', ['put'])
 push(`/block/ref/remove`, '{wsId?:string,pageId:string,blockId?:string,rowBlockId?:string}', 'AtomPermission[]', ['del'])

@@ -37,6 +37,13 @@ export async function createPageContent(item: PageItem) {
             page.on(PageDirective.viewCursor, async (d) => {
                 await timService.viewOperate(page.pageItemId, d);
             });
+            page.on(PageDirective.rollup, async (id) => {
+               var pd = await item.snapSync.rollupQuerySnap(id);
+                if (pd?.content) {
+                    await page.reload(pd.content);
+                    page.forceUpdate();
+                }
+            })
             page.loadPageInfo({ url: item.url, locker: item.locker, icon: item.icon, id: item.id, sn: item.sn, text: item.text });
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
