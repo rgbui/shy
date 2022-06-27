@@ -11,20 +11,17 @@
     align-items    : stretch;
 
     &-slide {
-        background-color: var(--background-secondary);
-        flex-grow       : 1;
-        flex-shrink     : 0;
-        flex-basis      : 218px;
-        display         : flex;
-        justify-content : flex-end;
-        align-items     : flex-start;
-
+        background-color   : var(--background-secondary);
+        flex-grow          : 1;
+        flex-shrink        : 0;
+        display            : flex;
+        justify-content    : flex-end;
+        align-items        : flex-start;
         >div {
             width     : 218px;
             padding   : 60px 6px 60px 20px;
             overflow-y: auto;
         }
-
         border-radius : 3px 0px 0px 3px;
         padding       : 30px 10px;
         box-sizing    : border-box;
@@ -87,44 +84,60 @@
     }
 
     &-content {
-        padding    : 30px 10px;
-        flex-grow  : 1;
-        flex-shrink: 1;
-        flex-basis : 800px;
-        align-items: flex-start;
-        background : var(--background-primary);
+        padding       : 30px 10px;
+        flex-grow     : 1;
+        flex-shrink   : 1;
+        align-items   : flex-start;
+        background    : var(--background-primary);
+        overflow-y    : auto;
+        overflow-x    : hidden;
 
         &-wrapper {
-            position : relative;
-            max-width: 740px;
+            width    : 740px;
             min-width: 460px;
-            height   : 100%;
 
             &-scroll {
-                padding    : 60px 6px 60px 20px;
+                padding    : 60px 6px 60px 30px;
                 line-height: 22px;
                 height     : 100%;
-                overflow-y : auto;
             }
 
             .shy-settings-operators {
                 position  : absolute;
                 top       : 0px;
-                right     : -60px;
+                right     : calc((100% - 224px - 740px) / 2);
                 margin-top: 60px;
+                transform : translate(70px, 0px);
 
                 a {
                     display        : flex;
-                    width          : 32px;
-                    height         : 32px;
                     justify-content: center;
                     align-items    : center;
-                    border-radius  : 50%;
-                    border         : 1px solid #dcddde;
-                    cursor         : pointer;
+                    flex-direction : column;
+                    stroke-width   : 2px;
 
-                    &:hover {
-                        background-color: #f6f6f7;
+                    span {
+                        display        : flex;
+                        width          : 32px;
+                        height         : 32px;
+                        justify-content: center;
+                        align-items    : center;
+                        border-radius  : 50%;
+                        border         : 1px solid #dcddde;
+                        cursor         : pointer;
+
+                        &:hover {
+                            background-color: #f6f6f7;
+                        }
+                    }
+
+                    label {
+                        color      : rgba(55, 53, 47, 1);
+                        font-size  : 12px;
+                        display    : inline-block;
+                        width      : 40px;
+                        text-align : center;
+                        font-weight: bold;
                     }
                 }
             }
@@ -283,9 +296,9 @@
     justify-content: flex-start;
     align-items    : center;
     flex-direction : column;
-    margin         : 10px;
+    margin         : 10px 10px 10px 0px;
     position       : relative;
-
+    
     &-bg {
         width           : 69px;
         height          : 50px;
@@ -296,7 +309,9 @@
         background-color: rgb(192, 157, 156);
     }
 
-    span {}
+    span {
+        font-size: 14px;
+    }
 }
 
 .shy-app-update {

@@ -2,6 +2,7 @@
 import { IconArguments } from "rich/extensions/icon/declare";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
+import { Events } from "rich/util/events";
 import { yCache } from "../../net/cache";
 import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
@@ -15,9 +16,9 @@ export type ViewOperate = {
     operate?: UserAction,
     seq: number
 }
-export class SnapSync {
+export class SnapSync extends Events {
     elementUrl: string;
-    private constructor(elementUrl: string) { this.elementUrl = elementUrl; }
+    private constructor(elementUrl: string) { super(); this.elementUrl = elementUrl; }
     get localId() {
         return '/' + surface.workspace.id + '/' + this.elementUrl
     }
@@ -51,14 +52,13 @@ export class SnapSync {
                 createDate: new Date()
             })
         }
-        else
-            await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
-                id: this.localId,
-                content,
-                seq,
-                creater: surface?.user?.id,
-                createDate: new Date()
-            });
+        else await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
+            id: this.localId,
+            content,
+            seq,
+            creater: surface?.user?.id,
+            createDate: new Date()
+        });
         this.localViewSnap = { seq, content, date: new Date() };
         if (this.localTime) clearTimeout(this.localTime);
         if (this.lastServiceViewSnap && (this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
@@ -73,6 +73,7 @@ export class SnapSync {
         if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
         if (this.localViewSnap) {
             if (this.lastServiceViewSnap && this.lastServiceViewSnap.seq >= this.localViewSnap.seq) return;
+            this.emit('willSave');
             var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
                 elementUrl: this.elementUrl,
                 wsId: surface.workspace.id,
@@ -87,7 +88,7 @@ export class SnapSync {
                     seq: this.localViewSnap.seq,
                     content: this.localViewSnap.content
                 })
-                if (r.ok) {
+                if(r.ok) {
                     if (typeof this.lastServiceViewSnap == 'undefined') {
                         this.lastServiceViewSnap = {} as any;
                     }
@@ -95,6 +96,7 @@ export class SnapSync {
                     this.lastServiceViewSnap.date = new Date();
                 }
             }
+            this.emit('saved');
         }
     }
     async forceSave() {
@@ -125,9 +127,7 @@ export class SnapSync {
     static create(type: ElementType, parentId: string, id?: string) {
         var elementUrl = getElementUrl(type, parentId, id);
         var ss = snapSyncMaps.get(elementUrl);
-        if (ss) {
-            return ss;
-        }
+        if (ss) return ss;
         else {
             ss = new SnapSync(elementUrl);
             snapSyncMaps.set(elementUrl, ss);

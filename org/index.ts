@@ -22,12 +22,12 @@ async function loadUser() {
         if (userEl) {
             if (user.avatar) {
                 userEl.innerHTML = `<a href="/my/workspace">
-            <div class="shy-avatar"><img src="${user.avatar.url}"style="width: 40px; height: 40px;"></div>
+            <div class="shy-avatar" style="width: 40px; height: 40px;"><img src="${user.avatar.url}" style="width: 40px; height: 40px;"></div>
             </a>`
             }
             else {
                 userEl.innerHTML = `<a href="/my/workspace">
-            <div class="shy-avatar"><span class='shy-avatar-name' style="width: 40px; height: 40px;display:block;text-align:center;line-height:40px">${user.name.slice(0, 1)}</span></div>
+            <div class="shy-avatar" style="width: 40px; height: 40px;"><span class='shy-avatar-name' style="width: 40px; height: 40px;display:block;text-align:center;line-height:40px">${user.name.slice(0, 1)}</span></div>
             </a>`
             }
         }

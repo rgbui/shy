@@ -32,6 +32,17 @@ class UserService extends BaseService {
         result = await masterSock.put('/phone/sign', data);
         return result;
     }
+    @put('/paw/sign')
+    async pawSign(data) {
+        var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: data.phone });
+        if (result.ok == false) return result;
+        result = await masterSock.put('/paw/sign', data);
+        return result;
+    }
+    @patch('/sign/patch')
+    async patchSign(data) {
+        return await masterSock.patch('/sign/patch', data);
+    }
     @get('/phone/check/sign')
     async checkPhone(data: { phone: string }) {
         var result = await masterSock.get<{ isUser: boolean }, string>('/phone/check/sign', data);
@@ -106,7 +117,7 @@ class UserService extends BaseService {
         var { file, uploadProgress } = args;
         try {
             if (!file.md5) file.md5 = await FileMd5(file);
-            var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress});
+            var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
             if (d.ok) {
                 return { ok: true, data: d.data }
             }

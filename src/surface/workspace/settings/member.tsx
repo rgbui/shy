@@ -94,13 +94,13 @@ export class WorkspaceMembers extends React.Component {
             <div className='shy-ws-members-list'>
                 <div className='shy-ws-member-head'>
                     <Row style={{ marginBottom: 0 }}>
-                        <Col span={6}>
-                            <span>{this.total}成员</span>
+                        <Col span={6} style={{ height: 30 }} valign={'middle'}>
+                            <span style={{ fontSize: 14 }}>{this.total}成员</span>
                         </Col>
-                        <Col span={18} align={'end'}>
+                        <Col span={18} style={{ height: 30 }} valign={'middle'} align={'end'}>
                             <Space>
-                                <span>显示角色:</span>
-                                <Select value={this.roleId} dropStyle={{ width: 120 }} onChange={e => this.roleId = e} options={options}></Select>
+                                <span style={{ fontSize: 14 }}>显示角色:</span>
+                                <Select style={{ fontSize: 14 }} value={this.roleId} dropStyle={{ width: 120 }} onChange={e => this.roleId = e} options={options}></Select>
                                 <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.loadMembers()} placeholder='搜索用户...'></Input>
                             </Space>
                         </Col>
