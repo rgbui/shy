@@ -72,12 +72,13 @@
     }
 
     &-logo {
-        margin-left  : 10px;
-        padding-right: 10px;
-        border-right : 1px solid rgba(55, 53, 47, 0.2);
-        height       : 24px;
-        display      : inline-block;
+        margin-left       : 10px;
+        padding-right     : 10px;
+        border-right      : 1px solid rgba(55, 53, 47, 0.2);
+        height            : 24px;
+        display           : inline-block;
         -webkit-app-region: no-drag;
+
         img {
             width        : 24px;
             height       : 24px;
@@ -164,6 +165,17 @@
 
         &:hover {
             background-color: rgba(55, 53, 47, 0.08);
+        }
+    }
+
+    &-save {
+        color          : rgb(55, 53, 47, 0.08);
+        display        : flex;
+        justify-content: flex-start;
+        align-items    : center;
+        font-size      : 14px;
+        .shy-loading {
+            margin-right: 10px;
         }
     }
 }
