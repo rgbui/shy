@@ -263,7 +263,7 @@ push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 
 push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
-push('/ws/search','{page?:number,size?:number,word:string,wsId?:string}','SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
+push('/ws/search','{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}','SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])

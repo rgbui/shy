@@ -184,7 +184,6 @@ class WorkspaceService extends BaseService {
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.patch('/ws/patch/member/roles', args);
     }
-
     @put('/ws/invite/create')
     async createInvite(args) {
         if (!args) args = {}
@@ -225,6 +224,15 @@ class WorkspaceService extends BaseService {
     @get('/page/word/query')
     async pageWordQuery(args) {
         return await surface.workspace.sock.get('/page/word/query', { word: args.word, wsId: surface.workspace.id });
+    }
+    @get('/ws/search')
+    async wsSearch(args) {
+        return await surface.workspace.sock.get('/page/word/query', {
+            word: args.word,
+            wsId: surface.workspace.id,
+            page: args.page,
+            size: args.size
+        });
     }
 }
 
