@@ -228,10 +228,8 @@ class WorkspaceService extends BaseService {
     @get('/ws/search')
     async wsSearch(args) {
         return await surface.workspace.sock.get('/page/word/query', {
-            word: args.word,
             wsId: surface.workspace.id,
-            page: args.page,
-            size: args.size
+            ...args
         });
     }
 }
