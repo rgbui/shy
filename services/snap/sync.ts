@@ -37,9 +37,9 @@ export class SnapSync extends Events {
             return r.data;
         }
     }
-    private localViewSnap: { seq: number, content: string, date: Date };
+    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
     private localTime;
-    async viewSnap(seq: number, content: string) {
+    async viewSnap(seq: number, content: string, plain?: string, text?: string) {
         /**
          * 本地先存起来
          */
@@ -59,7 +59,13 @@ export class SnapSync extends Events {
             creater: surface?.user?.id,
             createDate: new Date()
         });
-        this.localViewSnap = { seq, content, date: new Date() };
+        this.localViewSnap = {
+            seq,
+            content,
+            date: new Date(),
+            plain: plain || '',
+            text
+        };
         if (this.localTime) clearTimeout(this.localTime);
         if (this.lastServiceViewSnap && (this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
             this.saveToService();
@@ -86,7 +92,9 @@ export class SnapSync extends Events {
                     wsId: surface.workspace.id,
                     sockId: timService.sockId,
                     seq: this.localViewSnap.seq,
-                    content: this.localViewSnap.content
+                    content: this.localViewSnap.content,
+                    plain: this.localViewSnap.plain,
+                    pageText: this.localViewSnap.text
                 })
                 if (r.ok) {
                     if (typeof this.lastServiceViewSnap == 'undefined') {

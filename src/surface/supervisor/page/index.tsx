@@ -25,7 +25,7 @@ export async function createPageContent(item: PageItem) {
                 }
                 else {
                     var r = await item.snapSync.viewOperator(action.get() as any);
-                    await item.snapSync.viewSnap(r.seq, await page.getString());
+                    await item.snapSync.viewSnap(r.seq, await page.getString(), await page.getPlain(), item.text);
                 }
             });
             page.on(PageDirective.error, error => {
@@ -38,7 +38,7 @@ export async function createPageContent(item: PageItem) {
                 await timService.viewOperate(page.pageItemId, d);
             });
             page.on(PageDirective.rollup, async (id) => {
-               var pd = await item.snapSync.rollupQuerySnap(id);
+                var pd = await item.snapSync.rollupQuerySnap(id);
                 if (pd?.content) {
                     await page.reload(pd.content);
                     page.forceUpdate();
