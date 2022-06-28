@@ -244,10 +244,6 @@ push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: 
 push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/emoji/notify', '{workspaceId: string,id: string,roomId: string,emoji:{ emojiId: string, code?: string }}', 'void', ['air']);
 
-
-
-
-
 push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
@@ -267,6 +263,7 @@ push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 
 push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
+push('/ws/search','{page?:number,size?:number,word:string,wsId?:string}','SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
