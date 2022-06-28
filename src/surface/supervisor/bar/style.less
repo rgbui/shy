@@ -135,7 +135,7 @@
         }
 
         a {
-            color             : rgba(55, 53, 47, .4);
+            color             : rgba(55, 53, 47, .8);
             display           : inline-block;
             max-width         : 180px;
             line-height       : 24px;
@@ -169,13 +169,32 @@
     }
 
     &-save {
-        color          : rgb(55, 53, 47, 0.08);
+        color          : rgba(55, 53, 47, 0.4);
         display        : flex;
         justify-content: flex-start;
         align-items    : center;
         font-size      : 14px;
+
         .shy-loading {
             margin-right: 10px;
+        }
+    }
+
+    &-time {
+        color          : rgba(55, 53, 47, 0.4);
+        display        : flex;
+        margin-left    : 10px;
+        justify-content: flex-start;
+        align-items    : center;
+        font-size      : 14px;
+        visibility     : hidden;
+    }
+}
+
+.shy-supervisor-bar {
+    &:hover {
+        .shy-supervisor-bar-router-time {
+            visibility: visible;
         }
     }
 }
