@@ -76,10 +76,10 @@ export class SnapSync extends Events {
     }
     private lastServiceViewSnap: { seq: number, date: Date };
     private async saveToService() {
+        this.emit('willSave');
         if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
         if (this.localViewSnap) {
             if (this.lastServiceViewSnap && this.lastServiceViewSnap.seq >= this.localViewSnap.seq) return;
-            this.emit('willSave');
             var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
                 elementUrl: this.elementUrl,
                 wsId: surface.workspace.id,
@@ -97,6 +97,7 @@ export class SnapSync extends Events {
                     pageText: this.localViewSnap.text
                 })
                 if (r.ok) {
+                    this.emit('saveSuccessful');
                     if (typeof this.lastServiceViewSnap == 'undefined') {
                         this.lastServiceViewSnap = {} as any;
                     }
@@ -104,8 +105,8 @@ export class SnapSync extends Events {
                     this.lastServiceViewSnap.date = new Date();
                 }
             }
-            this.emit('saved');
         }
+        this.emit('saved');
     }
     async forceSave() {
         await this.saveToService();
@@ -155,4 +156,14 @@ export class SnapSync extends Events {
             return ss;
         }
     }
+}
+
+
+export interface SnapSync {
+    only(name: 'saved', fn: () => void);
+    only(name: 'willSave', fn: () => void);
+    only(name: 'saveSuccessful', fn: () => void);
+    emit(name: 'saveSuccessful');
+    emit(name: 'saved');
+    emit(name: 'willSave');
 }

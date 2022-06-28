@@ -60,11 +60,12 @@ class PageItemStore {
         await this.save(pageItem.workspace.id, { operate: ItemOperator.delete, actions });
     }
     public async updatePageItem(pageItem: PageItem, data: Record<string, any>) {
+        var cloneData=lodash.cloneDeep(data);
         var actions: PageItemAction[] = [];
         actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.update, actions });
         runInAction(() => {
-            Object.assign(pageItem, data);
+            Object.assign(pageItem,cloneData);
         })
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {

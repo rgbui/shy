@@ -20,6 +20,7 @@ import { channel } from "rich/net/channel";
 import { SnapSync } from "../../../../services/snap/sync";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PagePermission } from "rich/src/page/permission";
+import dayjs from "dayjs";
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -46,6 +47,8 @@ export class PageItem {
     share: 'net' | 'nas' | 'local' = 'nas';
     permission: PagePermission = PagePermission.canView;
     locker: { userid: string, lockDate: number } = null;
+    public editDate: Date = null;
+    public editor: string = null;
     get snapSync() {
         return SnapSync.create(ElementType.PageItem, this.id);
     }
@@ -66,8 +69,12 @@ export class PageItem {
             willLoadSubs: observable,
             share: observable,
             permission: observable,
-            locker: observable
-        })
+            locker: observable,
+            snapSaving: observable,
+            editDate: observable,
+            editor: observable
+        });
+
     }
     get sln() {
         return surface.sln;
@@ -107,9 +114,9 @@ export class PageItem {
     }
     parentId?: string;
     at: number;
+    snapSaving: boolean = false;
     get index() {
-        if (this.parent)
-            return this.parent?.childs.findIndex(g => g === this);
+        if (this.parent) return this.parent?.childs.findIndex(g => g === this);
         return null;
     }
     load(data) {
@@ -134,6 +141,22 @@ export class PageItem {
             }
         }
         if (this.childs?.length > 0) this.spread = true;
+        this.bindEvents();
+    }
+    bindEvents() {
+        if (this.id) {
+            this.snapSync.only('willSave', () => {
+                this.snapSaving = true;
+                console.log(this.snapSaving, 'willSave');
+            });
+            this.snapSync.only('saved', () => {
+                this.snapSaving = false;
+                console.log(this.snapSaving, 'saved');
+            });
+            this.snapSync.only('saveSuccessful', () => {
+                this.onChange({ editDate: new Date(), editor: surface.user.id })
+            });
+        }
     }
     get() {
         return {
@@ -199,7 +222,7 @@ export class PageItem {
     async onRemove() {
         pageItemStore.deletePageItem(this);
     }
-    getPageItemMenus() {
+    async getPageItemMenus() {
         var items: MenuItemType<PageItemDirective>[] = [];
         items.push({
             name: PageItemDirective.remove,
@@ -209,8 +232,7 @@ export class PageItem {
         items.push({
             name: PageItemDirective.copy,
             icon: copy,
-            text: '拷贝',
-            disabled: true
+            text: '拷贝'
         });
         items.push({
             name: PageItemDirective.rename,
@@ -223,26 +245,25 @@ export class PageItem {
         items.push({
             name: PageItemDirective.link,
             icon: link,
-            text: '链接',
-            disabled: true
+            text: '复制访问链接'
         });
-        items.push({
-            name: PageItemDirective.cut,
-            icon: cut,
-            text: '剪贴',
-            disabled: true
-        });
-        // items.push({
-        //     type: MenuItemTypeValue.divide,
-        // });
-        // items.push({
-        //     type: MenuItemTypeValue.text,
-        //     text: '编辑人kanhai'
-        // });
-        // items.push({
-        //     type: MenuItemTypeValue.text,
-        //     text: '编辑于2021.19.20'
-        // });
+        if (this.editor) {
+            items.push({
+                type: MenuItemTypeValue.divide,
+            });
+            var r = await channel.get('/user/basic', { userid: this.editor });
+            if (r?.data?.user)
+                items.push({
+                    type: MenuItemTypeValue.text,
+                    text: '编辑人' + r.data.user.name
+                });
+            if (this.editDate)
+                items.push({
+                    type: MenuItemTypeValue.text,
+                    text: '编辑于' + util.showTime(this.editDate)
+                });
+        }
+
         return items;
     }
     onContextmenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {

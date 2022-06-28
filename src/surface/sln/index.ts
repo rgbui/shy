@@ -32,7 +32,7 @@ export class Sln extends Events<SlnDirective> {
     isDrag: boolean = false;
     keyboardPlate = new KeyboardPlate();
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
-        var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) }, item.getPageItemMenus());
+        var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) },await item.getPageItemMenus());
         if (menuItem) {
             item.onContextmenuClickItem(menuItem.item, menuItem.event);
         }
