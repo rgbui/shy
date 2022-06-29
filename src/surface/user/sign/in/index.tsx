@@ -27,7 +27,8 @@ export var Login = observer(function () {
         failMsg: string,
         expireCount: number,
         expireTime: any,
-        agree: boolean
+        agree: boolean,
+        el: HTMLElement
     }>(() => {
         return {
             phone: '',
@@ -40,19 +41,20 @@ export var Login = observer(function () {
             expireCount: -1,
             expireTime: null,
             agree: false,
-            paw: ''
+            paw: '',
+            el: null
         }
     })
-    var { current: el } = React.useRef<HTMLElement>(null);
+
     function lockButton() {
-        var button = (el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
+        var button = (local.el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
         if (button.disabled == true) return true;
         button.disabled = true;
         return false;
     }
     function unlockButton() {
-        if (el) {
-            var button = (el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
+        if (local.el) {
+            var button = (local.el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
             button.disabled = false;
         }
         return true;
@@ -280,7 +282,7 @@ export var Login = observer(function () {
         });
     }
 
-    return <div className='shy-login-panel' ref={e => el = e}>
+    return <div className='shy-login-panel' ref={e => local.el = e} >
         <div className='shy-login-logo'><a href='/'><img style={{ width: 30, height: 30 }} src={Logo} /><span>诗云</span></a></div>
         <div className='shy-login'>
             <div className='shy-login-head'>
