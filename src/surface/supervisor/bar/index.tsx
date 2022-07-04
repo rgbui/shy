@@ -10,6 +10,8 @@ import { observer } from 'mobx-react-lite';
 import { MemberSvg } from 'rich/component/svgs';
 import { ShyUrl, UrlRoute } from '../../../history';
 import HomeSrc from "../../../assert/img/shy.256.png";
+import { PageLayoutType } from 'rich/src/page/declare';
+import Tooltip from 'rc-tooltip';
 export var Bar = observer(function () {
     function back() {
         UrlRoute.push(ShyUrl.myWorkspace);
@@ -33,9 +35,8 @@ export var Bar = observer(function () {
         </div>
         <div className='shy-supervisor-bar-right'>
             <PageUsers></PageUsers>
-            {/*<AppTip placement='bottom' id={AppLang.BarFavourite} ><a><Icon size={20} icon='favorite:sy' click={e => this.supervisor.onFavourite(e)}></Icon></a></AppTip> */}
-            {/*<a><Icon size={20} icon={MemberSvg}></Icon></a> */}
-            <AppTip placement='bottom' id={AppLang.BarPublish}  ><a><Icon size={20} icon='publish:sy' click={e => surface.supervisor.onOpenPublish(e)}></Icon></a></AppTip>
+            {surface.supervisor.item && surface.supervisor.item.pageType == PageLayoutType.textChannel && <Tooltip placement='bottom' overlay={'成员'} ><a><Icon size={20} icon={MemberSvg}></Icon></a></Tooltip>}
+            {surface.supervisor.item && [PageLayoutType.doc, PageLayoutType.board].includes(surface.supervisor.item.pageType) && <AppTip placement='bottom' id={AppLang.BarPublish}  ><a><Icon size={20} icon='publish:sy' click={e => surface.supervisor.onOpenPublish(e)}></Icon></a></AppTip>}
             <AppTip placement='bottom' id={AppLang.BarProperty}  ><a><Icon size={20} icon='elipsis:sy' click={e => surface.supervisor.onOpenPageProperty(e)}></Icon></a></AppTip>
         </div>
     </div>

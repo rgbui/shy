@@ -14,6 +14,7 @@ import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
+
 export class Sln extends Events<SlnDirective> {
     constructor() {
         super();
@@ -32,7 +33,7 @@ export class Sln extends Events<SlnDirective> {
     isDrag: boolean = false;
     keyboardPlate = new KeyboardPlate();
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
-        var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) },await item.getPageItemMenus());
+        var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) }, await item.getPageItemMenus());
         if (menuItem) {
             item.onContextmenuClickItem(menuItem.item, menuItem.event);
         }
@@ -78,8 +79,8 @@ export class Sln extends Events<SlnDirective> {
             channel.air('/page/open', { item });
         }
     }
-    onOpenItem(item: PageItem) {
-        channel.air('/page/open', { item });
+    async onOpenItem(item: PageItem) {
+        await channel.air('/page/open', { item });
     }
     onFocusItem(item?: PageItem) {
         this.selectIds = item ? [item.id] : [];

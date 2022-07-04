@@ -1,12 +1,7 @@
 
 import { util } from "rich/util/util";
 import { surface } from "../..";
-import trash from "rich/src/assert/svg/trash.svg";
-import rename from "../../../assert/svg/rename.svg";
-import copy from "rich/src/assert/svg/duplicate.svg";
 import { ElementType } from "rich/net/element.type";
-import cut from "../../../assert/svg/cut.svg";
-import link from '../../../assert/svg/link.svg';
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
@@ -16,11 +11,14 @@ import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { Page } from "rich/src/page";
 import { channel } from "rich/net/channel";
-
 import { SnapSync } from "../../../../services/snap/sync";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PagePermission } from "rich/src/page/permission";
-import dayjs from "dayjs";
+import lodash from "lodash";
+import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs";
+import { CopyText } from "rich/component/copy";
+import { ShyAlert } from "rich/component/lib/alert";
+
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -90,7 +88,6 @@ export class PageItem {
     get url() {
         return this.workspace.url + this.path;
     }
-
     get workspace() {
         return surface.workspace
     }
@@ -222,21 +219,51 @@ export class PageItem {
     async onRemove() {
         pageItemStore.deletePageItem(this);
     }
+    async onCopy() {
+        var data = {
+            icon: lodash.cloneDeep(this.icon),
+            text: util.getListName(this.parent.childs,
+                this.text,
+                g => g.text,
+                (c, i) => i > 0 ? `${c}(${i})` : `${c}`
+            ),
+            mime: Mime.page,
+            pageType: PageLayoutType.doc,
+            spread: false,
+        };
+        var item = await pageItemStore.insertAfterPageItem(this, data);
+        await item.onOpenItem();
+        if (!item.contentView) {
+            await util.delay(200);
+        }
+        if (this.contentView) {
+            var content = await this.contentView.get();
+            await item.contentView.onReplace(this.id, content);
+        }
+        else {
+            var pd = await this.snapSync.querySnap();
+            await item.contentView.onReplace(this.id, pd.content, pd.operates);
+        }
+        item.contentView.onSave();
+        item.contentView.forceUpdate()
+    }
     async getPageItemMenus() {
         var items: MenuItemType<PageItemDirective>[] = [];
         items.push({
             name: PageItemDirective.remove,
-            icon: trash,
+            icon: TrashSvg,
             text: '删除'
         });
-        items.push({
-            name: PageItemDirective.copy,
-            icon: copy,
-            text: '拷贝'
-        });
+        if (this.pageType == PageLayoutType.doc) {
+            items.push({
+                name: PageItemDirective.copy,
+                icon: DuplicateSvg,
+                text: '拷贝'
+            });
+        }
         items.push({
             name: PageItemDirective.rename,
-            icon: rename,
+            icon: RenameSvg,
             text: '重命名'
         });
         items.push({
@@ -244,7 +271,7 @@ export class PageItem {
         })
         items.push({
             name: PageItemDirective.link,
-            icon: link,
+            icon: LinkSvg,
             text: '复制访问链接'
         });
         if (this.editor) {
@@ -252,23 +279,21 @@ export class PageItem {
                 type: MenuItemTypeValue.divide,
             });
             var r = await channel.get('/user/basic', { userid: this.editor });
-            if (r?.data?.user)
-                items.push({
-                    type: MenuItemTypeValue.text,
-                    text: '编辑人' + r.data.user.name
-                });
-            if (this.editDate)
-                items.push({
-                    type: MenuItemTypeValue.text,
-                    text: '编辑于' + util.showTime(this.editDate)
-                });
+            if (r?.data?.user) items.push({
+                type: MenuItemTypeValue.text,
+                text: '编辑人' + r.data.user.name
+            });
+            if (this.editDate) items.push({
+                type: MenuItemTypeValue.text,
+                text: '编辑于' + util.showTime(this.editDate)
+            });
         }
-
         return items;
     }
     onContextmenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
         switch (menuItem.name) {
             case PageItemDirective.copy:
+                this.onCopy();
                 break;
             case PageItemDirective.remove:
                 this.onRemove();
@@ -276,10 +301,14 @@ export class PageItem {
             case PageItemDirective.rename:
                 this.onEdit();
                 break;
+            case PageItemDirective.link:
+                CopyText(this.url);
+                ShyAlert('访问链接已复制')
+                break;
         }
     }
-    onOpenItem() {
-        this.sln.onOpenItem(this);
+    async onOpenItem() {
+        await this.sln.onOpenItem(this);
     }
     onMousedownItem(event: MouseEvent) {
         this.sln.onMousedownItem(this, event);
