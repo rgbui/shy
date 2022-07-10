@@ -3,7 +3,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../..";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
-import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
+import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { SettingsSvg } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
@@ -18,11 +18,11 @@ export var WorkspaceProfile = observer(function () {
         var isMananger: boolean = false;
         if (surface.workspace.owner == surface.user.id) {
             isMananger = true;
-            var menus: MenuItemType<string>[] = [];
+            var menus: MenuItem<string>[] = [];
             if (isMananger) {
                 menus = [
                     { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                    { type: MenuItemTypeValue.divide },
+                    { type: MenuItemType.divide },
                     { name: 'invite', text: '邀请其ta人' },
                     //{ name: 'edit', text: '编辑个人空间资料' },
                 ]
@@ -31,7 +31,7 @@ export var WorkspaceProfile = observer(function () {
                 menus = [
                     { name: 'invite', text: '邀请其ta人' },
                     // { name: 'edit', text: '编辑个人空间资料' },
-                    { type: MenuItemTypeValue.divide },
+                    { type: MenuItemType.divide },
                     { name: 'exit', text: '退出空间' }
                 ]
             }

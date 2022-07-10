@@ -5,7 +5,7 @@ import { ElementType } from "rich/net/element.type";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
-import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
+import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { Mime, PageItemDirective } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "./store/sync";
@@ -248,7 +248,7 @@ export class PageItem {
         item.contentView.forceUpdate()
     }
     async getPageItemMenus() {
-        var items: MenuItemType<PageItemDirective>[] = [];
+        var items: MenuItem<PageItemDirective>[] = [];
         items.push({
             name: PageItemDirective.remove,
             icon: TrashSvg,
@@ -267,7 +267,7 @@ export class PageItem {
             text: '重命名'
         });
         items.push({
-            type: MenuItemTypeValue.divide,
+            type: MenuItemType.divide,
         })
         items.push({
             name: PageItemDirective.link,
@@ -276,21 +276,21 @@ export class PageItem {
         });
         if (this.editor) {
             items.push({
-                type: MenuItemTypeValue.divide,
+                type: MenuItemType.divide,
             });
             var r = await channel.get('/user/basic', { userid: this.editor });
             if (r?.data?.user) items.push({
-                type: MenuItemTypeValue.text,
+                type: MenuItemType.text,
                 text: '编辑人' + r.data.user.name
             });
             if (this.editDate) items.push({
-                type: MenuItemTypeValue.text,
+                type: MenuItemType.text,
                 text: '编辑于' + util.showTime(this.editDate)
             });
         }
         return items;
     }
-    onContextmenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
+    onContextmenuClickItem(menuItem: MenuItem<PageItemDirective>, event: MouseEvent) {
         switch (menuItem.name) {
             case PageItemDirective.copy:
                 this.onCopy();
