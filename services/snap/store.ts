@@ -10,13 +10,13 @@ import { timService } from "../../net/primus";
 import { config } from "../../src/common/config";
 import { surface } from "../../src/surface";
 const DELAY_TIME = 1000 * 60 * 5;
-var snapSyncMaps: Map<string, SnapSync> = new Map();
+var snapSyncMaps: Map<string, SnapStore> = new Map();
 
 export type ViewOperate = {
     operate?: UserAction,
     seq: number
 }
-export class SnapSync extends Events {
+export class SnapStore extends Events {
     elementUrl: string;
     private constructor(elementUrl: string) { super(); this.elementUrl = elementUrl; }
     get localId() {
@@ -151,15 +151,23 @@ export class SnapSync extends Events {
         var ss = snapSyncMaps.get(elementUrl);
         if (ss) return ss;
         else {
-            ss = new SnapSync(elementUrl);
+            ss = new SnapStore(elementUrl);
+            snapSyncMaps.set(elementUrl, ss);
+            return ss;
+        }
+    }
+    static createSnap(elementUrl: string) {
+        var ss = snapSyncMaps.get(elementUrl);
+        if (ss) return ss;
+        else {
+            ss = new SnapStore(elementUrl);
             snapSyncMaps.set(elementUrl, ss);
             return ss;
         }
     }
 }
 
-
-export interface SnapSync {
+export interface SnapStore {
     only(name: 'saved', fn: () => void);
     only(name: 'willSave', fn: () => void);
     only(name: 'saveSuccessful', fn: () => void);

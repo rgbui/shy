@@ -4,7 +4,7 @@ import { ElementType } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { surface } from "../src/surface";
 import { BaseService } from "./common/base";
-import { SnapSync } from "./snap/sync";
+import { SnapStore } from "./snap/store";
 
 class PageService extends BaseService {
     @get('/page/items')
@@ -25,19 +25,19 @@ class PageService extends BaseService {
     async pageQueryLinks(args: { word: string }) {
 
     }
-    @get('/page/sync/block')
-    async getPageSyncBlock(args: { syncBlockId: string }) {
-        var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
+    @get('/view/snap/query')
+    async getPageSyncBlock(args: { elementUrl: string }) {
+        var snapStore = SnapStore.createSnap(args.elementUrl);
         return { ok: true, data: await snapStore.querySnap() }
     }
-    @act('/page/view/operator')
-    async PageViewOperator(args: { syncBlockId: string, operate: Partial<UserAction> }) {
-        var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
+    @act('/view/snap/operator')
+    async PageViewOperator(args: { elementUrl: string, operate: Partial<UserAction> }) {
+        var snapStore = SnapStore.createSnap(args.elementUrl);
         return await snapStore.viewOperator(args.operate);
     }
-    @act('/page/view/snap')
-    async PageViewSnap(args: { syncBlockId: string, seq: number, content: any }) {
-        var snapStore = SnapSync.create(ElementType.Block, args.syncBlockId);
+    @act('/view/snap/store')
+    async PageViewSnap(args: { elementUrl: string, seq: number, content: any }) {
+        var snapStore = SnapStore.createSnap(args.elementUrl);
         return snapStore.viewSnap(args.seq, args.content)
     }
 

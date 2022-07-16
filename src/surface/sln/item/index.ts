@@ -11,7 +11,7 @@ import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { Page } from "rich/src/page";
 import { channel } from "rich/net/channel";
-import { SnapSync } from "../../../../services/snap/sync";
+import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PagePermission } from "rich/src/page/permission";
 import lodash from "lodash";
@@ -47,8 +47,8 @@ export class PageItem {
     locker: { userid: string, lockDate: number } = null;
     public editDate: Date = null;
     public editor: string = null;
-    get snapSync() {
-        return SnapSync.create(ElementType.PageItem, this.id);
+    get snapStore() {
+        return SnapStore.create(ElementType.PageItem, this.id);
     }
     constructor() {
         makeObservable(this, {
@@ -142,15 +142,14 @@ export class PageItem {
     }
     bindEvents() {
         if (this.id) {
-            this.snapSync.only('willSave', () => {
+            this.snapStore.only('willSave', () => {
                 this.snapSaving = true;
                 console.log(this.snapSaving, 'willSave');
             });
-            this.snapSync.only('saved', () => {
+            this.snapStore.only('saved', () => {
                 this.snapSaving = false;
-                console.log(this.snapSaving, 'saved');
             });
-            this.snapSync.only('saveSuccessful', () => {
+            this.snapStore.only('saveSuccessful', () => {
                 this.onChange({ editDate: new Date(), editor: surface.user.id })
             });
         }
@@ -241,7 +240,7 @@ export class PageItem {
             await item.contentView.onReplace(this.id, content);
         }
         else {
-            var pd = await this.snapSync.querySnap();
+            var pd = await this.snapStore.querySnap();
             await item.contentView.onReplace(this.id, pd.content, pd.operates);
         }
         item.contentView.onSave();
