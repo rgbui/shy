@@ -1,5 +1,4 @@
 
-import lodash from "lodash";
 import { config } from "../../src/common/config";
 import { sCache, CacheKey } from "../cache";
 import { masterSock } from "../sock";
