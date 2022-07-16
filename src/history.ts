@@ -7,8 +7,7 @@ export function currentParams(routePath: string): Record<string, any> {
         exact: true,
         path: routePath
     });
-    if (r && r.params)
-    {
+    if (r && r.params) {
         return r.params;
     }
     return undefined;

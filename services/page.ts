@@ -1,6 +1,5 @@
 
 import { act, del, get, patch, post, put } from "rich/net/annotation";
-import { ElementType } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { surface } from "../src/surface";
 import { BaseService } from "./common/base";
