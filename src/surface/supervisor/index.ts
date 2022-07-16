@@ -47,9 +47,6 @@ export class Supervisor extends Events {
             await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, undefined);
         }
     }
-    onFavourite(event: React.MouseEvent) {
-        // workspaceService.toggleFavourcePage(this.item)
-    }
     async onOpenPublish(event: React.MouseEvent) {
         await usePagePublish({ roundArea: Rect.fromEvent(event) }, this.item)
     }
@@ -66,7 +63,8 @@ export class Supervisor extends Events {
             })
         })
     }
-    async autoLayout() {
+    async autoLayout()
+    {
         if (this?.item?.contentView) {
             var view = await this.getView();
             var bound = Rect.fromEle(view);
