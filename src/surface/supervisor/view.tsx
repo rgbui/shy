@@ -6,8 +6,9 @@ import { observer } from "mobx-react";
 import { Loading } from "rich/component/view/loading";
 import lodash from "lodash";
 
-export var SupervisorView = observer(function () {
-    React.useEffect(() => {
+export var SupervisorView = observer(function ()
+{
+    React.useEffect(()=>{
         surface.supervisor.emit('mounted');
         var resize = lodash.debounce((event) => {
             surface.supervisor.autoLayout();

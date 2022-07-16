@@ -5,12 +5,14 @@ import { Page } from "rich/src/page";
 import { PageDirective } from "rich/src/page/directive";
 import { surface } from "../..";
 import { timService } from "../../../../net/primus";
-import { SnapSync } from "../../../../services/snap/sync";
+import { SnapStore } from "../../../../services/snap/store";
 import { PageItem } from "../../sln/item";
-export async function createPageContent(item: PageItem) {
+export async function createPageContent(item: PageItem)
+{
     try {
-        if (!item.contentView) {
-            var pd = await item.snapSync.querySnap();
+        if (!item.contentView)
+        {
+            var pd = await item.snapStore.querySnap();
             var page = new Page();
             page.pageItemId = item.id;
             item.contentView = page;
@@ -18,27 +20,27 @@ export async function createPageContent(item: PageItem) {
                 var syncBlocks = action.syncBlock();
                 if (syncBlocks.length > 0) {
                     syncBlocks.eachAsync(async (block) => {
-                        var snap = SnapSync.create(ElementType.Block, block.syncBlockId);
+                        var snap = SnapStore.create(ElementType.Block, block.syncBlockId);
                         var r = await snap.viewOperator(action.get() as any);
                         await snap.viewSnap(r.seq, await block.getString());
                     })
                 }
                 else {
-                    var r = await item.snapSync.viewOperator(action.get() as any);
-                    await item.snapSync.viewSnap(r.seq, await page.getString(), await page.getPlain(), item.text);
+                    var r = await item.snapStore.viewOperator(action.get() as any);
+                    await item.snapStore.viewSnap(r.seq, await page.getString(), await page.getPlain(), item.text);
                 }
             });
             page.on(PageDirective.error, error => {
                 console.error(error);
             });
             page.on(PageDirective.save, async () => {
-                await item.snapSync.forceSave();
+                await item.snapStore.forceSave();
             });
             page.on(PageDirective.viewCursor, async (d) => {
                 await timService.viewOperate(page.pageItemId, d);
             });
             page.on(PageDirective.rollup, async (id) => {
-                var pd = await item.snapSync.rollupQuerySnap(id);
+                var pd = await item.snapStore.rollupQuerySnap(id);
                 if (pd?.content) {
                     await page.reload(pd.content);
                     page.forceUpdate();
