@@ -1,7 +1,7 @@
 
 import { util } from "rich/util/util";
 import { surface } from "../..";
-import { ElementType } from "rich/net/element.type";
+import { ElementType, getElementUrl } from "rich/net/element.type";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
@@ -18,6 +18,7 @@ import lodash from "lodash";
 import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
+import { PageViewStores } from "../../supervisor/view/store";
 
 export class PageItem {
     id: string = null;
@@ -35,7 +36,7 @@ export class PageItem {
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-    contentView: Page;
+    // contentView: Page;
     /**
     * 是否为公开
     * net 互联网公开
@@ -68,7 +69,6 @@ export class PageItem {
             share: observable,
             permission: observable,
             locker: observable,
-            snapSaving: observable,
             editDate: observable,
             editor: observable
         });
@@ -87,6 +87,23 @@ export class PageItem {
     }
     get url() {
         return this.workspace.url + this.path;
+    }
+    get elementUrl() {
+        if (this.pageType == PageLayoutType.db || this.pageType == PageLayoutType.dbPickRecord) {
+            return getElementUrl(ElementType.Schema, this.id);
+        }
+        else if (this.pageType == PageLayoutType.doc || this.pageType == PageLayoutType.board) {
+            return getElementUrl(ElementType.PageItem, this.id);
+        }
+        else if (this.pageType == PageLayoutType.dbView) {
+            return getElementUrl(ElementType.SchemaView, this.parent.id, this.id);
+        }
+        else if (this.pageType == PageLayoutType.dbForm) {
+            return getElementUrl(ElementType.SchemaRecordView, this.parent.id, this.id);
+        }
+        else if (this.pageType == PageLayoutType.textChannel) {
+            return getElementUrl(ElementType.Room, this.id);
+        }
     }
     get workspace() {
         return surface.workspace
@@ -111,7 +128,7 @@ export class PageItem {
     }
     parentId?: string;
     at: number;
-    snapSaving: boolean = false;
+
     get index() {
         if (this.parent) return this.parent?.childs.findIndex(g => g === this);
         return null;
@@ -138,22 +155,8 @@ export class PageItem {
             }
         }
         if (this.childs?.length > 0) this.spread = true;
-        this.bindEvents();
     }
-    bindEvents() {
-        if (this.id) {
-            this.snapStore.only('willSave', () => {
-                this.snapSaving = true;
-                console.log(this.snapSaving, 'willSave');
-            });
-            this.snapStore.only('saved', () => {
-                this.snapSaving = false;
-            });
-            this.snapStore.only('saveSuccessful', () => {
-                this.onChange({ editDate: new Date(), editor: surface.user.id })
-            });
-        }
-    }
+
     get() {
         return {
             id: this.id,
@@ -227,24 +230,23 @@ export class PageItem {
                 (c, i) => i > 0 ? `${c}(${i})` : `${c}`
             ),
             mime: Mime.page,
-            pageType: PageLayoutType.doc,
+            pageType: this.pageType,
             spread: false,
         };
         var item = await pageItemStore.insertAfterPageItem(this, data);
         await item.onOpenItem();
-        if (!item.contentView) {
-            await util.delay(200);
-        }
-        if (this.contentView) {
-            var content = await this.contentView.get();
-            await item.contentView.onReplace(this.id, content);
+        var itemS = surface.supervisor.main;
+        var ps = PageViewStores.getPageViewStore(this.elementUrl);
+        if (ps?.page) {
+            var content = await ps?.page.get();
+            await itemS.page.onReplace(this.id, content);
         }
         else {
-            var pd = await this.snapStore.querySnap();
-            await item.contentView.onReplace(this.id, pd.content, pd.operates);
+            var pd = await (SnapStore.createSnap(this.elementUrl)).querySnap();
+            await itemS.page.onReplace(this.id, pd.content, pd.operates);
         }
-        item.contentView.onSave();
-        item.contentView.forceUpdate()
+        itemS.page.onSave();
+        itemS.page.forceUpdate();
     }
     async getPageItemMenus() {
         var items: MenuItem<PageItemDirective>[] = [];

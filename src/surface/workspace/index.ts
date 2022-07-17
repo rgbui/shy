@@ -19,6 +19,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
+import { PageViewStores } from "../supervisor/view/store";
 
 export type WorkspaceUser = {
     userid: string;
@@ -294,8 +295,9 @@ export class Workspace {
         var ec = parseElementUrl(data.elementUrl);
         if (ec.type == ElementType.PageItem) {
             var item = surface.workspace.find(g => g.id == ec.id);
-            if (item?.contentView) {
-                item?.contentView.loadUserActions([data], ec.id == surface.supervisor.item.id ? 'notifyView' : 'notify');
+            var pv = PageViewStores.getPageViewStore(item.elementUrl);
+            if (pv?.page) {
+                pv?.page.loadUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
             }
         }
     }

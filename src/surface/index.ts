@@ -133,7 +133,7 @@ export class Surface extends Events {
 
             }
             else {
-                UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
+              //  UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
             }
         }
     }

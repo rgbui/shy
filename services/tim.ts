@@ -52,9 +52,9 @@ export function bindCollaboration() {
     timService.tim.on('/ws/view/cursor/operate/notify', e => {
         if (e.workspaceId != surface.workspace.id) return;
         if (e.viewId) {
-            if (surface.supervisor.itemId == e.viewId) {
-                surface.supervisor.item.contentView.loadUserViewCursor(e);
-            }
+            // if (surface.supervisor.itemId == e.viewId) {
+            //     surface.supervisor.item.contentView.loadUserViewCursor(e);
+            // }
         }
     })
 }
