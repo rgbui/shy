@@ -11,7 +11,6 @@ import { config } from "../../src/common/config";
 import { surface } from "../../src/surface";
 const DELAY_TIME = 1000 * 60 * 5;
 var snapSyncMaps: Map<string, SnapStore> = new Map();
-
 export type ViewOperate = {
     operate?: UserAction,
     seq: number
@@ -20,7 +19,7 @@ export class SnapStore extends Events {
     elementUrl: string;
     private constructor(elementUrl: string) { super(); this.elementUrl = elementUrl; }
     get localId() {
-        return '/' + surface.workspace.id + '/' + this.elementUrl
+        return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
     async viewOperator(operate: Partial<UserAction>) {
         var r = await surface.workspace.sock.put<{

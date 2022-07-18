@@ -14,13 +14,11 @@ export async function createPageContent(store: PageViewStore) {
             store.page = page;
             if (store.item) page.pageInfo = store.item;
             page.on(PageDirective.history, async function (action) {
-                var syncBlocks = action.syncBlock();
-                if (syncBlocks.length > 0) {
-                    syncBlocks.eachAsync(async (block) => {
-                        var snap = SnapStore.createSnap(block.elementUrl)
-                        var r = await snap.viewOperator(action.get() as any);
-                        await snap.viewSnap(r.seq, await block.getString());
-                    })
+                var syncBlock = action.syncBlock;
+                if (syncBlock) {
+                    var snap = SnapStore.createSnap(syncBlock.elementUrl)
+                    var r = await snap.viewOperator(action.get() as any);
+                    await snap.viewSnap(r.seq, await syncBlock.getSyncString());
                 }
                 else {
                     var r = await store.snapStore.viewOperator(action.get() as any);
