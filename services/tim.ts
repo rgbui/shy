@@ -5,6 +5,7 @@ import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
 export enum MessageUrl {
     privateTalk = '/user/chat/notify',
+    userPayOrder='/user/order/notify',
     pageItemOperate = '/ws/page/item/operate/notify',
     viewOperate = '/ws/view/operate/notify',
     dateGridOperator = '/ws/datagrid/schema/operate/notify',
@@ -12,13 +13,15 @@ export enum MessageUrl {
     leaveWorkspace = '/ws/leave/notify',
     channelNotify = '/ws/channel/notify',
     channelPatchNotify = '/ws/channel/patch/notify',
-    channelEmojiNotify = '/ws/channel/emoji/notify'
+    channelEmojiNotify = '/ws/channel/emoji/notify',
+
 }
 
 export function bindCollaboration() {
     /*用户个人协作*/
     //私信
     timService.tim.on('/user/chat/notify', e => userChannelStore.notifyChat(e));
+    timService.tim.on('/user/order/notify',e=>channel.fire(MessageUrl.userPayOrder, e))
     /*空间协作*/
     //空间会话
     timService.tim.on(MessageUrl.channelNotify, e => { channel.fire(MessageUrl.channelNotify, e) });
