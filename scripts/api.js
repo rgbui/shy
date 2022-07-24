@@ -220,6 +220,13 @@ push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any
 push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
+push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string}`, 'SockResponse<{orderId:string}>', ['put'])
+push('/user/order/notify', '{id:string, subject: string,body: string, price: number,count: number,amount: number,kind: string}', 'void', ['air']);
+push('/user/order/list', '{page?: number, size?: number, word?: string, status?: string,deal?:boolean}', 'SockResponse<{page:number,size:number,list:any[],total:number}>', ['get']);
+push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
+
+
+
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
@@ -263,7 +270,7 @@ push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 
 push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
-push('/ws/search','{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}','SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
+push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
@@ -278,9 +285,9 @@ push('/view/snap/store', '{  elementUrl: string, seq: number, content: any }', '
 
 push('/view/snap/list', '{wsId?: string, elementUrl: string, page: number, size: number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push('/view/snap/content', '{wsId?:string,id:string}', 'SockResponse<{id:string,content:string}>', ['get'])
-push('/view/snap/patch','{id:string,data:Record<string,any>}','SockResponse<void>',['patch']);
-push('/view/snap/del','{id:string}','SockResponse<void>',['del']);
-push('/view/snap/rollup','{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}','SockResponse<{seq:number,id:string}>',['post']);
+push('/view/snap/patch', '{id:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
+push('/view/snap/del', '{id:string}', 'SockResponse<void>', ['del']);
+push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}', 'SockResponse<{seq:number,id:string}>', ['post']);
 
 push(`/block/ref/pages`, '{wsId?:string,pageId:string}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/block/ref/add`, '{wsId?:string,pageId:string,data:{blockId: string, rowBlockId: string, text: string, refPageId: string}}', 'SockResponse<void>', ['put'])
@@ -290,6 +297,8 @@ push(`/block/ref/sync`, '{wsId?:string,pageId:string,data:{rowBlockId: string, t
 
 push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number}>', ['patch'])
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
+
+
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
