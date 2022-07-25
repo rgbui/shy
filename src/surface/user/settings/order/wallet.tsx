@@ -6,7 +6,7 @@ import { usePayOrder } from "../../../../component/pay";
 export class ShyWallet extends React.Component {
     render() {
         async function openPay() {
-            var order = await usePayOrder({
+            await usePayOrder({
                 kind: 'fill',
                 subject: '充值',
                 body: '测试充值',

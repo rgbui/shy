@@ -1,4 +1,5 @@
 
+import lodash from 'lodash';
 import React from 'react';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { Loading } from 'rich/component/view/loading';
@@ -7,7 +8,7 @@ import { channel } from 'rich/net/channel';
 import "./style.less";
 export class PayView extends EventsComponent {
     async predictCreateOrder() {
-        this.loading = false;
+        this.loading = true;
         this.forceUpdate();
         var r = await channel.put('/create/qr_pay/order', {
             ...this.orderInfo
@@ -16,7 +17,7 @@ export class PayView extends EventsComponent {
             this.orderInfo.id = r.data.orderId;
         }
         else delete this.orderInfo.id;
-        this.loading = true;
+        this.loading = false;
         this.forceUpdate()
     }
     orderInfo: {
@@ -37,7 +38,7 @@ export class PayView extends EventsComponent {
         count: number,
         amount: number,
     }) {
-        this.orderInfo = orderInfo;
+        this.orderInfo =lodash.cloneDeep(orderInfo) ;
         await this.predictCreateOrder();
     }
     notifyOrder = (order) => {
@@ -54,7 +55,7 @@ export class PayView extends EventsComponent {
         if (!this.orderInfo?.id) return <div className="shy-pay-view"></div>
         var size = 120;
         var orderUrl = `https://pay.shy.live/pay/qr?orderId=${this.orderInfo.id}`;
-        var payUrl = `https://pay.shy.live/static/order?size=${size}&url=${encodeURIComponent(orderUrl)}`
+        var payUrl = `https://pay.shy.live/static/order.html?size=${size}&url=${encodeURIComponent(orderUrl)}`
         return <div className="shy-pay-view">
             <div className='shy-pay-view-head'>
                 <span>微信、支付宝扫码支付<em>{this.orderInfo.amount * this.orderInfo.count}元</em></span>
