@@ -14,6 +14,7 @@ import { ShyAppUpdate } from './content/update';
 import { ShyAppLang } from './content/lang';
 import { ShyWallet } from './order/wallet';
 import { ShyPayList } from './order/list';
+import { ShyFeature } from './order/feature';
 
 @observer
 class UserSettings extends EventsComponent {
@@ -60,6 +61,7 @@ class UserSettings extends EventsComponent {
                     <h4>帐单设置</h4>
                     <a onMouseDown={e => this.mode = 'wallet'} className={this.mode == 'wallet' ? "hover" : ""}>充值</a>
                     <a onMouseDown={e => this.mode = 'orderList'} className={this.mode == 'orderList' ? "hover" : ""}>帐单</a>
+                    <a onMouseDown={e => this.mode = 'price'} className={this.mode == 'price' ? "hover" : ""}>定价</a>
                     <Divider style={{ margin: '0px 15px' }}></Divider>
                     <h4>APP设置</h4>
                     {/* <a>外观</a> */}
@@ -90,6 +92,7 @@ class UserSettings extends EventsComponent {
                         {this.mode == 'lang' && <ShyAppLang></ShyAppLang>}
                         {this.mode == 'wallet' && <ShyWallet></ShyWallet>}
                         {this.mode == 'orderList' && <ShyPayList></ShyPayList>}
+                        {this.mode == 'price' && <ShyFeature></ShyFeature>}
                     </div>
                 </div>
             </div>
