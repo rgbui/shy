@@ -6,7 +6,7 @@ import { Remark } from "rich/component/view/text";
 export class ShyAppLang extends React.Component {
     render() {
         return <div className="shy-app-lang">
-            <h2>语言</h2>
+            <h2 className="h2">语言</h2>
             <Divider></Divider>
             <Row style={{ marginTop: 20 }}>
                 <Col span={12}><Remark>选择语言</Remark></Col>

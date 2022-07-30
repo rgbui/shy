@@ -46,7 +46,7 @@ export class ShyWallet extends React.Component {
             else return '无'
         }
         return <div className="shy-app-lang">
-            <h2>账户钱包</h2>
+            <h2 className="h2">账户钱包</h2>
             <Divider></Divider>
             <Row style={{ marginTop: 20 }}>
                 <Space >

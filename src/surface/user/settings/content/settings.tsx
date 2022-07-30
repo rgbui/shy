@@ -59,7 +59,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
     }
     render() {
         return <div>
-            <h2>我的帐号</h2>
+            <h2 className="h2">我的帐号</h2>
             <Divider></Divider>
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
                 <div className="bg">

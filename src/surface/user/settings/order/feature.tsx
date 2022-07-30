@@ -35,7 +35,7 @@ export class ShyFeature extends React.Component {
         async function openPay(kind: "fill" | "meal-1" | "meal-2") {
             var r = await useSelectPayView(kind);
             if (r) {
-load();
+                load();
             }
         }
         return <div className="shy-app-lang">
@@ -47,45 +47,45 @@ load();
                 <div className="shy-feature-cards">
                     {this.feature.item == 'personal' && <>
                         <div className="shy-feature-card">
-                            <h2>免费版</h2>
-                            <Row><Col><label>本地离线免费</label></Col></Row>
-                            <Row><Col>2022年底上线</Col></Row>
-                            <Row><Col>支持本地文档</Col></Row>
-                            <Row><Col>支持本地白板</Col></Row>
-                            <Row><Col><i>支持本地多维表</i></Col></Row>
-                            <Row><Col><i>支持能够离线的所有功能</i></Col></Row>
-                            <Row><Col></Col></Row>
+                            <h2 className="h2">免费版</h2>
+                            <Row className='gap-h-10'><Col><label>本地离线免费</label></Col></Row>
+                            <Row className='gap-h-10'><Col>2022年底上线</Col></Row>
+                            <Row className='gap-h-10'><Col>支持本地文档</Col></Row>
+                            <Row className='gap-h-10'><Col>支持本地白板</Col></Row>
+                            <Row className='gap-h-10'><Col><i>支持本地多维表</i></Col></Row>
+                            <Row className='gap-h-10'><Col><i>支持能够离线的所有功能</i></Col></Row>
+                            <Row className='gap-h-10'><Col></Col></Row>
                         </div>
                         <div className="shy-feature-card">
-                            <h2>个人版</h2>
-                            <Row><Col span={12}><label>按量付费</label></Col><Col span={12} align="end" ><Button onClick={e => openPay('fill')} >购买</Button></Col></Row>
-                            <Row><Col span={12}>空间</Col><Col span={12} align="end">5元/G/年</Col></Row>
-                            <Row><Col span={12}>流量</Col><Col span={12} align="end">3元/G</Col></Row>
-                            <Row><Col span={12}>数据</Col><Col span={12} align="end">3元/1万条</Col></Row>
-                            <Row><Col span={12}>API</Col><Col span={12} align="end">待定</Col></Row>
-                            <Row><Col><i>初始免费额度10元</i></Col></Row>
-                            <Row><Col><i>功能全开，协作成员数无限制</i></Col></Row>
+                            <h2 className="h2">个人版</h2>
+                            <Row className='gap-h-10'><Col span={12}><label>按量付费</label></Col><Col span={12} align="end" ><Button onClick={e => openPay('fill')} >购买</Button></Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>空间</Col><Col span={12} align="end">5元/G/年</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>流量</Col><Col span={12} align="end">3元/G</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col span={12} align="end">3元/1万条</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>API</Col><Col span={12} align="end">待定</Col></Row>
+                            <Row className='gap-h-10'><Col><i>初始免费额度10元</i></Col></Row>
+                            <Row className='gap-h-10'><Col><i>功能全开，协作成员数无限制</i></Col></Row>
                         </div>
                     </>}
                     {this.feature.item == 'item' && <>
                         <div className="shy-feature-card">
-                            <h2>团队版</h2>
-                            <Row><Col span={12}><label>150元/年</label></Col><Col align="end" span={12}><Button onClick={e => this.wallet.meal != 'meal-1' && openPay('meal-1')} ghost={this.wallet.meal == 'meal-1' ? true : false}>{this.wallet.meal == 'meal-1' ? "使用中" : "升级"}</Button></Col></Row>
-                            <Row><Col>适用于小规模团队</Col></Row>
-                            <Row><Col span={12}>空间</Col><Col align="end" span={12}>20G</Col></Row>
-                            <Row><Col span={12}>流量</Col><Col align="end" span={12}>100G</Col></Row>
-                            <Row><Col span={12}>数据</Col><Col align="end" span={12}>100万条</Col></Row>
-                            <Row><Col><i>功能全开，协作成员数无限制</i></Col></Row>
+                            <h2 className="h2">团队版</h2>
+                            <Row className='gap-h-10'><Col span={12}><label>150元/年</label></Col><Col align="end" span={12}><Button onClick={e => this.wallet.meal != 'meal-1' && openPay('meal-1')} ghost={this.wallet.meal == 'meal-1' ? true : false}>{this.wallet.meal == 'meal-1' ? "使用中" : "升级"}</Button></Col></Row>
+                            <Row className='gap-h-10'><Col>适用于小规模团队</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>空间</Col><Col align="end" span={12}>20G</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>流量</Col><Col align="end" span={12}>100G</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col align="end" span={12}>100万条</Col></Row>
+                            <Row className='gap-h-10'><Col><i>功能全开，协作成员数无限制</i></Col></Row>
                         </div>
                         <div className="shy-feature-card">
-                            <h2>社区版</h2>
-                            <Row><Col span={12}><label>480元/年</label></Col><Col span={12} align="end" ><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></Col></Row>
-                            <Row><Col>适用于开放性社区，<i>流量无限</i></Col></Row>
-                            <Row><Col span={12}>空间</Col><Col align="end" span={12}>50G</Col></Row>
-                            <Row><Col span={12}>流量</Col><Col align="end" span={12}>无限</Col></Row>
-                            <Row><Col span={12}>数据</Col><Col align="end" span={12}>300万条</Col></Row>
-                            <Row><Col><i>支持自定义域名</i></Col></Row>
-                            <Row><Col><i>支持发行独立app(待开发）</i></Col></Row>
+                            <h2 className="h2">社区版</h2>
+                            <Row className='gap-h-10'><Col span={12}><label>480元/年</label></Col><Col span={12} align="end" ><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></Col></Row>
+                            <Row className='gap-h-10'><Col>适用于开放性社区，<i>流量无限</i></Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>空间</Col><Col align="end" span={12}>50G</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>流量</Col><Col align="end" span={12}>无限</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col align="end" span={12}>300万条</Col></Row>
+                            <Row className='gap-h-10'><Col><i>支持自定义域名</i></Col></Row>
+                            <Row className='gap-h-10'><Col><i>支持发行独立app(待开发）</i></Col></Row>
                         </div>
                     </>}
                 </div>

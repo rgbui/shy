@@ -83,7 +83,7 @@ export class ShyPayList extends React.Component {
             }
         }
         return <div className="shy-pay-list">
-            <h2>支付记录</h2>
+            <h2 className="h2">支付记录</h2>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
                 <div className='shy-ws-member-head'>

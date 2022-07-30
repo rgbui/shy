@@ -11,17 +11,19 @@
     align-items    : stretch;
 
     &-slide {
-        background-color   : var(--background-secondary);
-        flex-grow          : 1;
-        flex-shrink        : 0;
-        display            : flex;
-        justify-content    : flex-end;
-        align-items        : flex-start;
+        background-color: var(--background-secondary);
+        flex-grow       : 1;
+        flex-shrink     : 0;
+        display         : flex;
+        justify-content : flex-end;
+        align-items     : flex-start;
+
         >div {
             width     : 218px;
             padding   : 60px 6px 60px 20px;
             overflow-y: auto;
         }
+
         border-radius : 3px 0px 0px 3px;
         padding       : 30px 10px;
         box-sizing    : border-box;
@@ -84,13 +86,13 @@
     }
 
     &-content {
-        padding       : 30px 10px;
-        flex-grow     : 1;
-        flex-shrink   : 1;
-        align-items   : flex-start;
-        background    : var(--background-primary);
-        overflow-y    : auto;
-        overflow-x    : hidden;
+        padding    : 30px 10px;
+        flex-grow  : 1;
+        flex-shrink: 1;
+        align-items: flex-start;
+        background : var(--background-primary);
+        overflow-y : auto;
+        overflow-x : hidden;
 
         &-wrapper {
             width    : 740px;
@@ -170,6 +172,114 @@
     }
 }
 
+.shy-user-settings {
+    background-image: linear-gradient(to right, var(--background-secondary), var(--background-primary));
+
+    &-slide {
+        background-color: var(--background-secondary);
+        h4 {
+            color         : var(--channels-default);
+            font-weight   : 700;
+            padding       : 5px 15px;
+            font-size     : 12px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin        : 0px;
+        }
+        a {
+            display        : flex;
+            justify-content: flex-start;
+            align-content  : center;
+            padding        : 5px 15px;
+            cursor         : pointer;
+            margin         : 5px 0px;
+            border-radius  : 4px;
+            font-size      : 16px;
+            font-weight    : 700;
+            color          : var(--interactive-normal);
+
+            &.warn {
+                color: hsl(359, calc(var(--saturation-factor, 1) * 82.6%), 59.4%);
+            }
+
+            .shy-icon {
+                width       : 20px;
+                height      : 20px;
+                margin-right: 8px;
+                color       : rgba(55, 53, 47, 0.8);
+                fill        : rgba(55, 53, 47, 0.8);
+            }
+
+            span {
+                font-size  : 14px;
+                line-height: 20px;
+                color      : rgb(55, 53, 47);
+            }
+
+            &:hover,
+            &.hover {
+                background: rgba(55, 53, 47, 0.08);
+            }
+
+            &.hover {
+                span {
+                    font-weight: bold;
+                }
+            }
+
+            &.selected span {
+                font-weight: bold;
+            }
+        }
+    }
+
+    &-content {
+        background   : var(--background-primary);
+        padding-left : 20px;
+        width        : calc(100vw - (100vw - 1000px)/2 - 200px);
+        padding-right: calc((100vw - 1000px)/2 + 20px)
+    }
+
+    .shy-settings-operators {
+        position  : absolute;
+        top       : 60px;
+        right     : 0px;
+        transform : translate(70px, 0px);
+        a {
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            flex-direction : column;
+            stroke-width   : 2px;
+
+            span {
+                display        : flex;
+                width          : 32px;
+                height         : 32px;
+                justify-content: center;
+                align-items    : center;
+                border-radius  : 50%;
+                border         : 1px solid #dcddde;
+                cursor         : pointer;
+
+                &:hover {
+                    background-color: #f6f6f7;
+                }
+            }
+
+            label {
+                color      : rgba(55, 53, 47, 1);
+                font-size  : 12px;
+                display    : inline-block;
+                width      : 40px;
+                text-align : center;
+                font-weight: bold;
+            }
+        }
+    }
+
+    z-index : 10000;
+}
 
 
 .shy-user-settings-profile-box {
@@ -298,7 +408,7 @@
     flex-direction : column;
     margin         : 10px 10px 10px 0px;
     position       : relative;
-    
+
     &-bg {
         width           : 69px;
         height          : 50px;
