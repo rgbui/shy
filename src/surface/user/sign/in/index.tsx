@@ -11,13 +11,14 @@ import { inviteCode, phoneCode, phoneRegex } from "../../../../common/verify";
 import { useLocation } from "react-router-dom";
 import { channel } from "rich/net/channel";
 import Logo from "../../../../assert/img/shy.256.png";
-import "./wxLogin.js";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { WechatSvg } from "../../../../component/svgs";
+import { WeixinOpen } from "../../../../component/winxin/open";
+
 export var Login = observer(function () {
     var local = useLocalObservable<{
-        step: 'phone' | 'login' | 'register' | 'name',
+        step: 'phone' | 'login' | 'register' | 'name' | 'weixin-login',
         loginType: 'paw' | 'code',
         phone: string,
         verifyPhoneCode: string,
@@ -28,7 +29,8 @@ export var Login = observer(function () {
         expireCount: number,
         expireTime: any,
         agree: boolean,
-        el: HTMLElement
+        el: HTMLElement,
+        weixinOpen: Record<string, any>,
     }>(() => {
         return {
             phone: '',
@@ -42,10 +44,10 @@ export var Login = observer(function () {
             expireTime: null,
             agree: false,
             paw: '',
-            el: null
+            el: null,
+            weixinOpen: null
         }
     })
-
     function lockButton() {
         var button = (local.el.querySelector('.shy-login-box-button button') as HTMLButtonElement);
         if (button.disabled == true) return true;
@@ -131,7 +133,7 @@ export var Login = observer(function () {
             if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = '邀请码输入不正确');
             if (!local.agree) return unlockButton() && (local.failMsg = '如您不同意诗云相关的服务协议将无法注册!');
         }
-        var result = local.loginType == 'paw' && local.step == 'login' ? await channel.put('/paw/sign', { phone: local.phone, paw: local.paw, inviteCode: undefined }) : await channel.put('/phone/sign', { phone: local.phone, code: local.verifyPhoneCode, inviteCode: local.step == 'register' ? local.inviteCode : undefined })
+        var result = local.loginType == 'paw' && local.step == 'login' ? await channel.put('/paw/sign', { phone: local.phone, paw: local.paw, inviteCode: undefined, weixinOpen: local.weixinOpen }) : await channel.put('/phone/sign', { phone: local.phone, code: local.verifyPhoneCode, inviteCode: local.step == 'register' ? local.inviteCode : undefined, weixinOpen: local.weixinOpen })
         unlockButton();
         if (result.ok == false) local.failMsg = result.warn;
         else {
@@ -222,7 +224,7 @@ export var Login = observer(function () {
     function renderName() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.name} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={'请输入称呼'}></Input>
+                <Input value={local.name || local.weixinOpen?.nickname} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={'请输入称呼'}></Input>
             </div>
             <div className='shy-login-box-account'>
                 <Input type='password' value={local.paw} onEnter={e => updateName()} onChange={e => local.paw = e} placeholder={'请输入密码'}></Input>
@@ -232,6 +234,34 @@ export var Login = observer(function () {
                 <Button size='medium' block onClick={e => updateName()}>保存</Button >
             </div>
         </div>
+    }
+    /**
+     * 微信登录
+     */
+    function renderWeixin() {
+        return <>
+            <WeixinOpen onChange={weixinOnChange}></WeixinOpen>
+            <div className="f-14 remark cursor flex-center" onMouseDown={e => local.step = 'phone'}>手机号登录</div>
+        </>
+    }
+    async function weixinOnChange(e: { exists: boolean, open: { openId: string, platform: string, nickname: string } }) {
+        if (e.exists) {
+            var r = await channel.put('/open/sign', { platform: e.open.platform, openid: e.open.openId });
+            if (r.ok) {
+                var rd = r.data;
+                /**
+                 * 说明登录成功
+                 */
+                await sCache.set(CacheKey.token, rd.token, 180, 'd');
+                surface.user.syncUserInfo(rd.user);
+                return successAfter()
+            }
+        }
+        /**
+         * 说明获取到当前的微信open，然后需要注册，注册的同时绑定open信息
+         */
+        local.weixinOpen = e.open;
+        local.step = 'phone';
     }
     let location = useLocation();
     async function successAfter() {
@@ -247,56 +277,29 @@ export var Login = observer(function () {
             local.phone = (location?.state as any)?.phone;
             phoneSign()
         }
-        function receiveMessage(event) {
-            console.log(event, 'sss');
-            if (event.origin && event.origin.startsWith('https://pay.shy.live')) {
-                var data = JSON.parse(event.data);
-                if (data.state == 'success') {
-                    //Sock.post('/login/verify_ok', data.userinfo);
-                }
-                else if (data.state == 'refuse') {
-                    alert('请在微信扫码后确认，否则无法登录');
-                    //vm.openWeixinQr(true);
-                }
-                else if (data.state == 'bind') {
-                    var info = data.info;
-                    // Sock.post("/login/toReg", { bindInfo: info }, function (err, result) {
-                    // });
-                }
-            }
-        }
-        window.addEventListener("message", receiveMessage, false);
-        return () => {
-            window.removeEventListener('message', receiveMessage, false)
-        }
     }, []);
 
-    async function openWeixin(state: string) {
-        new (window as any).WxLogin({
-            self_redirect: true,
-            id: "QRCodePanel",
-            appid: "wx2393b2ce548478c3",
-            scope: "snsapi_login",
-            redirect_uri: encodeURIComponent("https://pay.shy.live/user_open/weixin_back"),
-            state: state
-        });
-    }
+
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
         <div className='shy-login-logo'><a href='/'><img style={{ width: 30, height: 30 }} src={Logo} /><span>诗云</span></a></div>
         <div className='shy-login'>
-            <div className='shy-login-head'>
+            {local.step != 'weixin-login' && <div className='shy-login-head'>
+
                 {!['login', 'register', 'name'].includes(local.step) && <span>登录/注册&nbsp;诗云</span>}
                 {local.step == 'register' && <span>注册&nbsp;诗云</span>}
                 {local.step == 'login' && <span>登录&nbsp;诗云</span>}
                 {local.step == 'name' && <span>完善个人信息</span>}
-            </div>
+
+            </div>}
+            {local.weixinOpen && local.step != 'name' && <div className="flex-center code-block padding-10">需要继续登录或注册完成微信帐号的绑定</div>}
+            {local.step == 'weixin-login' && renderWeixin()}
             {local.step == 'phone' && renderPhone()}
             {(local.step == 'login' || local.step == 'register') && renderLogin()}
             {local.step == 'name' && renderName()}
-            {!['login', 'register', 'name'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center">其他登录方式</Divider>
+            {!['login', 'register', 'name', 'weixin-login'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center">其他登录方式</Divider>
                 <div className="shy-login-open">
-                    <Icon size={40} icon={WechatSvg}></Icon>
+                    <Icon click={e => local.step = 'weixin-login'} size={40} icon={WechatSvg}></Icon>
                 </div></>}
         </div>
     </div>
