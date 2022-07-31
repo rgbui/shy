@@ -25,4 +25,21 @@ class UserPay extends BaseService {
     async repeatPayOrder(args) {
         return await masterSock.get('/repeat/qr_pay/order', args);
     }
+
+    @del('/open/weixin/unbind')
+    async openWeixinUnbind(args) {
+        return await masterSock.delete('/open/weixin/unbind', args);
+    }
+    @get('/open/list')
+    async openList(args) {
+        return await masterSock.get('/open/list', args);
+    }
+    @put('/open/weixin/bind')
+    async WeixinBind(args) {
+        return await masterSock.put('/open/weixin/bind', args);
+    }
+    @put('/open/sign')
+    async WeixinOpenSign(args) {
+        return await masterSock.put('/open/sign', args);
+    }
 }

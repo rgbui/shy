@@ -180,9 +180,9 @@ push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
 push('/sign', '', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['get'])
 push('/sign/out', '', 'SockResponse<void>', ['get'])
-push('/paw/sign', '{phone:string,paw:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
+push('/paw/sign', '{phone:string,paw:string,inviteCode:string,weixinOpen:Record<string,any>}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 push(`/sign/patch`, '{name: string, paw: string}', 'SockResponse<{list:any[]}>', ['patch']);
-push('/phone/sign', '{phone:string,code:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
+push('/phone/sign', '{phone:string,code:string,inviteCode:string,weixinOpen:Record<string,any>}','SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 push('/phone/sms/code', '{phone:string}', '{ok:boolean,warn:string,data:{success:boolean,code?:string}}', ['post'])
 push('/phone/check/sign', '{phone:string}', '{ok:boolean,warn:string,data:{sign:boolean}}', ['get'])
 push('/phone/check/update', '{phone:string,code:string}', 'SockResponse<void>', ['patch'])
@@ -221,11 +221,16 @@ push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockRespons
 push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string}`, 'SockResponse<{orderId:string,code:string}>', ['put'])
-push('/repeat/qr_pay/order','{orderId:string,platform:string}','SockResponse<{orderId:string,code:string}>', ['get'])
+push('/repeat/qr_pay/order', '{orderId:string,platform:string}', 'SockResponse<{orderId:string,code:string}>', ['get'])
 push('/user/order/list', '{page?: number, size?: number, word?: string, status?: string,deal?:boolean}', 'SockResponse<{page:number,size:number,list:any[],total:number}>', ['get']);
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
-push('/user/wallet','{}','SockResponse<{money:number,meal:string}>', ['get']);
+push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 
+
+push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
+push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
+push('/open/list', '', 'SockResponse<{list:any[]}>', ['get'])
+push('/open/sign', '{}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
