@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Confirm } from "rich/component/lib/confirm";
 import { SuccessSvg } from "rich/component/svgs";
 import { Button } from "rich/component/view/button";
 import { Divider } from "rich/component/view/grid";
@@ -14,11 +15,16 @@ export class ShyOpen extends React.Component {
             this.forceUpdate();
         }
     }
+    componentDidMount(): void {
+        this.load();
+    }
     async onMouseDownPlatform(event: React.MouseEvent, platform: string) {
         if (this.list.some(s => s.platform == platform && s.disabled != true)) {
-            var s = this.list.find(s => s.platform == platform && s.disabled != true)
-            await channel.del('/open/weixin/unbind', { id: s.id });
-            await this.load();
+            if (await Confirm('确定要解除微信登录的扫码绑定吗?')) {
+                var s = this.list.find(s => s.platform == platform && s.disabled != true)
+                await channel.del('/open/weixin/unbind', { id: s.id });
+                await this.load();
+            }
         }
         else {
             var r = await useWeixinOpen();
@@ -37,7 +43,7 @@ export class ShyOpen extends React.Component {
                 <div className="gap-p-20">
                     <div className="h4">微信</div>
                     <div className="flex gap-b-10">
-                        {this.list.some(s => s.platform == 'weixin' && s.disabled != true) && <span className="text-1 f-14 flex-auto flex">
+                        {this.list.some(s => s.platform == 'weixin' && s.disabled != true) && <span className="green f-14 flex-auto flex">
                             <Icon icon={SuccessSvg}></Icon>
                             <span>已成功绑定微信</span>
                         </span>}
