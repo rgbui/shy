@@ -13,6 +13,7 @@ import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { usePayOrder } from "../../../../component/pay";
+import { Pagination } from "rich/component/view/pagination";
 export class ShyPayList extends React.Component {
     page: number = 1;
     size: number = 40;
@@ -120,6 +121,7 @@ export class ShyPayList extends React.Component {
                             })}
                         </tbody>
                     </table>
+                    <Pagination size={this.size} index={this.page} total={this.total} onChangeIndex={e => { this.page = e; this.load() }}></Pagination>
                 </div>
 
                 {!this.loading && this.orders.length == 0 && <Row><Col><Remark>没有支付记录</Remark></Col></Row>}
