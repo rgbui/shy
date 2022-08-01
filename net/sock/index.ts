@@ -54,10 +54,10 @@ export class Sock {
             this._remote = axios.create();
             if (config.isDev) this._remote.defaults.timeout = 1000;
             else if (config.isBeta || config.isPro) {
-                if (this.type != SockType.file)
-                    this._remote.defaults.timeout = 1000;
+                // if (this.type != SockType.file)
+                this._remote.defaults.timeout = 1000 * 10;
             }
-            if (this.type == SockType.file) this._remote.defaults.timeout = 1000 * 60 * 10;
+            if (this.type == SockType.file) this._remote.defaults.timeout = 1000 * 60 * 60;
             this._remote.defaults.validateStatus = function (status) {
                 return status < 500
             };
