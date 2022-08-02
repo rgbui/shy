@@ -8,7 +8,6 @@ export class ShySafe extends React.Component {
             <h2 className="h2">隐私与安全</h2>
             <Divider></Divider>
             <div>
-                <Divider></Divider>
                 <div className="gap-h-10">
                     <div className="f-12 remark">加好友设置</div>
                     <div className="flex">

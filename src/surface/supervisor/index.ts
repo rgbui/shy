@@ -31,7 +31,7 @@ export class Supervisor extends Events {
             this.main = PageViewStores.createPageViewStore(elementUrl)
         }
         catch (ex) {
-
+            console.error(ex);
         }
         finally {
             this.opening = false;
