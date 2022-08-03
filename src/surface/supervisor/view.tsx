@@ -22,7 +22,7 @@ export var SupervisorView = observer(function () {
             {surface.supervisor.main && !surface.supervisor.slide && <PageSupervisorView store={surface.supervisor.main} ></PageSupervisorView>}
             {surface.supervisor.main && surface.supervisor.slide && <div>
                 <PageSupervisorView store={surface.supervisor.main} ></PageSupervisorView>
-                <PageSupervisorView store={surface.supervisor.main}></PageSupervisorView>
+                <PageSupervisorView store={surface.supervisor.slide}></PageSupervisorView>
             </div>}
             {surface.supervisor.dialog && <PageSupervisorDialog store={surface.supervisor.dialog}></PageSupervisorDialog>}
         </>}

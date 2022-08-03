@@ -28,7 +28,8 @@ export class Supervisor extends Events {
         if (elementUrl == this.main?.elementUrl) return;
         this.opening = true;
         try {
-            this.main = PageViewStores.createPageViewStore(elementUrl)
+          
+            this.main = PageViewStores.createPageViewStore(elementUrl);
         }
         catch (ex) {
             console.error(ex);

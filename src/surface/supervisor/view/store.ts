@@ -5,7 +5,7 @@ import { PageSupervisorView } from "./index";
 import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
 import { Events } from "rich/util/events";
-export class PageViewStore extends Events{
+export class PageViewStore extends Events {
     source: 'main' | 'slide' | 'dialog';
     date: number = Date.now();
     elementUrl: string = '';

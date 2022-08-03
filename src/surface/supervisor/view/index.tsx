@@ -1,8 +1,11 @@
 import { makeObservable, observable } from "mobx";
+import { observer } from "mobx-react";
 import React from "react";
 import { Bar } from "../bar";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
+
+@observer
 export class PageSupervisorView extends React.Component<{ store: PageViewStore }> {
     constructor(props) {
         super(props);
@@ -10,10 +13,19 @@ export class PageSupervisorView extends React.Component<{ store: PageViewStore }
     }
     loading: boolean = false;
     componentDidMount(): void {
+        this.load();
+    }
+    load() {
         this.props.store.view = this;
         this.loading = true;
         createPageContent(this.props.store);
         this.loading = false;
+    }
+    componentDidUpdate(prevProps: Readonly<{ store: PageViewStore; }>, prevState: Readonly<{}>, snapshot?: any): void {
+        if (this.props?.store?.elementUrl != prevProps?.store?.elementUrl) {
+            if (prevProps?.store) prevProps?.store.page.cacheFragment()
+            this.load();
+        }
     }
     componentWillUnmount(): void {
         if (this.props.store.page)

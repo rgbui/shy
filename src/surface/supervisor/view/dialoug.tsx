@@ -14,7 +14,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
     }
     loading: boolean = false;
     componentDidMount(): void {
-        this.props.store.view = this;
+        // this.props.store.view = this;
         this.loading = true;
         createPageContent(this.props.store);
         this.loading = false;
