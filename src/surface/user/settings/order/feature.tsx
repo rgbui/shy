@@ -74,7 +74,7 @@ export class ShyFeature extends React.Component {
                             <Row className='gap-h-10'><Col>适用于小规模团队</Col></Row>
                             <Row className='gap-h-10'><Col span={12}>空间</Col><Col align="end" span={12}>20G</Col></Row>
                             <Row className='gap-h-10'><Col span={12}>流量</Col><Col align="end" span={12}>100G</Col></Row>
-                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col align="end" span={12}>100万条</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col align="end" span={12}>50万条</Col></Row>
                             <Row className='gap-h-10'><Col><i>功能全开，协作成员数无限制</i></Col></Row>
                         </div>
                         <div className="shy-feature-card">
@@ -83,7 +83,7 @@ export class ShyFeature extends React.Component {
                             <Row className='gap-h-10'><Col>适用于开放性社区，<i>流量无限</i></Col></Row>
                             <Row className='gap-h-10'><Col span={12}>空间</Col><Col align="end" span={12}>50G</Col></Row>
                             <Row className='gap-h-10'><Col span={12}>流量</Col><Col align="end" span={12}>无限</Col></Row>
-                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col align="end" span={12}>300万条</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>数据</Col><Col align="end" span={12}>200万条</Col></Row>
                             <Row className='gap-h-10'><Col><i>支持自定义域名</i></Col></Row>
                             <Row className='gap-h-10'><Col><i>支持发行独立app(待开发）</i></Col></Row>
                         </div>
