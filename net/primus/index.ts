@@ -28,16 +28,13 @@ class TimService {
         this.tim.reconnected = async function () {
             data = await self.getHeads();
             data.sockId = self.tim.id;
-            if (self.workspaceId && !self.isSync) data.workspaceId = self.workspaceId;
-            if (self.workspaceId && self.isSync) data.syncWorkspaceId = self.workspaceId;
+            if (self.workspaceId) data.workspaceId = self.workspaceId;
             self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
         }
     }
     private workspaceId: string;
     private viewId: string;
-    private isSync: boolean = false;
-    async enterWorkspaceView(workspaceId: string, isSync: boolean, viewId: string) {
-        this.isSync = isSync;
+    async enterWorkspaceView(workspaceId: string, viewId: string) {
         this.workspaceId = workspaceId;
         this.viewId = viewId;
         if (this.time) {
@@ -49,8 +46,7 @@ class TimService {
                 HttpMethod.post,
                 '/workspace/enter',
                 {
-                    workspaceId: this.isSync ? undefined : this.workspaceId,
-                    syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
+                    workspaceId: this.workspaceId,
                     viewId: this.viewId
                 }
             );
@@ -63,7 +59,6 @@ class TimService {
             this.time = undefined;
         }
         delete this.workspaceId;
-        delete this.isSync;
         await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
     }
     private viewTime;

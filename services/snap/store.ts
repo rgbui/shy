@@ -22,7 +22,9 @@ export class SnapStore extends Events {
         return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
     async viewOperator(operate: Partial<UserAction>) {
-        var r = await surface.workspace.sock.put<{
+        var ops = JSON.stringify(operate);
+        console.log(ops.length);
+        var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
             seq: number,
             id: string
         }>('/view/operate', {
@@ -30,7 +32,13 @@ export class SnapStore extends Events {
             wsId: surface.workspace.id,
             sockId: timService.sockId,
             operate: operate,
-        });
+        }) : await timService.tim.put('/view/operate', {
+            elementUrl: this.elementUrl,
+            wsId: surface.workspace.id,
+            sockId: timService.sockId,
+            operate: operate,
+            pidUrl: surface.workspace.pidUrl
+        })
         if (r.ok) {
             Object.assign(operate, r.data);
             return r.data;
