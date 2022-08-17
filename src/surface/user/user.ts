@@ -49,7 +49,8 @@ export class User {
             checkEmail: observable,
             cover: observable,
             realName: observable,
-            checkRealName: observable
+            checkRealName: observable,
+            status:observable
         })
     }
     get isSign() {

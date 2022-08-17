@@ -1,8 +1,8 @@
-import { observer } from "mobx-react";
+import { Observer, observer, useLocalStore } from "mobx-react";
 import React from "react";
 import { SettingsSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
-import { IconButton } from "rich/component/view/icon";
+import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType } from "rich/component/view/menu/declare";
 import { channel } from "rich/net/channel";
@@ -15,6 +15,11 @@ import './style.less';
 
 export var UserProfile = observer(function () {
     if (!surface.user.isSign) return <></>
+    var local = useLocalStore<{ avatar: Avatar }>(() => {
+        return {
+            avatar: null
+        }
+    })
     async function setUserStatus(event: React.MouseEvent) {
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
             { checkLabel: surface.user.status == UserStatus.online, name: 'online', text: '在线' },
@@ -27,8 +32,9 @@ export var UserProfile = observer(function () {
             var status = UserStatus[r.item.name]
             var g = await channel.patch('/user/patch/status', { status });
             if (g.ok) {
-                surface.user.status = status;
                 userNativeStore.put({ id: surface.user.id, status })
+                surface.user.status = status;
+                if (local.avatar) local.avatar.load(true)
             }
         }
     }
@@ -36,9 +42,17 @@ export var UserProfile = observer(function () {
         useOpenUserSettings()
     }
     return <div className="shy-user-profile">
-        {surface.user && <div onMouseDown={e => setUserStatus(e)}><Avatar size={32} userid={surface.user.id}></Avatar></div>}
+        {surface.user && <div className="flex round item-hover-1 cursor padding-5 padding-r-20" onMouseDown={e => setUserStatus(e)}>
+            <Avatar ref={e => local.avatar = e} size={32} userid={surface.user.id}></Avatar>
+            <div className="gap-l-5">
+                <div className="bold text f-14 l-14">{surface.user.name}</div>
+                <div className="text-1 f-14 l-14">#{surface.user.sn}</div>
+            </div>
+        </div>}
         <div className="shy-user-profile-operators">
-            <IconButton icon={SettingsSvg} wrapper onMouseDown={e => Mousedown(e)} width={32} size={16}></IconButton>
+            <span className="size-32 round flex-center cursor item-hover-1" onMouseDown={e => Mousedown(e)}>
+                <Icon size={16} icon={SettingsSvg}></Icon>
+            </span>
         </div>
     </div>
 });
