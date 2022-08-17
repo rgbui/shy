@@ -27,7 +27,8 @@ export class PageItem {
     childs?: PageItem[] = [];
     text: string = ''
     spread: boolean = false;
-    creater: string = ''
+    creater: string = '';
+    description: string = '';
     createDate: Date = null;
     mime: Mime = Mime.none;
     pageType: PageLayoutType = PageLayoutType.doc;
@@ -70,7 +71,8 @@ export class PageItem {
             permission: observable,
             locker: observable,
             editDate: observable,
-            editor: observable
+            editor: observable,
+            description: observable
         });
 
     }
