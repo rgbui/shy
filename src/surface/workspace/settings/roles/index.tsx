@@ -181,10 +181,10 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
-                        <Col span={18} style={{height:24}} valign="middle"><Icon size={14} style={{ cursor: 'pointer' }} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                        <Col span={18} style={{height:24}} valign="middle"><Icon size={14} style={{ cursor: 'pointer' }} onClick={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
                             <span style={{ cursor: 'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
-                        <Col span={6}  style={{height:24}} valign="middle" align='end'><ToolTip overlay={'添加角色'}><Icon size={14} click={e => this.addRole()} icon={PlusSvg}></Icon></ToolTip> </Col>
+                        <Col span={6}  style={{height:24}} valign="middle" align='end'><ToolTip overlay={'添加角色'}><Icon size={14} onClick={e => this.addRole()} icon={PlusSvg}></Icon></ToolTip> </Col>
                     </Row>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {

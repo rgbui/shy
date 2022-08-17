@@ -299,7 +299,7 @@ export var Login = observer(function () {
             {local.step == 'name' && renderName()}
             {!['login', 'register', 'name', 'weixin-login'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center">其他登录方式</Divider>
                 <div className="shy-login-open">
-                    <Icon click={e => local.step = 'weixin-login'} size={40} icon={WechatSvg}></Icon>
+                    <Icon onClick={e => local.step = 'weixin-login'} size={40} icon={WechatSvg}></Icon>
                 </div></>}
         </div>
     </div>

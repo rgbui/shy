@@ -119,7 +119,7 @@ export class WorkspaceMembers extends React.Component {
                                             if (role) return <a key={r}><span className='color' onMouseDown={e => this.removeRole(me, r, e)} style={{ backgroundColor: role.color }}></span><span className='text'>{role.text}</span></a>
                                             else return <a style={{ display: 'none' }} key={r}></a>
                                         })}
-                                        <a><Icon size={12} icon={PlusSvg} click={e => this.selectRole(me, e)}></Icon></a>
+                                        <a><Icon size={12} icon={PlusSvg} onClick={e => this.selectRole(me, e)}></Icon></a>
                                     </div>
                                 </Col>
                                 <Col span={4} align={"end"}></Col>
