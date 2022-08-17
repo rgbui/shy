@@ -1,4 +1,4 @@
-import { Observer, observer, useLocalStore } from "mobx-react";
+import { Observer, observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { SettingsSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
@@ -15,7 +15,7 @@ import './style.less';
 
 export var UserProfile = observer(function () {
     if (!surface.user.isSign) return <></>
-    var local = useLocalStore<{ avatar: Avatar }>(() => {
+    var local = useLocalObservable<{ avatar: Avatar }>(() => {
         return {
             avatar: null
         }
