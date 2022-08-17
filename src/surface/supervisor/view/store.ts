@@ -5,6 +5,7 @@ import { PageSupervisorView } from "./index";
 import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
 import { Events } from "rich/util/events";
+import { useSearchBox } from "rich/extensions/search/index";
 export class PageViewStore extends Events {
     source: 'main' | 'slide' | 'dialog';
     date: number = Date.now();
@@ -63,8 +64,8 @@ export class PageViewStore extends Events {
         if (this.page)
             this.page.onOpenPublish(e);
     }
-    onSearch(e: React.MouseEvent) {
-
+    async onSearch(e: React.MouseEvent) {
+        await useSearchBox({ isNav: true })
     }
     onMembers(e: React.MouseEvent) {
 
@@ -93,3 +94,4 @@ export class PageViewStores {
         }
     }
 }
+
