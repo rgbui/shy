@@ -6,7 +6,7 @@ import { CacheKey, sCache } from "../../net/cache";
 import { FileMd5 } from "../../src/util/file";
 import { FileType } from "../../type";
 import { SockResponse } from "../../net/sock/type";
-import { act, del, get, patch, post, put } from "rich/net/annotation";
+import { del, get, patch, post, put } from "rich/net/annotation";
 import { userNativeStore } from "../../native/store/user";
 import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";

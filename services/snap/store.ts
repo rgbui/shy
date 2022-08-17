@@ -21,9 +21,9 @@ export class SnapStore extends Events {
     get localId() {
         return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
-    async viewOperator(operate: Partial<UserAction>) {
+    async viewOperator(operate: Partial<UserAction>)
+    {
         var ops = JSON.stringify(operate);
-        console.log(ops.length);
         var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
             seq: number,
             id: string
