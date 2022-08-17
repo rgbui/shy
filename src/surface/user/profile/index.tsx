@@ -45,7 +45,7 @@ export var UserProfile = observer(function () {
         {surface.user && <div className="flex round item-hover-1 cursor padding-5 padding-r-20" onMouseDown={e => setUserStatus(e)}>
             <Avatar ref={e => local.avatar = e} size={32} userid={surface.user.id}></Avatar>
             <div className="gap-l-5">
-                <div className="bold text f-14 l-14">{surface.user.name}</div>
+                <div className="bold text f-14 l-14 text-overflow w-120" title={surface.user.name}>{surface.user.name}</div>
                 <div className="text-1 f-14 l-14">#{surface.user.sn}</div>
             </div>
         </div>}
