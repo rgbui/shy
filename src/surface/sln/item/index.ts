@@ -196,6 +196,17 @@ export class PageItem {
         }
         channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
     }
+    async getSubItems() {
+        if (!this.checkedHasChilds) {
+            var sus = await channel.get('/page/item/subs', { id: this.id });
+            if (sus.ok == true) {
+                this.load({ childs: sus.data.list })
+            }
+            this.checkedHasChilds = true;
+        }
+        return this.childs.map(c => c);
+
+    }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
         Object.assign(data, {

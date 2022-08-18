@@ -39,7 +39,6 @@ class PageService extends BaseService {
         var snapStore = SnapStore.createSnap(args.elementUrl);
         return snapStore.viewSnap(args.seq, args.content)
     }
-
     @get('/block/ref/pages')
     async pageRefPages(args) {
         return surface.workspace.sock.get('/block/ref/pages', { ...args, wsId: surface.workspace.id });
@@ -47,10 +46,6 @@ class PageService extends BaseService {
     @put('/block/ref/add')
     async addPageRef(args) {
         return surface.workspace.sock.put('/block/ref/add', { ...args, wsId: surface.workspace.id });
-    }
-    @del('/block/ref/remove')
-    async removePageRef(args) {
-        return surface.workspace.sock.delete('/block/ref/remove', { ...args, wsId: surface.workspace.id });
     }
     @patch('/block/ref/sync')
     async syncPageRef(args) {
