@@ -1,182 +1,9 @@
-.shy-settings {
-    position: fixed;
-    z-index : 10000;
-    width   : 100vw;
-    height  : 100vh;
-    top     : 0px;
-    left    : 0px;
-
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : stretch;
-
-    &-slide {
-        background-color: var(--background-secondary);
-        flex-grow       : 1;
-        flex-shrink     : 0;
-        display         : flex;
-        justify-content : flex-end;
-        align-items     : flex-start;
-
-        >div {
-            width     : 218px;
-            padding   : 60px 6px 60px 20px;
-            overflow-y: auto;
-        }
-
-        border-radius : 3px 0px 0px 3px;
-        padding       : 30px 10px;
-        box-sizing    : border-box;
-
-        h4 {
-            color         : var(--channels-default);
-            font-weight   : 700;
-            padding       : 5px 15px;
-            font-size     : 12px;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            margin        : 0px;
-        }
-
-        a {
-            display        : flex;
-            justify-content: flex-start;
-            align-content  : center;
-            padding        : 5px 15px;
-            cursor         : pointer;
-            margin         : 5px 0px;
-            border-radius  : 4px;
-            font-size      : 16px;
-            font-weight    : 700;
-            color          : var(--interactive-normal);
-
-            &.warn {
-                color: hsl(359, calc(var(--saturation-factor, 1) * 82.6%), 59.4%);
-            }
-
-            .shy-icon {
-                width       : 20px;
-                height      : 20px;
-                margin-right: 8px;
-                color       : rgba(55, 53, 47, 0.8);
-                fill        : rgba(55, 53, 47, 0.8);
-            }
-
-            span {
-                font-size  : 14px;
-                line-height: 20px;
-                color      : rgb(55, 53, 47);
-            }
-
-            &:hover,
-            &.hover {
-                background: rgba(55, 53, 47, 0.08);
-            }
-
-            &.hover {
-                span {
-                    font-weight: bold;
-                }
-            }
-
-            &.selected span {
-                font-weight: bold;
-            }
-        }
-    }
-
-    &-content {
-        padding    : 30px 10px;
-        flex-grow  : 1;
-        flex-shrink: 1;
-        align-items: flex-start;
-        background : var(--background-primary);
-        overflow-y : auto;
-        overflow-x : hidden;
-
-        &-wrapper {
-            width    : 740px;
-            min-width: 460px;
-
-            &-scroll {
-                padding    : 60px 6px 60px 30px;
-                line-height: 22px;
-                height     : 100%;
-            }
-
-            .shy-settings-operators {
-                position  : absolute;
-                top       : 0px;
-                right     : calc((100% - 224px - 740px) / 2);
-                margin-top: 60px;
-                transform : translate(70px, 0px);
-
-                a {
-                    display        : flex;
-                    justify-content: center;
-                    align-items    : center;
-                    flex-direction : column;
-                    stroke-width   : 2px;
-
-                    span {
-                        display        : flex;
-                        width          : 32px;
-                        height         : 32px;
-                        justify-content: center;
-                        align-items    : center;
-                        border-radius  : 50%;
-                        border         : 1px solid #dcddde;
-                        cursor         : pointer;
-
-                        &:hover {
-                            background-color: #f6f6f7;
-                        }
-                    }
-
-                    label {
-                        color      : rgba(55, 53, 47, 1);
-                        font-size  : 12px;
-                        display    : inline-block;
-                        width      : 40px;
-                        text-align : center;
-                        font-weight: bold;
-                    }
-                }
-            }
-        }
-
-        h2 {
-            margin     : 0px;
-            font-weight: 500;
-            font-size  : 16px;
-            display    : block;
-            line-height: 20px;
-            color      : rgb(55, 53, 47);
-        }
-
-        h5 {
-            margin   : 0px;
-            font-size: 14px;
-            display  : block;
-            color    : rgb(55, 53, 47);
-        }
-
-        .shy-row {
-            margin-bottom: 20px;
-        }
-
-    }
-
-    &-operators {
-        position: absolute;
-    }
-}
-
 .shy-user-settings {
     background-image: linear-gradient(to right, var(--background-secondary), var(--background-primary));
 
     &-slide {
         background-color: var(--background-secondary);
+
         h4 {
             color         : var(--channels-default);
             font-weight   : 700;
@@ -186,6 +13,7 @@
             text-transform: uppercase;
             margin        : 0px;
         }
+
         a {
             display        : flex;
             justify-content: flex-start;
@@ -193,6 +21,7 @@
             padding        : 5px 15px;
             cursor         : pointer;
             margin         : 5px 0px;
+            margin-right   : 10px;
             border-radius  : 4px;
             font-size      : 16px;
             font-weight    : 700;
@@ -240,11 +69,12 @@
         padding-right: calc((100vw - 1000px)/2 + 20px)
     }
 
-    .shy-settings-operators {
-        position  : absolute;
-        top       : 60px;
-        right     : 0px;
-        transform : translate(70px, 0px);
+    &-operators {
+        position : absolute;
+        top      : 60px;
+        right    : 0px;
+        transform: translate(70px, 0px);
+
         a {
             display        : flex;
             justify-content: center;

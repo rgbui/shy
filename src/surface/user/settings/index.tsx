@@ -92,7 +92,7 @@ class UserSettings extends EventsComponent {
                         {this.mode == 'appear' && <ShyAppear></ShyAppear>}
                     </div>
                 </div> 
-                <div className='shy-settings-operators'>
+                <div className='shy-user-settings-operators'>
                     <a onMouseDown={e => this.close()}>
                         <span>
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path
@@ -104,21 +104,6 @@ class UserSettings extends EventsComponent {
                 </div>
             </div>
         </div>
-        // return <div className='shy-settings'>
-        //     <div className='shy-settings-slide'>
-        //         <div>
-
-        //         </div>
-        //     </div>
-        //     <div className='shy-settings-content'>
-        //         <div className='shy-settings-content-wrapper'>
-
-        //             <div className='shy-settings-content-wrapper-scroll'>
-
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
     }
 }
 
