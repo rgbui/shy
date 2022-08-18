@@ -296,8 +296,7 @@ push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:
 
 push(`/block/ref/pages`, '{wsId?:string,pageId:string}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/block/ref/add`, '{wsId?:string,pageId:string,data:{blockId: string, rowBlockId: string, text: string, refPageId: string}}', 'SockResponse<void>', ['put'])
-push(`/block/ref/remove`, '{wsId?:string,pageId:string,blockId?:string,rowBlockId?:string}', 'AtomPermission[]', ['del'])
-push(`/block/ref/sync`, '{wsId?:string,pageId:string,data:{rowBlockId: string, text: string}}', 'AtomPermission[]', ['patch'])
+push(`/block/ref/sync`, '{wsId?:string,data:{deleteBlockIds: string[], updates: { rowBlockId: string, text: string }[]}}', 'SockResponse<void>', ['patch'])
 
 
 push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number}>', ['patch'])
