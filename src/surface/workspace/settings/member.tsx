@@ -89,7 +89,7 @@ export class WorkspaceMembers extends React.Component {
         });
         options.splice(0, 0, { text: '@所有人', value: '' })
         return <div className='shy-ws-members'>
-            <h2>成员</h2>
+            <div className="h2">成员</div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
                 <div className='shy-ws-member-head'>

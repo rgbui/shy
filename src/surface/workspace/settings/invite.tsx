@@ -15,19 +15,22 @@ export class WorkspaceInvite extends React.Component {
     input: Input;
     render() {
         return <div className='shy-ws-invites'>
-            <h2>邀请</h2>
+            <div className="h2">邀请</div>
             <Divider></Divider>
-            <h3 style={{ fontSize: 14 }}>通用的邀请链接</h3>
-            <Row>
-                <Remark>任何得到此链接的人均可以加入这个空间(空间没有人数上限的限制)，你也可以<a onMouseDown={e => this.createInvite(true)}>重置链接</a></Remark>
-            </Row>
-            <Row>
-                <Col span={16}><Input ref={e => this.input = e}
-                    readonly={true} value={surface.workspace.invite ? location.protocol + '//' + location.host + '/invite/' + surface.workspace.invite : ''}></Input></Col>
-                <Col align='start' span={8}><Button size={'larger'} style={{ marginLeft: 20 }}
+            <div className="bold f-14 gap-t-10">通用的邀请链接</div>
+            <div className="remark f-12 gap-h-10">
+                任何得到此链接的人均可以加入这个空间(空间没有人数上限的限制)，你也可以<a className="link undeline" onMouseDown={e => this.createInvite(true)}>重置链接</a>
+            </div>
+            <div className="flex max-w-500">
+                <Input ref={e => this.input = e}
+                    readonly={true}
+                    value={surface.workspace.invite ? location.protocol + '//' + location.host + '/invite/' + surface.workspace.invite : ''}></Input>
+
+                <Button className="gap-l-10"
                     onClick={e => this.createInvite()}
-                    ghost>{surface.workspace.invite ? '复制链接' : '创建链接'}</Button></Col>
-            </Row>
+                    ghost>{surface.workspace.invite ? '复制链接' : '创建链接'}</Button>
+            </div>
+
         </div>
     }
 }
