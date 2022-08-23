@@ -200,6 +200,7 @@ export class PageItem {
         if (!this.checkedHasChilds) {
             var sus = await channel.get('/page/item/subs', { id: this.id });
             if (sus.ok == true) {
+                this.spread=false;
                 this.load({ childs: sus.data.list })
             }
             this.checkedHasChilds = true;
