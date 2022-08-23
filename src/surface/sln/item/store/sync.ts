@@ -4,6 +4,7 @@ import { config } from "../../../../common/config";
 import { PageItem } from "..";
 import { timService } from "../../../../../net/primus";
 import { surface } from "../../..";
+import { Workspace } from "../../../workspace";
 export enum ItemOperatorDirective {
     update = 1,
     insert = 2,
@@ -54,18 +55,19 @@ class PageItemStore {
         var actions: PageItemAction[] = [];
         var pa = pageItem.parent;
         runInAction(() => {
-            lodash.remove(pa.childs, g => g.id == pageItem.id);
+            if (pa) lodash.remove(pa.childs, g => g.id == pageItem.id);
+            else lodash.remove(surface.workspace.childs, g => g.id == pageItem.id)
         })
         actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.delete, actions });
     }
     public async updatePageItem(pageItem: PageItem, data: Record<string, any>) {
-        var cloneData=lodash.cloneDeep(data);
+        var cloneData = lodash.cloneDeep(data);
         var actions: PageItemAction[] = [];
         actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.update, actions });
         runInAction(() => {
-            Object.assign(pageItem,cloneData);
+            Object.assign(pageItem, cloneData);
         })
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
@@ -107,8 +109,6 @@ class PageItemStore {
         var index = pageItem.index;
         var next = pageItem.next;
         var ns = pageItem.parent.childs.findAll((g, i) => i > index);
-
-
         data.id = config.guid();
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.parentId;
