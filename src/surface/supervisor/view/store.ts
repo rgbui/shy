@@ -23,7 +23,6 @@ export class PageViewStore extends Events {
     private init() {
         this.snapStore.only('willSave', () => {
             this.snapSaving = true;
-            console.log(this.snapSaving, 'willSave');
         });
         this.snapStore.only('saved', () => {
             this.snapSaving = false;

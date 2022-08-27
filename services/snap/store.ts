@@ -9,7 +9,8 @@ import { DbService } from "../../net/db/service";
 import { timService } from "../../net/primus";
 import { config } from "../../src/common/config";
 import { surface } from "../../src/surface";
-const DELAY_TIME = 1000 * 60 * 5;
+const DELAY_TIME = 1000 * 60 * 3;
+const MAX_OPERATE_COUNT = 50;
 var snapSyncMaps: Map<string, SnapStore> = new Map();
 export type ViewOperate = {
     operate?: UserAction,
@@ -21,8 +22,7 @@ export class SnapStore extends Events {
     get localId() {
         return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
-    async viewOperator(operate: Partial<UserAction>)
-    {
+    async viewOperator(operate: Partial<UserAction>) {
         var ops = JSON.stringify(operate);
         var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
             seq: number,
@@ -73,8 +73,9 @@ export class SnapStore extends Events {
             plain: plain || '',
             text
         };
+        this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);
-        if (this.lastServiceViewSnap && (this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
+        if (this.lastServiceViewSnap && (this.operateCount > MAX_OPERATE_COUNT || this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
             this.saveToService();
         }
         else this.localTime = setTimeout(() => {
@@ -82,6 +83,7 @@ export class SnapStore extends Events {
         }, DELAY_TIME);
     }
     private lastServiceViewSnap: { seq: number, date: Date };
+    private operateCount = 0;
     private async saveToService() {
         this.emit('willSave');
         if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
@@ -110,6 +112,7 @@ export class SnapStore extends Events {
                     }
                     this.lastServiceViewSnap.seq = this.localViewSnap.seq;
                     this.lastServiceViewSnap.date = new Date();
+                    this.operateCount = 0;
                 }
             }
         }
