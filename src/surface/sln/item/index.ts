@@ -9,7 +9,6 @@ import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { Mime, PageItemDirective } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { pageItemStore } from "./store/sync";
-import { Page } from "rich/src/page";
 import { channel } from "rich/net/channel";
 import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
