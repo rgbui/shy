@@ -13,6 +13,7 @@ import HomeSrc from "../../../assert/img/shy.256.png";
 import { PageLayoutType } from 'rich/src/page/declare';
 import Tooltip from 'rc-tooltip';
 import { PageViewStore } from '../view/store';
+
 export var Bar = observer(function (props: { store: PageViewStore }) {
     function back() {
         UrlRoute.push(ShyUrl.myWorkspace);

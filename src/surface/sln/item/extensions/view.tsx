@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import { PageItem } from "..";
 import { surface } from "../../..";
 import { AtomPermission } from "rich/src/page/permission";
+import { getPageIcon } from "rich/extensions/at/declare";
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     let refInput = React.useRef<HTMLInputElement>(null);
     let refEditText = React.useRef<string>(null);
@@ -70,7 +71,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             onContextMenu={e => contextmenu(e.nativeEvent)}
             onMouseDown={e => mousedown(e.nativeEvent)}>
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-            <i className='shy-ws-item-page-icon'><Icon size={16} icon={item.icon ? item.icon : PageSvg}></Icon></i>
+            <i className='shy-ws-item-page-icon'><Icon size={16} icon={getPageIcon(item)}></Icon></i>
             {!isInEdit && <span>{item.text || '新页面'}</span>}
             {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}

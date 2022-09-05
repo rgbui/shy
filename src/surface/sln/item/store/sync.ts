@@ -4,7 +4,7 @@ import { config } from "../../../../common/config";
 import { PageItem } from "..";
 import { timService } from "../../../../../net/primus";
 import { surface } from "../../..";
-import { Workspace } from "../../../workspace";
+
 export enum ItemOperatorDirective {
     update = 1,
     insert = 2,
