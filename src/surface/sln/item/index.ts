@@ -48,6 +48,9 @@ export class PageItem {
     locker: { userid: string, lockDate: number } = null;
     public editDate: Date = null;
     public editor: string = null;
+    speak?: 'more' | 'only' = 'more';
+    speakDate?: Date = null;
+    textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
     get snapStore() {
         return SnapStore.create(ElementType.PageItem, this.id);
     }
@@ -199,7 +202,7 @@ export class PageItem {
         if (!this.checkedHasChilds) {
             var sus = await channel.get('/page/item/subs', { id: this.id });
             if (sus.ok == true) {
-                this.spread=false;
+                this.spread = false;
                 this.load({ childs: sus.data.list })
             }
             this.checkedHasChilds = true;

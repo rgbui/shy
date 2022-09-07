@@ -1,7 +1,6 @@
 import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { PageItemBox } from "../view/box";
-import PageSvg from "../../../../assert/svg/page.svg";
 import { observer } from "mobx-react";
 import { PageItem } from "..";
 import { surface } from "../../..";
