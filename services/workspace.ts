@@ -84,6 +84,11 @@ class WorkspaceService extends BaseService {
         args.sockId = timService.sockId;
         return await surface.workspace.sock.put('/ws/channel/emoji', args);
     }
+    @get('/ws/channel/abled/send')
+    async getChannelAbledSend(args) {
+        if (!args.wsId) args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/channel/abled/send', args);
+    }
 
     /**
     * 用户上传单个文件
