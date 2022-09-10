@@ -95,7 +95,7 @@ export class SafeSetting extends React.Component {
                             { text: '无限制', value: 'none' },
                             { text: '访问5分钟后可发言', value: '5' },
                             { text: '访问10分后可发言', value: '10' },
-                            { text: '在诗云有验证过的手机', value: 'checkPhone' }
+                            { text: '在诗云验证过的手机', value: 'checkPhone' }
                         ]}>
                         </SelectBox>
                     </div>
@@ -111,7 +111,7 @@ export class SafeSetting extends React.Component {
                         { text: '无限制', value: 'none' },
                         { text: '访问5分钟后可申请加入', value: '5' },
                         { text: '访问10分后可申请加入', value: '10' },
-                        { text: '在诗云有验证过的手机', value: 'checkPhone' },
+                        { text: '在诗云验证过的手机', value: 'checkPhone' },
                     ]}>
                     </SelectBox></div>
                 </div>
