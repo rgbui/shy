@@ -90,6 +90,26 @@ export class Workspace {
     public onlineUsers: Map<string, WorkspaceOnLineUser[]> = new Map();
     public access: number = 0;
     public accessJoinTip: boolean = false;
+    /**
+     * 创建文档时的初始配置
+     */
+    public createPageConfig: {
+        isFullWidth: boolean,
+        smallFont: boolean,
+        nav: boolean,
+        autoRefPages: boolean,
+        autoRefSubPages: boolean
+    } = {
+            isFullWidth: true,
+            smallFont: false,
+            nav: false,
+            autoRefPages: false,
+            autoRefSubPages: true
+        };
+    /**
+     * 空间的初始默认页面
+     */
+    public defaultPageId: string = null;
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -112,6 +132,8 @@ export class Workspace {
             permissions: observable,
             member: observable,
             memberPermissions: computed,
+            createPageConfig: observable,
+            defaultPageId: observable,
         })
     }
     private _sock: Sock;
