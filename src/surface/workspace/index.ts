@@ -91,6 +91,18 @@ export class Workspace {
     public access: number = 0;
     public accessJoinTip: boolean = false;
     /**
+     * 访客发言限制
+     */
+    public accessTalkLimit: string = 'none';
+    /**
+     * 访客加入限制
+     */
+    public accessJoinLimit: string = 'none';
+    /**
+     * 访问加入成员协议
+     */
+    public acessJoinAgree: string = '';
+    /**
      * 创建文档时的初始配置
      */
     public createPageConfig: {
