@@ -64,6 +64,7 @@
         border-top   : 2px solid transparent;
         border-bottom: 2px solid transparent;
         border-radius: 4px;
+
         &-spread {
             color          : inherit;
             display        : inline-flex;
@@ -128,7 +129,7 @@
                 color        : rgba(25, 23, 17, 0.6);
             }
         }
-        
+
         &-operators {
             padding-right  : 5px;
             flex-shrink    : 0;
@@ -136,6 +137,7 @@
             justify-content: center;
             align-items    : center;
             display        : none;
+
             .shy-icon {
                 display        : inline-flex;
                 justify-content: center;
@@ -143,6 +145,7 @@
                 width          : 20px;
                 height         : 20px;
                 border-radius  : 3px;
+
                 &:hover {
                     background-color: rgba(55, 53, 47, 0.08);
                 }
@@ -151,6 +154,7 @@
 
         &:hover {
             background: rgba(55, 53, 47, 0.04);
+
             .shy-ws-item-page-operators {
                 display: flex;
             }
@@ -160,13 +164,24 @@
         &-selected:hover {
             color     : rgb(55, 53, 47);
             background: rgba(55, 53, 47, 0.08);
+
             >span {
                 font-weight: bold;
             }
         }
 
         &-dragover {
-            border-bottom: 2px solid #e16259;
+            &::after {
+                content       : '\20';
+                position      : absolute;
+                top           : 0px;
+                right         : 0px;
+                left          : 0px;
+                bottom        : 0px;
+                z-index       : 1;
+                pointer-events: none;
+                border-bottom : 2px solid #e16259;
+            }
         }
     }
 }
