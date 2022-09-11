@@ -67,7 +67,8 @@ export class PageViewStore extends Events {
         await useSearchBox({ isNav: true })
     }
     onMembers(e: React.MouseEvent) {
-
+        if (this.page)
+            this.page.openMember(e);
     }
 }
 
