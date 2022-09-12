@@ -331,7 +331,7 @@ export class Workspace {
             var item = surface.workspace.find(g => g.id == ec.id);
             var pv = PageViewStores.getPageViewStore(item.elementUrl);
             if (pv?.page) {
-                pv?.page.loadUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
+                pv?.page.syncUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
             }
         }
     }
