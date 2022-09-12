@@ -3,6 +3,7 @@ import { Events } from "rich/util/events";
 import { Rect } from "rich/src/common/vector/point";
 import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
+import { timService } from "../../../net/primus";
 export class Supervisor extends Events {
     constructor() {
         super()
@@ -28,8 +29,12 @@ export class Supervisor extends Events {
         if (elementUrl == this.main?.elementUrl) return;
         this.opening = true;
         try {
-          
             this.main = PageViewStores.createPageViewStore(elementUrl);
+            if (this.main.item)
+                timService.enterWorkspaceView(
+                    this.main.item.workspace.id,
+                    this.main.item.id
+                )
         }
         catch (ex) {
             console.error(ex);
