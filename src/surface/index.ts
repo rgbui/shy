@@ -11,7 +11,7 @@ import { config } from "../common/config";
 import { timService } from "../../net/primus";
 import { channel } from "rich/net/channel";
 import "./message.center";
-import { bindCollaboration } from "../../services/tim";
+import { ClientNotifys } from "../../services/tim";
 import { PageItem } from "./sln/item";
 
 export class Surface extends Events {
@@ -42,7 +42,7 @@ export class Surface extends Events {
             config.updateServiceGuid(r.data.guid);
             Object.assign(this.user, r.data.user);
             await timService.open();
-            bindCollaboration();
+            ClientNotifys();
         }
         else if (config.isPc) {
             UrlRoute.push(ShyUrl.signIn);
