@@ -1,6 +1,8 @@
+import lodash from "lodash";
 import { UserBasic } from "rich/types/user";
+import { Events } from "rich/util/events";
 
-class UserStore {
+export class UserStore extends Events {
     private ms: Map<string, UserBasic> = new Map();
     async get(userid: string) {
         return this.ms.get(userid);
@@ -21,6 +23,22 @@ class UserStore {
         }
         else this.ms.set(user.id, user as any);
     }
+    async notifyUpdate(userid: string, data: Record<string, any>) {
+        var r = this.ms.get(userid);
+        if (r) {
+            var c = lodash.cloneDeep(r);
+            Object.assign(r, data);
+            if (!lodash.isEqual(c, r)) {
+                this.emit('change', r)
+            }
+        }
+    }
+}
+
+export interface UserStore {
+    on(name: 'change', fn: (user: UserBasic) => void);
+    off(name: 'change', fn: (user: UserBasic) => void);
+    emit(name: 'change', user: UserBasic)
 }
 
 export var userNativeStore = new UserStore();
