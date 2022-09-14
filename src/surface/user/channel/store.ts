@@ -74,7 +74,6 @@ class UserChannelStore {
     async openFriends() {
         runInAction(() => {
             this.showFriend = true;
-            this.changeRoom = null;
             this.currentChannel = null;
         })
     }
