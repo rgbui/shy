@@ -155,6 +155,10 @@ class UserService extends BaseService {
     async userExitWs(args) {
         return masterSock.delete('/user/exit/ws', args);
     }
+    @get('/user/word/query')
+    async searchUserWord(args) {
+        return masterSock.get('/user/word/query', args);
+    }
 }
 
 
