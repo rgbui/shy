@@ -30,57 +30,6 @@ b {
 }
 
 
-/**
-layout 
-**/
-
-.flex-fix-auto {
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : center;
-
-    >* {
-        &:first-child {
-            flex-shrink: 0;
-            flex-grow  : 0;
-        }
-
-        &:last-child {
-            flex-shrink: 1;
-            flex-grow  : 1;
-        }
-    }
-}
-
-.flex-auto-fix {
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : center;
-
-    >* {
-        &:first-child {
-            flex-shrink: 1;
-            flex-grow  : 1;
-        }
-
-        &:last-child {
-            flex-shrink: 0;
-            flex-grow  : 0;
-        }
-    }
-}
-
-@keyframes ToggleVisible {
-    0% {
-        visibility         : hidden;
-        // background-color: red;
-    }
-
-    50% {
-        visibility         : hidden;
-        // background-color: blue;
-    }
-}
 
 ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-track {
