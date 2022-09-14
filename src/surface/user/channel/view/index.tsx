@@ -16,7 +16,7 @@ export var UserChannel = observer(function () {
             <div className="shy-user-channel-slide-head">
                 <UserChannelSearch></UserChannelSearch>
             </div>
-            <div className={"shy-user-friends" + (userChannelStore.showFriend ? " hover" : "")} onMouseDown={e => userChannelStore.openFriends()}>
+            <div className={"shy-user-friends cursor" + (userChannelStore.showFriend ? " hover" : "")} onMouseDown={e => userChannelStore.openFriends()}>
                 <Icon icon={FriendSvg}></Icon>
                 <span>好友</span>
             </div>
