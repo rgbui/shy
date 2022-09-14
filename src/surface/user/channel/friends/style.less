@@ -30,12 +30,16 @@
                 padding      : 2px 8px;
                 color        : var(--interactive-normal);
 
-                &.hover {
-                    background-color: var(--background-modifier-selected);
-                }
-
                 &:hover {
                     background-color: var(--background-modifier-hover);
+                }
+
+                &.hover {
+                    background-color: var(--background-modifier-selected);
+
+                    &:hover {
+                        background-color: var(--background-modifier-selected);
+                    }
                 }
             }
 
@@ -116,26 +120,26 @@
         padding   : 16px 10px;
         box-sizing: border-box;
 
-        >* {
-            flex-shrink: 1;
-            flex-grow  : 1;
-        }
+        // >* {
+        //     flex-shrink: 1;
+        //     flex-grow  : 1;
+        // }
 
         &-operator {
-            flex-shrink    : 0;
-            flex-shrink    : 0;
-            display        : flex;
-            justify-content: flex-end;
-            align-items    : center;
+            // flex-shrink    : 0;
+            // flex-shrink    : 0;
+            // display        : flex;
+            // justify-content: flex-end;
+            // align-items    : center;
 
-            .shy-icon {
-                cursor          : pointer;
-                width           : 36px;
-                height          : 36px;
-                border-radius   : 50%;
-                color           : var(--interactive-normal);
-                background-color: var(--background-secondary);
-            }
+            // .shy-icon {
+            //     cursor          : pointer;
+            //     width           : 36px;
+            //     height          : 36px;
+            //     border-radius   : 50%;
+            //     color           : var(--interactive-normal);
+            //     background-color: var(--background-secondary);
+            // }
         }
 
         &:hover {
