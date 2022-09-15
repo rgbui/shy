@@ -1,4 +1,5 @@
-import { Observer, observer, useLocalObservable } from "mobx-react";
+import { observe } from "mobx";
+import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { SettingsSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
@@ -41,9 +42,16 @@ export var UserProfile = observer(function () {
     async function Mousedown(event: React.MouseEvent) {
         useOpenUserSettings()
     }
+    React.useEffect(() => {
+        observe(surface.user, () => {
+            if (surface.user) {
+                if (local.avatar) local.avatar.forceUpdate()
+            }
+        })
+    }, [])
     return <div className="shy-user-profile">
         {surface.user && <div className="flex round item-hover-1 cursor padding-5 padding-r-20" onMouseDown={e => setUserStatus(e)}>
-            <Avatar ref={e => local.avatar = e} size={32} userid={surface.user.id}></Avatar>
+            <Avatar ref={e => local.avatar = e} size={32} user={surface.user}></Avatar>
             <div className="gap-l-5">
                 <div className="bold text f-14 l-14 text-overflow w-80" title={surface.user.name}>{surface.user.name}</div>
                 <div className="text-1 f-14 l-14">#{surface.user.sn}</div>
