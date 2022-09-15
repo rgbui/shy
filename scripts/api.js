@@ -194,6 +194,7 @@ push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch']
 push('/user/patch/status', '{status:UserStatus,customStatus?:{overDue: Date, text: string}}', 'SockResponse<void>', ['patch'])
 push('/user/basic', '{userid:string}', 'SockResponse<{user:UserBasic}>', ['get'])
 push('/users/basic', '{ids:string[]}', 'SockResponse<{list:UserBasic[]}>', ['get']);
+push('/user/basic/sync','{id:string}','void',['air'])
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{file:{url:string}}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number,rooms:any[]}>', ['get'])
