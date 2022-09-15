@@ -3,6 +3,7 @@ import { makeObservable, observable, runInAction } from "mobx";
 import { ResourceArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
+import { surface } from "../..";
 import { UserChannel, UserRoom, UserCommunicate } from "./declare";
 
 class UserChannelStore {
@@ -106,7 +107,9 @@ class UserChannelStore {
         var r = await channel.get('/friends', { page: this.friends.page, size: this.friends.size });
         if (r.ok) {
             this.friends = r.data;
-            var us = await channel.get('/users/basic', { ids: this.friends.list.map(c => c.friendId) });
+            var ids = this.friends.list.map(c => surface.user.id == c.friendId ? c.userid : c.friendId);
+            ids = lodash.uniq(ids);
+            var us = await channel.get('/users/basic', { ids: ids });
             if (us?.ok) {
                 this.friends.users = us.data.list;
             }
