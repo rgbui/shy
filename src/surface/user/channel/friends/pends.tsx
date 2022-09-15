@@ -8,21 +8,22 @@ import { CheckSvg, CloseSvg } from "rich/component/svgs";
 import { Input } from "rich/component/view/input";
 import { userChannelStore } from "../store";
 import { ToolTip } from "rich/component/view/tooltip";
+import lodash from "lodash";
 
 export var PendListView = observer(function () {
     var refInput = React.useRef<Input>(null);
     async function removeSend(row) {
         var r = await channel.del('/friend/delete', { id: row.id });
         if (r.ok) {
-            userChannelStore.pends.list.remove(g => g.id == row.id);
-            userChannelStore.pends.list = userChannelStore.pends.list;
+            lodash.remove(userChannelStore.pends.list, g => g.id == row.id)
+            userChannelStore.pends.total -= 1;
         }
     }
     async function agree(row) {
         var r = await channel.put('/friend/agree', { id: row.id });
         if (r.ok) {
-            userChannelStore.pends.list.remove(g => g.id == row.id);
-            userChannelStore.pends.list = userChannelStore.pends.list;
+            lodash.remove(userChannelStore.pends.list, g => g.id == row.id)
+            userChannelStore.pends.total -= 1;
         }
     }
     React.useEffect(() => {
