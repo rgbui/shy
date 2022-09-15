@@ -12,6 +12,7 @@ import { config } from './common/config';
 import { surface } from './surface';
 import { MyWorkSpace } from './surface/view/my';
 import { channel } from "rich/net/channel";
+import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
@@ -86,6 +87,7 @@ export function App() {
 
   }
   return <div className='shy-app'>
+    {renderAvatorStatusSvgMask()}
     {!isLoad && <div className='shy-app-load'></div>}
     {isLoad && renderRoutes()}
   </div>
