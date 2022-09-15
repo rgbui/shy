@@ -1,4 +1,5 @@
 import lodash from "lodash";
+import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
 import { Events } from "rich/util/events";
 
@@ -30,6 +31,7 @@ export class UserStore extends Events {
             Object.assign(r, data);
             if (!lodash.isEqual(c, r)) {
                 this.emit('change', r)
+                channel.air('/user/basic/sync',r)
             }
         }
     }
