@@ -10,15 +10,20 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Rect } from "rich/src/common/vector/point";
 import { channel } from "rich/net/channel";
 import { ToolTip } from "rich/component/view/tooltip";
-import { UserStatus } from "rich/types/user";
+import { UserBasic, UserStatus } from "rich/types/user";
+import { surface } from "../../..";
 
 export var FrendListView = observer(function () {
     var refInput = React.useRef<Input>(null);
-    async function joinChannel(row) {
-        await userChannelStore.openUserChannel({ id: row.friendId } as any)
+    async function joinChannel(user: UserBasic) {
+        await userChannelStore.openUserChannel(user.id)
     }
-    async function open(event: React.MouseEvent, row) {
+    async function open(event: React.MouseEvent, user: UserBasic) {
         event.stopPropagation();
+        var row = userChannelStore.friends.list.find(g => {
+            return g.friendId == user.id && g.userid == surface.user.id ||
+                g.userid == user.id && g.friendId == surface.user.id
+        })
         if (row) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
                 { name: 'delete', text: '解除好友关系' }

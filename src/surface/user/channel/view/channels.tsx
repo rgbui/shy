@@ -14,15 +14,15 @@ export var UserChannels = observer(function () {
         </div>
         {userChannelStore.channels.map(c => {
             var room = userChannelStore.rooms.find(g => g.id == c.roomId);
-            if (room.users.length == 2) {
-                var friendId = room.users.find(g =>g.userid != surface.user.id)?.userid;
+            if (room?.single) {
+                var friendId = room.other;
                 return <div key={c.id}
-                    onMouseDown={e => userChannelStore.changeRoom(c, room)}
+                    onMouseDown={e =>userChannelStore.changeRoom(c, room)}
                     className={"shy-user-channels-room" + (c.roomId == userChannelStore.currentRoom?.id ? " hover" : "")}>
                     <Avatar showName size={32} userid={friendId}></Avatar>
                 </div>
             }
-            else if (room.users.length > 2) {
+            else {
                 return <div key={c.id} className="shy-user-channels-room">
 
                 </div>

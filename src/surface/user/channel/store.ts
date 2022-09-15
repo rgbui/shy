@@ -48,8 +48,8 @@ class UserChannelStore {
             this.currentChannel = channel
         })
     }
-    async openUserChannel(user: UserBasic) {
-        var room = this.rooms.find(g => g.users.some(s => s.userid == user.id) && g.users.length == 2);
+    async openUserChannel(userid: string) {
+        var room = this.rooms.find(g => g.users.some(s => s.userid == userid) && g.users.length == 2);
         if (room) {
             var ch = this.channels.find(c => c.roomId == room.id);
             if (ch) {
@@ -60,10 +60,11 @@ class UserChannelStore {
                 return;
             }
         }
-        var r = await channel.put('/user/channel/join', { userids: [user.id] });
+        var r = await channel.put('/user/channel/join', { userids: [userid] });
         if (r.ok) {
             if (!this.channels.some(s => s.id == r.data.channel.id)) this.channels.push(r.data.channel as UserChannel)
             if (!this.rooms.some(s => s.id == r.data.room.id)) this.rooms.push(r.data.room as UserRoom);
+            console.log(r.data);
             await this.sortChannels()
             await this.changeRoom(r.data.channel, r.data.room);
         }

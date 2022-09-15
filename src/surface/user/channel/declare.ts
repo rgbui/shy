@@ -16,6 +16,8 @@ export interface UserRoom {
     creater: string;
     createDate: Date;
     users: { userid: string, createDate: Date, role?: 'member' | 'admin' }[];
+    other: string;
+    single: boolean,
     name: string;
 }
 
