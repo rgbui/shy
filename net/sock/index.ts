@@ -4,6 +4,7 @@ import { SockResponse, SockType } from "./type";
 import { config } from "../../src/common/config";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
+import { timService } from "../primus";
 
 export class Sock {
     constructor(private type: SockType, private remoteUrl?: string) { }
@@ -43,6 +44,7 @@ export class Sock {
         headers['shy-device'] = device || 'anonymous';
         if (token) headers['shy-token'] = token;
         if (lang) headers['shy-lang'] = lang;
+        if (timService && timService.tim) headers['shy-sockId'] = timService.sockId;
         return {
             headers: headers
         }
