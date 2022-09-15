@@ -40,6 +40,7 @@ export class Surface extends Events {
         var r = await channel.get('/sign')
         if (r.ok) {
             config.updateServiceGuid(r.data.guid);
+            r.data.user.online = true;
             Object.assign(this.user, r.data.user);
             await timService.open();
             ClientNotifys();
@@ -133,14 +134,14 @@ export class Surface extends Events {
 
             }
             else {
-              //  UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
+                //  UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
             }
         }
     }
     onCreateWorkspace() {
         UrlRoute.push(ShyUrl.workCreate);
     }
-  
+
     /**
      * 
      */
