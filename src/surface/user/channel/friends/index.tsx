@@ -19,7 +19,10 @@ export var FriendsView = observer(function () {
     async function joinFriend(event: React.MouseEvent) {
         var g = await useJoinFriend({ roundArea: Rect.fromEvent(event) });
         if (g) {
-            userChannelStore.mode = 'pending';
+            if (userChannelStore.mode == 'pending') {
+                await userChannelStore.loadPends();
+            } else
+                userChannelStore.mode = 'pending';
         }
     }
     return <div className="shy-user-channel-friends">
