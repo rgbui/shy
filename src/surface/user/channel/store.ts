@@ -3,6 +3,7 @@ import { makeObservable, observable, runInAction } from "mobx";
 import { ResourceArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
+import { UserChannel, UserRoom, UserCommunicate } from "./declare";
 
 class UserChannelStore {
     constructor() {
@@ -20,11 +21,11 @@ class UserChannelStore {
         });
     }
     showFriend: boolean = true;
-    channels: any[] = [];
-    rooms: any[] = [];
-    currentRoom: any = null;
-    currentChannel: any = null;
-    currentChats: any[] = null;
+    channels: UserChannel[] = [];
+    rooms: UserRoom[] = [];
+    currentRoom: UserRoom = null;
+    currentChannel: UserChannel = null;
+    currentChats: UserCommunicate[] = null;
     async loadChannels() {
         var r = await channel.get('/user/channels', { page: 1, size: 200 });
         if (r.ok) {
@@ -51,7 +52,7 @@ class UserChannelStore {
         if (room) {
             var ch = this.channels.find(c => c.roomId == room.id);
             if (ch) {
-                ch.activeDate = new Date();
+                ch.lastDate = new Date();
                 await channel.patch('/user/channel/active', { id: ch.id });
                 await this.sortChannels()
                 await this.changeRoom(ch, room);
@@ -60,8 +61,8 @@ class UserChannelStore {
         }
         var r = await channel.put('/user/channel/join', { userids: [user.id] });
         if (r.ok) {
-            if (!this.channels.some(s => s.id == r.data.channel.id)) this.channels.push(r.data.channel)
-            if (!this.rooms.some(s => s.id == r.data.room.id)) this.rooms.push(r.data.room);
+            if (!this.channels.some(s => s.id == r.data.channel.id)) this.channels.push(r.data.channel as UserChannel)
+            if (!this.rooms.some(s => s.id == r.data.room.id)) this.rooms.push(r.data.room as UserRoom);
             await this.sortChannels()
             await this.changeRoom(r.data.channel, r.data.room);
         }
@@ -75,6 +76,7 @@ class UserChannelStore {
         runInAction(() => {
             this.showFriend = true;
             this.currentChannel = null;
+            this.currentRoom = null;
         })
     }
     roomChats: Map<string, {
@@ -97,13 +99,17 @@ class UserChannelStore {
         }
     }
     mode: 'online' | 'all' | 'pending' | 'shield' = 'online';
-    friends: { page: number, size: number, total: number, list: any[] } = { page: 1, size: 200, total: 0, list: [] };
+    friends: { page: number, size: number, total: number, users?: UserBasic[], list: any[] } = { page: 1, size: 200, users: [], total: 0, list: [] };
     pends: { page: number, size: number, total: number, list: any[] } = { page: 1, size: 200, total: 0, list: [] };
     blacklist: { page: number, size: number, total: number, list: any[] } = { page: 1, size: 200, total: 0, list: [] };
     async loadFriends() {
         var r = await channel.get('/friends', { page: this.friends.page, size: this.friends.size });
         if (r.ok) {
             this.friends = r.data;
+            var us = await channel.get('/users/basic', { ids: this.friends.list.map(c => c.friendId) });
+            if (us?.ok) {
+                this.friends.users = us.data.list;
+            }
         }
     }
     async loadPends() {
