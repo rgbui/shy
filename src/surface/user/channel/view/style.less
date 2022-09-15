@@ -52,10 +52,13 @@
                 margin-left: 10px;
             }
 
-            &:hover,
-            &.hover {
+            &:hover {
                 color           : var(--interactive-hover);
                 background-color: var(--background-modifier-hover);
+            }
+
+            &.hover {
+                background-color: var(--background-modifier-selected);
             }
         }
 
@@ -83,6 +86,7 @@
     min-height   : 30px;
     border-radius: 4px;
     box-shadow   : 0 0 0 1px rgba(185, 187, 190, .3), 0 2px 10px 0 rgba(0, 0, 0, .1);
+
     &-user {
         min-height: 40px;
     }

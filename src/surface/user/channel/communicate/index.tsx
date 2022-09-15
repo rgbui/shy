@@ -15,8 +15,9 @@ export var CommunicateView = observer(function () {
 
     }
     async function onInput(data: { files?: File[], content?: string }) {
-        if (data.content) {
-            var re = await channel.put('/user/chat/send', {
+        if (data.content)
+        {
+            var re = await channel.put('/user/chat/send',{
                 sockId: timService.sockId,
                 tos: [...cm.users.map(c => c.id)],
                 roomId: cm.room.id,
