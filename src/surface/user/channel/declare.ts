@@ -27,14 +27,14 @@ export interface UserCommunicate {
     userid: string;
     roomId: string;
     seq: number;
-    file: IconArguments;
-    content: string;
-    isDeleted: boolean;
-    deletedDate: Date;
-    deletedUser: string;
-    editDate: Date;
-    isEdited: boolean;
-    replyId: string;
+    file?: IconArguments;
+    content?: string;
+    isDeleted?: boolean;
+    deletedDate?: Date;
+    deletedUser?: string;
+    editDate?: Date;
+    isEdited?: boolean;
+    replyId?: string;
     reply?: UserCommunicate;
-    emojis: { emojiId: string, code?: string, count: number }[];
+    emojis?: { emojiId: string, code?: string, count: number }[];
 }

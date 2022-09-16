@@ -1,6 +1,5 @@
 import lodash from "lodash";
 import { makeObservable, observable, runInAction } from "mobx";
-import { ResourceArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
 import { surface } from "../..";
@@ -82,15 +81,10 @@ class UserChannelStore {
         })
     }
     roomChats: Map<string, {
-        channel?: any,
-        users: {
-            id: string;
-            sn: number;
-            avatar: ResourceArguments;
-            name: string;
-        }[], room?: any, seq?: number, chats: any[]
+        channel?: UserChannel,
+        users: UserBasic[], room?: UserRoom, seq?: number, chats: UserCommunicate[]
     }> = new Map();
-    async loadRoomChats(ch: any, room: any) {
+    async loadRoomChats(ch: UserChannel, room: UserRoom) {
         var r = await channel.get('/user/chat/list', { roomId: room.id });
         if (r.ok) {
             var list = r.data.list || [];
@@ -129,6 +123,7 @@ class UserChannelStore {
         }
     }
     async notifyChat(data) {
+        console.log('chat', data);
         var cm = this.roomChats.get(data.roomId);
         if (cm) {
             if (!Array.isArray(cm.chats)) cm.chats = [];

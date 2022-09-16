@@ -8,6 +8,7 @@ import { userChannelStore } from "../store";
 import dayjs from "dayjs";
 import "./style.less";
 import { timService } from "../../../../../net/primus";
+import lodash from "lodash";
 export var CommunicateView = observer(function () {
     var cm = userChannelStore.currentRoom ? userChannelStore.roomChats.get(userChannelStore.currentRoom.id) : undefined;
     var currentUser = cm ? cm.users.find(g => g.id != cm.channel.userid) : undefined;
@@ -15,11 +16,12 @@ export var CommunicateView = observer(function () {
 
     }
     async function onInput(data: { files?: File[], content?: string }) {
-        if (data.content)
-        {
-            var re = await channel.put('/user/chat/send',{
+        if (data.content) {
+            var toUsers = cm.users.map(c => c.id);
+            lodash.remove(toUsers, g => g == surface.user.id);
+            var re = await channel.put('/user/chat/send', {
                 sockId: timService.sockId,
-                tos: [...cm.users.map(c => c.id)],
+                tos: toUsers,
                 roomId: cm.room.id,
                 content: data.content
             });
@@ -29,7 +31,8 @@ export var CommunicateView = observer(function () {
                     userid: surface.user.id,
                     createDate: re.data.createDate || new Date(),
                     content: data.content,
-                    seq: re.data.seq
+                    seq: re.data.seq,
+                    roomId: cm.room.id
                 })
             }
         }

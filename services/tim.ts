@@ -6,7 +6,7 @@ import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
 
 export enum MessageUrl {
-    privateTalk = '/user/chat/notify',
+    userTalkNotify = '/user/chat/notify',
     userPayNotify = '/user/pay/notify',
     userOnlineNotify = '/user/online/notify',
     userOffLineNotify = '/user/offline/notify',
@@ -40,28 +40,24 @@ export function ClientNotifys() {
      * 来自于有人发起好友的请求
      */
     timService.tim.on(MessageUrl.userOnlineNotify, e => {
-        console.log(e);
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
             userNativeStore.notifyUpdate(e.userid, e.data)
         }
     });
     timService.tim.on(MessageUrl.userOffLineNotify, e => {
-        console.log(e);
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
             userNativeStore.notifyUpdate(e.userid, e.data)
         }
     });
     timService.tim.on(MessageUrl.userPatchStatusNotify, e => {
-        console.log('dddd',e);
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
             userNativeStore.notifyUpdate(e.userid, e.data)
         }
     });
     timService.tim.on(MessageUrl.userPatchNotify, e => {
-        console.log('ddddss',e);
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
             userNativeStore.notifyUpdate(e.userid, e.data)
@@ -82,7 +78,7 @@ export function ClientNotifys() {
     });
 
     //私信
-    timService.tim.on(MessageUrl.privateTalk, e => userChannelStore.notifyChat(e));
+    timService.tim.on(MessageUrl.userTalkNotify, e => userChannelStore.notifyChat(e));
 
     /*空间协作*/
     //文档
