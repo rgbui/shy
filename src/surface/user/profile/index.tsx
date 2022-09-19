@@ -33,8 +33,8 @@ export var UserProfile = observer(function () {
             var status = UserStatus[r.item.name]
             var g = await channel.patch('/user/patch/status', { status });
             if (g.ok) {
-                userNativeStore.put({ id: surface.user.id, status })
                 surface.user.status = status;
+                await userNativeStore.notifyUpdate(surface.user.id, { status })
                 if (local.avatar) local.avatar.load(true)
             }
         }
