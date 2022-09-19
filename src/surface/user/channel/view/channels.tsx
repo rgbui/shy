@@ -3,6 +3,7 @@ import React from "react";
 import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../../..";
 import { userChannelStore } from "../store";
+
 export var UserChannels = observer(function () {
     React.useEffect(() => {
         userChannelStore.loadChannels();
@@ -12,13 +13,13 @@ export var UserChannels = observer(function () {
             <span>私信</span>
             {/*<Icon style={{ display: 'none' }} size={14} icon={PlusSvg}></Icon> */}
         </div>
-        {userChannelStore.channels.map(c => {
-            var room = userChannelStore.rooms.find(g => g.id == c.roomId);
-            if (room?.single) {
-                var friendId = room.other;
+        {userChannelStore.channels.list.map(c => {
+            if (c.room?.single) {
+                var friendId = c.room.other;
+                if (friendId == surface.user.id) friendId = c.room.creater;
                 return <div key={c.id}
-                    onMouseDown={e =>userChannelStore.changeRoom(c, room)}
-                    className={"shy-user-channels-room" + (c.roomId == userChannelStore.currentRoom?.id ? " hover" : "")}>
+                    onMouseDown={e => userChannelStore.changeRoom(c)}
+                    className={"shy-user-channels-room" + (c.id == userChannelStore.currentChannel.id ? " hover" : "")}>
                     <Avatar showName size={32} userid={friendId}></Avatar>
                 </div>
             }
