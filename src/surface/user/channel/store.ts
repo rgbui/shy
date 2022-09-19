@@ -3,96 +3,80 @@ import { makeObservable, observable, runInAction } from "mobx";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
 import { surface } from "../..";
-import { UserChannel, UserRoom, UserCommunicate } from "./declare";
+import { CacheKey, sCache } from "../../../../net/cache";
+import { UserChannel, UserRoom } from "./declare";
 
 class UserChannelStore {
     constructor() {
         makeObservable(this, {
             showFriend: observable,
             channels: observable,
-            rooms: observable,
             currentChannel: observable,
-            currentRoom: observable,
             mode: observable,
             friends: observable,
             pends: observable,
-            blacklist: observable,
-            roomChats: observable,
+            blacklist: observable
         });
     }
     showFriend: boolean = true;
-    channels: UserChannel[] = [];
-    rooms: UserRoom[] = [];
-    currentRoom: UserRoom = null;
+    channels: {
+        list: UserChannel[],
+        total: number,
+        page: number,
+        size: number
+    } = { list: [], total: 0, page: 1, size: 200 }
     currentChannel: UserChannel = null;
-    currentChats: UserCommunicate[] = null;
     async loadChannels() {
         var r = await channel.get('/user/channels', { page: 1, size: 200 });
         if (r.ok) {
             runInAction(() => {
-                this.rooms = r.data.rooms;
-                this.channels = r.data.list;
+                this.channels = { list: r.data.list, total: r.data.total, page: r.data.page, size: r.data.size };
+                this.channels.list.forEach(c => {
+                    if (!c.room) {
+                        c.room = r.data.rooms.find(g => g.id == c.roomId)
+                    }
+                })
             })
         }
     }
-    async changeRoom(channel, room) {
-        this.showFriend = false;
-        var map = this.roomChats.get(room.id);
-        if (!map) {
-            /**加载数据 */
-            map = await this.loadRoomChats(channel, room);
-        }
+    changeRoom(ch: UserChannel) {
         runInAction(() => {
-            this.currentRoom = room;
-            this.currentChannel = channel
+            this.showFriend = false;
+            this.currentChannel = ch;
         })
     }
     async openUserChannel(userid: string) {
-        var room = this.rooms.find(g => g.users.some(s => s.userid == userid) && g.users.length == 2);
-        if (room) {
-            var ch = this.channels.find(c => c.roomId == room.id);
-            if (ch) {
-                ch.lastDate = new Date();
-                await channel.patch('/user/channel/active', { id: ch.id });
-                await this.sortChannels()
-                await this.changeRoom(ch, room);
-                return;
-            }
+        var ch = this.channels.list.find(g => g.room.single == true && (g.room.creater == userid || g.room.other == userid));
+        if (ch) {
+            ch.lastDate = new Date();
+            await channel.patch('/user/channel/active', { id: ch.id });
+            this.sortChannels()
+            this.changeRoom(ch);
+            return;
         }
         var r = await channel.put('/user/channel/join', { userids: [userid] });
         if (r.ok) {
-            if (!this.channels.some(s => s.id == r.data.channel.id)) this.channels.push(r.data.channel as UserChannel)
-            if (!this.rooms.some(s => s.id == r.data.room.id)) this.rooms.push(r.data.room as UserRoom);
-            console.log(r.data);
-            await this.sortChannels()
-            await this.changeRoom(r.data.channel, r.data.room);
+            var ch = r.data.channel as UserChannel;
+            if (!this.channels.list.some(s => s.id == ch.id)) {
+                ch.room = r.data.room as UserRoom;
+                this.channels.list.push(ch);
+            }
+            else ch = this.channels.list.find(g => g.id == ch.id)
+            ch.lastDate = new Date();
+            this.sortChannels();
+            this.changeRoom(ch);
         }
     }
-    async sortChannels() {
-        var cs = lodash.sortBy(this.channels, 'lastDate');
+    sortChannels() {
+        var cs = lodash.sortBy(this.channels.list, 'lastDate');
         cs.reverse();
-        this.channels = cs;
+        this.channels.list = cs;
     }
-    async openFriends() {
+    openFriends() {
         runInAction(() => {
             this.showFriend = true;
             this.currentChannel = null;
-            this.currentRoom = null;
         })
-    }
-    roomChats: Map<string, {
-        channel?: UserChannel,
-        users: UserBasic[], room?: UserRoom, seq?: number, chats: UserCommunicate[]
-    }> = new Map();
-    async loadRoomChats(ch: UserChannel, room: UserRoom) {
-        var r = await channel.get('/user/chat/list', { roomId: room.id });
-        if (r.ok) {
-            var list = r.data.list || [];
-            var users = await channel.get('/users/basic', { ids: room.users.map(u => u.userid) })
-            var data = { channel: ch, room, users: users?.data?.list || [], seq: list.last()?.seq, chats: list } as any;
-            this.roomChats.set(room.id, data);
-            return data;
-        }
     }
     mode: 'online' | 'all' | 'pending' | 'shield' = 'online';
     friends: { page: number, size: number, total: number, users?: UserBasic[], list: any[] } = { page: 1, size: 200, users: [], total: 0, list: [] };
@@ -123,12 +107,24 @@ class UserChannelStore {
         }
     }
     async notifyChat(data) {
-        console.log('chat', data);
-        var cm = this.roomChats.get(data.roomId);
-        if (cm) {
-            if (!Array.isArray(cm.chats)) cm.chats = [];
-            cm.chats.push(data);
+        var ch = this.channels.list.find(g => g.room == data.roomId);
+        if (!ch) {
+            //这个需要自动创建一个新的channel
         }
+        if (ch) {
+            if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
+            ch.room.chats.push(data);
+            if (this.currentChannel !== ch) {
+                if (typeof ch.unreadSeq == 'undefined')
+                    ch.unreadSeq = data.seq;
+                else ch.unreadSeq > data.seq
+                ch.unreadSeq = data.seq;
+            }
+        }
+    }
+    async setRoomSeqCache(roomId: string,seq: number)
+    {
+        sCache.set(CacheKey.roomCache.replace('{roomId}',roomId), seq)
     }
 }
 
