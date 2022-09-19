@@ -220,7 +220,7 @@ push('/blacklist/join', '{otherId:string}', 'SockResponse<void>', ['put'])
 push('/friend/is', '{friendId:string}', 'SockResponse<{is:boolean}>', ['get'])
 push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any>}>', ['put'])
 push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
-push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[],replyId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
 push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string}`, 'SockResponse<{orderId:string,code:string}>', ['put'])
 push('/repeat/qr_pay/order', '{orderId:string,platform:string}', 'SockResponse<{orderId:string,code:string}>', ['get'])
