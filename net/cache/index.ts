@@ -14,7 +14,7 @@ export enum CacheKey {
     ws_toggle_pages = 6,
     slideWidth = 7,
     timUrl = 8,
-    roomCache='/room/{roomId}/cache/seq'
+    roomCache = '/room/{roomId}/cache/seq'
 }
 const FLAG = 'shy.';
 class SyCache {
