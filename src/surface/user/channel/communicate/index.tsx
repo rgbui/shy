@@ -1,17 +1,21 @@
-import { observer } from "mobx-react";
+import { observer, useLocalStore } from "mobx-react";
 import React from "react";
 import { RichTextInput } from "rich/component/view/rich.input/index";
 import { channel } from "rich/net/channel";
 import { surface } from "../../..";
 import { userChannelStore } from "../store";
 import "./style.less";
-import { timService } from "../../../../../net/primus";
 import { UserBox } from "rich/component/view/avator/user";
 import { Loading } from "rich/component/view/loading";
 import { RenderChatsView } from "./render";
 import { ChannelTextType } from "rich/extensions/chats/declare";
 import { util } from "rich/util/util";
 export var CommunicateView = observer(function () {
+    var local = useLocalStore<{ richInput: RichTextInput }>(() => {
+        return {
+            richInput: null
+        }
+    })
     function popOpen(cs: { char: string, span: HTMLElement }) {
 
     }
@@ -26,7 +30,6 @@ export var CommunicateView = observer(function () {
             var room = userChannelStore.currentChannel.room;
             var toUsers = room.users.map(c => c.userid);
             var re = await channel.put('/user/chat/send', {
-                sockId: timService.sockId,
                 tos: toUsers,
                 roomId: room.id,
                 content: data.content,
@@ -46,7 +49,7 @@ export var CommunicateView = observer(function () {
                     chat.reply = room.chats.find(b => b.id == chat.replyId);
                 }
                 room.chats.push(chat);
-                await userChannelStore.setRoomSeqCache(room.id, re.data.seq);
+                await userChannelStore.readRoomChat(userChannelStore.currentChannel);
                 // await this.block.setLocalSeq(re.data.seq);
                 // this.forceUpdate(()=>this.updateScroll());
             }
@@ -69,9 +72,8 @@ export var CommunicateView = observer(function () {
                 });
                 if (d) {
                     fr.speed = `${file.name}-上传完成`;
-                    this.forceUpdate();
+                    // this.forceUpdate();
                     var re = await channel.put('/user/chat/send', {
-                        sockId: timService.sockId,
                         tos: toUsers,
                         roomId: room.id,
                         file: d.data.file,
@@ -86,7 +88,7 @@ export var CommunicateView = observer(function () {
                             roomId: room.id,
                             seq: re.data.seq
                         });
-                        await userChannelStore.setRoomSeqCache(room.id, re.data.seq);
+                        await userChannelStore.readRoomChat(userChannelStore.currentChannel);
                     }
                 }
                 await util.delay(20)
@@ -97,28 +99,35 @@ export var CommunicateView = observer(function () {
         var ch = userChannelStore.currentChannel;
         if (ch && ch.room.isLoadChat !== true) {
             var r = await channel.get('/user/chat/list', { roomId: ch.room.id });
+            if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
             if (r.ok) {
                 var list = r.data.list || [];
-                if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
                 ch.room.chats.push(...list);
             }
+            userChannelStore.readRoomChat(ch);
+        }
+    }
+    async function replyChat(d: ChannelTextType) {
+        if (local.richInput) {
+            var use = await channel.get('/user/basic', { userid: d.userid });
+            local.richInput.openReply({ text: `回复${use.data.user.name}:${d.content}`, replyId: d.id })
         }
     }
     React.useEffect(() => {
         loadChats()
-    },[userChannelStore.currentChannel])
+    }, [userChannelStore.currentChannel])
     if (!userChannelStore.currentChannel) return <Loading></Loading>
     return <div className="shy-user-channel-communicate">
-        <div className="shy-user-channel-communicate-head">
-            {<UserBox userid={surface.user.id == userChannelStore.currentChannel.room.creater ? userChannelStore.currentChannel.room.other : userChannelStore.currentChannel.room.creater}>{(user) => {
-                return <span>@{user?.name}</span>
-            }}</UserBox>}
-        </div>
-        <div className="shy-user-channel-communicate-content">
-            {<RenderChatsView></RenderChatsView>}
-        </div>
-        <div className="shy-user-channel-communicate-input">
-            <RichTextInput popOpen={popOpen} onInput={onInput}></RichTextInput>
-        </div>
+        {<UserBox userid={surface.user.id == userChannelStore.currentChannel.room.creater ? userChannelStore.currentChannel.room.other : userChannelStore.currentChannel.room.creater}>{(user) => {
+            return <><div className="shy-user-channel-communicate-head">
+                <span>@{user?.name}</span>
+            </div>
+                <div className="shy-user-channel-communicate-content">
+                    {<RenderChatsView replyChat={replyChat}></RenderChatsView>}
+                </div>
+                <div className="shy-user-channel-communicate-input">
+                    <RichTextInput placeholder={'@' + user?.name} ref={e => local.richInput} popOpen={popOpen} onInput={onInput}></RichTextInput>
+                </div></>
+        }}</UserBox>}
     </div>
 })
