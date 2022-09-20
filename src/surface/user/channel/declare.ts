@@ -10,8 +10,8 @@ export interface UserChannel {
     deletedDate: Date;
     deletedUser: string;
     room: UserRoom;
-
-    unreadSeq?:number;
+    readedSeq?: number;
+    unreadCount?: number
 }
 
 export interface UserRoom {
@@ -22,11 +22,12 @@ export interface UserRoom {
     other: string;
     single: boolean,
     name: string;
+    currentnSeq: number;
 
     chats?: UserCommunicate[];
-    isLoadChat?:boolean;
+    isLoadChat?: boolean;
     isLoadAllChats?: boolean,
-    uploadFileds:{id:string,speed:string,text:string}[]
+    uploadFileds: { id: string, speed: string, text: string }[]
 }
 
 export interface UserCommunicate {
