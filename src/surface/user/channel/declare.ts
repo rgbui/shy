@@ -23,6 +23,7 @@ export interface UserRoom {
     single: boolean,
     name: string;
     currentnSeq: number;
+    currentContent: string;
 
     chats?: UserCommunicate[];
     isLoadChat?: boolean;
