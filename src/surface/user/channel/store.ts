@@ -1,21 +1,22 @@
 import lodash from "lodash";
-import { makeObservable, observable, runInAction } from "mobx";
+import { computed, makeObservable, observable, runInAction } from "mobx";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
 import { surface } from "../..";
-import { CacheKey, sCache } from "../../../../net/cache";
+import { CacheKey, yCache } from "../../../../net/cache";
 import { UserChannel, UserRoom } from "./declare";
 
 class UserChannelStore {
     constructor() {
-        makeObservable(this, {
+        makeObservable(this,{
             showFriend: observable,
             channels: observable,
             currentChannel: observable,
             mode: observable,
             friends: observable,
             pends: observable,
-            blacklist: observable
+            blacklist: observable,
+            unReadChatCount: computed
         });
     }
     showFriend: boolean = true;
@@ -26,17 +27,65 @@ class UserChannelStore {
         size: number
     } = { list: [], total: 0, page: 1, size: 200 }
     currentChannel: UserChannel = null;
+    isloaded: boolean = false;
+    get unReadChatCount() {
+        return this.channels.list.sum(g => g.unreadCount || 0)
+    }
     async loadChannels() {
+        if (this.isloaded) return;
+        this.isloaded = true;
         var r = await channel.get('/user/channels', { page: 1, size: 200 });
         if (r.ok) {
-            runInAction(() => {
-                this.channels = { list: r.data.list, total: r.data.total, page: r.data.page, size: r.data.size };
-                this.channels.list.forEach(c => {
-                    if (!c.room) {
-                        c.room = r.data.rooms.find(g => g.id == c.roomId)
+            this.channels = {
+                list: r.data.list,
+                total: r.data.total,
+                page: r.data.page,
+                size: r.data.size
+            };
+            await this.channels.list.eachAsync(async c => {
+                if (!c.room) {
+                    c.room = r.data.rooms.find(g => g.id == c.roomId)
+                    c.room.chats = [];
+                    var g = await yCache.get(CacheKey.roomCache.replace('{roomId}', c.room.id));
+                    if (g) {
+                        if (typeof g == 'string') g = parseFloat(g);
+                        if (!isNaN(g)) {
+                            c.readedSeq = g;
+                        }
                     }
-                })
-            })
+                }
+            });
+            await this.loadUnreadCounts();
+        } else this.isloaded = false;
+    }
+    /**
+     * 获取未读的聊天数
+     */
+    async loadUnreadCounts() {
+        var rs: { roomId: string, seq: number }[] = [];
+        this.channels.list.forEach(c => {
+            if (typeof c.room.currentnSeq == 'number') {
+                if (c.unreadCount == c.room.currentnSeq) {
+                    return;
+                }
+                rs.push({ roomId: c.room.id, seq: c.readedSeq || undefined })
+            }
+        });
+        if (rs.length > 0) {
+            var size = 10;
+            var count = Math.ceil(rs.length / size);
+            for (let i = 0; i < count; i++) {
+                var rgs = rs.slice(i * size, (i + 1) * size);
+                var result = await channel.get('/user/room/unread', { unrooms: rgs });
+                if (result.ok) {
+                    result.data.unreads.forEach(ur => {
+                        var c = this.channels.list.find(cc => cc.roomId == ur.roomId);
+                        if (c) {
+                            c.unreadCount = ur.count;
+                        }
+                    })
+                }
+            }
         }
     }
     changeRoom(ch: UserChannel) {
@@ -110,21 +159,32 @@ class UserChannelStore {
         var ch = this.channels.list.find(g => g.room == data.roomId);
         if (!ch) {
             //这个需要自动创建一个新的channel
+            var r = await channel.get('/user/channel/create', { roomId: data.roomId });
+            if (r.ok) {
+                ch = r.data.channel
+                this.channels.list.push(ch);
+                this.sortChannels();
+            }
         }
         if (ch) {
             if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
             ch.room.chats.push(data);
             if (this.currentChannel !== ch) {
-                if (typeof ch.unreadSeq == 'undefined')
-                    ch.unreadSeq = data.seq;
-                else ch.unreadSeq > data.seq
-                ch.unreadSeq = data.seq;
+                ch.unreadCount = (ch.unreadCount || 0) + 1;
+                ch.room.currentnSeq = ch.room.chats.max(c => c.seq);
+            }
+            else {
+                await this.readRoomChat(ch);
             }
         }
     }
-    async setRoomSeqCache(roomId: string,seq: number)
-    {
-        sCache.set(CacheKey.roomCache.replace('{roomId}',roomId), seq)
+    async readRoomChat(channel: UserChannel) {
+        runInAction(() => {
+            channel.readedSeq = channel.room.chats.max(c => c.seq);
+            channel.room.currentnSeq = channel.readedSeq;
+            channel.unreadCount = 0;
+        })
+        await yCache.set(CacheKey.roomCache.replace('{roomId}', channel.room.id), channel.readedSeq)
     }
 }
 
