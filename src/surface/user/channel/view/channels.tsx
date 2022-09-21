@@ -1,6 +1,8 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { Avatar } from "rich/component/view/avator/face";
+import { UserBox } from "rich/component/view/avator/user";
+import { DotNumber } from "rich/component/view/dot";
 import { surface } from "../../..";
 import { userChannelStore } from "../store";
 
@@ -11,7 +13,7 @@ export var UserChannels = observer(function () {
     return <div className="shy-user-channels">
         <div className="shy-user-channels-head">
             <span>私信</span>
-            {/*<Icon style={{ display: 'none' }} size={14} icon={PlusSvg}></Icon> */}
+            {/*<Icon style={{display:'none'}} size={14} icon={PlusSvg}></Icon> */}
         </div>
         {userChannelStore.channels.list.map(c => {
             if (c.room?.single) {
@@ -19,8 +21,17 @@ export var UserChannels = observer(function () {
                 if (friendId == surface.user.id) friendId = c.room.creater;
                 return <div key={c.id}
                     onMouseDown={e => userChannelStore.changeRoom(c)}
-                    className={"shy-user-channels-room" + (c.id == userChannelStore.currentChannel.id ? " hover" : "")}>
-                    <Avatar showName size={32} userid={friendId}></Avatar>
+                    className={"shy-user-channels-room" + (c.id == userChannelStore.currentChannel?.id ? " hover" : "")}>
+                    <UserBox userid={friendId}>{(user) => {
+                        return <div className="flex">
+                            <div className="flex-fixed size-32 relative"><Avatar size={32} user={user}></Avatar>  {c.unreadCount > 0 && <DotNumber count={c.unreadCount}></DotNumber>}</div>
+                            <div className="flex-auto">
+                                <div className="f-14 bold">{user.name}</div>
+                                <div className="remark text-over">{c.room.currentContent}</div>
+                            </div>
+                        </div>
+                    }}</UserBox>
+
                 </div>
             }
             else {
