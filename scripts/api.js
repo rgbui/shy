@@ -201,7 +201,7 @@ push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],
 push('/user/channel/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/user/channel/active', '{id:string}', 'SockResponse<void>', ['patch'])
 push('/user/channel/join', '{roomName?:string,userids:string[]}', 'SockResponse<{room:Record<string,any>,channel:Record<string,any>}>', ['put'])
-push('/user/channel/create','{roomId:string}', 'SockResponse<{channel:any}>', ['get'])
+push('/user/channel/create','{roomId:string}', 'SockResponse<{channel:any,room:any}>', ['get'])
 push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
