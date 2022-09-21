@@ -8,10 +8,11 @@ import { UserChannel, UserRoom } from "./declare";
 
 class UserChannelStore {
     constructor() {
-        makeObservable(this,{
+        makeObservable(this, {
             showFriend: observable,
             channels: observable,
-            currentChannel: observable,
+            currentChannel: computed,
+            currentChannelId: observable,
             mode: observable,
             friends: observable,
             pends: observable,
@@ -26,10 +27,31 @@ class UserChannelStore {
         page: number,
         size: number
     } = { list: [], total: 0, page: 1, size: 200 }
-    currentChannel: UserChannel = null;
+    currentChannelId: string = null;
+    get currentChannel(): UserChannel {
+        if (this.currentChannelId)
+            return this.channels.list.find(g => g.id == this.currentChannelId);
+    }
     isloaded: boolean = false;
     get unReadChatCount() {
         return this.channels.list.sum(g => g.unreadCount || 0)
+    }
+    async initChannel(ch: UserChannel) {
+        ch.unreadCount = 0;
+        if (ch.room) {
+            ch.room.chats = [];
+            ch.room.isLoadChat = false;
+            ch.room.isLoadAllChats = false;
+            ch.room.uploadFileds = [];
+            var g = await yCache.get(CacheKey.roomCache.replace('{roomId}', ch.room.id));
+            if (g) {
+                if (typeof g == 'string') g = parseFloat(g);
+                if (!isNaN(g)) {
+                    ch.readedSeq = g;
+                }
+            }
+        }
+        if (typeof ch.readedSeq == 'undefined') ch.readedSeq = -1;
     }
     async loadChannels() {
         if (this.isloaded) return;
@@ -45,15 +67,8 @@ class UserChannelStore {
             await this.channels.list.eachAsync(async c => {
                 if (!c.room) {
                     c.room = r.data.rooms.find(g => g.id == c.roomId)
-                    c.room.chats = [];
-                    var g = await yCache.get(CacheKey.roomCache.replace('{roomId}', c.room.id));
-                    if (g) {
-                        if (typeof g == 'string') g = parseFloat(g);
-                        if (!isNaN(g)) {
-                            c.readedSeq = g;
-                        }
-                    }
                 }
+                await this.initChannel(c);
             });
             await this.loadUnreadCounts();
         } else this.isloaded = false;
@@ -91,7 +106,7 @@ class UserChannelStore {
     changeRoom(ch: UserChannel) {
         runInAction(() => {
             this.showFriend = false;
-            this.currentChannel = ch;
+            this.currentChannelId = ch.id;
         })
     }
     async openUserChannel(userid: string) {
@@ -108,6 +123,7 @@ class UserChannelStore {
             var ch = r.data.channel as UserChannel;
             if (!this.channels.list.some(s => s.id == ch.id)) {
                 ch.room = r.data.room as UserRoom;
+                await this.initChannel(ch);
                 this.channels.list.push(ch);
             }
             else ch = this.channels.list.find(g => g.id == ch.id)
@@ -124,7 +140,7 @@ class UserChannelStore {
     openFriends() {
         runInAction(() => {
             this.showFriend = true;
-            this.currentChannel = null;
+            this.currentChannelId = '';
         })
     }
     mode: 'online' | 'all' | 'pending' | 'shield' = 'online';
@@ -156,12 +172,15 @@ class UserChannelStore {
         }
     }
     async notifyChat(data) {
-        var ch = this.channels.list.find(g => g.room == data.roomId);
+        var ch = this.channels.list.find(g => g.room?.id == data.roomId);
         if (!ch) {
             //这个需要自动创建一个新的channel
             var r = await channel.get('/user/channel/create', { roomId: data.roomId });
             if (r.ok) {
                 ch = r.data.channel
+                ch.room = r.data.room;
+                if (typeof ch.lastDate == 'undefined') ch.lastDate = new Date();
+                await this.initChannel(ch);
                 this.channels.list.push(ch);
                 this.sortChannels();
             }

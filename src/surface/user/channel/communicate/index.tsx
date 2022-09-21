@@ -1,4 +1,4 @@
-import { observer, useLocalStore } from "mobx-react";
+import { Observer, observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { RichTextInput } from "rich/component/view/rich.input/index";
 import { channel } from "rich/net/channel";
@@ -10,8 +10,10 @@ import { Loading } from "rich/component/view/loading";
 import { RenderChatsView } from "./render";
 import { ChannelTextType } from "rich/extensions/chats/declare";
 import { util } from "rich/util/util";
+import { runInAction } from "mobx";
+
 export var CommunicateView = observer(function () {
-    var local = useLocalStore<{ richInput: RichTextInput }>(() => {
+    var local = useLocalObservable<{ richInput: RichTextInput }>(() => {
         return {
             richInput: null
         }
@@ -99,12 +101,19 @@ export var CommunicateView = observer(function () {
         var ch = userChannelStore.currentChannel;
         if (ch && ch.room.isLoadChat !== true) {
             var r = await channel.get('/user/chat/list', { roomId: ch.room.id });
-            if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
-            if (r.ok) {
-                var list = r.data.list || [];
-                ch.room.chats.push(...list);
-            }
-            userChannelStore.readRoomChat(ch);
+            runInAction(() => {
+                if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
+                if (r.ok) {
+                    var list = r.data.list || [];
+                    list.each(l => {
+                        if (!ch.room.chats.some(s => s.id == l.id)) {
+                            ch.room.chats.push(l);
+                        }
+                    })
+                }
+                ch.room.isLoadChat = true;
+            })
+            await userChannelStore.readRoomChat(ch);
         }
     }
     async function replyChat(d: ChannelTextType) {
@@ -123,7 +132,9 @@ export var CommunicateView = observer(function () {
                 <span>@{user?.name}</span>
             </div>
                 <div className="shy-user-channel-communicate-content">
-                    {<RenderChatsView replyChat={replyChat}></RenderChatsView>}
+                    <Observer>{() => {
+                        return userChannelStore.currentChannel.room.isLoadChat && <RenderChatsView replyChat={replyChat}></RenderChatsView>
+                    }}</Observer>
                 </div>
                 <div className="shy-user-channel-communicate-input">
                     <RichTextInput placeholder={'@' + user?.name} ref={e => local.richInput} popOpen={popOpen} onInput={onInput}></RichTextInput>
