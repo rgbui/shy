@@ -59,7 +59,6 @@ class UserService extends BaseService {
     async userChatPathc(args) {
         return await masterSock.patch('/user/chat/patch', args);
     }
-
     @get('/user/chat/list')
     async getChatList(args) {
         return await masterSock.get('/user/chat/list', args);
@@ -91,5 +90,9 @@ class UserService extends BaseService {
     @get('/user/channel/create')
     async userChannelCreate(args) {
         return await masterSock.get('/user/channel/create', args);
+    }
+    @put('/user/chat/emoji')
+    async userChatEmoji(args) {
+        return await masterSock.put('/user/chat/emoji', args);
     }
 }
