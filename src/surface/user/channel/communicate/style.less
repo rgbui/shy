@@ -34,14 +34,14 @@
     }
 
     &-content {
-        position: absolute;
-        top     : 48px;
-        left    : 0px;
-        right   : 0px;
-        bottom  : 70px;
-        z-index : 1;
-
-
+        position       : absolute;
+        top            : 48px;
+        left           : 0px;
+        right          : 0px;
+        bottom         : 70px;
+        z-index        : 1;
+        overflow-y     : auto;
+        scroll-behavior: smooth;
         &::after {
             content           : "";
             position          : absolute;
@@ -55,11 +55,7 @@
             z-index           : 1;
             pointer-events    : none;
         }
-
         .shy-user-channel-chats {
-            height         : 100%;
-            overflow-y     : auto;
-            scroll-behavior: smooth;
         }
     }
 

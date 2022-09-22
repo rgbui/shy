@@ -1,4 +1,6 @@
+import { ViewChats } from "rich/extensions/chats";
 import { IconArguments } from "rich/extensions/icon/declare";
+import { CommunicateView } from "./communicate";
 
 export interface UserChannel {
     id: string;
@@ -11,7 +13,8 @@ export interface UserChannel {
     deletedUser: string;
     room: UserRoom;
     readedSeq?: number;
-    unreadCount?: number
+    unreadCount?: number;
+    communicateView?: CommunicateView
 }
 
 export interface UserRoom {
@@ -28,7 +31,8 @@ export interface UserRoom {
     chats?: UserCommunicate[];
     isLoadChat?: boolean;
     isLoadAllChats?: boolean,
-    uploadFileds: { id: string, speed: string, text: string }[]
+    uploadFileds: { id: string, speed: string, text: string }[],
+    viewChats?: ViewChats
 }
 
 export interface UserCommunicate {
