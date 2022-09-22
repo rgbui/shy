@@ -11,7 +11,6 @@ class UserChannelStore {
         makeObservable(this, {
             showFriend: observable,
             channels: observable,
-            currentChannel: computed,
             currentChannelId: observable,
             mode: observable,
             friends: observable,
@@ -28,10 +27,6 @@ class UserChannelStore {
         size: number
     } = { list: [], total: 0, page: 1, size: 200 }
     currentChannelId: string = null;
-    get currentChannel(): UserChannel {
-        if (this.currentChannelId)
-            return this.channels.list.find(g => g.id == this.currentChannelId);
-    }
     isloaded: boolean = false;
     get unReadChatCount() {
         return this.channels.list.sum(g => g.unreadCount || 0)
@@ -80,11 +75,11 @@ class UserChannelStore {
         var rs: { roomId: string, seq: number }[] = [];
         this.channels.list.forEach(c => {
             if (typeof c.room.currentnSeq == 'number') {
-                if (c.unreadCount == c.room.currentnSeq) {
+                if (c.readedSeq == c.room.currentnSeq) {
                     return;
                 }
-                rs.push({ roomId: c.room.id, seq: c.readedSeq || undefined })
             }
+            rs.push({ roomId: c.room.id, seq: c.readedSeq || undefined })
         });
         if (rs.length > 0) {
             var size = 10;
@@ -186,21 +181,26 @@ class UserChannelStore {
             }
         }
         if (ch) {
-            if (!Array.isArray(ch.room.chats)) ch.room.chats = [];
-            ch.room.chats.push(data);
-            if (this.currentChannel !== ch) {
-                ch.unreadCount = (ch.unreadCount || 0) + 1;
+            runInAction(() => {
+                ch.room.chats.push(data);
+                ch.room.currentContent = data.content;
                 ch.room.currentnSeq = ch.room.chats.max(c => c.seq);
+            })
+            if (this.currentChannelId !== ch.id || !ch.communicateView) {
+                ch.unreadCount = (ch.unreadCount || 0) + 1;
             }
             else {
                 await this.readRoomChat(ch);
             }
+            if (ch.communicateView) ch.communicateView.notifyNewChat();
         }
     }
     async readRoomChat(channel: UserChannel) {
         runInAction(() => {
-            channel.readedSeq = channel.room.chats.max(c => c.seq);
-            channel.room.currentnSeq = channel.readedSeq;
+            var chat = channel.room.chats.findMax(c => c.seq);
+            channel.readedSeq = chat.seq;
+            channel.room.currentnSeq = chat.seq;
+            channel.room.currentContent = chat.content;
             channel.unreadCount = 0;
         })
         await yCache.set(CacheKey.roomCache.replace('{roomId}', channel.room.id), channel.readedSeq)
