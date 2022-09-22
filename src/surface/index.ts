@@ -13,6 +13,7 @@ import { channel } from "rich/net/channel";
 import "./message.center";
 import { ClientNotifys } from "../../services/tim";
 import { PageItem } from "./sln/item";
+import { userChannelStore } from "./user/channel/store";
 
 export class Surface extends Events {
     constructor() {
@@ -44,6 +45,7 @@ export class Surface extends Events {
             Object.assign(this.user, r.data.user);
             await timService.open();
             ClientNotifys();
+            await userChannelStore.loadChannels();
         }
         else if (config.isPc) {
             UrlRoute.push(ShyUrl.signIn);
