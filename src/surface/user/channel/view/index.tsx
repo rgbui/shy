@@ -25,7 +25,12 @@ export var UserChannel = observer(function () {
         </div>
         <div className="shy-user-channel-content">
             {userChannelStore.showFriend && <FriendsView></FriendsView>}
-            {!userChannelStore.showFriend && <CommunicateView></CommunicateView>}
+            {!userChannelStore.showFriend &&
+                <>{userChannelStore.channels.list.map(ch=>{
+                    return <CommunicateView userChannel={ch} key={ch.id} ></CommunicateView>
+                })}</>
+
+            }
         </div>
     </div>
 })
