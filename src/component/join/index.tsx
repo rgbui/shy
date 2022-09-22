@@ -53,9 +53,8 @@ class JoinFriend extends EventsComponent {
         this.loading = true;
         this.forceUpdate();
         var r = await channel.get('/user/word/query', { word: this.word });
-        if (r.ok) {
-            this.list = r.data.list;
-        } else this.list = [];
+        if (r.ok) this.list = r.data.list;
+        else this.list = [];
         this.loading = false;
         this.forceUpdate()
     }, 1000)
@@ -70,6 +69,12 @@ class JoinFriend extends EventsComponent {
             }
             else if (r.data.exists == false) {
                 ShyAlert('帐号不存在')
+            }
+            else if ((r.data as any).black == true) {
+                ShyAlert('你被TA拉黑，无法加好友')
+            }
+            else if (r.data.refuse == true) {
+                ShyAlert('当前帐号不允许你加Ta为好友')
             }
             else if (r.data.send) {
                 ShyAlert('已发送好友请求')

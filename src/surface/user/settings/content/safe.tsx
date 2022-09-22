@@ -93,7 +93,7 @@ export class ShySafe extends React.Component {
                 <Divider></Divider>
                 <div className="gap-h-10">
                     <div className="flex ">
-                        <div className="bold flex-auto">允许诗云对屏屏幕的使用操作进行追踪</div>
+                        <div className="bold flex-auto">允许诗云对屏幕的使用操作进行追踪</div>
                         <div className="flex-fixed w-100 flex-end flex-inline"><Switch onChange={e => this.change('experienceHelp', e)} checked={this.data.experienceHelp}></Switch></div>
                     </div>
                     <div className="text-1 f-12">

@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Icon } from "rich/component/view/icon";
-import { Input } from "rich/component/view/input";
 import FriendSvg from "../../../../assert/svg/friends.svg";
 import { UserProfile } from "../../profile";
 import { CommunicateView } from "../communicate";
@@ -10,6 +9,7 @@ import { userChannelStore } from "../store";
 import { UserChannels } from "./channels";
 import { UserChannelSearch } from "./search";
 import "./style.less";
+
 export var UserChannel = observer(function () {
     return <div className="shy-user-channel">
         <div className="shy-user-channel-slide">
@@ -29,7 +29,6 @@ export var UserChannel = observer(function () {
                 <>{userChannelStore.channels.list.map(ch=>{
                     return <CommunicateView userChannel={ch} key={ch.id} ></CommunicateView>
                 })}</>
-
             }
         </div>
     </div>

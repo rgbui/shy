@@ -207,7 +207,7 @@ push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
 
-push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean}>', ['put'])
+push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
 push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/friends/pending', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
