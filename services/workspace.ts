@@ -237,5 +237,9 @@ class WorkspaceService extends BaseService {
             ...args
         });
     }
+    @get('/ws/online/users')
+    async wsOnlineUsers(args) {
+        return masterSock.get('/ws/online/users', args);
+    }
 }
 
