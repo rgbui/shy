@@ -4,7 +4,7 @@ import { Sln } from "./sln";
 import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { ShyUrl, UrlRoute } from "../history";
-import { Workspace } from "./workspace";
+import { LinkWorkspaceOnline, Workspace } from "./workspace";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../common/config";
@@ -35,7 +35,7 @@ export class Surface extends Events {
     user: User = new User();
     sln: Sln = new Sln();
     workspace: Workspace = null;
-    wss: Partial<Workspace>[] = [];
+    wss: LinkWorkspaceOnline[] = [];
     temporaryWs: Partial<Workspace> = null;
     async loadUser() {
         var r = await channel.get('/sign')
@@ -55,7 +55,12 @@ export class Surface extends Events {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
             if (r?.ok) {
-                this.wss = r.data.list;
+                var list = r.data.list;
+                list.forEach(l => {
+                    l.overlayDate = null;
+                    l.randomOnlineUsers = [];
+                })
+                this.wss = list;
             }
         }
     }

@@ -54,11 +54,17 @@ export type WorkspaceMember = {
     totalScore: number;
 }
 
-export type WorkspaceOnLineUser = {
+export type WorkspaceOnLineUserType = {
     userid: string;
     deviceId?: string;
     sockId?: string;
 }
+
+export type LinkWorkspaceOnline = {
+    overlayDate: Date,
+    randomOnlineUsers: string[],
+    loadingOnlineUsers:boolean
+} & Partial<Workspace>
 
 export class Workspace {
     public id: string = null;
@@ -87,7 +93,7 @@ export class Workspace {
     /**
      * 在线的成员
      */
-    public onlineUsers: Map<string, WorkspaceOnLineUser[]> = new Map();
+    public onlineUsers: Map<string, WorkspaceOnLineUserType[]> = new Map();
     public access: number = 0;
     public accessJoinTip: boolean = false;
     /**
@@ -299,7 +305,7 @@ export class Workspace {
         }
         return ov;
     }
-    async addViewLine(viewId: string, user: WorkspaceOnLineUser) {
+    async addViewLine(viewId: string, user: WorkspaceOnLineUserType) {
         var s = this.onlineUsers.get(viewId);
         if (!s) {
             this.onlineUsers.set(viewId, [{ userid: user.userid }]);
@@ -310,7 +316,7 @@ export class Workspace {
             }
         }
     }
-    async removeViewLine(user: WorkspaceOnLineUser, viewId?: string) {
+    async removeViewLine(user: WorkspaceOnLineUserType, viewId?: string) {
         if (typeof viewId == 'string') {
             var s = this.onlineUsers.get(viewId);
             if (s) {
