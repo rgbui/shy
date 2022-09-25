@@ -11,8 +11,14 @@ export var PageUsers = observer(function (props: { store: PageViewStore }) {
     if (item) {
         var viewUsers = surface.workspace.viewOnlineUsers.get(item.id);
         if (viewUsers) {
+            var us = [];
+            if (viewUsers.users.size > 0) {
+                us = Array.from(viewUsers.users);
+                if (surface.user)
+                    us.push(surface.user.id)
+            }
             return <div className='shy-supervisor-bar-users' style={{ height: 28 }}>
-                <UserAvatars users={viewUsers.users} size={28}></UserAvatars>
+                <UserAvatars users={us} size={28}></UserAvatars>
             </div>
         }
     }
