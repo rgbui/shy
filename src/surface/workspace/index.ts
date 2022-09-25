@@ -54,16 +54,11 @@ export type WorkspaceMember = {
     totalScore: number;
 }
 
-export type WorkspaceOnLineUserType = {
-    userid: string;
-    deviceId?: string;
-    sockId?: string;
-}
-
 export type LinkWorkspaceOnline = {
     overlayDate: Date,
     randomOnlineUsers: string[],
-    loadingOnlineUsers:boolean
+    loadingOnlineUsers: boolean,
+    unreadChats: { id: string, roomId: string, seq: number }[]
 } & Partial<Workspace>
 
 export class Workspace {
@@ -90,10 +85,6 @@ export class Workspace {
     public permissions: number[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
-    /**
-     * 在线的成员
-     */
-    public onlineUsers: Map<string, WorkspaceOnLineUserType[]> = new Map();
     public access: number = 0;
     public accessJoinTip: boolean = false;
     /**
@@ -128,6 +119,8 @@ export class Workspace {
      * 空间的初始默认页面
      */
     public defaultPageId: string = null;
+    public viewOnlineUsers: Map<string, { users: string[], load: boolean }> = new Map();
+    public onLineUsers: Set<string> = new Set();
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -145,13 +138,14 @@ export class Workspace {
             config: observable,
             owner: observable,
             roles: observable,
-            onlineUsers: observable,
             isJoinTip: computed,
             permissions: observable,
             member: observable,
             memberPermissions: computed,
             createPageConfig: observable,
             defaultPageId: observable,
+            viewOnlineUsers: observable,
+            onLineUsers: observable
         })
     }
     private _sock: Sock;
@@ -295,42 +289,6 @@ export class Workspace {
     async loadMember(member: WorkspaceMember) {
         this.member = member;
     }
-    async loadViewOnlines(viewId: string) {
-        var ov = this.onlineUsers.get(viewId);
-        if (!ov) {
-            ov = [];
-            var r = await channel.get('/ws/view/online/users', { viewId });
-            if (r.ok) ov = r.data.users.map(u => ({ userid: u })) || [];
-            this.onlineUsers.set(viewId, ov);
-        }
-        return ov;
-    }
-    async addViewLine(viewId: string, user: WorkspaceOnLineUserType) {
-        var s = this.onlineUsers.get(viewId);
-        if (!s) {
-            this.onlineUsers.set(viewId, [{ userid: user.userid }]);
-        }
-        else {
-            if (!s.some(g => g.userid == user.userid)) {
-                s.push({ userid: user.userid });
-            }
-        }
-    }
-    async removeViewLine(user: WorkspaceOnLineUserType, viewId?: string) {
-        if (typeof viewId == 'string') {
-            var s = this.onlineUsers.get(viewId);
-            if (s) {
-                s.removeAll(g => g.userid == user.userid);
-            }
-        }
-        else {
-            this.onlineUsers.forEach((vs, m) => {
-                if (vs.some(v => v.userid == user.userid)) {
-                    vs.remove(g => g.userid == user.userid);
-                }
-            })
-        }
-    }
     async onNotifyViewOperater(data: UserAction) {
         var ec = parseElementUrl(data.elementUrl);
         if (ec.type == ElementType.PageItem) {
@@ -358,5 +316,23 @@ export class Workspace {
     }
     getInviteUrl() {
         return this.url + '/invite/' + this.invite
+    }
+    async loadViewOnlineUsers(viewId: string) {
+        var rs = this.viewOnlineUsers.get(viewId);
+        if (!rs) {
+            var r = await channel.get('/ws/view/online/users', { viewId });
+            this.viewOnlineUsers.set(viewId, { load: true, users: r.data.users });
+        }
+        else {
+            if (rs.load == false) {
+                var r = await channel.get('/ws/view/online/users', { viewId });
+                if (r.ok) {
+                    r.data.users.forEach(u => {
+                        if (!rs.users.some(s => s == u)) rs.users.push(u)
+                    })
+                    rs.load = true;
+                }
+            }
+        }
     }
 }
