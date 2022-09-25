@@ -138,9 +138,10 @@ export function ClientNotifys() {
         if (surface.workspace?.id == e.wsId) {
             var r = surface.workspace.viewOnlineUsers.get(e.viewId);
             if (r) {
-                if (!r.users.includes(e.userid)) r.users.push(e.userid)
+                r.users.add(e.userid)
+              
             }
-            else surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users: [e.userid] })
+            else surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users:new Set([e.userid]) })
         }
     });
     /**
@@ -150,7 +151,7 @@ export function ClientNotifys() {
         if (surface.workspace?.id == e.wsId) {
             var r = surface.workspace.viewOnlineUsers.get(e.viewId);
             if (r) {
-                lodash.remove(r.users, g => g == e.userid)
+                r.users.delete(e.userid)
             }
         }
     });
