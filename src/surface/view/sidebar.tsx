@@ -31,23 +31,24 @@ export var SideBar = observer(function () {
             <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
         </a>
     }
-    async function loadWsOnline(workspace: LinkWorkspaceOnline) {
+    async function loadWsOnline(workspace: LinkWorkspaceOnline, tip: ToolTip) {
         if (workspace.loadingOnlineUsers) return;
+        if (workspace.overlayDate && (Date.now() - workspace.overlayDate.getTime()) < 1000 * 60) return;
         workspace.loadingOnlineUsers = true;
         var r = await channel.get('/ws/random/online/users', { wsId: workspace.id, size: 20 });
         runInAction(() => {
             if (r.ok) {
-                workspace.randomOnlineUsers = r.data.users;
+                workspace.randomOnlineUsers = new Set(r.data.users);
                 workspace.memberOnlineCount = r.data.count;
                 workspace.overlayDate = new Date();
             }
             workspace.loadingOnlineUsers = false;
+            setTimeout(() => {
+                tip.updateView();
+            }, 200);
         })
     }
     function renderWsOverlay(workspace: LinkWorkspaceOnline) {
-        if (!workspace.overlayDate || workspace.overlayDate && (Date.now() - workspace.overlayDate.getTime() > 2000 * 60)) {
-            loadWsOnline(workspace);
-        }
         if (!workspace.overlayDate) return <div>
             <div>
                 <span>{workspace.text}</span>
@@ -59,7 +60,7 @@ export var SideBar = observer(function () {
                 {workspace.memberOnlineCount > 0 && <span className="gap-l-10">{workspace.memberOnlineCount}人在线</span>}
                 {!workspace.memberOnlineCount && workspace.memberCount > 20 && <span className="gap-l-10">{workspace.memberCount}成员</span>}
             </div>
-            {workspace.randomOnlineUsers.length > 0 && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
+            {workspace.randomOnlineUsers.size > 0 && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
         </div>
     }
 
@@ -75,7 +76,7 @@ export var SideBar = observer(function () {
         <div className="shy-sidebar-body">
             {surface.temporaryWs && <ToolTip key={surface.temporaryWs.id} placement="right" overlay={surface.temporaryWs.text}><div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{renderWs(surface.temporaryWs)}</div></ToolTip>}
             {surface.wss.map(ws => {
-                return <ToolTip key={ws.id} placement="right" mouseenter={e => loadWsOnline(ws)} overlay={renderWsOverlay(ws)}><div onMouseDown={e => surface.onChangeWorkspace(ws)} className={'shy-sidebar-ws' + (surface.workspace?.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div></ToolTip>
+                return <ToolTip key={ws.id} placement="right" mouseenter={(e, t) => loadWsOnline(ws, t)} overlay={renderWsOverlay(ws)}><div onMouseDown={e => surface.onChangeWorkspace(ws)} className={'shy-sidebar-ws' + (surface.workspace?.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div></ToolTip>
             })}
             <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
             <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
