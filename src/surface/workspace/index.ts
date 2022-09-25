@@ -56,7 +56,7 @@ export type WorkspaceMember = {
 
 export type LinkWorkspaceOnline = {
     overlayDate: Date,
-    randomOnlineUsers: string[],
+    randomOnlineUsers: Set<string>,
     loadingOnlineUsers: boolean,
     unreadChats: { id: string, roomId: string, seq: number }[]
 } & Partial<Workspace>
