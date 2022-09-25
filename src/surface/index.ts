@@ -36,7 +36,7 @@ export class Surface extends Events {
     sln: Sln = new Sln();
     workspace: Workspace = null;
     wss: LinkWorkspaceOnline[] = [];
-    temporaryWs: Partial<Workspace> = null;
+    temporaryWs: LinkWorkspaceOnline = null;
     async loadUser() {
         var r = await channel.get('/sign')
         if (r.ok) {
@@ -89,6 +89,7 @@ export class Surface extends Events {
                     }
                 }
             }
+            if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
             if (g.data.roles) await ws.loadRoles(g.data.roles)
             else ws.loadRoles([]);
             if (g.data.member) await ws.loadMember(g.data.member as any)
@@ -96,7 +97,7 @@ export class Surface extends Events {
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
             runInAction(() => {
-                if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
+                if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
                 else this.temporaryWs = null;
                 this.workspace = ws;
             })
