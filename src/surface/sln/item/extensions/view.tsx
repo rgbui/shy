@@ -6,6 +6,8 @@ import { PageItem } from "..";
 import { surface } from "../../..";
 import { AtomPermission } from "rich/src/page/permission";
 import { getPageIcon } from "rich/extensions/at/declare";
+import { DotNumber } from "rich/component/view/dot";
+
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     let refInput = React.useRef<HTMLInputElement>(null);
     let refEditText = React.useRef<string>(null);
@@ -78,9 +80,10 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 defaultValue={item.text}
                 onKeyDown={e => keydown(e.nativeEvent)}
                 onInput={e => inputting(e.nativeEvent)} /></div>}
-            {!isInEdit && isCanEdit && <div className='shy-ws-item-page-operators'>
-                <Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
-                <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon>
+            {!isInEdit && <div className='shy-ws-item-page-operators'>
+                {isCanEdit && <><Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
+                    <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon></>}
+                {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber count={item.unreadChats.length}></DotNumber></span>}
             </div>}
         </div>
         {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}
