@@ -51,6 +51,7 @@ export class PageItem {
     speak?: 'more' | 'only' = 'more';
     speakDate?: Date = null;
     textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
+    unreadChats: { id: string, roomId: string, seq: number }[] = [];
     get snapStore() {
         return SnapStore.create(ElementType.PageItem, this.id);
     }
@@ -74,7 +75,8 @@ export class PageItem {
             locker: observable,
             editDate: observable,
             editor: observable,
-            description: observable
+            description: observable,
+            unreadChats: observable
         });
 
     }
