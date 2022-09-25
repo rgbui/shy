@@ -41,12 +41,22 @@
                 background-color: rgba(55, 53, 47, 0.08);
             }
         }
+
+        .unread {
+            visibility: visible;
+        }
     }
 
     &:hover {
         .shy-ws-pages-operators {
             visibility: visible;
+
+            .unread {
+                display: none;
+            }
         }
+
+
     }
 }
 

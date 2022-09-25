@@ -30,7 +30,6 @@ class MessageCenter {
             var it = surface.supervisor.main?.item;
             UrlRoute.pushToPage(surface.workspace.host, it.sn);
             it.onUpdateDocument();
-            await surface.workspace.loadViewOnlines(it.id);
             surface.sln.onFocusItem(it);
         }
     }
