@@ -201,7 +201,7 @@ push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],
 push('/user/channel/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/user/channel/active', '{id:string}', 'SockResponse<void>', ['patch'])
 push('/user/channel/join', '{roomName?:string,userids:string[]}', 'SockResponse<{room:Record<string,any>,channel:Record<string,any>}>', ['put'])
-push('/user/channel/create','{roomId:string}', 'SockResponse<{channel:any,room:any}>', ['get'])
+push('/user/channel/create', '{roomId:string}', 'SockResponse<{channel:any,room:any}>', ['get'])
 push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
@@ -225,7 +225,7 @@ push('/user/chat/send', '{roomId:string,content?:string,file?:any,tos:string[],r
 push('/user/chat/cancel', '{id:string,roomId:string}', 'SockResponse<void>', ['del']);
 push('/user/chat/patch', '{id:string,roomId:string,content?:string,file?:any}', 'SockResponse<void>', ['patch']);
 push('/user/chat/emoji', '{id:string,roomId:string,emoji:{emojiId: string, code?: string}}', 'SockResponse<{emoji:{emojiId: string, code?: string,count:number}}>', ['put']);
-push('/user/room/unread','{unrooms: { roomId: string, seq: number }[]}','SockResponse<{unreads:{roomId:string,count:number}[]}>',['get']);
+push('/user/room/unread', '{unrooms: { roomId: string, seq: number }[]}', 'SockResponse<{unreads:{roomId:string,count:number}[]}>', ['get']);
 push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string}`, 'SockResponse<{orderId:string,code:string}>', ['put'])
 push('/repeat/qr_pay/order', '{orderId:string,platform:string}', 'SockResponse<{orderId:string,code:string}>', ['get'])
 push('/user/order/list', '{page?: number, size?: number, word?: string, status?: string,deal?:boolean}', 'SockResponse<{page:number,size:number,list:any[],total:number}>', ['get']);
@@ -241,7 +241,7 @@ push('/open/sign', '{}', 'SockResponse<{user:Record<string,any>,guid:string,toke
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
-push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any}>', ['get'])
+push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any,onlineUsers:string[]}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
@@ -256,7 +256,8 @@ push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content
 push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?: string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,file?:any}`, 'SockResponse<void>', ['patch'])
 push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);
-push('/ws/online/users','{wsId:string,count?:number}','SockResponse<{count:number,users:string[]}>',['get'])
+push('/ws/random/online/users', '{wsId:string,size?:number}', 'SockResponse<{count:number,users:string[]}>', ['get'])
+push('/ws/online/users', '{wsId:string}', 'SockResponse<{users:string[]}>', ['get'])
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: string,file: any,isEdited:boolean}', 'void', ['air']);
 push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
