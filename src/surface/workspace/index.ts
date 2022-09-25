@@ -119,7 +119,7 @@ export class Workspace {
      * 空间的初始默认页面
      */
     public defaultPageId: string = null;
-    public viewOnlineUsers: Map<string, { users: string[], load: boolean }> = new Map();
+    public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
     constructor() {
         makeObservable(this, {
@@ -293,9 +293,11 @@ export class Workspace {
         var ec = parseElementUrl(data.elementUrl);
         if (ec.type == ElementType.PageItem) {
             var item = surface.workspace.find(g => g.id == ec.id);
-            var pv = PageViewStores.getPageViewStore(item.elementUrl);
-            if (pv?.page) {
-                pv?.page.syncUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
+            if (item) {
+                var pv = PageViewStores.getPageViewStore(item.elementUrl);
+                if (pv?.page) {
+                    pv?.page.syncUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
+                }
             }
         }
     }
@@ -321,14 +323,14 @@ export class Workspace {
         var rs = this.viewOnlineUsers.get(viewId);
         if (!rs) {
             var r = await channel.get('/ws/view/online/users', { viewId });
-            this.viewOnlineUsers.set(viewId, { load: true, users: r.data.users });
+            this.viewOnlineUsers.set(viewId, { load: true, users: new Set(r.data.users) });
         }
         else {
             if (rs.load == false) {
                 var r = await channel.get('/ws/view/online/users', { viewId });
                 if (r.ok) {
                     r.data.users.forEach(u => {
-                        if (!rs.users.some(s => s == u)) rs.users.push(u)
+                        rs.users.add(u);
                     })
                     rs.load = true;
                 }
