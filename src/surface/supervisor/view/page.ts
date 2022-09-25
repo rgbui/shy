@@ -1,8 +1,10 @@
 
+import lodash from "lodash";
 import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageDirective } from "rich/src/page/directive";
+import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
 import { PageViewStore } from "./store";
 
@@ -46,11 +48,20 @@ export async function createPageContent(store: PageViewStore) {
                 await page.syncUserActions(operates, 'load');
             }
             var bound = Rect.fromEle(store.view.pageEl);
-            page.render(store.view.pageEl, { width: bound.width, height: bound.height });
+            page.render(store.view.pageEl, {
+                width: bound.width,
+                height: bound.height
+            });
         }
         else {
             var bound = Rect.fromEle(store.view.pageEl);
             store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
+        }
+        if (store.page?.pageLayout?.type == PageLayoutType.textChannel) {
+            var ws = surface.wss.find(g => g.id == surface.workspace?.id);
+            if (ws) {
+                lodash.remove(ws.unreadChats, c => c.roomId == store.item.id);
+            }
         }
     }
     catch (ex) {
