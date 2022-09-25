@@ -27,7 +27,8 @@ export enum MessageUrl {
     channelNotify = '/ws/channel/notify',
     channelDeletedNotify = '/ws/channel/deleted/notify',
     channelPatchNotify = '/ws/channel/patch/notify',
-    channelEmojiNotify = '/ws/channel/emoji/notify'
+    channelEmojiNotify = '/ws/channel/emoji/notify',
+    patchWsNotify = '/ws/patch/notify'
 }
 
 export function ClientNotifys() {
@@ -131,7 +132,7 @@ export function ClientNotifys() {
         }
     });
     /**
-    * 用户进入这个空间
+    * 用户进入这个页面
     */
     timService.tim.on(MessageUrl.enterView, (e: { viewId: string, wsId: string, userid: string }) => {
         if (surface.workspace?.id == e.wsId) {
@@ -143,7 +144,7 @@ export function ClientNotifys() {
         }
     });
     /**
-     * 用户离开这个空间
+     * 用户离开这个页面
      */
     timService.tim.on(MessageUrl.leaveView, (e: { viewId: string, wsId: string, userid: string }) => {
         if (surface.workspace?.id == e.wsId) {
@@ -153,4 +154,9 @@ export function ClientNotifys() {
             }
         }
     });
+    timService.tim.on(MessageUrl.patchWsNotify, (e: { wsId: string, data: Record<string, any> }) => {
+        if (surface.workspace?.id == e.wsId) {
+            Object.assign(surface.workspace, e.data);
+        }
+    })
 }
