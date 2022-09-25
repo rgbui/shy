@@ -25,9 +25,11 @@ export class Supervisor extends Events {
      * 对话框页面
      */
     dialog: PageViewStore = null;
+    time;
     onOpen(elementUrl: string) {
         if (elementUrl == this.main?.elementUrl) return;
         this.opening = true;
+        if (this.time) { clearInterval(this.time); this.time = null; }
         try {
             this.main = PageViewStores.createPageViewStore(elementUrl);
             if (this.main.item)
@@ -35,6 +37,10 @@ export class Supervisor extends Events {
                     this.main.item.workspace.id,
                     this.main.item.id
                 )
+            /**
+             * 3小时主动同步一次，服务器缓存用户所在的视图在线状态过期时间是6小时
+             */
+            this.time = setInterval(() => this.syncWorkspaceView(), 1000 * 60 * 60 * 3);
         }
         catch (ex) {
             console.error(ex);
@@ -42,6 +48,13 @@ export class Supervisor extends Events {
         finally {
             this.opening = false;
         }
+    }
+    async syncWorkspaceView() {
+        if (this.main.item)
+            timService.enterWorkspaceView(
+                this.main.item.workspace.id,
+                this.main.item.id
+            )
     }
     onOpenSlide(elementUrl: string) {
         if (elementUrl == this.slide?.elementUrl) return;
