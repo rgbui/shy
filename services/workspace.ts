@@ -241,5 +241,13 @@ class WorkspaceService extends BaseService {
     async wsOnlineUsers(args) {
         return masterSock.get('/ws/online/users', args);
     }
+    @get('/ws/random/online/users')
+    async wsRandomOnLineUsers(args) {
+        return masterSock.get('/ws/random/online/users', args)
+    }
+    @get('/ws/view/online/users')
+    async wsGetViewOnLineUsers(args) {
+        return surface.workspace.sock.get('/ws/view/online/users', args);
+    }
 }
 
