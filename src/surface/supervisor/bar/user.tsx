@@ -14,7 +14,7 @@ export var PageUsers = observer(function (props: { store: PageViewStore }) {
             var us = [];
             if (viewUsers.users.size > 0) {
                 us = Array.from(viewUsers.users);
-                if (surface.user)
+                if (surface.user && !us.some(s => s == surface.user.id))
                     us.push(surface.user.id)
             }
             return <div className='shy-supervisor-bar-users' style={{ height: 28 }}>

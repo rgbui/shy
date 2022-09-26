@@ -10,6 +10,7 @@ import { DiscoveryView } from "../discovery";
 import { JoinTip } from "./join";
 import { SideSln } from "./sidesln";
 import { SupervisorView } from "../supervisor/view";
+
 export var SurfaceView = observer(function () {
     var local = useLocalObservable(() => {
         return {
