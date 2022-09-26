@@ -39,6 +39,7 @@ export type PageItemAction = {
     pageId?: string,
     data?: Record<string, any>
 }
+
 class PageItemStore {
     private async save(wsId: string, operate: {
         operate: ItemOperator,
@@ -58,6 +59,7 @@ class PageItemStore {
             if (pa) lodash.remove(pa.childs, g => g.id == pageItem.id);
             else lodash.remove(surface.workspace.childs, g => g.id == pageItem.id)
         })
+        surface.sln.onDeleteRefocusItem(pageItem);
         actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.delete, actions });
     }

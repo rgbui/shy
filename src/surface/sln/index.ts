@@ -89,6 +89,14 @@ export class Sln extends Events<SlnDirective> {
             yCache.set(CacheKey.ws_open_page_id, item.id);
         }
     }
+    onDeleteRefocusItem(item?: PageItem) {
+        if (this.selectIds && this.selectIds.some(s => s == item.id)) {
+            var r = surface.workspace.childs.arrayJsonFindMax('childs', x => x.selectedDate || 0);
+            if (r) {
+                channel.air('/page/open', { item: r });
+            }
+        }
+    }
     onEditItem(item: PageItem) {
         this.editId = item?.id || '';
     }
