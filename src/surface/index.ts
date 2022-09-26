@@ -138,7 +138,7 @@ export class Surface extends Events {
             await this.loadWorkspace(workspace.id);
         }
         else if (workspace.id == this.workspace.id) {
-            if (UrlRoute.isMatch(ShyUrl.me)) {
+            if (UrlRoute.isMatch(ShyUrl.me) || UrlRoute.isMatch(ShyUrl.discovery)) {
                 await this.loadWorkspace(workspace.id);
             }
             if (UrlRoute.isMatch(ShyUrl.page) || UrlRoute.isMatch(ShyUrl.wsPage)) {
