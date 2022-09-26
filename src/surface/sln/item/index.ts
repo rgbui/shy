@@ -7,7 +7,7 @@ import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { Mime, PageItemDirective } from "../declare";
-import { makeObservable, observable } from "mobx";
+import { makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { SnapStore } from "../../../../services/snap/store";
@@ -203,11 +203,13 @@ export class PageItem {
     async getSubItems() {
         if (!this.checkedHasChilds) {
             var sus = await channel.get('/page/item/subs', { id: this.id });
-            if (sus.ok == true) {
-                this.spread = false;
-                this.load({ childs: sus.data.list })
-            }
-            this.checkedHasChilds = true;
+            runInAction(() => {
+                if (sus.ok == true) {
+                    this.load({ childs: sus.data.list })
+                    this.spread = false;
+                }
+                this.checkedHasChilds = true;
+            })
         }
         return this.childs.map(c => c);
 
