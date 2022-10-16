@@ -1,5 +1,6 @@
 
 import lodash from "lodash";
+import { ElementType } from "rich/net/element.type";
 import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageLayoutType } from "rich/src/page/declare";
@@ -14,6 +15,12 @@ export async function createPageContent(store: PageViewStore) {
             var pd = await store.snapStore.querySnap();
             var page = new Page();
             store.page = page;
+            if (store.config?.type) store.page.pageLayout = { type: store.config.type };
+            else {
+                if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
+                    store.page.pageLayout = { type: PageLayoutType.dbForm };
+                }
+            }
             if (store.item) page.pageInfo = store.item;
             page.on(PageDirective.history, async function (action) {
                 var syncBlock = action.syncBlock;
@@ -46,6 +53,9 @@ export async function createPageContent(store: PageViewStore) {
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
                 await page.syncUserActions(operates, 'load');
+            }
+            if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
+                await page.loadSchemaView(store.elementUrl);
             }
             var bound = Rect.fromEle(store.view.pageEl);
             page.render(store.view.pageEl, {

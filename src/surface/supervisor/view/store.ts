@@ -1,22 +1,28 @@
 import { makeObservable, observable } from "mobx";
-import { ElementType, parseElementUrl } from "rich/net/element.type";
+import { ElementType, getElementUrl, parseElementUrl } from "rich/net/element.type";
 import { Page } from "rich/src/page";
 import { PageSupervisorView } from "./index";
 import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
 import { Events } from "rich/util/events";
 import { useSearchBox } from "rich/extensions/search/index";
+import lodash from "lodash";
+import { PageLayoutType } from "rich/src/page/declare";
+import { PageSupervisorDialog } from "./dialoug";
 export class PageViewStore extends Events {
     source: 'main' | 'slide' | 'dialog';
     date: number = Date.now();
     elementUrl: string = '';
     page: Page = null;
-    view: PageSupervisorView = null;
+    view: PageSupervisorView | PageSupervisorDialog = null;
     snapSaving: boolean = false;
-    constructor(options: { elementUrl: string, source?: 'main' | 'slide' | 'dialog' }) {
+    config?: { type?: PageLayoutType } = {};
+    constructor(options: { elementUrl: string, source?: 'main' | 'slide' | 'dialog', config?: PageViewStore['config'] }) {
         super();
         this.elementUrl = options.elementUrl;
         if (options.source) this.source = options.source;
+        if (options.config) this.config = lodash.cloneDeep(options.config);
+        else this.config = {}
         makeObservable(this, { snapSaving: observable });
         this.init();
     }
@@ -34,7 +40,11 @@ export class PageViewStore extends Events {
         });
     }
     get snapStore() {
-        return SnapStore.createSnap(this.elementUrl);
+        var url = this.elementUrl;
+        if (this.pe.type == ElementType.SchemaRecordViewData) {
+            url = getElementUrl(ElementType.SchemaRecordView, this.pe.id, this.pe.id1)
+        }
+        return SnapStore.createSnap(url);
     }
     private _pe: {
         type: ElementType;
@@ -70,17 +80,24 @@ export class PageViewStore extends Events {
         if (this.page)
             this.page.openMember(e);
     }
+    async loadConfig(config?: PageViewStore['config']) {
+        if (config) this.config = lodash.cloneDeep(config);
+        else this.config = {}
+    }
 }
 
 export class PageViewStores {
     private static stores: Map<string, PageViewStore[]> = new Map();
-    static createPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'main') {
+    static createPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'main', config?: PageViewStore['config']) {
         var s = this.stores.get(elementUrl);
         if (Array.isArray(s) && s.length > 0) {
             var r = s.find(g => g.source == source)
-            if (r) return r;
+            if (r) {
+                if (config) r.loadConfig(config);
+                return r;
+            }
         }
-        var pvs = new PageViewStore({ elementUrl, source });
+        var pvs = new PageViewStore({ elementUrl, source, config });
         if (Array.isArray(s)) s.push(pvs)
         else this.stores.set(elementUrl, [pvs]);
         return pvs;
