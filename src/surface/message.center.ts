@@ -33,6 +33,10 @@ class MessageCenter {
             surface.sln.onFocusItem(it);
         }
     }
+    @air('/page/dialog')
+    async pageDialog(args: { elementUrl: string }) {
+        return await surface.supervisor.onOpenDialog(args.elementUrl);
+    }
     @air('/page/create/sub')
     async createPageSub(args: { pageId: string, text: string }) {
         var item = surface.workspace.find(g => g.id == args.pageId);
