@@ -10,7 +10,8 @@ export class Supervisor extends Events {
         makeObservable(this, {
             opening: observable,
             main: observable,
-            slide: observable
+            slide: observable,
+            dialog: observable
         })
     }
     /**
@@ -65,8 +66,8 @@ export class Supervisor extends Events {
      * 这里打开elementUrl
      * @param elementUrl 
      */
-    async onOpenDialog(elementUrl: string) {
-        if (elementUrl == this.dialog?.elementUrl) return;
+    async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
+        if (elementUrl && elementUrl == this.dialog?.elementUrl) return;
         if (!elementUrl) this.dialog = null;
         else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog');
         if (this.dialog) {
@@ -89,7 +90,7 @@ export class Supervisor extends Events {
         }
         if (this.dialog?.page) {
             var bound = Rect.fromEle(this.dialog.view.pageEl);
-            this.slide.page.layout(bound);
+            this.dialog?.page.layout(bound);
         }
     }
     isShowElementUrl(elementUrl: string) {
