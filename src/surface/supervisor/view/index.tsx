@@ -15,10 +15,10 @@ export class PageSupervisorView extends React.Component<{ store: PageViewStore }
     componentDidMount(): void {
         this.load();
     }
-    load() {
+    async load() {
         this.props.store.view = this;
         this.loading = true;
-        createPageContent(this.props.store);
+        await createPageContent(this.props.store);
         this.loading = false;
     }
     componentDidUpdate(prevProps: Readonly<{ store: PageViewStore; }>, prevState: Readonly<{}>, snapshot?: any): void {
