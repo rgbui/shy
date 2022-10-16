@@ -4,10 +4,10 @@ import { UserAvatars } from 'rich/component/view/avator/users';
 import { surface } from '../..';
 import { PageViewStore } from '../view/store';
 export var PageUsers = observer(function (props: { store: PageViewStore }) {
-    React.useEffect(() => {
-        surface.workspace.loadViewOnlineUsers(item.id);
-    }, [])
     var item = props.store.item;
+    React.useEffect(() => {
+        if (item) surface.workspace.loadViewOnlineUsers(item.id);
+    }, [])
     if (item) {
         var viewUsers = surface.workspace.viewOnlineUsers.get(item.id);
         if (viewUsers) {
