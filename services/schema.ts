@@ -3,7 +3,7 @@
 
 
 
-import { put, get } from "rich/net/annotation";
+import { put, get, del } from "rich/net/annotation";
 import { timService } from "../net/primus";
 import { surface } from "../src/surface";
 
@@ -37,6 +37,13 @@ class SchemaService {
     @get('/schema/ids/list')
     async getSchemasByIds(args: Record<string, any>) {
         return await surface.workspace.sock.get('/schema/ids/list', {
+            wsId: surface.workspace.id,
+            ...(args || {})
+        })
+    }
+    @del('/schema/delete')
+    async deleteSchema(args: Record<string, any>) {
+        return await surface.workspace.sock.delete('/schema/delete', {
             wsId: surface.workspace.id,
             ...(args || {})
         })

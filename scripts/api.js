@@ -163,7 +163,7 @@ push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSche
 push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
 push('/schema/list', '{page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
 push('/schema/ids/list', '{ids:string[]}', 'SockResponse<{list:Partial<TableSchema>[]}>', ['get'])
-
+push('/schema/delete','{wsId?:string,id:string}','SockResponse<void>',['del']);
 push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{dataId:string,pos:"before"|"after"}}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
 push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:string}', ['del']);
