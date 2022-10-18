@@ -48,4 +48,11 @@ class SchemaService {
             ...(args || {})
         })
     }
+    @put('/datastore/rank')
+    async dataSchemaRank(args: Record<string, any>) {
+        return await surface.workspace.sock.put('/datastore/rank', {
+            wsId: surface.workspace.id,
+            ...(args || {})
+        })
+    }
 }
