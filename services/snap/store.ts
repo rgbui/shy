@@ -96,6 +96,7 @@ export class SnapStore extends Events {
                 seq: this.localViewSnap.seq
             });
             if (tryLocker.ok && tryLocker.data.lock == true) {
+                console.log('save', this.elementUrl);
                 var r = await surface.workspace.sock.put('/view/snap', {
                     elementUrl: this.elementUrl,
                     wsId: surface.workspace.id,
@@ -125,6 +126,7 @@ export class SnapStore extends Events {
         var seq: number;
         var local: view_snap;
         if (config.isPc) local = await yCache.get(this.localId);
+
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
         var r = await surface.workspace.sock.get<{

@@ -31,7 +31,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
                 else {
                     var r = await store.snapStore.viewOperator(action.get() as any);
-                    await store.snapStore.viewSnap(r.seq, await page.getString(), await page.getPlain(), store.item.text);
+                    await store.snapStore.viewSnap(r.seq, await page.getString(), await page.getPlain(), store.item?.text);
                 }
             });
             page.on(PageDirective.error, error => {
