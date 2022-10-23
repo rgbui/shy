@@ -9,6 +9,8 @@ import { useSearchBox } from "rich/extensions/search/index";
 import lodash from "lodash";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageSupervisorDialog } from "./dialoug";
+import { TableSchema } from "rich/blocks/data-grid/schema/meta";
+
 export class PageViewStore extends Events {
     source: 'main' | 'slide' | 'dialog';
     date: number = Date.now();
@@ -83,6 +85,11 @@ export class PageViewStore extends Events {
     async loadConfig(config?: PageViewStore['config']) {
         if (config) this.config = lodash.cloneDeep(config);
         else this.config = {}
+    }
+    async getSchema() {
+        if ([ElementType.SchemaView, ElementType.SchemaRecordView, ElementType.Schema].includes(this.pe.type)) {
+            return await TableSchema.loadTableSchema(this.pe.id)
+        }
     }
 }
 
