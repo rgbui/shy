@@ -18,7 +18,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
         }
     })
     async function load() {
-        if ([ElementType.Schema, ElementType.SchemaView, ElementType.SchemaRecordView].includes(props.store.pe.type)) {
+        if ([ElementType.Schema, ElementType.SchemaView, ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type)) {
             local.schema = await props.store.getSchema();
             local.isLoad = true;
         }
@@ -47,7 +47,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
             </div>
         }
     }
-    else if ([ElementType.SchemaRecordView].includes(props.store.pe.type)) {
+    else if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type)) {
         if (local.isLoad) {
             var v = local.schema?.recordViews.find(g => g.id == props.store.pe.id1);
             return <div className='shy-supervisor-bar-router text-1 flex f-14'>

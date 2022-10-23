@@ -87,7 +87,7 @@ export class PageViewStore extends Events {
         else this.config = {}
     }
     async getSchema() {
-        if ([ElementType.SchemaView, ElementType.SchemaRecordView, ElementType.Schema].includes(this.pe.type)) {
+        if ([ElementType.SchemaView, ElementType.SchemaRecordView, ElementType.SchemaRecordViewData, ElementType.Schema].includes(this.pe.type)) {
             return await TableSchema.loadTableSchema(this.pe.id)
         }
     }
