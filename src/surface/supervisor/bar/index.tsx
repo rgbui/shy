@@ -13,7 +13,8 @@ import HomeSrc from "../../../assert/img/shy.256.png";
 import { PageLayoutType } from 'rich/src/page/declare';
 import Tooltip from 'rc-tooltip';
 import { PageViewStore } from '../view/store';
-
+import { ElementType } from 'rich/net/element.type';
+import { FieldsSvg } from "rich/component/svgs"
 export var Bar = observer(function (props: { store: PageViewStore, className?: string | (string[]), noPosition?: boolean }) {
     function back() {
         UrlRoute.push(ShyUrl.myWorkspace);
@@ -43,9 +44,10 @@ export var Bar = observer(function (props: { store: PageViewStore, className?: s
         </div>
         <div className='shy-supervisor-bar-right w-200  flex-fixed h-40  flex-end'>
             <PageUsers store={props.store}></PageUsers>
+            {[ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type) && <AppTip placement='bottom' id={AppLang.BarPublish}><a onClick={e => props.store.onOpenFieldProperty(e)}><Icon size={18} rotate={90} icon={FieldsSvg} ></Icon></a></AppTip>}
             {item && [PageLayoutType.doc, PageLayoutType.board].includes(item.pageType) && <Tooltip placement='bottom' overlay={'搜索'}><a onClick={e => props.store.onSearch(e)}><Icon size={14} icon={SearchSvg}></Icon></a></Tooltip>}
             {item && [PageLayoutType.textChannel].includes(item.pageType) && <Tooltip placement='bottom' overlay={'成员'} ><a onClick={e => props.store.onMembers(e)}><Icon size={20} icon={MemberSvg}></Icon></a></Tooltip>}
-            {item && [PageLayoutType.doc, PageLayoutType.board, PageLayoutType.db, PageLayoutType.dbForm, PageLayoutType.dbView].includes(item.pageType) && <AppTip placement='bottom' id={AppLang.BarPublish}><a onClick={e => props.store.onOpenPublish(e)}><Icon size={20} icon='publish:sy' ></Icon></a></AppTip>}
+            {([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type) || item && [PageLayoutType.doc, PageLayoutType.dbForm, PageLayoutType.board, PageLayoutType.db, PageLayoutType.dbForm, PageLayoutType.dbView].includes(item.pageType)) && <AppTip placement='bottom' id={AppLang.BarPublish}><a onClick={e => props.store.onOpenPublish(e)}><Icon size={20} icon='publish:sy' ></Icon></a></AppTip>}
             <AppTip placement='bottom' id={AppLang.BarProperty}><a onClick={e => props.store.onOpenPageProperty(e)}><Icon size={20} icon='elipsis:sy' ></Icon></a></AppTip>
         </div>
     </div>

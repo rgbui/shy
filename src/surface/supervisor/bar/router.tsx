@@ -2,7 +2,7 @@
 import React from 'react';
 import { Icon } from 'rich/component/view/icon';
 import { observer, useLocalObservable } from 'mobx-react';
-import { ChevronRightSvg, CollectTableSvg, DocAddSvg, DocEditSvg, LockSvg } from 'rich/component/svgs';
+import { ChevronRightSvg, CollectTableSvg, DocAddSvg, DocEditSvg, LockSvg, MaximizeSvg } from 'rich/component/svgs';
 import { Loading } from 'rich/component/view/loading';
 import { util } from 'rich/util/util';
 import { PageViewStore } from '../view/store';
@@ -26,7 +26,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
     }
     React.useEffect(() => {
         load()
-    },[])
+    }, [])
     var item = props.store.item;
     if (props.store.pe.type == ElementType.Schema) {
         if (local.isLoad) {
@@ -48,6 +48,9 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <Icon size={16} icon={getSchemaViewIcon(view.url)}></Icon>
                     <em className='gap-l-3'> {view?.text}</em>
                 </span>
+                <span className='item-hover  round cursor flex-center size-24 round '>
+                    <Icon size={16} icon={MaximizeSvg}></Icon>
+                </span>
             </div>
         }
     }
@@ -63,6 +66,9 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                 <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
                     <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
                     <em className='gap-l-3'>{v?.text}</em>
+                </span>
+                <span className='item-hover  round cursor flex-center size-24 round '>
+                    <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>
             </div>
         }
