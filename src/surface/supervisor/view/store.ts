@@ -75,6 +75,10 @@ export class PageViewStore extends Events {
         if (this.page)
             this.page.onOpenPublish(e);
     }
+    onOpenFieldProperty(e: React.MouseEvent) {
+        if (this.page)
+            this.page.onOpenFieldProperty(e);
+    }
     async onSearch(e: React.MouseEvent) {
         await useSearchBox({ isNav: true })
     }
