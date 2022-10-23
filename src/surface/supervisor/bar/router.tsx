@@ -2,13 +2,14 @@
 import React from 'react';
 import { Icon } from 'rich/component/view/icon';
 import { observer, useLocalObservable } from 'mobx-react';
-import { ChevronRightSvg, CollectTableSvg, LockSvg } from 'rich/component/svgs';
+import { ChevronRightSvg, CollectTableSvg, DocAddSvg, DocEditSvg, LockSvg } from 'rich/component/svgs';
 import { Loading } from 'rich/component/view/loading';
 import { util } from 'rich/util/util';
 import { PageViewStore } from '../view/store';
 import { getPageIcon } from 'rich/extensions/at/declare';
 import { ElementType } from 'rich/net/element.type';
 import { TableSchema } from 'rich/blocks/data-grid/schema/meta';
+import { getSchemaViewIcon } from 'rich/blocks/data-grid/schema/util';
 
 export var PageRouter = observer(function (props: { store: PageViewStore }) {
     var local = useLocalObservable<{ isLoad: boolean, schema: TableSchema }>(() => {
@@ -43,7 +44,10 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <em className='gap-l-3'>{local.schema?.text}</em>
                 </span>
                 <span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span>
-                <span className='item-hover padding-w-5 padding-h-3 round cursor'>{view?.text}</span>
+                <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
+                    <Icon size={16} icon={getSchemaViewIcon(view.url)}></Icon>
+                    <em className='gap-l-3'> {view?.text}</em>
+                </span>
             </div>
         }
     }
@@ -56,7 +60,10 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <em className='gap-l-3'>{local.schema?.text}</em>
                 </span>
                 <span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span>
-                <span className='item-hover padding-w-5 padding-h-3 round cursor'>{v?.text}</span>
+                <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
+                    <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
+                    <em className='gap-l-3'>{v?.text}</em>
+                </span>
             </div>
         }
     }
