@@ -48,5 +48,9 @@ class DataStoreService {
     async statisticsValue(args) {
         return surface.workspace.sock.get('/datastore/statistics/value', args)
     }
+    @put('/datastore/row/object/update')
+    async datastoreRowObjectUpdate(args){
+        return surface.workspace.sock.get('/datastore/row/object/update', args)
+    }
 
 }

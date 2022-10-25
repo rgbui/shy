@@ -176,6 +176,7 @@ push('/datastore/group', '{schemaId:string,page?:number,size?:number,filter?:Rec
 push('/datastore/statistics', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,having?:Record<string, any>,sorts?:Record<string, 1|-1>,groups:string[],aggregate?: Record<string, any>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any>,indicator:string}', '{ok:boolean,data:{value:number},warn:string}', ['get']);
 push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
+push('/datastore/row/object/update','{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}','SockResponse<void>', ['put']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
