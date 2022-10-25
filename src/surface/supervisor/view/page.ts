@@ -20,6 +20,10 @@ export async function createPageContent(store: PageViewStore) {
                 if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
                     store.page.pageLayout = { type: PageLayoutType.dbForm };
                 }
+                else if (store.pe.type == ElementType.SchemaFieldBlogData) {
+                    store.page.pageLayout = { type: PageLayoutType.blog };
+                    page.customElementUrl = store.elementUrl;
+                }
             }
             if (store.item) page.pageInfo = store.item;
             page.on(PageDirective.history, async function (action) {
