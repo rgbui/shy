@@ -91,8 +91,43 @@ export class PageViewStore extends Events {
         else this.config = {}
     }
     async getSchema() {
-        if ([ElementType.SchemaView, ElementType.SchemaRecordView, ElementType.SchemaRecordViewData, ElementType.Schema].includes(this.pe.type)) {
+        if ([ElementType.SchemaView,
+
+        ElementType.SchemaFieldBlogData,
+        ElementType.SchemaFieldData,
+        ElementType.SchemaFieldNameData,
+
+        ElementType.SchemaRecordView,
+        ElementType.SchemaRecordViewData,
+
+        ElementType.Schema].includes(this.pe.type)) {
             return await TableSchema.loadTableSchema(this.pe.id)
+        }
+    }
+    async getSchemaRow() {
+        if ([
+            ElementType.SchemaFieldBlogData,
+            ElementType.SchemaFieldData,
+            ElementType.SchemaFieldNameData,
+            ElementType.SchemaRecordViewData
+        ].includes(this.pe.type)) {
+            var schema = await this.getSchema()
+            var row = await schema.rowGet(this.pe.id2);
+            if (row) return row;
+        }
+    }
+    async getSchemaRowField() {
+        if ([
+            ElementType.SchemaFieldBlogData,
+            ElementType.SchemaFieldData,
+            ElementType.SchemaFieldNameData
+        ].includes(this.pe.type)) {
+            var row = await this.getSchemaRow();
+            if (row) {
+                var schema = await this.getSchema();
+                var field = schema.fields.find(g => g.id == this.pe.id1 || g.name == this.pe.id1);
+                return field.getValue(row)
+            }
         }
     }
 }
