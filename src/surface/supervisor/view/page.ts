@@ -5,6 +5,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageDirective } from "rich/src/page/directive";
+import { util } from "rich/util/util";
 import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
 import { PageViewStore } from "./store";
@@ -21,11 +22,15 @@ export async function createPageContent(store: PageViewStore) {
                     store.page.pageLayout = { type: PageLayoutType.dbForm };
                 }
                 else if (store.pe.type == ElementType.SchemaFieldBlogData) {
-                    store.page.pageLayout = { type: PageLayoutType.blog };
+                    page.pageLayout = { type: PageLayoutType.blog };
                     page.customElementUrl = store.elementUrl;
+                    page.requireSelectLayout = false;
                 }
             }
             if (store.item) page.pageInfo = store.item;
+            if (store.pe.type == ElementType.SchemaFieldBlogData) {
+                page.pageInfo = (await store.getSchemaRowField()) || { id: util.guid() }
+            }
             page.on(PageDirective.history, async function (action) {
                 var syncBlock = action.syncBlock;
                 if (syncBlock) {

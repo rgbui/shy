@@ -19,7 +19,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
         }
     })
     async function load() {
-        if ([ElementType.Schema, ElementType.SchemaView, ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type)) {
+        if ([ElementType.Schema, ElementType.SchemaView, ElementType.SchemaFieldBlogData, ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type)) {
             local.schema = await props.store.getSchema();
             local.isLoad = true;
         }
@@ -67,6 +67,24 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
                     <em className='gap-l-3'>{v?.text}</em>
                 </span>
+                <span className='item-hover  round cursor flex-center size-24 round '>
+                    <Icon size={16} icon={MaximizeSvg}></Icon>
+                </span>
+            </div>
+        }
+    }
+    else if ([ElementType.SchemaFieldBlogData].includes(props.store.pe.type)) {
+        if (local.isLoad) {
+            return <div className='shy-supervisor-bar-router text-1 flex f-14'>
+                <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
+                    <Icon size={16} icon={CollectTableSvg}></Icon>
+                    <em className='gap-l-3'>{local.schema?.text}</em>
+                </span>
+                {/* <span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span> */}
+                {/* <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
+                    <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
+                    <em className='gap-l-3'>{v?.text}</em>
+                </span> */}
                 <span className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>
