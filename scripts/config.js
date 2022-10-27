@@ -215,6 +215,7 @@ module.exports = {
             API_VERSION: JSON.stringify(API_VERSION),
             AUTH_URL: JSON.stringify(AUTH_URL),
             VERSION_PREFIX: JSON.stringify(versionPrefix),
+            ASSERT_URL: JSON.stringify(publicPath + versionPrefix),
             AMAP_KEY: JSON.stringify(AMAP_KEY),
             AMAP_PAIR: JSON.stringify(AMAP_PAIR)
         }),
@@ -234,10 +235,10 @@ module.exports = {
                     from: path.join(__dirname, "shared.js"),
                     to: versionPrefix + 'assert/js/shared.js'
                 },
-                // {
-                //     from: path.join(__dirname, "../../rich/resources/gallery"),
-                //     to: versionPrefix + 'assert/gallery'
-                // }
+                {
+                    from: path.join(__dirname, "../../rich/extensions/data-grid/formula/docs"),
+                    to: versionPrefix + 'assert/data-grid/formula/docs'
+                }
             ]
         })
         /**
