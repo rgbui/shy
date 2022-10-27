@@ -82,6 +82,10 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
+    /***
+     * 页面的一些其它的pageItem,如blog文档，该文档脱离正常的pages，其parentId='blog'
+     */
+    public otherChilds: PageItem[] = [];
     public permissions: number[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
@@ -129,6 +133,7 @@ export class Workspace {
             icon: observable,
             cover: observable,
             childs: observable,
+            otherChilds: observable,
             siteDomain: observable,
             customSiteDomain: observable,
             slogan: observable,
@@ -279,6 +284,41 @@ export class Workspace {
                 pages = ShyUtil.flatArrayConvertTree(pages);
                 this.load({ childs: pages });
             }
+        }
+    }
+    /**
+     * 获取加载页面，没有挂在侧栏的一些页面
+     * 例如：文档blog
+     * @param id 
+     * @param pageItemInfo 
+     * @returns 
+     */
+    async loadOtherPage(id: string, pageItemInfo?: Partial<PageItem>) {
+        if (id) {
+            var pageItem = surface.workspace.otherChilds.find(c => c.id == id);
+            if (!pageItem) {
+                var g = await channel.get('/page/item', { id });
+                if (g) {
+                    pageItem = new PageItem();
+                    pageItem.load(g.data.item);
+                    surface.workspace.otherChilds.push(pageItem);
+                    return pageItem;
+                }
+            }
+            else return pageItem;
+        }
+        var pageItem = new PageItem();
+        if (id) pageItem.id = id;
+        else pageItem.id = config.guid();
+        if (pageItemInfo) Object.assign(pageItem, pageItemInfo)
+        var data = pageItem.getItem();
+        if (pageItemInfo) Object.assign(data, pageItemInfo)
+        delete data.sn;
+        var r = await channel.put('/page/item/create', { wsId: surface.workspace.id, data });
+        if (r.ok) {
+            pageItem.load(r.data.item);
+            surface.workspace.otherChilds.push(pageItem);
+            return pageItem;
         }
     }
     pageSort = (x, y) => {

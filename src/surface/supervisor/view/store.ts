@@ -10,6 +10,7 @@ import lodash from "lodash";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageSupervisorDialog } from "./dialoug";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
+import { PageItem } from "../../sln/item";
 
 export class PageViewStore extends Events {
     source: 'main' | 'slide' | 'dialog';
@@ -53,18 +54,23 @@ export class PageViewStore extends Events {
         id: string;
         id1: string;
         id2: string;
-    };
+    }
     get pe() {
         if (typeof this._pe == 'undefined')
             this._pe = parseElementUrl(this.elementUrl) as any;
         return this._pe;
     }
+    cachePageItem: PageItem;
     get item() {
+        if (this.cachePageItem) return this.cachePageItem;
         if ([ElementType.PageItem, ElementType.Room, ElementType.Schema].includes(this.pe.type)) {
             return surface.workspace?.find(g => g.id == this.pe.id);
         }
         else if ([ElementType.SchemaView, ElementType.SchemaRecordView].includes(this.pe.type)) {
             return surface.workspace.find(g => g.id == this.pe.id1)
+        }
+        else if ([ElementType.SchemaFieldBlogData].includes(this.pe.type)) {
+
         }
         return null;
     }
@@ -113,7 +119,7 @@ export class PageViewStore extends Events {
         ].includes(this.pe.type)) {
             var schema = await this.getSchema()
             var row = await schema.rowGet(this.pe.id2);
-            if (row) return row;
+            if (row) return row.data.data;
         }
     }
     async getSchemaRowField() {
@@ -129,6 +135,12 @@ export class PageViewStore extends Events {
                 return field.getValue(row)
             }
         }
+    }
+    async storeRowFieldContent(data: Record<string, any>) {
+        var schema = await this.getSchema();
+        var row = await this.getSchemaRow();
+        var field = schema.fields.find(g => g.id == this.pe.id1 || g.name == this.pe.id1);
+        await schema.rowUpdateFieldObject({ rowId: row.id, fieldName: field.name, data })
     }
 }
 

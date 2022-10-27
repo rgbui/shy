@@ -5,9 +5,9 @@ import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageDirective } from "rich/src/page/directive";
-import { util } from "rich/util/util";
 import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
+import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 
 export async function createPageContent(store: PageViewStore) {
@@ -29,7 +29,19 @@ export async function createPageContent(store: PageViewStore) {
             }
             if (store.item) page.pageInfo = store.item;
             if (store.pe.type == ElementType.SchemaFieldBlogData) {
-                page.pageInfo = (await store.getSchemaRowField()) || { id: util.guid() }
+                var rf = (await store.getSchemaRowField());
+                var blogPageItem = await surface.workspace.loadOtherPage(rf?.id, {
+                    mime: Mime.blog,
+                    pageType: PageLayoutType.blog,
+                    parentId:'blog'
+                });
+                if (blogPageItem) {
+                    if (rf?.id !== blogPageItem.id) {
+                        await store.storeRowFieldContent(blogPageItem.get());
+                    }
+                }
+                store.cachePageItem = blogPageItem;
+                page.pageInfo = store.item;
             }
             page.on(PageDirective.history, async function (action) {
                 var syncBlock = action.syncBlock;
