@@ -20,6 +20,11 @@ class PageService extends BaseService {
     async queryPageItem(args: { id: string }) {
         return await surface.workspace.sock.get('/page/item', args);
     }
+    @put('/page/item/create')
+    async pageItemCreate(args: Record<string, any>) {
+        if (!args.wsId) args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.put('/page/item/create', args);
+    }
     @get('/page/query/links')
     async pageQueryLinks(args: { word: string }) {
 

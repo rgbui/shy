@@ -288,9 +288,10 @@ push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:st
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
+push('/page/item/create','{wsId?:string,data:Record<string,any>}','SockResponse<{ item:Record<string,any> }>',['put'])
 push('/page/word/query', '{word:string}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/guid', '', 'string', ['query']);
-push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])
+//push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])
 
 push('/view/snap/query', '{ elementUrl: string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
