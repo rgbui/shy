@@ -12,7 +12,7 @@ import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
-import { PagePermission } from "rich/src/page/permission";
+import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
 import lodash from "lodash";
 import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
@@ -134,7 +134,6 @@ export class PageItem {
     }
     parentId?: string;
     at: number;
-
     get index() {
         if (this.parent) return this.parent?.childs.findIndex(g => g === this);
         return null;
@@ -162,7 +161,6 @@ export class PageItem {
         }
         if (this.childs?.length > 0) this.spread = true;
     }
-
     get() {
         return {
             id: this.id,
@@ -170,6 +168,22 @@ export class PageItem {
             text: this.text, sn: this.sn,
             icon: this.icon,
             pageType: this.pageType
+        }
+    }
+    getItem() {
+        return {
+            id: this.id,
+            text: this.text,
+            sn: this.sn,
+            icon: this.icon,
+            pageType: this.pageType,
+            parentId: this.parent?.id || null,
+            workspaceId: this.workspace.id,
+            mime: this.mime,
+            share: this.share,
+            permission: this.permission,
+            locker: this.locker,
+            description:this.description
         }
     }
     closest(predict: (item: PageItem) => boolean, ignoreSelf?: boolean) {
@@ -390,6 +404,22 @@ export class PageItem {
                 }
                 link.setAttribute('href', dataUrl);
                 canvas.remove();
+            }
+        }
+    }
+    getPermissons() {
+        var ps = surface.workspace.memberPermissions;
+        if (surface.workspace.member) {
+            return ps;
+        } else {
+            if (this.permission == PagePermission.canEdit) {
+                return getEditPerssions()
+            }
+            else if (this.permission == PagePermission.canInteraction) {
+                return getCommonPerssions()
+            }
+            else {
+                return []
             }
         }
     }
