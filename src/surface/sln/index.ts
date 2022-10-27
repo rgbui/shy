@@ -3,7 +3,6 @@ import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItem } from "./item";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point } from "rich/src/common/vector/point";
-import { SlnDirective, Mime } from "./declare";
 import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
 import { makeObservable, observable } from "mobx";
@@ -14,8 +13,9 @@ import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
+import { Mime } from "./declare";
 
-export class Sln extends Events<SlnDirective> {
+export class Sln extends Events {
     constructor() {
         super();
         makeObservable(this, {

@@ -152,7 +152,6 @@ export class Surface extends Events {
     onCreateWorkspace() {
         UrlRoute.push(ShyUrl.workCreate);
     }
-
     /**
      * 
      */

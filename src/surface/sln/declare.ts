@@ -1,16 +1,8 @@
-export enum SlnDirective {
-    addSubPageItem,
-    removePageItem,
-    updatePageItem,
-    toggleModule,
-    togglePageItem,
-    openItem
-}
-
 
 export enum Mime {
     none = 0,
     page = 10,
+    blog = 11,
     pages = 20,
     favourite = 30,
     trash = 40,
