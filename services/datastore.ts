@@ -53,5 +53,8 @@ class DataStoreService {
     async datastoreRowObjectUpdate(args) {
         return surface.workspace.sock.put('/datastore/row/object/update', args)
     }
-
+    @del('/datastore/remove/ids')
+    async dateStoreDeleteIds(args) {
+        return surface.workspace.sock.delete('/datastore/remove/ids', args)
+    }
 }
