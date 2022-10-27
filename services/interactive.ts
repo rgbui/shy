@@ -1,4 +1,4 @@
-import { patch } from "rich/net/annotation";
+import { patch,get} from "rich/net/annotation";
 import { surface } from "../src/surface";
 
 class interactiveService {
@@ -8,5 +8,12 @@ class interactiveService {
             ...args,
             wsId: surface.workspace.id
         });
+    }
+    @get('/user/interactives')
+    async getUserInteractives(args: {}) {
+        return surface.workspace.sock.get('/user/interactives', {
+            ...args,
+            wsId: surface.workspace.id
+        })
     }
 }

@@ -2,6 +2,7 @@
 import lodash from "lodash";
 import { act, air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
+import { ElementType, getElementUrl } from "rich/net/element.type";
 import { PageLayoutType } from "rich/src/page/declare";
 import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
 import { surface } from ".";
@@ -18,21 +19,23 @@ class MessageCenter {
         else return []
     }
     @air('/page/open')
-    async pageOpen(args: { item: string | { id: string } }) {
-        var { item } = args;
-        var id = typeof item == 'string' ? item : item?.id;
-        var it = id ? surface.workspace.find(g => g.id == id) : undefined;
-        if (it) {
-            UrlRoute.pushToPage(surface.workspace.host, it.sn)
+    async pageOpen(args: { item: string | { id: string }, elementUrl: string }) {
+        var { item, elementUrl } = args;
+        if (item) {
+            var id = typeof item == 'string' ? item : item?.id;
+            elementUrl = getElementUrl(ElementType.PageItem, id);
+        }
+        surface.supervisor.onOpen(elementUrl);
+        if (surface.supervisor.main?.item) {
+            var it = surface.supervisor.main?.item;
+            UrlRoute.pushToPage(surface.workspace.host, it.sn);
             it.onUpdateDocument();
-            await surface.workspace.loadViewOnlines(it.id);
             surface.sln.onFocusItem(it);
-            await surface.supervisor.onOpenItem(it);
         }
-        else {
-            surface.sln.onFocusItem();
-            await surface.supervisor.onOpenItem();
-        }
+    }
+    @air('/page/dialog')
+    async pageDialog(args: { elementUrl: string }) {
+        return await surface.supervisor.onOpenDialog(args.elementUrl);
     }
     @air('/page/create/sub')
     async createPageSub(args: { pageId: string, text: string }) {

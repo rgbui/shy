@@ -147,7 +147,8 @@ push('/gallery/query', `{type: GalleryType, word: string}`, `{ok:boolean,data:Ou
 push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['act']);
 push('/page/update/info', `{id: string, pageInfo:LinkPageItem}`, `void`, ['air']);
 push('/page/query/info', `{id: string}`, `SockResponse<LinkPageItem>`, ['get']);
-push('/page/open', `{item:string|{id:string}}`, `void`, ['air']);
+push('/page/open', `{item:string|{id:string},blockId?:string}`, `void`, ['air']);
+push('/page/dialog', '{elementUrl:string}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
 push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])
@@ -162,8 +163,8 @@ push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSche
 push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
 push('/schema/list', '{page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
 push('/schema/ids/list', '{ids:string[]}', 'SockResponse<{list:Partial<TableSchema>[]}>', ['get'])
-
-push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{dataId:string,pos:"before"|"after"}}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['put']);
+push('/schema/delete', '{wsId?:string,id:string}', 'SockResponse<void>', ['del']);
+push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,data:Record<string,any>}>', ['put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
 push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:string}', ['del']);
 push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', 'SockResponse<void>', ['patch']);
@@ -174,15 +175,16 @@ push('/datastore/query/all', '{schemaId:string,page?:number,size?:number,filter?
 push('/datastore/group', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,group:string}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/statistics', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,having?:Record<string, any>,sorts?:Record<string, 1|-1>,groups:string[],aggregate?: Record<string, any>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any>,indicator:string}', '{ok:boolean,data:{value:number},warn:string}', ['get']);
-
+push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
+push('/datastore/row/object/update','{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}','SockResponse<void>', ['put']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
 push('/sign', '', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['get'])
 push('/sign/out', '', 'SockResponse<void>', ['get'])
-push('/paw/sign', '{phone:string,paw:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
+push('/paw/sign', '{phone:string,paw:string,inviteCode:string,weixinOpen:Record<string,any>}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 push(`/sign/patch`, '{name: string, paw: string}', 'SockResponse<{list:any[]}>', ['patch']);
-push('/phone/sign', '{phone:string,code:string,inviteCode:string}', '{ok:boolean,warn:string,data:{user:Record<string,any>,guid:string,token:string}}', ['put'])
+push('/phone/sign', '{phone:string,code:string,inviteCode:string,weixinOpen:Record<string,any>}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 push('/phone/sms/code', '{phone:string}', '{ok:boolean,warn:string,data:{success:boolean,code?:string}}', ['post'])
 push('/phone/check/sign', '{phone:string}', '{ok:boolean,warn:string,data:{sign:boolean}}', ['get'])
 push('/phone/check/update', '{phone:string,code:string}', 'SockResponse<void>', ['patch'])
@@ -194,17 +196,20 @@ push('/user/patch', '{data:Record<string,any>}', 'SockResponse<void>', ['patch']
 push('/user/patch/status', '{status:UserStatus,customStatus?:{overDue: Date, text: string}}', 'SockResponse<void>', ['patch'])
 push('/user/basic', '{userid:string}', 'SockResponse<{user:UserBasic}>', ['get'])
 push('/users/basic', '{ids:string[]}', 'SockResponse<{list:UserBasic[]}>', ['get']);
+push('/user/basic/sync', '{id:string}', 'void', ['air'])
 push('/user/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{file:{url:string}}>', ['post'])
 push('/user/wss', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/user/channels', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number,rooms:any[]}>', ['get'])
 push('/user/channel/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/user/channel/active', '{id:string}', 'SockResponse<void>', ['patch'])
 push('/user/channel/join', '{roomName?:string,userids:string[]}', 'SockResponse<{room:Record<string,any>,channel:Record<string,any>}>', ['put'])
+push('/user/channel/create', '{roomId:string}', 'SockResponse<{channel:any,room:any}>', ['get'])
 push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
+push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
 
-push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean}>', ['put'])
+push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
 push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
 push('/friends/pending', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
@@ -218,12 +223,27 @@ push('/blacklist/join', '{otherId:string}', 'SockResponse<void>', ['put'])
 push('/friend/is', '{friendId:string}', 'SockResponse<{is:boolean}>', ['get'])
 push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any>}>', ['put'])
 push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
-push('/user/chat/send', '{roomId:string,content?:string,file?:any,sockId:string,tos:string[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
-push('/user/chat/cancel', '{id:string}', 'SockResponse<void>', ['del']);
+push('/user/chat/send', '{roomId:string,content?:string,file?:any,tos:string[],replyId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/user/chat/cancel', '{id:string,roomId:string}', 'SockResponse<void>', ['del']);
+push('/user/chat/patch', '{id:string,roomId:string,content?:string,file?:any}', 'SockResponse<void>', ['patch']);
+push('/user/chat/emoji', '{id:string,roomId:string,emoji:{emojiId: string, code?: string}}', 'SockResponse<{emoji:{emojiId: string, code?: string,count:number}}>', ['put']);
+push('/user/room/unread', '{unrooms: { roomId: string, seq: number }[]}', 'SockResponse<{unreads:{roomId:string,count:number}[]}>', ['get']);
+push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string}`, 'SockResponse<{orderId:string,code:string}>', ['put'])
+push('/repeat/qr_pay/order', '{orderId:string,platform:string}', 'SockResponse<{orderId:string,code:string}>', ['get'])
+push('/user/order/list', '{page?: number, size?: number, word?: string, status?: string,deal?:boolean}', 'SockResponse<{page:number,size:number,list:any[],total:number}>', ['get']);
+push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
+push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
+
+
+push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
+push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
+push('/open/list', '', 'SockResponse<{list:any[]}>', ['get'])
+push('/open/sign', '{}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
+
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
-push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any}>', ['get'])
+push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any,onlineUsers:string[]}>', ['get'])
 push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
@@ -238,16 +258,13 @@ push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content
 push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?: string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,file?:any}`, 'SockResponse<void>', ['patch'])
 push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);
-
+push('/ws/random/online/users', '{wsId:string,size?:number}', 'SockResponse<{count:number,users:string[]}>', ['get'])
+push('/ws/online/users', '{wsId:string}', 'SockResponse<{users:string[]}>', ['get'])
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: string,file: any,isEdited:boolean}', 'void', ['air']);
 push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/emoji/notify', '{workspaceId: string,id: string,roomId: string,emoji:{ emojiId: string, code?: string }}', 'void', ['air']);
-
-
-
-
-
+push('/ws/channel/abled/send', '{wsId?:string,roomId:string,pageId:string}', 'SockResponse<{abled:boolean}>', ['get']);
 push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
@@ -267,27 +284,36 @@ push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 
 push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
+push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
 push('/page/word/query', '{word:string}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/guid', '', 'string', ['query']);
-push('/page/sync/block', '{syncBlockId:string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
-push('/page/view/operator', '{syncBlockId: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
-push('/page/view/snap', '{ syncBlockId: string, seq: number, content: any }', 'Promise<void>', ['act'])
 push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])
+
+push('/view/snap/query', '{ elementUrl: string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
+push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
+push('/view/snap/store', '{  elementUrl: string, seq: number, content: any }', 'Promise<void>', ['act'])
+
+
 push('/view/snap/list', '{wsId?: string, elementUrl: string, page: number, size: number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push('/view/snap/content', '{wsId?:string,id:string}', 'SockResponse<{id:string,content:string}>', ['get'])
-push('/view/snap/patch','{id:string}','SockResponse<void>',['patch']);
-push('/view/snap/del','{id:string}','SockResponse<void>',['del']);
+push('/view/snap/patch', '{id:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
+push('/view/snap/del', '{id:string}', 'SockResponse<void>', ['del']);
+push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}', 'SockResponse<{seq:number,id:string}>', ['post']);
+
 push(`/block/ref/pages`, '{wsId?:string,pageId:string}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/block/ref/add`, '{wsId?:string,pageId:string,data:{blockId: string, rowBlockId: string, text: string, refPageId: string}}', 'SockResponse<void>', ['put'])
-push(`/block/ref/remove`, '{wsId?:string,pageId:string,blockId?:string,rowBlockId?:string}', 'AtomPermission[]', ['del'])
-push(`/block/ref/sync`, '{wsId?:string,pageId:string,data:{rowBlockId: string, text: string}}', 'AtomPermission[]', ['patch'])
+push(`/block/ref/sync`, '{wsId?:string,data:{deleteBlockIds: string[], updates: { rowBlockId: string, text: string }[]}}', 'SockResponse<void>', ['patch'])
 
 
-push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number}>', ['patch'])
+push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherExists:boolean}>', ['patch'])
+push(`/user/interactives`, '{elementUrl:string,schemaUrl:string,ids:string[],es:string[]}', 'SockResponse<{list:{elementUrl:string,values:string[]}[]}>', ['get'])
+
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
+
+
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

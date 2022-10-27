@@ -13,7 +13,8 @@ export enum CacheKey {
     lang = 5,
     ws_toggle_pages = 6,
     slideWidth = 7,
-    timUrl = 8
+    timUrl = 8,
+    roomCache = '/room/{roomId}/cache/seq'
 }
 const FLAG = 'shy.';
 class SyCache {

@@ -1,76 +1,102 @@
 
-import { PageItem } from "../sln/item";
 import { Events } from "rich/util/events";
 import { Rect } from "rich/src/common/vector/point";
-import { usePagePublish } from "./publish";
-import { computed, makeObservable, observable } from "mobx";
-import { surface } from "..";
-import { createPageContent } from "./page";
+import { makeObservable, observable } from "mobx";
+import { PageViewStore, PageViewStores } from "./view/store";
 import { timService } from "../../../net/primus";
-
 export class Supervisor extends Events {
-    itemId: string = null;
-    pagesEl: HTMLElement;
-    loading: boolean = false;
     constructor() {
         super()
         makeObservable(this, {
-            itemId: observable,
-            item: computed,
-            loading: observable
+            opening: observable,
+            main: observable,
+            slide: observable,
+            dialog: observable
         })
     }
-    get item() {
-        return surface.workspace.find(g => g.id == this.itemId);
-    }
-    async onOpenItem(item?: PageItem) {
-        var oldItem = this.item;
-        if (item) {
-            if (item.id == this.itemId) return;
-            else this.itemId = item.id;
-            this.loading = true;
-            await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, item.id);
-            try {
-                if (oldItem && oldItem.contentView) {
-                    oldItem.contentView.cacheFragment();
-                }
-                await createPageContent(item);
-            }
-            catch (ex) {
-
-            }
-            finally {
-                this.loading = false;
-            }
+    /**
+     * 主页面
+     */
+    main: PageViewStore = null;
+    /**
+     * 侧边页
+     */
+    slide: PageViewStore = null;
+    /**
+     * 对话框页面
+     */
+    dialog: PageViewStore = null;
+    time;
+    onOpen(elementUrl: string) {
+        if (elementUrl == this.main?.elementUrl) return;
+        this.opening = true;
+        if (this.time) { clearInterval(this.time); this.time = null; }
+        try {
+            this.main = PageViewStores.createPageViewStore(elementUrl);
+            if (this.main.item)
+                timService.enterWorkspaceView(
+                    this.main.item.workspace.id,
+                    this.main.item.id
+                )
+            /**
+             * 3小时主动同步一次，服务器缓存用户所在的视图在线状态过期时间是6小时
+             */
+            this.time = setInterval(() => this.syncWorkspaceView(), 1000 * 60 * 60 * 3);
         }
-        else {
-            await timService.enterWorkspaceView(surface.workspace.id, surface.workspace.member ? true : false, undefined);
+        catch (ex) {
+            console.error(ex);
         }
-    }
-    onFavourite(event: React.MouseEvent) {
-        // workspaceService.toggleFavourcePage(this.item)
-    }
-    async onOpenPublish(event: React.MouseEvent) {
-        await usePagePublish({ roundArea: Rect.fromEvent(event) }, this.item)
-    }
-    async onOpenPageProperty(event: React.MouseEvent) {
-        if (this.item.contentView) {
-            await this.item.contentView.onPageContextmenu(event);
+        finally {
+            this.opening = false;
         }
     }
-    async getView(): Promise<HTMLElement> {
-        if (this.pagesEl) return this.pagesEl;
-        return new Promise((resolve, reject) => {
-            this.on('mounted', function () {
-                if (this.pagesEl) resolve(this.pagesEl);
+    async syncWorkspaceView() {
+        if (this.main.item)
+            timService.enterWorkspaceView(
+                this.main.item.workspace.id,
+                this.main.item.id
+            )
+    }
+    onOpenSlide(elementUrl: string) {
+        if (elementUrl == this.slide?.elementUrl) return;
+        if (!elementUrl) this.slide = null;
+        else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide')
+    }
+    /**
+     * 这里打开elementUrl
+     * @param elementUrl 
+     */
+    async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
+        if (elementUrl && elementUrl == this.dialog?.elementUrl) return;
+        if (!elementUrl) this.dialog = null;
+        else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog');
+        if (this.dialog) {
+            return new Promise((resolve, reject) => {
+                this.dialog.only('close', () => {
+                    resolve(this.dialog.page);
+                })
             })
-        })
-    }
-    async autoLayout() {
-        if (this?.item?.contentView) {
-            var view = await this.getView();
-            var bound = Rect.fromEle(view);
-            this.item.contentView.layout({ width: bound.width, height: bound.height })
         }
+    }
+    opening: boolean = false;
+    async autoLayout() {
+        if (this.main?.page) {
+            var bound = Rect.fromEle(this.main.view.pageEl);
+            this.main.page.layout(bound);
+        }
+        if (this.slide?.page) {
+            var bound = Rect.fromEle(this.slide.view.pageEl);
+            this.slide.page.layout(bound);
+        }
+        if (this.dialog?.page) {
+            var bound = Rect.fromEle(this.dialog.view.pageEl);
+            this.dialog?.page.layout(bound);
+        }
+    }
+    isShowElementUrl(elementUrl: string) {
+        if (this.main?.elementUrl == elementUrl) return true;
+        if (this.slide?.elementUrl == elementUrl) return true;
+        if (this.dialog?.elementUrl == elementUrl) return true;
+        return false;
     }
 }

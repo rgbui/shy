@@ -138,9 +138,9 @@ export class WorkspaceRoles extends React.Component {
     }
     renderRoles() {
         return <div className="shy-ws-roles-list">
-            <h3>角色</h3>
+            <div className='h2'>角色</div>
             <Divider></Divider>
-            <Remark style={{ margin: '10px 0px' }}>使用角色来组织你的空间成员并自定义权限</Remark>
+            <div className='remark gap-h-10'>使用角色来组织你的空间成员并自定义权限</div>
             <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole(this.allRole)}>
                 <Row valign='middle'>
                     <Col span={12}><Space>
@@ -181,10 +181,10 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='shy-ws-roles-edit-roles-head'>
                     <Row>
-                        <Col span={18} style={{height:24}} valign="middle"><Icon size={14} style={{ cursor: 'pointer' }} click={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                        <Col span={18} style={{ height: 24 }} valign="middle"><Icon size={14} style={{ cursor: 'pointer' }} onClick={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
                             <span style={{ cursor: 'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
                         </Col>
-                        <Col span={6}  style={{height:24}} valign="middle" align='end'><ToolTip overlay={'添加角色'}><Icon size={14} click={e => this.addRole()} icon={PlusSvg}></Icon></ToolTip> </Col>
+                        <Col span={6} style={{ height: 24 }} valign="middle" align='end'><ToolTip overlay={'添加角色'}><Icon size={14} onClick={e => this.addRole()} icon={PlusSvg}></Icon></ToolTip> </Col>
                     </Row>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {
@@ -316,9 +316,9 @@ export class WorkspaceRoles extends React.Component {
             return false;
         }
         return <div className="shy-ws-role-permission">
-            <Row style={{margin:0}}>
+            <Row style={{ margin: 0 }}>
                 <Col span={12}><span style={{ fontSize: 12 }}>通用的空间权限</span></Col>
-                <Col span={12} align={'end'}><Button style={{padding:0,margin:0}} link size={'small'} >清除权限</Button></Col>
+                <Col span={12} align={'end'}><Button style={{ padding: 0, margin: 0 }} link size={'small'} >清除权限</Button></Col>
             </Row>
             <Row>
                 <Col span={18}><h4>编辑文档</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.editDoc, e)} checked={is(AtomPermission.editDoc)}></Switch></Col>

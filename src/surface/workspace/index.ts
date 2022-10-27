@@ -19,6 +19,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
+import { PageViewStores } from "../supervisor/view/store";
 
 export type WorkspaceUser = {
     userid: string;
@@ -53,11 +54,12 @@ export type WorkspaceMember = {
     totalScore: number;
 }
 
-export type WorkspaceOnLineUser = {
-    userid: string;
-    deviceId?: string;
-    sockId?: string;
-}
+export type LinkWorkspaceOnline = {
+    overlayDate: Date,
+    randomOnlineUsers: Set<string>,
+    loadingOnlineUsers: boolean,
+    unreadChats: { id: string, roomId: string, seq: number }[]
+} & Partial<Workspace>
 
 export class Workspace {
     public id: string = null;
@@ -83,12 +85,42 @@ export class Workspace {
     public permissions: number[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
-    /**
-     * 在线的成员
-     */
-    public onlineUsers: Map<string, WorkspaceOnLineUser[]> = new Map();
     public access: number = 0;
     public accessJoinTip: boolean = false;
+    /**
+     * 访客发言限制
+     */
+    public accessTalkLimit: string = 'none';
+    /**
+     * 访客加入限制
+     */
+    public accessJoinLimit: string = 'none';
+    /**
+     * 访问加入成员协议
+     */
+    public acessJoinAgree: string = '';
+    /**
+     * 创建文档时的初始配置
+     */
+    public createPageConfig: {
+        isFullWidth: boolean,
+        smallFont: boolean,
+        nav: boolean,
+        autoRefPages: boolean,
+        autoRefSubPages: boolean
+    } = {
+            isFullWidth: true,
+            smallFont: false,
+            nav: false,
+            autoRefPages: false,
+            autoRefSubPages: true
+        };
+    /**
+     * 空间的初始默认页面
+     */
+    public defaultPageId: string = null;
+    public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
+    public onLineUsers: Set<string> = new Set();
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -106,11 +138,14 @@ export class Workspace {
             config: observable,
             owner: observable,
             roles: observable,
-            onlineUsers: observable,
             isJoinTip: computed,
             permissions: observable,
             member: observable,
             memberPermissions: computed,
+            createPageConfig: observable,
+            defaultPageId: observable,
+            viewOnlineUsers: observable,
+            onLineUsers: observable
         })
     }
     private _sock: Sock;
@@ -254,48 +289,15 @@ export class Workspace {
     async loadMember(member: WorkspaceMember) {
         this.member = member;
     }
-    async loadViewOnlines(viewId: string) {
-        var ov = this.onlineUsers.get(viewId);
-        if (!ov) {
-            ov = [];
-            var r = await channel.get('/ws/view/online/users', { viewId });
-            if (r.ok) ov = r.data.users.map(u => ({ userid: u })) || [];
-            this.onlineUsers.set(viewId, ov);
-        }
-        return ov;
-    }
-    async addViewLine(viewId: string, user: WorkspaceOnLineUser) {
-        var s = this.onlineUsers.get(viewId);
-        if (!s) {
-            this.onlineUsers.set(viewId, [{ userid: user.userid }]);
-        }
-        else {
-            if (!s.some(g => g.userid == user.userid)) {
-                s.push({ userid: user.userid });
-            }
-        }
-    }
-    async removeViewLine(user: WorkspaceOnLineUser, viewId?: string) {
-        if (typeof viewId == 'string') {
-            var s = this.onlineUsers.get(viewId);
-            if (s) {
-                s.removeAll(g => g.userid == user.userid);
-            }
-        }
-        else {
-            this.onlineUsers.forEach((vs, m) => {
-                if (vs.some(v => v.userid == user.userid)) {
-                    vs.remove(g => g.userid == user.userid);
-                }
-            })
-        }
-    }
     async onNotifyViewOperater(data: UserAction) {
         var ec = parseElementUrl(data.elementUrl);
         if (ec.type == ElementType.PageItem) {
             var item = surface.workspace.find(g => g.id == ec.id);
-            if (item?.contentView) {
-                item?.contentView.loadUserActions([data], ec.id == surface.supervisor.item.id ? 'notifyView' : 'notify');
+            if (item) {
+                var pv = PageViewStores.getPageViewStore(item.elementUrl);
+                if (pv?.page) {
+                    pv?.page.syncUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
+                }
             }
         }
     }
@@ -316,5 +318,23 @@ export class Workspace {
     }
     getInviteUrl() {
         return this.url + '/invite/' + this.invite
+    }
+    async loadViewOnlineUsers(viewId: string) {
+        var rs = this.viewOnlineUsers.get(viewId);
+        if (!rs) {
+            var r = await channel.get('/ws/view/online/users', { viewId });
+            this.viewOnlineUsers.set(viewId, { load: true, users: new Set(r.data.users) });
+        }
+        else {
+            if (rs.load == false) {
+                var r = await channel.get('/ws/view/online/users', { viewId });
+                if (r.ok) {
+                    r.data.users.forEach(u => {
+                        rs.users.add(u);
+                    })
+                    rs.load = true;
+                }
+            }
+        }
     }
 }

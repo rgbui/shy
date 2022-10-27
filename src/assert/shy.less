@@ -1,12 +1,17 @@
 html,
 body {
-    padding: 0px;
-    margin : 0px;
+    font-weight         : 400;
+    line-height         : 1.5;
+    padding             : 0px;
+    margin              : 0px;
+    font-size           : 16px;
+    font-family         : -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans', 'Noto Sans CJK SC', 'Microsoft YaHei UI', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-variant-numeric: tabular-nums;
 }
-
-.shy-app {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+.ef{
+    font-family: "Segoe UI Emoji","Segoe UI Symbol","Segoe UI","Apple Color Emoji","Twemoji Mozilla","Noto Color Emoji","Android Emoji";
 }
+.shy-app {}
 
 a {
     text-decoration: none;
@@ -25,57 +30,6 @@ b {
 }
 
 
-/**
-layout 
-**/
-
-.flex-fix-auto {
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : center;
-
-    >* {
-        &:first-child {
-            flex-shrink: 0;
-            flex-grow  : 0;
-        }
-
-        &:last-child {
-            flex-shrink: 1;
-            flex-grow  : 1;
-        }
-    }
-}
-
-.flex-auto-fix {
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : center;
-
-    >* {
-        &:first-child {
-            flex-shrink: 1;
-            flex-grow  : 1;
-        }
-
-        &:last-child {
-            flex-shrink: 0;
-            flex-grow  : 0;
-        }
-    }
-}
-
-@keyframes ToggleVisible {
-    0% {
-        visibility         : hidden;
-        // background-color: red;
-    }
-
-    50% {
-        visibility         : hidden;
-        // background-color: blue;
-    }
-}
 
 ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-track {

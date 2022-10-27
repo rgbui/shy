@@ -44,7 +44,8 @@ export var UserChannelSearch = observer(function () {
     async function select(user: UserBasic) {
         onClear();
         refInput.current.onClear();
-        userChannelStore.openUserChannel(user);
+        if (user.id)
+            userChannelStore.openUserChannel(user.id);
     }
     return <div className="shy-user-channel-slide-head-search">
         <Input size='small'

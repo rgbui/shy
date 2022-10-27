@@ -6,7 +6,7 @@ import { CacheKey, sCache } from "../../net/cache";
 import { FileMd5 } from "../../src/util/file";
 import { FileType } from "../../type";
 import { SockResponse } from "../../net/sock/type";
-import { act, del, get, patch, post, put } from "rich/net/annotation";
+import { del, get, patch, post, put } from "rich/net/annotation";
 import { userNativeStore } from "../../native/store/user";
 import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";
@@ -104,7 +104,22 @@ class UserService extends BaseService {
     }
     @get('/users/basic')
     async getBasics(data: { ids: string[] }) {
-        return await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, data)
+        var users = await userNativeStore.getUsers(...data.ids);
+        data.ids.removeAll(g => users.some(u => u.id == g));
+        if (data.ids.length > 0) {
+            var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, data)
+            if (rs.ok) {
+                await rs.data.list.eachAsync(async c => {
+                    await userNativeStore.put(c);
+                });
+                rs.data.list.push(...users);
+            }
+            return rs;
+        }
+        else return {
+            ok: true, data: { list: users }
+        }
+
     }
     /**
      * 用户直接上传文件，不考虑md5是否有重复
@@ -154,6 +169,10 @@ class UserService extends BaseService {
     @del('/user/exit/ws')
     async userExitWs(args) {
         return masterSock.delete('/user/exit/ws', args);
+    }
+    @get('/user/word/query')
+    async searchUserWord(args) {
+        return masterSock.get('/user/word/query', args);
     }
 }
 

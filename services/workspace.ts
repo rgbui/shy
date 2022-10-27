@@ -84,6 +84,11 @@ class WorkspaceService extends BaseService {
         args.sockId = timService.sockId;
         return await surface.workspace.sock.put('/ws/channel/emoji', args);
     }
+    @get('/ws/channel/abled/send')
+    async getChannelAbledSend(args) {
+        if (!args.wsId) args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/channel/abled/send', args);
+    }
 
     /**
     * 用户上传单个文件
@@ -184,7 +189,6 @@ class WorkspaceService extends BaseService {
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.patch('/ws/patch/member/roles', args);
     }
-
     @put('/ws/invite/create')
     async createInvite(args) {
         if (!args) args = {}
@@ -225,6 +229,25 @@ class WorkspaceService extends BaseService {
     @get('/page/word/query')
     async pageWordQuery(args) {
         return await surface.workspace.sock.get('/page/word/query', { word: args.word, wsId: surface.workspace.id });
+    }
+    @get('/ws/search')
+    async wsSearch(args) {
+        return await surface.workspace.sock.get('/page/word/query', {
+            wsId: surface.workspace.id,
+            ...args
+        });
+    }
+    @get('/ws/online/users')
+    async wsOnlineUsers(args) {
+        return masterSock.get('/ws/online/users', args);
+    }
+    @get('/ws/random/online/users')
+    async wsRandomOnLineUsers(args) {
+        return masterSock.get('/ws/random/online/users', args)
+    }
+    @get('/ws/view/online/users')
+    async wsGetViewOnLineUsers(args) {
+        return surface.workspace.sock.get('/ws/view/online/users', args);
     }
 }
 

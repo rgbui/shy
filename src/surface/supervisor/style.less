@@ -5,34 +5,62 @@
     background-color: rgba(243, 243, 243);
 
     &-view {
-        &::after {
-            content           : "";
-            position          : absolute;
-            display           : block;
-            top               : -1px;
-            left              : 0;
-            right             : 0;
-            height            : 1px;
-            -webkit-box-shadow: var(--elevation-low);
-            box-shadow        : var(--elevation-low);
-            z-index           : 1;
-            pointer-events    : none;
+        position: absolute;
+        top     : 0px;
+        right   : 0px;
+        left    : 0px;
+        bottom  : 0px;
+
+        .shy-supervisor-bar {
+            height  : 48px;
+            position: absolute;
+            top     : 0px;
+            right   : 0px;
+            left    : 0px;
+            &::after {
+                content           : "";
+                position          : absolute;
+                display           : block;
+                top               : 48px;
+                left              : 0;
+                right             : 0;
+                height            : 1px;
+                -webkit-box-shadow: var(--elevation-low);
+                box-shadow        : var(--elevation-low);
+                z-index           : 1;
+                pointer-events    : none;
+            }
         }
 
-        position : absolute;
-        top      : 48px;
-        right    : 0px;
-        left     : 0px;
-        bottom   : 0px;
-
-        &-page {
-            height                : 100%;
-            overflow-y            : auto;
-            overflow-x            : hidden;
-            overscroll-behavior   : none;
-            // scroll-behavior    : smooth;
+        .shy-supervisor-view-content {
+            position           : absolute;
+            top                : 48px;
+            right              : 0px;
+            left               : 0px;
+            bottom             : 0px;
+            overflow-y         : auto;
+            overflow-x         : hidden;
+            overscroll-behavior: none;
         }
     }
 }
 
-.shy-supervisor-join-tip {}
+
+// .shy-supervisor-dialog-mask {
+//     position  : fixed;
+//     top       : 0px;
+//     left      : 0px;
+//     right     : 0px;
+//     bottom    : 0px;
+//     background: rgba(15, 15, 15, 0.6);
+// }
+
+// .shy-supervisor-dialog {
+//     position        : absolute;
+//     top             : 50%;
+//     left            : 50%;
+//     transform       : translate(-50%, -50%);
+//     width           : 1200px;
+//     height          : 500px;
+//     background-color: #fff;
+// }

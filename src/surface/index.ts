@@ -4,15 +4,16 @@ import { Sln } from "./sln";
 import { Events } from "rich/util/events";
 import { Supervisor } from "./supervisor";
 import { ShyUrl, UrlRoute } from "../history";
-import { Workspace } from "./workspace";
+import { LinkWorkspaceOnline, Workspace } from "./workspace";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../common/config";
 import { timService } from "../../net/primus";
 import { channel } from "rich/net/channel";
 import "./message.center";
-import { bindCollaboration } from "../../services/tim";
+import { ClientNotifys } from "../../services/tim";
 import { PageItem } from "./sln/item";
+import { userChannelStore } from "./user/channel/store";
 
 export class Surface extends Events {
     constructor() {
@@ -34,15 +35,17 @@ export class Surface extends Events {
     user: User = new User();
     sln: Sln = new Sln();
     workspace: Workspace = null;
-    wss: Partial<Workspace>[] = [];
-    temporaryWs: Partial<Workspace> = null;
+    wss: LinkWorkspaceOnline[] = [];
+    temporaryWs: LinkWorkspaceOnline = null;
     async loadUser() {
         var r = await channel.get('/sign')
         if (r.ok) {
             config.updateServiceGuid(r.data.guid);
+            r.data.user.online = true;
             Object.assign(this.user, r.data.user);
             await timService.open();
-            bindCollaboration();
+            ClientNotifys();
+            await userChannelStore.loadChannels();
         }
         else if (config.isPc) {
             UrlRoute.push(ShyUrl.signIn);
@@ -52,7 +55,12 @@ export class Surface extends Events {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
             if (r?.ok) {
-                this.wss = r.data.list;
+                var list = r.data.list;
+                list.forEach(l => {
+                    l.overlayDate = null;
+                    l.randomOnlineUsers = [];
+                })
+                this.wss = list;
             }
         }
     }
@@ -81,6 +89,7 @@ export class Surface extends Events {
                     }
                 }
             }
+            if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
             if (g.data.roles) await ws.loadRoles(g.data.roles)
             else ws.loadRoles([]);
             if (g.data.member) await ws.loadMember(g.data.member as any)
@@ -88,7 +97,7 @@ export class Surface extends Events {
             await ws.loadPages();
             await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
             runInAction(() => {
-                if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws;
+                if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
                 else this.temporaryWs = null;
                 this.workspace = ws;
             })
@@ -129,18 +138,21 @@ export class Surface extends Events {
             await this.loadWorkspace(workspace.id);
         }
         else if (workspace.id == this.workspace.id) {
+            if (UrlRoute.isMatch(ShyUrl.me) || UrlRoute.isMatch(ShyUrl.discovery)) {
+                await this.loadWorkspace(workspace.id);
+            }
             if (UrlRoute.isMatch(ShyUrl.page) || UrlRoute.isMatch(ShyUrl.wsPage)) {
 
             }
             else {
-                UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
+                //  UrlRoute.pushToPage(workspace.sn, surface.supervisor.item.sn);
             }
         }
     }
     onCreateWorkspace() {
         UrlRoute.push(ShyUrl.workCreate);
     }
-  
+
     /**
      * 
      */

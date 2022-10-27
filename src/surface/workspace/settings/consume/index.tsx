@@ -6,10 +6,11 @@ import { Col, Divider, Row } from "rich/component/view/grid";
 import { Switch } from "rich/component/view/switch";
 import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
-import { surface } from "../..";
-import { SaveTip } from "../../../component/tip/save.tip";
+import { surface } from "../../..";
+import { SaveTip } from "../../../../component/tip/save.tip";
+
 @observer
-export class WorkspaceManage extends React.Component {
+export class ConsumeView extends React.Component {
     constructor(props) {
         super(props);
         makeObservable(this, {
@@ -27,7 +28,7 @@ export class WorkspaceManage extends React.Component {
         };
         this.forceUpdate();
     }
-    change(data: Partial<WorkspaceManage['data']>) {
+    change(data: Partial<ConsumeView['data']>) {
         if (data.access == 1) data.accessJoinTip = true;
         if (data.access == 0) data.accessJoinTip = false;
         Object.assign(this.data, data);
@@ -59,20 +60,9 @@ export class WorkspaceManage extends React.Component {
     render() {
         return <div className='shy-ws-manage'>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <h2>空间管理</h2>
+            <div className="h2">空间资源消耗</div>
+            <div className="remark f-12">消耗的越多诗云提供的生产力就越多</div>
             <Divider></Divider>
-            <div >
-                <Row style={{ marginTop: 20 }}>
-                    <Col span={18}><h4 style={{ margin: '0px 0px 10px 0px' }}>允许任何人可以访问空间</h4></Col><Col span={6} align='end'><Switch onChange={e => this.change({ access: e ? 1 : 0 })} checked={this.data.access == 1}></Switch></Col>
-                    <Col><Remark style={{ fontSize: 14 }}>公开访问可能会产生大量的访问流量</Remark></Col>
-                    <Divider></Divider>
-                </Row>
-                <Row style={{ marginTop: 20 }}>
-                    <Col span={18}><h4 style={{ margin: '0px 0px 10px 0px' }}>允许访客加入空间成为成员</h4></Col><Col span={6} align='end'><Switch onChange={e => this.change({ accessJoinTip: e })} checked={this.data.accessJoinTip}></Switch></Col>
-                    <Col><Remark> </Remark></Col>
-                    <Divider></Divider>
-                </Row>
-            </div>
         </div>
     }
 }

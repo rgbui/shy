@@ -9,21 +9,22 @@ import { DbService } from "../../net/db/service";
 import { timService } from "../../net/primus";
 import { config } from "../../src/common/config";
 import { surface } from "../../src/surface";
-const DELAY_TIME = 1000 * 60 * 1;
-var snapSyncMaps: Map<string, SnapSync> = new Map();
-
+const DELAY_TIME = 1000 * 60 * 3;
+const MAX_OPERATE_COUNT = 50;
+var snapSyncMaps: Map<string, SnapStore> = new Map();
 export type ViewOperate = {
     operate?: UserAction,
     seq: number
 }
-export class SnapSync extends Events {
+export class SnapStore extends Events {
     elementUrl: string;
     private constructor(elementUrl: string) { super(); this.elementUrl = elementUrl; }
     get localId() {
-        return '/' + surface.workspace.id + '/' + this.elementUrl
+        return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
     async viewOperator(operate: Partial<UserAction>) {
-        var r = await surface.workspace.sock.put<{
+        var ops = JSON.stringify(operate);
+        var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
             seq: number,
             id: string
         }>('/view/operate', {
@@ -31,15 +32,21 @@ export class SnapSync extends Events {
             wsId: surface.workspace.id,
             sockId: timService.sockId,
             operate: operate,
-        });
+        }) : await timService.tim.put('/view/operate', {
+            elementUrl: this.elementUrl,
+            wsId: surface.workspace.id,
+            sockId: timService.sockId,
+            operate: operate,
+            pidUrl: surface.workspace.pidUrl
+        })
         if (r.ok) {
             Object.assign(operate, r.data);
             return r.data;
         }
     }
-    private localViewSnap: { seq: number, content: string, date: Date };
+    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
     private localTime;
-    async viewSnap(seq: number, content: string) {
+    async viewSnap(seq: number, content: string, plain?: string, text?: string) {
         /**
          * 本地先存起来
          */
@@ -59,9 +66,16 @@ export class SnapSync extends Events {
             creater: surface?.user?.id,
             createDate: new Date()
         });
-        this.localViewSnap = { seq, content, date: new Date() };
+        this.localViewSnap = {
+            seq,
+            content,
+            date: new Date(),
+            plain: plain || '',
+            text
+        };
+        this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);
-        if (this.lastServiceViewSnap && (this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
+        if (this.lastServiceViewSnap && (this.operateCount > MAX_OPERATE_COUNT || this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
             this.saveToService();
         }
         else this.localTime = setTimeout(() => {
@@ -69,11 +83,12 @@ export class SnapSync extends Events {
         }, DELAY_TIME);
     }
     private lastServiceViewSnap: { seq: number, date: Date };
+    private operateCount = 0;
     private async saveToService() {
+        this.emit('willSave');
         if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
         if (this.localViewSnap) {
             if (this.lastServiceViewSnap && this.lastServiceViewSnap.seq >= this.localViewSnap.seq) return;
-            this.emit('willSave');
             var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
                 elementUrl: this.elementUrl,
                 wsId: surface.workspace.id,
@@ -81,23 +96,28 @@ export class SnapSync extends Events {
                 seq: this.localViewSnap.seq
             });
             if (tryLocker.ok && tryLocker.data.lock == true) {
+                console.log('save', this.elementUrl);
                 var r = await surface.workspace.sock.put('/view/snap', {
                     elementUrl: this.elementUrl,
                     wsId: surface.workspace.id,
                     sockId: timService.sockId,
                     seq: this.localViewSnap.seq,
-                    content: this.localViewSnap.content
+                    content: this.localViewSnap.content,
+                    plain: this.localViewSnap.plain,
+                    pageText: this.localViewSnap.text
                 })
-                if(r.ok) {
+                if (r.ok) {
+                    this.emit('saveSuccessful');
                     if (typeof this.lastServiceViewSnap == 'undefined') {
                         this.lastServiceViewSnap = {} as any;
                     }
                     this.lastServiceViewSnap.seq = this.localViewSnap.seq;
                     this.lastServiceViewSnap.date = new Date();
+                    this.operateCount = 0;
                 }
             }
-            this.emit('saved');
         }
+        this.emit('saved');
     }
     async forceSave() {
         await this.saveToService();
@@ -106,8 +126,8 @@ export class SnapSync extends Events {
         var seq: number;
         var local: view_snap;
         if (config.isPc) local = await yCache.get(this.localId);
-        else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
 
+        else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
@@ -124,14 +144,46 @@ export class SnapSync extends Events {
             return { operates: r.data.operates as ViewOperate[], content: r.data.content ? JSON.parse(r.data.content) : {} }
         }
     }
+    async rollupQuerySnap(snapId: string) {
+        var r = await surface.workspace.sock.get<{ content: string, seq: number }>('/view/snap/content', {
+            id: snapId
+        });
+        if (r.ok) {
+            if (this.localTime) clearTimeout(this.localTime);
+            if (typeof this.lastServiceViewSnap == 'undefined') {
+                this.lastServiceViewSnap = {} as any;
+            }
+            this.lastServiceViewSnap.seq = r.data.seq;
+            this.lastServiceViewSnap.date = new Date();
+            return { content: r.data.content ? JSON.parse(r.data.content) : undefined }
+        }
+    }
     static create(type: ElementType, parentId: string, id?: string) {
         var elementUrl = getElementUrl(type, parentId, id);
         var ss = snapSyncMaps.get(elementUrl);
         if (ss) return ss;
         else {
-            ss = new SnapSync(elementUrl);
+            ss = new SnapStore(elementUrl);
             snapSyncMaps.set(elementUrl, ss);
             return ss;
         }
     }
+    static createSnap(elementUrl: string) {
+        var ss = snapSyncMaps.get(elementUrl);
+        if (ss) return ss;
+        else {
+            ss = new SnapStore(elementUrl);
+            snapSyncMaps.set(elementUrl, ss);
+            return ss;
+        }
+    }
+}
+
+export interface SnapStore {
+    only(name: 'saved', fn: () => void);
+    only(name: 'willSave', fn: () => void);
+    only(name: 'saveSuccessful', fn: () => void);
+    emit(name: 'saveSuccessful');
+    emit(name: 'saved');
+    emit(name: 'willSave');
 }

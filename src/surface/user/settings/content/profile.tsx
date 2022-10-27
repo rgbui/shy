@@ -3,7 +3,6 @@ import React from "react";
 import { OpenFileDialoug } from "rich/component/file";
 import { Button } from "rich/component/view/button";
 import { Col, Divider, Row, Space } from "rich/component/view/grid";
-import { Textarea } from "rich/component/view/input";
 import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
@@ -11,6 +10,7 @@ import { surface } from "../../..";
 import { useColorPicker } from "rich/component/view/color/picker";
 import { makeObservable, observable } from "mobx";
 import { autoImageUrl } from "rich/net/element.type";
+import { Textarea } from "rich/component/view/input/textarea";
 
 const DEFAULT_COLOR = 'rgb(192,157,156)';
 
@@ -76,7 +76,7 @@ export class UserSettingProfile extends React.Component {
             return <svg aria-hidden="false" width="32" height="24" viewBox="0 0 24 24"><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path></svg>
         }
         return <div className="shy-user-settings-profile">
-            <h2>用户个人资料</h2>
+            <h2 className="h2">用户个人资料</h2>
             <Divider></Divider>
             <div className="shy-user-settings-profile-box">
                 <div className="shy-user-settings-profile-box-left">

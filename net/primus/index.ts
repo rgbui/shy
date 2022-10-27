@@ -1,5 +1,4 @@
 
-import lodash from "lodash";
 import { config } from "../../src/common/config";
 import { sCache, CacheKey } from "../cache";
 import { masterSock } from "../sock";
@@ -29,29 +28,25 @@ class TimService {
         this.tim.reconnected = async function () {
             data = await self.getHeads();
             data.sockId = self.tim.id;
-            if (self.workspaceId && !self.isSync) data.workspaceId = self.workspaceId;
-            if (self.workspaceId && self.isSync) data.syncWorkspaceId = self.workspaceId;
+            if (self.workspaceId) data.workspaceId = self.workspaceId;
             self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
         }
     }
     private workspaceId: string;
     private viewId: string;
-    private isSync: boolean = false;
-    async enterWorkspaceView(workspaceId: string, isSync: boolean, viewId: string) {
-        this.isSync = isSync;
-        this.workspaceId = workspaceId;
-        this.viewId = viewId;
+    async enterWorkspaceView(workspaceId: string, viewId: string) {
         if (this.time) {
             clearTimeout(this.time);
             this.time = undefined;
         }
         this.time = setTimeout(async () => {
+            this.workspaceId = workspaceId;
+            this.viewId = viewId;
             if (this.tim) await this.tim.syncSend(
                 HttpMethod.post,
                 '/workspace/enter',
                 {
-                    workspaceId: this.isSync ? undefined : this.workspaceId,
-                    syncWorkspaceId: this.isSync ? this.workspaceId : undefined,
+                    workspaceId: this.workspaceId,
                     viewId: this.viewId
                 }
             );
@@ -64,21 +59,7 @@ class TimService {
             this.time = undefined;
         }
         delete this.workspaceId;
-        delete this.isSync;
         await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
-    }
-    private viewTime;
-    async viewOperate(viewId: string, operate: Record<string, any>) {
-        if (this.viewTime) {
-            clearTimeout(this.viewTime);
-            this.viewTime = null;
-        }
-        this.viewTime = setTimeout(async () => {
-            await this.tim.syncSend(HttpMethod.post, '/view/cursor/operate', {
-                viewId: viewId,
-                operate: operate
-            });
-        }, 700);
     }
     /**
      * 激活

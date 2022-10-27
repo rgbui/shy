@@ -3,13 +3,14 @@ import React from 'react';
 import { Loading } from "rich/component/view/loading";
 import { surface } from "..";
 import { SideBar } from "./sidebar";
-import { SupervisorView } from "../supervisor/view";
 import { UserChannel } from "../user/channel/view";
 import { Route } from "react-router";
 import { ShyUrl } from "../../history";
 import { DiscoveryView } from "../discovery";
 import { JoinTip } from "./join";
 import { SideSln } from "./sidesln";
+import { SupervisorView } from "../supervisor/view";
+
 export var SurfaceView = observer(function () {
     var local = useLocalObservable(() => {
         return {

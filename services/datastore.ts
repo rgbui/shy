@@ -1,13 +1,15 @@
 
 import { surface } from "../src/surface";
-import {  del, put, get, patch } from "rich/net/annotation";
+import { del, put, get, patch } from "rich/net/annotation";
 class DataStoreService {
     @put('/datastore/add')
     async add(args) {
+        args.wsId = surface.workspace.id;
         return surface.workspace.sock.put('/datastore/add', args)
     }
     @put('/datastore/batch/add')
     async batchAdd(args) {
+        args.wsId = surface.workspace.id;
         return surface.workspace.sock.put('/datastore/batch/add', args)
     }
     @del('/datastore/remove')
@@ -45,6 +47,10 @@ class DataStoreService {
     @get('/datastore/statistics/value')
     async statisticsValue(args) {
         return surface.workspace.sock.get('/datastore/statistics/value', args)
+    }
+    @put('/datastore/row/object/update')
+    async datastoreRowObjectUpdate(args){
+        return surface.workspace.sock.get('/datastore/row/object/update', args)
     }
 
 }

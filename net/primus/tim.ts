@@ -6,6 +6,7 @@ import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
 import { HttpMethod } from './http';
 import { loadPrimus } from './load';
+
 export class Tim {
     public isConncted: boolean = false;
     private primus;
@@ -29,10 +30,10 @@ export class Tim {
         this.primus = primus;
         primus.on('data', function message(data) {
             try {
-                var json = JSON.parse(data); 
+                var json = JSON.parse(data);
                 GenreConsistency.parse(json);
                 if (json.rid) {
-                    var se = self.sendEvents.find(g => g.rid == json.rid)
+                    var se = self.sendEvents.find(g => g.id == json.rid)
                     if (se) {
                         se.callback(json);
                     }
@@ -94,7 +95,7 @@ export class Tim {
     async getId() {
         return util.guid();
     }
-    private sendEvents: { rid: string, isTimeOut?: boolean, timeout: number, callback: (data) => void }[] = [];
+    private sendEvents: { id: string, isTimeOut?: boolean, timeout: number, callback: (data) => void }[] = [];
     /**
      * 同步发送，即发送一个消息，然后返回一个值
      * @param method 
@@ -106,30 +107,30 @@ export class Tim {
         url = Sock.resolve('/' + API_VERSION, url);
         return new Promise((resolve, reject) => {
             this.sendEvents.push({
-                rid: id,
+                id: id,
                 callback: (data) => {
-                    var se = this.sendEvents.find(g => g.rid == id);
+                    var se = this.sendEvents.find(g => g.id == id);
                     if (se && se.isTimeOut) return;
                     if (se && se.timeout) {
                         clearTimeout(se.timeout);
                         delete se.timeout;
                     }
-                    this.sendEvents.remove(g => g.rid == id);
+                    this.sendEvents.remove(g => g.id == id);
                     resolve(data);
                 },
                 timeout: setTimeout(() => {
-                    var se = this.sendEvents.find(g => g.rid == id);
+                    var se = this.sendEvents.find(g => g.id == id);
                     if (se && se.timeout) {
                         clearTimeout(se.timeout);
                         delete se.timeout;
                         se.isTimeOut = true;
                     }
-                    this.sendEvents.remove(g => g.rid == id);
+                    this.sendEvents.remove(g => g.id == id);
                     reject(new Error('response time out'))
                 }, 2e3) as any
             });
             if (data) GenreConsistency.transform(data);
-            this.primus.write({ rid: id, method, url, data });
+            this.primus.write({ id: id, method, url, data });
         })
     }
     /**

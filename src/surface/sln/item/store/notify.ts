@@ -74,7 +74,9 @@ export function PageItemOperateNotify(e: {
                 if (pageId) {
                     var item = surface.workspace?.find(g => g.id == pageId);
                     if (item) {
-                        item.parent.childs.remove(g => g == item);
+                        if (item.parent) lodash.remove(item.parent.childs, c => c.id == item.id);
+                        else lodash.remove(surface.workspace.childs, c => c.id == item.id)
+                        surface.sln.onDeleteRefocusItem(item);
                     }
                 }
                 break;

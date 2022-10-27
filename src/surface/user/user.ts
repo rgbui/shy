@@ -33,6 +33,9 @@ export class User {
     public config: object = null;
     public status: UserStatus = null;
     public online: boolean = null
+    public allowSendLetter = true;
+    public allowAddFriend = true;
+    public experienceHelp:boolean=true;
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -49,7 +52,11 @@ export class User {
             checkEmail: observable,
             cover: observable,
             realName: observable,
-            checkRealName: observable
+            checkRealName: observable,
+            status: observable,
+            allowAddFriend:observable,
+            allowSendLetter:observable,
+            experienceHelp:observable
         })
     }
     get isSign() {

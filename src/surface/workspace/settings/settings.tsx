@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'rich/component/view/button/index';
 import { Row, Col, Divider, Space } from 'rich/component/view/grid';
-import { Input, Textarea } from 'rich/component/view/input';
+import { Input } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
 import { surface } from '../..';
 import "./style.less";
@@ -12,6 +12,7 @@ import { Remark } from 'rich/component/view/text';
 import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
+import { Textarea } from 'rich/component/view/input/textarea';
 @observer
 export class WorkspaceSettingsView extends React.Component {
     constructor(props) {
@@ -101,12 +102,12 @@ export class WorkspaceSettingsView extends React.Component {
     render() {
         return <div>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <h2>工作空间</h2>
+            <div className="h2">工作空间</div>
             <Divider></Divider>
-            <Row>
-                <Col span={10}><h5 style={{ marginBottom: 10 }}>空间头像</h5></Col>
-                <Col span={14}><h5 style={{ marginBottom: 10 }}>空间横幅背景</h5></Col>
-                <Col span={10}>
+            <div className='gap-h-10'>
+                <div className='bold f-14'>空间头像</div>
+                <div className='remark f-12 gap-h-10'></div>
+                <div>
                     <Space valign='start'>
                         <div className='shy-settings-ws-avatar' onClick={() => this.onUploadFace()} >
                             {surface.workspace.icon && <img src={autoImageUrl(surface.workspace.icon.url, 120)} />}
@@ -118,39 +119,51 @@ export class WorkspaceSettingsView extends React.Component {
                             <Button ghost onClick={e => this.onUploadFace()}>上传图片</Button>
                         </div>
                     </Space>
-                </Col>
-                <Col span={14}>
+                </div>
+            </div>
+
+            <Divider></Divider>
+            <div className='gap-h-10'>
+                <div className='bold f-14'>空间名称</div>
+                <div className='remark f-12 gap-h-10'>点击输入框可修改名称</div>
+                <div className='max-w-500'>
+                    <Input value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
+                </div>
+            </div>
+            <Divider></Divider>
+            <div className='gap-h-10'>
+                <div className='bold f-14'>空间横幅背景</div>
+                <div className='remark f-12 gap-h-10'>更换控间横幅</div>
+                <div className='flex flex-top'>
                     {surface.workspace.cover && <div className='shy-settings-ws-cover' onClick={() => this.onUploadCover()} >
                         {surface.workspace.cover && <img src={autoImageUrl(surface.workspace.cover.url, 500)} />}
                         <div className='shy-settings-ws-cover-hover'>更换横幅</div>
                     </div>}
-                    {surface.workspace.cover && <Button ghost style={{ marginLeft: 10 }} onClick={() => this.onRemoveCover()}>移除横幅背景</Button>}
-                    {!surface.workspace.cover && <Button ghost style={{}} onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
-                </Col>
-            </Row>
-            <Divider></Divider>
-            <Row>
-                <Col span={24}><h5>工作空间名称</h5></Col>
-                <Col span={24}><Remark style={{ marginBottom: 10 }}>点击输入框可修改名称</Remark></Col>
-                <Col span={24}><Input value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input></Col>
-            </Row>
-            <Divider></Divider>
-            <Row>
-                <Col span={24}><h5>工作空间描述</h5></Col>
-                <Col span={24}><Remark style={{ marginBottom: 10 }}>点击输入框可修改名称</Remark></Col>
-                <Col span={24}><Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'请输入你的工作空间描述'}></Textarea></Col>
-            </Row>
-            <Divider></Divider>
-            <Row>
-                <Col><h5>空间域名</h5></Col>
-                <Col><Remark style={{ marginBottom: 10 }}>自定义空间二级域名</Remark></Col>
-                <Col>
-                    <div className='shy-ws-settings-view-domain'>
-                        <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
-                        {!surface.workspace.siteDomain && <Button disabled onClick={e => this.openDomain(e)} ghost>更换空间域名</Button>}
+                    <div className='gap-l-10'>
+                        {surface.workspace.cover && <Button ghost onClick={() => this.onRemoveCover()}>移除横幅背景</Button>}
+                        {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
+
+            <Divider></Divider>
+
+            <div className='gap-h-10'>
+                <div className='bold f-14'>工作空间描述</div>
+                <div className='remark f-12 gap-h-10'>点击输入框可输入工作空间描述</div>
+                <div className='max-w-500'>
+                    <Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'请输入你的工作空间描述'}></Textarea>
+                </div>
+            </div>
+            <Divider></Divider>
+            <div className='gap-h-10'>
+                <div className='bold f-14'>空间域名</div>
+                <div className='remark f-12 gap-h-10'>自定义空间二级域名</div>
+                <div className='shy-ws-settings-view-domain'>
+                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
+                    {!surface.workspace.siteDomain && <Button disabled onClick={e => this.openDomain(e)} ghost>更换空间域名</Button>}
+                </div>
+            </div>
         </div>
     }
 }

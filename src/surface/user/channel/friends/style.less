@@ -3,13 +3,11 @@
         color     : var(--text-normal);
         height    : 48px;
         background: var(--background-primary);
-
         &-tabs {
             padding-left   : 20px;
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
-
             .line {
                 background: var(--background-modifier-accent);
                 width     : 1px;
@@ -29,13 +27,15 @@
                 cursor       : pointer;
                 padding      : 2px 8px;
                 color        : var(--interactive-normal);
+                &:hover {
+                    background-color: var(--background-modifier-hover);
+                }
 
                 &.hover {
                     background-color: var(--background-modifier-selected);
-                }
-
-                &:hover {
-                    background-color: var(--background-modifier-hover);
+                    &:hover {
+                        background-color: var(--background-modifier-selected);
+                    }
                 }
             }
 
@@ -73,7 +73,6 @@
             content       : '\20';
             box-shadow    : var(--elevation-low);
         }
-
     }
 }
 
@@ -82,7 +81,6 @@
     padding-right: 20px;
 
     &-search {
-
         height         : 60px;
         display        : flex;
         justify-content: flex-start;
@@ -116,27 +114,7 @@
         padding   : 16px 10px;
         box-sizing: border-box;
 
-        >* {
-            flex-shrink: 1;
-            flex-grow  : 1;
-        }
-
-        &-operator {
-            flex-shrink    : 0;
-            flex-shrink    : 0;
-            display        : flex;
-            justify-content: flex-end;
-            align-items    : center;
-
-            .shy-icon {
-                cursor          : pointer;
-                width           : 36px;
-                height          : 36px;
-                border-radius   : 50%;
-                color           : var(--interactive-normal);
-                background-color: var(--background-secondary);
-            }
-        }
+        &-operator {}
 
         &:hover {
             background        : var(--background-modifier-hover);
@@ -144,7 +122,6 @@
             box-shadow        : none;
             border-radius     : 8px;
             border-color      : transparent;
-
         }
     }
 }

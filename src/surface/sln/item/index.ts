@@ -1,25 +1,24 @@
 
 import { util } from "rich/util/util";
 import { surface } from "../..";
-import trash from "rich/src/assert/svg/trash.svg";
-import rename from "../../../assert/svg/rename.svg";
-import copy from "rich/src/assert/svg/duplicate.svg";
-import { ElementType } from "rich/net/element.type";
-import cut from "../../../assert/svg/cut.svg";
-import link from '../../../assert/svg/link.svg';
+import { ElementType, getElementUrl } from "rich/net/element.type";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
-import { MenuItemType, MenuItemTypeValue } from "rich/component/view/menu/declare";
+import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { Mime, PageItemDirective } from "../declare";
-import { makeObservable, observable } from "mobx";
+import { makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
-import { Page } from "rich/src/page";
 import { channel } from "rich/net/channel";
-
-import { SnapSync } from "../../../../services/snap/sync";
+import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PagePermission } from "rich/src/page/permission";
+import lodash from "lodash";
+import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs";
+import { CopyText } from "rich/component/copy";
+import { ShyAlert } from "rich/component/lib/alert";
+import { PageViewStores } from "../../supervisor/view/store";
+
 export class PageItem {
     id: string = null;
     sn?: number = null;
@@ -27,7 +26,8 @@ export class PageItem {
     childs?: PageItem[] = [];
     text: string = ''
     spread: boolean = false;
-    creater: string = ''
+    creater: string = '';
+    description: string = '';
     createDate: Date = null;
     mime: Mime = Mime.none;
     pageType: PageLayoutType = PageLayoutType.doc;
@@ -36,7 +36,7 @@ export class PageItem {
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-    contentView: Page;
+    // contentView: Page;
     /**
     * 是否为公开
     * net 互联网公开
@@ -46,8 +46,14 @@ export class PageItem {
     share: 'net' | 'nas' | 'local' = 'nas';
     permission: PagePermission = PagePermission.canView;
     locker: { userid: string, lockDate: number } = null;
-    get snapSync() {
-        return SnapSync.create(ElementType.PageItem, this.id);
+    public editDate: Date = null;
+    public editor: string = null;
+    speak?: 'more' | 'only' = 'more';
+    speakDate?: Date = null;
+    textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
+    unreadChats: { id: string, roomId: string, seq: number }[] = [];
+    get snapStore() {
+        return SnapStore.create(ElementType.PageItem, this.id);
     }
     constructor() {
         makeObservable(this, {
@@ -66,8 +72,13 @@ export class PageItem {
             willLoadSubs: observable,
             share: observable,
             permission: observable,
-            locker: observable
-        })
+            locker: observable,
+            editDate: observable,
+            editor: observable,
+            description: observable,
+            unreadChats: observable
+        });
+
     }
     get sln() {
         return surface.sln;
@@ -83,7 +94,23 @@ export class PageItem {
     get url() {
         return this.workspace.url + this.path;
     }
-
+    get elementUrl() {
+        if (this.pageType == PageLayoutType.db || this.pageType == PageLayoutType.dbPickRecord) {
+            return getElementUrl(ElementType.Schema, this.id);
+        }
+        else if (this.pageType == PageLayoutType.doc || this.pageType == PageLayoutType.board) {
+            return getElementUrl(ElementType.PageItem, this.id);
+        }
+        else if (this.pageType == PageLayoutType.dbView) {
+            return getElementUrl(ElementType.SchemaView, this.parent.id, this.id);
+        }
+        else if (this.pageType == PageLayoutType.dbForm) {
+            return getElementUrl(ElementType.SchemaRecordView, this.parent.id, this.id);
+        }
+        else if (this.pageType == PageLayoutType.textChannel) {
+            return getElementUrl(ElementType.Room, this.id);
+        }
+    }
     get workspace() {
         return surface.workspace
     }
@@ -107,9 +134,9 @@ export class PageItem {
     }
     parentId?: string;
     at: number;
+
     get index() {
-        if (this.parent)
-            return this.parent?.childs.findIndex(g => g === this);
+        if (this.parent) return this.parent?.childs.findIndex(g => g === this);
         return null;
     }
     load(data) {
@@ -135,6 +162,7 @@ export class PageItem {
         }
         if (this.childs?.length > 0) this.spread = true;
     }
+
     get() {
         return {
             id: this.id,
@@ -172,6 +200,20 @@ export class PageItem {
         }
         channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
     }
+    async getSubItems() {
+        if (!this.checkedHasChilds) {
+            var sus = await channel.get('/page/item/subs', { id: this.id });
+            runInAction(() => {
+                if (sus.ok == true) {
+                    this.load({ childs: sus.data.list })
+                    this.spread = false;
+                }
+                this.checkedHasChilds = true;
+            })
+        }
+        return this.childs.map(c => c);
+
+    }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
         Object.assign(data, {
@@ -199,55 +241,80 @@ export class PageItem {
     async onRemove() {
         pageItemStore.deletePageItem(this);
     }
-    getPageItemMenus() {
-        var items: MenuItemType<PageItemDirective>[] = [];
+    async onCopy() {
+        var data = {
+            icon: lodash.cloneDeep(this.icon),
+            text: util.getListName(this.parent.childs,
+                this.text,
+                g => g.text,
+                (c, i) => i > 0 ? `${c}(${i})` : `${c}`
+            ),
+            mime: Mime.page,
+            pageType: this.pageType,
+            spread: false,
+        };
+        var item = await pageItemStore.insertAfterPageItem(this, data);
+        await item.onOpenItem();
+        var itemS = surface.supervisor.main;
+        var ps = PageViewStores.getPageViewStore(this.elementUrl);
+        if (ps?.page) {
+            var content = await ps?.page.get();
+            await itemS.page.onReplace(this.id, content);
+        }
+        else {
+            var pd = await (SnapStore.createSnap(this.elementUrl)).querySnap();
+            await itemS.page.onReplace(this.id, pd.content, pd.operates);
+        }
+        itemS.page.onSave();
+        itemS.page.forceUpdate();
+    }
+    async getPageItemMenus() {
+        var items: MenuItem<PageItemDirective>[] = [];
         items.push({
             name: PageItemDirective.remove,
-            icon: trash,
+            icon: TrashSvg,
             text: '删除'
         });
-        items.push({
-            name: PageItemDirective.copy,
-            icon: copy,
-            text: '拷贝',
-            disabled: true
-        });
+        if (this.pageType == PageLayoutType.doc) {
+            items.push({
+                name: PageItemDirective.copy,
+                icon: DuplicateSvg,
+                text: '拷贝'
+            });
+        }
         items.push({
             name: PageItemDirective.rename,
-            icon: rename,
+            icon: RenameSvg,
             text: '重命名'
         });
         items.push({
-            type: MenuItemTypeValue.divide,
+            type: MenuItemType.divide,
         })
         items.push({
             name: PageItemDirective.link,
-            icon: link,
-            text: '链接',
-            disabled: true
+            icon: LinkSvg,
+            text: '复制访问链接'
         });
-        items.push({
-            name: PageItemDirective.cut,
-            icon: cut,
-            text: '剪贴',
-            disabled: true
-        });
-        // items.push({
-        //     type: MenuItemTypeValue.divide,
-        // });
-        // items.push({
-        //     type: MenuItemTypeValue.text,
-        //     text: '编辑人kanhai'
-        // });
-        // items.push({
-        //     type: MenuItemTypeValue.text,
-        //     text: '编辑于2021.19.20'
-        // });
+        if (this.editor) {
+            items.push({
+                type: MenuItemType.divide,
+            });
+            var r = await channel.get('/user/basic', { userid: this.editor });
+            if (r?.data?.user) items.push({
+                type: MenuItemType.text,
+                text: '编辑人' + r.data.user.name
+            });
+            if (this.editDate) items.push({
+                type: MenuItemType.text,
+                text: '编辑于' + util.showTime(this.editDate)
+            });
+        }
         return items;
     }
-    onContextmenuClickItem(menuItem: MenuItemType<PageItemDirective>, event: MouseEvent) {
+    onContextmenuClickItem(menuItem: MenuItem<PageItemDirective>, event: MouseEvent) {
         switch (menuItem.name) {
             case PageItemDirective.copy:
+                this.onCopy();
                 break;
             case PageItemDirective.remove:
                 this.onRemove();
@@ -255,10 +322,14 @@ export class PageItem {
             case PageItemDirective.rename:
                 this.onEdit();
                 break;
+            case PageItemDirective.link:
+                CopyText(this.url);
+                ShyAlert('访问链接已复制')
+                break;
         }
     }
-    onOpenItem() {
-        this.sln.onOpenItem(this);
+    async onOpenItem() {
+        await this.sln.onOpenItem(this);
     }
     onMousedownItem(event: MouseEvent) {
         this.sln.onMousedownItem(this, event);

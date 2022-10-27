@@ -1,11 +1,13 @@
 import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { PageItemBox } from "../view/box";
-import PageSvg from "../../../../assert/svg/page.svg";
 import { observer } from "mobx-react";
 import { PageItem } from "..";
 import { surface } from "../../..";
 import { AtomPermission } from "rich/src/page/permission";
+import { getPageIcon } from "rich/extensions/at/declare";
+import { DotNumber } from "rich/component/view/dot";
+
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     let refInput = React.useRef<HTMLInputElement>(null);
     let refEditText = React.useRef<string>(null);
@@ -70,7 +72,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             onContextMenu={e => contextmenu(e.nativeEvent)}
             onMouseDown={e => mousedown(e.nativeEvent)}>
             <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-            <i className='shy-ws-item-page-icon'><Icon size={16} icon={item.icon ? item.icon : PageSvg}></Icon></i>
+            <i className='shy-ws-item-page-icon'><Icon size={16} icon={getPageIcon(item)}></Icon></i>
             {!isInEdit && <span>{item.text || '新页面'}</span>}
             {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}
@@ -78,9 +80,10 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 defaultValue={item.text}
                 onKeyDown={e => keydown(e.nativeEvent)}
                 onInput={e => inputting(e.nativeEvent)} /></div>}
-            {!isInEdit && isCanEdit && <div className='shy-ws-item-page-operators'>
-                <Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
-                <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon>
+            {!isInEdit && <div className='shy-ws-item-page-operators'>
+                {isCanEdit && <><Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
+                    <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon></>}
+                {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber count={item.unreadChats.length}></DotNumber></span>}
             </div>}
         </div>
         {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}

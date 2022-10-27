@@ -11,16 +11,23 @@ import { BlackListView } from "./blacklist";
 import { FrendListView } from "./list";
 import { PendListView } from "./pends";
 import "./style.less";
+
 export var FriendsView = observer(function () {
     function setMode(mode: string) {
         userChannelStore.mode = mode as any;
     }
     async function joinFriend(event: React.MouseEvent) {
-        await useJoinFriend({ roundArea: Rect.fromEvent(event) })
+        var g = await useJoinFriend({ roundArea: Rect.fromEvent(event) });
+        if (g) {
+            if (userChannelStore.mode == 'pending') {
+                await userChannelStore.loadPends();
+            } else
+                userChannelStore.mode = 'pending';
+        }
     }
     return <div className="shy-user-channel-friends">
-        <div className="shy-user-channel-friends-head flex-auto-fix">
-            <div className="shy-user-channel-friends-head-tabs">
+        <div className="shy-user-channel-friends-head flex">
+            <div className="shy-user-channel-friends-head-tabs flex-auto">
                 <Icon icon={FriendSvg}></Icon>
                 <span>好友</span>
                 <div className="line"></div>
@@ -28,10 +35,10 @@ export var FriendsView = observer(function () {
                 <a onMouseDown={e => setMode('all')} className={userChannelStore.mode == 'all' ? "hover" : ""}>全部</a>
                 <a onMouseDown={e => setMode('pending')} className={userChannelStore.mode == 'pending' ? "hover" : ""}>待定</a>
                 <a onMouseDown={e => setMode('shield')} className={userChannelStore.mode == "shield" ? "hover" : ""}>屏蔽</a>
-                <Button size="small" onClick={e => joinFriend(e)}>添加好友</Button>
+                <Button size="small" className="gap-l-10" onClick={e => joinFriend(e)}>添加好友</Button>
             </div>
-            <div className="shy-user-channel-friends-head-btns" style={{ width: 80 }}>
-                <Icon size={40} fontSize={30} icon={"help:sy"}></Icon>
+            <div className="shy-user-channel-friends-head-btns flex-fixed flex-end gap-r-10" style={{ width: 80 }}>
+                <span className='round item-hover cursor size-24 flex-center'> <Icon size={18} icon={"help:sy"}></Icon></span>
             </div>
         </div>
         <div className="shy-user-channel-friends-content">
