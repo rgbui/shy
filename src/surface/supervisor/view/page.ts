@@ -33,7 +33,7 @@ export async function createPageContent(store: PageViewStore) {
                 var blogPageItem = await surface.workspace.loadOtherPage(rf?.id, {
                     mime: Mime.blog,
                     pageType: PageLayoutType.blog,
-                    parentId:'blog'
+                    parentId: 'blog'
                 });
                 if (blogPageItem) {
                     if (rf?.id !== blogPageItem.id) {

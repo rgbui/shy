@@ -119,7 +119,7 @@ export class PageViewStore extends Events {
         ].includes(this.pe.type)) {
             var schema = await this.getSchema()
             var row = await schema.rowGet(this.pe.id2);
-            if (row) return row.data.data;
+            if (row) return row;
         }
     }
     async getSchemaRowField() {
