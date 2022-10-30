@@ -176,8 +176,8 @@ push('/datastore/group', '{schemaId:string,page?:number,size?:number,filter?:Rec
 push('/datastore/statistics', '{schemaId:string,page?:number,size?:number,filter?:Record<string, any>,having?:Record<string, any>,sorts?:Record<string, 1|-1>,groups:string[],aggregate?: Record<string, any>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any>,indicator:string}', '{ok:boolean,data:{value:number},warn:string}', ['get']);
 push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
-push('/datastore/row/object/update','{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}','SockResponse<void>', ['put']);
-push('/datastore/remove/ids','{schemaId: string,ids:string[]}','SockResponse<void>', ['del']);
+push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
+push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
@@ -286,10 +286,16 @@ push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', '
 push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
 push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
+push('/ws/comment/list', '{elementUrl: string,wsId?: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
+push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string}', 'SockResponse<{data:any}>', ['put']);
+push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
+push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number}>', ['put']);
+
+
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
-push('/page/item/create','{wsId?:string,data:Record<string,any>}','SockResponse<{ item:Record<string,any> }>',['put'])
+push('/page/item/create', '{wsId?:string,data:Record<string,any>}', 'SockResponse<{ item:Record<string,any> }>', ['put'])
 push('/page/word/query', '{word:string}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/guid', '', 'string', ['query']);
 //push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])

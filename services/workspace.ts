@@ -237,6 +237,45 @@ class WorkspaceService extends BaseService {
             ...args
         });
     }
+
+    @get('/ws/comment/list')
+    async wsCommentList(args) {
+        return await surface.workspace.sock.get('/ws/comment/list', {
+            wsId: surface.workspace.id,
+            ...args
+        });
+    }
+
+
+    @put('/ws/comment/send')
+    async wsCommentSend(args) {
+        return await surface.workspace.sock.put('/ws/comment/send', {
+            wsId: surface.workspace.id,
+            ...args
+        });
+    }
+
+
+    @del('/ws/comment/del')
+    async wsDel(args) {
+        return await surface.workspace.sock.delete('/ws/comment/del', {
+            wsId: surface.workspace.id,
+            ...args
+        });
+    }
+
+
+    @put('/ws/comment/emoji')
+    async wsCommentEmoji(args) {
+        return await surface.workspace.sock.put('/ws/comment/emoji', {
+            wsId: surface.workspace.id,
+            ...args
+        });
+    }
+
+
+
+
     @get('/ws/online/users')
     async wsOnlineUsers(args) {
         return masterSock.get('/ws/online/users', args);
