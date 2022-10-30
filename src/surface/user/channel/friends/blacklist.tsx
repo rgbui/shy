@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { CloseSvg, CloseTickSvg } from "rich/component/svgs";
+import { CloseSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
-import { Icon, IconButton } from "rich/component/view/icon";
+import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
 import { ToolTip } from "rich/component/view/tooltip";
 import { channel } from "rich/net/channel";
