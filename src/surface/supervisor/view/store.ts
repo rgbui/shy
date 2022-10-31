@@ -142,6 +142,10 @@ export class PageViewStore extends Events {
         var field = schema.fields.find(g => g.id == this.pe.id1 || g.name == this.pe.id1);
         await schema.rowUpdateFieldObject({ rowId: row.id, fieldName: field.name, data })
     }
+    async onFullDisplay() {
+        await surface.supervisor.onOpenDialog(null)
+        surface.supervisor.onOpen(this.elementUrl);
+    }
 }
 
 export class PageViewStores {

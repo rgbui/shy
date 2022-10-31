@@ -19,7 +19,12 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
         }
     })
     async function load() {
-        if ([ElementType.Schema, ElementType.SchemaView, ElementType.SchemaFieldBlogData, ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type)) {
+        if ([ElementType.Schema,
+        ElementType.SchemaView,
+        ElementType.SchemaFieldBlogData,
+        ElementType.SchemaRecordView,
+        ElementType.SchemaRecordViewData
+        ].includes(props.store.pe.type)) {
             local.schema = await props.store.getSchema();
             local.isLoad = true;
         }
@@ -48,7 +53,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <Icon size={16} icon={getSchemaViewIcon(view.url)}></Icon>
                     <em className='gap-l-3'> {view?.text}</em>
                 </span>
-                <span className='item-hover  round cursor flex-center size-24 round '>
+                <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>
             </div>
@@ -67,7 +72,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
                     <em className='gap-l-3'>{v?.text}</em>
                 </span>
-                <span className='item-hover  round cursor flex-center size-24 round '>
+                <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>
             </div>
@@ -85,7 +90,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
                     <em className='gap-l-3'>{v?.text}</em>
                 </span> */}
-                <span className='item-hover  round cursor flex-center size-24 round '>
+                <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>
             </div>
