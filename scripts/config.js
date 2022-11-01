@@ -136,7 +136,7 @@ module.exports = {
             }
         },
         {
-            test: /\.(json)$/,
+            test: /\.(json|md)$/,
             type: 'asset/resource',
             generator: {
                 filename: versionPrefix + 'data/[name]-[contenthash:8][ext]',
@@ -155,21 +155,23 @@ module.exports = {
                     maxSize: 5 * 1024
                 }
             }
-        }, {
+        },
+        // {
 
-            test: /\.md$/,
-            use: [
-                {
-                    loader: "html-loader",
-                },
-                {
-                    loader: "markdown-loader",
-                    options: {
-                        /* your options here */
-                    }
-                },
-            ],
-        }]
+        //     test: /\.md$/,
+        //     use: [
+        //         {
+        //             loader: "html-loader",
+        //         },
+        //         {
+        //             loader: "markdown-loader",
+        //             options: {
+        //                 /* your options here */
+        //             }
+        //         },
+        //     ],
+        // }
+        ]
     },
     plugins: [
         // new BundleAnalyzerPlugin(),
