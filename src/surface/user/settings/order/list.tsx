@@ -14,6 +14,7 @@ import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { usePayOrder } from "../../../../component/pay";
 import { Pagination } from "rich/component/view/pagination";
+import { Spin } from "rich/component/view/spin";
 export class ShyPayList extends React.Component {
     page: number = 1;
     size: number = 40;
@@ -102,7 +103,7 @@ export class ShyPayList extends React.Component {
                     </Row>
                 </div>
                 {/* <Divider></Divider> */}
-                {this.loading && <Loading></Loading>}
+                {this.loading && <Spin block></Spin>}
                 <div className="shy-page-order-list">
                     <table>
                         <thead><tr><th>订单号</th><th>类别</th><th>订单内容</th><th>金额</th><th>支付时间</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead>
