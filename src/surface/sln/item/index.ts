@@ -183,7 +183,7 @@ export class PageItem {
             share: this.share,
             permission: this.permission,
             locker: this.locker,
-            description:this.description
+            description: this.description
         }
     }
     closest(predict: (item: PageItem) => boolean, ignoreSelf?: boolean) {
@@ -422,6 +422,12 @@ export class PageItem {
                 return []
             }
         }
+    }
+    find(predict: (item: PageItem) => boolean) {
+        return this.childs.arrayJsonFind('childs', predict)
+    }
+    each(predict: (item: PageItem) => void) {
+        this.childs.arrayJsonEach('childs', predict)
     }
 }
 
