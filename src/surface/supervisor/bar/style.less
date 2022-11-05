@@ -121,17 +121,17 @@
         -webkit-app-region: no-drag;
 
         .shy-icon {
-            user-select       : none;
-            transition        : background 20ms ease-in 0s;
-            display           : flex;
-            align-items       : center;
-            justify-content   : center;
-            border-radius     : 3px;
-            flex-shrink       : 0;
-            margin-right      : 6px;
-            color             : rgba(55, 53, 47, .4);
+            user-select          : none;
+            transition           : background 20ms ease-in 0s;
+            display              : flex;
+            align-items          : center;
+            justify-content      : center;
+            border-radius        : 3px;
+            flex-shrink          : 0;
+            margin-right         : 6px;
+            color                : rgba(55, 53, 47, .4);
             // fill              : rgba(55, 53, 47, .4);
-            -webkit-app-region: no-drag;
+            -webkit-app-region   : no-drag;
         }
 
         a {
@@ -182,19 +182,19 @@
 
     &-time {
         color          : rgba(55, 53, 47, 0.4);
-        display        : flex;
+        display        : none;
         margin-left    : 10px;
         justify-content: flex-start;
         align-items    : center;
         font-size      : 14px;
-        visibility     : hidden;
+
     }
 }
 
 .shy-supervisor-bar {
     &:hover {
         .shy-supervisor-bar-router-time {
-            visibility: visible;
+            display: flex;
         }
     }
 }

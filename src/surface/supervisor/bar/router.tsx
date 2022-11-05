@@ -11,7 +11,6 @@ import {
     MaximizeSvg,
     PageSvg
 } from 'rich/component/svgs';
-import { Loading } from 'rich/component/view/loading';
 import { util } from 'rich/util/util';
 import { PageViewStore } from '../view/store';
 import { getPageIcon } from 'rich/extensions/at/declare';
@@ -19,6 +18,7 @@ import { ElementType, getElementUrl } from 'rich/net/element.type';
 import { TableSchema } from 'rich/blocks/data-grid/schema/meta';
 import { getSchemaViewIcon } from 'rich/blocks/data-grid/schema/util';
 import { runInAction } from 'mobx';
+import { Spin } from 'rich/component/view/spin';
 
 export var PageRouter = observer(function (props: { store: PageViewStore }) {
     var local = useLocalObservable<{ isLoad: boolean, schema: TableSchema }>(() => {
@@ -37,10 +37,8 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
         ].includes(props.store.pe.type)) {
             var sch = await props.store.getSchema();
             runInAction(() => {
-                console.log('load...');
                 local.schema = sch;
                 local.isLoad = true;
-                console.log('loadData', local.schema, local.isLoad)
             })
         }
     }
@@ -53,6 +51,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
             return <div onMouseDown={e => props.store.onOpen(getElementUrl(ElementType.Schema, local.schema.id))} className='shy-supervisor-bar-router f-14'>
                 <Icon icon={getPageIcon(props.store.item)} size={18}></Icon>
                 <span className='item-hover padding-w-10 padding-h-3 round cursor'>{props.store.item?.text}</span>
+                {props.store.snapSaving && <span className='shy-supervisor-bar-router-save'><Spin size={16}></Spin>保存中...</span>}
             </div>
         }
     }
@@ -127,7 +126,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
         return <div className='shy-supervisor-bar-router'>
             <span className='shy-supervisor-bar-router-item'><Icon icon={getPageIcon(item)} size={18}></Icon><a className='shy-supervisor-bar-router-item-title'>{item.text || '新页面'}</a></span>
             {item.editDate && <span className='shy-supervisor-bar-router-time'>保存于{util.showTime(item.editDate)}</span>}
-            {props.store.snapSaving && <span className='shy-supervisor-bar-router-save'><Loading></Loading>保存中...</span>}
+            {props.store.snapSaving && <span className='shy-supervisor-bar-router-save'><Spin size={16}></Spin>保存中...</span>}
             {item.locker?.userid && <div className='shy-supervisor-bar-router-locker'><Icon size={18} icon={LockSvg}></Icon></div>}
         </div>
     }
