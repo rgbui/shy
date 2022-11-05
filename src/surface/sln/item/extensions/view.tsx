@@ -7,6 +7,8 @@ import { surface } from "../../..";
 import { AtomPermission } from "rich/src/page/permission";
 import { getPageIcon } from "rich/extensions/at/declare";
 import { DotNumber } from "rich/component/view/dot";
+import { DotsSvg, PlusSvg } from "rich/component/svgs";
+import { Mime } from "../../declare";
 
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     let refInput = React.useRef<HTMLInputElement>(null);
@@ -16,6 +18,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     style.paddingLeft = 0 + (props.deep || 0) * 15;
     var isInEdit = item.id == surface.sln.editId;
     var isCanEdit = item.workspace.isCanEdit;
+    var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
     async function mousedown(event: MouseEvent) {
@@ -81,8 +84,8 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 onKeyDown={e => keydown(e.nativeEvent)}
                 onInput={e => inputting(e.nativeEvent)} /></div>}
             {!isInEdit && <div className='shy-ws-item-page-operators'>
-                {isCanEdit && <><Icon className='shy-ws-item-page-property' icon='elipsis:sy'></Icon>
-                    <Icon className='shy-ws-item-page-add' icon='add:sy'></Icon></>}
+                {isCanEdit && <><Icon className='shy-ws-item-page-property' size={18} icon={DotsSvg}></Icon>
+                    {isCanPlus && <Icon className='shy-ws-item-page-add' size={18} icon={PlusSvg}></Icon>}</>}
                 {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber count={item.unreadChats.length}></DotNumber></span>}
             </div>}
         </div>
