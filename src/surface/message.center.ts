@@ -18,13 +18,13 @@ class MessageCenter {
         else return []
     }
     @air('/page/open')
-    async pageOpen(args: { item: string | { id: string }, elementUrl: string }) {
+    async pageOpen(args: { item?: string | { id: string }, elementUrl?: string }) {
         var { item, elementUrl } = args;
         if (item) {
             var id = typeof item == 'string' ? item : item?.id;
             elementUrl = getElementUrl(ElementType.PageItem, id);
         }
-        surface.supervisor.onOpen(elementUrl);
+        await surface.supervisor.onOpen(elementUrl);
         if (surface.supervisor.main?.item) {
             var it = surface.supervisor.main?.item;
             UrlRoute.pushToPage(surface.workspace.host, it.sn);
