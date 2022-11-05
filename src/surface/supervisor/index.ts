@@ -4,6 +4,9 @@ import { Rect } from "rich/src/common/vector/point";
 import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
 import { timService } from "../../../net/primus";
+import { ElementType } from "rich/net/element.type";
+import { surface } from "..";
+
 export class Supervisor extends Events {
     constructor() {
         super()
@@ -27,17 +30,26 @@ export class Supervisor extends Events {
      */
     dialog: PageViewStore = null;
     time;
-    onOpen(elementUrl: string) {
+    async onOpen(elementUrl: string) {
         if (elementUrl == this.main?.elementUrl) return;
         this.opening = true;
         if (this.time) { clearInterval(this.time); this.time = null; }
         try {
-            this.main = PageViewStores.createPageViewStore(elementUrl);
-            if (this.main.item)
-                timService.enterWorkspaceView(
-                    this.main.item.workspace.id,
-                    this.main.item.id
-                )
+            var mainStore = PageViewStores.createPageViewStore(elementUrl);
+            /**
+             * 这里打开的elementType，但workspace没有，需要递归查找
+             * 对于Schema可能需要自动创建
+             */
+            if (!mainStore.item && [
+                ElementType.PageItem,
+                ElementType.Room,
+                ElementType.Schema
+            ].includes(mainStore.pe.type)) await surface.workspace.onLoadElementUrl(elementUrl);
+            this.main = mainStore;
+            if (this.main.item) timService.enterWorkspaceView(
+                this.main.item.workspace.id,
+                this.main.item.id
+            )
             /**
              * 3小时主动同步一次，服务器缓存用户所在的视图在线状态过期时间是6小时
              */
@@ -98,5 +110,9 @@ export class Supervisor extends Events {
         if (this.slide?.elementUrl == elementUrl) return true;
         if (this.dialog?.elementUrl == elementUrl) return true;
         return false;
+    }
+    closeDialogOrSlide() {
+        if (this.dialog) this.dialog = null;
+        if (this.slide) this.slide = null;
     }
 }

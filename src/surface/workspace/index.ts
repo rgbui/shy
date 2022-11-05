@@ -20,6 +20,9 @@ import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { PageViewStores } from "../supervisor/view/store";
+import { TableSchema } from "rich/blocks/data-grid/schema/meta";
+import { pageItemStore } from "../sln/item/store/sync";
+import { PageLayoutType } from "rich/src/page/declare";
 
 export type WorkspaceUser = {
     userid: string;
@@ -375,6 +378,65 @@ export class Workspace {
                     rs.load = true;
                 }
             }
+        }
+    }
+    async onLoadElementUrl(elementUrl: string) {
+        var pe = parseElementUrl(elementUrl);
+        if ([ElementType.PageItem, ElementType.Room, ElementType.Schema].includes(pe.type)) {
+            var id = pe.id;
+            var item = this.find(g => g.id == id);
+            if (!item) {
+                var pa = await channel.get('/page/parent/ids', { id });
+                if (pa.ok) {
+                    console.log(pa,pe,elementUrl,'ggx');
+                    if (pa.data.exists == false && pe.type == ElementType.Schema) {
+                        var viewItem = this.find(g => g.mime == Mime.pages);
+                        console.log('ggg',viewItem,'gg');
+                        if (viewItem) {
+                            var sch = await TableSchema.loadTableSchema(id);
+                            if (sch) {
+                                console.log(viewItem,'ggg','aappend')
+                                item = await pageItemStore.appendPageItem(viewItem, {
+                                    id: sch.id,
+                                    text: sch.text,
+                                    mime: Mime.table,
+                                    pageType: PageLayoutType.db,
+                                    spread: false,
+                                });
+                                return item;
+                            }
+                        }
+                    }
+                    else if (pa.data.exists == true) {
+                        pa.data.parentIds.removeAll(c => this.find(g => g.id == c && g.checkedHasChilds == true) ? true : false);
+                        if (pa.data.parentIds.length > 0) {
+                            var rlist = await channel.get('/page/parent/subs', { parentIds: pa.data.parentIds });
+                            if (rlist.ok) {
+                                var list = rlist.data.list;
+                                list.sort(this.pageSort);
+                                list = ShyUtil.flatArrayConvertTree(list);
+                                var look = list.lookup(g => g.parentId);
+                                look.forEach((v, k) => {
+                                    var item = this.find(c => c.id == k);
+                                    if (item) {
+                                        item.load(v);
+                                        item.checkedHasChilds = true;
+                                        item.each(c => { c.checkedHasChilds = true })
+                                    }
+                                })
+                            }
+                        }
+                        item = this.find(g => g.id == id);
+                        return item;
+                    }
+                    else {
+                        /**
+                         * 404
+                         */
+                    }
+                }
+            }
+            return item;
         }
     }
 }
