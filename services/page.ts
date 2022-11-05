@@ -13,9 +13,21 @@ class PageService extends BaseService {
         return await sock.get('/page/items', { wsId: wsId, ids: args.ids });
     }
     @get('/page/item/subs')
-    async pageItemSubs(args: { id: string }) {
+    async pageItemSubs(args:Record<string, any>) {
+        if (!args.wsId) args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/page/item/subs', args);
     }
+    @get('/page/parent/ids')
+    async pageParentIds(args: Record<string, any>) {
+        if (!args.wsId) args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/page/parent/ids', args);
+    }
+    @get('/page/parent/subs')
+    async pageParentSubs(args: Record<string, any>) {
+        if (!args.wsId) args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/page/parent/subs', args);
+    }
+
     @get('/page/item')
     async queryPageItem(args: { id: string }) {
         return await surface.workspace.sock.get('/page/item', args);
