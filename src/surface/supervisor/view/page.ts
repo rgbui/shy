@@ -27,7 +27,14 @@ export async function createPageContent(store: PageViewStore) {
                     page.requireSelectLayout = false;
                 }
             }
-            if (store.item) page.pageInfo = store.item;
+            if (store.item) {
+                page.pageInfo = store.item;
+                if (store.item.mime == Mime.table) {
+                    page.pageLayout = { type: PageLayoutType.db };
+                    page.requireSelectLayout = false;
+                }
+            }
+
             if (store.pe.type == ElementType.SchemaFieldBlogData) {
                 var rf = (await store.getSchemaRowField());
                 var blogPageItem = await surface.workspace.loadOtherPage(rf?.id, {

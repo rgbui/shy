@@ -11,6 +11,7 @@ import { PageLayoutType } from "rich/src/page/declare";
 import { PageSupervisorDialog } from "./dialoug";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { PageItem } from "../../sln/item";
+import { channel } from "rich/net/channel";
 
 export class PageViewStore extends Events {
     source: 'main' | 'slide' | 'dialog';
@@ -145,6 +146,10 @@ export class PageViewStore extends Events {
     async onFullDisplay() {
         await surface.supervisor.onOpenDialog(null)
         surface.supervisor.onOpen(this.elementUrl);
+    }
+    async onOpen(elementUrl: string) {
+        surface.supervisor.closeDialogOrSlide()
+        await channel.air('/page/open', { elementUrl })
     }
 }
 
