@@ -76,7 +76,8 @@ class PageItemStore {
         if (pageItem.checkedHasChilds && pageItem.spread == true) {
             if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
             var actions: PageItemAction[] = [];
-            data.id = config.guid();
+            if (typeof data.id == 'undefined')
+                data.id = config.guid();
             data.workspaceId = pageItem.workspaceId;
             data.parentId = pageItem.id;
             data.at = pageItem.childs.last() ? (pageItem.childs.last().at + 1) : 0;
