@@ -80,7 +80,6 @@ import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
 import { UserBasic, UserStatus } from "../types/user";
-import { AtomPermission } from "../src/page/permission";
 import { ResourceArguments } from "../extensions/icon/declare";
 export type SockResponse<T, U = string> = {
         /**
@@ -319,7 +318,7 @@ push(`/block/ref/sync`, '{wsId?:string,data:{deleteBlockIds: string[], updates: 
 
 
 push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherExists:boolean}>', ['patch'])
-push(`/user/interactives`, '{elementUrl:string,schemaUrl:string,ids:string[],es:string[]}', 'SockResponse<{list:{elementUrl:string,values:string[]}[]}>', ['get'])
+push(`/user/interactives`, '{wsId?:string,schemaId:string,ids:string[],es:string[]}', 'SockResponse<{list:Record<string,string[]>}>', ['get'])
 
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
 
