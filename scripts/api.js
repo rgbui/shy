@@ -317,7 +317,7 @@ push(`/block/ref/add`, '{wsId?:string,pageId:string,data:{blockId: string, rowBl
 push(`/block/ref/sync`, '{wsId?:string,data:{deleteBlockIds: string[], updates: { rowBlockId: string, text: string }[]}}', 'SockResponse<void>', ['patch'])
 
 
-push(`/interactive/emoji`, '{elementUrl:string,schemaUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherExists:boolean}>', ['patch'])
+push(`/interactive/emoji`, '{elementUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherExists:boolean}>', ['patch'])
 push(`/user/interactives`, '{wsId?:string,schemaId:string,ids:string[],es:string[]}', 'SockResponse<{list:Record<string,string[]>}>', ['get'])
 
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
