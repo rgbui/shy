@@ -19,11 +19,8 @@ export var SupervisorView = observer(function () {
     return <div className='shy-supervisor'>
         {surface.supervisor.opening && <></>}
         {surface.supervisor.opening == false && <>
-            {surface.supervisor.page && !surface.supervisor.slide && <PageSupervisorView store={surface.supervisor.page} ></PageSupervisorView>}
-            {surface.supervisor.page && surface.supervisor.slide && <div className="flex w100 h100">
-                <PageSupervisorView style={{ right: '50%' }} store={surface.supervisor.page} ></PageSupervisorView>
-                <PageSupervisorView slide style={{ left: '50%' }} store={surface.supervisor.slide}></PageSupervisorView>
-            </div>}
+            {surface.supervisor.page && <PageSupervisorView style={{ right: surface.supervisor.slide ? surface.supervisor.slide_pos + "%" : undefined }} store={surface.supervisor.page} ></PageSupervisorView>}
+            {surface.supervisor.slide && <PageSupervisorView slide style={{ left: (100 - surface.supervisor.slide_pos) + "%" }} store={surface.supervisor.slide}></PageSupervisorView>}
             {surface.supervisor.dialog && <PageSupervisorDialog store={surface.supervisor.dialog}></PageSupervisorDialog>}
         </>}
     </div>

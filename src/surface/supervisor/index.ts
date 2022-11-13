@@ -14,9 +14,11 @@ export class Supervisor extends Events {
             opening: observable,
             page: observable,
             slide: observable,
-            dialog: observable
+            dialog: observable,
+            slide_pos:observable
         })
     }
+    slide_pos:number=50
     /**
      * 主页面
      */
