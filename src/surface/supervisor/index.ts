@@ -35,7 +35,7 @@ export class Supervisor extends Events {
         this.opening = true;
         if (this.time) { clearInterval(this.time); this.time = null; }
         try {
-            var mainStore = PageViewStores.createPageViewStore(elementUrl);
+            var mainStore = PageViewStores.createPageViewStore(elementUrl, 'page', config);
             /**
              * 这里打开的elementType，但workspace没有，需要递归查找
              * 对于Schema可能需要自动创建
@@ -69,10 +69,17 @@ export class Supervisor extends Events {
                 this.page.item.id
             )
     }
-    onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
+    async onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.slide?.elementUrl) return;
         if (!elementUrl) this.slide = null;
-        else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide')
+        else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide', config)
+        if (this.slide) {
+            return new Promise((resolve, reject) => {
+                this.slide.only('close', () => {
+                    resolve(this.slide.page);
+                })
+            })
+        }
     }
     /**
      * 这里打开elementUrl
@@ -81,7 +88,7 @@ export class Supervisor extends Events {
     async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl && elementUrl == this.dialog?.elementUrl) return;
         if (!elementUrl) this.dialog = null;
-        else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog');
+        else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog', config);
         if (this.dialog) {
             return new Promise((resolve, reject) => {
                 this.dialog.only('close', () => {

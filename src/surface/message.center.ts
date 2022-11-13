@@ -36,6 +36,10 @@ class MessageCenter {
     async pageDialog(args: { elementUrl: string, config?: { isTemplate?: boolean } }) {
         return await surface.supervisor.onOpenDialog(args.elementUrl, args.config);
     }
+    @air('/page/slide')
+    async pageSlide(args: { elementUrl: string, config?: { isTemplate?: boolean } }) {
+        return await surface.supervisor.onOpenSlide(args.elementUrl, args.config);
+    }
     @air('/page/create/sub')
     async createPageSub(args: { pageId: string, text: string }) {
         var item = surface.workspace.find(g => g.id == args.pageId);
