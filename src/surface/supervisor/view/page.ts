@@ -15,6 +15,8 @@ export async function createPageContent(store: PageViewStore) {
         if (!store.page) {
             var pd = await store.snapStore.querySnap();
             var page = new Page();
+            page.openSource = store.source;
+            page.customElementUrl = store.elementUrl;
             store.page = page;
             if (store.config?.type) store.page.pageLayout = { type: store.config.type };
             else {
@@ -34,7 +36,10 @@ export async function createPageContent(store: PageViewStore) {
                     page.requireSelectLayout = false;
                 }
             }
-
+            if (store.pe.type == ElementType.SchemaRecordView) {
+                if (store.config.isTemplate)
+                    page.recordViewTemplate = true;
+            }
             if (store.pe.type == ElementType.SchemaFieldBlogData) {
                 var rf = (await store.getSchemaRowField());
                 var blogPageItem = await surface.workspace.loadOtherPage(rf?.id, {

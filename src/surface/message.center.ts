@@ -18,23 +18,23 @@ class MessageCenter {
         else return []
     }
     @air('/page/open')
-    async pageOpen(args: { item?: string | { id: string }, elementUrl?: string }) {
+    async pageOpen(args: { item?: string | { id: string }, elementUrl?: string, config?: { isTemplate?: boolean } }) {
         var { item, elementUrl } = args;
         if (item) {
-            var id = typeof item == 'string' ? item : item?.id;
-            elementUrl = getElementUrl(ElementType.PageItem, id);
+            if ((item as PageItem)?.id) elementUrl = (item as PageItem).elementUrl;
+            else elementUrl = getElementUrl(ElementType.PageItem, item as string);
         }
-        await surface.supervisor.onOpen(elementUrl);
-        if (surface.supervisor.main?.item) {
-            var it = surface.supervisor.main?.item;
+        await surface.supervisor.onOpen(elementUrl, args.config);
+        if (surface.supervisor.page?.item) {
+            var it = surface.supervisor.page?.item;
             UrlRoute.pushToPage(surface.workspace.host, it.sn);
             it.onUpdateDocument();
             surface.sln.onFocusItem(it);
         }
     }
     @air('/page/dialog')
-    async pageDialog(args: { elementUrl: string }) {
-        return await surface.supervisor.onOpenDialog(args.elementUrl);
+    async pageDialog(args: { elementUrl: string, config?: { isTemplate?: boolean } }) {
+        return await surface.supervisor.onOpenDialog(args.elementUrl, args.config);
     }
     @air('/page/create/sub')
     async createPageSub(args: { pageId: string, text: string }) {

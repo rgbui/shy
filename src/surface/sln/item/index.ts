@@ -269,7 +269,7 @@ export class PageItem {
         };
         var item = await pageItemStore.insertAfterPageItem(this, data);
         await item.onOpenItem();
-        var itemS = surface.supervisor.main;
+        var itemS = surface.supervisor.page;
         var ps = PageViewStores.getPageViewStore(this.elementUrl);
         if (ps?.page) {
             var content = await ps?.page.get();

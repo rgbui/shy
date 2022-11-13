@@ -68,7 +68,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <Icon size={16} icon={getSchemaViewIcon(view.url)}></Icon>
                     <em className='gap-l-3'>{view?.text}</em>
                 </span>
-                {props.store.source != 'main' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
+                {props.store.source != 'page' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>}
             </div>
@@ -95,7 +95,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                         <em className='gap-l-3'>{props.store?.page?.pageInfo?.text}</em>
                     </span></>}
 
-                {props.store.source != 'main' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
+                {props.store.source != 'page' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>}
             </div>
@@ -116,7 +116,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                     <em className='gap-l-3'>{v?.text}</em>
                 </span>
 
-                {props.store.source != 'main' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
+                {props.store.source != 'page' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>}
             </div>

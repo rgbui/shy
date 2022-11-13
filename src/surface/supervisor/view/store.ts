@@ -14,14 +14,14 @@ import { PageItem } from "../../sln/item";
 import { channel } from "rich/net/channel";
 
 export class PageViewStore extends Events {
-    source: 'main' | 'slide' | 'dialog';
+    source: 'page' | 'slide' | 'dialog';
     date: number = Date.now();
     elementUrl: string = '';
     page: Page = null;
     view: PageSupervisorView | PageSupervisorDialog = null;
     snapSaving: boolean = false;
-    config?: { type?: PageLayoutType } = {};
-    constructor(options: { elementUrl: string, source?: 'main' | 'slide' | 'dialog', config?: PageViewStore['config'] }) {
+    config?: { type?: PageLayoutType, isTemplate?: boolean } = {};
+    constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();
         this.elementUrl = options.elementUrl;
         if (options.source) this.source = options.source;
@@ -155,7 +155,7 @@ export class PageViewStore extends Events {
 
 export class PageViewStores {
     private static stores: Map<string, PageViewStore[]> = new Map();
-    static createPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'main', config?: PageViewStore['config']) {
+    static createPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'page', config?: PageViewStore['config']) {
         var s = this.stores.get(elementUrl);
         if (Array.isArray(s) && s.length > 0) {
             var r = s.find(g => g.source == source)
@@ -169,7 +169,7 @@ export class PageViewStores {
         else this.stores.set(elementUrl, [pvs]);
         return pvs;
     }
-    static getPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'main') {
+    static getPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'page') {
         var s = this.stores.get(elementUrl);
         if (Array.isArray(s) && s.length > 0) {
             if (!source) return s[0];

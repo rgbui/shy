@@ -146,8 +146,8 @@ push('/gallery/query', `{type: GalleryType, word: string}`, `{ok:boolean,data:Ou
 push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['act']);
 push('/page/update/info', `{id: string, pageInfo:LinkPageItem}`, `void`, ['air']);
 push('/page/query/info', `{id: string}`, `SockResponse<LinkPageItem>`, ['get']);
-push('/page/open', `{item?: string | { id: string }, elementUrl?: string}`, `void`, ['air']);
-push('/page/dialog', '{elementUrl:string}', 'any', ['air']);
+push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean}}`, `void`, ['air']);
+push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
 push('/current/workspace', '', '{id:string,sn:number,text:string}', ['query'])

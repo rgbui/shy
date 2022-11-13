@@ -12,7 +12,7 @@ export class Supervisor extends Events {
         super()
         makeObservable(this, {
             opening: observable,
-            main: observable,
+            page: observable,
             slide: observable,
             dialog: observable
         })
@@ -20,7 +20,7 @@ export class Supervisor extends Events {
     /**
      * 主页面
      */
-    main: PageViewStore = null;
+    page: PageViewStore = null;
     /**
      * 侧边页
      */
@@ -30,8 +30,8 @@ export class Supervisor extends Events {
      */
     dialog: PageViewStore = null;
     time;
-    async onOpen(elementUrl: string) {
-        if (elementUrl == this.main?.elementUrl) return;
+    async onOpen(elementUrl: string, config?: PageViewStore['config']) {
+        if (elementUrl == this.page?.elementUrl) return;
         this.opening = true;
         if (this.time) { clearInterval(this.time); this.time = null; }
         try {
@@ -45,10 +45,10 @@ export class Supervisor extends Events {
                 ElementType.Room,
                 ElementType.Schema
             ].includes(mainStore.pe.type)) await surface.workspace.onLoadElementUrl(elementUrl);
-            this.main = mainStore;
-            if (this.main.item) timService.enterWorkspaceView(
-                this.main.item.workspace.id,
-                this.main.item.id
+            this.page = mainStore;
+            if (this.page.item) timService.enterWorkspaceView(
+                this.page.item.workspace.id,
+                this.page.item.id
             )
             /**
              * 3小时主动同步一次，服务器缓存用户所在的视图在线状态过期时间是6小时
@@ -63,13 +63,13 @@ export class Supervisor extends Events {
         }
     }
     async syncWorkspaceView() {
-        if (this.main.item)
+        if (this.page.item)
             timService.enterWorkspaceView(
-                this.main.item.workspace.id,
-                this.main.item.id
+                this.page.item.workspace.id,
+                this.page.item.id
             )
     }
-    onOpenSlide(elementUrl: string) {
+    onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.slide?.elementUrl) return;
         if (!elementUrl) this.slide = null;
         else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide')
@@ -92,9 +92,9 @@ export class Supervisor extends Events {
     }
     opening: boolean = false;
     async autoLayout() {
-        if (this.main?.page) {
-            var bound = Rect.fromEle(this.main.view.pageEl);
-            this.main.page.layout(bound);
+        if (this.page?.page) {
+            var bound = Rect.fromEle(this.page.view.pageEl);
+            this.page.page.layout(bound);
         }
         if (this.slide?.page) {
             var bound = Rect.fromEle(this.slide.view.pageEl);
@@ -106,7 +106,7 @@ export class Supervisor extends Events {
         }
     }
     isShowElementUrl(elementUrl: string) {
-        if (this.main?.elementUrl == elementUrl) return true;
+        if (this.page?.elementUrl == elementUrl) return true;
         if (this.slide?.elementUrl == elementUrl) return true;
         if (this.dialog?.elementUrl == elementUrl) return true;
         return false;
