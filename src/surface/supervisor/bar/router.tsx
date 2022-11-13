@@ -7,6 +7,7 @@ import {
     CollectTableSvg,
     DocAddSvg,
     DocEditSvg,
+    DoubleRightSvg,
     LockSvg,
     MaximizeSvg,
     PageSvg
@@ -78,23 +79,21 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
         if (local.isLoad) {
             var v = local.schema?.recordViews.find(g => g.id == props.store.pe.id1);
             return <div className='shy-supervisor-bar-router text-1 flex f-14'>
+                {props.store.source == 'slide' && <span onMouseDown={e => props.store.view?.onClose()} className='item-hover  round cursor flex-center size-24 round'><Icon size={18} icon={DoubleRightSvg}></Icon></span>}
                 <span onMouseDown={e => props.store.onOpen(getElementUrl(ElementType.Schema, local.schema.id))} className='item-hover padding-w-5 padding-h-3 round cursor flex'>
                     <Icon size={16} icon={local.schema.icon || CollectTableSvg}></Icon>
                     <em className='gap-l-3'>{local.schema?.text}</em>
                 </span>
-
                 <span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span>
                 <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
                     <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
                     <em className='gap-l-3'>{v?.text}</em>
                 </span>
-
                 {ElementType.SchemaRecordViewData == props.store.pe.type && <><span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span>
                     <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
                         <Icon size={16} icon={props.store?.page?.pageInfo?.icon || PageSvg}></Icon>
                         <em className='gap-l-3'>{props.store?.page?.pageInfo?.text}</em>
                     </span></>}
-
                 {props.store.source != 'page' && <span onMouseDown={e => props.store.onFullDisplay()} className='item-hover  round cursor flex-center size-24 round '>
                     <Icon size={16} icon={MaximizeSvg}></Icon>
                 </span>}
@@ -104,7 +103,6 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
     else if ([ElementType.SchemaFieldBlogData].includes(props.store.pe.type)) {
         if (local.isLoad) {
             return <div className='shy-supervisor-bar-router text-1 flex f-14'>
-
                 <span onMouseDown={e => props.store.onOpen(getElementUrl(ElementType.Schema, local.schema.id))} className='item-hover padding-w-5 padding-h-3 round cursor flex'>
                     <Icon size={16} icon={local.schema.icon || CollectTableSvg}></Icon>
                     <em className='gap-l-3'>{local.schema?.text}</em>
