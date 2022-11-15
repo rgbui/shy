@@ -86,7 +86,7 @@ export var PageRouter = observer(function (props: { store: PageViewStore }) {
                 </span>
                 <span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span>
                 <span className='item-hover padding-w-5 padding-h-3 round cursor flex'>
-                    <Icon size={16} icon={ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg}></Icon>
+                    <Icon size={16} icon={v.icon || (ElementType.SchemaRecordViewData == props.store.pe.type ? DocEditSvg : DocAddSvg)}></Icon>
                     <em className='gap-l-3'>{v?.text}</em>
                 </span>
                 {ElementType.SchemaRecordViewData == props.store.pe.type && <><span className='remark'><Icon size={12} icon={ChevronRightSvg}></Icon></span>
