@@ -144,8 +144,8 @@ push('/log', `{type:"error"|"warn"|"info",message:string|Error}`, 'void', ['rich
 push('/gallery/query', `{type: GalleryType, word: string}`, `{ok:boolean,data:OuterPic[],warn:string}`, ['get', 'rich'])
 
 push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['act']);
-push('/page/update/info', `{id: string, pageInfo:LinkPageItem}`, `void`, ['air']);
-push('/page/query/info', `{id: string}`, `SockResponse<LinkPageItem>`, ['get']);
+push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageItem}`, `void`, ['air']);
+push('/page/query/info', `{id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean}}`, `void`, ['air']);
 push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
 push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);

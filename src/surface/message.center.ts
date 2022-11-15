@@ -2,7 +2,7 @@
 import lodash from "lodash";
 import { act, air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
-import { ElementType, getElementUrl } from "rich/net/element.type";
+import { ElementType, getElementUrl, parseElementUrl } from "rich/net/element.type";
 import { PageLayoutType } from "rich/src/page/declare";
 import { surface } from ".";
 import { yCache, CacheKey } from "../../net/cache";
@@ -111,14 +111,26 @@ class MessageCenter {
         return surface.workspace;
     }
     @air('/page/update/info')
-    async pageUpdateInfo(args: { id: string, pageInfo: Partial<PageItem> }) {
-        var item = surface.workspace.find(g => g.id == args.id);
-        if (!item) item = surface.workspace.otherChilds.find(g => g.id == args.id);
-        if (item) {
-            await pageItemStore.updatePageItem(item, args.pageInfo);
-            channel.fire('/page/update/info', args as any);
-            item.onUpdateDocument();
+    async pageUpdateInfo(args: { id?: string, elementUrl?: string, pageInfo: Partial<PageItem> }) {
+        var itemId;
+        if (args.id) {
+            itemId = args.id;
         }
+        else if (args.elementUrl) {
+            var pe = parseElementUrl(args.elementUrl);
+            if ([ElementType.PageItem, ElementType.Schema, ElementType.Room].includes(pe.type)) {
+                itemId = pe.id;
+            }
+        }
+        if (itemId) {
+            var item = surface.workspace.find(g => g.id == itemId);
+            if (!item) item = surface.workspace.otherChilds.find(g => g.id == itemId);
+            if (item) {
+                await pageItemStore.updatePageItem(item, args.pageInfo);
+                item.onUpdateDocument();
+            }
+        }
+        channel.fire('/page/update/info', args as any);
     }
     @air('/page/notify/toggle')
     async pageNotifyToggle(args: { id: string, visible: boolean }) {
