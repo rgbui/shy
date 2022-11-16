@@ -47,6 +47,7 @@ export class SnapStore extends Events {
     private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
     private localTime;
     async viewSnap(seq: number, content: string, plain?: string, text?: string) {
+        console.log(seq, content, 'content');
         /**
          * 本地先存起来
          */
