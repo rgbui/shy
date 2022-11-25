@@ -59,11 +59,11 @@ export class ShyFeature extends React.Component {
                         <div className="shy-feature-card">
                             <h2 className="h2">个人版</h2>
                             <Row className='gap-h-10'><Col span={12}><label>按量付费</label></Col><Col span={12} align="end" ><Button onClick={e => openPay('fill')} >购买</Button></Col></Row>
-                            <Row className='gap-h-10'><Col span={12}>空间</Col><Col span={12} align="end">5元/G/年</Col></Row>
-                            <Row className='gap-h-10'><Col span={12}>流量</Col><Col span={12} align="end">3元/G</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>空间</Col><Col span={12} align="end">3元/G/年</Col></Row>
+                            <Row className='gap-h-10'><Col span={12}>流量</Col><Col span={12} align="end">1元/G</Col></Row>
                             <Row className='gap-h-10'><Col span={12}>数据</Col><Col span={12} align="end">3元/1万条</Col></Row>
                             <Row className='gap-h-10'><Col span={12}>API</Col><Col span={12} align="end">待定</Col></Row>
-                            <Row className='gap-h-10'><Col><i>初始免费额度10元</i></Col></Row>
+                            <Row className='gap-h-10'><Col><i>软件服务费50元/年</i></Col></Row>
                             <Row className='gap-h-10'><Col><i>功能全开，协作成员数无限制</i></Col></Row>
                         </div>
                     </>}
