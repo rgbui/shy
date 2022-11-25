@@ -27,6 +27,12 @@ a {
         padding-left : 20px;
         padding-right: 20px;
     }
+
+    /* 当页面宽度小于319px */
+    @media screen and (max-width: 319px) {
+        padding-left : 10px;
+        padding-right: 10px;
+    }
 }
 
 
@@ -34,6 +40,7 @@ a {
     img {
         border-radius: 50%;
     }
+
     &-name {
         display        : inline-flex;
         justify-content: center;
@@ -52,9 +59,7 @@ a {
     &-head {
         @padding-gap();
         align-items     : center;
-        backdrop-filter : blur(10px);
-        background-color: hsla(0, 0%, 100%, .65);
-        box-shadow      : 0 4px 24px rgba(0, 0, 0, .08);
+        background-color: #f2f3f5;
         box-sizing      : border-box;
         display         : flex;
         height          : 56px;
@@ -82,9 +87,14 @@ a {
                 min-width    : 80px;
             }
         }
+
+        &.float {
+            backdrop-filter : blur(10px);
+            background-color: hsla(0, 0%, 100%, .65);
+            box-shadow      : 0 4px 8px rgba(0, 0, 0, .08);
+        }
     }
 }
-
 
 
 
@@ -145,20 +155,19 @@ a {
 
 .shy-site-footer {
     @padding-gap();
-    align-items     : flex-start;
-    background-color: #242424;
-    display         : flex;
-    height          : 160px;
-    justify-content : flex-start;
-    padding-bottom  : 50px;
-    padding-top     : 50px;
+    align-items    : flex-start;
+    display        : flex;
+    height         : 160px;
+    justify-content: flex-start;
+    padding-bottom : 50px;
+    padding-top    : 50px;
 
     &>div {
         flex-grow: 1;
     }
 
     h4 {
-        color      : hsla(0, 0%, 100%, .9);
+        color      : rgba(0, 0, 0, .6);
         font-size  : 20px;
         font-weight: 400;
         height     : 24px;
@@ -168,12 +177,11 @@ a {
 
     a,
     span {
-        color    : #666;
-        font-size: 14px;
+        color      : #666;
+        font-size  : 14px;
+        line-height: 30px;
     }
 }
-
-
 
 .shy-site-content {
     margin-top    : 56px;
@@ -221,7 +229,7 @@ a {
         text-align: center;
 
         a {
-            display         : inline-block;
+            display         : inline-flex;
             background-color: #e16259;
             color           : #fff;
             border-radius   : 4px;
@@ -329,6 +337,7 @@ a {
         display        : flex;
         justify-content: flex-start;
         align-items    : center;
+        font-size      : 14px;
 
         >label {
             display   : inline-block;
@@ -344,8 +353,8 @@ a {
     }
 
     .shy-site-price-remark {
-        color     : rgba(0, 0, 0, .7);
-        text-align: center;
+        // color     : rgba(0, 0, 0, .7);
+        text-align: left;
         font-size : 14px;
     }
 
@@ -406,11 +415,13 @@ a {
         border-radius: 16px;
         box-shadow   : rgba(79, 77, 192, 0.15) 0px 0px 60px -8px;
         margin       : 0px 10px;
+        margin-bottom: 20px;
 
         &-icon {
             display        : flex;
             justify-content: center;
-            align-items    : flex-start;
+            align-items    : center;
+            height         : 200px;
 
             svg {
                 max-width: 80px;
@@ -467,8 +478,81 @@ a {
     padding-bottom: 150px;
 }
 
-.shy-site-protocol{
-    a{
-        color:#0069c2;
+.shy-site-protocol {
+    a {
+        color: #0069c2;
+    }
+}
+
+/* 当页面宽度小于319px */
+@media screen and (max-width:1000px) {
+
+    .shy-site-head {
+        justify-content: space-between;
+    }
+
+    .shy-site-head-navs {
+        display         : none;
+        position        : fixed;
+        z-index         : 10000;
+        top             : 0px;
+        left            : 0px;
+        width           : 100vw;
+        height          : 100vh;
+        padding-top     : 30px;
+        backdrop-filter : blur(10px);
+        background-color: hsla(0, 0%, 100%, .65);
+        >a {
+            display  : block;
+            height   : 30px;
+            margin   : 10px;
+            font-size: 16px;
+        }
+    }
+    .shy-site-head-logo {
+        // flex-grow  : 1;
+        // flex-shrink: 1;
+    }
+
+    .shy-site-footer {
+        display: block;
+
+        >div {
+            margin-bottom: 20px;
+        }
+    }
+
+    .shy-site-price-items {
+        display: block !important;
+
+        >div {
+            margin       : 0 auto !important;
+            margin-bottom: 40px !important;
+            ;
+            max-width: 500px;
+
+            &:last-child,
+            &:first-child {
+                margin       : 0 auto;
+                margin-bottom: 40px;
+            }
+        }
+    }
+
+    .shy-site-download-platforms {
+        display: block;
+    }
+
+    .shy-site-download-platform {
+        margin       : 0 auto !important;
+        margin-bottom: 40px !important;
+        ;
+        max-width: 500px;
+
+        &:last-child,
+        &:first-child {
+            margin       : 0 auto;
+            margin-bottom: 40px;
+        }
     }
 }

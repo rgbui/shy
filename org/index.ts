@@ -10,6 +10,7 @@ import "rich/util/array";
 import "../services/user/index";
 import "../services/common/common";
 import "./style.less";
+import "rich/src/assert/atom.less";
 import { channel } from "rich/net/channel";
 window.isAuth = false;
 import { createAuthIframe } from '../auth/iframe';
@@ -32,9 +33,16 @@ async function loadUser() {
             }
         }
     }
+
 }
 window.addEventListener('load', (e) => {
     loadUser();
+})
+document.addEventListener('scroll', (e) => {
+    var head = document.body.querySelector('.shy-site-head') as HTMLElement;
+    var top = document.documentElement.scrollTop || document.body.scrollTop;
+    if (top > 0) head.classList.add('float')
+    else head.classList.remove('float');
 })
 
 
