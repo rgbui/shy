@@ -103,9 +103,9 @@ a {
     flex-shrink    : 0;
     height         : 40px;
     display        : flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items    : center;
-    width          : 90px;
+    min-width      : 90px;
 
     a.shy-site-head-user-sign {
         display         : inline-block;
@@ -118,6 +118,13 @@ a {
         background-color: #242424;
         color           : #fff;
         padding         : 0 5px;
+        margin-left: 10px;
+    }
+
+    .shy-site-head-menu {
+        margin-left: 10px;
+        cursor: pointer;
+        display: none;
     }
 }
 
@@ -263,7 +270,7 @@ a {
             background   : rgb(255, 255, 255);
             border-radius: 16px;
             box-shadow   : rgba(79, 77, 192, 0.15) 0px 0px 60px -8px;
-            max-width    : 900px;
+            max-width    : 100%;
         }
     }
 
@@ -490,6 +497,9 @@ a {
     .shy-site-head {
         justify-content: space-between;
     }
+    .shy-site-head-menu{
+        display: block !important;
+    }
 
     .shy-site-head-navs {
         display         : none;
@@ -502,6 +512,7 @@ a {
         padding-top     : 30px;
         backdrop-filter : blur(10px);
         background-color: hsla(0, 0%, 100%, .65);
+
         >a {
             display  : block;
             height   : 30px;
@@ -509,6 +520,7 @@ a {
             font-size: 16px;
         }
     }
+
     .shy-site-head-logo {
         // flex-grow  : 1;
         // flex-shrink: 1;

@@ -15,31 +15,51 @@ import { channel } from "rich/net/channel";
 window.isAuth = false;
 import { createAuthIframe } from '../auth/iframe';
 createAuthIframe();
+var user, isUserRender;
+function getEle(selector) {
+    return document.body.querySelector(selector) as HTMLElement;
+}
 async function loadUser() {
     var r = await channel.get('/sign');
     if (r.ok) {
-        var user = r.data.user;
-        var userEl = document.body.querySelector('.shy-site-head-user') as HTMLElement;
-        if (userEl) {
-            if (user.avatar) {
-                userEl.innerHTML = `<a href="/my/workspace">
+        user = r.data.user;
+        renderEl()
+    }
+}
+function renderEl() {
+    if (isUserRender) return;
+    if (!user) return;
+    var userEl = getEle('.shy-site-head-user');
+    if (userEl) {
+        var loginButton = getEle('.shy-site-head-user-sign');
+        loginButton.style.display = 'none';
+        isUserRender = true;
+        if (user.avatar) {
+            userEl.insertAdjacentHTML('afterbegin',
+                `<a href="/my/workspace">
             <div class="shy-avatar" style="width: 40px; height: 40px;"><img src="${user.avatar.url}" style="width: 40px; height: 40px;"></div>
-            </a>`
-            }
-            else {
-                userEl.innerHTML = `<a href="/my/workspace">
+            </a>`)
+
+        }
+        else {
+            userEl.insertAdjacentHTML('afterbegin',
+                `<a href="/my/workspace">
             <div class="shy-avatar" style="width: 40px; height: 40px;"><span class='shy-avatar-name' style="width: 40px; height: 40px;display:block;text-align:center;line-height:40px">${user.name.slice(0, 1)}</span></div>
-            </a>`
-            }
+            </a>`)
         }
     }
-
 }
-window.addEventListener('load', (e) => {
-    loadUser();
+loadUser();
+window.addEventListener('DOMContentLoaded', (e) => {
+    renderEl()
+    var ele = getEle('.shy-site-head-menu');
+    ele.addEventListener('mousedown', e => {
+        var nv = getEle('.shy-site-head-navs');
+        nv.style.display = 'block'
+    })
 })
 document.addEventListener('scroll', (e) => {
-    var head = document.body.querySelector('.shy-site-head') as HTMLElement;
+    var head = getEle('.shy-site-head');
     var top = document.documentElement.scrollTop || document.body.scrollTop;
     if (top > 0) head.classList.add('float')
     else head.classList.remove('float');
