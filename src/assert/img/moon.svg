@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="389px" height="318px" viewBox="0 0 389 318" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>feature-moons</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Templates" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Landing-Page-Example" transform="translate(-175.000000, -1815.000000)">
+            <g id="images" transform="translate(111.000000, 1692.000000)">
+                <g id="feature-moons" transform="translate(64.000000, 123.000000)">
+                    <circle id="moons" fill="#25FF82" cx="159" cy="159" r="159"></circle>
+                    <circle id="moons" fill="#FFFFFF" cx="281.5" cy="159.5" r="107.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
