@@ -25,6 +25,7 @@ export var Bar = observer(function (props: { store: PageViewStore, className?: s
         else classList.push(props.className);
     }
     var item = props.store.item;
+    if (item?.pageType == PageLayoutType.docCard) classList.push('ppt')
     if (!surface.showSlideBar) {
         return <div style={{ position: props.noPosition ? 'static' : undefined }} className={classList.join(" ")}>
             <div className='shy-supervisor-bar-left flex-auto'>
