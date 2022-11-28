@@ -95,7 +95,7 @@ export class PageItem {
         return this.workspace.url + this.path;
     }
     get elementUrl() {
-        if (this.pageType == PageLayoutType.db || this.pageType == PageLayoutType.dbPickRecord) {
+        if (this.pageType == PageLayoutType.db || this.pageType == PageLayoutType.docCard || this.pageType == PageLayoutType.dbPickRecord) {
             return getElementUrl(ElementType.Schema, this.id);
         }
         else if (this.pageType == PageLayoutType.doc || this.pageType == PageLayoutType.board) {
