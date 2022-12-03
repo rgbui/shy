@@ -26,6 +26,7 @@ export class DbService<T extends { id: string }>{
         return await this.channelStore({ key: 'update', where, data }) as any;
     }
     async save(where: Partial<T>, data: Partial<T>, defaultValue?: Partial<T>) {
+        
         return await this.channelStore({ key: 'save', name: this.name, where, data, defaultValue }) as any;
     }
 }

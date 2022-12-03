@@ -23,6 +23,7 @@ export class SnapStore extends Events {
         return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
     async viewOperator(operate: Partial<UserAction>) {
+       
         var ops = JSON.stringify(operate);
         var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
             seq: number,
@@ -46,8 +47,8 @@ export class SnapStore extends Events {
     }
     private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
     private localTime;
-    async viewSnap(seq: number, content: string, plain?: string, text?: string)
-    {
+    async viewSnap(seq: number, content: string, plain?: string, text?: string) {
+       
         /**
          * 本地先存起来
          */
@@ -97,7 +98,6 @@ export class SnapStore extends Events {
                 seq: this.localViewSnap.seq
             });
             if (tryLocker.ok && tryLocker.data.lock == true) {
-                console.log('save', this.elementUrl);
                 var r = await surface.workspace.sock.put('/view/snap', {
                     elementUrl: this.elementUrl,
                     wsId: surface.workspace.id,

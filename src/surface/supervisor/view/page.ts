@@ -12,7 +12,8 @@ import { PageViewStore } from "./store";
 
 export async function createPageContent(store: PageViewStore) {
     try {
-        if (!store.page) {
+        if (!store.page)
+        {
             var pd = await store.snapStore.querySnap();
             var page = new Page();
             page.openSource = store.source;

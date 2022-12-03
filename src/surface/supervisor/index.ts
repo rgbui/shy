@@ -34,7 +34,6 @@ export class Supervisor extends Events {
     time;
     async onOpen(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.page?.elementUrl) return;
-        console.log(elementUrl,'ggg');
         this.opening = true;
         if (this.time) { clearInterval(this.time); this.time = null; }
         try {
