@@ -13,7 +13,7 @@ class PageService extends BaseService {
         return await sock.get('/page/items', { wsId: wsId, ids: args.ids });
     }
     @get('/page/item/subs')
-    async pageItemSubs(args:Record<string, any>) {
+    async pageItemSubs(args: Record<string, any>) {
         if (!args.wsId) args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/page/item/subs', args);
     }
@@ -54,7 +54,7 @@ class PageService extends BaseService {
     @act('/view/snap/store')
     async PageViewSnap(args: { elementUrl: string, seq: number, content: any }) {
         var snapStore = SnapStore.createSnap(args.elementUrl);
-        return snapStore.viewSnap(args.seq, args.content)
+        return snapStore.viewSnap({ seq: args.seq, content: args.content })
     }
     @get('/block/ref/pages')
     async pageRefPages(args) {
