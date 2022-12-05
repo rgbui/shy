@@ -12,8 +12,7 @@ import { PageViewStore } from "./store";
 
 export async function createPageContent(store: PageViewStore) {
     try {
-        if (!store.page)
-        {
+        if (!store.page) {
             var pd = await store.snapStore.querySnap();
             var page = new Page();
             page.openSource = store.source;
@@ -62,11 +61,16 @@ export async function createPageContent(store: PageViewStore) {
                 if (syncBlock) {
                     var snap = SnapStore.createSnap(syncBlock.elementUrl)
                     var r = await snap.viewOperator(action.get() as any);
-                    await snap.viewSnap(r.seq, await syncBlock.getSyncString());
+                    await snap.viewSnap({ seq: r.seq, content: await syncBlock.getSyncString() });
                 }
                 else {
                     var r = await store.snapStore.viewOperator(action.get() as any);
-                    await store.snapStore.viewSnap(r.seq, await page.getString(), await page.getPlain(), store.item?.text);
+                    await store.snapStore.viewSnap({
+                        seq: r.seq,
+                        content: await page.getString(),
+                        plain: await page.getPlain(),
+                        text: store.item?.text
+                    });
                 }
             });
             page.on(PageDirective.error, error => {
@@ -88,6 +92,18 @@ export async function createPageContent(store: PageViewStore) {
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
                 await page.syncUserActions(operates, 'load');
+                var seq = operates.max(o => o.seq);
+                var op = operates.find(g => g.seq == seq);
+                page.on(PageDirective.mounted, async () => {
+                    await store.snapStore.viewSnap({
+                        seq: seq,
+                        content: await page.getString(),
+                        plain: await page.getPlain(),
+                        text: store.item?.text,
+                        force: true,
+                        creater: op.creater
+                    });
+                })
             }
             if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
                 await page.loadSchemaView(store.elementUrl);
