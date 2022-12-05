@@ -1,4 +1,5 @@
 
+import { QueueHandle } from "rich/component/lib/queue";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
@@ -23,7 +24,6 @@ export class SnapStore extends Events {
         return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
     async viewOperator(operate: Partial<UserAction>) {
-       
         var ops = JSON.stringify(operate);
         var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
             seq: number,
@@ -47,39 +47,42 @@ export class SnapStore extends Events {
     }
     private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
     private localTime;
-    async viewSnap(seq: number, content: string, plain?: string, text?: string) {
-       
-        /**
-         * 本地先存起来
-         */
-        if (config.isPc) {
-            await yCache.set(this.localId, {
+    private viewSnapQueue: QueueHandle;
+    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
+        if (typeof this.viewSnapQueue == 'undefined') this.viewSnapQueue = new QueueHandle();
+        await this.viewSnapQueue.create(async () => {
+            /**
+            * 本地先存起来
+            */
+            if (config.isPc) {
+                await yCache.set(this.localId, {
+                    id: this.localId,
+                    content: snap.content,
+                    seq: snap.seq,
+                    creater: snap.creater || surface?.user?.id,
+                    createDate: new Date()
+                })
+            }
+            else await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
                 id: this.localId,
-                content,
-                seq,
-                creater: surface?.user?.id,
+                content: snap.content,
+                seq: snap.seq,
+                creater: snap.creater || surface?.user?.id,
                 createDate: new Date()
-            })
-        }
-        else await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
-            id: this.localId,
-            content,
-            seq,
-            creater: surface?.user?.id,
-            createDate: new Date()
-        });
+            });
+        })
         this.localViewSnap = {
-            seq,
-            content,
+            seq: snap.seq,
+            content: snap.content,
             date: new Date(),
-            plain: plain || '',
-            text
+            plain: (snap.plain || ''),
+            text: snap.text
         };
         this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);
-        if (this.lastServiceViewSnap && (this.operateCount > MAX_OPERATE_COUNT || this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME)) {
+        if (snap.force) this.saveToService()
+        else if (this.lastServiceViewSnap && (this.operateCount > MAX_OPERATE_COUNT || this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME))
             this.saveToService();
-        }
         else this.localTime = setTimeout(() => {
             this.saveToService();
         }, DELAY_TIME);
