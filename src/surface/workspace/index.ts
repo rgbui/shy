@@ -388,14 +388,11 @@ export class Workspace {
             if (!item) {
                 var pa = await channel.get('/page/parent/ids', { id });
                 if (pa.ok) {
-                    console.log(pa,pe,elementUrl,'ggx');
                     if (pa.data.exists == false && pe.type == ElementType.Schema) {
                         var viewItem = this.find(g => g.mime == Mime.pages);
-                        console.log('ggg',viewItem,'gg');
                         if (viewItem) {
                             var sch = await TableSchema.loadTableSchema(id);
                             if (sch) {
-                                console.log(viewItem,'ggg','aappend')
                                 item = await pageItemStore.appendPageItem(viewItem, {
                                     id: sch.id,
                                     text: sch.text,
