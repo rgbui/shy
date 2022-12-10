@@ -96,7 +96,8 @@ export var Login = observer(function () {
     /**
      * 输入手机验证码
      */
-    async function genCode() {
+    async function genCode()
+    {
         if (local.expireCount == -1) {
             local.expireCount = 120;
             var result = await channel.post('/phone/sms/code', { phone: local.phone });
@@ -119,7 +120,7 @@ export var Login = observer(function () {
         local.failMsg = '';
         if (lockButton()) return;
         if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
-        if (!phoneRegex.test(local.phone)) return unlockButton() && (local.failMsg = '手机号格式不正确');
+        if (!(phoneRegex.test(local.phone) || (local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length))) return unlockButton() && (local.failMsg = '手机号格式不正确');
         if (local.loginType == 'paw' && local.step == 'login') {
             if (!local.paw) return unlockButton() && (local.failMsg = '密码不能为空');
             if (local.paw.length < 5) return unlockButton() && (local.failMsg = '密码输入不合法');

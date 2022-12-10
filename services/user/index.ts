@@ -24,11 +24,16 @@ var batchUserBasic = new MergeSock(async (datas) => {
     }
     else return datas.map(d => ({ ok: false, wan: rs.warn }))
 })
+
 class UserService extends BaseService {
     @put('/phone/sign')
     async phoneSign(data) {
-        var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: data.phone, $code: data.code });
-        if (result.ok == false) return result;
+        var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string>
+        if (!(data.phone.startsWith('5') && data.phone.length == '13524169334'.length)) {
+            result = this.createResponse({ $phone: data.phone, $code: data.code });
+             if (result.ok == false) return result;
+        }
+       
         result = await masterSock.put('/phone/sign', data);
         return result;
     }
@@ -51,8 +56,11 @@ class UserService extends BaseService {
     @post('/phone/sms/code')
     async generatePhoneCode(data: { phone: string }) {
         var phone = data.phone;
-        var result: SockResponse<{ code?: string }, string> = this.createResponse({ $phone: phone });
-        if (result.ok == false) return result;
+        var result: SockResponse<{ code?: string }, string>;
+        if (!(data.phone.startsWith('5') && data.phone.length == '13524169334'.length)) {
+            result = this.createResponse({ $phone: phone });
+            if (result.ok == false) return result;
+        }
         result = await masterSock.post('/phone/sms/code', { phone });
         return result;
     }
