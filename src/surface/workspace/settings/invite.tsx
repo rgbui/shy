@@ -1,9 +1,8 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { Button } from "rich/component/view/button";
-import { Row, Col, Divider } from "rich/component/view/grid";
+import { Divider } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
-import { Remark } from "rich/component/view/text";
 import { surface } from "../..";
 
 @observer

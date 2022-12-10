@@ -153,7 +153,8 @@ export class Workspace {
             createPageConfig: observable,
             defaultPageId: observable,
             viewOnlineUsers: observable,
-            onLineUsers: observable
+            onLineUsers: observable,
+            invite:observable
         })
     }
     private _sock: Sock;
