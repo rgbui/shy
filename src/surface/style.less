@@ -1,57 +1,57 @@
 .shy-surface {
-    display: flex;
+    display        : flex;
     justify-content: flex-start;
-    align-items: stretch;
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
-    overflow: hidden;
+    align-items    : stretch;
+    width          : 100vw;
+    height         : 100vh;
+    position       : absolute;
+    top            : 0px;
+    left           : 0px;
+    z-index        : 1;
+    overflow       : hidden;
 
     .shy-sidebar {
-        width: 72px;
-        flex-shrink: 0;
-        flex-grow: 0;
-        background-color: var(--background-tertiary);
+        width             : 72px;
+        flex-shrink       : 0;
+        flex-grow         : 0;
+        background-color  : var(--background-tertiary);
         -webkit-app-region: drag;
-        display: flex;
-        justify-content: flex-start;
-        align-items: stretch;
-        flex-direction: column;
-        flex-wrap: nowrap;
+        display           : flex;
+        justify-content   : flex-start;
+        align-items       : stretch;
+        flex-direction    : column;
+        flex-wrap         : nowrap;
 
         >* {
-            flex-grow: 0;
+            flex-grow  : 0;
             flex-shrink: 0;
         }
 
         &-body {
             flex-shrink: 1;
-            flex-grow: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
+            flex-grow  : 1;
+            overflow-y : auto;
+            overflow-x : hidden;
 
             &::-webkit-scrollbar {
-                width: 2px;
+                width : 2px;
                 height: 2px;
             }
         }
 
         a {
             -webkit-app-region: no-drag;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            justify-content: center;
-            cursor: pointer;
-            align-items: center;
-            margin: 12px;
-            transition: color .15s ease-out, background-color .35s ease-out, border-radius .4s;
-            background-color: var(--background-primary);
-            border-radius: 50%;
-            color: rgb(59, 165, 93);
+            width             : 48px;
+            height            : 48px;
+            display           : flex;
+            justify-content   : center;
+            cursor            : pointer;
+            align-items       : center;
+            margin            : 12px;
+            transition        : color .15s ease-out, background-color .35s ease-out, border-radius .4s;
+            background-color  : var(--background-primary);
+            border-radius     : 50%;
+            color             : rgb(59, 165, 93);
 
             &:hover {
                 border-radius: 16px;
@@ -64,7 +64,7 @@
             &.shy-sidebar-ws-name {
                 &:hover {
                     background-color: rgb(88, 101, 242);
-                    color: #fff;
+                    color           : #fff;
                 }
             }
 
@@ -81,7 +81,7 @@
                 &:hover,
                 &.hover {
                     background-color: rgb(59, 165, 93);
-                    color: #fff;
+                    color           : #fff;
                 }
             }
         }
@@ -95,40 +95,40 @@
 
             .shy-sidebar-ws-name {
                 background-color: rgb(88, 101, 242);
-                color: #fff;
+                color           : #fff;
             }
         }
 
         &-divider {
-            margin: 0px 20px;
-            height: 2px;
-            width: 32px;
-            border-radius: 1px;
+            margin          : 0px 20px;
+            height          : 2px;
+            width           : 32px;
+            border-radius   : 1px;
             background-color: var(--background-modifier-accent);
         }
     }
 
     &-content {
-        flex-grow: 1.0;
-        flex-shrink: 1;
+        flex-grow       : 1.0;
+        flex-shrink     : 1;
         background-color: rgb(243, 243, 243);
-        display: flex;
-        justify-content: stretch;
-        align-items: stretch;
-        flex-direction: column;
-        height: 100vh;
+        display         : flex;
+        justify-content : stretch;
+        align-items     : stretch;
+        flex-direction  : column;
+        height          : 100vh;
 
         &-head {
             flex-shrink: 0;
-            flex-grow: 0;
+            flex-grow  : 0;
         }
 
         &-box {
-            flex-grow: 1.0;
-            flex-shrink: 1;
-            display: flex;
+            flex-grow      : 1.0;
+            flex-shrink    : 1;
+            display        : flex;
             justify-content: flex-start;
-            align-items: stretch;
+            align-items    : stretch;
         }
     }
 
@@ -145,24 +145,24 @@
     }
 
     .shy-slide {
-        overflow-y: auto;
-        height: 100%;
-        width: 240px;
-        box-sizing: border-box;
-        flex-shrink: 0;
+        overflow-y      : auto;
+        height          : 100%;
+        width           : 240px;
+        box-sizing      : border-box;
+        flex-shrink     : 0;
         background-color: var(--background-secondary);
-        position: relative;
+        position        : relative;
 
         // border-right    : 1px solid var(--background-modifier-accent);
         &-resize {
-            position: absolute;
-            top: 0px;
-            right: 1px;
-            bottom: 0px;
-            width: 2px;
-            opacity: 0;
+            position  : absolute;
+            top       : 0px;
+            right     : 1px;
+            bottom    : 0px;
+            width     : 2px;
+            opacity   : 0;
             box-shadow: rgba(0, 0, 0, 0.1) -2px 0px 0px 0px inset;
-            cursor: col-resize;
+            cursor    : col-resize;
 
             &:hover {
                 opacity: 1;
@@ -183,84 +183,84 @@
 
         &.float {
             position: absolute;
-            top: 100px;
-            left: 0px;
-            bottom: 100px;
-            opacity: 1;
-            z-index: 100;
+            top     : 100px;
+            left    : 0px;
+            bottom  : 100px;
+            opacity : 1;
+            z-index : 100;
         }
 
         &.float-hide {
             position: absolute;
-            top: 100px;
-            left: 0px;
-            bottom: 100px;
-            opacity: 0;
-            z-index: 100;
+            top     : 100px;
+            left    : 0px;
+            bottom  : 100px;
+            opacity : 0;
+            z-index : 100;
         }
     }
 
     .shy-content {
-        flex-grow: 1.0;
-        flex-shrink: 1;
+        flex-grow       : 1.0;
+        flex-shrink     : 1;
         background-color: rgb(243, 243, 243);
     }
 
     &-loading {
-        display: flex;
+        display        : flex;
         justify-content: center;
-        align-items: center;
-        width: 100vw;
-        height: 100vh;
+        align-items    : center;
+        width          : 100vw;
+        height         : 100vh;
     }
 }
 
 .shy-wss {
-    height: 100%;
-
+    height : 100%;
+    outline: none;
 
     .shy-ws {
 
-        height: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
+        height         : 100%;
+        position       : relative;
+        display        : flex;
+        flex-direction : column;
         justify-content: flex-start;
-        align-items: stretch;
+        align-items    : stretch;
 
         .shy-ws-profile {
-            flex-grow: 0;
+            flex-grow  : 0;
             flex-shrink: 0;
         }
 
         >.shy-ws-items {
-            flex-grow: 1;
+            flex-grow     : 1;
             padding-bottom: 100px;
-            overflow-y: auto;
-            box-sizing: border-box;
-            padding-top: 15px;
+            overflow-y    : auto;
+            box-sizing    : border-box;
+            padding-top   : 15px;
         }
     }
 }
 
 .shy-supervisor-join-tip {
-    height: 100%;
+    height          : 100%;
     background-color: #e16259;
-    display: flex;
-    color: #fff;
-    justify-content: center;
-    align-items: center;
+    display         : flex;
+    color           : #fff;
+    justify-content : center;
+    align-items     : center;
 
     a {
-        margin-left: 10px;
-        font-weight: 600;
-        padding: 4px 8px;
-        color: #fff;
-        display: inline-block;
+        margin-left  : 10px;
+        font-weight  : 600;
+        padding      : 4px 8px;
+        color        : #fff;
+        display      : inline-block;
         border-radius: 3px;
-        font-size: 14px;
-        border: 1px solid #fff;
-        cursor: pointer;
+        font-size    : 14px;
+        border       : 1px solid #fff;
+        cursor       : pointer;
 
         &:hover {
             background-color: lighten(#e16259, 10%);
@@ -270,20 +270,20 @@
 }
 
 .shy-404 {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0px;
-    left: 0px;
+    width           : 100vw;
+    height          : 100vh;
+    position        : fixed;
+    top             : 0px;
+    left            : 0px;
     background-color: #e16259;
-    color: #fff;
+    color           : #fff;
 
     &-content {
         margin-top: 150px;
         text-align: center;
 
         h3 {
-            margin: 0px;
+            margin       : 0px;
             margin-bottom: 20px;
         }
 
@@ -295,8 +295,8 @@
             }
 
             a {
-                font-size: inherit;
-                color: #fff;
+                font-size      : inherit;
+                color          : #fff;
                 text-decoration: underline;
             }
         }
