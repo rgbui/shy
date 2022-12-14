@@ -7,11 +7,8 @@ import { config } from "../../src/common/config";
 export class DbService<T extends { id: string }>{
     constructor(private name: string) { }
     private async channelStore(d) {
-        if (config.isWeb) {
-            return await dbStore(d);
-        }
-        else
-            return await iframeChannel('dbStore', d);
+        if (config.isPc || config.isMobile) return await dbStore(d);
+        else return await iframeChannel('dbStore', d);
     }
     async findOne(where: Partial<T>): Promise<T> {
         return await this.channelStore({ key: 'findOne', name: this.name, where }) as any;
@@ -26,7 +23,7 @@ export class DbService<T extends { id: string }>{
         return await this.channelStore({ key: 'update', where, data }) as any;
     }
     async save(where: Partial<T>, data: Partial<T>, defaultValue?: Partial<T>) {
-        
+
         return await this.channelStore({ key: 'save', name: this.name, where, data, defaultValue }) as any;
     }
 }
