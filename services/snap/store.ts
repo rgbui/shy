@@ -48,7 +48,7 @@ export class SnapStore extends Events {
     private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
     private localTime;
     private viewSnapQueue: QueueHandle;
-    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
+    async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
         if (typeof this.viewSnapQueue == 'undefined') this.viewSnapQueue = new QueueHandle();
         await this.viewSnapQueue.create(async () => {
             /**
@@ -78,6 +78,9 @@ export class SnapStore extends Events {
             plain: (snap.plain || ''),
             text: snap.text
         };
+    }
+    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
+        await this.storeLocal(snap);
         this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);
         if (snap.force) this.saveToService()
@@ -148,11 +151,13 @@ export class SnapStore extends Events {
             return { operates: r.data.operates as ViewOperate[], content: r.data.content ? JSON.parse(r.data.content) : {} }
         }
     }
-    async rollupQuerySnap(snapId: string) {
+    async rollupSnap(snapId: string) {
         var r = await surface.workspace.sock.get<{ content: string, seq: number }>('/view/snap/content', {
             id: snapId
         });
         if (r.ok) {
+            await this.storeLocal(r.data);
+            this.operateCount = 0;
             if (this.localTime) clearTimeout(this.localTime);
             if (typeof this.lastServiceViewSnap == 'undefined') {
                 this.lastServiceViewSnap = {} as any;
