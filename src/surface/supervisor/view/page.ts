@@ -79,15 +79,13 @@ export async function createPageContent(store: PageViewStore) {
             page.on(PageDirective.save, async () => {
                 await store.snapStore.forceSave();
             });
-            if (store.item && [PageLayoutType.board].includes(store.item.pageType)) {
-                page.on(PageDirective.rollup, async (id) => {
-                    var pd = await store.snapStore.rollupQuerySnap(id);
-                    if (pd?.content) {
-                        await page.reload(pd.content);
-                        page.forceUpdate();
-                    }
-                });
-            }
+            page.on(PageDirective.rollup, async (id) => {
+                var pd = await store.snapStore.rollupSnap(id);
+                if (pd?.content) {
+                    await page.reload(pd.content);
+                    page.forceUpdate();
+                }
+            });
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
