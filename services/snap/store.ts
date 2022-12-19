@@ -9,6 +9,7 @@ import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
 import { timService } from "../../net/primus";
 import { config } from "../../src/common/config";
+import { log } from "../../src/common/log";
 import { surface } from "../../src/surface";
 const DELAY_TIME = 1000 * 60 * 3;
 const MAX_OPERATE_COUNT = 50;
@@ -94,37 +95,45 @@ export class SnapStore extends Events {
     private operateCount = 0;
     private async saveToService() {
         this.emit('willSave');
-        if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
-        if (this.localViewSnap) {
-            if (this.lastServiceViewSnap && this.lastServiceViewSnap.seq >= this.localViewSnap.seq) return;
-            var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
-                elementUrl: this.elementUrl,
-                wsId: surface.workspace.id,
-                sockId: timService.sockId,
-                seq: this.localViewSnap.seq
-            });
-            if (tryLocker.ok && tryLocker.data.lock == true) {
-                var r = await surface.workspace.sock.put('/view/snap', {
+        try {
+            if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
+            if (this.localViewSnap) {
+                if (this.lastServiceViewSnap && this.lastServiceViewSnap.seq >= this.localViewSnap.seq) return;
+                var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
                     elementUrl: this.elementUrl,
                     wsId: surface.workspace.id,
                     sockId: timService.sockId,
-                    seq: this.localViewSnap.seq,
-                    content: this.localViewSnap.content,
-                    plain: this.localViewSnap.plain,
-                    pageText: this.localViewSnap.text
-                })
-                if (r.ok) {
-                    this.emit('saveSuccessful');
-                    if (typeof this.lastServiceViewSnap == 'undefined') {
-                        this.lastServiceViewSnap = {} as any;
+                    seq: this.localViewSnap.seq
+                });
+                if (tryLocker.ok && tryLocker.data.lock == true) {
+                    var r = await surface.workspace.sock.put('/view/snap', {
+                        elementUrl: this.elementUrl,
+                        wsId: surface.workspace.id,
+                        sockId: timService.sockId,
+                        seq: this.localViewSnap.seq,
+                        content: this.localViewSnap.content,
+                        plain: this.localViewSnap.plain,
+                        pageText: this.localViewSnap.text
+                    })
+                    if (r.ok) {
+                        this.emit('saveSuccessful');
+                        if (typeof this.lastServiceViewSnap == 'undefined') {
+                            this.lastServiceViewSnap = {} as any;
+                        }
+                        this.lastServiceViewSnap.seq = this.localViewSnap.seq;
+                        this.lastServiceViewSnap.date = new Date();
+                        this.operateCount = 0;
                     }
-                    this.lastServiceViewSnap.seq = this.localViewSnap.seq;
-                    this.lastServiceViewSnap.date = new Date();
-                    this.operateCount = 0;
                 }
             }
         }
-        this.emit('saved');
+        catch (ex) {
+            console.error(ex);
+            log.error(ex);
+        }
+        finally {
+            this.emit('saved');
+        }
     }
     async forceSave() {
         await this.saveToService();
