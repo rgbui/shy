@@ -20,7 +20,6 @@ import { TableSchema } from 'rich/blocks/data-grid/schema/meta';
 import { getSchemaViewIcon } from 'rich/blocks/data-grid/schema/util';
 import { runInAction } from 'mobx';
 import { Spin } from 'rich/component/view/spin';
-import { PageLayoutType } from 'rich/src/page/declare';
 
 export var PageRouter = observer(function (props: { store: PageViewStore }) {
     var local = useLocalObservable<{ isLoad: boolean, schema: TableSchema }>(() => {

@@ -49,7 +49,7 @@ export var Bar = observer(function (props: { store: PageViewStore, className?: s
             {item && [PageLayoutType.doc, PageLayoutType.board].includes(item.pageType) && <Tooltip placement='bottom' overlay={'搜索'}><a onClick={e => props.store.onSearch(e)}><Icon size={14} icon={SearchSvg}></Icon></a></Tooltip>}
             {item && [PageLayoutType.textChannel].includes(item.pageType) && <Tooltip placement='bottom' overlay={'成员'} ><a onClick={e => props.store.onMembers(e)}><Icon size={20} icon={MemberSvg}></Icon></a></Tooltip>}
             {([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(props.store.pe.type) || item && [PageLayoutType.doc, PageLayoutType.dbForm, PageLayoutType.board, PageLayoutType.db, PageLayoutType.dbForm, PageLayoutType.dbView].includes(item.pageType)) && <AppTip placement='bottom' id={AppLang.BarPublish}><a onClick={e => props.store.onOpenPublish(e)}><Icon size={20} icon='publish:sy' ></Icon></a></AppTip>}
-            <AppTip placement='bottom' id={AppLang.BarProperty}><a onClick={e => props.store.onOpenPageProperty(e)}><Icon size={20} icon='elipsis:sy' ></Icon></a></AppTip>
+            {item && ![PageLayoutType.textChannel].includes(item.pageType) && <AppTip placement='bottom' id={AppLang.BarProperty}><a onClick={e => props.store.onOpenPageProperty(e)}><Icon size={20} icon='elipsis:sy' ></Icon></a></AppTip>}
         </div>
     </div>
 })
