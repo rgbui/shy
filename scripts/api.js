@@ -208,6 +208,10 @@ push('/user/channel/create', '{roomId:string}', 'SockResponse<{channel:any,room:
 push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
+push('/user/onlines', '{users:Set<string>}', 'void', ['air']);
+push('/user/view/onlines', '{viewId:string,users:Set<string>}', 'void', ['air']);
+push('/user/get/onlines', '{wsId?:string}', '{users:Set<string>}', ['query']);
+push('/user/get/view/onlines', '{viewId:string}', '{users:Set<string>}', ['query']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
 
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])

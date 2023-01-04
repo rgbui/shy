@@ -1,4 +1,4 @@
-import lodash from "lodash";
+
 import { channel } from "rich/net/channel";
 import { userNativeStore } from "../native/store/user";
 import { timService } from "../net/primus";
@@ -121,6 +121,7 @@ export function ClientNotifys() {
     timService.tim.on(MessageUrl.enterWorkspace, (e: { wsId: string, userid: string }) => {
         if (surface.workspace?.id == e.wsId) {
             surface.workspace.onLineUsers.add(e.userid)
+            channel.air('/user/onlines', { users: surface.workspace.onLineUsers })
         }
     });
     /**
@@ -129,6 +130,7 @@ export function ClientNotifys() {
     timService.tim.on(MessageUrl.leaveWorkspace, (e: { wsId: string, userid: string }) => {
         if (surface.workspace?.id == e.wsId) {
             surface.workspace.onLineUsers.delete(e.userid)
+            channel.air('/user/onlines', { users: surface.workspace.onLineUsers })
         }
     });
     /**
@@ -137,11 +139,10 @@ export function ClientNotifys() {
     timService.tim.on(MessageUrl.enterView, (e: { viewId: string, wsId: string, userid: string }) => {
         if (surface.workspace?.id == e.wsId) {
             var r = surface.workspace.viewOnlineUsers.get(e.viewId);
-            if (r) {
-                r.users.add(e.userid)
-              
-            }
-            else surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users:new Set([e.userid]) })
+            var se: Set<string>;
+            if (r) { r.users.add(e.userid); se = r.users; }
+            else { se = new Set(e.userid); surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users: se }) }
+            channel.air('/user/view/onlines', { viewId: e.viewId, users: se })
         }
     });
     /**
@@ -152,6 +153,7 @@ export function ClientNotifys() {
             var r = surface.workspace.viewOnlineUsers.get(e.viewId);
             if (r) {
                 r.users.delete(e.userid)
+                channel.air('/user/view/onlines', { viewId: e.viewId, users: r.users })
             }
         }
     });

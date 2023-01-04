@@ -17,6 +17,19 @@ class MessageCenter {
         if (surface.workspace) return surface.workspace.findAll(x => x.mime == Mime.page).map(g => g.get())
         else return []
     }
+    @query('/user/get/onlines')
+    getOnlines() {
+        if (surface.workspace) return surface.workspace.onLineUsers;
+        return new Set()
+    }
+    @query('/user/get/view/onlines')
+    getViewOnlines(e: { viewId: string }) {
+        if (surface.workspace) {
+            var users = surface.workspace.viewOnlineUsers.get(e.viewId)
+            if (users) return users;
+        }
+        return new Set()
+    }
     @air('/page/open')
     async pageOpen(args: { item?: string | { id: string }, elementUrl?: string, config?: { isTemplate?: boolean } }) {
         var { item, elementUrl } = args;
