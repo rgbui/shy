@@ -4,7 +4,6 @@ import React, { CSSProperties } from "react";
 import { MouseDragger } from "rich/src/common/dragger";
 import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../..";
-import { Bar } from "../bar";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
 
@@ -28,7 +27,7 @@ export class PageSupervisorView extends React.Component<{
         var t = event.target as HTMLElement;
         if (this.el && this.props.slide) {
             if (!this.el.contains(t)) {
-                 this.onClose()
+                this.onClose()
             }
         }
     }
@@ -69,7 +68,7 @@ export class PageSupervisorView extends React.Component<{
     el: HTMLElement;
     render() {
         return <div ref={e => this.el = e} className={"shy-supervisor-view" + (this.props.slide ? " shadow" : "")} style={this.props.style || {}}>
-            <Bar store={this.props.store}></Bar>
+            {/*<Bar store={this.props.store}></Bar> */}
             <div className="shy-supervisor-view-content" ref={e => this.pageEl = e}>
             </div>
             {this.props.slide && <div onMouseDown={e => this.mousedown(e)} className="cursor-col z-2000 w-10 pos pos-t pos-b pos-l border-left"></div>}

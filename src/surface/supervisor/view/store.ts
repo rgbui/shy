@@ -12,6 +12,7 @@ import { PageSupervisorDialog } from "./dialoug";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { PageItem } from "../../sln/item";
 import { channel } from "rich/net/channel";
+import { PageDirective } from "rich/src/page/directive";
 
 export class PageViewStore extends Events {
     source: 'page' | 'slide' | 'dialog';
@@ -33,9 +34,11 @@ export class PageViewStore extends Events {
     private init() {
         this.snapStore.only('willSave', () => {
             this.snapSaving = true;
+            if (this.page) this.page.emit(PageDirective.willSave)
         });
         this.snapStore.only('saved', () => {
             this.snapSaving = false;
+            if (this.page) this.page.emit(PageDirective.saved)
         });
         this.snapStore.only('saveSuccessful', () => {
             if (this.item) {

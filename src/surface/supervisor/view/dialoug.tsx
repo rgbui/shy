@@ -3,7 +3,6 @@ import { observer } from "mobx-react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { popoverLayer } from "rich/component/lib/zindex";
-import { Bar } from "../bar";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
 
@@ -52,7 +51,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
             onMouseDown={e => this.mousedown(e)}
             style={{ zIndex: popoverLayer.zoom(this) }}
             className="fixed-full mask flex-center"><div style={{ marginTop: 72, marginBottom: 72, height: 'calc(100% - 144px)' }} className="round shadow bg-white min-w-960">
-                <Bar className={'round'} noPosition store={this.props.store}></Bar>
+                {/*<Bar className={'round'} noPosition store={this.props.store}></Bar> */}
                 <div className="shy-supervisor-view-content overflow-y" style={{ height: 'calc(100% - 48px)' }} ref={e => this.pageEl = e}>
                 </div>
             </div>
