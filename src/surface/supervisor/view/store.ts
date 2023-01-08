@@ -5,7 +5,6 @@ import { PageSupervisorView } from "./index";
 import { surface } from "../..";
 import { SnapStore } from "../../../../services/snap/store";
 import { Events } from "rich/util/events";
-import { useSearchBox } from "rich/extensions/search/index";
 import lodash from "lodash";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageSupervisorDialog } from "./dialoug";
@@ -78,23 +77,8 @@ export class PageViewStore extends Events {
         }
         return null;
     }
-    onOpenPageProperty(e: React.MouseEvent) {
-        if (this.page) this.page.onPageContextmenu(e);
-    }
-    onOpenPublish(e: React.MouseEvent) {
-        if (this.page)
-            this.page.onOpenPublish(e);
-    }
     onOpenFieldProperty(e: React.MouseEvent) {
-        if (this.page)
-            this.page.onOpenFieldProperty(e);
-    }
-    async onSearch(e: React.MouseEvent) {
-        await useSearchBox({ isNav: true })
-    }
-    onMembers(e: React.MouseEvent) {
-        if (this.page)
-            this.page.openMember(e);
+        if (this.page) this.page.onOpenFieldProperty(e);
     }
     async loadConfig(config?: PageViewStore['config']) {
         if (config) this.config = lodash.cloneDeep(config);
@@ -102,14 +86,11 @@ export class PageViewStore extends Events {
     }
     async getSchema() {
         if ([ElementType.SchemaView,
-
         ElementType.SchemaFieldBlogData,
         ElementType.SchemaFieldData,
         ElementType.SchemaFieldNameData,
-
         ElementType.SchemaRecordView,
         ElementType.SchemaRecordViewData,
-
         ElementType.Schema].includes(this.pe.type)) {
             return await TableSchema.loadTableSchema(this.pe.id)
         }

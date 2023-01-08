@@ -20,7 +20,6 @@ export class PageSupervisorView extends React.Component<{
     loading: boolean = false;
     componentDidMount(): void {
         this.load();
-
         document.addEventListener('mousedown', this.dc, true);
     }
     dc = (event: MouseEvent) => {
