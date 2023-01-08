@@ -79,6 +79,13 @@ export async function createPageContent(store: PageViewStore) {
             page.on(PageDirective.save, async () => {
                 await store.snapStore.forceSave();
             });
+            page.on(PageDirective.blur, async () => {
+                if (store.source == 'slide')
+                    store.emit('close');
+            })
+            page.on(PageDirective.close, async () => {
+                store.emit('close');
+            })
             page.on(PageDirective.rollup, async (id) => {
                 var pd = await store.snapStore.rollupSnap(id);
                 if (pd?.content) {
