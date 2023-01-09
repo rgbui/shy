@@ -14,7 +14,7 @@ import { channel } from "rich/net/channel";
 import { PageDirective } from "rich/src/page/directive";
 
 export class PageViewStore extends Events {
-    source: 'page' | 'slide' | 'dialog';
+    source: 'page' | 'slide' | 'dialog' | 'popup';
     date: number = Date.now();
     elementUrl: string = '';
     page: Page = null;
