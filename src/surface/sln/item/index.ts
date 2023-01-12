@@ -95,10 +95,10 @@ export class PageItem {
         return this.workspace.url + this.path;
     }
     get elementUrl() {
-        if (this.pageType == PageLayoutType.db || this.pageType == PageLayoutType.docCard || this.pageType == PageLayoutType.dbPickRecord) {
+        if (this.pageType == PageLayoutType.db) {
             return getElementUrl(ElementType.Schema, this.id);
         }
-        else if (this.pageType == PageLayoutType.doc || this.pageType == PageLayoutType.board) {
+        else if (this.pageType == PageLayoutType.doc || this.pageType == PageLayoutType.docCard || this.pageType == PageLayoutType.board) {
             return getElementUrl(ElementType.PageItem, this.id);
         }
         else if (this.pageType == PageLayoutType.dbView) {

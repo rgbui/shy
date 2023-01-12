@@ -134,6 +134,9 @@ class MessageCenter {
             if ([ElementType.PageItem, ElementType.Schema, ElementType.Room].includes(pe.type)) {
                 itemId = pe.id;
             }
+            else if (ElementType.SchemaFieldBlogData == pe.type) {
+
+            }
         }
         if (itemId) {
             var item = surface.workspace.find(g => g.id == itemId);
