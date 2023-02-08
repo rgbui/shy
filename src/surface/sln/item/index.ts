@@ -45,7 +45,11 @@ export class PageItem {
     */
     share: 'net' | 'nas' | 'local' = 'nas';
     permission: PagePermission = PagePermission.canView;
-    locker: { userid: string, lockDate: number } = null;
+    locker: {
+        lock: boolean,
+        date: number,
+        userid: string
+    } = null;
     public editDate: Date = null;
     public editor: string = null;
     speak?: 'more' | 'only' = 'more';
