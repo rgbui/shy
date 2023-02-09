@@ -123,7 +123,7 @@ export async function createPageContent(store: PageViewStore) {
             var bound = Rect.fromEle(store.view.pageEl);
             store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
             if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
-                await page.loadSchemaView(store.elementUrl);
+                await store.page.loadSchemaView(store.elementUrl);
             }
         }
         if (store.page?.pageLayout?.type == PageLayoutType.textChannel) {
