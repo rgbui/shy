@@ -122,6 +122,9 @@ export async function createPageContent(store: PageViewStore) {
         else {
             var bound = Rect.fromEle(store.view.pageEl);
             store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
+            if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
+                await page.loadSchemaView(store.elementUrl);
+            }
         }
         if (store.page?.pageLayout?.type == PageLayoutType.textChannel) {
             var ws = surface.wss.find(g => g.id == surface.workspace?.id);
