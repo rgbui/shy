@@ -1,11 +1,11 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { appLangProvider } from '../i18n/provider';
-import { ShyUrl, SyHistory } from './history';
+import { ShyUrl, SyHistory, UrlRoute } from './history';
 import { Login } from './surface/user/sign/in';
 import { LogOut } from './surface/user/sign/out';
 import { WorkspaceCreateView } from './surface/workspace/create';
-import { SurfaceView } from './surface/view/index';
+import { SurfaceView } from './surface/view';
 import { View404 } from './surface/404';
 import { InviteView } from './surface/workspace/create/invite';
 import { config } from './common/config';
@@ -18,8 +18,15 @@ export function App() {
   async function load() {
     await appLangProvider.import();
     await channel.put('/device/sign');
-    await surface.loadUser()
-    await surface.loadWorkspaceList()
+    await surface.user.sign();
+    if (surface.user.isSign) {
+      await surface.user.createTim()
+    }
+    else {
+      if (config.isPc) {
+        UrlRoute.push(ShyUrl.signIn);
+      }
+    }
     setLoad(true);
   }
   React.useEffect(() => {

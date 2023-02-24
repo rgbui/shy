@@ -5,7 +5,7 @@ import { FileType } from "../type";
 import { FileMd5 } from "../src/util/file";
 import { surface } from "../src/surface";
 import { del, get, patch, post, put } from "rich/net/annotation";
-import { timService } from "../net/primus";
+import { userTim } from "../net/primus";
 
 class WorkspaceService extends BaseService {
     @get('/ws/basic')
@@ -44,7 +44,7 @@ class WorkspaceService extends BaseService {
     @patch('/ws/patch')
     async update(data: { wsId?: string, sockId?: string, data: Record<string, any> }) {
         data.wsId = surface.workspace.id;
-        data.sockId = timService.sockId;
+        data.sockId = userTim.sockId;
         return await masterSock.patch('/ws/patch', data)
     }
     @get('/user/wss')
@@ -58,7 +58,7 @@ class WorkspaceService extends BaseService {
     @put('/ws/channel/send')
     async putUserChat(args) {
         args.wsId = surface.workspace.id;
-        args.sockId = timService.sockId;
+        args.sockId = userTim.sockId;
         return await surface.workspace.sock.put('/ws/channel/send', args);
     }
     @get('/ws/channel/list')
@@ -69,19 +69,19 @@ class WorkspaceService extends BaseService {
     @del('/ws/channel/cancel')
     async getChatCancel(args) {
         args.wsId = surface.workspace.id;
-        args.sockId = timService.sockId;
+        args.sockId = userTim.sockId;
         return await surface.workspace.sock.delete('/ws/channel/cancel', args);
     }
     @patch('/ws/channel/patch')
     async channelPatch(args) {
         args.wsId = surface.workspace.id;
-        args.sockId = timService.sockId;
+        args.sockId = userTim.sockId;
         return await surface.workspace.sock.patch('/ws/channel/patch', args);
     }
     @put('/ws/channel/emoji')
     async channelEmoji(args) {
         args.wsId = surface.workspace.id;
-        args.sockId = timService.sockId;
+        args.sockId = userTim.sockId;
         return await surface.workspace.sock.put('/ws/channel/emoji', args);
     }
     @get('/ws/channel/abled/send')

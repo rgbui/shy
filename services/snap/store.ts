@@ -7,7 +7,7 @@ import { Events } from "rich/util/events";
 import { yCache } from "../../net/cache";
 import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
-import { timService } from "../../net/primus";
+import { userTim } from "../../net/primus";
 import { config } from "../../src/common/config";
 import { log } from "../../src/common/log";
 import { surface } from "../../src/surface";
@@ -32,12 +32,12 @@ export class SnapStore extends Events {
         }>('/view/operate', {
             elementUrl: this.elementUrl,
             wsId: surface.workspace.id,
-            sockId: timService.sockId,
+            sockId: userTim.sockId,
             operate: operate,
-        }) : await timService.tim.put('/view/operate', {
+        }) : await userTim.tim.put('/view/operate', {
             elementUrl: this.elementUrl,
             wsId: surface.workspace.id,
-            sockId: timService.sockId,
+            sockId: userTim.sockId,
             operate: operate,
             pidUrl: surface.workspace.pidUrl
         })
@@ -102,14 +102,14 @@ export class SnapStore extends Events {
                 var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
                     elementUrl: this.elementUrl,
                     wsId: surface.workspace.id,
-                    sockId: timService.sockId,
+                    sockId: userTim.sockId,
                     seq: this.localViewSnap.seq
                 });
                 if (tryLocker.ok && tryLocker.data.lock == true) {
                     var r = await surface.workspace.sock.put('/view/snap', {
                         elementUrl: this.elementUrl,
                         wsId: surface.workspace.id,
-                        sockId: timService.sockId,
+                        sockId: userTim.sockId,
                         seq: this.localViewSnap.seq,
                         content: this.localViewSnap.content,
                         plain: this.localViewSnap.plain,

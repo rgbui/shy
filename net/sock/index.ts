@@ -4,7 +4,7 @@ import { SockResponse, SockType } from "./type";
 import { config } from "../../src/common/config";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
-import { timService } from "../primus";
+import { userTim } from "../primus";
 
 export class Sock {
     constructor(private type: SockType, private remoteUrl?: string) { }
@@ -44,7 +44,7 @@ export class Sock {
         headers['shy-device'] = device || 'anonymous';
         if (token) headers['shy-token'] = token;
         if (lang) headers['shy-lang'] = lang;
-        if (timService && timService.tim) headers['shy-sockId'] = timService.sockId;
+        if (userTim && userTim.tim) headers['shy-sockId'] = userTim.sockId;
         return {
             headers: headers
         }
@@ -54,7 +54,7 @@ export class Sock {
         if (this._remote) return this._remote;
         else {
             this._remote = axios.create();
-            if (config.isDev) this._remote.defaults.timeout = 1000*10;
+            if (config.isDev) this._remote.defaults.timeout = 1000 * 10;
             else if (config.isBeta || config.isPro) {
                 // if (this.type != SockType.file)
                 this._remote.defaults.timeout = 1000 * 10;
@@ -206,9 +206,6 @@ export class Sock {
     }
     static createSock(url: string) {
         return new Sock(SockType.none, url);
-    }
-    static createWorkspaceSock(ws: { pidUrl: string }) {
-        return new Sock(SockType.workspace, ws.pidUrl)
     }
 }
 

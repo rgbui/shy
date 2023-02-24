@@ -13,7 +13,7 @@ export function App() {
     async function load() {
         await appLangProvider.import();
         await channel.put('/device/sign');
-        await surface.loadUser()
+        await surface.user.sign();
         await surface.loadWorkspaceList()
         setLoad(true);
     }
