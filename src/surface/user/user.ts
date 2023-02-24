@@ -8,7 +8,7 @@ import { sCache, CacheKey } from "../../../net/cache";
 import { HttpMethod } from "../../../net/primus/http";
 import { CreateTim, Tim } from "../../../net/primus/tim";
 import { masterSock } from "../../../net/sock";
-import { userTimNotify, workspaceNotifys } from "../../../services/tim";
+import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl } from "../../history";
 import { useOpenUserSettings } from "./settings";
 
@@ -29,7 +29,7 @@ export class User {
     public checkEmail: boolean = null;
     public slogan: string = null;
     public rk: string;
-    public pk: string;
+    public uk: string;
     /**
      * 注册来源
      */
@@ -98,8 +98,9 @@ export class User {
         if (r.ok) {
             r.data.user.online = true;
             r.data.user.rk = r.data.rk;
-            r.data.user.pk = r.data.pk;
+            r.data.user.uk = r.data.uk;
             Object.assign(this, r.data.user);
+            console.log(this);
         }
     }
     async createTim() {

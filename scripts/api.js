@@ -181,7 +181,7 @@ push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<v
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
-push('/sign', '', 'SockResponse<{user:Record<string,any>,rk:string,pk:string,token:string}>', ['get'])
+push('/sign', '', 'SockResponse<{user:Record<string,any>,rk:string,uk:string,token:string}>', ['get'])
 push('/sign/out', '', 'SockResponse<void>', ['get'])
 push('/paw/sign', '{phone:string,paw:string,inviteCode:string,weixinOpen:Record<string,any>}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 push(`/sign/patch`, '{name: string, paw: string}', 'SockResponse<{list:any[]}>', ['patch']);
