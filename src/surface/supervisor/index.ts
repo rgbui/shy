@@ -3,7 +3,6 @@ import { Events } from "rich/util/events";
 import { Rect } from "rich/src/common/vector/point";
 import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
-import { userTim } from "../../../net/primus";
 import { ElementType } from "rich/net/element.type";
 import { surface } from "..";
 

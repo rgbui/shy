@@ -1,5 +1,4 @@
 
-import { ShyUtil } from "../util";
 import * as short from 'short-uuid';
 class Config {
     /**
@@ -7,6 +6,7 @@ class Config {
      * dev 开发版
      * beta 测试版（线上的）
      * pro 正式版
+     * inside 内部版
      * @returns 
      */
     get mode() {
@@ -46,18 +46,8 @@ class Config {
     get platform() {
         return PLATFORM
     }
-    private service_guid: string = '';
-    private count = 0;
     guid() {
-        if (this.service_guid) {
-            var n = this.count = this.count + 1;
-            return this.service_guid + "-" + (ShyUtil.hexadecimalConversion(62, n));
-        }
-        else return short.generate();
-    }
-    updateServiceGuid(guid: string) {
-        this.service_guid = guid;
-        this.count = 0;
+        return short.generate();
     }
     isOnline: boolean;
     constructor() {

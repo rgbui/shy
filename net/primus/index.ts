@@ -93,7 +93,7 @@ class TimService {
         }
     }
 }
-export var userTim = new TimService();
+
 
 
 
