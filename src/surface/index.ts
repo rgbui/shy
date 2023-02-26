@@ -10,9 +10,7 @@ import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../common/config";
 import { channel } from "rich/net/channel";
 import "./message.center";
-import { Sock } from "../../net/sock";
 import { PageItem } from "./sln/item";
-
 
 export class Surface extends Events {
     constructor() {
@@ -66,9 +64,9 @@ export class Surface extends Events {
                     ws.fileServicePids = r.data.pids.findAll(g => g.types.includes('file'));
                     ws.searchServicePids = r.data.pids.findAll(g => g.types.includes('search'));
                 }
+                await ws.createTim();
                 var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
-                var sock = Sock.createSock(ws.dataServicePids.randomOf().url);
-                var g = await sock.get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                var g = await ws.sock.get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
                 if (g.data.workspace) {
                     ws.load({ ...g.data.workspace });
                 }
@@ -99,7 +97,6 @@ export class Surface extends Events {
                     else this.temporaryWs = null;
                     this.workspace = ws;
                 })
-                await this.workspace.createTim();
                 var page = await ws.getDefaultPage();
                 channel.air('/page/open', { item: page });
             }

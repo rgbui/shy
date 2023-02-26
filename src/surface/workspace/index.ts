@@ -186,7 +186,10 @@ export class Workspace {
     private _sock: Sock;
     get sock() {
         if (this._sock) return this._sock;
-        return this._sock = new Sock(SockType.master, Workspace.getWsSockUrl(this.dataServicePids, 'ws'));
+        return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.dataServicePids, 'ws'), {
+            'shy-sockId': this.tim.id,
+            'shy-wsId': this.id
+        });
     }
     get url() {
         if (config.isPro || config.isPc) {

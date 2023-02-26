@@ -4,10 +4,12 @@ import { SockResponse, SockType } from "./type";
 import { config } from "../../src/common/config";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
-import { userTim } from "../primus";
+import { surface } from "../../src/surface";
+
 
 export class Sock {
-    constructor(private type: SockType, private remoteUrl?: string) { }
+
+    constructor(private type: SockType, private remoteUrl?: string, private headers?: Record<string, any>) { }
     async baseUrl() {
         if (this.remoteUrl) return this.remoteUrl;
         switch (this.type) {
@@ -44,7 +46,10 @@ export class Sock {
         headers['shy-device'] = device || 'anonymous';
         if (token) headers['shy-token'] = token;
         if (lang) headers['shy-lang'] = lang;
-        if (userTim && userTim.tim) headers['shy-sockId'] = userTim.sockId;
+        if (this.type == SockType.master) {
+            if (surface.user?.tim) headers['shy-sockId'] = surface.user?.tim.id;
+        }
+        if (typeof this.headers) Object.assign(headers, this.headers)
         return {
             headers: headers
         }
