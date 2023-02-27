@@ -13,12 +13,7 @@ export class Tim {
     id: string;
     url: string;
     reconnected: () => void;
-    session: {
-        userid: string,
-        tokenId: string,
-        deviceId: string,
-        workspaceId: string
-    } = null;
+    date = new Date();
     async load(url: string) {
         var self = this;
         this.url = url;
@@ -221,9 +216,33 @@ export class Tim {
     on(url: string, fn: (...args: any[]) => void) {
         this.events.push({ url, fn });
     }
+    only(url: string, fn: (...args: any[]) => void) {
+        var ev = this.events.find(ev => ev.url == url);
+        if (ev) ev.fn = fn;
+        else this.events.push({ url, fn })
+    }
     off(url: string, fn?: (...args: any[]) => void) {
         if (typeof fn == 'function') this.events.removeAll(e => e.url == url && e.fn == fn);
         else this.events.removeAll(e => e.url == url);
+    }
+}
+
+
+var timPool = new Map<string, Tim>();
+/**
+ * 
+ * @param serverNumber 服务号 相同的服务号，表示会提供相同的tim服务，tim开销比较大，能重用就重用呗
+ * @param url 
+ * @returns 
+ */
+export async function CreateTim(serverNumber: string, url: string) {
+    var tp = timPool.get(serverNumber);
+    if (tp) return tp;
+    else {
+        var tim = new Tim();
+        timPool.set(serverNumber, tim);
+        await tim.load(url);
+        return tim;
     }
 }
 

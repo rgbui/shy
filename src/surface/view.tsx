@@ -1,15 +1,15 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from 'react';
 import { Loading } from "rich/component/view/loading";
-import { surface } from "..";
-import { SideBar } from "./sidebar";
-import { UserChannel } from "../user/channel/view";
+import { Surface, surface } from ".";
+import { SideBar } from "./view/sidebar";
+import { UserChannel } from "./user/channel/view";
 import { Route } from "react-router";
-import { ShyUrl } from "../../history";
-import { DiscoveryView } from "../discovery";
-import { JoinTip } from "./join";
-import { SideSln } from "./sidesln";
-import { SupervisorView } from "../supervisor/view";
+import { ShyUrl, UrlRoute } from "../history";
+import { DiscoveryView } from "./discovery";
+import { JoinTip } from "./view/join";
+import { SideSln } from "./view/sidesln";
+import { SupervisorView } from "./supervisor/view";
 
 export var SurfaceView = observer(function () {
     var local = useLocalObservable(() => {
@@ -20,7 +20,10 @@ export var SurfaceView = observer(function () {
     async function load() {
         local.loading = true;
         try {
-            await surface.loadWorkspace(undefined, await surface.getWsName())
+            await surface.loadWorkspaceList();
+            var willWs = await Surface.getWsName();
+            if (willWs) await surface.onLoadWorkspace(willWs)
+            else UrlRoute.redict(ShyUrl.myWorkspace)
         }
         catch (ex) {
         }

@@ -11,10 +11,13 @@ import { surface } from "../..";
 import { ShyUrl, UrlRoute } from "../../../history";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Sock } from "../../../../net/sock";
+import { Pid } from "../declare";
+
 export var InviteView = observer(function () {
-    var local = useLocalObservable<{ ws: Partial<Workspace>, loading: boolean }>(() => {
+    var local = useLocalObservable<{ ws: Partial<Workspace>, pids: Pid[], loading: boolean }>(() => {
         return {
             ws: null,
+            pids: [],
             loading: true
         }
     })
@@ -27,14 +30,15 @@ export var InviteView = observer(function () {
         }
         var w = await channel.get('/ws/invite/check', { invite: inviteCode });
         if (w.ok) {
-            var rg = await channel.get('/ws/is/member', { sock: Sock.createWorkspaceSock(w.data.workspace as any), wsId: w.data.workspace.id })
+            var rg = await channel.get('/ws/is/member', { sock: Sock.createSock(Workspace.getWsSockUrl(w.data.pids,'ws')), wsId: w.data.workspace.id })
             if (rg?.data?.exists) return UrlRoute.pushToWs(w.data.workspace.siteDomain || w.data.workspace.sn);
             local.ws = w.data.workspace;
+            local.pids = w.data.pids;
             local.loading = false;
         }
     }
     async function join() {
-        var sock = Sock.createWorkspaceSock(local.ws as any);
+        var sock = Sock.createSock(Workspace.getWsSockUrl(local.pids,'ws'))
         await channel.put('/user/join/ws', { wsId: local.ws.id });
         var r = await channel.put('/ws/invite/join', { wsId: local.ws.id, sock });
         await surface.loadWorkspaceList();

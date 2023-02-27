@@ -4,7 +4,6 @@
 
 
 import { put, get, del } from "rich/net/annotation";
-import { timService } from "../net/primus";
 import { surface } from "../src/surface";
 
 class SchemaService {
@@ -24,7 +23,7 @@ class SchemaService {
             wsId: surface.workspace.id,
             operate: args.operate,
             schema: 'DataGridSchema',
-            sockId: timService.sockId
+            sockId: surface.workspace.tim.id
         })
     }
     @get('/schema/list')

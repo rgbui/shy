@@ -8,12 +8,9 @@ import { LinkWorkspaceOnline, Workspace } from "./workspace";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../common/config";
-import { timService } from "../../net/primus";
 import { channel } from "rich/net/channel";
 import "./message.center";
-import { ClientNotifys } from "../../services/tim";
 import { PageItem } from "./sln/item";
-import { userChannelStore } from "./user/channel/store";
 
 export class Surface extends Events {
     constructor() {
@@ -37,20 +34,6 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: LinkWorkspaceOnline[] = [];
     temporaryWs: LinkWorkspaceOnline = null;
-    async loadUser() {
-        var r = await channel.get('/sign')
-        if (r.ok) {
-            config.updateServiceGuid(r.data.guid);
-            r.data.user.online = true;
-            Object.assign(this.user, r.data.user);
-            await timService.open();
-            ClientNotifys();
-            await userChannelStore.loadChannels();
-        }
-        else if (config.isPc) {
-            UrlRoute.push(ShyUrl.signIn);
-        }
-    }
     async loadWorkspaceList() {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
@@ -64,49 +47,66 @@ export class Surface extends Events {
             }
         }
     }
-    async loadWorkspace(wsId: string, name?: string | number) {
-        if (typeof wsId == 'undefined' && typeof name == 'undefined') {
-            return this.workspace = null;
-        }
-        var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
-        var r = await channel.get('/ws/info', { name, wsId });
-        if (r.data?.workspace) {
-            var ws = new Workspace();
-            ws.load({ ...r.data.workspace });
-            var g = await channel.get('/ws/access/info', { wsId: ws.id, sock: ws.sock, pageId: willPageId });
-            var willPageItem = g.data.page as PageItem;
-            /**
-             * 不是成员，且空间为非公开，页面也不是非公开，那么不能访问
-             */
-            if (!g.data.member) {
+    async onLoadWorkspace(name: string) {
+        try {
+            if (typeof (name as any) == 'number') name = name.toString();
+            if (typeof name == 'undefined') {
+                return this.workspace = null;
+            }
+            // 
+            var r = await channel.get('/ws/query', { name });
+            if (r?.data.workspace) {
+                var ws = new Workspace();
+                ws.load({ ...r.data.workspace });
+                if (Array.isArray(r.data.pids)) {
+                    ws.dataServicePids = r.data.pids.findAll(g => g.types.includes('ws'));
+                    ws.timServicePids = r.data.pids.findAll(g => g.types.includes('tim'));
+                    ws.fileServicePids = r.data.pids.findAll(g => g.types.includes('file'));
+                    ws.searchServicePids = r.data.pids.findAll(g => g.types.includes('search'));
+                }
+                await ws.createTim();
+                var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
+                var g = await ws.sock.get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                if (g.data.workspace) {
+                    ws.load({ ...g.data.workspace });
+                }
+                var willPageItem = g.data.page as PageItem;
                 /**
-                 *空间不是公开的，页面也不是公开的，那么就不能访问
-                 */
-                if (ws.access == 0 || typeof ws.access == 'undefined') {
-                    if (!(willPageItem && willPageItem.share == 'net')) {
-                        UrlRoute.push(ShyUrl._404);
-                        return;
+                 * 不是成员，且空间为非公开，页面也不是非公开，那么不能访问
+                */
+                if (!g.data.member) {
+                    /**
+                     *空间不是公开的，页面也不是公开的，那么就不能访问
+                     */
+                    if (ws.access == 0 || typeof ws.access == 'undefined') {
+                        if (!(willPageItem && willPageItem.share == 'net')) {
+                            UrlRoute.push(ShyUrl._404);
+                            return;
+                        }
                     }
                 }
+                if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
+                if (g.data.roles) await ws.onLoadRoles(g.data.roles)
+                else await ws.onLoadRoles()
+                if (g.data.member) await ws.loadMember(g.data.member as any)
+                else await ws.loadMember(null);
+                await ws.onLoadPages();
+                await sCache.set(CacheKey.wsHost, ws.sn);
+                runInAction(() => {
+                    if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
+                    else this.temporaryWs = null;
+                    this.workspace = ws;
+                })
+                var page = await ws.getDefaultPage();
+                channel.air('/page/open', { item: page });
             }
-            if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
-            if (g.data.roles) await ws.loadRoles(g.data.roles)
-            else ws.loadRoles([]);
-            if (g.data.member) await ws.loadMember(g.data.member as any)
-            else await ws.loadMember(null);
-            await ws.loadPages();
-            await sCache.set(CacheKey.wsHost, config.isPro ? ws.host : ws.sn);
-            runInAction(() => {
-                if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
-                else this.temporaryWs = null;
-                this.workspace = ws;
-            })
-            var page = await ws.getDefaultPage();
-            channel.air('/page/open', { item: page });
+            else {
+                this.workspace = null;
+                UrlRoute.push(ShyUrl._404);
+            }
         }
-        else {
-            this.workspace = null;
-            UrlRoute.push(ShyUrl._404);
+        catch (ex) {
+            console.error(ex)
         }
     }
     async exitWorkspace() {
@@ -116,17 +116,23 @@ export class Surface extends Events {
         list.remove(g => g.id == surface.workspace.id);
         surface.wss = list;
         var w = surface.wss.first();
-        if (w) await this.loadWorkspace(w.id);
-        else await this.loadWorkspace(undefined);
+        if (w) await this.onLoadWorkspace(w.id);
+        else await this.onLoadWorkspace(undefined);
     }
-    async getWsName() {
-        var domain, sn, wsId;
+    static async getWsName() {
+        var domain: string, sn, wsId;
         sn = UrlRoute.match(ShyUrl.wsPage)?.wsId;
         if (!sn) {
             sn = UrlRoute.match(ShyUrl.ws)?.wsId;
         }
         if (!sn && location.host && /[\da-z\-]+\.shy\.live/.test(location.host)) {
             domain = location.host.replace(/\.shy\.live$/g, '');
+        }
+        if (!sn && !domain) {
+            domain = location.host as string;
+            if (domain == 'shy.live' || domain.startsWith('localhost:')) {
+                domain = undefined;
+            }
         }
         if (!domain && !sn) {
             wsId = await sCache.get(CacheKey.wsHost);
@@ -135,11 +141,11 @@ export class Surface extends Events {
     }
     async onChangeWorkspace(workspace: Partial<Workspace>) {
         if (workspace.id != this.workspace?.id) {
-            await this.loadWorkspace(workspace.id);
+            await this.onLoadWorkspace(workspace.id);
         }
         else if (workspace.id == this.workspace.id) {
             if (UrlRoute.isMatch(ShyUrl.me) || UrlRoute.isMatch(ShyUrl.discovery)) {
-                await this.loadWorkspace(workspace.id);
+                await this.onLoadWorkspace(workspace.id);
             }
             if (UrlRoute.isMatch(ShyUrl.page) || UrlRoute.isMatch(ShyUrl.wsPage)) {
 

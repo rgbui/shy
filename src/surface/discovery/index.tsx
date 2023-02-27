@@ -35,7 +35,7 @@ export var DiscoveryView = observer(function () {
         }
     }
     async function openWs(ws: Partial<Workspace>) {
-        await surface.loadWorkspace(ws.id);
+        await surface.onLoadWorkspace(ws.id);
     }
     React.useEffect(() => {
         loadWs();

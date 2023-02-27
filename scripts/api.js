@@ -181,7 +181,7 @@ push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<v
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
-push('/sign', '', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['get'])
+push('/sign', '', 'SockResponse<{user:Record<string,any>,rk:string,uk:string,token:string}>', ['get'])
 push('/sign/out', '', 'SockResponse<void>', ['get'])
 push('/paw/sign', '{phone:string,paw:string,inviteCode:string,weixinOpen:Record<string,any>}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
 push(`/sign/patch`, '{name: string, paw: string}', 'SockResponse<{list:any[]}>', ['patch']);
@@ -249,11 +249,11 @@ push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any,onlineUsers:string[]}>', ['get'])
-push('/ws/query', '{wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
-push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
+push('/ws/query', '{name?:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get'])
+push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get'])
 push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
 push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
-push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get']);
+push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get']);
 push('/ws/invite/join', '{wsId:string,sock?:any}', 'SockResponse<void>', ['put']);
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])

@@ -2,7 +2,6 @@ import lodash from "lodash";
 import { runInAction } from "mobx";
 import { config } from "../../../../common/config";
 import { PageItem } from "..";
-import { timService } from "../../../../../net/primus";
 import { surface } from "../../..";
 
 export enum ItemOperatorDirective {
@@ -49,7 +48,7 @@ class PageItemStore {
             wsId,
             operate,
             schema: 'PageItem',
-            sockId: timService.sockId
+            sockId: surface.workspace.tim.id
         })
     }
     public async deletePageItem(pageItem: PageItem) {

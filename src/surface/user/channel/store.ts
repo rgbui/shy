@@ -198,9 +198,9 @@ class UserChannelStore {
     async readRoomChat(channel: UserChannel) {
         runInAction(() => {
             var chat = channel.room.chats.findMax(c => c.seq);
-            channel.readedSeq = chat.seq;
-            channel.room.currentnSeq = chat.seq;
-            channel.room.currentContent = chat.content;
+            channel.readedSeq = chat?.seq || -1;
+            channel.room.currentnSeq = chat?.seq || -1;
+            channel.room.currentContent = chat?.content || '';
             channel.unreadCount = 0;
         })
         await yCache.set(CacheKey.roomCache.replace('{roomId}', channel.room.id), channel.readedSeq)

@@ -23,6 +23,10 @@ import { PageViewStores } from "../supervisor/view/store";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { pageItemStore } from "../sln/item/store/sync";
 import { PageLayoutType } from "rich/src/page/declare";
+import { SockType } from "../../../net/sock/type";
+import { Pid, PidType } from "./declare";
+import { CreateTim, Tim } from "../../../net/primus/tim";
+import { workspaceNotifys } from "../../../services/tim";
 
 export type WorkspaceUser = {
     userid: string;
@@ -64,12 +68,33 @@ export type LinkWorkspaceOnline = {
     unreadChats: { id: string, roomId: string, seq: number }[]
 } & Partial<Workspace>
 
+
+
 export class Workspace {
     public id: string = null;
     public sn: number = null;
     public createDate: Date = null;
     public creater: string = null;
     public owner: string = null;
+    /**
+   * 
+   * 数据存储服务号
+   * 
+   */
+    public dataServiceNumber: string;
+    public dataServicePids: Pid[];
+    public timServicePids: Pid[];
+    /**
+     * 大文件存储服务商ID
+     */
+    public fileServiceNumber: string
+    public fileServicePids: Pid[];
+    /**
+     * 服务搜索服务商ID
+     */
+    public searchServiceNumber: string
+    public searchServicePids: Pid[];
+
     public text: string = null;
     public icon: IconArguments = null;
     public cover: IconArguments = null;
@@ -78,6 +103,7 @@ export class Workspace {
     public siteDomain: string = null;
     public siteDomainDuration: Date = null;
     public customSiteDomain: string = null;
+    public customSiteDomainProtocol: string = null;
     public invite: string = null;
     public pid: string = null;
     public pidUrl: string = null;
@@ -154,19 +180,23 @@ export class Workspace {
             defaultPageId: observable,
             viewOnlineUsers: observable,
             onLineUsers: observable,
-            invite:observable
+            invite: observable
         })
     }
     private _sock: Sock;
     get sock() {
         if (this._sock) return this._sock;
-        return this._sock = Sock.createWorkspaceSock(this);
-    }
-    get host() {
-        return this.siteDomain || this.sn
+        return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.dataServicePids, 'ws'), {
+            'shy-sockId': this.tim.id,
+            'shy-wsId': this.id
+        });
     }
     get url() {
-        if (config.isPro || config.isPc) return `https://${this.host}.shy.live`
+        if (config.isPro || config.isPc) {
+            if (this.customSiteDomain) return this.customSiteDomain;
+            var host = this.siteDomain || this.sn;
+            return `https://${host}.shy.live`
+        }
         else return 'http://' + location.host + "/ws/" + this.sn + "";
     }
     get isJoinTip() {
@@ -268,7 +298,7 @@ export class Workspace {
             }
         }
     }
-    async loadRoles(roles?: WorkspaceRole[]) {
+    async onLoadRoles(roles?: WorkspaceRole[]) {
         if (roles) this.roles = roles;
         else {
             var rs = await channel.get('/ws/roles');
@@ -278,7 +308,7 @@ export class Workspace {
             else this.roles = [];
         }
     }
-    async loadPages() {
+    async onLoadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
         var rr = await channel.get('/page/items', { ids, sock: this.sock, wsId: this.id });
         if (rr) {
@@ -436,5 +466,19 @@ export class Workspace {
             }
             return item;
         }
+    }
+    async createTim() {
+        this.tim = await CreateTim(this.dataServiceNumber, this.timServicePids.randomOf().url);
+        workspaceNotifys(this.tim);
+    }
+    tim: Tim
+    static getWsSockUrl(pids: Pid[], type: PidType) {
+        return pids.filter(g => g.types.includes(type)).randomOf()?.url;
+    }
+    enterPage(pageId: string) {
+
+    }
+    exitWorkspace() {
+
     }
 }

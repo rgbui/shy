@@ -1,5 +1,6 @@
 
-import { config } from "../../src/common/config";
+
+
 import { sCache, CacheKey } from "../cache";
 import { masterSock } from "../sock";
 import { HttpMethod } from "./http";
@@ -28,39 +29,39 @@ class TimService {
         this.tim.reconnected = async function () {
             data = await self.getHeads();
             data.sockId = self.tim.id;
-            if (self.workspaceId) data.workspaceId = self.workspaceId;
+            // if (self.workspaceId) data.workspaceId = self.workspaceId;
             self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
         }
     }
-    private workspaceId: string;
-    private viewId: string;
-    async enterWorkspaceView(workspaceId: string, viewId: string) {
-        if (this.time) {
-            clearTimeout(this.time);
-            this.time = undefined;
-        }
-        this.time = setTimeout(async () => {
-            this.workspaceId = workspaceId;
-            this.viewId = viewId;
-            if (this.tim) await this.tim.syncSend(
-                HttpMethod.post,
-                '/workspace/enter',
-                {
-                    workspaceId: this.workspaceId,
-                    viewId: this.viewId
-                }
-            );
-        }, config.isPro ? 1000 : 700);
-    }
-    time;
-    async leaveWorkspace() {
-        if (this.time) {
-            clearTimeout(this.time);
-            this.time = undefined;
-        }
-        delete this.workspaceId;
-        await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
-    }
+    // private workspaceId: string;
+    // private viewId: string;
+    // async enterWorkspaceView(workspaceId: string, viewId: string) {
+    //     if (this.time) {
+    //         clearTimeout(this.time);
+    //         this.time = undefined;
+    //     }
+    //     this.time = setTimeout(async () => {
+    //         this.workspaceId = workspaceId;
+    //         this.viewId = viewId;
+    //         if (this.tim) await this.tim.syncSend(
+    //             HttpMethod.post,
+    //             '/workspace/enter',
+    //             {
+    //                 workspaceId: this.workspaceId,
+    //                 viewId: this.viewId
+    //             }
+    //         );
+    //     }, config.isPro ? 1000 : 700);
+    // }
+    // time;
+    // async leaveWorkspace() {
+    //     if (this.time) {
+    //         clearTimeout(this.time);
+    //         this.time = undefined;
+    //     }
+    //     delete this.workspaceId;
+    //     await this.tim.syncSend(HttpMethod.post, '/workspace/leave', {});
+    // }
     /**
      * 激活
      */
@@ -86,11 +87,18 @@ class TimService {
         var token = await sCache.get(CacheKey.token);
         var lang = await sCache.get(CacheKey.lang);
         return {
-            device, token, lang
+            device,
+            token,
+            lang
         }
     }
 }
-export var timService = new TimService();
+
+
+
+
+
+
 document.addEventListener("visibilitychange", function (e) {
     console.log(document.visibilityState, 'visibilitychange');
     if (document.visibilityState == 'hidden') {

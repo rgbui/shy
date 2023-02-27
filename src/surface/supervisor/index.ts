@@ -3,7 +3,6 @@ import { Events } from "rich/util/events";
 import { Rect } from "rich/src/common/vector/point";
 import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
-import { timService } from "../../../net/primus";
 import { ElementType } from "rich/net/element.type";
 import { surface } from "..";
 
@@ -48,10 +47,9 @@ export class Supervisor extends Events {
                 ElementType.Schema
             ].includes(mainStore.pe.type)) await surface.workspace.onLoadElementUrl(elementUrl);
             this.page = mainStore;
-            if (this.page.item) timService.enterWorkspaceView(
-                this.page.item.workspace.id,
-                this.page.item.id
-            )
+            if (this.page.item) {
+                surface.workspace.enterPage(this.page.item.id);
+            }
             /**
              * 3小时主动同步一次，服务器缓存用户所在的视图在线状态过期时间是6小时
              */
@@ -65,11 +63,9 @@ export class Supervisor extends Events {
         }
     }
     async syncWorkspaceView() {
-        if (this.page.item)
-            timService.enterWorkspaceView(
-                this.page.item.workspace.id,
-                this.page.item.id
-            )
+        if (this.page.item) {
+            surface.workspace.enterPage(this.page.item.id);
+        }
     }
     async onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.slide?.elementUrl) return;

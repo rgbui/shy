@@ -3,7 +3,6 @@ import { ShyUrl, UrlRoute } from "../../../history";
 import { surface } from "../..";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
-import { timService } from "../../../../net/primus";
 import { config } from "../../../common/config";
 
 export class LogOut extends React.Component {
@@ -13,8 +12,11 @@ export class LogOut extends React.Component {
             var r = await channel.get('/sign/out');
             if (r.ok) {
                 surface.user = new User();
+                if (surface.workspace?.tim)
+                    surface.workspace.tim.close()
                 surface.workspace = null;
-                timService.close();
+                if (surface.user?.tim)
+                    surface.user.tim.close();
                 if (config.isPro) location.href = 'https://shy.live'
                 else UrlRoute.push(ShyUrl.root);
             }

@@ -12,7 +12,7 @@ export var JoinTip = observer(function () {
             sock: surface.workspace.sock
         });
         surface.loadWorkspaceList();
-        await surface.loadWorkspace(surface.workspace.id);
+        await surface.onLoadWorkspace(surface.workspace.id);
     }
     return <div className='shy-supervisor-join-tip' >
         <span>您当前处于预览模式，加入该空间一起协作吧</span>
