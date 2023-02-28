@@ -251,7 +251,7 @@ push('/ws/info', '{name?:string|number,wsId?:string}', 'SockResponse<{workspace:
 push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any,onlineUsers:string[]}>', ['get'])
 push('/ws/query', '{name?:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get'])
-push('/ws/create', '{text:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
+push('/ws/create', '{text:string,dataServiceAddress?:string,searchServiceAddress?:string,fileServiceAddress?:string,templateId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['put'])
 push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
 push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get']);
 push('/ws/invite/join', '{wsId:string,sock?:any}', 'SockResponse<void>', ['put']);
