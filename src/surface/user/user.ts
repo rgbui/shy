@@ -66,6 +66,7 @@ export class User {
             experienceHelp: observable
         })
     }
+
     get isSign() {
         return this.id ? true : false;
     }
@@ -100,7 +101,6 @@ export class User {
             r.data.user.rk = r.data.rk;
             r.data.user.uk = r.data.uk;
             Object.assign(this, r.data.user);
-            console.log(this);
         }
     }
     async createTim() {
@@ -117,11 +117,11 @@ export class User {
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
         await this.tim.syncSend(HttpMethod.post, '/user/online', data);
-        this.tim.reconnected = async () => {
+        this.tim.only('reconnected', async () => {
             var data = await self.getTimHeads();
             data.sockId = self.tim.id;
             self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
-        }
+        })
         userTimNotify(this.tim);
     }
     async getTimHeads() {

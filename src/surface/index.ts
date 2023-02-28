@@ -51,6 +51,9 @@ export class Surface extends Events {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
             if (typeof name == 'undefined') {
+                if (!this.workspace) {
+                    this.workspace.exitWorkspace()
+                }
                 return this.workspace = null;
             }
             // 
@@ -101,6 +104,9 @@ export class Surface extends Events {
                 channel.air('/page/open', { item: page });
             }
             else {
+                if (!this.workspace) {
+                    this.workspace.exitWorkspace()
+                }
                 this.workspace = null;
                 UrlRoute.push(ShyUrl._404);
             }

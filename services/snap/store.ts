@@ -37,8 +37,7 @@ export class SnapStore extends Events {
             elementUrl: this.elementUrl,
             wsId: surface.workspace.id,
             sockId: surface.workspace.tim.id,
-            operate: operate,
-            pidUrl: surface.workspace.pidUrl
+            operate: operate
         })
         if (r.ok) {
             Object.assign(operate, r.data);

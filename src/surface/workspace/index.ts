@@ -4,7 +4,7 @@ import { PageItem } from "../sln/item";
 import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
 import { ShyUrl, UrlRoute } from "../../history";
-import { CacheKey, yCache } from "../../../net/cache";
+import { CacheKey, sCache, yCache } from "../../../net/cache";
 import { Mime } from "../sln/declare";
 import { ShyUtil } from "../../util";
 import { util } from "rich/util/util";
@@ -27,6 +27,7 @@ import { SockType } from "../../../net/sock/type";
 import { Pid, PidType } from "./declare";
 import { CreateTim, Tim } from "../../../net/primus/tim";
 import { workspaceNotifys } from "../../../services/tim";
+import { HttpMethod } from "../../../net/primus/http";
 
 export type WorkspaceUser = {
     userid: string;
@@ -105,9 +106,6 @@ export class Workspace {
     public customSiteDomain: string = null;
     public customSiteDomainProtocol: string = null;
     public invite: string = null;
-    public pid: string = null;
-    public pidUrl: string = null;
-    public dbId: string = null;
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
@@ -166,7 +164,6 @@ export class Workspace {
             siteDomain: observable,
             customSiteDomain: observable,
             slogan: observable,
-            pidUrl: observable,
             memberCount: observable,
             memberOnlineCount: observable,
             config: observable,
@@ -470,15 +467,56 @@ export class Workspace {
     async createTim() {
         this.tim = await CreateTim(this.dataServiceNumber, this.timServicePids.randomOf().url);
         workspaceNotifys(this.tim);
+        var self = this;
+        this.tim.only('reconnected_workspace', async () => {
+            var data = await self.getTimHeads();
+            data.sockId = self.tim.id;
+            data.workspaceId = self.id;
+            data.userid = surface.user.id;
+            if (self.currentPageId) data.viewId = self.currentPageId;
+            await self.tim.syncSend(HttpMethod.post, '/user/reconnected_workspace', data);
+        })
+        await this.enterWorkspace();
     }
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {
         return pids.filter(g => g.types.includes(type)).randomOf()?.url;
     }
-    enterPage(pageId: string) {
-
+    currentPageId: string;
+    async enterPage(pageId: string) {
+        var data = await this.getTimHeads();
+        data.sockId = this.tim.id;
+        data.workspaceId = this.id;
+        data.viewId = pageId;
+        data.userid = surface.user.id;
+        this.currentPageId = pageId;
+        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', data);
     }
-    exitWorkspace() {
-
+    async enterWorkspace() {
+        var data = await this.getTimHeads();
+        data.sockId = this.tim.id;
+        data.workspaceId = this.id;
+        data.userid = surface.user.id;
+        if (this.currentPageId)
+            data.viewId = this.currentPageId;
+        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', data);
+    }
+    async exitWorkspace() {
+        var data = await this.getTimHeads();
+        data.sockId = this.tim.id;
+        data.workspaceId = this.id;
+        if (this.currentPageId)
+            data.viewId = this.currentPageId;
+        await this.tim.syncSend(HttpMethod.post, '/workspace/leave', data);
+    }
+    async getTimHeads() {
+        var device = await sCache.get(CacheKey.device);
+        var token = await sCache.get(CacheKey.token);
+        var lang = await sCache.get(CacheKey.lang);
+        return {
+            device,
+            token,
+            lang
+        } as any
     }
 }
