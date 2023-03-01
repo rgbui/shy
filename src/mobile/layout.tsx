@@ -1,6 +1,11 @@
 
 import { observer } from "mobx-react";
 import React from "react";
+
+/**
+ * https://www.swiper.com.cn/
+ * 
+ */
 export var LayoutView = observer(function (props: { children: React.ReactNode }) {
     return <div className="shy-mobile-layout">
         <div className="shy-mobile-layout-head">
