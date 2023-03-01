@@ -12,7 +12,6 @@ export class Tim {
     private primus;
     id: string;
     url: string;
-    reconnected: () => void;
     date = new Date();
     async load(url: string) {
         var self = this;
@@ -50,9 +49,12 @@ export class Tim {
                 log.error(ex);
             }
         });
-        primus.on('reconnected', function (opts) {
-            if (typeof self.reconnected == 'function') self.reconnected();
+        primus.on('reconnected', async function (opts) {
+
+            // if (typeof self.reconnected == 'function') self.reconnected();
             console.log('It took %d ms to reconnect', opts.duration);
+            await self.emit('reconnected');
+            await self.emit('reconnected_workspace');
         });
         primus.on('reconnect', function (opts) {
             console.log('It took %d ms to reconnect', opts.duration);
@@ -225,6 +227,12 @@ export class Tim {
         if (typeof fn == 'function') this.events.removeAll(e => e.url == url && e.fn == fn);
         else this.events.removeAll(e => e.url == url);
     }
+    async emit(url: string, ...args: any[]) {
+        var ev = this.events.findAll(c => c.url == url);
+        for (let i = 0; i < ev.length; i++) {
+            await ev[i].fn.apply(this, args);
+        }
+    }
 }
 
 
@@ -246,3 +254,21 @@ export async function CreateTim(serverNumber: string, url: string) {
     }
 }
 
+
+
+
+document.addEventListener("visibilitychange", function (e) {
+    console.log(document.visibilityState, 'visibilitychange');
+    if (document.visibilityState == 'hidden') {
+        // 网页被挂起 ---- 暂停音乐
+
+    }
+    else {
+        // 网页被呼起 ---- 播放音乐
+
+    }
+});
+window.addEventListener('pageshow', function () { console.log('pageshow') });
+window.addEventListener('pagehide', function () { console.log('pagehide') })
+// window.addEventListener('blur', function () { console.log('blur'); });
+// window.addEventListener('focus', function () { console.log('focus'); });

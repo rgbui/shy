@@ -5,7 +5,7 @@ import { FileType } from "../type";
 import { FileMd5 } from "../src/util/file";
 import { surface } from "../src/surface";
 import { del, get, patch, post, put } from "rich/net/annotation";
-
+import { Workspace } from "../src/surface/workspace";
 
 class WorkspaceService extends BaseService {
     @get('/ws/basic')
@@ -29,22 +29,37 @@ class WorkspaceService extends BaseService {
         return await masterSock.get('/ws/discovery', args);
     }
     @put('/ws/create')
-    async createWs(data: { text: string, templateId }) {
-        var r = await masterSock.put<{ workspace: Record<string, any> }>('/ws/create', { text: data.text });
-        if (r.ok) {
-            var pidUrl = r.data.workspace.pidUrl;
-            if (pidUrl) {
-                var sock = Sock.createSock(pidUrl);
-                await sock.put('/ws/init', { wsId: r.data.workspace.id, templateId: data.templateId });
-                return { ok: true, data: { workspace: r.data.workspace } }
-            }
+    async createWs(data: {
+        text: string,
+        dataServiceAddress?: string,
+        searchServiceAddress?: string,
+        fileServiceAddress?: string,
+        templateId?: string
+    }) {
+        var rr = await masterSock.put('/ws/create', {
+            text: data.text,
+            dataServiceAddress: data.dataServiceAddress,
+            searchServiceAddress: data.searchServiceAddress,
+            fileServiceAddress: data.fileServiceAddress,
+        })
+        if (rr.ok) {
+            var url = Workspace.getWsSockUrl(rr.data.pids, 'ws');
+            var sock = Sock.createSock(url);
+            await sock.put('/ws/init', {
+                wsId: rr.data.workspace.id,
+                text: data.text,
+                sn: rr.data.workspace.sn,
+                // templateId?: string
+            });
+            return { ok: true, data: { workspace: rr.data.workspace } }
         }
-        return { ok: false, warn: r.warn }
+        else return { ok: false, warn: rr.warn }
     }
     @patch('/ws/patch')
     async update(data: { wsId?: string, sockId?: string, data: Record<string, any> }) {
         data.wsId = surface.workspace.id;
         data.sockId = surface.workspace.tim.id;
+        await masterSock.patch('/ws/master/patch', data);
         return await surface.workspace.sock.patch('/ws/patch', data)
     }
     @get('/user/wss')
