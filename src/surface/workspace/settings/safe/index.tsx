@@ -47,8 +47,7 @@ export class SafeSetting extends React.Component {
                 'accessTalkLimit',
                 'accessJoinLimit',
                 'acessJoinAgree:'
-            ])))
-                this.tip.close()
+            ]))) this.tip.close()
             else this.tip.open();
         }
     }
@@ -88,38 +87,17 @@ export class SafeSetting extends React.Component {
                     <div className="flex-auto  f-14">允许访客加入空间成为成员</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('accessJoinTip', e)} checked={this.data.accessJoinTip}></Switch></div>
                 </div>
-                <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14">访客发言限制</div>
-                    <div className="flex-fixed">
-                        <SelectBox border width={200} value={this.data.accessTalkLimit} onChange={e => this.change('accessTalkLimit', e)} options={[
-                            { text: '无限制', value: 'none' },
-                            { text: '访问5分钟后可发言', value: '5' },
-                            { text: '访问10分后可发言', value: '10' },
-                            { text: '在诗云验证过的手机', value: 'checkPhone' }
-                        ]}>
-                        </SelectBox>
-                    </div>
-                </div>
             </div>
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14 gap-t-10">加入空间成为成员的准入条件</div>
                 <div className="remark f-12 gap-h-10">设置后加入的成员需满足以下条件才可以加入</div>
-                <div className="flex gap-h-10">
-                    <div className="flex-fixed f-14 gap-r-10">加入限制</div>
-                    <div className="flex-fixed" ><SelectBox border value={this.data.accessJoinLimit} onChange={e => this.change('accessJoinLimit', e)} width={200} options={[
-                        { text: '无限制', value: 'none' },
-                        { text: '访问5分钟后可申请加入', value: '5' },
-                        { text: '访问10分后可申请加入', value: '10' },
-                        { text: '在诗云验证过的手机', value: 'checkPhone' },
-                    ]}>
-                    </SelectBox></div>
-                </div>
+
                 <div className="gap-h-10">
                     <div className="f-14">服务协议</div>
                     <div className="remark f-12 gap-h-10">加入空间时，用户需要同意该协议才可以成为成员。</div>
                     <div className="max-w-500">
-                        <Textarea value={this.data.acessJoinAgree} onChange={e => this.change('acessJoinAgree', e)} placeholder="支持markdown语法" ></Textarea>
+                        <Textarea style={{minHeight:150}} value={this.data.acessJoinAgree} onChange={e => this.change('acessJoinAgree', e)} placeholder="支持markdown语法" ></Textarea>
                     </div>
                 </div>
             </div>

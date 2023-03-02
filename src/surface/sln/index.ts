@@ -40,7 +40,7 @@ export class Sln extends Events {
     }
     async onMousedownItem(item: PageItem, event: MouseEvent) {
         var self = this;
-        if (surface.workspace?.isAllow(AtomPermission.createOrDeleteDoc)) {
+        if (surface.workspace?.isAllow(AtomPermission.docEdit)) {
             MouseDragger<{ item: HTMLElement }>({
                 event,
                 dis: 5,

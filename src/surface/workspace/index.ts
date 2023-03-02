@@ -14,7 +14,7 @@ import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "..";
-import { AtomPermission, getAllAtomPermission, getCommonPerssions } from "rich/src/page/permission";
+import { AtomPermission, getAllAtomPermission, getCommonPerssions, getEditPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
@@ -113,7 +113,7 @@ export class Workspace {
      * 页面的一些其它的pageItem,如blog文档，该文档脱离正常的pages，其parentId='blog'
      */
     public otherChilds: PageItem[] = [];
-    public permissions: number[] = getCommonPerssions();
+    public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
     public access: number = 0;
@@ -170,14 +170,15 @@ export class Workspace {
             owner: observable,
             roles: observable,
             isJoinTip: computed,
-            permissions: observable,
+            allMemeberPermissions: observable,
             member: observable,
-            memberPermissions: computed,
             createPageConfig: observable,
             defaultPageId: observable,
             viewOnlineUsers: observable,
             onLineUsers: observable,
-            invite: observable
+            invite: observable,
+            isOwner: computed,
+            isMember: computed
         })
     }
     private _sock: Sock;
@@ -199,38 +200,49 @@ export class Workspace {
     get isJoinTip() {
         return !this.member && surface.user.isSign && this.access == 1
     }
+    get isOwner() {
+        return surface.user.id == this.owner ? true : false;
+    }
+    isAllow(...permissions: AtomPermission[]) {
+
+        return true;
+    }
+    get isMember() {
+        if (this.member) return true;
+        else return false;
+    }
     /**
      * 获取当前成员在这个空间的权限
      */
-    get memberPermissions() {
-        var ps: AtomPermission[] = [];
-        if (surface.user?.id == this.owner) {
-            return getAllAtomPermission()
-        }
-        if (this.member) {
-            if (this.member.roleIds.length > 0) {
-                ps = [];
-                this.member.roleIds.forEach(rid => {
-                    var role = this.roles.find(g => g.id == rid);
-                    if (role && Array.isArray(role.permissions)) {
-                        role.permissions.forEach(p => {
-                            if (!ps.includes(p)) ps.push(p)
-                        })
-                    }
-                });
-                return ps;
-            }
-        }
-        ps = this.permissions?.length > 0 ? this.permissions : getCommonPerssions();
-        if (!ps) ps = [];
-        return ps;
-    }
-    isAllow(permission: AtomPermission) {
-        return (this.memberPermissions || []).includes(permission);
-    }
-    get isCanEdit() {
-        return this.isAllow(AtomPermission.createOrDeleteDoc) || false;
-    }
+    // get memberPermissions() {
+    //     var ps: AtomPermission[] = [];
+    //     if (surface.user?.id == this.owner) {
+    //         return getEditPerssions()
+    //     }
+    //     if (this.member) {
+    //         if (this.member.roleIds.length > 0) {
+    //             ps = [];
+    //             this.member.roleIds.forEach(rid => {
+    //                 var role = this.roles.find(g => g.id == rid);
+    //                 if (role && Array.isArray(role.permissions)) {
+    //                     role.permissions.forEach(p => {
+    //                         if (!ps.includes(p)) ps.push(p)
+    //                     })
+    //                 }
+    //             });
+    //             return ps;
+    //         }
+    //     }
+    //     ps = this.allMemeberPermissions?.length > 0 ? this.allMemeberPermissions : getCommonPerssions();
+    //     if (!ps) ps = [];
+    //     return ps;
+    // }
+    // isAllow(permission: AtomPermission) {
+    //     return (this.memberPermissions || []).includes(permission);
+    // }
+    // get isCanEdit() {
+    //     return this.isAllow(AtomPermission.createOrDeleteDoc) || false;
+    // }
     load(data) {
         for (var n in data) {
             if (n == 'childs') {

@@ -19,7 +19,7 @@ import lodash from 'lodash';
 import { makeObservable, observable, runInAction, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
-import { ArrowLeftSvg, ArrowRightSvg, PlusSvg, TypesPersonSvg } from "rich/component/svgs";
+import { ArrowLeftSvg, ArrowRightSvg, ChevronRightSvg, PlusSvg, TypesPersonSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
 import { useColorPicker } from 'rich/component/view/color/picker';
@@ -116,7 +116,7 @@ export class WorkspaceRoles extends React.Component {
     }
     async loadRoles() {
         this.roles = lodash.cloneDeep(surface.workspace.roles);
-        this.roles.push({ text: '所有人', permissions: surface.workspace.permissions || getCommonPerssions() })
+        this.roles.push({ text: '所有人', permissions: surface.workspace.allMemeberPermissions || getCommonPerssions() })
         this.bakeRoles = lodash.cloneDeep(this.roles);
     }
     async addRole() {
@@ -254,7 +254,7 @@ export class WorkspaceRoles extends React.Component {
                 var br = this.bakeRoles.find(g => g.id ? false : true);
                 if (JSON.stringify(br.permissions) !== JSON.stringify(role.permissions)) {
                     await channel.patch('/ws/patch', { data: { permissions: role.permissions } });
-                    surface.workspace.permissions = role.permissions;
+                    surface.workspace.allMemeberPermissions = role.permissions;
                     await util.delay(200);
                 }
             }
@@ -316,9 +316,26 @@ export class WorkspaceRoles extends React.Component {
             return false;
         }
         return <div className="shy-ws-role-permission">
-            <Row style={{ margin: 0 }}>
-                <Col span={12}><span style={{ fontSize: 12 }}>通用的空间权限</span></Col>
-                <Col span={12} align={'end'}><Button style={{ padding: 0, margin: 0 }} link size={'small'} >清除权限</Button></Col>
+            <div className='f-12 flex'>
+                <span className='flex-auto'>通用的空间权限</span>
+                <span className='flex-fixed '><Button style={{ padding: 0, margin: 0 }} link size={'small'} >清除权限</Button></span>
+            </div>
+
+            <div className='flex'>
+                <div className='flex-auto'>
+                    <div>页面权限</div>
+                    <div className='remark'></div>
+                </div>
+                <div className='flex-fixed'>
+                    <span>
+                        <Icon icon={ChevronRightSvg}></Icon>
+                    </span>
+                </div>
+            </div>
+
+            {/* <Row style={{ margin: 0 }}>
+                <Col span={12}><span style={{ fontSize: 12 }}></span></Col>
+                <Col span={12} align={'end'}></Col>
             </Row>
             <Row>
                 <Col span={18}><h4>编辑文档</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.editDoc, e)} checked={is(AtomPermission.editDoc)}></Switch></Col>
@@ -337,7 +354,7 @@ export class WorkspaceRoles extends React.Component {
                 <Col span={18}><h4>创建会话</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteChannel, e)} checked={is(AtomPermission.createOrDeleteChannel)}></Switch></Col>
                 <Col><Remark style={{ fontSize: 14 }}>默认允许创建会话或删除会话</Remark></Col>
             </Row>
-            <Divider></Divider>
+            <Divider></Divider> */}
 
         </div>
     }

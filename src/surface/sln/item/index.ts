@@ -12,7 +12,7 @@ import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
-import { getCommonPerssions, getEditPerssions, PagePermission } from "rich/src/page/permission";
+import { AtomPermission } from "rich/src/page/permission";
 import lodash from "lodash";
 import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
@@ -36,7 +36,7 @@ export class PageItem {
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-    // contentView: Page;
+
     /**
     * 是否为公开
     * net 互联网公开
@@ -44,7 +44,20 @@ export class PageItem {
     * local 本地存储
     */
     share: 'net' | 'nas' | 'local' = 'nas';
-    permission: PagePermission = PagePermission.canView;
+
+    /**
+     * 互联网是否公开，如果公开的权限是什么
+     */
+    public netPermissions: AtomPermission[] = [];
+    /**
+     * 外部邀请的用户权限
+     */
+    public inviteUsersPermissions: { userid: string, permissions: AtomPermission[] }[] = [];
+    /**
+     * 空间成员权限，
+     * 可以指定角色，也可以指定具体的人
+     */
+    public memberPermissions: { roleId: string, userid: string, permissions: AtomPermission[] }[] = [];
     locker: {
         lock: boolean,
         date: number,
@@ -75,7 +88,9 @@ export class PageItem {
             checkedHasChilds: observable,
             willLoadSubs: observable,
             share: observable,
-            permission: observable,
+            netPermissions: observable,
+            memberPermissions: observable,
+            inviteUsersPermissions: observable,
             locker: observable,
             editDate: observable,
             editor: observable,
@@ -185,7 +200,9 @@ export class PageItem {
             workspaceId: this.workspace.id,
             mime: this.mime,
             share: this.share,
-            permission: this.permission,
+            netPermissions: lodash.cloneDeep(this.netPermissions),
+            inviteUsersPermissions: lodash.cloneDeep(this.inviteUsersPermissions),
+            memberPermissions: lodash.cloneDeep(this.memberPermissions),
             locker: this.locker,
             description: this.description
         }
@@ -411,21 +428,22 @@ export class PageItem {
             }
         }
     }
-    getPermissons() {
-        var ps = surface.workspace.memberPermissions;
-        if (surface.workspace.member) {
-            return ps;
-        } else {
-            if (this.permission == PagePermission.canEdit) {
-                return getEditPerssions()
-            }
-            else if (this.permission == PagePermission.canInteraction) {
-                return getCommonPerssions()
-            }
-            else {
-                return []
-            }
-        }
+    getPagePermissions() {
+        return []
+        // var ps = surface.workspace.memberPermissions;
+        // if (surface.workspace.member) {
+        //     return ps;
+        // } else {
+        //     if (this.permission == PagePermission.canEdit) {
+        //         return getEditPerssions()
+        //     }
+        //     else if (this.permission == PagePermission.canInteraction) {
+        //         return getCommonPerssions()
+        //     }
+        //     else {
+        //         return []
+        //     }
+        // }
     }
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)

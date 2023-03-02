@@ -8,52 +8,59 @@ import { SettingsSvg } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
-
+import { AtomPermission } from "rich/src/page/permission";
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
-        if (!surface.workspace?.isCanEdit) return;
+        if (!surface.workspace.isMember) return;
         var ele = event.currentTarget as HTMLElement;
         ele = ele.querySelector('.shy-ws-profile-info') as HTMLElement;
         var rect = Rect.from(ele.getBoundingClientRect());
-        var isMananger: boolean = false;
-        if (surface.workspace.owner == surface.user.id) {
-            isMananger = true;
-            var menus: MenuItem<string>[] = [];
-            if (isMananger) {
-                menus = [
-                    { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                    { type: MenuItemType.divide },
-                    { name: 'invite', text: '邀请其ta人' },
-                    //{ name: 'edit', text: '编辑个人空间资料' },
-                ]
+        var menus: MenuItem<string>[] = [];
+        if (surface.workspace.isOwner) {
+            menus = [
+                { name: 'setting', icon: SettingsSvg, text: '空间设置' },
+                { type: MenuItemType.divide },
+                { name: 'invite', text: '邀请其ta人' },
+                { name: 'edit', text: '编辑个人空间资料' },
+            ]
+        }
+        else if (surface.workspace.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
+            menus = [
+                { name: 'setting', icon: SettingsSvg, text: '空间设置' },
+                { type: MenuItemType.divide },
+                { name: 'invite', text: '邀请其ta人' },
+                { name: 'edit', text: '编辑个人空间资料' },
+                { type: MenuItemType.divide },
+                { name: 'exit', text: '退出空间' }
+            ]
+        }
+        else {
+            menus = [
+                { name: 'invite', text: '邀请其ta人' },
+                { name: 'edit', text: '编辑个人空间资料' },
+                { type: MenuItemType.divide },
+                { name: 'exit', text: '退出空间' }
+            ]
+        }
+        var se = await useSelectMenuItem(
+            { fixPoint: rect.leftBottom.add(0, 0) },
+            menus
+        );
+        if (se) {
+            if (se.item.name == 'exit') {
+                surface.exitWorkspace();
             }
-            else {
-                menus = [
-                    { name: 'invite', text: '邀请其ta人' },
-                    // { name: 'edit', text: '编辑个人空间资料' },
-                    { type: MenuItemType.divide },
-                    { name: 'exit', text: '退出空间' }
-                ]
+            else if (se.item.name == 'invite') {
+                surface.workspace.onCreateInvite(true);
             }
-            var se = await useSelectMenuItem(
-                { fixPoint: rect.leftBottom.add(0, 0) },
-                menus
-            );
-            if (se) {
-                if (se.item.name == 'exit') {
-                    surface.exitWorkspace();
-                }
-                else if (se.item.name == 'invite') {
-                    surface.workspace.onCreateInvite(true);
-                }
-                else if (se.item.name == 'edit') {
+            else if (se.item.name == 'edit') {
 
-                }
-                else if (se.item.name == 'setting') {
-                    useOpenWorkspaceSettings()
-                }
+            }
+            else if (se.item.name == 'setting') {
+                useOpenWorkspaceSettings()
             }
         }
+
     }
     return <div className={'shy-ws-profile' + (surface.workspace?.cover?.url ? " cover" : "")} onMouseDown={e => mousedown(e)}>
         <div className={'shy-ws-profile-info'}>
