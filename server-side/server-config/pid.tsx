@@ -22,8 +22,8 @@ export class PidView extends EventsComponent {
             <div><label></label></div>
             <div className="flex">
                 <SelectBox
-                    // multiple
-                    onChange={e => this.pid.types = e}
+                    multiple
+                    onChange={e => this.pid.types = e as string[]}
                     value={this.pid.types}
                     options={[
                         { text: 'ws', value: 'ws' },
