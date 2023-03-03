@@ -97,7 +97,6 @@ export class PageItem {
             description: observable,
             unreadChats: observable
         });
-
     }
     get sln() {
         return surface.sln;
@@ -427,6 +426,9 @@ export class PageItem {
                 canvas.remove();
             }
         }
+    }
+    isAllow(...ps: AtomPermission[]) {
+        return true
     }
     getPagePermissions() {
         return []
