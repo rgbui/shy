@@ -17,7 +17,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     var style: Record<string, any> = {};
     style.paddingLeft = 0 + (props.deep || 0) * 15;
     var isInEdit = item.id == surface.sln.editId;
-    var isCanEdit = item.workspace.isCanEdit;
+    var isCanEdit = item.isAllow(AtomPermission.docEdit, AtomPermission.channelEdit, AtomPermission.dbEdit);
     var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
@@ -46,7 +46,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         item.text = input.value.trim();
     }
     function contextmenu(event: MouseEvent) {
-        if (item.workspace.isAllow(AtomPermission.createOrDeleteDoc)) {
+        if (item.isAllow(AtomPermission.docEdit)) {
             event.preventDefault();
             item.onContextmenu(event);
         }

@@ -30,7 +30,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
             }
             if (store.item) {
-                page.permissons = store.item.getPermissons();
+                page.permissons = store.item.getPagePermissions();
                 page.pageInfo = store.item;
                 if (store.item.mime == Mime.table) {
                     page.pageLayout = { type: PageLayoutType.db };

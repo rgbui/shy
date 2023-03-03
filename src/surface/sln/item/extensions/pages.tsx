@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
+import { AtomPermission } from "rich/src/page/permission";
 import { PageItem } from "..";
 
 
@@ -12,7 +13,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
         <div className='shy-ws-pages-head'>
             <span onMouseDown={e => item.onSpread()}>{item.text || "我的页面"}</span>
         </div>
-        {item.workspace.isCanEdit && <div className='shy-ws-pages-operators cursor'>
+        {item.isAllow(AtomPermission.dbEdit, AtomPermission.docEdit, AtomPermission.channelEdit) && <div className='shy-ws-pages-operators cursor'>
             <Icon icon={PlusSvg} onMousedown={e => item.onAdd()}></Icon>
         </div>}
         {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}
