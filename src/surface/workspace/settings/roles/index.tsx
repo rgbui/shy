@@ -16,7 +16,7 @@
  */
 
 import lodash from 'lodash';
-import { makeObservable, observable, runInAction, toJS } from 'mobx';
+import { makeObservable, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
 import { ArrowLeftSvg, ArrowRightSvg, ChevronRightSvg, PlusSvg, TypesPersonSvg } from "rich/component/svgs";
@@ -27,7 +27,6 @@ import { Row, Col, Space, Divider } from 'rich/component/view/grid';
 import { Icon, IconButton } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
 import { useSelectMenuItem } from 'rich/component/view/menu';
-import { Switch } from 'rich/component/view/switch';
 import { Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
 import { Rect } from 'rich/src/common/vector/point';
@@ -38,6 +37,8 @@ import "./style.less";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { WorkspaceRole } from '../..';
 import { ToolTip } from 'rich/component/view/tooltip';
+import { SelectBox } from 'rich/component/view/select/box';
+
 const RoleColors: string[] = [
     'rgb(26,188,156)',
     'rgb(46,204,113)',
@@ -60,6 +61,7 @@ const RoleColors: string[] = [
     'rgb(151,156,159)',
     'rgb(84,110,122)',
 ]
+
 @observer
 export class WorkspaceRoles extends React.Component {
     constructor(props) {
@@ -179,13 +181,14 @@ export class WorkspaceRoles extends React.Component {
     renderEditRoles() {
         return <div className='shy-ws-roles-edit'>
             <div className="shy-ws-roles-edit-roles">
-                <div className='shy-ws-roles-edit-roles-head'>
-                    <Row>
-                        <Col span={18} style={{ height: 24 }} valign="middle"><Icon size={14} style={{ cursor: 'pointer' }} onClick={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
-                            <span style={{ cursor: 'pointer', display: 'inline-block', marginLeft: 5 }} onMouseDown={e => this.editRole = null}>后退</span>
-                        </Col>
-                        <Col span={6} style={{ height: 24 }} valign="middle" align='end'><ToolTip overlay={'添加角色'}><Icon size={14} onClick={e => this.addRole()} icon={PlusSvg}></Icon></ToolTip> </Col>
-                    </Row>
+                <div className='flex gap-b-10'>
+                    <div className='flex-auto cursor'>
+                        <Icon size={14} onClick={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
+                        <span className='gap-l-5' onMouseDown={e => this.editRole = null}>后退</span>
+                    </div>
+                    <div className='flex-fixed'>
+                        <ToolTip overlay={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={16} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></ToolTip>
+                    </div>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {
                     return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span style={{ backgroundColor: r.color }}></span><span>{r.text}</span></a>
@@ -276,8 +279,12 @@ export class WorkspaceRoles extends React.Component {
                 <Col><label>角色颜色<i>*</i></label></Col>
                 <Col><Remark>成员将使用角色列表中最靠前的角色的颜色。</Remark></Col>
                 <Col><div className='shy-ws-role-info-color-box'>
-                    <div className='shy-ws-role-info-color' style={{ backgroundColor: this.editRole.color }}></div>
-                    <div className='shy-ws-role-info-color-picker' onMouseDown={e => this.openFontColor(e)} style={{ backgroundColor: RoleColors.includes(this.editRole.color) ? "rgb(153, 170, 181)" : this.editRole.color }}>
+                    <div className='shy-ws-role-info-color' style={{
+                        backgroundColor: this.editRole.color
+                    }}></div>
+                    <div className='shy-ws-role-info-color-picker' onMouseDown={e => this.openFontColor(e)} style={{
+                        backgroundColor: RoleColors.includes(this.editRole.color) ? "rgb(153, 170, 181)" : this.editRole.color
+                    }}>
                         <svg style={{ position: 'absolute', top: 2, right: 2 }} width="14" height="14" viewBox="0 0 16 16"><g fill="none"><path d="M-4-4h24v24H-4z"></path><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></g></svg>
                     </div>
                     <div className='shy-ws-role-info-colors'>
@@ -293,27 +300,17 @@ export class WorkspaceRoles extends React.Component {
     }
     renderPerssions() {
         var self = this;
-        function changePermission(permission, checked) {
-            if (!Array.isArray(self.editRole?.permissions)) {
-                self.editRole.permissions = [];
-            }
-            if (checked == true) {
-                if (!self.editRole.permissions.includes(permission)) {
-                    self.editRole.permissions.push(permission);
+        function save(ps: AtomPermission[]) {
+            var first = ps[0];
+            var name = AtomPermission[first];
+            name = name.slice(0, 2);
+            lodash.remove(self.editRole.permissions, g => (AtomPermission[g as any] as string)?.startsWith(name))
+            ps.forEach(p => {
+                if (!self.editRole.permissions.includes(p)) {
+                    self.editRole.permissions.push(p)
                 }
-            }
-            else {
-                if (self.editRole.permissions.includes(permission)) {
-                    lodash.remove(self.editRole.permissions, x => x == permission);
-                }
-            }
+            })
             self.tip.open();
-        }
-        function is(permission: AtomPermission) {
-            if (Array.isArray(self.editRole?.permissions)) {
-                return (self.editRole.permissions as number[]).includes(permission)
-            }
-            return false;
         }
         return <div className="shy-ws-role-permission">
             <div className='f-12 flex'>
@@ -321,17 +318,118 @@ export class WorkspaceRoles extends React.Component {
                 <span className='flex-fixed '><Button style={{ padding: 0, margin: 0 }} link size={'small'} >清除权限</Button></span>
             </div>
 
-            <div className='flex'>
-                <div className='flex-auto'>
-                    <div>页面权限</div>
-                    <div className='remark'></div>
+            <div className='r-gap-h-10'>
+                <div className='flex'>
+                    <div className='flex-auto'>
+                        <div>页面权限</div>
+                        <div className='remark f-12'>设置页面、白板、宣传页的权限</div>
+                    </div>
+                    <div className='flex-fixed'>
+                        <SelectBox
+                            border
+                            multiple
+                            computedChanges={async (vs, v) => {
+                                if (v == AtomPermission.docInteraction) lodash.remove(vs, g => ![AtomPermission.docExport].includes(g))
+                                else if (v == AtomPermission.docExport) lodash.remove(vs, g => ![AtomPermission.docInteraction].includes(g))
+                                else vs = []
+                                if (!vs.includes(v)) vs.push(v)
+                                return vs;
+                            }}
+                            options={[
+                                { text: '可编辑', value: AtomPermission.docEdit },
+                                { text: '可导出', value: AtomPermission.docExport },
+                                { text: '可交互', value: AtomPermission.docInteraction },
+                                { text: '可查看', value: AtomPermission.docView },
+                                { text: '无权限', value: AtomPermission.docNotAllow },
+                            ]}
+                            value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('doc'))}
+                            onChange={e => { save(e) }}
+                        ></SelectBox>
+                    </div>
                 </div>
-                <div className='flex-fixed'>
-                    <span>
-                        <Icon icon={ChevronRightSvg}></Icon>
-                    </span>
+
+
+                <div className='flex'>
+                    <div className='flex-auto'>
+                        <div>频道权限</div>
+                        <div className='remark f-12'> 设置频道的权限</div>
+                    </div>
+                    <div className='flex-fixed'>
+                        <SelectBox
+                            multiple
+                            border
+                            computedChanges={async (vs, v) => {
+                                vs = []
+                                if (!vs.includes(v)) vs.push(v)
+                                return vs;
+                            }}
+                            options={[
+                                { text: '可编辑', value: AtomPermission.channelEdit },
+                                { text: '可交互', value: AtomPermission.channelInteraction },
+                                { text: '可查看', value: AtomPermission.channelView },
+                                { text: '无权限', value: AtomPermission.channelNotAllow },
+                            ]}
+                            value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('channel'))}
+                            onChange={e => { save(e) }}
+                        ></SelectBox>
+                    </div>
+                </div>
+
+                <div className='flex'>
+                    <div className='flex-auto'>
+                        <div>数据表格权限</div>
+                        <div className='remark f-12'>设置数据表格的权限</div>
+                    </div>
+                    <div className='flex-fixed'>
+                        <SelectBox
+                            border
+                            options={[
+                                { text: '可编辑', value: AtomPermission.dbEdit },
+                                { text: '可编辑数据', value: AtomPermission.dbDataEdit },
+                                { text: '可交互', value: AtomPermission.dbInteraction },
+                                { text: '可查看', value: AtomPermission.dbView },
+                                { text: '无权限', value: AtomPermission.dbNotAllow },
+                            ]}
+                            multiple
+                            computedChanges={async (vs, v) => {
+                                if (v == AtomPermission.dbDataEdit) lodash.remove(vs, g => ![AtomPermission.dbInteraction].includes(g))
+                                else if (v == AtomPermission.dbInteraction) lodash.remove(vs, g => ![AtomPermission.dbDataEdit].includes(g))
+                                else vs = []
+                                if (!vs.includes(v)) vs.push(v)
+                                return vs;
+                            }}
+                            value={self.editRole?.permissions?.filter(g => AtomPermission[g]?.startsWith('db'))}
+                            onChange={e => { save(e) }}
+                        ></SelectBox>
+                    </div>
+                </div>
+
+                <div className='flex'>
+                    <div className='flex-auto'>
+                        <div>空间管理权限</div>
+                        <div className='remark f-12'>设置管理理员对空间的管理权限</div>
+                    </div>
+                    <div className='flex-fixed'>
+                        <SelectBox
+                            border
+                            options={[
+                                { text: '管理空间', value: AtomPermission.wsEdit },
+                                { text: '管理成员', value: AtomPermission.wsMemeberPermissions },
+                                { text: '无权限', value: AtomPermission.wsNotAllow }
+                            ]}
+                            multiple
+                            computedChanges={async (vs, v) => {
+                                vs = []
+                                if (!vs.includes(v)) vs.push(v)
+                                return vs;
+                            }}
+                            value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('ws'))}
+                            onChange={e => { save(e) }}
+                        ></SelectBox>
+                    </div>
                 </div>
             </div>
+
 
             {/* <Row style={{ margin: 0 }}>
                 <Col span={12}><span style={{ fontSize: 12 }}></span></Col>

@@ -80,7 +80,7 @@ import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
 import { UserBasic, UserStatus } from "../types/user";
-import { ResourceArguments } from "../extensions/icon/declare";
+import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -151,7 +151,7 @@ push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any',
 push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
-push('/current/workspace', '', '{id:string,sn:number,text:string,url:string}', ['query'])
+push('/current/workspace','','{id:string,sn:number,text:string,url:string,roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
 push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
