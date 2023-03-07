@@ -1,11 +1,10 @@
 
 import { BaseService } from "./common/base";
 import { fileSock, masterSock, Sock } from "../net/sock";
-import { FileType } from "../type";
-import { FileMd5 } from "../src/util/file";
 import { surface } from "../src/surface";
 import { del, get, patch, post, put } from "rich/net/annotation";
 import { Workspace } from "../src/surface/workspace";
+import { FileMd5 } from "../src/util/file";
 
 class WorkspaceService extends BaseService {
     @get('/ws/basic')
@@ -112,19 +111,12 @@ class WorkspaceService extends BaseService {
     @post('/ws/upload/file')
     async uploadFile(data: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
+            var masterFile;
             var { file, uploadProgress } = data;
             if (!file.md5) file.md5 = await FileMd5(file);
-            var r = await fileSock.get('/file/exists', { md5: file.md5 });
-            var masterFile;
-            if (r?.ok) masterFile = r.data;
-            else {
-                var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
-                if (d.ok) {
-                    masterFile = d.data;
-                }
-            }
-            if (masterFile) {
-                await surface.workspace.sock.put('/file/store', { wsId: surface.workspace.id, file: masterFile?.file });
+            var d = await surface.workspace.fileSock.upload(file, { url: '/ws/file/upload', uploadProgress: uploadProgress });
+            if (d.ok) {
+                masterFile = d.data;
             }
             return { ok: true, data: masterFile }
         }
@@ -137,12 +129,9 @@ class WorkspaceService extends BaseService {
         try {
             var { url } = data;
             var masterFile;
-            var d = await fileSock.put('/file/download', { url });
+            var d = await surface.workspace.fileSock.put('/ws/file/download', { url });
             if (d.ok) {
                 masterFile = d.data;
-            }
-            if (masterFile) {
-                await surface.workspace.sock.post('/file/store', { file: masterFile, wsId: surface.workspace.id });
             }
             return { ok: true, data: masterFile }
         }
@@ -239,7 +228,7 @@ class WorkspaceService extends BaseService {
     }
     @put('/bookmark/url')
     async bookMarkUrl(args) {
-        return await fileSock.put('/bookmark/url', { url: args.url });
+        return await surface.workspace.fileSock.put('/ws/bookmark/url', { url: args.url });
     }
     @get('/page/word/query')
     async pageWordQuery(args) {
@@ -279,7 +268,6 @@ class WorkspaceService extends BaseService {
         });
     }
 
-
     @put('/ws/comment/emoji')
     async wsCommentEmoji(args) {
         return await surface.workspace.sock.put('/ws/comment/emoji', {
@@ -287,9 +275,6 @@ class WorkspaceService extends BaseService {
             ...args
         });
     }
-
-
-
 
     @get('/ws/online/users')
     async wsOnlineUsers(args) {

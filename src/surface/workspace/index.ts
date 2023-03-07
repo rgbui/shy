@@ -14,7 +14,7 @@ import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "..";
-import { AtomPermission, getAllAtomPermission, getCommonPerssions, getEditPerssions } from "rich/src/page/permission";
+import { AtomPermission,  getCommonPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
@@ -185,6 +185,14 @@ export class Workspace {
     get sock() {
         if (this._sock) return this._sock;
         return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.dataServicePids, 'ws'), {
+            'shy-sockId': this.tim.id,
+            'shy-wsId': this.id
+        });
+    }
+    private _filesock: Sock;
+    get fileSock() {
+        if (this._filesock) return this._filesock;
+        return this._filesock = new Sock(SockType.none, Workspace.getWsSockUrl(this.dataServicePids, 'file'), {
             'shy-sockId': this.tim.id,
             'shy-wsId': this.id
         });
