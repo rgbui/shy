@@ -19,6 +19,7 @@ import { ShyOpen } from './content/open';
 import { ShySafe } from './content/safe';
 import { ShyAppear } from './app/appear';
 import { SaveTip } from '../../../component/tip/save.tip';
+import { ShyUserPks } from './content/keys';
 
 @observer
 class UserSettings extends EventsComponent {
@@ -69,6 +70,7 @@ class UserSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} >我的帐号</a>
                         <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} >用户个人资料</a>
                         <a onMouseDown={e => this.setMode('user-safe')} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a>
+                        <a onMouseDown={e => this.setMode('user-pks')} className={this.mode == 'user-pks' ? "hover" : ""} >用户个人私钥</a>
                         <a onMouseDown={e => this.setMode('open')} className={this.mode == 'open' ? "hover" : ""} >第三方帐户</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>帐单设置</h4>
@@ -77,7 +79,7 @@ class UserSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('orderList')} className={this.mode == 'orderList' ? "hover" : ""}>帐单</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>APP设置</h4>
-                        <a onMouseDown={e => this.setMode('appear')} className={this.mode == 'appear' ? "hover" : ""}>外观</a>
+                        {/*<a onMouseDown={e => this.setMode('appear')} className={this.mode == 'appear' ? "hover" : ""}>外观</a> */}
                         <a onMouseDown={e => this.setMode('lang')} className={this.mode == 'lang' ? "hover" : ""}>语言</a>
                         {/*<Divider style={{ margin: '0px 15px' }}></Divider> */}
                         <a onMouseDown={e => this.setMode('update')} className={this.mode == 'update' ? "hover" : ""}>更新日志</a>
@@ -90,6 +92,7 @@ class UserSettings extends EventsComponent {
                     <div className='padding-h-60'>
                         {this.mode == 'user-settings' && <UserSettingsView setMode={() => { this.mode = 'user-profile' }}></UserSettingsView>}
                         {this.mode == 'user-profile' && <UserSettingProfile></UserSettingProfile>}
+                        {this.mode == 'user-pks' && <ShyUserPks></ShyUserPks>}
                         {this.mode == 'update' && <ShyAppUpdate></ShyAppUpdate>}
                         {this.mode == 'lang' && <ShyAppLang></ShyAppLang>}
                         {this.mode == 'wallet' && <ShyWallet></ShyWallet>}

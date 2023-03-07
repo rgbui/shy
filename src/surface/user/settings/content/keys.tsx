@@ -1,6 +1,6 @@
 
 import React from "react";
-import { DotsSvg, EditSvg } from "rich/component/svgs";
+import { DotsSvg, EditSvg, PlusSvg } from "rich/component/svgs";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
@@ -22,7 +22,7 @@ export interface UserPks {
 }
 
 
-export class ShyPayList extends React.Component {
+export class ShyUserPks extends React.Component {
     pks: UserPks[] = [];
     loading: boolean = false;
     componentDidMount() {
@@ -40,7 +40,7 @@ export class ShyPayList extends React.Component {
 
         var self = this;
         async function open(event: React.MouseEvent) {
-            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, []);
+            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ text: '添加私钥', name: 'add', icon: PlusSvg }]);
             if (r) {
 
             }
@@ -63,14 +63,17 @@ export class ShyPayList extends React.Component {
         }
 
         return <div>
-            <div><span className="flex-fixed"></span><span className="flex-auto flex-end"><span className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span></span></div>
+            <div className="flex"><span className="flex-fixed h2">个人私钥</span><span className="flex-auto flex-end"><span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span></span></div>
             <Divider></Divider>
             {this.loading && <Spin></Spin>}
             {!this.loading && <div>
                 {this.pks.map(pk => {
-                    return <div className="item-hover  min-h-30 flex" key={pk.id}>
-                        <div className="flex-auto"><span>{pk.name}</span></div>
-                        <div className="flex-fixed">
+                    return <div className="item-hover padding-w-14  min-h-30 flex" key={pk.id}>
+                        <div className="flex-auto">
+                            <span>{pk.name}</span>
+                            <span className="remark">{pk.public_key}</span>
+                        </div>
+                        <div className="flex-fixed flex r-gap-l-5">
                             <span onMouseDown={e => editProperty(pk, e)} className="flex-center size-24 cursor item-hover round"><Icon icon={EditSvg}></Icon></span>
                             <span onMouseDown={e => openPkProperty(pk, e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span>
                         </div>
