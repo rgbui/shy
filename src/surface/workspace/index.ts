@@ -14,7 +14,7 @@ import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "..";
-import { AtomPermission,  getCommonPerssions } from "rich/src/page/permission";
+import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
@@ -85,6 +85,11 @@ export class Workspace {
     public dataServiceNumber: string;
     public dataServicePids: Pid[];
     public timServicePids: Pid[];
+
+    /**
+     * 数据存储空间访问时进入的区块链编号
+     */
+    public chainBlockId: string = '';
     /**
      * 大文件存储服务商ID
      */
@@ -152,6 +157,8 @@ export class Workspace {
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
+
+
     constructor() {
         makeObservable(this, {
             id: observable,

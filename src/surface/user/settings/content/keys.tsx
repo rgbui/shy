@@ -1,9 +1,12 @@
 
 import React from "react";
+import { ShyAlert } from "rich/component/lib/alert";
 import { DotsSvg, EditSvg, PlusSvg } from "rich/component/svgs";
+import { useForm } from "rich/component/view/form/dialoug";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
+import { MenuItemType } from "rich/component/view/menu/declare";
 import { Spin } from "rich/component/view/spin";
 import { Rect } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
@@ -20,7 +23,6 @@ export interface UserPks {
     private_key: string;
     check: boolean;
 }
-
 
 export class ShyUserPks extends React.Component {
     pks: UserPks[] = [];
@@ -42,44 +44,86 @@ export class ShyUserPks extends React.Component {
         async function open(event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ text: '添加私钥', name: 'add', icon: PlusSvg }]);
             if (r) {
-
+                var g = await useForm({
+                    title: '创建个人身份私钥',
+                    remark: '私钥名称',
+                    fields: [{ name: 'name', text: '名称', type: 'input' }],
+                    checkModel: async (model) => {
+                        if (model.name) return '名称不能为空'
+                        return ''
+                    }
+                });
+                if (g) {
+                    await masterSock.put('/user/create/pk', { name: g.name });
+                    await self.load()
+                    ShyAlert('个人身份私钥添加成功')
+                }
             }
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
-            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ name: 'disabled' }]);
+            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
+                { name: 'edit', text: "编辑名称" },
+                ...(self.pks.length > 2 ? [
+                    { name: 'check', text: "启用", checkLabel: pk.check },
+                    { name: 'uncheck', text: "禁用", checkLabel: pk.check }
+                ] : [])
+            ]);
             if (r) {
-                if (r.item.name == 'disabled') {
-                    await masterSock.patch('/user/update/pks', { id: pk, data: { disabled: pk.disabled ? false : true } })
+                if (r.item.name == 'check') {
+                    await masterSock.patch('/user/update/pks', { id: pk, data: { check: true } })
+                }
+                else if (r.item.name == 'uncheck') {
+                    await masterSock.patch('/user/update/pks', { id: pk, data: { check: false } })
+                }
+                else if (r.item?.name == 'edit') {
+                    editProperty(pk, event)
                 }
             }
         }
         async function editProperty(pk: UserPks, event: React.MouseEvent) {
-
-
-            await masterSock.put('/user/create/pks', {});
+            var g = await useForm({
+                title: '编辑私钥名称',
+                remark: '私钥名称',
+                model: { name: pk.name },
+                fields: [{ name: 'name', text: '名称', type: 'input' }],
+                checkModel: async (model) => {
+                    if (model.name) return '名称不能为空'
+                    return ''
+                }
+            });
+            if (g) {
+                await masterSock.put('/user/update/pk', { id: pk.id, data: { name: g.name } });
+            }
             await self.load();
-            self.forceUpdate();
-
+            ShyAlert('个人身份私钥编辑成功')
         }
-
         return <div>
-            <div className="flex"><span className="flex-fixed h2">个人私钥</span><span className="flex-auto flex-end"><span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span></span></div>
+            <div className="flex"><span className="flex-fixed h2">个人身份私钥</span><span className="flex-auto flex-end"><span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span></span></div>
             <Divider></Divider>
-            {this.loading && <Spin></Spin>}
+            {this.loading && <Spin block></Spin>}
             {!this.loading && <div>
                 {this.pks.map(pk => {
                     return <div className="item-hover padding-w-14  min-h-30 flex" key={pk.id}>
                         <div className="flex-auto">
-                            <span>{pk.name}</span>
-                            <span className="remark">{pk.public_key}</span>
+                            <div className="flex">
+                                <span>{pk.name}</span>
+                                <span className="bg-primary">{pk.mode == 'deal' ? "生活交易" : "日常行为"}</span>
+                            </div>
+                            <div className="remark">{pk.public_key}</div>
                         </div>
                         <div className="flex-fixed flex r-gap-l-5">
-                            <span onMouseDown={e => editProperty(pk, e)} className="flex-center size-24 cursor item-hover round"><Icon icon={EditSvg}></Icon></span>
                             <span onMouseDown={e => openPkProperty(pk, e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span>
                         </div>
                     </div>
                 })}
             </div>}
+
+            <div className="remark">
+                个人身份私钥主要分类
+                <div>1.生活交易 主要用于交易安全方面的私钥</div>
+                <div>2.日常行烽 主要用于签名社区内的交互行为</div>
+            </div>
+
         </div>
     }
 }
