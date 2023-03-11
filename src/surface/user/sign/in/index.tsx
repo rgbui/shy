@@ -10,7 +10,7 @@ import { observer, useLocalObservable } from "mobx-react";
 import { inviteCode, phoneCode, phoneRegex } from "../../../../common/verify";
 import { useLocation } from "react-router-dom";
 import { channel } from "rich/net/channel";
-import Logo from "../../../../assert/img/shy.256.png";
+import LogoSrc from "../../../../assert/img/shy.logo.256.png";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { WechatSvg } from "../../../../component/svgs";
@@ -81,7 +81,7 @@ export var Login = observer(function () {
     function renderPhone() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.phone}
+                <Input size="larger" value={local.phone}
                     name={'phone'}
                     onEnter={e => phoneSign()}
                     onChange={e => local.phone = e}
@@ -89,15 +89,14 @@ export var Login = observer(function () {
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
-                <Button size='medium' block onClick={e => phoneSign()}>继续</Button >
+                <Button size='larger' block onClick={e => phoneSign()}>继续</Button >
             </div>
         </div>
     }
     /**
      * 输入手机验证码
      */
-    async function genCode()
-    {
+    async function genCode() {
         if (local.expireCount == -1) {
             local.expireCount = 120;
             var result = await channel.post('/phone/sms/code', { phone: local.phone });
@@ -181,13 +180,13 @@ export var Login = observer(function () {
         else {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input size={'larger'} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
                 </div>
                 {local.loginType == 'paw' && <div className='shy-login-box-account'>
-                    <Input type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
+                    <Input size="larger" type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
                 </div>}
                 {local.loginType == 'code' && <div className='shy-login-box-code'>
-                    <Input value={local.verifyPhoneCode}
+                    <Input size="larger" value={local.verifyPhoneCode}
                         name={'code'}
                         placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)}
                         onChange={e => local.verifyPhoneCode = e}
@@ -196,7 +195,7 @@ export var Login = observer(function () {
                     {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
                 </div>}
                 <div className='shy-login-box-button'>
-                    <Button size='medium' block onClick={e => loginOrRegister()}>{'登录'}</Button >
+                    <Button size="larger" block onClick={e => loginOrRegister()}>{'登录'}</Button >
                 </div>
                 <div className="shy-login-box-type">
                     <span>您也可以使用<a onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? "密码登录" : "手机短信登录"}</a></span>
@@ -225,14 +224,14 @@ export var Login = observer(function () {
     function renderName() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input value={local.name || local.weixinOpen?.nickname} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={'请输入称呼'}></Input>
+                <Input size="larger" value={local.name || local.weixinOpen?.nickname} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={'请输入称呼'}></Input>
             </div>
             <div className='shy-login-box-account'>
-                <Input type='password' value={local.paw} onEnter={e => updateName()} onChange={e => local.paw = e} placeholder={'请输入密码'}></Input>
+                <Input size="larger" type='password' value={local.paw} onEnter={e => updateName()} onChange={e => local.paw = e} placeholder={'请输入密码'}></Input>
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
-                <Button size='medium' block onClick={e => updateName()}>保存</Button >
+                <Button size="larger" block onClick={e => updateName()}>保存</Button >
             </div>
         </div>
     }
@@ -283,7 +282,7 @@ export var Login = observer(function () {
 
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
-        <div className='shy-login-logo'><a href='/'><img style={{ width: 30, height: 30 }} src={Logo} /><span>诗云</span></a></div>
+        <div className='shy-login-logo'><a href='/'><img style={{ width: 60, height: 60 }} src={LogoSrc} /><span>诗云</span></a></div>
         <div className='shy-login'>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
 
@@ -300,7 +299,7 @@ export var Login = observer(function () {
             {local.step == 'name' && renderName()}
             {!['login', 'register', 'name', 'weixin-login'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center">其他登录方式</Divider>
                 <div className="shy-login-open">
-                    <Icon onClick={e => local.step = 'weixin-login'} size={40} icon={WechatSvg}></Icon>
+                    <Icon className={'cursor'} onClick={e => local.step = 'weixin-login'} size={40} icon={WechatSvg}></Icon>
                 </div></>}
         </div>
     </div>
