@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'rich/component/view/button/index';
-import { Row, Col, Divider, Space } from 'rich/component/view/grid';
+import {  Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
 import { surface } from '../..';
@@ -8,11 +8,11 @@ import "./style.less";
 import { observer } from 'mobx-react';
 import { channel } from 'rich/net/channel';
 import { useSetWsDomain } from '../../user/common/setDomain';
-import { Remark } from 'rich/component/view/text';
 import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
 import { Textarea } from 'rich/component/view/input/textarea';
+
 @observer
 export class WorkspaceSettingsView extends React.Component {
     constructor(props) {
@@ -139,10 +139,8 @@ export class WorkspaceSettingsView extends React.Component {
                         {surface.workspace.cover && <img src={autoImageUrl(surface.workspace.cover.url, 500)} />}
                         <div className='shy-settings-ws-cover-hover'>更换横幅</div>
                     </div>}
-                    <div className='gap-l-10'>
-                        {surface.workspace.cover && <Button ghost onClick={() => this.onRemoveCover()}>移除横幅背景</Button>}
-                        {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
-                    </div>
+                    {surface.workspace.cover && <Button className='gap-l-10' ghost onClick={() => this.onRemoveCover()}>移除横幅背景</Button>}
+                    {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
                 </div>
             </div>
 

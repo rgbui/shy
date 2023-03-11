@@ -68,10 +68,10 @@ class UserSettings extends EventsComponent {
                     <div className='padding-h-60'>
                         <h4>用户设置</h4>
                         <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} >我的帐号</a>
-                        <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} >用户个人资料</a>
-                        <a onMouseDown={e => this.setMode('user-safe')} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a>
-                        <a onMouseDown={e => this.setMode('user-pks')} className={this.mode == 'user-pks' ? "hover" : ""} >用户个人私钥</a>
+                        <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} >个人资料</a>
+                        <a onMouseDown={e => this.setMode('user-pks')} className={this.mode == 'user-pks' ? "hover" : ""} >个人私钥</a>
                         <a onMouseDown={e => this.setMode('open')} className={this.mode == 'open' ? "hover" : ""} >第三方帐户</a>
+                        <a onMouseDown={e => this.setMode('user-safe')} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>帐单设置</h4>
                         <a onMouseDown={e => this.setMode('price')} className={this.mode == 'price' ? "hover" : ""}>定价</a>
