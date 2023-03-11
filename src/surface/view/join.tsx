@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { channel } from "rich/net/channel";
-import { surface } from "..";
+import { surface } from "../store";
 export var JoinTip = observer(function () {
     async function mousedown(event: React.MouseEvent) {
         await channel.put('/user/join/ws', {

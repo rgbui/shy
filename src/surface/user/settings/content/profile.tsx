@@ -6,7 +6,7 @@ import { Col, Divider, Row, Space } from "rich/component/view/grid";
 import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { useColorPicker } from "rich/component/view/color/picker";
 import { makeObservable, observable } from "mobx";
 import { autoImageUrl } from "rich/net/element.type";

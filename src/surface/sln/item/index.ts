@@ -1,6 +1,6 @@
 
 import { util } from "rich/util/util";
-import { surface } from "../..";
+import { surface } from "../../store";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';

@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { MouseDragger } from "rich/src/common/dragger";
-import { surface } from "..";
+import { surface } from "../store";
 import { yCache, CacheKey } from "../../../net/cache";
 import { SlnView } from "../sln/view";
 

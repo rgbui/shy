@@ -6,7 +6,7 @@ import { Icon } from "rich/component/view/icon";
 import { Loading } from "rich/component/view/loading";
 import { Workspace } from "..";
 import { Avatar } from "rich/component/view/avator/face";
-import { surface } from "../..";
+import { surface } from "../../store";
 import "./style.less";
 import DragHandle from "rich/src/assert/svg/dragHandle.svg";
 import PlusSvg from "rich/src/assert/svg/plus.svg";

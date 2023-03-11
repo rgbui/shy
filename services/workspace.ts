@@ -1,7 +1,7 @@
 
 import { BaseService } from "./common/base";
 import { fileSock, masterSock, Sock } from "../net/sock";
-import { surface } from "../src/surface";
+import { surface } from "../src/surface/store";
 import { del, get, patch, post, put } from "rich/net/annotation";
 import { Workspace } from "../src/surface/workspace";
 import { FileMd5 } from "../src/util/file";

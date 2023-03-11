@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { PageItem } from "../../surface/sln/item";
 import { Icon } from "rich/component/view/icon";
-import { surface } from "../../surface";
+import { surface } from "../../surface/store";
 export var WorkspaceSln = observer(function () {
     function renderItem(item: PageItem, deep: number = 0) {
         return <div key={item.id}>

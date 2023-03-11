@@ -1,7 +1,7 @@
 import React from "react";
 import { RichTextInput } from "rich/component/view/rich.input/index";
 import { channel } from "rich/net/channel";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { userChannelStore } from "../store";
 import "./style.less";
 import { UserBox } from "rich/component/view/avator/user";

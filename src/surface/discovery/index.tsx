@@ -5,7 +5,7 @@ import pic from "../../assert/img/pic-3.jpg";
 import { channel } from "rich/net/channel";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Workspace } from "../workspace";
-import { surface } from "..";
+import { surface } from "../store";
 
 export var DiscoveryView = observer(function () {
     var local = useLocalObservable(() => {

@@ -4,7 +4,7 @@
 
 
 import { put, get, del } from "rich/net/annotation";
-import { surface } from "../src/surface";
+import { surface } from "../src/surface/store";
 
 class SchemaService {
     @put('/schema/create')

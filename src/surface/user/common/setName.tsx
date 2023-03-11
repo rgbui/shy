@@ -5,7 +5,7 @@ import { Dialoug, Row, Col } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
-import { surface } from "../..";
+import { surface } from "../../store";
 
 class UserModifyName extends EventsComponent {
     render() {

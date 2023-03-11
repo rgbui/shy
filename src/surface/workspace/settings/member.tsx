@@ -4,7 +4,7 @@ import { Row, Col, Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { observer } from 'mobx-react';
 import { makeObservable, observable, runInAction } from 'mobx';
-import { surface } from '../..';
+import { surface } from '../../store';
 import { Select } from 'rich/component/view/select';
 import { channel } from 'rich/net/channel';
 import { Avatar } from 'rich/component/view/avator/face';

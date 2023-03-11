@@ -7,7 +7,7 @@ import { Input } from "rich/component/view/input";
 import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
 import { Workspace } from "../..";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { useSelectWorkspacePage } from "rich/extensions/link/select"
 import { Point } from "rich/src/common/vector/point";

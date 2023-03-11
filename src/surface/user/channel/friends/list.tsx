@@ -11,7 +11,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { channel } from "rich/net/channel";
 import { ToolTip } from "rich/component/view/tooltip";
 import { UserBasic, UserStatus } from "rich/types/user";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 
 export var FrendListView = observer(function () {
     var refInput = React.useRef<Input>(null);

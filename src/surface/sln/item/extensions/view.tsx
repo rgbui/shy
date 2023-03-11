@@ -3,7 +3,7 @@ import { Icon } from "rich/component/view/icon";
 import { PageItemBox } from "../view/box";
 import { observer } from "mobx-react";
 import { PageItem } from "..";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { AtomPermission } from "rich/src/page/permission";
 import { getPageIcon } from "rich/extensions/at/declare";
 import { DotNumber } from "rich/component/view/dot";

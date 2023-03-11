@@ -3,7 +3,7 @@ import { Button } from 'rich/component/view/button/index';
 import {  Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
-import { surface } from '../..';
+import { surface } from '../../store';
 import "./style.less";
 import { observer } from 'mobx-react';
 import { channel } from 'rich/net/channel';

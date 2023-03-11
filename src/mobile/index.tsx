@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { channel } from "rich/net/channel";
 import { appLangProvider } from "../../i18n/provider";
-import { surface } from "../surface";
+import { surface } from "../surface/store";
 import { Route, Router, Switch } from "react-router";
 import { ShyMobileHistory } from "./history";
 import { WorkspaceView } from "./workspace";

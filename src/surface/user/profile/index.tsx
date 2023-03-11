@@ -9,7 +9,7 @@ import { MenuItemType } from "rich/component/view/menu/declare";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { UserStatus } from "rich/types/user";
-import { surface } from "../..";
+import { surface } from "../../store";
 import { userNativeStore } from "../../../../native/store/user";
 import { useOpenUserSettings } from "../settings";
 import './style.less';

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react"
 import { LayoutView } from "../layout"
 import React from "react";
-import { surface } from "../../surface";
+import { surface } from "../../surface/store";
 import { Avatar } from "rich/component/view/avator/face";
 export var UserView = observer(function () {
     return <LayoutView>

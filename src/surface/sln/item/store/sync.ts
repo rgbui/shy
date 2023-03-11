@@ -2,7 +2,7 @@ import lodash from "lodash";
 import { runInAction } from "mobx";
 import { config } from "../../../../common/config";
 import { PageItem } from "..";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 
 export enum ItemOperatorDirective {
     update = 1,

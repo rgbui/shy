@@ -4,7 +4,7 @@ import { act, air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
 import { ElementType, getElementUrl, parseElementUrl } from "rich/net/element.type";
 import { PageLayoutType } from "rich/src/page/declare";
-import { surface } from ".";
+import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
 import { UrlRoute } from "../history";
 import { Mime } from "./sln/declare";

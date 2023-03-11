@@ -7,7 +7,7 @@ import { Row, Space } from "rich/component/view/grid";
 import { Loading } from "rich/component/view/loading";
 import { channel } from "rich/net/channel";
 import { Workspace } from "..";
-import { surface } from "../..";
+import { surface } from "../../store";
 import { ShyUrl, UrlRoute } from "../../../history";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Sock } from "../../../../net/sock";

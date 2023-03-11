@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { Avatar } from "rich/component/view/avator/face";
 import { channel } from "rich/net/channel";
 import React from "react";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { Icon } from "rich/component/view/icon";
 import { CheckSvg, CloseSvg } from "rich/component/svgs";
 import { Input } from "rich/component/view/input";

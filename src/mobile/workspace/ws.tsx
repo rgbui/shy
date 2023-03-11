@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { surface } from "../../surface";
+import { surface } from "../../surface/store";
 export var WsList = observer(function () {
 
     React.useEffect(() => {

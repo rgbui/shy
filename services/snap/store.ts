@@ -9,7 +9,7 @@ import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
 import { config } from "../../src/common/config";
 import { log } from "../../src/common/log";
-import { surface } from "../../src/surface";
+import { surface } from "../../src/surface/store";
 const DELAY_TIME = 1000 * 60 * 3;
 const MAX_OPERATE_COUNT = 50;
 var snapSyncMaps: Map<string, SnapStore> = new Map();

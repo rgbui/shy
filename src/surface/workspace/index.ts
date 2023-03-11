@@ -13,7 +13,7 @@ import { useOpenWorkspaceSettings } from "./settings";
 import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
-import { surface } from "..";
+import { surface } from "../store";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";

@@ -4,7 +4,7 @@ import { SockResponse, SockType } from "./type";
 import { config } from "../../src/common/config";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
-import { surface } from "../../src/surface";
+import { surface } from "../../src/surface/store";
 
 
 export class Sock {

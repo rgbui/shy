@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React, { CSSProperties } from "react";
 import { PageItem } from "..";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 export var PageItemBox = observer(function (props: { items: PageItem[], style?: CSSProperties, deep?: number }) {
     if (props.items.length == 0) {
         var style: Record<string, any> = {};

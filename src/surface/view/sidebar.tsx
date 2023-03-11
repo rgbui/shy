@@ -2,7 +2,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Icon } from "rich/component/view/icon";
-import { surface } from "..";
+import { surface } from "../store";
 import PubWorkspace from "../../assert/svg/pubWorkspace.svg";
 import DownloadSvg from "../../assert/svg/download.svg";
 import { PlusSvg } from "rich/component/svgs";

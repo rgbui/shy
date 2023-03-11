@@ -1,6 +1,6 @@
 import React from "react";
 import { Rect } from "rich/src/common/vector/point";
-import { surface } from "../..";
+import { surface } from "../../store";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";

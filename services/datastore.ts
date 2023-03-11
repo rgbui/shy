@@ -1,5 +1,5 @@
 
-import { surface } from "../src/surface";
+import { surface } from "../src/surface/store";
 import { del, put, get, patch } from "rich/net/annotation";
 
 class DataStoreService {

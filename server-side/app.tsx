@@ -4,7 +4,7 @@ import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 import { channel } from "rich/net/channel";
 import { appLangProvider } from "../i18n/provider";
 import { SyHistory, ShyUrl } from "../src/history";
-import { surface } from "../src/surface";
+import { surface } from "../src/surface/store";
 import { View404 } from "../src/surface/404";
 import { Login } from "../src/surface/user/sign/in";
 import { LogOut } from "../src/surface/user/sign/out";

@@ -6,7 +6,7 @@ import { sCache, CacheKey } from "../../../net/cache";
 import { UrlRoute, ShyUrl } from "../../history";
 import { channel } from "rich/net/channel";
 import { Workspace } from "../workspace";
-import { surface } from "..";
+import { surface } from "../store";
 
 export var MyWorkSpace = observer(function () {
     async function load() {

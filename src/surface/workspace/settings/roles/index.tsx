@@ -31,7 +31,7 @@ import { Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
 import { Rect } from 'rich/src/common/vector/point';
 import { util } from 'rich/util/util';
-import { surface } from '../../..';
+import { surface } from '../../../store';
 import { SaveTip } from '../../../../component/tip/save.tip';
 import "./style.less";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";

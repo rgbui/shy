@@ -3,7 +3,7 @@ import React from "react";
 import { Avatar } from "rich/component/view/avator/face";
 import { UserBox } from "rich/component/view/avator/user";
 import { DotNumber } from "rich/component/view/dot";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { userChannelStore } from "../store";
 
 export var UserChannels = observer(function () {

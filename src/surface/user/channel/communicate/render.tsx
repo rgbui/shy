@@ -3,7 +3,7 @@ import { ViewChats } from "rich/extensions/chats";
 import { ChannelTextType } from "rich/extensions/chats/declare";
 import { EmojiCode } from "rich/extensions/emoji/store";
 import { channel } from "rich/net/channel";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { UserChannel } from "../declare";
 export class RenderChatsView extends React.Component<{
     userChannel: UserChannel,

@@ -4,7 +4,7 @@ import React from "react";
 import { Divider } from "rich/component/view/grid";
 import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 
 export class ShySafe extends React.Component {

@@ -9,7 +9,7 @@ import { SurfaceView } from './surface/view';
 import { View404 } from './surface/404';
 import { InviteView } from './surface/workspace/create/invite';
 import { config } from './common/config';
-import { surface } from './surface';
+import { surface } from './surface/store';
 import { MyWorkSpace } from './surface/view/my';
 import { channel } from "rich/net/channel";
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";

@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from 'react';
 import { Loading } from "rich/component/view/loading";
-import { Surface, surface } from ".";
+import { Surface, surface } from "./store";
 import { SideBar } from "./view/sidebar";
 import { UserChannel } from "./user/channel/view";
 import { Route } from "react-router";

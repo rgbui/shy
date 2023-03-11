@@ -1,5 +1,5 @@
 import React from "react";
-import { surface } from "../..";
+import { surface } from "../../store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer } from "mobx-react";
 import { UserProfile } from "../../user/profile";

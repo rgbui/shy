@@ -1,7 +1,7 @@
 import { Observer, observer } from "mobx-react"
 import React from "react";
 import { userChannelStore } from "../../surface/user/channel/store";
-import { surface } from "../../surface";
+import { surface } from "../../surface/store";
 import { UserBox } from "rich/component/view/avator/user";
 import { Avatar } from "rich/component/view/avator/face";
 import { DotNumber } from "rich/component/view/dot";

@@ -4,7 +4,7 @@ import { Input } from "rich/component/view/input";
 import { UrlRoute } from "../../../history";
 import { observer, useLocalObservable } from "mobx-react";
 import "./style.less";
-import { surface } from "../..";
+import { surface } from "../../store";
 import { masterSock, Sock } from "../../../../net/sock";
 import { Workspace } from "..";
 import { channel } from "rich/net/channel";

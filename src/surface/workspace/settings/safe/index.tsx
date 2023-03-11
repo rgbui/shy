@@ -7,7 +7,7 @@ import { Textarea } from "rich/component/view/input/textarea";
 import { SelectBox } from "rich/component/view/select/box";
 import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
-import { surface } from "../../..";
+import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 
 @observer

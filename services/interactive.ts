@@ -1,5 +1,5 @@
 import { patch,get} from "rich/net/annotation";
-import { surface } from "../src/surface";
+import { surface } from "../src/surface/store";
 
 class interactiveService {
     @patch('/interactive/emoji')
