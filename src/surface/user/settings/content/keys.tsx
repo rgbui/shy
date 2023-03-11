@@ -6,7 +6,6 @@ import { useForm } from "rich/component/view/form/dialoug";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
-import { MenuItemType } from "rich/component/view/menu/declare";
 import { Spin } from "rich/component/view/spin";
 import { Rect } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
@@ -62,22 +61,27 @@ export class ShyUserPks extends React.Component {
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-                { name: 'edit', text: "编辑名称" },
-                ...(self.pks.length > 2 ? [
+                { name: 'edit', text: "编辑名称", icon: EditSvg },
+                ...(self.pks.length > 2 && pk.mode == 'active' ? [
                     { name: 'check', text: "启用", checkLabel: pk.check },
-                    { name: 'uncheck', text: "禁用", checkLabel: pk.check }
+                    { name: 'uncheck', text: "禁用", checkLabel: !pk.check }
                 ] : [])
             ]);
             if (r) {
                 if (r.item.name == 'check') {
-                    await masterSock.patch('/user/update/pks', { id: pk, data: { check: true } })
+                    await masterSock.patch('/user/update/pk', { id: pk.id, check: true })
+                    await self.load();
+                    ShyAlert('个人身份私钥启用成功')
                 }
                 else if (r.item.name == 'uncheck') {
-                    await masterSock.patch('/user/update/pks', { id: pk, data: { check: false } })
+                    await masterSock.patch('/user/update/pk', { id: pk.id, check: false })
+                    await self.load();
+                    ShyAlert('个人身份私钥禁用成功')
                 }
                 else if (r.item?.name == 'edit') {
                     editProperty(pk, event)
                 }
+
             }
         }
         async function editProperty(pk: UserPks, event: React.MouseEvent) {
@@ -92,7 +96,7 @@ export class ShyUserPks extends React.Component {
                 }
             });
             if (g) {
-                await masterSock.put('/user/update/pk', { id: pk.id, data: { name: g.name } });
+                await masterSock.patch('/user/update/pk', { id: pk.id, name: g.name });
             }
             await self.load();
             ShyAlert('个人身份私钥编辑成功')
@@ -103,11 +107,11 @@ export class ShyUserPks extends React.Component {
             {this.loading && <Spin block></Spin>}
             {!this.loading && <div>
                 {this.pks.map(pk => {
-                    return <div className="item-hover padding-w-14  min-h-30 flex" key={pk.id}>
+                    return <div className={"item-hover round padding-14 gap-b-10  min-h-30 flex-top" + (pk.check ? " " : " op-4")} key={pk.id}>
                         <div className="flex-auto">
                             <div className="flex">
                                 <span>{pk.name}</span>
-                                <span className="bg-primary">{pk.mode == 'deal' ? "生活交易" : "日常行为"}</span>
+                                <span className=" gap-l-10 f-12 bg-primary round text-white op-7 padding-w-5 padding-h-1">{pk.mode == 'deal' ? "交易" : "日常"}</span>
                             </div>
                             <div className="remark">{pk.public_key}</div>
                         </div>
@@ -118,12 +122,11 @@ export class ShyUserPks extends React.Component {
                 })}
             </div>}
 
-            <div className="remark">
+            <div className="remark gap-h-30">
                 个人身份私钥主要分类
-                <div>1.生活交易 主要用于交易安全方面的私钥</div>
-                <div>2.日常行烽 主要用于签名社区内的交互行为</div>
+                <div>1.生活交易 适用于交易安全方面的私钥</div>
+                <div>2.日常行烽 适用于签名社区内的交互行为</div>
             </div>
-
         </div>
     }
 }
