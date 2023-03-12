@@ -18,7 +18,8 @@ export function App() {
         await appLangProvider.import();
         await channel.put('/device/sign');
         await surface.user.sign()
-        await serverSlideStore.load();
+        if (!surface.user.isSign) surface.user.toSign()
+        else await serverSlideStore.load();
         setLoad(true);
     }
     React.useEffect(() => {
@@ -30,7 +31,7 @@ export function App() {
                 <Route path={ShyUrl.root} exact component={ServerSlideView}></Route>
                 <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
                 <Route path={ShyUrl.signIn} exact component={Login}></Route>
-                <Route path={'/server/slide'} exact component={ServerSlideView}></Route>
+                <Route path={ShyUrl.home} exact component={ServerSlideView}></Route>
                 <Route path={ShyUrl._404} exact component={View404}></Route>
                 <Route component={View404}></Route>
             </Switch>

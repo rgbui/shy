@@ -5,7 +5,7 @@ import { masterSock } from "../net/sock";
 import { Pid, ServerServiceMachineIdKey, ServerServiceNumberKey, ServiceMachine, ShyServiceSlideElectron } from "./declare";
 
 export class ServerSlideStore {
-    machineCode: string;
+    machineCode: string = null;
     service_machine: ServiceMachine = null;
     pids: Pid[] = [];
     constructor() {
