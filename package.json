@@ -5,11 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build-api": "node scripts/api.js",
-    "pro": "webpack --config scripts/config.js  --pro",
-    "beta": "webpack --config scripts/config.js  --beta ",
     "desktop": "webpack --config scripts/config.js  --dev --desktop",
     "desktop-pro": "webpack --config scripts/config.js  --pro --desktop",
-    "dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  "
+    "server-side": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors --server-side",
+    "server-side-pro": "webpack --config scripts/config.js  --pro --server-side",
+    "mobile": "webpack --config scripts/config.js  --dev --mobile",
+    "mobile-pro": "webpack --config scripts/config.js  --pro --mobile",
+    "web-dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress --colors  ",
+    "web-pro": "webpack --config scripts/config.js  --pro",
+    "web-beta": "webpack --config scripts/config.js  --beta "
   },
   "keywords": [
     "shy.live",
