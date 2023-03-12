@@ -11,7 +11,7 @@ import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
 import { useOpenWorkspaceSettings } from "./settings";
 import { computed, makeObservable, observable } from "mobx";
-import { config } from "../../common/config";
+import { config } from "../../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { config } from "../common/config";
+import { config } from "../../common/config";
 import { ShyUrl, UrlRoute } from "../history";
 export var View404 = observer(function () {
     function back(event: React.MouseEvent) {

@@ -10,7 +10,7 @@ import { LinkWorkspaceOnline } from "../workspace";
 import LogoSrc from "../../assert/img/shy.logo.256.png";
 import { ShyUrl, UrlRoute } from "../../history";
 import { autoImageUrl } from "rich/net/element.type";
-import { config } from "../../common/config";
+import { config } from "../../../common/config";
 import { UA } from "rich/util/ua";
 import { ToolTip } from "rich/component/view/tooltip";
 import { DotNumber } from "rich/component/view/dot/index";

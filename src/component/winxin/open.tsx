@@ -1,7 +1,7 @@
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
-import { config } from "../../common/config";
+import { config } from "../../../common/config";
 export class WeixinOpen extends EventsComponent<{ onChange?: (data: { exists: boolean, open: { openId: string, nickname: string } }) => void }> {
     loading: boolean = false;
     sockId: string = '';

@@ -1,5 +1,5 @@
 import { query } from "rich/net/annotation";
-import { config } from "../../src/common/config";
+import { config } from "../../common/config";
 
 
 

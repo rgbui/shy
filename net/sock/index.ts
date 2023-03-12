@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { CacheKey, sCache } from "../cache";
 import { SockResponse, SockType } from "./type";
-import { config } from "../../src/common/config";
+import { config } from "../../common/config";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
 import { surface } from "../../src/surface/store";

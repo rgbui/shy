@@ -1,6 +1,6 @@
 import { createBrowserHistory } from "history";
 import { generatePath, matchPath } from "react-router";
-import { config } from "./common/config";
+import { config } from "../common/config";
 export const SyHistory = createBrowserHistory();
 export function currentParams(routePath: string): Record<string, any> {
     var r = matchPath(location.pathname, {
@@ -67,5 +67,6 @@ export enum ShyUrl {
     workCreate = '/work/create',
     myWorkspace = '/my/workspace',
     discovery = '/discovery',
-    _404 = '/404'
+    _404 = '/404',
+    home = '/home'
 }

@@ -4,7 +4,7 @@ import { Button } from "rich/component/view/button";
 import { Divider } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { surface } from "../../store";
-import { config } from "../../../common/config";
+import { config } from "../../../../common/config";
 
 @observer
 export class WorkspaceInvite extends React.Component {

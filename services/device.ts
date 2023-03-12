@@ -4,7 +4,7 @@ import { put, query } from "rich/net/annotation";
 import { UA } from "rich/util/ua";
 import { CacheKey, sCache } from "../net/cache";
 import { masterSock } from "../net/sock";
-import { config } from "../src/common/config";
+import { config } from "../common/config";
 import { fingerFlag } from "../src/util/finger";
 class UserDeviceService {
     @put('/device/sign')

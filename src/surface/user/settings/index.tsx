@@ -8,7 +8,7 @@ import { makeObservable, observable } from 'mobx';
 import { Singleton } from 'rich/component/lib/Singleton';
 import { Divider } from 'rich/component/view/grid';
 import { Remark } from 'rich/component/view/text';
-import { config } from "../../../common/config";
+import { config } from "../../../../common/config";
 import { UserSettingProfile } from './content/profile';
 import { ShyAppUpdate } from './app/upgrade';
 import { ShyAppLang } from './app/lang';

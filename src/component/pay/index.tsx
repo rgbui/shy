@@ -7,7 +7,7 @@ import { Icon } from 'rich/component/view/icon';
 import { Loading } from 'rich/component/view/loading';
 import { PopoverSingleton } from 'rich/extensions/popover/popover';
 import { channel } from 'rich/net/channel';
-import { config } from '../../common/config';
+import { config } from '../../../common/config';
 import { WeixinPaySvg, AlipaySvg } from '../svgs';
 import "./style.less";
 export class PayView extends EventsComponent {
