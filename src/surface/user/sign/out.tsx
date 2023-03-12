@@ -3,7 +3,7 @@ import { ShyUrl, UrlRoute } from "../../../history";
 import { surface } from "../../store";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
-import { config } from "../../../common/config";
+import { config } from "../../../../common/config";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;

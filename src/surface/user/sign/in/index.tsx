@@ -7,15 +7,17 @@ import { surface } from "../../../store";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { observer, useLocalObservable } from "mobx-react";
-import { inviteCode, phoneCode, phoneRegex } from "../../../../common/verify";
+import { inviteCode, phoneCode, phoneRegex } from "../../../../../common/verify";
 import { useLocation } from "react-router-dom";
 import { channel } from "rich/net/channel";
 import LogoSrc from "../../../../assert/img/shy.logo.256.png";
+import LogoBlueSrc from "../../../../assert/img/shy.logo.blue.256.png";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { WechatSvg } from "../../../../component/svgs";
 import { WeixinOpen } from "../../../../component/winxin/open";
-
+import "./style.less"
+import { config } from "../../../../../common/config";
 export var Login = observer(function () {
     var local = useLocalObservable<{
         step: 'phone' | 'login' | 'register' | 'name' | 'weixin-login',
@@ -265,6 +267,9 @@ export var Login = observer(function () {
     }
     let location = useLocation();
     async function successAfter() {
+        if(config.isServerSide){
+            return UrlRoute.push(ShyUrl.home)
+        }
         if ((location?.state as any)?.back) {
             UrlRoute.redict((location?.state as any)?.back)
         }
@@ -279,10 +284,8 @@ export var Login = observer(function () {
         }
     }, []);
 
-
-
     return <div className='shy-login-panel' ref={e => local.el = e} >
-        <div className='shy-login-logo'><a href='/'><img style={{ width: 60, height: 60 }} src={LogoSrc} /><span>诗云</span></a></div>
+        <div className='shy-login-logo'><a href={config.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={config.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{config.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
         <div className='shy-login'>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
 
