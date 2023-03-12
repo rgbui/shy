@@ -1,4 +1,4 @@
-import { config } from "../../src/common/config";
+import { config } from "../../common/config";
 import { Aes } from "../../src/util/crypto";
 import { iframeChannel } from "../../auth/iframe";
 /**

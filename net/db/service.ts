@@ -3,7 +3,7 @@
 
 import { iframeChannel } from "../../auth/iframe";
 import { dbStore } from "../../auth/view";
-import { config } from "../../src/common/config";
+import { config } from "../../common/config";
 export class DbService<T extends { id: string }>{
     constructor(private name: string) { }
     private async channelStore(d) {

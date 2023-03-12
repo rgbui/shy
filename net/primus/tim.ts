@@ -1,6 +1,6 @@
 import { util } from 'rich/util/util';
-import { config } from '../../src/common/config';
-import { log } from '../../src/common/log';
+import { config } from '../../common/config';
+import { log } from '../../common/log';
 import { Sock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
 import { SockResponse } from '../sock/type';
