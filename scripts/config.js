@@ -16,6 +16,9 @@ if (process.argv.some(s => s == '--pro')) mode = 'pro';
 else if (process.argv.some(s => s == '--beta')) mode = 'beta';
 var platform = 'web';
 if (process.argv.some(s => s == '--desktop')) platform = 'desktop';
+else if (process.argv.some(s => s == '--server-side')) platform = 'server-side';
+else if (process.argv.some(s => s == '--org')) platform = 'org';
+else if (process.argv.some(s => s == '--mobile')) platform = 'mobile';
 
 var isDev = mode == 'dev'
 /**
@@ -26,7 +29,7 @@ let port = 8081;
 let publicPath = `http://localhost:${port}/`;
 if (mode == 'pro') publicPath = `https://static.shy.live/`;
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
-if (platform == 'desktop') publicPath = `shy://shy.live/`;
+if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) publicPath = `shy://shy.live/`;
 
 var API_URLS = ['http://127.0.0.1:8888'];
 if (mode == 'beta') API_URLS = ['https://beta-b1.shy.live'];
@@ -39,8 +42,9 @@ var AUTH_URL = '/auth';
 if (mode == 'pro') AUTH_URL = 'https://auth.shy.live/auth.html';
 else if (mode == 'beta') AUTH_URL = 'https://beta-auth.shy.live/auth.html';
 
-if (platform == 'desktop') AUTH_URL = `shy://shy.live/auth.html`;
+if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) AUTH_URL = `shy://shy.live/auth.html`;
 
+console.log(platform, mode, isDev);
 
 var AMAP_KEY;
 var AMAP_PAIR;
@@ -54,15 +58,101 @@ else {
 }
 
 var dist = path.resolve(__dirname, "../dist" + (isDev ? "" : '/' + mode));
-if (platform == 'desktop') dist = path.resolve(__dirname, "../../desktop/dist/view");
+if (mode == 'pro') {
+    if (platform == 'desktop') dist = path.resolve(__dirname, "../../desktop/dist/view");
+    else if (platform == 'server-side') dist = path.resolve(__dirname, "../../desktop/dist/view-server");
+    else if (platform == 'mobile') dist = path.resolve(__dirname, "../dist" + (isDev ? "mobile" : '/mobile-' + mode));
+}
+
+var viewEntrys = {
+    auth: './auth/view.ts'
+}
+var htmls = [new HtmlWebpackPlugin({
+    template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
+    filename: 'index.html',
+    showErrors: true,
+    hash: true,
+    chunks: ['web', 'shared'],
+    favicon: false,
+    templateParameters: {
+        src: publicPath + versionPrefix
+    }
+})]
+var cps = [{
+    from: path.join(__dirname, "../src/assert/img/shy.svg"),
+    to: versionPrefix + 'assert/img/shy.fav.svg'
+},
+{
+    from: path.join(__dirname, "shared.js"),
+    to: versionPrefix + 'assert/js/shared.js'
+},
+{
+    from: path.join(__dirname, "../../rich/extensions/data-grid/formula/docs"),
+    to: versionPrefix + 'assert/data-grid/formula/docs'
+}];
+
+if (platform == 'server-side') {
+    Object.assign(viewEntrys, {
+        server: './server-side/index.tsx',
+    })
+    htmls = [new HtmlWebpackPlugin({
+        template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
+        filename: 'index.html',
+        showErrors: true,
+        hash: true,
+        chunks: ['server', 'shared'],
+        favicon: false,
+        templateParameters: {
+            src: publicPath + versionPrefix
+        }
+    })]
+    cps = [{
+        from: path.join(__dirname, "../src/assert/img/shy.blue.svg"),
+        to: versionPrefix + 'assert/img/shy.fav.svg'
+    }]
+}
+else if (platform == 'mobile') {
+    Object.assign(viewEntrys, {
+        mobile: "./src/mobile/index.tsx"
+    })
+    htmls = [new HtmlWebpackPlugin({
+        template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
+        filename: 'index.html',
+        showErrors: true,
+        hash: true,
+        chunks: ['mobile', 'shared'],
+        favicon: false,
+        templateParameters: {
+            src: publicPath + versionPrefix
+        }
+    })]
+}
+else {
+    Object.assign(viewEntrys, {
+        web: './src/surface/index.tsx',
+    })
+    if (platform == 'web') {
+        Object.assign(viewEntrys, {
+            org: './org/index.ts',
+        })
+        htmls.push(new HtmlWebpackPlugin({
+            template: path.join(__dirname, "org.html"), // 婧愭ā鏉挎枃浠�
+            filename: 'org.html',
+            showErrors: true,
+            hash: true,
+            chunks: ['org', 'shared'],
+            favicon: false,
+            templateParameters: {
+                src: publicPath + versionPrefix
+            }
+        }))
+    }
+}
+
 
 module.exports = {
     mode: isDev ? 'development' : 'production',
-    entry: {
-        main: './src/main.tsx',
-        auth: './auth/view.ts',
-        org: './org/index.ts'
-    },
+    entry: viewEntrys,
     devtool: isDev ? 'inline-source-map' : undefined,
     output: {
         path: dist,
@@ -155,38 +245,12 @@ module.exports = {
                     maxSize: 5 * 1024
                 }
             }
-        },
-        // {
-
-        //     test: /\.md$/,
-        //     use: [
-        //         {
-        //             loader: "html-loader",
-        //         },
-        //         {
-        //             loader: "markdown-loader",
-        //             options: {
-        //                 /* your options here */
-        //             }
-        //         },
-        //     ],
-        // }
+        }
         ]
     },
     plugins: [
         // new BundleAnalyzerPlugin(),
         isDev ? new webpack.HotModuleReplacementPlugin() : new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin({
-            template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
-            filename: 'shy.html',
-            showErrors: true,
-            hash: false,
-            chunks: ['main', 'shared'],
-            favicon: false,
-            templateParameters: {
-                src: publicPath + versionPrefix
-            },
-        }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "auth.html"), // 婧愭ā鏉挎枃浠�
             filename: 'auth.html',
@@ -198,17 +262,7 @@ module.exports = {
                 src: publicPath + versionPrefix
             },
         }),
-        new HtmlWebpackPlugin({
-            template: path.join(__dirname, "org.html"), // 婧愭ā鏉挎枃浠�
-            filename: 'org.html',
-            showErrors: true,
-            hash: true,
-            chunks: ['org'],
-            favicon: false,
-            templateParameters: {
-                src: publicPath + versionPrefix
-            },
-        }),
+        ...htmls,
         new webpack.DefinePlugin({
             PLATFORM: JSON.stringify(platform),
             MODE: JSON.stringify(mode),
@@ -228,20 +282,7 @@ module.exports = {
             filename: versionPrefix + "assert/css/shy.[contenthash:8].css"
         }),
         new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: path.join(__dirname, "../src/assert/img/shy.svg"),
-                    to: versionPrefix + 'assert/img/shy.fav.svg'
-                },
-                {
-                    from: path.join(__dirname, "shared.js"),
-                    to: versionPrefix + 'assert/js/shared.js'
-                },
-                {
-                    from: path.join(__dirname, "../../rich/extensions/data-grid/formula/docs"),
-                    to: versionPrefix + 'assert/data-grid/formula/docs'
-                }
-            ]
+            patterns: cps
         })
         /**
          * 离线貌似有问题
@@ -295,7 +336,7 @@ if (isDev) {
             rewrites: [
                 { from: '/auth', to: "/auth.html" },
                 { from: '/org', to: "/org.html" },
-                { from: /^[a-zA-Z\d\/]+$/, to: '/shy.html' }
+                { from: /^[a-zA-Z\d\/]+$/, to: '/index.html' }
             ]
         }
     }
