@@ -5,7 +5,7 @@ export interface ShyServiceSlideElectron {
     getDeviceID: () => Promise<string>,
     savePid: (sm: ServiceNumber, pid: Pid) => Promise<void>,
     runPid: (pid: Pid) => Promise<void>,
-    deletePid:(pid:Pid)=>Promise<void>,
+    deletePid: (pid: Pid) => Promise<void>,
     stopPid: (pid: Pid) => Promise<void>,
     installSoft: (callback: (data: string) => void) => void
 }
@@ -55,15 +55,16 @@ export class ServiceMachine {
 
     public id: string;
     public createDate: Date;
-    public serviceNumber: string;
+    public serviceNumberId: string;
     public machineName: string;
     public machineCode: string;
     public remark: string;
+    public isInstall: boolean;
 }
 
 export class Pid {
     public id: string;
-    public serviceNumber: string;
+    public serviceNumberId: string;
     public serviceMachineId: string;
     public createDate: Date;
     public name: string;

@@ -19,7 +19,6 @@ export function App() {
         await channel.put('/device/sign');
         await surface.user.sign()
         if (!surface.user.isSign) surface.user.toSign()
-        else await serverSlideStore.load();
         setLoad(true);
     }
     React.useEffect(() => {
