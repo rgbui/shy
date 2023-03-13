@@ -2,7 +2,7 @@
 import { makeObservable, observable, runInAction } from "mobx";
 import { yCache } from "../net/cache";
 import { masterSock } from "../net/sock";
-import { Pid, ServerServiceMachineIdKey, ServerServiceNumberKey, ServiceMachine, ServiceNumber, ShyServiceSlideElectron } from "./declare";
+import { Pid, ServerServiceMachineIdKey, ServiceMachine, ServiceNumber, ShyServiceSlideElectron } from "./declare";
 
 export class ServerSlideStore {
     machineCode: string = null;
@@ -23,10 +23,9 @@ export class ServerSlideStore {
     async load() {
         var g = await this.shyServiceSlideElectron.getDeviceID();
         if (g) { this.machineCode = g; }
-        var sm = await yCache.get(ServerServiceNumberKey);
         var mid = await yCache.get(ServerServiceMachineIdKey);
         var filter: Record<string, any> = {};
-        if (sm && mid) filter = { serviceName: sm, machineId: mid }
+        if (mid) filter = { machineId: mid }
         else filter = { machineCode: g }
         var r = await masterSock.get<{ pids: Pid[], service_number: ServiceNumber, service_machine: ServiceMachine }>('/service/machine/pids', filter);
         if (r?.data) {

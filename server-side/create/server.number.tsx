@@ -55,9 +55,9 @@ export class ServerNumberView extends EventsComponent {
             </div>
 
             <Divider></Divider>
-            <div className="flex"><label>Elasticsearch(搜索引擎)</label></div>
+            <div className="flex"><label>ElasticSearch(搜索引擎)</label></div>
             <div className="r-flex r-gap-h-10">
-                <div className="remark f-12">检测是否能与elasticsearch正常连接</div>
+                <div className="remark f-12">检测是否能与ElasticSearch正常连接</div>
                 <div className="r-gap-r-5"><span className="flex-fixed flex-end w-100">网址:</span><div className="flex-auto"><Input value={this.sn.search.url} onChange={e => this.sn.search.url = e}></Input></div></div>
             </div>
             <Divider></Divider>
@@ -75,11 +75,13 @@ export class ServerNumberView extends EventsComponent {
         this.forceUpdate()
     }
     async onSave() {
-        var r = await masterSock.get('/service/number/exists', { serviceNumber: this.sn.serviceNumber })
-        if (r.data.exists == true) {
-            this.serviceNumberError = '服务号已存在';
-            this.forceUpdate()
-            return
+        if (!this.sn.id) {
+            var r = await masterSock.get('/service/number/exists', { serviceNumber: this.sn.serviceNumber })
+            if (r.data.exists == true) {
+                this.serviceNumberError = '服务号已存在';
+                this.forceUpdate()
+                return
+            }
         }
         this.emit('save', lodash.cloneDeep(this.sn))
     }
