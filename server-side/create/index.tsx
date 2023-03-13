@@ -6,7 +6,7 @@ import { masterSock } from "../../net/sock";
 import { ServiceMachine, ServiceNumber } from "../declare";
 import { serverSlideStore } from "../store";
 import { useServerNumberView } from "./server.number";
-import LogoSrc from "../../src/assert/img/shy.blue.svg";
+
 import { FlashlampSvg, PlusSvg, ServerSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { surface } from "../../src/surface/store";
@@ -38,6 +38,7 @@ export var ServerConfigCreate = observer(function () {
             });
             if (r.ok) {
                 serverSlideStore.service_machine = r.data.serviceMachine;
+                serverSlideStore.service_number = r.data.serviceNumber;
             }
         }
     }
@@ -81,35 +82,29 @@ export var ServerConfigCreate = observer(function () {
     }
 
     return <div className=" gap-t-100 flex-center vw100 vh100">
-        <div>
-            <div className="flex">
-                <LogoSrc style={{ width: 60, height: 60 }}></LogoSrc><span style={{ fontSize: 24 }}>诗云服务端</span>
-            </div>
-            <div className="flex-center r-round  r-padding-14 r-cursor text-1">
+        <div className="flex-center r-round r-gap-w-10  r-padding-14 r-cursor text-1 r-border r-shadow">
 
-                <div className="item-hover flex flex-top w-180" onMouseDown={e => create(e)}>
-                    <Icon className='flxe-fixed' size={40} icon={FlashlampSvg}></Icon>
-                    <div className="flex-auto gap-l-5">
-                        <span>快捷</span>
-                        <div className="remark f-12">一键安装创建服务号</div>
-                    </div>
+            <div className="item-hover flex flex-top w-180 " onMouseDown={e => create(e)}>
+                <Icon className='flxe-fixed' size={40} icon={FlashlampSvg}></Icon>
+                <div className="flex-auto gap-l-5">
+                    <span>快捷</span>
+                    <div className="remark f-12">一键安装创建服务号</div>
                 </div>
-                <div className="item-hover flex flex-top w-180" onMouseDown={e => create(e)}>
-                    <Icon className='flxe-fixed' size={40} icon={PlusSvg}></Icon>
-                    <div className="flex-auto gap-l-5">
-                        <span>创建</span>
-                        <div className="remark f-12">创建新的服务号</div>
-                    </div>
+            </div>
+            <div className="item-hover flex flex-top w-180" onMouseDown={e => create(e)}>
+                <Icon className='flxe-fixed' size={40} icon={PlusSvg}></Icon>
+                <div className="flex-auto gap-l-5">
+                    <span>创建</span>
+                    <div className="remark f-12">创建新的服务号</div>
                 </div>
-                <div className="item-hover  flex flex-top   w-180" onMouseDown={e => bind(e)}>
-                    <Icon className='flxe-fixed' size={34} icon={ServerSvg}></Icon>
-                    <div className="flex-auto gap-l-5">
-                        <span>选择</span>
-                        <div className="remark f-12">选择已有的服务号</div>
-                    </div>
+            </div>
+            <div className="item-hover  flex flex-top   w-180" onMouseDown={e => bind(e)}>
+                <Icon className='flxe-fixed' size={34} icon={ServerSvg}></Icon>
+                <div className="flex-auto gap-l-5">
+                    <span>选择</span>
+                    <div className="remark f-12">选择已有的服务号</div>
                 </div>
             </div>
         </div>
-
     </div>
 })

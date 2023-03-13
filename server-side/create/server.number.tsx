@@ -75,15 +75,13 @@ export class ServerNumberView extends EventsComponent {
         this.forceUpdate()
     }
     async onSave() {
-        if (!lodash.isEqual(this.sn, this.oldSn)) {
-            var r = await masterSock.put('/service/number/exists', { serviceNumber: this.sn.serviceNumber })
-            if (r.data.exists == true) {
-                this.serviceNumberError = '服务号已存在';
-                this.forceUpdate()
-                return
-            }
-            this.emit('save', lodash.cloneDeep(this.sn))
+        var r = await masterSock.get('/service/number/exists', { serviceNumber: this.sn.serviceNumber })
+        if (r.data.exists == true) {
+            this.serviceNumberError = '服务号已存在';
+            this.forceUpdate()
+            return
         }
+        this.emit('save', lodash.cloneDeep(this.sn))
     }
     onCancel() {
         this.emit('cancel')
