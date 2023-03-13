@@ -1,4 +1,4 @@
-import { observer } from "mobx-react"
+import { observer, useLocalObservable } from "mobx-react"
 import React from "react";
 import { ServerConfigView } from "./machine";
 import { ServerConfigCreate } from "./create";
@@ -7,9 +7,21 @@ import LogoSrc from "../src/assert/img/shy.blue.svg";
 import { surface } from "../src/surface/store";
 import { Avatar } from "rich/component/view/avator/face";
 import { ShyUrl, UrlRoute } from "../src/history";
+import { Spin } from "rich/component/view/spin";
+
 export var ServerSlideView = observer(function () {
+
+    var local = useLocalObservable<{ loading: boolean, isLoad: boolean }>(() => {
+        return {
+            loading: false,
+            isLoad: false
+        }
+    })
     async function load() {
+        local.loading = true;
         await serverSlideStore.load();
+        local.isLoad = true;
+        local.loading = false;
     }
     async function exit() {
         UrlRoute.push(ShyUrl.signOut)
@@ -37,8 +49,12 @@ export var ServerSlideView = observer(function () {
             </div>
         </div>
         <div className="padding-w-100 gap-t-80">
-            {!serverSlideStore.service_machine && <ServerConfigCreate></ServerConfigCreate>}
-            {serverSlideStore.service_machine && <ServerConfigView></ServerConfigView>}
+            {!local.isLoad && local.loading && <Spin block></Spin>}
+            {local.isLoad && <div >
+                {!serverSlideStore.service_machine && <ServerConfigCreate></ServerConfigCreate>}
+                {serverSlideStore.service_machine && <ServerConfigView></ServerConfigView>}
+            </div>}
+
         </div>
     </div>
 })

@@ -8,9 +8,7 @@ import { surface } from "../src/surface/store";
 import { View404 } from "../src/surface/404";
 import { Login } from "../src/surface/user/sign/in";
 import { LogOut } from "../src/surface/user/sign/out";
-
 import { ServerSlideView } from "./home";
-import { serverSlideStore } from "./store";
 
 export function App() {
     let [isLoad, setLoad] = React.useState(false);

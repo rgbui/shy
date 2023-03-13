@@ -50,7 +50,9 @@ export class ServiceNumber {
     public isShyServiceCenter: boolean;
 }
 
-
+export function buildServiceNumberAddress(sn: ServiceNumber) {
+    return `shy-server://${sn.serviceNumber}/invite/${sn.verifyCode}`
+}
 export class ServiceMachine {
 
     public id: string;
@@ -60,6 +62,7 @@ export class ServiceMachine {
     public machineCode: string;
     public remark: string;
     public isInstall: boolean;
+    
 }
 
 export class Pid {
@@ -76,6 +79,4 @@ export class Pid {
     public weight: number;
     public mode: string;
 }
-
-export const ServerServiceNumberKey = 'ServerServiceNumber';
 export const ServerServiceMachineIdKey = 'ServerServiceMachineId';
