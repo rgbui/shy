@@ -2,14 +2,16 @@
 import { makeObservable, observable, runInAction } from "mobx";
 import { yCache } from "../net/cache";
 import { masterSock } from "../net/sock";
-import { Pid, ServerServiceMachineIdKey, ServerServiceNumberKey, ServiceMachine, ShyServiceSlideElectron } from "./declare";
+import { Pid, ServerServiceMachineIdKey, ServerServiceNumberKey, ServiceMachine, ServiceNumber, ShyServiceSlideElectron } from "./declare";
 
 export class ServerSlideStore {
     machineCode: string = null;
+    service_number: ServiceNumber = null;
     service_machine: ServiceMachine = null;
     pids: Pid[] = [];
     constructor() {
         makeObservable(this, {
+            service_number: observable,
             machineCode: observable,
             service_machine: observable,
             pids: observable
@@ -26,9 +28,10 @@ export class ServerSlideStore {
         var filter: Record<string, any> = {};
         if (sm && mid) filter = { serviceName: sm, machineId: mid }
         else filter = { machineCode: g }
-        var r = await masterSock.get<{ pids: Pid[], service_machine: ServiceMachine }>('/service/machine/pids', filter);
+        var r = await masterSock.get<{ pids: Pid[], service_number: ServiceNumber, service_machine: ServiceMachine }>('/service/machine/pids', filter);
         if (r?.data) {
             runInAction(() => {
+                this.service_number = r.data.service_number;
                 this.service_machine = r.data.service_machine;
                 this.pids = r.data.pids;
             })
