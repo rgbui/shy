@@ -8,6 +8,7 @@ export interface ShyServiceSlideElectron {
     runPid: (pid: Pid) => Promise<void>,
     deletePid: (pid: Pid) => Promise<void>,
     stopPid: (pid: Pid) => Promise<void>,
+    checkServiceConnect: (sn: ServiceNumber, name: 'mongodb' | 'redis' | 'es') => Promise<{ error: string, connect: boolean }>
     installSoft: (callback: (data: string) => void) => void,
     openFile(options: {
         dialogTitle?: string,

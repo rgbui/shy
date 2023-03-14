@@ -1,14 +1,15 @@
 
 import lodash from "lodash";
-import { observer } from "mobx-react";
+import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Confirm } from "rich/component/lib/confirm";
-import { DocEditSvg, DuplicateSvg, EditSvg, TrashSvg } from "rich/component/svgs";
+import { CheckSvg, CloseSvg, DocEditSvg, DuplicateSvg, EditSvg, PauseSvg, PlaySvg, TrashSvg } from "rich/component/svgs";
 import { Button } from "rich/component/view/button";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
+import { Spin } from "rich/component/view/spin";
 import { ToolTip } from "rich/component/view/tooltip";
 import { util } from "rich/util/util";
 import { masterSock } from "../../net/sock";
@@ -18,6 +19,15 @@ import { serverSlideStore } from "../store";
 import { usePidView } from "./pid";
 
 export var ServerConfigView = observer(function () {
+
+    var local = useLocalObservable(() => {
+        return {
+            redisCheck: { loading: false, connect: null, error: '' },
+            mongodbCheck: { loading: false, connect: null, error: '' },
+            esCheck: { loading: false, connect: null, error: '' },
+        }
+    })
+
     async function editService() {
         var f = await useServerNumberView(serverSlideStore.service_number) as ServiceNumber;
         if (f) {
@@ -96,6 +106,22 @@ export var ServerConfigView = observer(function () {
         else if (pid.status == 'error') return '错误'
         else return '未运行'
     }
+    async function checkConnect(type: 'mongodb' | 'redis' | 'es') {
+        var dr = local[type + 'Check']
+        dr.loading = true;
+        try {
+            var g = await serverSlideStore.shyServiceSlideElectron.checkServiceConnect(lodash.cloneDeep(serverSlideStore.service_number), type)
+            console.log('gggg', g);
+            dr.connect = g.connect;
+            dr.error = g.error || '';
+        }
+        catch (ex) {
+
+        }
+        finally {
+            dr.loading = false;
+        }
+    }
 
     return <div>
         <div className="h4  gap-t-30"><span>服务号</span></div>
@@ -119,26 +145,35 @@ export var ServerConfigView = observer(function () {
 
             <div>
                 <div className="flex">
-                    <Button size={'small'} ghost >检测Mongodb是否正常连接</Button>
+                    {local.mongodbCheck.connect && <Icon className={'gap-r-5'} size={20} icon={CheckSvg}></Icon>}
+                    {local.mongodbCheck.connect == false && <Icon className={'gap-r-5'} size={20} icon={CloseSvg}></Icon>}
+                    <Button disabled={local.mongodbCheck.loading} onClick={e => checkConnect('mongodb')} size={'small'} ghost >{local.mongodbCheck.loading && <Spin size={16}></Spin>}检测Mongodb是否正常连接</Button>
                     <span className="gap-l-10">{renderConfig(serverSlideStore.service_number.mongodb)}</span>
                     <ToolTip overlay={'编辑Mongodb'}><span onClick={e => editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></ToolTip>
                 </div>
+                {local.mongodbCheck.connect == false && <div className="error gap-h-5">{local.mongodbCheck.error}</div>}
             </div>
 
             <div>
                 <div className="flex">
-                    <Button size={'small'} ghost >检测Redis是否正常连接</Button>
+                    {local.redisCheck.connect && <Icon className={'gap-r-5'} size={20} icon={CheckSvg}></Icon>}
+                    {local.redisCheck.connect == false && <Icon className={'gap-r-5'} size={20} icon={CloseSvg}></Icon>}
+                    <Button disabled={local.redisCheck.loading} onClick={e => checkConnect('redis')} size={'small'} ghost >{local.redisCheck.loading && <Spin size={16}></Spin>}检测Redis是否正常连接</Button>
                     <span className="gap-l-10">{renderConfig(serverSlideStore.service_number.redis)}</span>
                     <ToolTip overlay={'编辑Redis'}><span onClick={e => editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></ToolTip>
                 </div>
+                {local.redisCheck.connect == false && <div className="error gap-h-5">{local.redisCheck.error}</div>}
             </div>
 
             <div>
                 <div className="flex">
-                    <Button size={'small'} ghost >检测ElasticSearch是否正常连接</Button>
+                    {local.esCheck.connect && <Icon className={'gap-r-5'} size={20} icon={CheckSvg}></Icon>}
+                    {local.esCheck.connect == false && <Icon className={'gap-r-5'} size={20} icon={CloseSvg}></Icon>}
+                    <Button disabled={local.esCheck.loading} onClick={e => checkConnect('es')} size={'small'} ghost >{local.esCheck.loading && <Spin size={16}></Spin>}检测ElasticSearch是否正常连接</Button>
                     <span className="gap-l-10">{renderConfig(serverSlideStore.service_number.search)}</span>
                     <ToolTip overlay={'编辑ElasticSearch'}><span onClick={e => editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></ToolTip>
                 </div>
+                {local.esCheck.connect == false && <div className="error gap-h-5">{local.esCheck.error}</div>}
             </div>
 
             <div>
@@ -174,8 +209,8 @@ export var ServerConfigView = observer(function () {
                 </div>
                 <div className="flex-auto flex-end flex r-padding-w-5 r-padding-h-3 r-round r-flex-center r-item-hover r-cursor">
 
-                    <span onMouseDown={e => runPid(pid, e)}><Icon size={16} icon={DocEditSvg}></Icon><em>运行</em></span>
-                    <span onMouseDown={e => stopPid(pid, e)}><Icon size={16} icon={DocEditSvg}></Icon><em>暂停</em></span>
+                    <span onMouseDown={e => runPid(pid, e)}><Icon size={16} icon={PlaySvg}></Icon><em>运行</em></span>
+                    <span onMouseDown={e => stopPid(pid, e)}><Icon size={16} icon={PauseSvg}></Icon><em>暂停</em></span>
 
                     <span onMouseDown={e => editPid(pid, e)}><Icon size={16} icon={EditSvg}></Icon><em>编辑</em></span>
                     <span onMouseDown={e => removePid(pid, e)}><Icon size={16} icon={TrashSvg}></Icon><em>删除</em></span>
