@@ -36,7 +36,7 @@ export var ServerConfigView = observer(function () {
         ShyAlert('复制地址成功');
     }
     async function savePid(pid: Pid) {
-        await  serverSlideStore.shyServiceSlideElectron.savePid(serverSlideStore.service_number, pid);
+        await serverSlideStore.shyServiceSlideElectron.savePid(serverSlideStore.service_number, pid);
     }
 
     async function addPid(event: React.MouseEvent) {
@@ -89,6 +89,12 @@ export var ServerConfigView = observer(function () {
             else ps.push(c)
         })
         return '{' + ps.join(",") + '}';
+    }
+    function getPidStatus(pid: Pid) {
+        if (pid.status == 'running') return '运行'
+        else if (pid.status == 'stop') return '暂停'
+        else if (pid.status == 'error') return '错误'
+        else return '未运行'
     }
 
     return <div>
@@ -153,16 +159,18 @@ export var ServerConfigView = observer(function () {
         </div>
         <div className="flex round item-hover-focus padding-w-10 padding-h-3 remark bold">
             <div className="flex-fixed flex">
-                <span className="w-100">{'进程'}</span>
-                <span className="w-100">{'端口'}</span>
+                <span className="w-100">端口</span>
+                <span className="w-180">访问网址</span>
+                <span className="w-80">状态</span>
             </div>
             <div className="flex-auto flex-end "><span>操作</span></div>
         </div>
         {serverSlideStore.pids.map(pid => {
             return <div className="flex border-bottom padding-w-10 padding-h-5" key={pid.id}>
                 <div className="flex-fixed flex">
-                    <span className="w-100">{pid.name}</span>
-                    <span className="w-100">{pid.port}</span>
+                    <span className="w-100">{pid.port + (pid.name ? `(${pid.name})` : '')}</span>
+                    <span className="w-180">{pid.url ? pid.url : (`http://127.0.0.1:${pid.port}`)}</span>
+                    <span className="w-80">{getPidStatus(pid)}</span>
                 </div>
                 <div className="flex-auto flex-end flex r-padding-w-5 r-padding-h-3 r-round r-flex-center r-item-hover r-cursor">
 
