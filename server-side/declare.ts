@@ -2,12 +2,23 @@
 
 
 export interface ShyServiceSlideElectron {
+    getConfig(): Promise<{ version: string, isAutoStartup: boolean, closeTray: boolean }>,
     getDeviceID: () => Promise<string>,
     savePid: (sm: ServiceNumber, pid: Pid) => Promise<void>,
     runPid: (pid: Pid) => Promise<void>,
     deletePid: (pid: Pid) => Promise<void>,
     stopPid: (pid: Pid) => Promise<void>,
-    installSoft: (callback: (data: string) => void) => void
+    installSoft: (callback: (data: string) => void) => void,
+    openFile(options: {
+        dialogTitle: string,
+        mode: 'file' | 'dir',
+        exts: string,
+        defaultPath: string
+    }): Promise<string>,
+    openExternal(url: string): Promise<void>,
+    openPath(filePath: string): Promise<void>,
+    setStartUp(isAutoStartup: boolean): Promise<void>,
+    setTray(isTray: boolean): Promise<void>,
 }
 
 
@@ -62,7 +73,7 @@ export class ServiceMachine {
     public machineCode: string;
     public remark: string;
     public isInstall: boolean;
-    
+
 }
 
 export class Pid {

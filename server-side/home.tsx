@@ -8,6 +8,9 @@ import { surface } from "../src/surface/store";
 import { Avatar } from "rich/component/view/avator/face";
 import { ShyUrl, UrlRoute } from "../src/history";
 import { Spin } from "rich/component/view/spin";
+import { SettingsSvg } from "rich/component/svgs";
+import { Icon } from "rich/component/view/icon";
+import { useServerSlideConfig } from "./config";
 
 export var ServerSlideView = observer(function () {
 
@@ -44,8 +47,12 @@ export var ServerSlideView = observer(function () {
                 <LogoSrc style={{ width: 54, height: 54 }}></LogoSrc><span style={{ fontSize: 24 }}>诗云服务端</span>
             </div>
             <div className="flex-fixed flex-end">
-                {surface.user && <a className="remark cursor gap-r-10" onMouseDown={e => exit()}>退出</a>}
-                {surface.user && <Avatar hideStatus size={40} user={surface.user}></Avatar>}
+
+                {surface.user && <Avatar hideStatus size={36} user={surface.user}></Avatar>}
+                <span className="size-24 round flex-center item-hover cursor gap-w-10" onMouseDown={useServerSlideConfig}>
+                    <Icon size={16} icon={SettingsSvg}></Icon>
+                </span>
+                {surface.user && <a className="remark cursor item-hover round " onMouseDown={e => exit()}>退出</a>}
             </div>
         </div>
         <div className="padding-w-100 gap-t-80">
