@@ -10,15 +10,16 @@ export interface ShyServiceSlideElectron {
     stopPid: (pid: Pid) => Promise<void>,
     installSoft: (callback: (data: string) => void) => void,
     openFile(options: {
-        dialogTitle: string,
-        mode: 'file' | 'dir',
-        exts: string,
-        defaultPath: string
+        dialogTitle?: string,
+        mode?: 'file' | 'dir',
+        exts?: string,
+        defaultPath?: string
     }): Promise<string>,
     openExternal(url: string): Promise<void>,
     openPath(filePath: string): Promise<void>,
     setStartUp(isAutoStartup: boolean): Promise<void>,
     setTray(isTray: boolean): Promise<void>,
+    getLocalIp: () => Promise<string>
 }
 
 
@@ -89,5 +90,15 @@ export class Pid {
     public abled: boolean;
     public weight: number;
     public mode: string;
+    public storeDir: string;
+    public status?: 'running' | 'stop' | 'error'
 }
 export const ServerServiceMachineIdKey = 'ServerServiceMachineId';
+
+
+export var PidTypeOptions = [
+    { text: '数据服务', value: 'ws' },
+    { text: '即时通讯', value: 'tim' },
+    { text: '文件管理', value: 'file' },
+    { text: '搜索服务', value: 'search' }
+]
