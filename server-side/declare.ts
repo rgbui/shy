@@ -92,7 +92,8 @@ export class Pid {
     public weight: number;
     public mode: string;
     public storeDir: string;
-    public status?: 'running' | 'stop' | 'error'
+    public status?: 'running' | 'stop' | 'error';
+    public config?: Record<string, any>
 }
 export const ServerServiceMachineIdKey = 'ServerServiceMachineId';
 

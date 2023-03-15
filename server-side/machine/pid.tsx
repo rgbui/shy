@@ -9,6 +9,7 @@ import { SelectBox } from "rich/component/view/select/box";
 import { InputNumber } from "rich/component/view/input/number";
 import { Divider } from "rich/component/view/grid";
 import { serverSlideStore } from "../store";
+import { Textarea } from "rich/component/view/input/textarea";
 
 export class PidView extends EventsComponent {
     pid: Partial<Pid> = {};
@@ -50,7 +51,16 @@ export class PidView extends EventsComponent {
                         </div>
                         <Button onMouseDown={e => this.selectDir()} className="flex-fixed">选择文件夹</Button>
                     </div></>}
+                <div><label>其它:</label></div>
+                <div className="flex gap-t-5 gap-b-10"><Textarea value={this.pid.config ? JSON.stringify(this.pid.config) : ""} onChange={e => {
+                    try {
+                        this.pid.config = window.eval("(" + e + ")");
+                        this.forceUpdate()
+                    }
+                    catch (ex) {
 
+                    }
+                }}></Textarea></div>
                 {this.error && <div className="error">{this.error}</div>}
             </div>
             <Divider></Divider>
