@@ -80,7 +80,7 @@ var htmls = [new HtmlWebpackPlugin({
 })]
 var cps = [{
     from: path.join(__dirname, "../src/assert/img/shy.svg"),
-    to: versionPrefix + 'assert/img/shy.fav.svg'
+    to: versionPrefix + 'assert/img/shy.svg'
 },
 {
     from: path.join(__dirname, "shared.js"),
