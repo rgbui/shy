@@ -33,6 +33,7 @@ export class ServerSlideStore {
     get shyServiceSlideElectron() {
         return (window as any).ShyServiceSlideElectron as ShyServiceSlideElectron
     }
+    time;
     async load() {
         var g = await this.shyServiceSlideElectron.getDeviceID();
         if (g) { this.machineCode = g; }
@@ -52,6 +53,32 @@ export class ServerSlideStore {
                 })
                 this.pids = r.data.pids;
             })
+        }
+
+        this.time = setTimeout(async () => {
+
+            var now = new Date();
+            var hour = now.getHours();
+            if (hour > 6 && hour < 20) {
+                if (this.willUpdatePack.loading) return;
+                if (this.willUpdatePack.version) return;
+                // 1点到6点 13点到18点 检查更新，避免影响用户使用 增加随机时间，避免同时检查
+                util.delay(1000 * 60 * util.getRandom(0, 20));
+                await this.checkVersionUpdate()
+            }
+            if (hour > 1 && hour < 6) {
+                if (this.willUpdatePack.installLoading) return;
+                if (this.willUpdatePack.version) {
+                    await this.updateInstall()
+                }
+            }
+        }, 1000 * 60 * 60 * 1);
+        await this.checkVersionUpdate()
+    }
+    async unload() {
+        if (this.time) {
+            clearTimeout(this.time);
+            this.time = null;
         }
     }
 
@@ -122,13 +149,11 @@ export class ServerSlideStore {
             dr.loading = false;
         }
     }
-
     async checkAllConnect() {
         await this.checkConnect('mongodb')
         await this.checkConnect('redis')
         await this.checkConnect('es')
     }
-
     async runPid(pid: Pid, event?: React.MouseEvent) {
         var g = await serverSlideStore.shyServiceSlideElectron.runPid(lodash.cloneDeep(pid))
         pid.status = 'running';
@@ -145,6 +170,63 @@ export class ServerSlideStore {
     async stopAll() {
         for (let i = 0; i < this.pids.length; i++) {
             await this.stopPid(this.pids[i])
+        }
+    }
+
+    //更新
+    willUpdatePack: {
+        loading: boolean,
+        version: string,
+        filePath: string,
+        installLoading: boolean,
+    } = { loading: false, version: '', filePath: '', installLoading: false };
+    async checkVersionUpdate() {
+        this.willUpdatePack.loading = true;
+        try {
+            var config = (await this.shyServiceSlideElectron.getConfig());
+            var r = await masterSock.get('/pub/server/check/version', { version: config.version });
+            if (r.ok) {
+                if (r.data?.pub_version) {
+                    var g: {
+                        windowDownloadUrl: string,
+                        macDownloadUrl: string,
+                        linuxDownloadUrl: string,
+                        version: string,
+                    } = r.data.pub_version;
+                    var url = g.windowDownloadUrl;
+                    if (config.platform == 'darwin') url = g.macDownloadUrl;
+                    if (config.platform == 'linux') url = g.linuxDownloadUrl;
+                    var c = await this.shyServiceSlideElectron.downloadServerPack(url, g.version);
+                    this.willUpdatePack.version = g.version;
+                    this.willUpdatePack.filePath = c.zipFilePath;
+                }
+            }
+        }
+        catch (ex) {
+
+        }
+        finally {
+            this.willUpdatePack.loading = false
+        }
+    }
+    async updateInstall() {
+        try {
+            this.willUpdatePack.installLoading = true;
+            await this.stopAll();
+            await this.shyServiceSlideElectron.packServerSlide(this.willUpdatePack.filePath, this.willUpdatePack.version);
+            runInAction(() => {
+                this.willUpdatePack.loading = false;
+                this.willUpdatePack.version = null;
+                this.willUpdatePack.filePath = null;
+                this.willUpdatePack.installLoading = false;
+            })
+        }
+        catch (ex) {
+
+        }
+        finally {
+            this.willUpdatePack.installLoading = false;
+            await this.runAll()
         }
     }
 }

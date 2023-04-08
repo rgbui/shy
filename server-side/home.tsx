@@ -2,7 +2,7 @@ import { observer, useLocalObservable } from "mobx-react"
 import React from "react";
 import { ServerConfigView } from "./machine";
 import { ServerConfigCreate } from "./create";
-import { serverSlideStore } from "./store";
+import { ServerSlideStore, serverSlideStore } from "./store";
 import LogoSrc from "../src/assert/img/shy.blue.svg";
 import { surface } from "../src/surface/store";
 import { Avatar } from "rich/component/view/avator/face";
@@ -11,6 +11,7 @@ import { Spin } from "rich/component/view/spin";
 import { SettingsSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useServerSlideConfig } from "./config";
+import { Button } from "rich/component/view/button";
 
 export var ServerSlideView = observer(function () {
 
@@ -31,6 +32,9 @@ export var ServerSlideView = observer(function () {
     }
     React.useEffect(() => {
         load()
+        return () => {
+            serverSlideStore.unload()
+        }
     }, [])
 
     return <div>
@@ -56,6 +60,10 @@ export var ServerSlideView = observer(function () {
             </div>
         </div>
         <div className="padding-w-100 gap-t-80">
+            {serverSlideStore.willUpdatePack.version && <div className="padding-20 round border shadow">
+                {serverSlideStore.willUpdatePack.installLoading && <><div className="flex"><Spin></Spin>正在安装更新中,请不要退出关闭...</div></>}
+                {serverSlideStore.willUpdatePack.installLoading && <><div className="flex"><span>将在夜里1点~5点期间自动安装更新</span><Button onMouseDown={e => serverSlideStore.updateInstall()} >手动更新</Button></div></>}
+            </div>}
             {!local.isLoad && local.loading && <Spin block></Spin>}
             {local.isLoad && <div >
                 {!serverSlideStore.service_machine && <ServerConfigCreate></ServerConfigCreate>}
