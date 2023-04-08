@@ -2,7 +2,12 @@
 
 
 export interface ShyServiceSlideElectron {
-    getConfig(): Promise<{ version: string, isAutoStartup: boolean, closeTray: boolean }>,
+    getConfig(): Promise<{
+        version: string,
+        isAutoStartup: boolean,
+        closeTray: boolean,
+        platform: 'aix' | 'android' | 'darwin' | 'freebsd' | 'haiku' | 'linux' | 'openbsd' | 'sunos' | 'win32' | 'cygwin' | 'netbsd';
+    }>,
     getDeviceID: () => Promise<string>,
     savePid: (sm: ServiceNumber, pid: Pid) => Promise<void>,
     runPid: (pid: Pid) => Promise<void>,
@@ -20,7 +25,9 @@ export interface ShyServiceSlideElectron {
     openPath(filePath: string): Promise<void>,
     setStartUp(isAutoStartup: boolean): Promise<void>,
     setTray(isTray: boolean): Promise<void>,
-    getLocalIp: () => Promise<string>
+    getLocalIp: () => Promise<string>,
+    downloadServerPack(url: string, version: string): Promise<{ zipFilePath: string }>,
+    packServerSlide(filePath: string, version: string): Promise<void>,
 }
 
 
