@@ -26,15 +26,22 @@ var isDev = mode == 'dev'
  */
 
 let port = 8081;
-let publicPath = `http://localhost:${port}/`;
+let publicPath = `http://127.0.0.1:${port}/`;
 if (mode == 'pro') publicPath = `https://static.shy.live/`;
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
 if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) publicPath = `shy://shy.live/`;
 
-var API_URLS = ['http://127.0.0.1:8888'];
-if (mode == 'beta') API_URLS = ['https://beta-b1.shy.live'];
-else if (mode == 'pro') API_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'];
+var API_MASTER_URLS = ['http://127.0.0.1:8888'];
+if (mode == 'beta') API_MASTER_URLS = ['https://beta-b1.shy.live'];
+else if (mode == 'pro') API_MASTER_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'];
 
+var FILE_URLS = ['http://127.0.0.1:8889']
+if (mode == 'beta') FILE_URLS = ['https://beta-b2.shy.live'];
+else if (mode == 'pro') FILE_URLS = ['https://api-s1.shy.live', 'https://api-s2.shy.live'];
+
+var API_URLS = ['http://127.0.0.1:9000'];
+if (mode == 'beta') API_URLS = ['https://beta-b3.shy.live'];
+else if (mode == 'pro') API_URLS = ['https://api-s3.shy.live', 'https://api-s4.shy.live'];
 
 var API_VERSION = 'v1';
 var versionPrefix = pkg.version + '/';
@@ -267,7 +274,9 @@ module.exports = {
             PLATFORM: JSON.stringify(platform),
             MODE: JSON.stringify(mode),
             VERSION: JSON.stringify(pkg.version),
-            API_MASTER_URLS: JSON.stringify(API_URLS),
+            API_MASTER_URLS: JSON.stringify(API_MASTER_URLS),
+            API_URLS: JSON.stringify(API_URLS),
+            FILE_URLS: JSON.stringify(FILE_URLS),
             API_VERSION: JSON.stringify(API_VERSION),
             AUTH_URL: JSON.stringify(AUTH_URL),
             VERSION_PREFIX: JSON.stringify(versionPrefix),

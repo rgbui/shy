@@ -14,28 +14,17 @@ export class Sock {
         if (this.remoteUrl) return this.remoteUrl;
         switch (this.type) {
             case SockType.master:
-                var urls: string[] = API_MASTER_URLS as any;
+                var urls: string[] = API_MASTER_URLS;
                 if (typeof urls == 'string') urls = JSON.parse(urls);
                 return urls.randomOf();
-                break;
             case SockType.api:
-                if (this.remoteUrl) return this.remoteUrl;
-                var ms = await masterSock.get<{ url: string }, string>('/pid/provider/api');
-                if (ms.ok) {
-                    this.remoteUrl = ms.data.url;
-                    return this.remoteUrl;
-                }
-                else window.Toast.error('没有找到可用的api连接')
-                break;
+                var urls: string[] = API_URLS;
+                if (typeof urls == 'string') urls = JSON.parse(urls);
+                return urls.randomOf();
             case SockType.file:
-                if (this.remoteUrl) return this.remoteUrl;
-                var ms = await masterSock.get<{ url: string }, string>('/pid/provider/file');
-                if (ms.ok) {
-                    this.remoteUrl = ms.data.url;
-                    return this.remoteUrl;
-                }
-                else window.Toast.error('没有找到可用的file连接')
-                break;
+                var urls: string[] = FILE_URLS;
+                if (typeof urls == 'string') urls = JSON.parse(urls);
+                return urls.randomOf();
         }
     }
     private async config() {
