@@ -188,14 +188,14 @@ export class ServerSlideStore {
             if (r.ok) {
                 if (r.data?.pub_version) {
                     var g: {
-                        windowDownloadUrl: string,
-                        macDownloadUrl: string,
-                        linuxDownloadUrl: string,
+                        windowPackUrl: string,
+                        macPackUrl: string,
+                        linuxPackUrl: string,
                         version: string,
                     } = r.data.pub_version;
-                    var url = g.windowDownloadUrl;
-                    if (config.platform == 'darwin') url = g.macDownloadUrl;
-                    if (config.platform == 'linux') url = g.linuxDownloadUrl;
+                    var url = g.windowPackUrl;
+                    if (config.platform == 'darwin') url = g.macPackUrl;
+                    if (config.platform == 'linux') url = g.linuxPackUrl;
                     var c = await this.shyServiceSlideElectron.downloadServerPack(url, g.version);
                     this.willUpdatePack.version = g.version;
                     this.willUpdatePack.filePath = c.zipFilePath;
