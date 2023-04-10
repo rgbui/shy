@@ -37,7 +37,7 @@ export var ServerSlideView = observer(function () {
         }
     }, [])
 
-    return <div>
+    return <div className="vw100 vh100">
         <div className="flex padding-w-100 pos"
             style={{
                 top: 0, left: 0, right: 0,
@@ -59,7 +59,7 @@ export var ServerSlideView = observer(function () {
                 {surface.user && <a className="remark cursor item-hover round " onMouseDown={e => exit()}>退出</a>}
             </div>
         </div>
-        <div className="padding-w-100 gap-t-80">
+        <div className="padding-w-100 gap-t-80 overflow-y padding-h-80 " style={{ boxSizing: 'border-box', height: 'calc(100% - 60px)' }}>
             {serverSlideStore.willUpdatePack.version && <div className="padding-20 round border shadow">
                 {serverSlideStore.willUpdatePack.installLoading && <><div className="flex"><Spin></Spin>正在安装更新中,请不要退出关闭...</div></>}
                 {serverSlideStore.willUpdatePack.installLoading && <><div className="flex"><span>将在夜里1点~5点期间自动安装更新</span><Button onMouseDown={e => serverSlideStore.updateInstall()} >手动更新</Button></div></>}

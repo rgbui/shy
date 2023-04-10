@@ -36,6 +36,7 @@ export class ServerSlideStore {
     time;
     async load() {
         var g = await this.shyServiceSlideElectron.getDeviceID();
+        console.log('device code',g);
         if (g) { this.machineCode = g; }
         var mid = await yCache.get(ServerServiceMachineIdKey);
         var filter: Record<string, any> = {};
@@ -83,6 +84,7 @@ export class ServerSlideStore {
     }
 
     async editService() {
+        console.log(serverSlideStore.service_number)
         var f = await useServerNumberView(serverSlideStore.service_number) as ServiceNumber;
         if (f) {
             await masterSock.patch('/service/patch/number', { id: serverSlideStore.service_number.id, data: f })
