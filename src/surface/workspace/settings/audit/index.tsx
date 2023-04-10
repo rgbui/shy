@@ -2,9 +2,8 @@ import lodash from "lodash";
 import { makeObservable, observable, runInAction } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { Col, Divider, Row } from "rich/component/view/grid";
-import { Switch } from "rich/component/view/switch";
-import { Remark } from "rich/component/view/text";
+import { Divider } from "rich/component/view/grid";
+
 import { channel } from "rich/net/channel";
 import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
