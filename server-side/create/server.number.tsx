@@ -9,6 +9,8 @@ import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { InputNumber } from "rich/component/view/input/number";
 import { serverSlideStore } from "../store";
 import { masterSock } from "../../net/sock";
+import { util } from "rich/util/util";
+import { Spin } from "rich/component/view/spin";
 export class ServerNumberView extends EventsComponent {
     sn: ServiceNumber = {
         mongodb: { ip: '127.0.0.1', port: 27017, account: '', paw: '' },
@@ -19,6 +21,11 @@ export class ServerNumberView extends EventsComponent {
     serviceNumberError = '';
     step: number = 1;
     render() {
+        if (this.loading) {
+            return <div className="padding-14 round ">
+                <Spin></Spin>
+            </div>
+        }
         return <div className="padding-14 round ">
 
             <div className="flex"><label>服务号<em>*</em></label></div>
@@ -68,11 +75,16 @@ export class ServerNumberView extends EventsComponent {
         </div>
     }
 
-    open(sn: ServiceNumber) {
-        if (sn) this.sn = Object.assign({}, sn || {}) as any;
-        else { this.sn.serviceNumber = serverSlideStore.machineCode }
-        this.oldSn = lodash.cloneDeep(this.sn);
-        this.forceUpdate()
+    loading: boolean = false;
+    async open(sn: ServiceNumber) {
+        this.loading = true;
+        this.forceUpdate(() => {
+            if (sn) this.sn = sn;
+            else { this.sn.serviceNumber = serverSlideStore.machineCode }
+            this.oldSn = lodash.cloneDeep(this.sn);
+            this.loading = false;
+            this.forceUpdate()
+        });
     }
     async onSave() {
         if (!this.sn.id) {
