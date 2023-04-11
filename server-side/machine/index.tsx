@@ -1,22 +1,13 @@
-
-import lodash from "lodash";
-import { observer, useLocalObservable } from "mobx-react";
+import { observer } from "mobx-react";
 import React from "react";
-import { CopyText } from "rich/component/copy";
-import { ShyAlert } from "rich/component/lib/alert";
-import { Confirm } from "rich/component/lib/confirm";
 import { CheckSvg, CloseSvg, DocEditSvg, DuplicateSvg, EditSvg, PauseSvg, PlaySvg, TrashSvg } from "rich/component/svgs";
 import { Button } from "rich/component/view/button";
 import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { Spin } from "rich/component/view/spin";
 import { ToolTip } from "rich/component/view/tooltip";
-import { util } from "rich/util/util";
-import { masterSock } from "../../net/sock";
-import { useServerNumberView } from "../create/server.number";
-import { buildServiceNumberAddress, Pid, ServiceNumber } from "../declare";
+import { buildServiceNumberAddress, Pid } from "../declare";
 import { serverSlideStore } from "../store";
-import { usePidView } from "./pid";
 
 export var ServerConfigView = observer(function () {
 
