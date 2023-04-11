@@ -68,12 +68,12 @@ export class RobotWikiList extends React.Component<{ robot: RobotInfo }> {
             }
             else if (r.item?.name == 'delete') {
                 if (await Confirm('确认删除吗')) {
-                    await masterSock.delete('/wiki/doc', { id: doc.id })
+                    await masterSock.delete('/del/doc', { id: doc.id })
                     this.docs.arrayJsonRemove('childs', g => g.id == doc.id)
                 }
             }
             else if (r.item?.name == 'add') {
-                var g = await masterSock.put('/wiki/doc', { data: { wsId: surface.workspace?.id, robotId: this.robot.id, parentId: parentDoc?.id, text: '新建文档' } })
+                var g = await masterSock.put('/put/doc', { data: { wsId: surface.workspace?.id, robotId: this.robot.id, parentId: parentDoc?.id, text: '新建文档' } })
                 if (g.ok) {
                     var docs = parentDoc?.childs || this.docs;
                     var at = docs.findIndex(g => g == doc);
@@ -81,7 +81,7 @@ export class RobotWikiList extends React.Component<{ robot: RobotInfo }> {
                 }
             }
             else if (r.item?.name == 'addSub') {
-                var g = await masterSock.put('/wiki/doc', { data: { wsId: surface.workspace?.id, robotId: this.robot.id, parentId: doc.id, text: '新建文档' } })
+                var g = await masterSock.put('/put/doc', { data: { wsId: surface.workspace?.id, robotId: this.robot.id, parentId: doc.id, text: '新建文档' } })
                 if (g.ok) {
                     var docs = doc.childs;
                     if (!Array.isArray(docs)) docs = doc.childs = [];
@@ -100,7 +100,7 @@ export class RobotWikiList extends React.Component<{ robot: RobotInfo }> {
         var oldEditDoc = this.editDoc;
         if (oldEditDoc.contentChange == true) {
             if (await Confirm('文档内容已经修改，是否保存？')) {
-                await masterSock.post('/wiki/doc', { data: { id: oldEditDoc.id, contentS: oldEditDoc.contents } })
+                await masterSock.patch('/wiki/doc/content', { wikiId: doc.wikiId, data: { id: oldEditDoc.id, contents: oldEditDoc.contents } })
                 oldEditDoc.contentChange = false;
             }
         }

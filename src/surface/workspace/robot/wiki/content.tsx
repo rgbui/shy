@@ -19,7 +19,7 @@ export var ContentViewer = observer(function (props: { doc: WikiDoc }) {
     })
     async function load() {
         if (!Array.isArray(doc.contents)) {
-            var g = await masterSock.get('/robot/wiki/content', { docId: doc.id });
+            var g = await masterSock.get('/robot/doc/content', { docId: doc.id });
             if (g?.ok) {
                 doc.contents = g.data.contents || [];
             }
@@ -27,12 +27,12 @@ export var ContentViewer = observer(function (props: { doc: WikiDoc }) {
     }
     async function save() {
         local.saveLoading = true;
-        await masterSock.patch('/robot/wiki/content', { docId: doc.id, data: { contents: doc.contents } });
+        await masterSock.patch('/robot/doc/content', { wikiId: doc.wikiId, data: { id: doc.id, contents: doc.contents } });
         local.saveLoading = false;
     }
     var input = lodash.debounce(async (e) => {
         doc.text = e;
-        await masterSock.put('/robot/wiki', { docId: doc.id, data: { text: e } })
+        await masterSock.patch('/patch/doc', { id: doc.id, data: { text: e } })
     }, 1000)
 
     React.useEffect(() => {
