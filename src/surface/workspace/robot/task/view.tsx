@@ -1,7 +1,8 @@
+import lodash from "lodash";
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { DotsSvg } from "rich/component/svgs";
+import { DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
@@ -9,6 +10,7 @@ import { Spin } from "rich/component/view/spin";
 import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
 import { RobotInfo, RobotTask } from "../declare";
+import { useTaskContent } from "./content";
 
 @observer
 export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
@@ -46,33 +48,44 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
         var r = await useSelectMenuItem({ roundPoint: Point.from(event) }, [{ name: 'edit' }, { name: "main" }, { name: 'disabled' }, { name: 'delete' }]);
         if (r) {
             if (r.item.name == 'delete') {
-                var s = await masterSock.delete('/robot/task', { robot: this.robot.id, id: task.id });
+                var s = await masterSock.delete('/robot/task', { id: task.id });
                 if (s.ok) {
                     this.tasks = this.tasks.filter(t => t.id != task.id);
                 }
             }
             else if (r.item.name == 'edit') {
-                var s = await masterSock.patch('/robot/task', { id: task.id, data: {} });
-                if (s.ok) {
-                    this.tasks = this.tasks.filter(t => t.id != task.id);
+                var d = await useTaskContent(lodash.cloneDeep(task));
+                if (d && lodash.isEqual(d, task) == false) {
+                    var s = await masterSock.patch('/robot/task', { id: task.id, data: {} });
+                    if (s.ok) {
+                        this.tasks = this.tasks.filter(t => t.id != task.id);
+                    }
                 }
             }
             else if (r.item.name == 'disabled') {
-                var s = await masterSock.put('/robot/task', { id: task.id, data: { disabled: !task.disabled } });
+                var s = await masterSock.patch('/robot/task', { id: task.id, data: { disabled: !task.disabled } });
                 if (s.ok) {
                     task.disabled = !task.disabled;
                 }
             }
             else if (r.item.name == 'main') {
-                var s = await masterSock.patch('/robot/task', { id: task.id, data: { main: !task.main } });
+                var s = await masterSock.patch('/set/robot/task/main', { id: task.id, robotId: this.robot.id });
                 if (s.ok) {
                     task.main = !task.main;
                 }
             }
         }
     }
-    
-    
+    async add(event: React.MouseEvent) {
+        var d = await useTaskContent(null);
+        if (d) {
+            var s = await masterSock.put('/robot/task', { data: d });
+            if (s.ok) {
+                this.tasks.push(s.data.task);
+            }
+        }
+    }
+
     render() {
         return <div className="">
             <div>
@@ -81,6 +94,9 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
                 </div>
             </div>
             <div className="">
+                <div className="h3 flex"><span className="flex-auto"></span><span
+                    className="flex-fixed size-24 cursor item-hover round"
+                    onMouseDown={e => this.add(e)}><Icon icon={PlusSvg}></Icon></span></div>
                 {this.loading && <Spin block></Spin>}
                 {this.tasks.map(task => {
                     return <div key={task.id}>

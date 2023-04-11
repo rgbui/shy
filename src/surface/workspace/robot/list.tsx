@@ -51,9 +51,9 @@ export class RobotList extends React.Component {
         );
         if (r) {
             if (r.item.name == 'addWiki') {
-                var g = await useForm({ title: '', fields: [{ name: 'text', type: 'input', text: '' }, { name: 'description', type: 'textarea', text: '' }] })
+                var g = await useForm({ title: '', fields: [{ name: 'text', type: 'input', text: '' }, { name: 'remark', type: 'textarea', text: '' }] })
                 if (g) {
-                    var s = await masterSock.put('/create/robot', { scene: 'wiki', wsId: surface.workspace.id, name: g.text, description: g.description });
+                    var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, remark: g.remark } });
                     if (s.ok) {
                         this.robots.push(s.data.robot);
                         this.open(s.data.robot)
@@ -61,9 +61,9 @@ export class RobotList extends React.Component {
                 }
             }
             else if (r.item.name == 'addCommand') {
-                var g = await useForm({ title: '', fields: [{ name: 'text', type: 'input', text: '' }, { name: 'description', type: 'textarea', text: '' }] })
+                var g = await useForm({ title: '', fields: [{ name: 'text', type: 'input', text: '' }, { name: 'remark', type: 'textarea', text: '' }] })
                 if (g) {
-                    var s = await masterSock.put('/create/robot', { scene: 'command', wsId: surface.workspace.id, name: g.text, description: g.description });
+                    var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'command', name: g.text, remark: g.remark } });
                     if (s.ok) {
                         this.robots.push(s.data.robot);
                         this.open(s.data.robot)
@@ -90,7 +90,7 @@ export class RobotList extends React.Component {
                             </div>
                             <div className="flex-auto">
                                 <div>{robot.name}</div>
-                                <div>{robot.description}</div>
+                                <div>{robot.remark}</div>
                             </div>
                         </div>
                     </div>
