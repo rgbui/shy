@@ -198,6 +198,56 @@ export class Sock {
         }
         return url;
     }
+    async fetchStream(options: { url: string, data?: Record<string, any>, method: string }, callback: (chunk: any, done?: boolean) => void) {
+        var resolveUrl = await this.getUrlData(options.url, options.data || {}, options?.method?.toLowerCase() == 'get');
+        var headers = await this.config() as any;
+        headers = {
+            "Content-Type": "application/json",
+            ...headers.headers
+        }
+        const res = await fetch(resolveUrl, {
+            method: (options.method || "POST").toUpperCase(),
+            body: options.data ? JSON.stringify(options.data) : undefined,
+            mode: 'cors',
+            headers: headers
+        })
+        // Create a reader for the response body
+        const reader = res.body.getReader();
+        // Create a decoder for UTF-8 encoded text
+        const decoder = new TextDecoder("utf-8");
+        const readChunk = async () => {
+            var rg = await reader.read();
+            if (!rg.done) {
+                const dataString = decoder.decode(rg.value);
+                if (typeof callback == 'function') callback(dataString)
+                readChunk();
+            }
+            else {
+                callback(undefined, true);
+            }
+        }
+        await readChunk()
+    }
+    async getUrlData(url: string, querys: Record<string, any>, isGet = false) {
+        var baseUrl = await this.baseUrl();
+        url = Sock.urlJoint(url, querys);
+        GenreConsistency.transform(querys);
+        var resolveUrl = Sock.resolve(baseUrl, API_VERSION, url);
+        if (isGet) {
+            if (querys && Object.keys(querys).length > 0) {
+                var ps: string[] = [];
+                for (let q in querys) {
+                    if (typeof querys[q] != 'undefined') {
+                        var value = querys[q];
+                        if (typeof value == 'object') value = JSON.stringify(value);
+                        ps.push(q + '=' + encodeURIComponent(value));
+                    }
+                }
+                resolveUrl = resolveUrl + (resolveUrl.indexOf('?') == -1 ? "?" : "&") + ps.join("&");
+            }
+        }
+        return resolveUrl;
+    }
     static createSock(url: string) {
         return new Sock(SockType.none, url);
     }
