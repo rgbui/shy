@@ -40,7 +40,9 @@ export var ServerSlideView = observer(function () {
     return <div className="vw100 vh100">
         <div className="flex padding-w-100 pos"
             style={{
-                top: 0, left: 0, right: 0,
+                top: 0,
+                left: 0,
+                right: 0,
                 height: 60,
                 backdropFilter: 'blur(10px)',
                 backgroundColor: 'hsla(0, 0%, 100%, .65)',
