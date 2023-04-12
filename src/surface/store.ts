@@ -104,11 +104,19 @@ export class Surface extends Events {
                 channel.air('/page/open', { item: page });
             }
             else {
-                if (!this.workspace) {
+                if (this.workspace) {
                     this.workspace.exitWorkspace()
                 }
                 this.workspace = null;
-                UrlRoute.push(ShyUrl._404);
+                if (config.isPc) {
+                    UrlRoute.push(ShyUrl.signIn);
+                }
+                else if (config.isPro) {
+                    if (location.host == 'shy.live') UrlRoute.push(ShyUrl.root);
+                    else location.href = 'https://shy.live';
+                }
+                else if (config.isDev)
+                    UrlRoute.push(ShyUrl.signIn);
             }
         }
         catch (ex) {
