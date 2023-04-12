@@ -345,7 +345,7 @@ if (isDev) {
             rewrites: [
                 { from: '/auth', to: "/auth.html" },
                 { from: '/org', to: "/org.html" },
-                { from: /^[a-zA-Z\d\/]+$/, to: '/index.html' }
+                { from: /^[a-zA-Z\d\/]+$/, to: '/shy.html' }
             ]
         }
     }
