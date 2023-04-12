@@ -135,10 +135,20 @@ export class PageViewStore extends Events {
         surface.supervisor.closeDialogOrSlide()
         await channel.air('/page/open', { elementUrl })
     }
+    updateElementUrl(elementUrl: string) {
+        if (elementUrl != this.elementUrl) {
+            var pvs = PageViewStores.stores.get(this.elementUrl);
+            if (Array.isArray(pvs)) {
+                lodash.remove(pvs, c => c == this)
+            }
+            this.elementUrl = elementUrl;
+            PageViewStores.createPageViewStore(this.elementUrl, this.source, this.config);
+        }
+    }
 }
 
 export class PageViewStores {
-    private static stores: Map<string, PageViewStore[]> = new Map();
+    static stores: Map<string, PageViewStore[]> = new Map();
     static createPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'page', config?: PageViewStore['config']) {
         var s = this.stores.get(elementUrl);
         if (Array.isArray(s) && s.length > 0) {

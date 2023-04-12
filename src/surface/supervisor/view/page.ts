@@ -55,7 +55,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
                 store.cachePageItem = blogPageItem;
                 page.pageInfo = store.item;
-            }
+            };
             page.on(PageDirective.history, async function (action) {
                 var syncBlock = action.syncBlock;
                 if (syncBlock) {
@@ -73,6 +73,9 @@ export async function createPageContent(store: PageViewStore) {
                     });
                 }
             });
+            page.on(PageDirective.changePageLayout, async () => {
+                store.updateElementUrl(store.item.elementUrl);
+            })
             page.on(PageDirective.error, error => {
                 console.error(error);
             });
@@ -82,10 +85,10 @@ export async function createPageContent(store: PageViewStore) {
             page.on(PageDirective.blur, async () => {
                 if (store.source == 'slide')
                     store.emit('close');
-            })
+            });
             page.on(PageDirective.close, async () => {
                 store.emit('close');
-            })
+            });
             page.on(PageDirective.rollup, async (id) => {
                 var pd = await store.snapStore.rollupSnap(id);
                 if (pd?.content) {

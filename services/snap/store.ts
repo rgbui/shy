@@ -79,6 +79,7 @@ export class SnapStore extends Events {
         };
     }
     async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
+      
         await this.storeLocal(snap);
         this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);
@@ -137,6 +138,7 @@ export class SnapStore extends Events {
         await this.saveToService();
     }
     async querySnap() {
+  
         var seq: number;
         var local: view_snap;
         if (config.isPc) local = await yCache.get(this.localId);
