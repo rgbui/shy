@@ -76,7 +76,7 @@ var viewEntrys = {
 }
 var htmls = [new HtmlWebpackPlugin({
     template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
-    filename: 'index.html',
+    filename: 'shy.html',
     showErrors: true,
     hash: true,
     chunks: ['web', 'shared'],
@@ -115,7 +115,7 @@ if (platform == 'server-side') {
     })]
     cps = [{
         from: path.join(__dirname, "../src/assert/img/shy.blue.svg"),
-        to: versionPrefix + 'assert/img/shy.fav.svg'
+        to: versionPrefix + 'assert/img/shy.svg'
     }]
 }
 else if (platform == 'mobile') {
