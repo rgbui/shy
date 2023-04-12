@@ -336,7 +336,7 @@ module.exports = {
 if (isDev) {
     module.exports.devServer = {
         contentBase: path.resolve(__dirname, '../dist'),
-        host: 'localhost',
+        host: '127.0.0.1',
         compress: true,
         hot: true,
         port: port,
