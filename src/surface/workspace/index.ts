@@ -157,8 +157,7 @@ export class Workspace {
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
-
-
+    
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -524,8 +523,7 @@ export class Workspace {
         data.sockId = this.tim.id;
         data.workspaceId = this.id;
         data.userid = surface.user.id;
-        if (this.currentPageId)
-            data.viewId = this.currentPageId;
+        if (this.currentPageId) data.viewId = this.currentPageId;
         await this.tim.syncSend(HttpMethod.post, '/workspace/enter', data);
     }
     async exitWorkspace() {
