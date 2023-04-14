@@ -6,8 +6,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const WorkboxPlugin = require('workbox-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -171,7 +171,9 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', ".ts", ".js", ".less", ".css"],
         alias: {
-            crypto: false
+            crypto: false,
+            'react': path.resolve(__dirname, '../node_modules/react'),
+            'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
         }
     },
     module: {
@@ -335,10 +337,14 @@ module.exports = {
 };
 if (isDev) {
     module.exports.devServer = {
-        contentBase: path.resolve(__dirname, '../dist'),
+        static: {
+            directory: path.join(__dirname, '../dist'),
+        },
+        client: {
+            progress: true,
+        },
         host: '127.0.0.1',
         compress: true,
-        hot: true,
         port: port,
         open: true,
         historyApiFallback: {
