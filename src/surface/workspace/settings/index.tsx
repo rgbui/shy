@@ -17,9 +17,11 @@ import { WorkspaceMembers } from "./member";
 import { WorkspaceRoles } from "./roles";
 import { SafeSetting } from "./safe";
 import { WorkspaceSettingsView } from "./settings";
+import { RobotList } from "../robot/list"; 
+
 
 @observer
-class WsSettings extends EventsComponent {
+export class WsSettings extends EventsComponent {
     mode: string = 'settings';
     visible: boolean = false;
     constructor(props) {
@@ -69,6 +71,8 @@ class WsSettings extends EventsComponent {
                         <a onMouseDown={e => this.mode = 'price'} className={this.mode == 'price' ? "hover" : ""}>定价</a>
                         <a onMouseDown={e => this.setMode('consume')} className={this.mode == 'consume' ? "hover" : ""}>空间使用量</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
+                        <h4>机器人管理</h4>
+                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} >机器人</a>
                         <h4>成员管理</h4>
                         <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} >成员</a>
                         <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请</a>
@@ -87,6 +91,7 @@ class WsSettings extends EventsComponent {
                         {this.mode == 'audit' && <AuditView></AuditView>}
                         {this.mode == 'price' && <ShyFeature></ShyFeature>}
                         {this.mode == 'consume' && <ConsumeView></ConsumeView>}
+                        {this.mode == 'robots' && <RobotList></RobotList>}
                     </div>
                 </div>
                 <div className='shy-ws-settings-operators'>
