@@ -1,4 +1,4 @@
-import {  runInAction } from "mobx";
+import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
@@ -230,9 +230,10 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
                 {docs.map(doc => {
                     return <div key={doc.id} >
                         <div data-wiki-id={doc.id} onMouseDown={e => mousedownDoc(e, doc)} >
-                            <div className={"visible-hover cursor flex h-30 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>  <span className="size-20 flex-center"
-                                onMouseDown={e => { doc.spread = doc.spread ? false : true; e.stopPropagation() }}>
-                                <Icon icon={doc.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon></span>
+                            <div className={"visible-hover cursor flex h-30 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>
+                                <span className="size-20 flex-center item-hover round"
+                                    onMouseDown={e => { doc.spread = doc.spread ? false : true; e.stopPropagation() }}>
+                                    <Icon icon={doc.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon></span>
                                 <span className="flex-fixed size-20 round item-hover flex-center cursor">
                                     <Icon size={16} icon={PageSvg}></Icon>
                                 </span>
