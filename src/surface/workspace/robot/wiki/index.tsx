@@ -1,4 +1,4 @@
-import { computed, runInAction } from "mobx";
+import {  runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
@@ -15,7 +15,6 @@ import { util } from "rich/util/util";
 import { ShyUtil } from "../../../../util";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
-import { settings } from "paper/dist/paper-core";
 
 export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
     var local = useLocalObservable<{
@@ -24,7 +23,6 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
         docs: WikiDoc[],
         editDoc: WikiDoc,
         cv: ContentViewer,
-        // overDrop: { id: string, drop: 'up' | 'up-sub' },
         docPanel: HTMLElement
     }>(() => {
         return {
@@ -33,7 +31,6 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
             robot: props.robot,
             docs: [],
             editDoc: null,
-            // overDrop: { id: null, drop: null },
             docPanel: null
         }
     })
@@ -146,19 +143,16 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
     function mousedownDoc(e: React.MouseEvent, doc: WikiDoc) {
         e.preventDefault();
         if (local.editDoc?.id == doc.id) return;
-        console.log('mousedown', doc.id)
         var overDrop: { id: string, doc: WikiDoc, el: HTMLElement, drop: 'up' | 'up-sub' } = {
             id: null,
             doc: null,
             el: null,
             drop: null
         };
-
         MouseDragger({
             event: e.nativeEvent,
             dis: 5,
             moveStart: (e) => {
-                console.log('moveStart...');
                 var pe = (e.target as HTMLElement).closest('[data-wiki-id]') as HTMLElement;
                 ghostView.load(pe, { point: Point.from(e) })
             },
@@ -200,27 +194,53 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
             }
         })
     }
-    function dragPos(doc: WikiDoc, dropDoc: WikiDoc, arrow: 'up' | 'up-sub') {
-
+    async function dragPos(doc: WikiDoc, dropDoc: WikiDoc, arrow: 'up' | 'up-sub') {
+        var parentId = arrow == 'up-sub' ? dropDoc.id : dropDoc.parentId;
+        var g = await masterSock.post('/doc/move', {
+            id: doc.id,
+            pos: {
+                parentId,
+                id: arrow == 'up-sub' ? (dropDoc.childs || [])[0]?.id : dropDoc.id,
+                arrow: 'up'
+            }
+        })
+        if (g.ok) {
+            runInAction(() => {
+                local.docs.arrayJsonRemove('childs', g => g.id == doc.id)
+                if (arrow == 'up-sub') {
+                    if (!Array.isArray(dropDoc.childs)) dropDoc.childs = [];
+                    dropDoc.childs.push(doc);
+                    doc.parentId = dropDoc.id;
+                }
+                else {
+                    var docs = (dropDoc.parentId ? local.docs.arrayJsonFind('childs', g => g.id == dropDoc.parentId).childs : local.docs)
+                    var at = docs.findIndex(g => g.id == dropDoc.id);
+                    docs.forEach((c, i) => {
+                        if (i > at) { c.at += 1 }
+                    })
+                    doc.at = dropDoc.at + 1;
+                    docs.splice(at + 1, 0, doc);
+                }
+            })
+        }
     }
     function renderDocs(docs: WikiDoc[], parentDoc: WikiDoc, level: number = 0) {
         if (!parentDoc || parentDoc?.spread === true) {
             return <div>
                 {docs.map(doc => {
                     return <div key={doc.id} >
-                        <div data-wiki-id={doc.id} onClick={e => setTimeout(() => {
-                            // local.editDoc = doc
-                        }, 10)} onMouseDown={e => mousedownDoc(e, doc)} className={"visible-hover cursor flex h-30 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>
-                            <span className="size-20 flex-center"
+                        <div data-wiki-id={doc.id} onMouseDown={e => mousedownDoc(e, doc)} >
+                            <div className={"visible-hover cursor flex h-30 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>  <span className="size-20 flex-center"
                                 onMouseDown={e => { doc.spread = doc.spread ? false : true; e.stopPropagation() }}>
                                 <Icon icon={doc.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon></span>
-                            <span className="flex-fixed size-20 round item-hover flex-center cursor">
-                                <Icon size={16} icon={PageSvg}></Icon>
-                            </span>
-                            <span className="flex-auto text-overflow">{doc.text || '知识'}</span>
-                            <span className="flex-fixed">
-                                <span className="flex-center size-20 item-hover visible round" onClick={e => contextmenuItem(e, doc, parentDoc)}><Icon size={20} icon={DotsSvg}></Icon></span>
-                            </span>
+                                <span className="flex-fixed size-20 round item-hover flex-center cursor">
+                                    <Icon size={16} icon={PageSvg}></Icon>
+                                </span>
+                                <span className="flex-auto text-overflow">{doc.text || '知识'}</span>
+                                <span className="flex-fixed">
+                                    <span className="flex-center size-20 item-hover visible round" onClick={e => contextmenuItem(e, doc, parentDoc)}><Icon size={20} icon={DotsSvg}></Icon></span>
+                                </span>
+                            </div>
                         </div>
                         {doc.childs && renderDocs(doc.childs, doc, level + 1)}
                     </div>
