@@ -11,6 +11,7 @@ import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
 import { RobotInfo, RobotTask } from "../declare";
 import { useTaskContent } from "./content";
+import { MenuItemType } from "rich/component/view/menu/declare";
 
 @observer
 export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
@@ -45,7 +46,13 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
         }
     }
     async operator(event: React.MouseEvent, task: RobotTask) {
-        var r = await useSelectMenuItem({ roundPoint: Point.from(event) }, [{ name: 'edit' }, { name: "main" }, { name: 'disabled' }, { name: 'delete' }]);
+        var r = await useSelectMenuItem({ roundPoint: Point.from(event) }, [
+            { name: 'edit', text: '编辑' },
+            { text: '设为主入口', name: "main" },
+            { text: '禁用', name: 'disabled' },
+            { type: MenuItemType.divide },
+            { text: '删除', name: 'delete' }
+        ]);
         if (r) {
             if (r.item.name == 'delete') {
                 var s = await masterSock.delete('/robot/task', { id: task.id });
@@ -94,12 +101,12 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
                 </div>
             </div>
             <div className="">
-                <div className="h3 flex"><span className="flex-auto"></span><span
+                <div className="h3 flex"><span className="flex-auto">指令列表</span><span
                     className="flex-fixed size-24 cursor item-hover round"
                     onMouseDown={e => this.add(e)}><Icon icon={PlusSvg}></Icon></span></div>
                 {this.loading && <Spin block></Spin>}
                 {this.tasks.map(task => {
-                    return <div key={task.id}>
+                    return <div key={task.id} className="shadow padding-14 gap-h-10 round">
                         <div className="flex">
                             <span className="flex-fixed">/{task.name}</span>
                             <span className="remark f-12 flex-auto">{task.description}</span>

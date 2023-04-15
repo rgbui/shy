@@ -28,11 +28,18 @@ export type RobotTask = {
     template?: string,
 }
 
-export type RobotInfo = UserBasic & { remark?: string, basePath?: string, headers?: { name: string, value: string }[], }
+export type RobotInfo = UserBasic & {
+    remark?: string,
+    basePath?: string,    
+    scene: string;
+    headers?: { name: string, value: string }[],
+}
 
 
 export interface WikiDoc {
     id: string;
+    spread?: boolean,
+    at?: number,
     createDate: Date;
     creater: string;
     contents: { id: string, tokenCount?: number, content: string, date?: Date }[];
@@ -40,8 +47,8 @@ export interface WikiDoc {
     text: string;
     url: string;
     tokenCount: number;
+    embeddding: boolean,
     workspaceId: string;
     parentId: string;
     childs: WikiDoc[];
-    contentChange: boolean
 }

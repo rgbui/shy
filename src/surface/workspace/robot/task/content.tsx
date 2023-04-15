@@ -6,6 +6,7 @@ import { Input } from "rich/component/view/input";
 import { Textarea } from "rich/component/view/input/textarea";
 import { SelectBox } from "rich/component/view/select/box";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
+
 export class TaskContent extends EventsComponent {
     constructor(props) {
         super(props)
@@ -18,12 +19,23 @@ export class TaskContent extends EventsComponent {
         return <div className="w-500 max-h-300 overflow-y">
             <div><Input value={this.task.name} onChange={e => this.task.name = e}></Input></div>
             <div className="flex">
-                <div><SelectBox value={this.task.method} onChange={e => this.task.method = e as string} options={[{ name: 'GET', text: 'GET' }, { name: 'POST', text: 'POST' }, { name: '', text: '' }]}></SelectBox></div>
+                <div><SelectBox value={this.task.method} onChange={e => this.task.method = e as string} options={[
+                    { name: 'GET', text: 'GET' },
+                    { name: 'POST', text: 'POST' },
+                    { name: '', text: '' }
+                ]}></SelectBox></div>
                 <div><Input value={this.task.url} onChange={e => this.task.url = e}></Input></div>
             </div>
             <div>
-                <div><label></label> <div><SelectBox value={this.task.handle} onChange={e => this.task.handle = e as any} options={[{ name: 'GET', text: 'GET' }, { name: 'POST', text: 'POST' }, { name: '', text: '' }]}></SelectBox></div></div>
-                <div><label></label> <div><SelectBox value={this.task.flag} onChange={e => this.task.flag = e as any} options={[{ name: 'GET', text: 'GET' }, { name: 'POST', text: 'POST' }, { name: '', text: '' }]}></SelectBox></div></div>
+                <div><label></label> <div><SelectBox value={this.task.handle} onChange={e => this.task.handle = e as any} options={[
+                    { name: 'GET', text: 'GET' },
+                    { name: 'POST', text: 'POST' },
+                    { name: '', text: '' }]}></SelectBox></div></div>
+                <div><label></label> <div><SelectBox value={this.task.flag} onChange={e => this.task.flag = e as any} options={[
+                    { name: 'GET', text: 'GET' },
+                    { name: 'POST', text: 'POST' },
+                    { name: '', text: '' }
+                ]}></SelectBox></div></div>
             </div>
             <div><Textarea value={this.task.description} onChange={e => this.task.description = e}></Textarea></div>
             <div>
@@ -72,7 +84,19 @@ export class TaskContent extends EventsComponent {
         </div>
     }
     open(task: RobotTask) {
-        if (!task) this.task = { nextActions: [], name: '', method: 'GET', url: '', handle: 'sync', flag: 'write', description: '', args: [], headers: [], replys: [], template: '' }
+        if (!task) this.task = {
+            nextActions: [],
+            name: '',
+            method: 'GET',
+            url: '',
+            handle: 'sync',
+            flag: 'write',
+            description: '',
+            args: [],
+            headers: [],
+            replys: [],
+            template: ''
+        }
         else this.task = task;
     }
 }
