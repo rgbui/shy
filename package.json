@@ -8,15 +8,15 @@
   "main": "index.js",
   "scripts": {
     "build-api": "node scripts/api.js",
-    "desktop": "webpack --config scripts/config.js  --dev --desktop",
-    "desktop-pro": "webpack --config scripts/config.js  --pro --desktop",
+    "desktop": "webpack --config scripts/config.js  --node-env --dev,--desktop",
+    "desktop-pro": "webpack --config scripts/config.js  --node-env --pro,--desktop",
     "server-side": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress  --server-side",
-    "server-side-pro": "webpack --config scripts/config.js  --pro --server-side",
-    "mobile": "webpack --config scripts/config.js  --dev --mobile",
-    "mobile-pro": "webpack --config scripts/config.js  --pro --mobile",
+    "server-side-pro": "webpack --config scripts/config.js  --node-env --pro,--server-side",
+    "mobile": "webpack --config scripts/config.js  --node-env --dev,--mobile",
+    "mobile-pro": "webpack --config scripts/config.js  --node-env --pro,--mobile",
     "web-dev": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress   ",
-    "web-pro": "webpack --config scripts/config.js  --pro",
-    "web-beta": "webpack --config scripts/config.js  --beta "
+    "web-pro": "webpack --config scripts/config.js  --node-env --pro",
+    "web-beta": "webpack --config scripts/config.js --node-env --beta"
   },
   "keywords": [
     "shy.live",

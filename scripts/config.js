@@ -6,19 +6,30 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
+
+//console.log(process.env.NODE_ENV, process.argv, 'process.env.NODE_ENV');
+
+
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var mode = 'dev';
+var argv = (process.env.NODE_ENV||'').split(/[\s,]+/);
 if (process.argv.some(s => s == '--pro')) mode = 'pro';
 else if (process.argv.some(s => s == '--beta')) mode = 'beta';
+if (argv.some(s => s == '--pro')) mode = 'pro';
+else if (argv.some(s => s == '--beta')) mode = 'beta';
+
 var platform = 'web';
 if (process.argv.some(s => s == '--desktop')) platform = 'desktop';
 else if (process.argv.some(s => s == '--server-side')) platform = 'server-side';
-else if (process.argv.some(s => s == '--org')) platform = 'org';
 else if (process.argv.some(s => s == '--mobile')) platform = 'mobile';
+
+if (argv.some(s => s == '--desktop')) platform = 'desktop';
+else if (argv.some(s => s == '--server-side')) platform = 'server-side';
+else if (argv.some(s => s == '--mobile')) platform = 'mobile';
 
 var isDev = mode == 'dev'
 /**
@@ -51,7 +62,7 @@ else if (mode == 'beta') AUTH_URL = 'https://beta-auth.shy.live/auth.html';
 
 if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) AUTH_URL = `shy://shy.live/auth.html`;
 
-console.log(platform, mode, isDev);
+//console.log(platform, mode, isDev);
 
 var AMAP_KEY;
 var AMAP_PAIR;
