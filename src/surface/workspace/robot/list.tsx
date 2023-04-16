@@ -59,6 +59,10 @@ export class RobotList extends React.Component {
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
+                        await surface.workspace.sock.put('/ws/member/add/robot', {
+                            wsId: surface.workspace.id,
+                            robotInfo: s.data.robot
+                        });
                         this.robots.push(s.data.robot);
                         this.open(s.data.robot)
                     }
@@ -69,6 +73,10 @@ export class RobotList extends React.Component {
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'command', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
+                        await surface.workspace.sock.put('/ws/member/add/robot', {
+                            wsId: surface.workspace.id,
+                            robotInfo: s.data.robot
+                        });
                         this.robots.push(s.data.robot);
                         this.open(s.data.robot)
                     }

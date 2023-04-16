@@ -20,6 +20,7 @@ export class User {
     public checkPhone: boolean = null;
     public checkRealName: boolean = null;
     public realName: string = null;
+    public role: 'user' | 'robot' = null;
     public paw: string = null;
     public checkPaw: boolean = null;
     public name: string = null;
