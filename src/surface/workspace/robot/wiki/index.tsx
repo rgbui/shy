@@ -2,7 +2,7 @@ import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
+import { DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType } from "rich/component/view/menu/declare";
@@ -88,7 +88,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
             { name: 'addSub', text: '添加子文档', icon: PlusAreaSvg },
             { type: MenuItemType.divide },
             // { name: 'edit',text:'重命名',icon:EditSvg}, 
-            { name: 'fine', text: '微调', icon: PageSvg },
+            { name: 'fine', text: '微调', icon: RefreshSvg },
             { name: 'delete', text: '删除', icon: TrashSvg }
         ])
         if (r) {
