@@ -121,6 +121,7 @@ class WorkspaceService extends BaseService {
             return { ok: true, data: masterFile }
         }
         catch (ex) {
+            console.error('上传文件失败', ex)
             return { ok: false, warn: '上传文件失败' }
         }
     }
