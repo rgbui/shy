@@ -228,7 +228,7 @@ push('/blacklist/join', '{otherId:string}', 'SockResponse<void>', ['put'])
 push('/friend/is', '{friendId:string}', 'SockResponse<{is:boolean}>', ['get'])
 push('/friend/agree', '{id:string}', 'SockResponse<{userFriend:Record<string,any>}>', ['put'])
 push('/user/chat/list', '{roomId:string,seq?:number,size?:number}', 'SockResponse<{list:any[]}>', ['get'])
-push('/user/chat/send', '{roomId:string,content?:string,file?:any,tos:string[],replyId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/user/chat/send', '{roomId:string,content?:string,files?:any,tos:string[],replyId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/user/chat/cancel', '{id:string,roomId:string}', 'SockResponse<void>', ['del']);
 push('/user/chat/patch', '{id:string,roomId:string,content?:string,file?:any}', 'SockResponse<void>', ['patch']);
 push('/user/chat/emoji', '{id:string,roomId:string,emoji:{emojiId: string, code?: string}}', 'SockResponse<{emoji:{emojiId: string, code?: string,count:number}}>', ['put']);
@@ -259,7 +259,7 @@ push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'Sock
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/channel/list', '{roomId:string,seq?:number,page?:number,size?:number}', 'SockResponse<{list:any[],unreadCount?:number}>', ['get'])
-push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, file?:any}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, files?:any[]}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?: string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,file?:any}`, 'SockResponse<void>', ['patch'])
 push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);

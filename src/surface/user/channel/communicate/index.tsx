@@ -1,5 +1,4 @@
 import React from "react";
-import { RichTextInput } from "rich/component/view/rich.input/index";
 import { channel } from "rich/net/channel";
 import { surface } from "../../../store";
 import { userChannelStore } from "../store";
@@ -10,11 +9,10 @@ import { ChannelTextType } from "rich/extensions/chats/declare";
 import { util } from "rich/util/util";
 import { UserChannel } from "../declare";
 import { Avatar } from "rich/component/view/avator/face";
+import { InputChatBox } from "rich/component/view/input.chat/box";
+import { ResourceArguments } from "rich/extensions/icon/declare";
 
 export class CommunicateView extends React.Component<{ userChannel: UserChannel }>{
-    popOpen = (cs: { char: string, span: HTMLElement }) => {
-
-    }
     componentDidMount(): void {
         this.props.userChannel.communicateView = this;
         this.loadChats();
@@ -23,79 +21,35 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
         this.props.userChannel.communicateView = null;
     }
     onInput = async (data: {
-        files?: File[];
+        files?: ResourceArguments[];
         content?: string;
-        reply?: {
-            replyId: string;
-        }
+        replyId: string
     }) => {
-        if (data.content) {
-            var room = this.props.userChannel.room;
-            var toUsers = room.users.map(c => c.userid);
-            var re = await channel.put('/user/chat/send', {
-                tos: toUsers,
-                roomId: room.id,
+        var room = this.props.userChannel.room;
+        var toUsers = room.users.map(c => c.userid);
+        var re = await channel.put('/user/chat/send', {
+            tos: toUsers,
+            roomId: room.id,
+            content: data.content,
+            replyId: data.replyId || undefined,
+            files: data.files
+        })
+        if (re.data) {
+            var chat: ChannelTextType = {
+                id: re.data.id,
+                userid: surface.user.id,
+                createDate: re.data.createDate || new Date(),
                 content: data.content,
-                replyId: data.reply?.replyId || undefined
-            })
-            if (re.data) {
-                var chat: ChannelTextType = {
-                    id: re.data.id,
-                    userid: surface.user.id,
-                    createDate: re.data.createDate || new Date(),
-                    content: data.content,
-                    roomId: room.id,
-                    seq: re.data.seq,
-                    replyId: data.reply?.replyId || undefined
-                };
-                if (chat.replyId) {
-                    chat.reply = room.chats.find(b => b.id == chat.replyId);
-                }
-                room.chats.push(chat);
-                await userChannelStore.readRoomChat(this.props.userChannel);
-                this.notifyNewChat();
+                roomId: room.id,
+                seq: re.data.seq,
+                replyId: data?.replyId || undefined
+            };
+            if (chat.replyId) {
+                chat.reply = room.chats.find(b => b.id == chat.replyId);
             }
-        }
-        else if (data.files) {
-            for (let i = 0; i < data.files.length; i++) {
-                var id = util.guid();
-                var file = data.files[i];
-                var fr = { id, text: file.name, speed: `${file.name}-读取中...` };
-                room.uploadFileds.push(fr);
-                this.notifyNewUploadFile();
-                var d = await channel.post('/user/upload/file', {
-                    file,
-                    uploadProgress: (event) => {
-                        if (event.lengthComputable) {
-                            fr.speed = `${file.name}-${util.byteToString(event.total)}(${(100 * event.loaded / event.total).toFixed(2)}%)`;
-                            this.notifyNewUploadFile();
-                        }
-                    }
-                });
-                if (d) {
-                    fr.speed = `${file.name}-上传完成`;
-                    this.notifyNewUploadFile();
-                    var re = await channel.put('/user/chat/send', {
-                        tos: toUsers,
-                        roomId: room.id,
-                        file: d.data.file,
-                    });
-                    if (re.data) {
-                        room.uploadFileds.remove(g => g.id == fr.id);
-                        room.chats.push({
-                            id: re.data.id,
-                            userid: surface.user.id,
-                            createDate: re.data.createDate || new Date(),
-                            file: d.data.file as any,
-                            roomId: room.id,
-                            seq: re.data.seq
-                        });
-                        this.notifyNewUploadFile();
-                        await userChannelStore.readRoomChat(this.props.userChannel);
-                    }
-                }
-                await util.delay(20)
-            }
+            room.chats.push(chat);
+            await userChannelStore.readRoomChat(this.props.userChannel);
+            this.notifyNewChat();
         }
     }
     loadChats = async () => {
@@ -118,7 +72,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
             })
         }
     }
-    richInput: RichTextInput;
+    richInput: InputChatBox;
     replyChat = async (d: ChannelTextType) => {
         if (this.richInput) {
             var use = await channel.get('/user/basic', { userid: d.userid });
@@ -145,7 +99,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
                             {props.userChannel.room.isLoadChat && <RenderChatsView userChannel={props.userChannel} reditChat={this.reditChat} replyChat={this.replyChat}></RenderChatsView>}
                         </div>
                         <div className="shy-user-channel-communicate-input">
-                            <RichTextInput placeholder={'@' + user?.name} ref={e => this.richInput = e} popOpen={this.popOpen} onInput={this.onInput}></RichTextInput>
+                            <InputChatBox placeholder={'@' + user?.name} ref={e => this.richInput = e} onChange={this.onInput}></InputChatBox>
                         </div></>
                 }}</UserBox>}
             </div>
