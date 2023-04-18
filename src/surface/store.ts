@@ -62,10 +62,7 @@ export class Surface extends Events {
                 var ws = new Workspace();
                 ws.load({ ...r.data.workspace });
                 if (Array.isArray(r.data.pids)) {
-                    ws.dataServicePids = r.data.pids.findAll(g => g.types.includes('ws'));
-                    ws.timServicePids = r.data.pids.findAll(g => g.types.includes('tim'));
-                    ws.fileServicePids = r.data.pids.findAll(g => g.types.includes('file'));
-                    ws.searchServicePids = r.data.pids.findAll(g => g.types.includes('search'));
+                    ws.pids = r.data.pids;
                 }
                 await ws.createTim();
                 var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;

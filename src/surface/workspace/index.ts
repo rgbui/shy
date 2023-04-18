@@ -77,14 +77,17 @@ export class Workspace {
     public createDate: Date = null;
     public creater: string = null;
     public owner: string = null;
+
+
+    public pids: Pid[] = [];
     /**
    * 
    * 数据存储服务号
    * 
    */
     public dataServiceNumber: string;
-    public dataServicePids: Pid[];
-    public timServicePids: Pid[];
+    // public dataServicePids: Pid[];
+    // public timServicePids: Pid[];
 
     /**
      * 数据存储空间访问时进入的区块链编号
@@ -93,13 +96,13 @@ export class Workspace {
     /**
      * 大文件存储服务商ID
      */
-    public fileServiceNumber: string
-    public fileServicePids: Pid[];
+    // public fileServiceNumber: string
+    // public fileServicePids: Pid[];
     /**
      * 服务搜索服务商ID
      */
-    public searchServiceNumber: string
-    public searchServicePids: Pid[];
+    // public searchServiceNumber: string
+    // public searchServicePids: Pid[];
 
     public text: string = null;
     public icon: IconArguments = null;
@@ -157,7 +160,7 @@ export class Workspace {
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
-    
+
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -190,7 +193,7 @@ export class Workspace {
     private _sock: Sock;
     get sock() {
         if (this._sock) return this._sock;
-        return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.dataServicePids, 'ws'), {
+        return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'ws'), {
             'shy-sockId': this.tim.id,
             'shy-wsId': this.id
         });
@@ -198,7 +201,7 @@ export class Workspace {
     private _filesock: Sock;
     get fileSock() {
         if (this._filesock) return this._filesock;
-        return this._filesock = new Sock(SockType.none, Workspace.getWsSockUrl(this.dataServicePids, 'file'), {
+        return this._filesock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'file'), {
             'shy-sockId': this.tim.id,
             'shy-wsId': this.id
         });
@@ -491,7 +494,7 @@ export class Workspace {
         }
     }
     async createTim() {
-        this.tim = await CreateTim(this.dataServiceNumber, this.timServicePids.randomOf().url);
+        this.tim = await CreateTim(this.dataServiceNumber || 'shy', Workspace.getWsSockUrl(this.pids, 'tim'));
         workspaceNotifys(this.tim);
         var self = this;
         this.tim.only('reconnected_workspace', async () => {
@@ -506,6 +509,7 @@ export class Workspace {
     }
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {
+        console.log(pids, type);
         return pids.filter(g => g.types.includes(type)).randomOf()?.url;
     }
     currentPageId: string;
@@ -530,8 +534,7 @@ export class Workspace {
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
         data.workspaceId = this.id;
-        if (this.currentPageId)
-            data.viewId = this.currentPageId;
+        if (this.currentPageId) data.viewId = this.currentPageId;
         await this.tim.syncSend(HttpMethod.post, '/workspace/leave', data);
     }
     async getTimHeads() {
