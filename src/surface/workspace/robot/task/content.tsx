@@ -1,7 +1,6 @@
 import { EventsComponent } from "rich/component/lib/events.component";
 import { makeObservable, observable } from "mobx";
 import React from "react";
-import { RobotTask } from "../declare";
 import { Input } from "rich/component/view/input";
 import { Textarea } from "rich/component/view/input/textarea";
 import { SelectBox } from "rich/component/view/select/box";
@@ -11,6 +10,7 @@ import { util } from "rich/util/util";
 import { PlusSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import lodash from "lodash";
+import { RobotTask } from "rich/types/user";
 
 @observer
 export class TaskContent extends EventsComponent {

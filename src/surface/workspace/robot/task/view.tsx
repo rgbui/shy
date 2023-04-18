@@ -9,11 +9,11 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Spin } from "rich/component/view/spin";
 import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
-import { RobotInfo, RobotTask } from "../declare";
 import { useTaskContent } from "./content";
 import { MenuItemType } from "rich/component/view/menu/declare";
 import { surface } from "../../../store";
 import { Confirm } from "rich/component/lib/confirm";
+import { RobotInfo, RobotTask } from "rich/types/user";
 
 @observer
 export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {

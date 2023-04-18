@@ -7,9 +7,10 @@ import { Input } from "rich/component/view/input";
 import { Textarea } from "rich/component/view/input/textarea";
 import { util } from "rich/util/util";
 import { masterSock } from "../../../../../net/sock";
-import { RobotInfo, WikiDoc } from "../declare";
+import { WikiDoc } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
+import { RobotInfo } from "rich/types/user";
 
 @observer
 export class ContentViewer extends React.Component {

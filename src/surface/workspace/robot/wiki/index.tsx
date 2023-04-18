@@ -9,12 +9,13 @@ import { MenuItemType } from "rich/component/view/menu/declare";
 import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
 import { surface } from "../../../store";
-import { RobotInfo, WikiDoc } from "../declare";
+import { WikiDoc } from "../declare";
 import { ContentViewer } from "./content";
 import { util } from "rich/util/util";
 import { ShyUtil } from "../../../../util";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
+import { RobotInfo } from "rich/types/user";
 
 export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
     var local = useLocalObservable<{
