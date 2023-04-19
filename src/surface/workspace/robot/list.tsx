@@ -10,10 +10,10 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
-import { RobotInfo } from "./declare";
 import { Divider } from "rich/component/view/grid";
 import { RobotWikiList } from "./wiki/index";
 import { RobotTasksList } from "./task/view";
+import { RobotInfo } from "rich/types/user";
 
 @observer
 export class RobotList extends React.Component {
