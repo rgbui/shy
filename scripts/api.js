@@ -246,6 +246,7 @@ push('/text/edit', '{code: boolean, input: string, question: string, options: an
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
 push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
 push('/fetch','{options: {url: string;data?: Record<string, any>;method: string;},callback: (chunk: any, done?: boolean) => void}','',['post']);
+push('/http','{url: string;data?: Record<string, any>;method: string;}','SockResponse<any>',['post']);
 push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
 push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
 push('/open/list', '', 'SockResponse<{list:any[]}>', ['get'])

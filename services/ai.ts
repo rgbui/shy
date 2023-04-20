@@ -51,4 +51,13 @@ export class AiService {
         delete args.callback;
         await masterSock.fetchStream(args, cb);
     }
+    @post('/http')
+    async http(args) {
+        if (args.method == 'get')
+            return await masterSock.get(args.url, args.args);
+        else if (args.method == 'put')
+            return await masterSock.get(args.url, args.args);
+        else if (args.method == 'post')
+            return await masterSock.post(args.url, args.args);
+    }
 }
