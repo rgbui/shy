@@ -9,3 +9,4 @@ import "./user/pay";
 import './workspace';
 import "./page";
 import "./interactive";
+import "./ai";
