@@ -38,6 +38,7 @@ export class Sock {
         if (this.type == SockType.master) {
             if (surface.user?.tim) headers['shy-sockId'] = surface.user?.tim.id;
         }
+        if (surface.workspace) headers['shy-wsId'] = surface.workspace.id;
         if (typeof this.headers) Object.assign(headers, this.headers)
         return {
             headers: headers
