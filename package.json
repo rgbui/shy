@@ -10,7 +10,7 @@
     "build-api": "node scripts/api.js",
     "desktop": "webpack --config scripts/config.js  --node-env --dev,--desktop",
     "desktop-pro": "webpack --config scripts/config.js  --node-env --pro,--desktop",
-    "server-side": "webpack-dev-server  --env development  --config scripts/config.js  --hot --progress  --server-side",
+    "server-side": "webpack-dev-server  --env development  --config scripts/config.js  --node-env   --server-side",
     "server-side-pro": "webpack --config scripts/config.js  --node-env --pro,--server-side",
     "mobile": "webpack --config scripts/config.js  --node-env --dev,--mobile",
     "mobile-pro": "webpack --config scripts/config.js  --node-env --pro,--mobile",
