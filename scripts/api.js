@@ -151,7 +151,7 @@ push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any',
 push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
-push('/current/workspace','','{id:string,sn:number,text:string,url:string,roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
+push('/current/workspace', '', '{id:string,sn:number,text:string,url:string,roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
 push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
@@ -239,7 +239,13 @@ push('/user/order/list', '{page?: number, size?: number, word?: string, status?:
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
 push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 
-
+push('/query/wiki/answer', '{ask: string, robotId: string}', 'SockResponse<{contents:{ id: string, content: string, rank: number, max: number }[]}>', ['get']);
+push('/text/ai', '{input: string, model: string, uid: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{contents:{ id: string, content: string, rank: number, max: number }[]}>', ['get']);
+push('/text/ai/stream', '{question: string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean)=>void}', 'SockResponse<void>', ['post'])
+push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
+push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
+push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
+push('/fetch','{options: {url: string;data?: Record<string, any>;method: string;},callback: (chunk: any, done?: boolean) => void}','',['post']);
 push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
 push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
 push('/open/list', '', 'SockResponse<{list:any[]}>', ['get'])
