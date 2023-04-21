@@ -35,6 +35,7 @@ export class Tim {
                 else {
                     var d = json.data;
                     var ses = self.events.findAll(g => g.url == json.url);
+                    
                     for (let i = 0; i < ses.length; i++) {
                         try {
                             ses[i].fn(d);

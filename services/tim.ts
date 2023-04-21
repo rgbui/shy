@@ -102,17 +102,22 @@ export function workspaceNotifys(tim: Tim) {
 
     //空间会话
     tim.only(MessageUrl.channelNotify, (e: { id: string, seq?: number, workspaceId: string, roomId: string }) => {
-        var ws = surface.wss.find(g => g.id == e.workspaceId);
-        if (ws) {
-            ws.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
-            if (ws.id == surface.workspace.id) {
-                var item = surface.workspace.find(g => g.id == e.roomId);
-                if (item) {
-                    item.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
+        try {
+            var ws = surface.wss.find(g => g.id == e.workspaceId);
+            if (ws) {
+                ws.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
+                if (ws.id == surface.workspace.id) {
+                    var item = surface.workspace.find(g => g.id == e.roomId);
+                    if (item) {
+                        item.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
+                    }
                 }
             }
+            channel.fire(MessageUrl.channelNotify, e)
         }
-        channel.fire(MessageUrl.channelNotify, e)
+        catch (ex) {
+            console.error(ex);
+        }
     });
     tim.only(MessageUrl.channelPatchNotify, e => { channel.fire(MessageUrl.channelPatchNotify, e) });
     tim.only(MessageUrl.channelEmojiNotify, e => { channel.fire(MessageUrl.channelEmojiNotify, e) });

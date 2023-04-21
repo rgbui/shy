@@ -38,10 +38,12 @@ export class Surface extends Events {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
             if (r?.ok) {
-                var list = r.data.list;
+                var list: LinkWorkspaceOnline[] = r.data.list;
                 list.forEach(l => {
                     l.overlayDate = null;
-                    l.randomOnlineUsers = [];
+                    l.randomOnlineUsers = new Set();
+                    l.loadingOnlineUsers = false;
+                    l.unreadChats = [];
                 })
                 this.wss = list;
             }
