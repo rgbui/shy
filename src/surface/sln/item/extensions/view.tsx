@@ -86,7 +86,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             {!isInEdit && <div className='shy-ws-item-page-operators'>
                 {isCanEdit && <><Icon className='shy-ws-item-page-property' size={18} icon={DotsSvg}></Icon>
                     {isCanPlus && <Icon className='shy-ws-item-page-add' size={18} icon={PlusSvg}></Icon>}</>}
-                {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber count={item.unreadChats.length}></DotNumber></span>}
+                {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber arrow="none" count={item.unreadChats.length}></DotNumber></span>}
             </div>}
         </div>
         {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'>...</div>}

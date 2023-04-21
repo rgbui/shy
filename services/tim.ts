@@ -105,11 +105,13 @@ export function workspaceNotifys(tim: Tim) {
         try {
             var ws = surface.wss.find(g => g.id == e.workspaceId);
             if (ws) {
-                ws.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
-                if (ws.id == surface.workspace.id) {
-                    var item = surface.workspace.find(g => g.id == e.roomId);
-                    if (item) {
-                        item.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
+                if (surface?.supervisor?.page.item.id !== e.roomId) {
+                    ws.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
+                    if (ws.id == surface.workspace.id) {
+                        var item = surface.workspace.find(g => g.id == e.roomId);
+                        if (item) {
+                            item.unreadChats.push({ roomId: e.roomId, seq: e.seq, id: e.id })
+                        }
                     }
                 }
             }

@@ -125,7 +125,6 @@
 
         &-input {
             flex-grow: 1.0;
-
             input {
                 width        : 100%;
                 font-size    : inherit;
@@ -139,14 +138,15 @@
                 color        : rgba(25, 23, 17, 0.6);
             }
         }
-
         &-operators {
             padding-right  : 5px;
             flex-shrink    : 0;
             flex-grow      : 0;
+            display        : flex;
+            flex-wrap      : nowrap;
             justify-content: center;
             align-items    : center;
-            display        : none;
+            visibility     : hidden;
 
             .shy-icon {
                 display        : inline-flex;
@@ -160,13 +160,17 @@
                     background-color: rgba(55, 53, 47, 0.08);
                 }
             }
+
+            .unread {
+                visibility: visible;
+            }
         }
 
         &:hover {
             background: rgba(55, 53, 47, 0.04);
 
             .shy-ws-item-page-operators {
-                display: flex;
+                visibility: visible;
             }
         }
 
