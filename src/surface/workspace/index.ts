@@ -509,7 +509,6 @@ export class Workspace {
     }
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {
-        console.log(pids, type);
         return pids.filter(g => g.types.includes(type)).randomOf()?.url;
     }
     currentPageId: string;
