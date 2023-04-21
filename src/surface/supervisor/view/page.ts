@@ -133,6 +133,7 @@ export async function createPageContent(store: PageViewStore) {
             var ws = surface.wss.find(g => g.id == surface.workspace?.id);
             if (ws) {
                 lodash.remove(ws.unreadChats, c => c.roomId == store.item.id);
+                store.item.unreadChats = [];
             }
         }
     }
