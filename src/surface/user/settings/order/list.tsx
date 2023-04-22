@@ -3,11 +3,9 @@ import lodash from "lodash";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
 import { TrashSvg, UnpaySvg } from "rich/component/svgs";
-
 import { Col, Divider, Row, Space } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
-import { Loading } from "rich/component/view/loading";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
@@ -15,6 +13,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { usePayOrder } from "../../../../component/pay";
 import { Pagination } from "rich/component/view/pagination";
 import { Spin } from "rich/component/view/spin";
+
 export class ShyPayList extends React.Component {
     page: number = 1;
     size: number = 40;
@@ -122,7 +121,7 @@ export class ShyPayList extends React.Component {
                             })}
                         </tbody>
                     </table>
-                    <Pagination size={this.size} index={this.page} total={this.total} onChangeIndex={e => { this.page = e; this.load() }}></Pagination>
+                    <Pagination size={this.size} index={this.page} total={this.total} onChange={e => { this.page = e; this.load() }}></Pagination>
                 </div>
 
                 {!this.loading && this.orders.length == 0 && <Row><Col><Remark>没有支付记录</Remark></Col></Row>}
