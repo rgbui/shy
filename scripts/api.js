@@ -245,8 +245,8 @@ push('/text/ai/stream', '{question: string, model?: string, uid?: string, option
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
 push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
-push('/fetch','{options: {url: string;data?: Record<string, any>;method: string;},callback: (chunk: any, done?: boolean) => void}','',['post']);
-push('/http','{url: string;data?: Record<string, any>;method: string;}','SockResponse<any>',['post']);
+push('/fetch', '{options: {url: string;data?: Record<string, any>;method: string;},callback: (chunk: any, done?: boolean) => void}', '', ['post']);
+push('/http', '{url: string;data?: Record<string, any>;method: string;}', 'SockResponse<any>', ['post']);
 push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
 push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
 push('/open/list', '', 'SockResponse<{list:any[]}>', ['get'])
@@ -301,7 +301,7 @@ push('/ws/comment/list', '{elementUrl: string,wsId?: string, parentId: string, s
 push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string}', 'SockResponse<{data:any}>', ['put']);
 push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number}>', ['put']);
-
+push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
 
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])

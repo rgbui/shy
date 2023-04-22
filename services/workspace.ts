@@ -1,6 +1,6 @@
 
 import { BaseService } from "./common/base";
-import { fileSock, masterSock, Sock } from "../net/sock";
+import { masterSock, Sock } from "../net/sock";
 import { surface } from "../src/surface/store";
 import { del, get, patch, post, put } from "rich/net/annotation";
 import { Workspace } from "../src/surface/workspace";
@@ -279,15 +279,23 @@ class WorkspaceService extends BaseService {
 
     @get('/ws/online/users')
     async wsOnlineUsers(args) {
-        return masterSock.get('/ws/online/users', args);
+        args.wsId = surface.workspace.id;
+        return await masterSock.get('/ws/online/users', args);
     }
     @get('/ws/random/online/users')
     async wsRandomOnLineUsers(args) {
-        return masterSock.get('/ws/random/online/users', args)
+        args.wsId = surface.workspace.id;
+        return await masterSock.get('/ws/random/online/users', args)
     }
     @get('/ws/view/online/users')
     async wsGetViewOnLineUsers(args) {
-        return surface.workspace.sock.get('/ws/view/online/users', args);
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/view/online/users', args);
+    }
+    @get('/ws/robots')
+    async wsRobots(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/ws/robots', args);
     }
 }
 
