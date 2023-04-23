@@ -33,7 +33,7 @@ export class RobotList extends React.Component {
     async load() {
         try {
             this.loading = true;
-            var r = await masterSock.get('/ws/robots', { wsId: surface.workspace.id });
+            var r = await masterSock.get('/ws/my/robots', { wsId: surface.workspace.id });
             if (r.ok) {
                 this.robots = r.data.list;
             }

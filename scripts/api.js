@@ -302,6 +302,7 @@ push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, r
 push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
+push('/robots/info','{ids:string[]}','SockResponse<{list:any[]}>', ['get']);
 
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
