@@ -20,7 +20,6 @@ import { WorkspaceSettingsView } from "./settings";
 import { RobotList } from "../robot/list";
 import { RecommendRobots } from "./member/robots";
 
-
 @observer
 export class WsSettings extends EventsComponent {
     mode: string = 'settings';
@@ -54,7 +53,6 @@ export class WsSettings extends EventsComponent {
     el: HTMLElement;
     render() {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
-
         return <div ref={e => this.el = e} className='shy-ws-settings fixed-full'>
             <div className='screen-content-1000 flex-full h100 relative'>
                 <div className='flex-fixed w-200 shy-ws-settings-slide h100 box-border overflow-y'>
@@ -72,12 +70,13 @@ export class WsSettings extends EventsComponent {
                         <a onMouseDown={e => this.mode = 'price'} className={this.mode == 'price' ? "hover" : ""}>定价</a>
                         <a onMouseDown={e => this.setMode('consume')} className={this.mode == 'consume' ? "hover" : ""}>空间使用量</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>机器人</h4>
-                        <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} >机器人成员</a>
-                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} >自定义机器人</a>
                         <h4>成员管理</h4>
                         <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} >成员</a>
                         <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请</a>
+                        <Divider style={{ margin: '0px 15px' }}></Divider>
+                        <h4>机器人</h4>
+                        <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} >推荐机器人</a>
+                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} >自定义机器人</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <a className="warn" onMouseDown={e => this.deleteSpace()}>删除空间</a>
                     </div>
