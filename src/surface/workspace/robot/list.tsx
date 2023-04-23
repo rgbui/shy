@@ -91,8 +91,8 @@ export class RobotList extends React.Component {
     currentRobot: RobotInfo = null;
     render() {
         if (this.currentRobot) {
-            if (this.currentRobot.scene == 'wiki') return <RobotWikiList robot={this.currentRobot}></RobotWikiList>
-            else return <RobotTasksList robot={this.currentRobot}></RobotTasksList>
+            if (this.currentRobot.scene == 'wiki') return <RobotWikiList  robotList={this}  robot={this.currentRobot}></RobotWikiList>
+            else return <RobotTasksList robotList={this} robot={this.currentRobot}></RobotTasksList>
         }
         return <div>
             <div className="h2 flex">

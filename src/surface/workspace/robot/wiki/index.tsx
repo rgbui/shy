@@ -2,7 +2,7 @@ import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg } from "rich/component/svgs";
+import { ArrowLeftSvg, DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType } from "rich/component/view/menu/declare";
@@ -16,8 +16,9 @@ import { ShyUtil } from "../../../../util";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { RobotInfo } from "rich/types/user";
+import { RobotList } from "../list";
 
-export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
+export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: RobotList }) => {
     var local = useLocalObservable<{
         loading: boolean,
         robot: RobotInfo,
@@ -251,11 +252,16 @@ export var RobotWikiList = observer((props: { robot: RobotInfo }) => {
         }
         else return <></>
     }
-
-
+    function back() {
+        props.robotList.currentRobot = null;
+    }
     return <div>
 
-        <div></div>
+        <div className="flex">
+            <div className="flex-fixed" onMouseDown={e => back()}>
+                <span><Icon icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+            </div>
+        </div>
         <div className="flex flex-top">
             <div className="flex-fixed w-200">
                 <div className="flex">

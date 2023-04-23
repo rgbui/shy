@@ -2,7 +2,7 @@ import lodash from "lodash";
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { ButtonSvg, DotsSvg, EditSvg, ForbidSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
+import { ArrowLeftSvg, ButtonSvg, DotsSvg, EditSvg, ForbidSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
@@ -14,9 +14,10 @@ import { MenuItemType } from "rich/component/view/menu/declare";
 import { surface } from "../../../store";
 import { Confirm } from "rich/component/lib/confirm";
 import { RobotInfo, RobotTask } from "rich/types/user";
+import { RobotList } from "../list";
 
 @observer
-export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
+export class RobotTasksList extends React.Component<{ robot: RobotInfo,robotList:RobotList }> {
     constructor(props) {
         super(props);
         this.robot = props.robot;
@@ -96,9 +97,16 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo }> {
             }
         }
     }
-
+    async back() {
+this.props.robotList.currentRobot=null;
+    }
     render() {
         return <div className="">
+            <div className="flex">
+                <div className="flex-fixed" onMouseDown={e => this.back()}>
+                    <span><Icon icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+                </div>
+            </div>
             <div>
                 <div className="flex">
                     {this.robot && <Avatar user={this.robot}></Avatar>}
