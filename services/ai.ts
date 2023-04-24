@@ -53,11 +53,11 @@ export class AiService {
     }
     @post('/http')
     async http(args) {
-        if (args.method == 'get')
-            return await masterSock.get(args.url, args.args);
-        else if (args.method == 'put')
-            return await masterSock.get(args.url, args.args);
-        else if (args.method == 'post')
-            return await masterSock.post(args.url, args.args);
+        var me = args.method.toLowerCase();
+        if (typeof args.data == 'undefined') args.data = {}
+        args.data.wsId = surface.workspace?.id;
+        if (me == 'get') return await masterSock.get(args.url, args.data);
+        else if (me == 'put') return await masterSock.put(args.url, args.data);
+        else if (me == 'post') return await masterSock.post(args.url, args.data);
     }
 }
