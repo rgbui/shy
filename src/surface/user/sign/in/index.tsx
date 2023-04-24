@@ -156,10 +156,10 @@ export var Login = observer(function () {
         if (local.step == 'register') {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
                 </div>
                 <div className='shy-login-box-code'>
-                    <Input value={local.verifyPhoneCode}
+                    <Input size="larger" value={local.verifyPhoneCode}
                         name={'code'}
                         placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)}
                         onChange={e => local.verifyPhoneCode = e}
@@ -168,7 +168,7 @@ export var Login = observer(function () {
                     {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
                 </div>
                 {local.step == 'register' && <div className='shy-login-box-account'>
-                    <Input name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
+                    <Input size="larger" name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
                 </div>}
                 {local.step == 'register' && <div className='shy-login-box-agree'>
                     <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></label>
@@ -267,7 +267,7 @@ export var Login = observer(function () {
     }
     let location = useLocation();
     async function successAfter() {
-        if(config.isServerSide){
+        if (config.isServerSide) {
             return UrlRoute.push(ShyUrl.home)
         }
         if ((location?.state as any)?.back) {
