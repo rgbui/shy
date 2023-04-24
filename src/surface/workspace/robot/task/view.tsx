@@ -17,7 +17,7 @@ import { RobotInfo, RobotTask } from "rich/types/user";
 import { RobotList } from "../list";
 
 @observer
-export class RobotTasksList extends React.Component<{ robot: RobotInfo,robotList:RobotList }> {
+export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotList: RobotList }> {
     constructor(props) {
         super(props);
         this.robot = props.robot;
@@ -98,13 +98,13 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo,robotList
         }
     }
     async back() {
-this.props.robotList.currentRobot=null;
+        this.props.robotList.currentRobot = null;
     }
     render() {
         return <div className="">
             <div className="flex">
-                <div className="flex-fixed" onMouseDown={e => this.back()}>
-                    <span><Icon icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+                <div className="flex-fixed flex" onMouseDown={e => this.back()}>
+                    <span className="size-24 gap-r-5 flex-center item-hover round cursor"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
                 </div>
             </div>
             <div>

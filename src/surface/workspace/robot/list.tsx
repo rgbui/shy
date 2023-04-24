@@ -2,7 +2,7 @@
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { PlusSvg } from "rich/component/svgs";
+import { AiSvg, PageSvg, PlusSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
 import { useForm } from "rich/component/view/form/dialoug";
 import { Icon } from "rich/component/view/icon";
@@ -49,8 +49,8 @@ export class RobotList extends React.Component {
         var r = await useSelectMenuItem(
             { roundPoint: Point.from(event) },
             [
-                { name: 'addWiki', text: '创建知识问答机器人' },
-                { name: 'addCommand', text: '创建命令机器人' }
+                { name: 'addWiki', text: '创建知识问答机器人', icon: PageSvg },
+                { name: 'addCommand', text: '创建命令机器人', icon: AiSvg }
             ]
         );
         if (r) {
@@ -86,20 +86,22 @@ export class RobotList extends React.Component {
     }
     open(robot: RobotInfo) {
         this.currentRobot = robot;
-        console.log(this.currentRobot)
     }
     currentRobot: RobotInfo = null;
     render() {
         if (this.currentRobot) {
-            if (this.currentRobot.scene == 'wiki') return <RobotWikiList  robotList={this}  robot={this.currentRobot}></RobotWikiList>
+            if (this.currentRobot.scene == 'wiki') return <RobotWikiList robotList={this} robot={this.currentRobot}></RobotWikiList>
             else return <RobotTasksList robotList={this} robot={this.currentRobot}></RobotTasksList>
         }
         return <div>
             <div className="h2 flex">
                 <span className="flex-auto">机器人列表</span>
-                <span className="size-20 round flex-center flex-fixed pointer" onMouseDown={e => this.add(e)}><Icon size={18} icon={PlusSvg}></Icon></span>
             </div>
             <Divider></Divider>
+            <div className="flex gap-h-10">
+                <span className="remark">创建知识问答、指令执行机器人</span>
+                <span className="size-20 cursor item-hover round flex-center flex-fixed pointer" onMouseDown={e => this.add(e)}><Icon size={18} icon={PlusSvg}></Icon></span>
+            </div>
             <div className="">
                 {this.robots.map(robot => {
                     return <div key={robot.id} className="gap-h-10 cursor item-hover round padding-10" onMouseDown={e => this.open(robot)}>

@@ -56,7 +56,6 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
                     doc.spread = true;
                 })
                 local.docs = docs;
-                console.log('docs,', local.docs)
             }
         }
         catch (ex) {
@@ -256,10 +255,9 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
         props.robotList.currentRobot = null;
     }
     return <div>
-
         <div className="flex">
-            <div className="flex-fixed" onMouseDown={e => back()}>
-                <span><Icon icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+            <div className="flex-fixed flex" onMouseDown={e => back()}>
+                <span className="size-24 gap-r-5 flex-center item-hover round cursor"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
             </div>
         </div>
         <div className="flex flex-top">

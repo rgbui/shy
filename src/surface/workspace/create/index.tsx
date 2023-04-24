@@ -44,7 +44,7 @@ export var WorkspaceCreateView = observer(function () {
     }
 
     return <div className='shy-ws-create w-400'>
-        <div className="h2 flex-center">创建您的线上工作室</div>
+        <div className="h2 flex-center">创建您的社区空间</div>
         <div className="remark flex-center gap-b-20">
             创造、记录、管理、经营、沟通、协作无上限
         </div>
