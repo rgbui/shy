@@ -294,6 +294,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/robots')
     async wsRobots(args) {
+        if (typeof args == 'undefined') args = {}
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/ws/robots', args);
     }
