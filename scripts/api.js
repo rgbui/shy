@@ -245,7 +245,7 @@ push('/text/ai/stream', '{question: string, model?: string, uid?: string, option
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
 push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
-push('/fetch', '{options: {url: string;data?: Record<string, any>;method: string;},callback: (chunk: any, done?: boolean) => void}', '', ['post']);
+push('/fetch', '{url: string,data?: Record<string, any>,method: string,callback: (chunk: any, done?: boolean) => void}', '', ['post']);
 push('/http', '{url: string;data?: Record<string, any>;method: string;}', 'SockResponse<any>', ['post']);
 push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
 push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
@@ -266,9 +266,9 @@ push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'Sock
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/channel/list', '{roomId:string,seq?:number,page?:number,size?:number}', 'SockResponse<{list:any[],unreadCount?:number}>', ['get'])
-push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, files?:any[],mentions?:string[],robotId?:string}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, files?:any[],mentions?:string[],robotId?:string,isRobotSend?: boolean,newLine?: boolean}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?: string}', 'SockResponse<void>', ['del']);
-push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,file?:any,isEdited?:boolean}`, 'SockResponse<void>', ['patch'])
+push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,files?:any[],isEdited?:boolean}`, 'SockResponse<void>', ['patch'])
 push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);
 push('/ws/random/online/users', '{wsId:string,size?:number}', 'SockResponse<{count:number,users:string[]}>', ['get'])
 push('/ws/online/users', '{wsId:string}', 'SockResponse<{users:string[]}>', ['get'])
