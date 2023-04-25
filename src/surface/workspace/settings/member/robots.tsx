@@ -11,24 +11,42 @@ import { surface } from "../../../store";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Pagination } from "rich/component/view/pagination";
 import { channel } from "rich/net/channel";
+import { makeObservable, observable } from "mobx";
+import { RobotDetail } from "./robot.detail";
 
 @observer
 export class RecommendRobots extends React.Component {
+    constructor(props) {
+        super(props);
+        makeObservable(this, {
+            search: observable,
+            currentRobots: observable,
+            currentRobot: observable
+        })
+    }
     render() {
+        if (this.currentRobot) {
+            return <RobotDetail
+                back={() => { this.currentRobot = null }}
+                robot={this.currentRobot}></RobotDetail>
+        }
         return <div>
             <div className="h2">
-                <span>推荐机器人</span>
+                <span>推荐服务机器人</span>
             </div>
             <Divider></Divider>
-            <div className="remark f-12 gap-h-10">添加服务机器人至协作空间</div>
+            <div className="remark f-12 gap-h-10">添加服务机器人至空间</div>
             <div>
                 {this.search.loading && <SpinBox></SpinBox>}
                 {this.search.list.map(l => {
-                    return <div className="flex gap-h-10 item-hove round" key={l.id}>
-                        <div className="flex-auto"><Avatar userid={l.id}></Avatar></div>
+                    return <div onClick={e => this.currentRobot = l} className="flex gap-h-10 item-hove round item-hover padding-10" key={l.id}>
+                        <div className="flex-auto"><Avatar size={40} userid={l.id}></Avatar></div>
                         <div className="flex-fixed">
                             {this.currentRobots.some(s => s.userid == l.id) && <Button ghost>已添加</Button>}
-                            {!this.currentRobots.some(s => s.userid == l.id) && <Button onClick={(e, b) => this.addMember(l, e, b)}>添加至空间</Button>}
+                            {!this.currentRobots.some(s => s.userid == l.id) && <Button onClick={(e, b) => {
+                                e.stopPropagation()
+                                this.addMember(l, e, b)
+                            }}>添加至空间</Button>}
                         </div>
                     </div>
                 })}
@@ -65,6 +83,7 @@ export class RecommendRobots extends React.Component {
             error: ''
         }
     currentRobots: { userid: string }[] = [];
+    currentRobot: RobotInfo = null;
     async load() {
         this.search.loading = true;
         this.search.error = '';
@@ -91,12 +110,21 @@ export class RecommendRobots extends React.Component {
     }
     async addMember(l: RobotInfo, e: React.MouseEvent, b: Button) {
         b.loading = true;
-        await surface.workspace.sock.put('/ws/member/add/robot', {
-            wsId: surface.workspace.id,
-            robotInfo: l
-        });
-        b.loading = false;
-        ShyAlert('添加成功')
+        try {
+            await surface.workspace.sock.put('/ws/member/add/robot', {
+                wsId: surface.workspace.id,
+                robotInfo: l
+            });
+            ShyAlert('添加成功')
+            await this.load()
+        }
+        catch (ex) {
+            console.error(ex);
+            ShyAlert('添加失败')
+        }
+        finally {
+            b.loading = false;
+        }
     }
     componentDidMount() {
         this.load()

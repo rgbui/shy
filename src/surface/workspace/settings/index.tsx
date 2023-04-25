@@ -59,7 +59,7 @@ export class WsSettings extends EventsComponent {
                     <div className='padding-h-60'>
                         <h4>{surface.workspace.text}</h4>
                         <a onMouseDown={e => this.setMode('settings')} className={this.mode == 'settings' ? "hover" : ""} >概况</a>
-                        <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}>身份组</a>
+                        <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}>角色组</a>
                         <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}>空间设置 </a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>安全管理</h4>
