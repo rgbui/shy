@@ -10,7 +10,7 @@ export interface WikiDoc {
     text: string;
     url: string;
     tokenCount: number;
-    embeddding: boolean,
+    embedding: boolean,
     workspaceId: string;
     parentId: string;
     childs: WikiDoc[];
