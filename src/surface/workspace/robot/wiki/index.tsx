@@ -17,6 +17,8 @@ import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { RobotInfo } from "rich/types/user";
 import { RobotList } from "../list";
+import { RobotInfoView } from "../info";
+import { RobotInfoDescriptionView } from "../description";
 
 export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: RobotList }) => {
     var local = useLocalObservable<{
@@ -25,7 +27,8 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
         docs: WikiDoc[],
         editDoc: WikiDoc,
         cv: ContentViewer,
-        docPanel: HTMLElement
+        docPanel: HTMLElement,
+        tab: string,
     }>(() => {
         return {
             cv: null,
@@ -33,7 +36,8 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
             robot: props.robot,
             docs: [],
             editDoc: null,
-            docPanel: null
+            docPanel: null,
+            tab: '1'
         }
     })
     async function load() {
@@ -68,7 +72,6 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
     React.useEffect(() => {
         load()
     }, [])
-
     async function add(event: React.MouseEvent) {
         var g = await masterSock.put('/put/doc', {
             data: {
@@ -256,21 +259,34 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
     }
     return <div>
         <div className="flex">
-            <div className="flex-fixed flex" onMouseDown={e => back()}>
-                <span className="size-24 gap-r-5 flex-center item-hover round cursor"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+            <div className="flex-fixed flex item-hover padding-w-3 round cursor" onMouseDown={e => back()}>
+                <span className="size-24 gap-r-5 flex-center"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
             </div>
         </div>
-        <div className="flex flex-top">
-            <div className="flex-fixed w-200">
-                <div className="flex">
-                    <span className="flex-auto">知识</span>
-                    <span onMouseDown={e => add(e)} className="size-20 cursor round item-hover flex-center flex-fixed"><Icon size={16} icon={PlusSvg}></Icon></span>
+        <div>
+            <RobotInfoView robot={props.robot}></RobotInfoView>
+        </div>
+        <div className="flex border-bottom gap-h-10 r-padding-w-10 r-h-30 r-cursor">
+            <span onClick={e => local.tab = '1'} className={" " + (local.tab == '1' ? "border-b-p" : "")}>常规</span>
+            <span onClick={e => local.tab = '2'} className={" " + (local.tab == '2' ? "border-b-p" : "")}>知识</span>
+        </div>
+        {local.tab == '1' && <div>
+            <RobotInfoDescriptionView robot={props.robot}></RobotInfoDescriptionView>
+        </div>}
+        {local.tab == '2' && <div>
+            <div className="flex flex-top">
+                <div className="flex-fixed w-200">
+                    <div className="flex">
+                        <span className="flex-auto">知识</span>
+                        <span onMouseDown={e => add(e)} className="size-20 cursor round item-hover flex-center flex-fixed"><Icon size={16} icon={PlusSvg}></Icon></span>
+                    </div>
+                    <div ref={e => local.docPanel = e}>{renderDocs(local.docs, null)}</div>
                 </div>
-                <div ref={e => local.docPanel = e}>{renderDocs(local.docs, null)}</div>
+                <div className="flex-auto gap-w-10">
+                    <ContentViewer ref={e => local.cv = e}></ContentViewer>
+                </div>
             </div>
-            <div className="flex-auto gap-w-10">
-                <ContentViewer ref={e => local.cv = e}></ContentViewer>
-            </div>
-        </div>
+        </div>}
+
     </div>
 })

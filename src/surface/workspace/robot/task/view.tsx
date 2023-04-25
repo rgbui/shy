@@ -3,7 +3,6 @@ import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import { ArrowLeftSvg, ButtonSvg, DotsSvg, EditSvg, ForbidSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
-import { Avatar } from "rich/component/view/avator/face";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Spin } from "rich/component/view/spin";
@@ -15,6 +14,8 @@ import { surface } from "../../../store";
 import { Confirm } from "rich/component/lib/confirm";
 import { RobotInfo, RobotTask } from "rich/types/user";
 import { RobotList } from "../list";
+import { RobotInfoView } from "../info";
+import { RobotInfoDescriptionView } from "../description";
 
 @observer
 export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotList: RobotList }> {
@@ -24,12 +25,14 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotLis
         makeObservable(this, {
             tasks: observable,
             loading: observable,
-            robot: observable
+            robot: observable,
+            tab: observable
         })
     }
     tasks: RobotTask[] = [];
     loading: boolean = false;
     robot: RobotInfo = null;
+    tab: string = '1'
     componentDidMount() {
         this.load()
     }
@@ -101,18 +104,26 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotLis
         this.props.robotList.currentRobot = null;
     }
     render() {
-        return <div className="">
+        return <div>
+
             <div className="flex">
-                <div className="flex-fixed flex" onMouseDown={e => this.back()}>
-                    <span className="size-24 gap-r-5 flex-center item-hover round cursor"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+                <div className="flex-fixed flex item-hover padding-w-3  round cursor" onMouseDown={e => this.back()}>
+                    <span className="size-24 gap-r-5 flex-center"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
                 </div>
             </div>
+
             <div>
-                <div className="flex">
-                    {this.robot && <Avatar user={this.robot}></Avatar>}
-                </div>
+                <RobotInfoView robot={this.robot}></RobotInfoView>
             </div>
-            <div >
+            
+            <div className="flex border-bottom gap-h-10 r-padding-w-10 r-h-30 r-cursor">
+                <span onClick={e => this.tab = '1'} className={" " + (this.tab == '1' ? "border-b-p" : "")}>常规</span>
+                <span onClick={e => this.tab = '2'} className={" " + (this.tab == '2' ? "border-b-p" : "")}>指令</span>
+            </div>
+            {this.tab == '1' && <div>
+                <RobotInfoDescriptionView robot={this.props.robot}></RobotInfoDescriptionView>
+            </div>}
+            {this.tab == '2' && <div>
                 <div className="h3 flex"><span className="flex-auto">指令列表</span><span
                     className="flex-fixed size-24 cursor item-hover round flex-center"
                     onMouseDown={e => this.add(e)}><Icon icon={PlusSvg}></Icon></span></div>
@@ -128,7 +139,7 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotLis
                         </div>
                     </div>
                 })}
-            </div>
+            </div>}
         </div>
     }
 }
