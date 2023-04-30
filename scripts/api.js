@@ -240,7 +240,7 @@ push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
 push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 
 push('/query/wiki/answer', '{ask: string, robotId: string}', 'SockResponse<{contents:{ id: string, content: string, rank: number, max: number }[]}>', ['get']);
-push('/text/ai', '{input: string, model: string, uid: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{contents:{ id: string, content: string, rank: number, max: number }[]}>', ['get']);
+push('/text/ai', '{input: string, model?: string, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
 push('/text/ai/stream', '{question: string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean)=>void}', 'SockResponse<void>', ['post'])
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])

@@ -9,10 +9,10 @@ export class AiService {
         var d = await masterSock.get('/query/wiki/answer', args);
         return d;
     }
-    @get('/text/ai')
+    @post('/text/ai')
     async textAI(args) {
         args.wsId = surface.workspace?.id;
-        var d = await masterSock.get('/text/ai', args);
+        var d = await masterSock.post('/text/ai', args);
         return d;
     }
     @post('/text/edit')
