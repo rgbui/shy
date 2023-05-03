@@ -1,4 +1,4 @@
-import React from "react";
+
 import { AppLang } from "../../../../../i18n/enum";
 import { appLangProvider } from "../../../../../i18n/provider";
 import { ShyUrl, UrlRoute } from "../../../../history";
@@ -19,6 +19,8 @@ import { WeixinOpen } from "../../../../component/winxin/open";
 import "./style.less"
 import { config } from "../../../../../common/config";
 import { ShyUtil } from "../../../../util";
+import { isMobileOnly } from "react-device-detect";
+import React from "react";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -292,15 +294,13 @@ export var Login = observer(function () {
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
         <div className='shy-login-logo'><a href={config.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={config.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{config.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
-        <div className='shy-login'>
-            <div className="text-center gap-b-10 error">目前内部测试中，暂时无法注册使用</div>
+        <div className={'shy-login border-box' + (isMobileOnly ? " vw100-40" : " w-300")} >
+            <div className="text-center gap-b-10 error">内部测试中，暂时无法注册</div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
-
                 {!['login', 'register', 'name'].includes(local.step) && <span>登录/注册&nbsp;诗云</span>}
                 {local.step == 'register' && <span>注册&nbsp;诗云</span>}
                 {local.step == 'login' && <span>登录&nbsp;诗云</span>}
                 {local.step == 'name' && <span>完善个人信息</span>}
-
             </div>}
             {local.weixinOpen && local.step != 'name' && <div className="flex-center code-block padding-10">需要继续登录或注册完成微信帐号的绑定</div>}
             {local.step == 'weixin-login' && renderWeixin()}
