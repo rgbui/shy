@@ -24,7 +24,7 @@ export class InviteList extends React.Component {
         this.load();
     }
     dataUser: Partial<User> = null;
-    search: { page: number, size: number, list: { id: string }[], total: number, loading: boolean } = { page: 1, size: 10, list: [], total: 0, loading: false }
+    search: { page: number, size: number, list: { id: string }[], total: number, loading: boolean } = { page: 1, size: 20, list: [], total: 0, loading: false }
     async load() {
         if (!this.dataUser) {
             var r = await channel.get('/user/query')
