@@ -18,6 +18,7 @@ import { userChannelStore } from "../user/channel/store";
 import { UserAvatars } from "rich/component/view/avator/users"
 import { channel } from "rich/net/channel";
 import { runInAction } from "mobx";
+import { isMobileOnly } from "react-device-detect";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
@@ -62,6 +63,9 @@ export var SideBar = observer(function () {
             </div>
             {workspace.randomOnlineUsers.size > 0 && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
         </div>
+    }
+    if (isMobileOnly) {
+        return <></>
     }
     return <div className='shy-sidebar'>
         <a className="shy-sidebar-operator"

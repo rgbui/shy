@@ -89,6 +89,9 @@ export async function createPageContent(store: PageViewStore) {
             page.on(PageDirective.close, async () => {
                 store.emit('close');
             });
+            page.on(PageDirective.spreadSln, async () => {
+                surface.slnSpread = true;
+            });
             page.on(PageDirective.rollup, async (id) => {
                 var pd = await store.snapStore.rollupSnap(id);
                 if (pd?.content) {

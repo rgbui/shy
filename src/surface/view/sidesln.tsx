@@ -4,6 +4,7 @@ import { MouseDragger } from "rich/src/common/dragger";
 import { surface } from "../store";
 import { yCache, CacheKey } from "../../../net/cache";
 import { SlnView } from "../sln/view";
+import { isMobileOnly } from "react-device-detect";
 
 export var SideSln = observer(function () {
     var local = useLocalObservable(() => {
@@ -19,7 +20,7 @@ export var SideSln = observer(function () {
     }
     React.useEffect(() => {
         load();
-    },[])
+    }, [])
     function mousedown(event: React.MouseEvent) {
         MouseDragger<{ event: React.MouseEvent, width: number }>({
             event,
@@ -45,9 +46,13 @@ export var SideSln = observer(function () {
     }
     return surface.showSln && <><div className={'shy-slide'}
         ref={e => local.slideEl = e}
-        style={{ width: local.slideWidth }}>
+        style={{
+            width: isMobileOnly && surface.slnSpread === true ? '100%' : local.slideWidth,
+            display: surface.supervisor.page && isMobileOnly && surface.slnSpread !== true ? "none" : undefined
+        }}>
         <SlnView></SlnView>
         <div className='shy-slide-resize' onMouseDown={mousedown}></div>
-    </div><div className='shy-slide-reaction'></div>
+    </div>
+        {!isMobileOnly && <div className='shy-slide-reaction'></div>}
     </>
 })

@@ -13,6 +13,7 @@ import { surface } from "../../store";
 import { userNativeStore } from "../../../../native/store/user";
 import { useOpenUserSettings } from "../settings";
 import './style.less';
+import { isMobileOnly } from "react-device-detect";
 
 export var UserProfile = observer(function () {
     if (!surface.user.isSign) return <></>
@@ -58,9 +59,9 @@ export var UserProfile = observer(function () {
             </div>
         </div>}
         <div className="shy-user-profile-operators">
-            <span className="size-32 round flex-center cursor item-hover-1" onMouseDown={e => Mousedown(e)}>
+            {!isMobileOnly && <span className="size-32 round flex-center cursor item-hover-1" onMouseDown={e => Mousedown(e)}>
                 <Icon size={16} icon={SettingsSvg}></Icon>
-            </span>
+            </span>}
         </div>
     </div>
 });

@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import lodash from "lodash";
 import { PageSupervisorView } from "./view/index";
 import { PageSupervisorDialog } from "./view/dialoug";
-
 export var SupervisorView = observer(function () {
     React.useEffect(() => {
         surface.supervisor.emit('mounted');
@@ -16,7 +15,7 @@ export var SupervisorView = observer(function () {
             window.removeEventListener('resize', resize)
         }
     }, [])
-    return <div className='shy-supervisor'>
+    return <div className='shy-supervisor' style={{ display: surface.supervisor.page && surface.slnSpread !== true ? undefined : "none" }}>
         {surface.supervisor.opening && <></>}
         {surface.supervisor.opening == false && <>
             {surface.supervisor.page && <PageSupervisorView style={{ right: surface.supervisor.slide ? surface.supervisor.slide_pos + "%" : undefined }} store={surface.supervisor.page} ></PageSupervisorView>}

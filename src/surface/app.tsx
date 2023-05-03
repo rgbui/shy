@@ -13,6 +13,8 @@ import { surface } from './store';
 import { MyWorkSpace } from './view/my';
 import { channel } from "rich/net/channel";
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
+import { isMobileOnly } from 'react-device-detect';
+import { Spin } from 'rich/component/view/spin';
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
@@ -31,6 +33,22 @@ export function App() {
   }
   React.useEffect(() => {
     load();
+    var resize = (e?) => {
+      var el = document.querySelector('.shy-app');
+      if (el) {
+        if (isMobileOnly) {
+          el.classList.add('shy-app-mobile')
+        }
+        else {
+          el.classList.remove('shy-app-mobile');
+        }
+      }
+    }
+    window.addEventListener('resize', resize);
+    resize()
+    return () => {
+      window.removeEventListener('resize', resize);
+    }
   }, [])
   function renderRoutes() {
     if (config.isDev || config.isBeta) {
@@ -93,9 +111,11 @@ export function App() {
     }
 
   }
-  return <div className='shy-app'>
+  return <div className='shy-app' >
     {renderAvatorStatusSvgMask()}
-    {!isLoad && <div className='shy-app-load'></div>}
+    {!isLoad && <div className='flex-center gap-h-30'>
+      <Spin></Spin>
+    </div>}
     {isLoad && renderRoutes()}
   </div>
 }

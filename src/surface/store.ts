@@ -25,9 +25,11 @@ export class Surface extends Events {
             showHeadTip: computed,
             showSlideBar: computed,
             showSln: computed,
+            slnSpread: observable,
             showWorkspace: computed
         });
     }
+    slnSpread: boolean = null;
     supervisor: Supervisor = new Supervisor();
     user: User = new User();
     sln: Sln = new Sln();
