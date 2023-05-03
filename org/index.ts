@@ -57,6 +57,13 @@ window.addEventListener('DOMContentLoaded', (e) => {
         var nv = getEle('.shy-site-head-navs');
         nv.style.display = 'block'
     })
+    var eb = getEle('.shy-site-head-navs');
+    if (eb) {
+        eb.addEventListener('mousedown', g => {
+            var te = g.target as HTMLElement;
+            if (te.tagName.toLowerCase() != 'a') eb.style.display = 'none';
+        })
+    }
 })
 document.addEventListener('scroll', (e) => {
     var head = getEle('.shy-site-head');

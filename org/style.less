@@ -98,6 +98,7 @@ a {
 
 
 
+
 .shy-site-head-user {
     flex-grow      : 0;
     flex-shrink    : 0;
@@ -334,7 +335,7 @@ a {
     h3,
     h4 {
         text-align: center;
-        font-size: 28px;
+        font-size : 28px;
     }
 
     p {
@@ -394,6 +395,19 @@ a {
     }
 }
 
+.shy-site-price-features {
+    display: block;
+
+    >div {
+        width    : auto;
+        max-width: 500px;
+
+        img {
+            width : 20px;
+            height: 20px;
+        }
+    }
+}
 
 .shy-site-download {
     padding-top: 50px;
@@ -514,13 +528,13 @@ a {
         height          : 100vh;
         padding-top     : 30px;
         backdrop-filter : blur(10px);
-        background-color: hsla(0, 0%, 100%, .65);
+        background-color: hsla(0, 0%, 100%, .85);
 
         >a {
             display  : block;
-            height   : 30px;
             margin   : 10px;
-            font-size: 16px;
+            font-size: 20px;
+            height   : 40px;
         }
     }
 
@@ -545,11 +559,26 @@ a {
             margin-bottom: 40px !important;
             ;
             max-width: 500px;
+            width    : auto !important;
 
             &:last-child,
             &:first-child {
                 margin       : 0 auto;
                 margin-bottom: 40px;
+            }
+        }
+    }
+
+    .shy-site-price-features {
+        display: block;
+
+        >div {
+            width    : auto;
+            max-width: 500px;
+
+            img {
+                width : 20px;
+                height: 20px;
             }
         }
     }
