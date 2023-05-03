@@ -20,6 +20,7 @@ import { ShySafe } from './content/safe';
 import { ShyAppear } from './app/appear';
 import { SaveTip } from '../../../component/tip/save.tip';
 import { ShyUserPks } from './content/keys';
+import { InviteList } from './task/invite';
 
 @observer
 class UserSettings extends EventsComponent {
@@ -76,6 +77,10 @@ class UserSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('price')} className={this.mode == 'price' ? "hover" : ""}>定价</a>
                         <a onMouseDown={e => this.setMode('wallet')} className={this.mode == 'wallet' ? "hover" : ""}>钱包</a>
                         <a onMouseDown={e => this.setMode('orderList')} className={this.mode == 'orderList' ? "hover" : ""}>帐单</a>
+                        <Divider style={{ margin: '0px 15px' }}></Divider>
+                        <h4>活动中心</h4>
+                        <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请好友</a>
+
 
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>安全设置</h4>
@@ -106,6 +111,7 @@ class UserSettings extends EventsComponent {
                         {this.mode == 'open' && <ShyOpen></ShyOpen>}
                         {this.mode == 'user-safe' && <ShySafe></ShySafe>}
                         {this.mode == 'appear' && <ShyAppear></ShyAppear>}
+                        {this.mode == 'invite' && <InviteList></InviteList>}
                     </div>
                 </div>
                 <div className='shy-user-settings-operators'>
