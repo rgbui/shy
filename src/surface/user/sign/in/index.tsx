@@ -294,7 +294,7 @@ export var Login = observer(function () {
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
         <div className='shy-login-logo'><a href={config.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={config.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{config.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
-        <div className={'shy-login border-box' + (isMobileOnly ? " vw100-40" : " w-300")} >
+        <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-40" : " w-350")} >
             <div className="text-center gap-b-10 error">内部测试中，暂时无法注册</div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
                 {!['login', 'register', 'name'].includes(local.step) && <span>登录/注册&nbsp;诗云</span>}
