@@ -1,130 +1,79 @@
 .shy-ws-pages {
     position: relative;
-
     &-head {
-        padding-left: 10px;
-        color       : rgba(55, 53, 47, 0.4);
-        font-size   : 12px;
-
-        span {
-            padding     : 2px 4px;
-            padding-left: 0px;
-            display     : inline-block;
-            cursor      : pointer;
-
-            &:hover {
-                background-color: rgba(55, 53, 47, 0.08);
-            }
-        }
+        color          : rgba(55, 53, 47, 0.4);
     }
-
-    &-operators {
-        padding-right  : 10px;
-        position       : absolute;
-        top            : 0px;
-        right          : 0px;
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        visibility     : hidden;
-
-        .shy-icon {
-            display        : inline-flex;
-            justify-content: center;
-            align-items    : center;
-            color          : rgba(25, 23, 17, 0.6);
-            width          : 20px;
-            height         : 20px;
-            border-radius  : 3px;
-
-            &:hover {
-                background-color: rgba(55, 53, 47, 0.08);
-            }
-        }
-
-        .unread {
-            visibility: visible;
-        }
-    }
-
-    &:hover {
-        .shy-ws-pages-operators {
-            visibility: visible;
-
-            .unread {
-                display: none;
-            }
-        }
-
-
+    .shy-icon {
+        color: rgba(55, 53, 47, 0.45);
     }
 }
 
-
 .shy-ws-item {
     &-page {
-        margin       : 0px 5px;
-        cursor       : pointer;
-        position     : relative;
-        display      : flex;
-        align-items  : center;
-        min-height   : 27px;
-        color        : rgba(25, 23, 17, 0.6);
-        font-size    : 14px;
-        border-top   : 2px solid transparent;
-        border-bottom: 2px solid transparent;
-        border-radius: 4px;
+        // cursor          : pointer;
+        // position        : relative;
+        color           : rgba(25, 23, 17, 0.6);
+        font-size       : 14px;
+        border-top      : 2px solid transparent;
+        border-bottom   : 2px solid transparent;
 
-        &-spread {
-            color          : inherit;
-            display        : inline-flex;
-            justify-content: center;
-            align-items    : center;
-            width          : 20px;
-            height         : 20px;
-            flex-shrink    : 0;
-            border-radius  : 3px;
-
-            &:hover {
-                background-color: rgba(55, 53, 47, 0.08);
-            }
+        .shy-icon {
+            color: rgba(55, 53, 47, 0.45);
         }
 
-        &-icon {
-            color          : rgba(55, 53, 47, 0.4);
-            fill           : rgba(55, 53, 47, 0.4);
-            display        : flex;
-            align-items    : center;
-            justify-content: center;
-            flex-shrink    : 0;
-            flex-grow      : 0;
-            width          : 20px;
-            height         : 20px;
-            margin-right   : 4px;
-            transition     : background 20ms ease-in 0s;
-            border-radius  : 3px;
-            font-style     : normal;
+        // border-radius: 4px;
 
-            &:hover {
-                background-color: rgba(55, 53, 47, 0.08);
-            }
-        }
+        // &-spread {
+        //     color          : inherit;
+        //     display        : inline-flex;
+        //     justify-content: center;
+        //     align-items    : center;
+        //     width          : 20px;
+        //     height         : 20px;
+        //     flex-shrink    : 0;
+        //     border-radius  : 3px;
 
-        >span {
-            color        : inherit;
-            flex-grow    : 1;
-            flex-shrink  : 1;
-            height       : 20px;
-            line-height  : 20px;
-            padding-right: 10px;
-            white-space  : nowrap;
-            min-width    : 0px;
-            overflow     : hidden;
-            text-overflow: ellipsis;
-        }
+        //     &:hover {
+        //         background-color: rgba(55, 53, 47, 0.08);
+        //     }
+        // }
+
+        // &-icon {
+        //     color          : rgba(55, 53, 47, 0.4);
+        //     fill           : rgba(55, 53, 47, 0.4);
+        //     display        : flex;
+        //     align-items    : center;
+        //     justify-content: center;
+        //     flex-shrink    : 0;
+        //     flex-grow      : 0;
+        //     width          : 20px;
+        //     height         : 20px;
+        //     margin-right   : 4px;
+        //     transition     : background 20ms ease-in 0s;
+        //     border-radius  : 3px;
+        //     font-style     : normal;
+
+        //     &:hover {
+        //         background-color: rgba(55, 53, 47, 0.08);
+        //     }
+        // }
+
+        // >span {
+        //     color        : inherit;
+        //     flex-grow    : 1;
+        //     flex-shrink  : 1;
+        //     height       : 20px;
+        //     line-height  : 20px;
+        //     padding-right: 10px;
+        //     white-space  : nowrap;
+        //     min-width    : 0px;
+        //     overflow     : hidden;
+        //     text-overflow: ellipsis;
+        // }
 
         &-input {
             flex-grow: 1.0;
+
             input {
                 width        : 100%;
                 font-size    : inherit;
@@ -138,6 +87,7 @@
                 color        : rgba(25, 23, 17, 0.6);
             }
         }
+
         &-operators {
             padding-right  : 5px;
             flex-shrink    : 0;
@@ -200,9 +150,3 @@
     }
 }
 
-.shy-ws-item-empty {
-    span {
-        color    : rgba(55, 53, 47, 0.4);
-        font-size: 12px;
-    }
-}
