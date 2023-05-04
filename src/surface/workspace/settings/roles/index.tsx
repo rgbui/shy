@@ -478,7 +478,7 @@ export class WorkspaceRoles extends React.Component {
         }
     }
     async removeRoleMember(id: string) {
-        if (await Confirm("确定要从该角色移出成员吗")) {
+        if (await Confirm(`确定要从角色组[${this.editRole?.text}]移出成员吗`)) {
             var g = await surface.workspace.sock.delete('/ws/user/delete/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: id });
             await this.loadRoleMemebers(this.editRole)
         }
@@ -486,7 +486,7 @@ export class WorkspaceRoles extends React.Component {
     renderRoleUsers() {
         return <div className="shy-ws-role-users">
             <div className='flex'>
-                <span className='flex-auto remark'>成员列表</span>
+                <span className='flex-auto remark f-12'>成员列表{this.roleUserSearch.total ? `(${this.roleUserSearch.total})` : ''}</span>
                 <span onClick={e => this.onAddRoleMember(e)} className='flex-fixed flex-center size-24 round item-hover round cursor'>
                     <Icon size={18} icon={PlusSvg}></Icon>
                 </span>
@@ -494,10 +494,10 @@ export class WorkspaceRoles extends React.Component {
             {this.roleUserSearch.loading && <div className='remark flex-center gap-h-30'><Spin></Spin></div>}
             {this.roleUserSearch.list.map(ru => {
                 return <div className='flex' key={ru.id}>
-                    <span className='flex-auto'> <Avatar size={40} showName showSn userid={ru.userid}></Avatar></span>
+                    <span className='flex-auto'><Avatar size={40} showName showSn userid={ru.userid}></Avatar></span>
                     <ToolTip overlay={'移出成员'}>
-                        <span onClick={e => this.removeRoleMember(ru.userid)} className='flex-fixed size-24 round item-hover cursor'>
-                            <Icon icon={CloseSvg}></Icon>
+                        <span onClick={e => this.removeRoleMember(ru.userid)} className='flex-fixed size-24 flex-center round item-hover cursor'>
+                            <Icon size={16} icon={CloseSvg}></Icon>
                         </span>
                     </ToolTip>
                 </div>

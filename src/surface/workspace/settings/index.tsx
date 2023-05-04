@@ -68,7 +68,7 @@ export class WsSettings extends EventsComponent {
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>帐单</h4>
                         <a onMouseDown={e => this.mode = 'price'} className={this.mode == 'price' ? "hover" : ""}>定价</a>
-                        <a onMouseDown={e => this.setMode('consume')} className={this.mode == 'consume' ? "hover" : ""}>空间使用量</a>
+                        {/*<a onMouseDown={e => this.setMode('consume')} className={this.mode == 'consume' ? "hover" : ""}>空间使用量</a> */}
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4>成员管理</h4>
                         <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} >成员</a>
