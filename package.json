@@ -41,7 +41,6 @@
     "mobx": "^6.3.5",
     "mobx-react": "^7.2.0",
     "prismjs": "^1.23.0",
-    "rc-tooltip": "^5.1.1",
     "react": "^17.0.2",
     "react-color": "^2.19.3",
     "react-device-detect": "^2.2.3",
