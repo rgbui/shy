@@ -3,6 +3,8 @@ import { runInAction } from "mobx";
 import { config } from "../../../../../common/config";
 import { PageItem } from "..";
 import { surface } from "../../../store";
+import { Workspace } from "../../../workspace";
+import { Mime } from "../../declare";
 
 export enum ItemOperatorDirective {
     update = 1,
@@ -120,7 +122,7 @@ class PageItemStore {
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.parentId;
         data.at = pageItem.at + 1;
-
+        data.subCount = 0;
         var newItem = new PageItem();
         newItem.checkedHasChilds = true;
         newItem.load(data);
@@ -157,6 +159,30 @@ class PageItemStore {
             }
         }
         return newItem;
+    }
+
+    public async createFolder(workspace: Workspace, data: Record<string, any>, next?: PageItem) {
+        if (next) return await this.insertAfterPageItem(next, data)
+        else {
+            var actions: PageItemAction[] = [];
+            data.id = config.guid();
+            data.workspaceId = workspace.id;
+            data.at = (workspace.childs.last()?.at || 0) + 1;
+            data.subCount = 0;
+            data.mime= Mime.pages;
+            var newItem = new PageItem();
+            newItem.checkedHasChilds = true;
+            newItem.load(data);
+            actions.push({ directive: ItemOperatorDirective.insert, data });
+            var r = await this.save(data.workspaceId, { operate: ItemOperator.insertAfter, actions })
+            if (r.ok && Array.isArray(r.data.actions)) {
+                var re = r.data.actions.find(g => g && g.id == newItem.id);
+                if (re) {
+                    newItem.load(re);
+                }
+            }
+            return newItem;
+        }
     }
     public async movePrependPageItem(pageItem: PageItem, parentItem: PageItem) {
         if (pageItem.parent == parentItem && !pageItem.prev) return;
