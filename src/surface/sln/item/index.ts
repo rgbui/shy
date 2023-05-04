@@ -6,7 +6,7 @@ import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
-import { Mime, PageItemDirective } from "../declare";
+import { Mime } from "../declare";
 import { makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
@@ -308,17 +308,22 @@ export class PageItem {
         itemS.page.forceUpdate();
     }
     async getPageItemMenus() {
-        var items: MenuItem<PageItemDirective>[] = [];
+        var items: MenuItem<string>[] = [];
         if (this.mime == Mime.pages) {
             items = [
                 {
-                    name: PageItemDirective.rename,
+                    name: 'rename',
+                    icon: RenameSvg,
+                    text: '重命名'
+                },
+                {
+                    name: 'rename',
                     icon: RenameSvg,
                     text: '重命名'
                 },
                 { type: MenuItemType.divide },
                 {
-                    name: PageItemDirective.remove,
+                    name: 'remove',
                     icon: TrashSvg,
                     text: '删除'
                 }
@@ -326,19 +331,19 @@ export class PageItem {
         }
         else {
             items.push({
-                name: PageItemDirective.remove,
+                name: 'remove',
                 icon: TrashSvg,
                 text: '删除'
             });
             if (this.pageType == PageLayoutType.doc) {
                 items.push({
-                    name: PageItemDirective.copy,
+                    name: 'copy',
                     icon: DuplicateSvg,
                     text: '拷贝'
                 });
             }
             items.push({
-                name: PageItemDirective.rename,
+                name: 'rename',
                 icon: RenameSvg,
                 text: '重命名'
             });
@@ -346,7 +351,7 @@ export class PageItem {
                 type: MenuItemType.divide,
             })
             items.push({
-                name: PageItemDirective.link,
+                name: 'link',
                 icon: LinkSvg,
                 text: '复制访问链接'
             });
@@ -367,15 +372,15 @@ export class PageItem {
         }
         return items;
     }
-    async onContextmenuClickItem(menuItem: MenuItem<PageItemDirective>, event: MouseEvent) {
+    async onContextmenuClickItem(menuItem: MenuItem<string>, event: MouseEvent) {
         switch (menuItem.name) {
-            case PageItemDirective.copy:
+            case 'copy':
                 this.onCopy();
                 break;
-            case PageItemDirective.remove:
+            case 'remove':
                 this.onRemove();
                 break;
-            case PageItemDirective.rename:
+            case 'rename':
                 if (this.mime == Mime.page) {
                     var r = await useForm({
                         title: '修改分类名称', fields: [
@@ -396,7 +401,7 @@ export class PageItem {
                     this.onEdit();
                 }
                 break;
-            case PageItemDirective.link:
+            case 'link':
                 CopyText(this.url);
                 ShyAlert('访问链接已复制')
                 break;
