@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'rich/component/view/button/index';
-import {  Divider, Space } from 'rich/component/view/grid';
+import { Divider, Space } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { OpenFileDialoug } from 'rich/component/file';
 import { surface } from '../../store';
@@ -110,12 +110,12 @@ export class WorkspaceSettingsView extends React.Component {
                 <div>
                     <Space valign='start'>
                         <div className='shy-settings-ws-avatar' onClick={() => this.onUploadFace()} >
-                            {surface.workspace.icon && <img src={autoImageUrl(surface.workspace.icon.url, 120)} />}
-                            {!surface.workspace.icon && <span>{surface.workspace.text.slice(0, 1)}</span>}
+                            {surface.workspace.icon && <img className='w100 h100 circle' src={autoImageUrl(surface.workspace.icon.url, 120)} />}
+                            {!surface.workspace.icon && <span className='w100 h100 circle flex-center'>{surface.workspace.text.slice(0, 1)}</span>}
                             <div className='shy-settings-ws-avatar-hover'>添加图片</div>
                         </div>
                         <div>
-                            <p style={{ fontSize: 12, marginBottom: 10 }}>我们建议使用至少 200x200 大小的图片。</p>
+                            <p style={{ fontSize: 12, marginBottom: 10 }}>建议使用 200x200 以上的图片。</p>
                             <Button ghost onClick={e => this.onUploadFace()}>上传图片</Button>
                         </div>
                     </Space>
@@ -125,7 +125,7 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'>空间名称</div>
-                <div className='remark f-12 gap-h-10'>点击输入框可修改名称</div>
+                <div className='remark f-12 gap-h-10'>修改空间名称</div>
                 <div className='max-w-500'>
                     <Input value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
                 </div>
@@ -148,7 +148,7 @@ export class WorkspaceSettingsView extends React.Component {
 
             <div className='gap-h-10'>
                 <div className='bold f-14'>工作空间描述</div>
-                <div className='remark f-12 gap-h-10'>点击输入框可输入工作空间描述</div>
+                <div className='remark f-12 gap-h-10'>修改工作空间描述</div>
                 <div className='max-w-500'>
                     <Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'请输入你的工作空间描述'}></Textarea>
                 </div>
