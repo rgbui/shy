@@ -36,7 +36,7 @@ export class PageItem {
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
     willLoadSubs: boolean = false;
-
+    subCount: number = null;
     /**
     * 是否为公开
     * net 互联网公开
@@ -93,7 +93,8 @@ export class PageItem {
             editor: observable,
             description: observable,
             unreadChats: observable,
-            pageType: observable
+            pageType: observable,
+            subCount: observable
         });
     }
     get sln() {

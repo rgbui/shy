@@ -5,9 +5,9 @@ import { observer } from "mobx-react";
 import { PageItem } from "..";
 import { surface } from "../../../store";
 import { AtomPermission } from "rich/src/page/permission";
-import { getPageIcon } from "rich/extensions/at/declare";
+import { getPageIcon, getPageText } from "rich/extensions/at/declare";
 import { DotNumber } from "rich/component/view/dot";
-import { DotsSvg, PlusSvg } from "rich/component/svgs";
+import { ChevronDownSvg, ChevronRightSvg, DotSvg, DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Mime } from "../../declare";
 
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
@@ -21,6 +21,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     var isDragOver = surface.sln.isDrag && surface.sln.hoverId == item.id && !surface.sln.dragIds.some(s => s == props.item.id);
+
     async function mousedown(event: MouseEvent) {
         var target = event.target as HTMLElement;
         if (target.closest('.shy-ws-item-page-spread')) {
@@ -68,15 +69,18 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         }
     }, [isInEdit])
     return <div className='shy-ws-item' data-at={props.item.at} >
-        <div className={'shy-ws-item-page' + (isSelected ? " shy-ws-item-page-selected" : "") + (isDragOver ? " shy-ws-item-page-dragover" : "")}
+        <div className={'shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor' + (isSelected ? " shy-ws-item-page-selected" : "") + (isDragOver ? " shy-ws-item-page-dragover" : "")}
             style={style}
             onMouseEnter={e => surface.sln.hoverId = props.item.id}
             onMouseLeave={e => surface.sln.hoverId = ''}
             onContextMenu={e => contextmenu(e.nativeEvent)}
             onMouseDown={e => mousedown(e.nativeEvent)}>
-            <Icon className='shy-ws-item-page-spread' icon={item.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon>
-            <i className='shy-ws-item-page-icon'><Icon size={16} icon={getPageIcon(item)}></Icon></i>
-            {!isInEdit && <span>{item.text || '新页面'}</span>}
+            <span className={"size-20 round item-hover flex-center flex-fixed shy-ws-item-page-spread ts " + (item.spread ? " " : " angle-90-")}>
+                {item.subCount > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
+                {item.subCount == 0 && <Icon size={16} icon={DotSvg}></Icon>}
+            </span>
+            <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover round-3 flex-center gap-r-5 '><Icon size={16} icon={getPageIcon(item)}></Icon></i>
+            {!isInEdit && <span className="text-overflow flex-auto h-20 l-20 padding-r-10">{getPageText(item)}</span>}
             {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}
                 ref={e => refInput.current = e}
