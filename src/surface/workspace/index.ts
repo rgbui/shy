@@ -70,7 +70,6 @@ export type LinkWorkspaceOnline = {
 } & Partial<Workspace>
 
 
-
 export class Workspace {
     public id: string = null;
     public sn: number = null;
@@ -78,17 +77,15 @@ export class Workspace {
     public creater: string = null;
     public owner: string = null;
 
-
     public pids: Pid[] = [];
     /**
-   * 
-   * 数据存储服务号
-   * 
-   */
+     * 
+     * 数据存储服务号
+     * 
+     */
     public dataServiceNumber: string;
     // public dataServicePids: Pid[];
     // public timServicePids: Pid[];
-
     /**
      * 数据存储空间访问时进入的区块链编号
      */
@@ -126,6 +123,7 @@ export class Workspace {
     public member: WorkspaceMember = null;
     public access: number = 0;
     public accessJoinTip: boolean = false;
+    public slnStyle: 'menu' | 'note' = 'note';
     /**
      * 访客发言限制
      */
@@ -186,6 +184,7 @@ export class Workspace {
             viewOnlineUsers: observable,
             onLineUsers: observable,
             invite: observable,
+            slnStyle: observable,
             isOwner: computed,
             isMember: computed
         })

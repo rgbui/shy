@@ -4,7 +4,7 @@ import { surface } from "../../store";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
-import { ChevronDownSvg, EditSvg, MenuSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, FolderPlusSvg, } from "rich/component/svgs";
+import { ChevronDownSvg, EditSvg, MenuSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, FolderPlusSvg, FolderCloseSvg, } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
@@ -23,11 +23,11 @@ export var WorkspaceProfile = observer(function () {
         if (surface.workspace.isOwner) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                { name: 'createFolder', icon: MenuFolderSvg, text: '创建类别' },
+                { name: 'createFolder', icon: FolderCloseSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
                 { text: '风格', type: MenuItemType.text },
-                { name: 'showMenu', icon: FolderPlusSvg, text: '菜单' },
-                { name: 'showNote', icon: TreeListSvg, text: '目录' },
+                { name: 'showMenu', icon: FolderPlusSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
+                { name: 'showNote', icon: TreeListSvg, text: '目录', checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
@@ -36,7 +36,7 @@ export var WorkspaceProfile = observer(function () {
         else if (surface.workspace.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                { name: 'createFolder', icon: MenuFolderSvg, text: '创建类别' },
+                { name: 'createFolder', icon: FolderCloseSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
                 { text: '风格', type: MenuItemType.text },
                 { name: 'showMenu', icon: MenuFolderSvg, text: '菜单' },
@@ -88,7 +88,7 @@ export var WorkspaceProfile = observer(function () {
                 }
             }
             else if (se.item.name == 'showMenu' || se.item.name == 'showNote') {
-
+                surface.workspace.onUpdateInfo({ slnStyle: se.item.name ? "menu" : 'note' })
             }
         }
     }
