@@ -101,11 +101,11 @@ export class WorkspaceManage extends React.Component {
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.smallFont', e)} checked={this.data.createPageConfig.smallFont}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">标题目录</div>
+                    <div className="flex-auto  f-14 text-1">自动目录大纲</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.nav', e)} checked={this.data.createPageConfig.nav}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">页面自动显示关联引用</div>
+                    <div className="flex-auto  f-14 text-1">自动显示关联引用(反链）</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.autoRefPages', e)} checked={this.data.createPageConfig.autoRefPages}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
