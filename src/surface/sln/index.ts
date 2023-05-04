@@ -67,7 +67,8 @@ export class Sln extends Events {
                         }
                     }
                     else {
-                        channel.air('/page/open', { item });
+                        if (item.mime == Mime.page)
+                            channel.air('/page/open', { item });
                     }
                     self.isDrag = false;
                     self.dragIds = [];
@@ -76,13 +77,17 @@ export class Sln extends Events {
             })
         }
         else {
-            channel.air('/page/open', { item });
+            if (item.mime == Mime.page) channel.air('/page/open', { item });
         }
     }
     async onOpenItem(item: PageItem) {
         await channel.air('/page/open', { item });
     }
     onFocusItem(item?: PageItem) {
+        if (item && this.selectIds.length == 1 && this.selectIds[0] == item.id) {
+            item.onSpread()
+            return;
+        }
         this.selectIds = item ? [item.id] : [];
         if (item) {
             item.selectedDate = new Date().getTime();
@@ -112,5 +117,10 @@ export class Sln extends Events {
             default:
                 return PageItemView;
         }
+    }
+    async onCreateFolder(text: string) {
+        var newItem = await pageItemStore.createFolder(surface.workspace, { text });
+        surface.workspace.childs.push(newItem);
+        return newItem;
     }
 }
