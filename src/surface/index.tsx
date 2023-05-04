@@ -13,7 +13,6 @@ import "./supervisor/style.less";
 import "./sln/style.less";
 import { App } from './app';
 import { configure } from 'mobx';
-import { TestApp } from '../test';
 
 configure({ enforceActions: 'never' })
 // render react DOM
@@ -22,6 +21,7 @@ ReactDOM.render(
   <App />,
   document.body.appendChild(document.createElement('div')),
 )
+// import { TestApp } from '../test';
 // ReactDOM.render(
 //   <TestApp />,
 //   document.body.appendChild(document.createElement('div')),
