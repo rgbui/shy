@@ -14,7 +14,7 @@ import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
 import { AtomPermission } from "rich/src/page/permission";
 import lodash from "lodash";
-import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs";
+import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { PageViewStores } from "../../supervisor/view/store";
@@ -309,17 +309,30 @@ export class PageItem {
     }
     async getPageItemMenus() {
         var items: MenuItem<string>[] = [];
-        if (this.mime == Mime.pages) {
+        if (this.mime == Mime.pages)
+        {
             items = [
+
                 {
                     name: 'rename',
                     icon: RenameSvg,
-                    text: '重命名'
+                    text: '编辑分类'
                 },
                 {
-                    name: 'rename',
-                    icon: RenameSvg,
-                    text: '重命名'
+                    name: 'createFolder',
+                    icon: FolderPlusSvg,
+                    text: '创建分类'
+                },
+                { type: MenuItemType.divide },
+                {
+                    name: 'toggleFolder',
+                    icon: this.spread ? FolderCloseSvg : FolderOpenSvg,
+                    text: this.spread ? "折叠分类" : '展开分类'
+                },
+                {
+                    name: 'unAllFolders',
+                    icon: SeoFolderSvg,
+                    text: '折叠所有分类'
                 },
                 { type: MenuItemType.divide },
                 {
@@ -335,6 +348,9 @@ export class PageItem {
                 icon: TrashSvg,
                 text: '删除'
             });
+            items.push({
+                type: MenuItemType.divide,
+            })
             if (this.pageType == PageLayoutType.doc) {
                 items.push({
                     name: 'copy',
@@ -362,11 +378,11 @@ export class PageItem {
                 var r = await channel.get('/user/basic', { userid: this.editor });
                 if (r?.data?.user) items.push({
                     type: MenuItemType.text,
-                    text: '编辑人' + r.data.user.name
+                    text: '编辑人 ' + r.data.user.name
                 });
                 if (this.editDate) items.push({
                     type: MenuItemType.text,
-                    text: '编辑于' + util.showTime(this.editDate)
+                    text: '编辑于 ' + util.showTime(this.editDate)
                 });
             }
         }

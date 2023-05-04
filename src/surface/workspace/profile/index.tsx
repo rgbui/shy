@@ -13,7 +13,8 @@ import { isMobileOnly } from "react-device-detect";
 import { useForm } from "rich/component/view/form/dialoug";
 
 export var WorkspaceProfile = observer(function () {
-    async function mousedown(event: React.MouseEvent) {
+    async function mousedown(event: React.MouseEvent)
+    {
         if (!surface.workspace.isMember) return;
         if (isMobileOnly) return;
         var ele = event.currentTarget as HTMLElement;
@@ -26,7 +27,7 @@ export var WorkspaceProfile = observer(function () {
                 { name: 'createFolder', icon: FolderPlusSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
                 { text: '风格', type: MenuItemType.text },
-                { name: 'showMenu', icon: FolderPlusSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
+                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
                 { name: 'showNote', icon: TreeListSvg, text: '目录', checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
