@@ -36,7 +36,8 @@ export type PageItemAction = {
     directive: ItemOperatorDirective,
     filter?: Record<string, any>,
     pageId?: string,
-    data?: Record<string, any>
+    data?: Record<string, any>,
+    extra?: Record<string, any>
 }
 
 class PageItemStore {
@@ -59,8 +60,11 @@ class PageItemStore {
             else lodash.remove(surface.workspace.childs, g => g.id == pageItem.id)
         })
         surface.sln.onDeleteRefocusItem(pageItem);
-        actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id });
+        actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id, data: { parentId: pageItem.parentId } });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.delete, actions });
+        if (typeof pageItem?.parent.subCount == 'number') {
+            pageItem.parent.subCount = pageItem.parent.subCount - 1;
+        }
     }
     public async updatePageItem(pageItem: PageItem, data: Record<string, any>) {
         var cloneData = lodash.cloneDeep(data);
@@ -86,6 +90,7 @@ class PageItemStore {
             runInAction(() => {
                 pageItem.spread = true;
                 pageItem.childs.push(newItem);
+                pageItem.subCount = pageItem.childs.length;
             })
             actions.push({ directive: ItemOperatorDirective.insert, data });
             var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.append, actions });
@@ -141,6 +146,7 @@ class PageItemStore {
                 }
             }
             pageItem.parent.childs.splice(index + 1, 0, newItem);
+            pageItem.parent.subCount = pageItem.parent.childs.length;
         })
         actions.push({ directive: ItemOperatorDirective.insert, data });
         var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.insertAfter, actions })
@@ -154,6 +160,7 @@ class PageItemStore {
     }
     public async movePrependPageItem(pageItem: PageItem, parentItem: PageItem) {
         if (pageItem.parent == parentItem && !pageItem.prev) return;
+        var oldParentId = pageItem.parentId;
         var actions: PageItemAction[] = [];
         runInAction(() => {
             if (parentItem.childs.length > 0 && parentItem.childs.first().at == 0) {
@@ -163,11 +170,13 @@ class PageItemStore {
                 actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: parentItem.id, at: { $gte: 0 } } });
             }
             lodash.remove(pageItem.parent?.childs, g => g.id == pageItem.id);
+            pageItem.parent.subCount = pageItem.parent.childs.length;
             pageItem.parentId = parentItem.id;
             pageItem.at = 0;
             parentItem.childs.splice(0, 0, pageItem);
+            parentItem.subCount = parentItem.childs.length;
         })
-        actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: 0, parentId: pageItem.parentId } })
+        actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: 0, parentId: pageItem.parentId }, extra: { parentId: oldParentId } })
         await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAppend, actions })
     }
     /**
@@ -184,8 +193,10 @@ class PageItemStore {
             if (pageItem.prev == toPageItem) return;
             var actions: PageItemAction[] = [];
             var next = toPageItem.next;
+            var oldParentId = pageItem.parentId;
             runInAction(() => {
                 lodash.remove(pageItem.parent.childs, g => g.id == pageItem.id);
+                pageItem.parent.subCount = pageItem.parent.childs.length;
                 if (next) {
                     var ns = toPageItem.parent.childs.findAll((g, i) => i >= next.index);
                     if (next.at - 1 == toPageItem.at) {
@@ -210,9 +221,15 @@ class PageItemStore {
                 pageItem.parentId = toPageItem.parentId;
                 var currentAt = toPageItem.parent.childs.findIndex(g => g.id == toPageItem.id);
                 toPageItem.parent.childs.splice(currentAt + 1, 0, pageItem);
+                toPageItem.parent.subCount = toPageItem.parent.childs.length;
                 pageItem.at = toPageItem.at + 1;
             })
-            actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: toPageItem.at + 1, parentId: toPageItem.parent.id } })
+            actions.push({
+                directive: ItemOperatorDirective.update,
+                pageId: pageItem.id,
+                data: { at: toPageItem.at + 1, parentId: toPageItem.parent.id },
+                extra: { parentId: oldParentId }
+            })
             await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAfter, actions })
         }
     }
