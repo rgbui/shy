@@ -19,12 +19,12 @@ import lodash from 'lodash';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
-import { ArrowLeftSvg, ArrowRightSvg, ChevronRightSvg, PlusSvg, TypesPersonSvg } from "rich/component/svgs";
+import { ChevronLeftSvg, ChevronRightSvg, CloseSvg, DotsSvg, EditSvg, MemberSvg, PlusSvg, TrashSvg, TypesPersonSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
 import { useColorPicker } from 'rich/component/view/color/picker';
-import { Row, Col, Space, Divider } from 'rich/component/view/grid';
-import { Icon, IconButton } from "rich/component/view/icon";
+import { Row, Col, Divider } from 'rich/component/view/grid';
+import { Icon } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
 import { useSelectMenuItem } from 'rich/component/view/menu';
 import { Remark } from "rich/component/view/text";
@@ -38,6 +38,12 @@ import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { WorkspaceRole } from '../..';
 import { ToolTip } from 'rich/component/view/tooltip';
 import { SelectBox } from 'rich/component/view/select/box';
+import { MenuItemType } from 'rich/component/view/menu/declare';
+import { Pagination } from 'rich/component/view/pagination';
+import { useUserPicker } from 'rich/extensions/at/picker';
+import { Confirm } from 'rich/component/lib/confirm';
+import { SearchListType } from 'rich/component/types';
+import { Spin } from 'rich/component/view/spin';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',
@@ -70,42 +76,59 @@ export class WorkspaceRoles extends React.Component {
             roles: observable,
             mode: observable,
             editRole: observable,
-            roleUsers: observable,
-            rolePage: observable,
-            roleSize: observable,
-            roleTotal: observable,
+            roleUserSearch: observable,
+
         })
     }
     editRole: Record<string, any> = null;
     roles = [];
     bakeRoles = [];
     mode = 'permission';
-    roleUsers: any[] = [];
-    rolePage: number = 1;
-    roleSize: number = 100;
-    roleTotal: number = -1;
+    roleUserSearch: SearchListType = {
+        list: [],
+        page: 1,
+        size: 100,
+        total: -1,
+        loading: false
+    }
+
     async openEditRole(role) {
         this.editRole = role;
         if (!role.id) {
             this.mode = 'permission';
         }
         else {
-            this.rolePage = 1;
-            var r = await channel.get('/ws/role/members', { roleId: role.id, page: this.rolePage, size: this.roleSize });
+            this.roleUserSearch.page = 1
+            await this.loadRoleMemebers(role);
+        }
+    }
+    async loadRoleMemebers(role) {
+        this.roleUserSearch.loading = true;
+        try {
+            this.roleUserSearch.error = '';
+            var r = await channel.get('/ws/role/members', { roleId: role.id, page: this.roleUserSearch.page, size: this.roleUserSearch.size });
             if (r.ok) {
-                this.roleUsers = r.data.list;
-                this.rolePage = r.data.page;
-                this.roleSize = r.data.size;
-                this.roleTotal = r.data.total;
+                Object.assign(this.roleUserSearch, r.data);
             }
         }
+        catch (ex) {
+            this.roleUserSearch.error = ex.toString();
+        }
+        finally {
+            this.roleUserSearch.loading = false;
+        }
+
     }
     componentDidMount() {
         this.loadRoles();
     }
     async operatorRole(role, event: React.MouseEvent) {
         event.stopPropagation();
-        var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ name: 'delete', text: '删除' }]);
+        var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
+            { name: 'edit', icon: EditSvg, text: '编辑' },
+            { type: MenuItemType.divide },
+            { name: 'delete', icon: TrashSvg, text: '删除' }
+        ]);
         if (r && r.item.name == 'delete') {
             var re = await channel.del('/ws/role/delete', { roleId: role.id });
             var rs = this.roles.map(r => r);
@@ -114,6 +137,9 @@ export class WorkspaceRoles extends React.Component {
             surface.workspace.roles.remove(g => g.id == role.id);
             surface.workspace.roles = surface.workspace.roles;
             this.bakeRoles.remove(g => g.id == role.id);
+        }
+        else if (r?.item.name == 'edit') {
+            this.openEditRole(role);
         }
     }
     async loadRoles() {
@@ -143,36 +169,44 @@ export class WorkspaceRoles extends React.Component {
             <div className='h2'>角色</div>
             <Divider></Divider>
             <div className='remark gap-h-10'>使用角色来组织你的空间成员并自定义权限</div>
-            <div className="shy-ws-roles-everyone" onMouseDown={e => this.openEditRole(this.allRole)}>
-                <Row valign='middle'>
-                    <Col span={12}><Space>
-                        <Icon size={24} icon={TypesPersonSvg}></Icon>
-                        <div>
-                            <h3>默认权限</h3>
-                            <span style={{ fontSize: 12 }}>@所有人.适用所有空间成员</span>
-                        </div>
-                    </Space>
-                    </Col>
-                    <Col span={12} align='end'><Icon size={14} icon={ArrowRightSvg}></Icon></Col>
-                </Row>
+            <div className="shy-ws-roles-everyone flex cursor round padding-20" onMouseDown={e => this.openEditRole(this.allRole)}>
+                <div className='flex-auto flex'>
+                    <div className='flex-fixed circle bg-white size-40 flex-center remark'>
+                        <Icon size={24} icon={MemberSvg}></Icon>
+                    </div>
+                    <div className='flex-auto gap-l-10'>
+                        <h3>默认权限</h3>
+                        <div className='remark f-12 gap-t-5'>@所有人.适用所有空间成员</div>
+                    </div>
+                </div>
+                <div className='flex-fixed gap-r-10'>
+                    <span className='item-hover size-30 circle flex-center '><Icon size={20} icon={ChevronRightSvg}></Icon></span>
+                </div>
             </div>
             <div className='shy-ws-roles-list-box'>
-                <div className='shy-ws-roles-list-box-head'>
-                    <Row style={{ marginBottom: 0 }}>
-                        <Col span={12}><span>角色</span></Col>
-                        <Col span={12} align='end'><Button size='small' onClick={e => this.addRole()}>添加角色</Button></Col>
-                    </Row>
+                <div className='shy-ws-roles-list-box-head flex'>
+                    <div className='flex-auto'><span>角色</span></div>
+                    <div className='flex-fixed'><Button size='small' onClick={e => this.addRole()}>添加角色</Button></div>
                 </div>
+                {this.roles.length == 0 && <div className='remark flex-center gap-h-20'>还没有创建任何角色</div>}
                 {this.roles.filter(g => g.id ? true : false).map(r => {
                     return <div key={r.id} className='shy-ws-roles-list-role-info' onMouseDown={e => this.openEditRole(r)} >
-                        <div style={{ display: 'inline-flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <svg width="20" height="23" viewBox="0 0 20 23" style={{ marginRight: 5 }}><g fill="none" fillRule="evenodd"><path
-                                fill={r.color}
-                                d="M19.487 5.126L10.487 0.126C10.184 -0.042 9.81798 -0.042 9.51498 0.126L0.514977 5.126C0.197977 5.302 0.000976562 5.636 0.000976562 5.999C0.000976562 6.693 0.114977 22.999 10.001 22.999C19.887 22.999 20.001 6.693 20.001 5.999C20.001 5.636 19.804 5.302 19.487 5.126ZM10.001 5.999C11.382 5.999 12.501 7.118 12.501 8.499C12.501 9.88 11.382 10.999 10.001 10.999C8.61998 10.999 7.50098 9.88 7.50098 8.499C7.50098 7.118 8.61998 5.999 10.001 5.999ZM6.25098 16C6.25098 13.699 7.69998 12.25 10.001 12.25C12.302 12.25 13.751 13.699 13.751 16H6.25098Z"></path></g></svg>
-                            {r.text}</div>
-                        <div><IconButton width={24} onMouseDown={e => this.operatorRole(r, e)} size={14} wrapper
-                            icon={'elipsis:sy'}
-                        ></IconButton></div>
+                        <div className='flex-fixed flex'>
+                            <svg
+                                width="20"
+                                height="23"
+                                viewBox="0 0 20 23"
+                                style={{ marginRight: 5 }}
+                            >
+                                <g fill="none"
+                                    fillRule="evenodd">
+                                    <path fill={r.color} d="M19.487 5.126L10.487 0.126C10.184 -0.042 9.81798 -0.042 9.51498 0.126L0.514977 5.126C0.197977 5.302 0.000976562 5.636 0.000976562 5.999C0.000976562 6.693 0.114977 22.999 10.001 22.999C19.887 22.999 20.001 6.693 20.001 5.999C20.001 5.636 19.804 5.302 19.487 5.126ZM10.001 5.999C11.382 5.999 12.501 7.118 12.501 8.499C12.501 9.88 11.382 10.999 10.001 10.999C8.61998 10.999 7.50098 9.88 7.50098 8.499C7.50098 7.118 8.61998 5.999 10.001 5.999ZM6.25098 16C6.25098 13.699 7.69998 12.25 10.001 12.25C12.302 12.25 13.751 13.699 13.751 16H6.25098Z">
+                                    </path>
+                                </g>
+                            </svg>
+                            <span>{r.text}</span>
+                        </div>
+                        <div className='flex-fixed size-24 round cursor flex-center ' onMouseDown={e => this.operatorRole(r, e)} > <Icon size={16} icon={DotsSvg}></Icon></div>
                     </div>
                 })}
             </div>
@@ -182,9 +216,11 @@ export class WorkspaceRoles extends React.Component {
         return <div className='shy-ws-roles-edit'>
             <div className="shy-ws-roles-edit-roles">
                 <div className='flex gap-b-10'>
-                    <div className='flex-auto cursor'>
-                        <Icon size={14} onClick={e => this.editRole = null} icon={ArrowLeftSvg}></Icon>
-                        <span className='gap-l-5' onMouseDown={e => this.editRole = null}>后退</span>
+                    <div className='flex-auto cursor flex'>
+                        <span className='item-hover round flex padding-w-10 padding-h-2 '>
+                            <Icon size={14} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
+                            <span className='gap-l-5' onMouseDown={e => this.editRole = null}>后退</span>
+                        </span>
                     </div>
                     <div className='flex-fixed'>
                         <ToolTip overlay={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={16} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></ToolTip>
@@ -326,6 +362,7 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
+                            small
                             border
                             multiple
                             computedChanges={async (vs, v) => {
@@ -338,7 +375,7 @@ export class WorkspaceRoles extends React.Component {
                             options={[
                                 { text: '可编辑', value: AtomPermission.docEdit },
                                 { text: '可导出', value: AtomPermission.docExport },
-                                { text: '可交互', value: AtomPermission.docInteraction },
+                                { text: '可评论', value: AtomPermission.docInteraction },
                                 { text: '可查看', value: AtomPermission.docView },
                                 { text: '无权限', value: AtomPermission.docNotAllow },
                             ]}
@@ -347,8 +384,7 @@ export class WorkspaceRoles extends React.Component {
                         ></SelectBox>
                     </div>
                 </div>
-
-
+                <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div>频道权限</div>
@@ -356,6 +392,7 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
+                            small
                             multiple
                             border
                             computedChanges={async (vs, v) => {
@@ -365,7 +402,7 @@ export class WorkspaceRoles extends React.Component {
                             }}
                             options={[
                                 { text: '可编辑', value: AtomPermission.channelEdit },
-                                { text: '可交互', value: AtomPermission.channelInteraction },
+                                { text: '可发言', value: AtomPermission.channelInteraction },
                                 { text: '可查看', value: AtomPermission.channelView },
                                 { text: '无权限', value: AtomPermission.channelNotAllow },
                             ]}
@@ -374,7 +411,7 @@ export class WorkspaceRoles extends React.Component {
                         ></SelectBox>
                     </div>
                 </div>
-
+                <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div>数据表格权限</div>
@@ -382,11 +419,12 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
+                            small
                             border
                             options={[
-                                { text: '可编辑', value: AtomPermission.dbEdit },
+                                { text: '可编辑表格', value: AtomPermission.dbEdit },
                                 { text: '可编辑数据', value: AtomPermission.dbDataEdit },
-                                { text: '可交互', value: AtomPermission.dbInteraction },
+                                { text: '可添加数据', value: AtomPermission.dbInteraction },
                                 { text: '可查看', value: AtomPermission.dbView },
                                 { text: '无权限', value: AtomPermission.dbNotAllow },
                             ]}
@@ -403,7 +441,7 @@ export class WorkspaceRoles extends React.Component {
                         ></SelectBox>
                     </div>
                 </div>
-
+                <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div>空间管理权限</div>
@@ -411,6 +449,7 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
+                            small
                             border
                             options={[
                                 { text: '管理空间', value: AtomPermission.wsEdit },
@@ -429,41 +468,49 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                 </div>
             </div>
-
-
-            {/* <Row style={{ margin: 0 }}>
-                <Col span={12}><span style={{ fontSize: 12 }}></span></Col>
-                <Col span={12} align={'end'}></Col>
-            </Row>
-            <Row>
-                <Col span={18}><h4>编辑文档</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.editDoc, e)} checked={is(AtomPermission.editDoc)}></Switch></Col>
-                <Col><Remark style={{ fontSize: 14 }}>默认允许编辑文档</Remark></Col>
-            </Row><Divider></Divider>
-            <Row>
-                <Col span={18}><h4>创建或删除文档</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteDoc, e)} checked={is(AtomPermission.createOrDeleteDoc)}></Switch></Col>
-                <Col><Remark style={{ fontSize: 14 }}>默认允许创建或删除文档</Remark></Col>
-            </Row><Divider></Divider>
-            <Row>
-                <Col span={18}><h4>会话发送消息</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.sendMessageByChannel, e)} checked={is(AtomPermission.sendMessageByChannel)}></Switch></Col>
-                <Col><Remark style={{ fontSize: 14 }}>默认允许会话发送消息</Remark></Col>
-            </Row>
-            <Divider></Divider>
-            <Row>
-                <Col span={18}><h4>创建会话</h4></Col><Col span={6} align='end'><Switch onChange={e => changePermission(AtomPermission.createOrDeleteChannel, e)} checked={is(AtomPermission.createOrDeleteChannel)}></Switch></Col>
-                <Col><Remark style={{ fontSize: 14 }}>默认允许创建会话或删除会话</Remark></Col>
-            </Row>
-            <Divider></Divider> */}
-
         </div>
+    }
+    async onAddRoleMember(e: React.MouseEvent) {
+        var r = await useUserPicker({ center: true, centerTop: 100 });
+        if (r) {
+            var g = await surface.workspace.sock.put('/ws/user/put/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: r.id });
+            await this.loadRoleMemebers(this.editRole)
+        }
+    }
+    async removeRoleMember(id: string) {
+        if (await Confirm("确定要从该角色移出成员吗")) {
+            var g = await surface.workspace.sock.delete('/ws/user/delete/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: id });
+            await this.loadRoleMemebers(this.editRole)
+        }
     }
     renderRoleUsers() {
         return <div className="shy-ws-role-users">
-            {this.roleUsers.map(ru => {
-                return <Row key={ru.id}>
-                    <Col span={12}><Avatar size={40} showName showSn userid={ru.userid}></Avatar></Col>
-                    <Col span={12}></Col>
-                </Row>
+            <div className='flex'>
+                <span className='flex-auto remark'>成员列表</span>
+                <span onClick={e => this.onAddRoleMember(e)} className='flex-fixed flex-center size-24 round item-hover round cursor'>
+                    <Icon size={18} icon={PlusSvg}></Icon>
+                </span>
+            </div>
+            {this.roleUserSearch.loading && <div className='remark flex-center gap-h-30'><Spin></Spin></div>}
+            {this.roleUserSearch.list.map(ru => {
+                return <div className='flex' key={ru.id}>
+                    <span className='flex-auto'> <Avatar size={40} showName showSn userid={ru.userid}></Avatar></span>
+                    <ToolTip overlay={'移出成员'}>
+                        <span onClick={e => this.removeRoleMember(ru.userid)} className='flex-fixed size-24 round item-hover cursor'>
+                            <Icon icon={CloseSvg}></Icon>
+                        </span>
+                    </ToolTip>
+                </div>
             })}
+            <Pagination
+                size={this.roleUserSearch.size}
+                index={this.roleUserSearch.page}
+                total={this.roleUserSearch.total}
+                onChange={e => {
+                    this.roleUserSearch.page = e;
+                    this.loadRoleMemebers(e);
+                }}
+            ></Pagination>
         </div>
     }
     render() {

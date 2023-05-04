@@ -4,12 +4,13 @@ import { surface } from "../../store";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
-import {  ChevronDownSvg, MenuSvg, SettingsSvg } from "rich/component/svgs";
+import { ChevronDownSvg, EditSvg, MenuSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
 import { AtomPermission } from "rich/src/page/permission";
 import { isMobileOnly } from "react-device-detect";
+
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
         if (!surface.workspace.isMember) return;
@@ -22,26 +23,32 @@ export var WorkspaceProfile = observer(function () {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
                 { type: MenuItemType.divide },
-                { name: 'invite', text: '邀请其ta人' },
-                { name: 'edit', text: '编辑个人空间资料' },
+                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单' },
+                { name: 'showNote', icon: TreeListSvg, text: '目录' },
+                { type: MenuItemType.divide },
+                { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
+                { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
             ]
         }
         else if (surface.workspace.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
                 { type: MenuItemType.divide },
-                { name: 'invite', text: '邀请其ta人' },
-                { name: 'edit', text: '编辑个人空间资料' },
+                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单' },
+                { name: 'showNote', icon: TreeListSvg, text: '目录' },
                 { type: MenuItemType.divide },
-                { name: 'exit', text: '退出空间' }
+                { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
+                { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+                { type: MenuItemType.divide },
+                { name: 'exit', text: '退出空间', icon: LogoutSvg }
             ]
         }
         else {
             menus = [
-                { name: 'invite', text: '邀请其ta人' },
-                { name: 'edit', text: '编辑个人空间资料' },
+                { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
+                { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
-                { name: 'exit', text: '退出空间' }
+                { name: 'exit', text: '退出空间', icon: LogoutSvg }
             ]
         }
         var se = await useSelectMenuItem(
