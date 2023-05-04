@@ -4,12 +4,13 @@ import { surface } from "../../store";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
-import { ChevronDownSvg, EditSvg, MenuSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, } from "rich/component/svgs";
+import { ChevronDownSvg, EditSvg, MenuSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, FolderPlusSvg, } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
 import { AtomPermission } from "rich/src/page/permission";
 import { isMobileOnly } from "react-device-detect";
+import { useForm } from "rich/component/view/form/dialoug";
 
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
@@ -22,23 +23,27 @@ export var WorkspaceProfile = observer(function () {
         if (surface.workspace.isOwner) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
+                { name: 'createFolder', icon: MenuFolderSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
-                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单' },
+                { text: '风格', type: MenuItemType.text },
+                { name: 'showMenu', icon: FolderPlusSvg, text: '菜单' },
                 { name: 'showNote', icon: TreeListSvg, text: '目录' },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
-                { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+                // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
             ]
         }
         else if (surface.workspace.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
+                { name: 'createFolder', icon: MenuFolderSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
+                { text: '风格', type: MenuItemType.text },
                 { name: 'showMenu', icon: MenuFolderSvg, text: '菜单' },
                 { name: 'showNote', icon: TreeListSvg, text: '目录' },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
-                { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+                // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
                 { name: 'exit', text: '退出空间', icon: LogoutSvg }
             ]
@@ -46,7 +51,7 @@ export var WorkspaceProfile = observer(function () {
         else {
             menus = [
                 { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
-                { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+                // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
                 { name: 'exit', text: '退出空间', icon: LogoutSvg }
             ]
@@ -67,6 +72,23 @@ export var WorkspaceProfile = observer(function () {
             }
             else if (se.item.name == 'setting') {
                 useOpenWorkspaceSettings()
+            }
+            else if (se.item.name == 'createFolder') {
+                var r = await useForm({
+                    title: '创建分类',
+                    fields: [{ name: 'text', text: '分类名称', type: 'input' }],
+                    async checkModel(model) {
+                        if (!model.text) return '分类名称不能为空'
+                        if (model.text.length > 30) return '分类名称过长'
+                        return '';
+                    }
+                });
+                if (r?.text) {
+                    surface.sln.onCreateFolder(r.text)
+                }
+            }
+            else if (se.item.name == 'showMenu' || se.item.name == 'showNote') {
+
             }
         }
     }

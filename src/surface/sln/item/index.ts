@@ -18,6 +18,8 @@ import { DuplicateSvg, LinkSvg, RenameSvg, TrashSvg } from "rich/component/svgs"
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { PageViewStores } from "../../supervisor/view/store";
+import { Confirm } from "rich/component/lib/confirm";
+import { useForm } from "rich/component/view/form/dialoug";
 
 export class PageItem {
     id: string = null;
@@ -31,7 +33,6 @@ export class PageItem {
     createDate: Date = null;
     mime: Mime = Mime.none;
     pageType: PageLayoutType = PageLayoutType.doc;
-    parentIds: string[] = [];
     workspaceId: string;
     selectedDate: number = null;
     checkedHasChilds: boolean = false;
@@ -80,7 +81,6 @@ export class PageItem {
             creater: observable,
             createDate: observable,
             mime: observable,
-            parentIds: observable,
             selectedDate: observable,
             checkedHasChilds: observable,
             willLoadSubs: observable,
@@ -144,9 +144,13 @@ export class PageItem {
     }
     get next() {
         var pa = this.parent;
-        if (pa.childs?.length > 0) {
+        if (pa?.childs?.length > 0) {
             var currentAt = pa.childs.findIndex(g => g == this);
             return pa.childs[currentAt + 1];
+        }
+        else {
+            var currentAt = this.workspace.childs.findIndex(g => g == this);
+            return this.workspace.childs[currentAt + 1]
         }
     }
     parentId?: string;
@@ -272,7 +276,9 @@ export class PageItem {
         this.sln.onEditItem(this);
     }
     async onRemove() {
-        pageItemStore.deletePageItem(this);
+        if (this.mime == Mime.pages && await Confirm('确定要删除吗，该操作不可撤消'))
+            pageItemStore.deletePageItem(this);
+        else pageItemStore.deletePageItem(this);
     }
     async onCopy() {
         var data = {
@@ -303,48 +309,65 @@ export class PageItem {
     }
     async getPageItemMenus() {
         var items: MenuItem<PageItemDirective>[] = [];
-        items.push({
-            name: PageItemDirective.remove,
-            icon: TrashSvg,
-            text: '删除'
-        });
-        if (this.pageType == PageLayoutType.doc) {
-            items.push({
-                name: PageItemDirective.copy,
-                icon: DuplicateSvg,
-                text: '拷贝'
-            });
+        if (this.mime == Mime.pages) {
+            items = [
+                {
+                    name: PageItemDirective.rename,
+                    icon: RenameSvg,
+                    text: '重命名'
+                },
+                { type: MenuItemType.divide },
+                {
+                    name: PageItemDirective.remove,
+                    icon: TrashSvg,
+                    text: '删除'
+                }
+            ]
         }
-        items.push({
-            name: PageItemDirective.rename,
-            icon: RenameSvg,
-            text: '重命名'
-        });
-        items.push({
-            type: MenuItemType.divide,
-        })
-        items.push({
-            name: PageItemDirective.link,
-            icon: LinkSvg,
-            text: '复制访问链接'
-        });
-        if (this.editor) {
+        else {
+            items.push({
+                name: PageItemDirective.remove,
+                icon: TrashSvg,
+                text: '删除'
+            });
+            if (this.pageType == PageLayoutType.doc) {
+                items.push({
+                    name: PageItemDirective.copy,
+                    icon: DuplicateSvg,
+                    text: '拷贝'
+                });
+            }
+            items.push({
+                name: PageItemDirective.rename,
+                icon: RenameSvg,
+                text: '重命名'
+            });
             items.push({
                 type: MenuItemType.divide,
+            })
+            items.push({
+                name: PageItemDirective.link,
+                icon: LinkSvg,
+                text: '复制访问链接'
             });
-            var r = await channel.get('/user/basic', { userid: this.editor });
-            if (r?.data?.user) items.push({
-                type: MenuItemType.text,
-                text: '编辑人' + r.data.user.name
-            });
-            if (this.editDate) items.push({
-                type: MenuItemType.text,
-                text: '编辑于' + util.showTime(this.editDate)
-            });
+            if (this.editor) {
+                items.push({
+                    type: MenuItemType.divide,
+                });
+                var r = await channel.get('/user/basic', { userid: this.editor });
+                if (r?.data?.user) items.push({
+                    type: MenuItemType.text,
+                    text: '编辑人' + r.data.user.name
+                });
+                if (this.editDate) items.push({
+                    type: MenuItemType.text,
+                    text: '编辑于' + util.showTime(this.editDate)
+                });
+            }
         }
         return items;
     }
-    onContextmenuClickItem(menuItem: MenuItem<PageItemDirective>, event: MouseEvent) {
+    async onContextmenuClickItem(menuItem: MenuItem<PageItemDirective>, event: MouseEvent) {
         switch (menuItem.name) {
             case PageItemDirective.copy:
                 this.onCopy();
@@ -353,7 +376,25 @@ export class PageItem {
                 this.onRemove();
                 break;
             case PageItemDirective.rename:
-                this.onEdit();
+                if (this.mime == Mime.page) {
+                    var r = await useForm({
+                        title: '修改分类名称', fields: [
+                            { name: 'title', type: 'input', text: '分类名称' }
+                        ],
+                        model: { title: this.text },
+                        async checkModel(model) {
+                            if (!model.text) return '分类名称不能为空'
+                            if (model.text.length > 30) return '分类名称过长'
+                            return '';
+                        }
+                    });
+                    if (r) {
+                        this.onChange({ text: r.title }, true);
+                    }
+                }
+                else {
+                    this.onEdit();
+                }
                 break;
             case PageItemDirective.link:
                 CopyText(this.url);
