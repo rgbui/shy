@@ -14,10 +14,17 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
             e.preventDefault();
             item.onContextmenu(e.nativeEvent)
         }}
-            onMouseDown={e => item.onMousedownItem(e.nativeEvent)}
+            onMouseDown={e => {
+                if (e.nativeEvent.button == 2) return
+                item.onMousedownItem(e.nativeEvent)
+            }}
             className="shy-ws-pages flex padding-w-10 gap-b-3">
-            <div className='shy-ws-pages-head flex-auto' onMouseDown={e => item.onSpread()}>
-                <span className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor">{item.text || "我的页面"}</span>
+            <div className='shy-ws-pages-head flex-auto'>
+                <span onMouseDown={e => {
+                    e.stopPropagation();
+                    if (e.nativeEvent.button == 2) return;
+                    item.onSpread()
+                }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor">{item.text || "我的页面"}</span>
             </div>
             {item.isAllow(AtomPermission.dbEdit, AtomPermission.docEdit, AtomPermission.channelEdit) && <div className='flex-fixed flex-end visible'>
                 <span className="size-20 flex-center cursor item-hover round">

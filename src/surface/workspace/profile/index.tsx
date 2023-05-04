@@ -23,7 +23,7 @@ export var WorkspaceProfile = observer(function () {
         if (surface.workspace.isOwner) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                { name: 'createFolder', icon: FolderCloseSvg, text: '创建类别' },
+                { name: 'createFolder', icon: FolderPlusSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
                 { text: '风格', type: MenuItemType.text },
                 { name: 'showMenu', icon: FolderPlusSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
@@ -36,11 +36,11 @@ export var WorkspaceProfile = observer(function () {
         else if (surface.workspace.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                { name: 'createFolder', icon: FolderCloseSvg, text: '创建类别' },
+                { name: 'createFolder', icon: FolderPlusSvg, text: '创建类别' },
                 { type: MenuItemType.divide },
                 { text: '风格', type: MenuItemType.text },
-                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单' },
-                { name: 'showNote', icon: TreeListSvg, text: '目录' },
+                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
+                { name: 'showNote', icon: TreeListSvg, text: '目录', checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
