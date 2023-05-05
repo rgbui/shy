@@ -89,11 +89,17 @@ export class SafeSetting extends React.Component {
             <div className="gap-h-10">
                 <div className="bold f-14 gap-t-10">加入空间成为成员的准入条件</div>
                 <div className="gap-h-10">
-                    <div className="f-14">服务协议</div>
-                    <div className="remark f-12 gap-h-10">加入空间时，用户需要同意该协议才可以成为成员。</div>
-                    <div className="max-w-500">
-                        <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder="支持markdown语法" ></Textarea>
+                    <div className="flex gap-h-10">
+                        <div className="flex-auto  f-14">服务协议</div>
+                        <div className="flex-fixed"><Switch onChange={e => this.change('accessProfile.checkJoinProtocol', e)} checked={this.data.accessProfile.checkJoinProtocol ? true : false}></Switch></div>
                     </div>
+                    {this.data.accessProfile.checkJoinProtocol &&
+                        <><div className="remark f-12 gap-h-10">加入空间时，用户需要同意以下协议才可以成为成员。</div>
+                            <div className="max-w-500">
+                                <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder="支持markdown语法" ></Textarea>
+                            </div>
+                        </>
+                    }
                 </div>
             </div>
         </div>
