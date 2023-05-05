@@ -78,7 +78,7 @@ class PageItemStore {
         })
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
-        if (pageItem.checkedHasChilds && pageItem.spread == true) {
+        if (pageItem.mime == Mime.pages || pageItem.checkedHasChilds && pageItem.spread == true) {
             if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
             var actions: PageItemAction[] = [];
             if (typeof data.id == 'undefined')
@@ -145,7 +145,7 @@ class PageItemStore {
                     ns.forEach(n => {
                         n.at += 1;
                     })
-                    actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId, at: { $gt: at } } })
+                    actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.parentId || null, at: { $gt: at } } })
                 }
             }
             if (pageItem.parent)
@@ -199,14 +199,13 @@ class PageItemStore {
                 actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: parentItem.id, at: { $gte: 0 } } });
             }
             lodash.remove(oldPs, g => g.id == pageItem.id);
-            if (pageItem.parent)
-                pageItem.parent.subCount = oldPs.length;
+            if (pageItem.parent) pageItem.parent.subCount = oldPs.length;
             pageItem.parentId = parentItem.id;
             pageItem.at = 0;
             parentItem.childs.splice(0, 0, pageItem);
             parentItem.subCount = parentItem.childs.length;
         })
-        actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: 0, parentId: pageItem.parentId }, extra: { parentId: oldParentId } })
+        actions.push({ directive: ItemOperatorDirective.update, pageId: pageItem.id, data: { at: 0, parentId: pageItem.parentId || null }, extra: { parentId: oldParentId == parentItem?.id ? undefined : oldParentId } })
         await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAppend, actions })
     }
     /**
@@ -215,7 +214,7 @@ class PageItemStore {
      * @param toPageItem 
      * @returns 
      */
-    public async moveToPageItem(pageItem: PageItem, toPageItem: PageItem) {
+    public async moveToAfterPageItem(pageItem: PageItem, toPageItem: PageItem) {
         if (pageItem.prev == toPageItem) return;
         var actions: PageItemAction[] = [];
         var next = toPageItem.next;
@@ -257,6 +256,52 @@ class PageItemStore {
             directive: ItemOperatorDirective.update,
             pageId: pageItem.id,
             data: { at: toPageItem.at + 1, parentId: toPageItem.parent?.id },
+            extra: { parentId: oldParentId == toPageItem?.parentId ? undefined : oldParentId }
+        })
+        await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAfter, actions })
+    }
+    public async moveToBeforePageItem(pageItem: PageItem, beforePageItem: PageItem) {
+        if (pageItem.next == beforePageItem) return;
+        var actions: PageItemAction[] = [];
+        var prev = beforePageItem.prev;
+        var oldParentId = pageItem.parentId;
+        var oldPs = oldParentId ? pageItem.parent.childs : surface.workspace.childs;
+        var toPs = beforePageItem.parentId ? beforePageItem.parent.childs : surface.workspace.childs;
+        runInAction(() => {
+            lodash.remove(oldPs, g => g.id == pageItem.id);
+            if (pageItem.parent)
+                pageItem.parent.subCount = oldPs.length;
+            if (prev) {
+                var ns = toPs.findAll((g, i) => i >= beforePageItem.index);
+                if (prev.at + 1 == beforePageItem.at) {
+                    /**这是正常的排序 */
+                    actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: beforePageItem.parent?.id || null, at: { $gte: beforePageItem.at } } });
+                    ns.forEach(n => {
+                        n.at += 1;
+                    })
+                }
+                else if (prev.at == beforePageItem.at) {
+                    /**
+                     * 这是不正常的排序,需要纠正一下
+                     */
+                    var nextAt = prev.at;
+                    ns.forEach((n, g) => {
+                        var shouldAt = nextAt + 2 + g;
+                        n.at = shouldAt;
+                        actions.push({ directive: ItemOperatorDirective.update, pageId: n.id, data: { at: n.at } });
+                    })
+                }
+            }
+            pageItem.parentId = beforePageItem.parentId;
+            var currentAt = toPs.findIndex(g => g.id == beforePageItem.id);
+            toPs.splice(currentAt, 0, pageItem);
+            if (beforePageItem.parent) beforePageItem.parent.subCount = toPs.length;
+            pageItem.at = beforePageItem.at - 1;
+        })
+        actions.push({
+            directive: ItemOperatorDirective.update,
+            pageId: pageItem.id,
+            data: { at: beforePageItem.at - 1, parentId: beforePageItem.parent?.id || null },
             extra: { parentId: oldParentId }
         })
         await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAfter, actions })
