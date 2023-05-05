@@ -18,8 +18,8 @@ export var SlnView = observer(function () {
             document.removeEventListener('mousemove', move);
         }
     }, [])
-    return <div className='shy-wss'  onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
-        {surface.workspace && <div className={'shy-ws shy-ws-' + (surface.workspace.slnStyle || 'note')}>
+    return <div className='shy-wss h100'  onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
+        {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + (surface.workspace.slnStyle || 'note')}>
             <WorkspaceProfile ></WorkspaceProfile>
             <div className='shy-ws-items' ref={e=>surface.sln.el=e}>
                 {surface.workspace.childs.map(ws => {

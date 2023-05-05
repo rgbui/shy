@@ -121,22 +121,19 @@ export class Workspace {
     public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
-    public access: number = 0;
-    public accessJoinTip: boolean = false;
     public slnStyle: 'menu' | 'note' = 'note';
-    public allowSlnIcon:boolean=false;
-    /**
-     * 访客发言限制
-     */
-    public accessTalkLimit: string = 'none';
-    /**
-     * 访客加入限制
-     */
-    public accessJoinLimit: string = 'none';
-    /**
-     * 访问加入成员协议
-     */
-    public acessJoinAgree: string = '';
+    public allowSlnIcon: boolean = false;
+
+    public access: number = 0;
+    public accessProfile: {
+        disabledJoin: boolean,
+        checkJoinProtocol: boolean,
+        joinProtocol: string
+    } = {
+            disabledJoin: false,
+            checkJoinProtocol: false,
+            joinProtocol: ''
+        }
     /**
      * 创建文档时的初始配置
      */
@@ -159,7 +156,6 @@ export class Workspace {
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
-
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -177,7 +173,7 @@ export class Workspace {
             config: observable,
             owner: observable,
             roles: observable,
-            isJoinTip: computed,
+            accessProfile: observable,
             allMemeberPermissions: observable,
             member: observable,
             createPageConfig: observable,
@@ -510,6 +506,9 @@ export class Workspace {
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {
         return pids.filter(g => g.types.includes(type)).randomOf()?.url;
+    }
+    static getWsSock(pids:Pid[],type:PidType){
+        return Sock.createSock(this.getWsSockUrl(pids,type))
     }
     currentPageId: string;
     async enterPage(pageId: string) {
