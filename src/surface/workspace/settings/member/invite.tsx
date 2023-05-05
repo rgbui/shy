@@ -14,13 +14,7 @@ export class WorkspaceInvite extends React.Component {
     }
     input: Input;
     render() {
-        var url = `https://${surface.workspace.siteDomain || surface.workspace.sn}.shy.live/`
-        if (surface.workspace.customSiteDomain) {
-            url = `${surface.workspace.customSiteDomainProtocol || 'https'}://${surface.workspace.customSiteDomain}/`
-        }
-        if (config.isDev || config.isBeta) {
-            url = location.protocol + '//' + location.host + "/"
-        }
+
         return <div className='shy-ws-invites'>
             <div className="h2">邀请</div>
             <Divider></Divider>
@@ -31,7 +25,7 @@ export class WorkspaceInvite extends React.Component {
             <div className="flex max-w-500">
                 <Input ref={e => this.input = e}
                     readonly={true}
-                    value={surface.workspace.invite ? url + '/invite/' + surface.workspace.invite : ''}></Input>
+                    value={surface.workspace.getInviteUrl()}></Input>
                 <Button className="gap-l-10"
                     onClick={e => this.createInvite()}
                     ghost>{surface.workspace.invite ? '复制链接' : '创建链接'}</Button>

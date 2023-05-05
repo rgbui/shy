@@ -413,7 +413,15 @@ export class Workspace {
         }
     }
     getInviteUrl() {
-        return this.url + '/invite/' + this.invite
+        if (!this.invite) return '';
+        var url = `https://${this.siteDomain || this.sn}.shy.live/`
+        if (this.customSiteDomain) {
+            url = `${this.customSiteDomainProtocol || 'https'}://${this.customSiteDomain}/`
+        }
+        if (config.isDev || config.isBeta) {
+            url = location.protocol + '//' + location.host + "/"
+        }
+        return url + 'invite/' + this.invite;
     }
     async loadViewOnlineUsers(viewId: string) {
         var rs = this.viewOnlineUsers.get(viewId);
@@ -507,8 +515,8 @@ export class Workspace {
     static getWsSockUrl(pids: Pid[], type: PidType) {
         return pids.filter(g => g.types.includes(type)).randomOf()?.url;
     }
-    static getWsSock(pids:Pid[],type:PidType){
-        return Sock.createSock(this.getWsSockUrl(pids,type))
+    static getWsSock(pids: Pid[], type: PidType) {
+        return Sock.createSock(this.getWsSockUrl(pids, type))
     }
     currentPageId: string;
     async enterPage(pageId: string) {
