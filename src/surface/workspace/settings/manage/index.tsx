@@ -1,5 +1,5 @@
 import lodash from "lodash";
-import { makeObservable, observable } from "mobx";
+import { makeObservable, observable, runInAction } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import { Divider } from "rich/component/view/grid";
@@ -11,6 +11,8 @@ import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { useSelectWorkspacePage } from "rich/extensions/link/select"
 import { Point } from "rich/src/common/vector/point";
+import { SelectBox } from "rich/component/view/select/box";
+import { MenuFolderSvg, TreeListSvg } from "rich/component/svgs";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -21,7 +23,7 @@ export class WorkspaceManage extends React.Component {
             error: observable
         })
     }
-    data: { createPageConfig: Workspace['createPageConfig'] } & { defaultPageId?: string, defaultPageTitle?: string } = {
+    data: { createPageConfig: Workspace['createPageConfig'] } & { defaultPageId?: string, defaultPageTitle?: string, allowSlnIcon?: boolean, slnStyle?: Workspace['slnStyle'] } = {
         createPageConfig: {
             isFullWidth: true,
             smallFont: false,
@@ -30,7 +32,9 @@ export class WorkspaceManage extends React.Component {
             autoRefSubPages: true,
         },
         defaultPageId: null,
-        defaultPageTitle: ''
+        defaultPageTitle: '',
+        allowSlnIcon: false,
+        slnStyle: 'note'
     };
     error: Record<string, any> = {};
     tip: SaveTip;
@@ -43,29 +47,36 @@ export class WorkspaceManage extends React.Component {
     }
     checkChange() {
         if (this.tip) {
-            if (lodash.isEqual(this.data, lodash.pick(surface.workspace, ['createPageConfig', 'defaultPageId'])))
+            if (lodash.isEqual(this.data, lodash.pick(surface.workspace, ['allowSlnIcon', 'slnStyle', 'createPageConfig', 'defaultPageId'])))
                 this.tip.close()
-            else
-                this.tip.open();
+            else this.tip.open();
         }
     }
     async save() {
         var r = await channel.patch('/ws/patch', {
             data: {
                 createPageConfig: lodash.cloneDeep(this.data.createPageConfig),
-                defaultPageId: lodash.cloneDeep(this.data.defaultPageId)
+                defaultPageId: lodash.cloneDeep(this.data.defaultPageId),
+                allowSlnIcon: this.data.allowSlnIcon,
+                slnStyle: this.data.slnStyle
             }
         });
         if (r.ok) {
-            surface.workspace.createPageConfig = lodash.cloneDeep(this.data.createPageConfig);
-            surface.workspace.defaultPageId = lodash.cloneDeep(this.data.defaultPageId);
-            this.tip.close();
+            runInAction(() => {
+                surface.workspace.createPageConfig = lodash.cloneDeep(this.data.createPageConfig);
+                surface.workspace.defaultPageId = lodash.cloneDeep(this.data.defaultPageId);
+                surface.workspace.allowSlnIcon = this.data.allowSlnIcon;
+                surface.workspace.slnStyle = this.data.slnStyle;
+                this.tip.close();
+            })
         }
     }
     async reset() {
         this.data.defaultPageTitle = '';
         this.data = { createPageConfig: lodash.cloneDeep(surface.workspace.createPageConfig) };
         this.data.defaultPageId = surface.workspace.defaultPageId;
+        this.data.slnStyle = surface.workspace.slnStyle;
+        this.data.allowSlnIcon = surface.workspace.allowSlnIcon;
         if (this.data.defaultPageId) {
             var page = await channel.get('/page/query/info', { id: this.data.defaultPageId });
             if (page.ok) {
@@ -101,15 +112,15 @@ export class WorkspaceManage extends React.Component {
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.smallFont', e)} checked={this.data.createPageConfig.smallFont}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">自动目录大纲</div>
+                    <div className="flex-auto  f-14 text-1">目录大纲</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.nav', e)} checked={this.data.createPageConfig.nav}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">自动显示关联引用(反链）</div>
+                    <div className="flex-auto  f-14 text-1">显示关联引用(反链）</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.autoRefPages', e)} checked={this.data.createPageConfig.autoRefPages}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">父页面自动引用子页面</div>
+                    <div className="flex-auto  f-14 text-1">父页面引用子页面</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.autoRefSubPages', e)} checked={this.data.createPageConfig.autoRefSubPages}></Switch></div>
                 </div>
             </div>
@@ -119,6 +130,30 @@ export class WorkspaceManage extends React.Component {
                 <div className="remark f-12 gap-h-10">通过自定义域名打开时，默认显示初始页面</div>
                 <div className="max-w-500">
                     <Input onMousedown={e => this.open(e)} value={this.data.defaultPageTitle} readonly></Input>
+                </div>
+            </div>
+            <Divider></Divider>
+            <div className="gap-h-10">
+                <div className="bold f-14">资源管理器(侧栏）设置</div>
+                <div className="remark f-12 gap-h-10">资源项的风格显示设置</div>
+                <div className="flex gap-h-10">
+                    <div className="flex-auto  f-14 text-1">资源项自定义图标</div>
+                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={surface.workspace.allowSlnIcon ? false : true}></Switch></div>
+                </div>
+                <div className="flex gap-h-10">
+                    <div className="flex-auto  f-14 text-1">资源布局风格</div>
+                    <div className="flex-fixed">
+                        <SelectBox
+                            small
+                            border
+                            options={[
+                                { text: '目录', value: 'note', icon: TreeListSvg },
+                                { text: '菜单', value: 'menu', icon: MenuFolderSvg },
+                            ]}
+                            value={this.data.slnStyle}
+                            onChange={e => { this.change('slnStyle', e) }}
+                        ></SelectBox>
+                    </div>
                 </div>
             </div>
         </div>
