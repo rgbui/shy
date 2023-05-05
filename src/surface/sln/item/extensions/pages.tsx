@@ -10,8 +10,9 @@ import { surface } from "../../../store";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
-
     function renderHead() {
+        var gap = 30;
+
         return <div
             onContextMenu={e => {
                 e.preventDefault();
@@ -21,15 +22,19 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 if (e.nativeEvent.button == 2) return
                 item.onMousedownItem(e.nativeEvent)
             }}
-            className="shy-ws-pages flex padding-w-10 padding-b-3">
-            <div className='shy-ws-pages-head flex-auto flex'>
+            style={{ '--gap-left': gap + 'px' } as any}
+            className={"shy-ws-pages flex padding-w-10 padding-b-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
+            <div className={'shy-ws-pages-head flex-auto flex '}>
                 {surface.workspace.slnStyle == 'menu' && <span
                     onMouseDown={e => {
                         e.stopPropagation();
                         if (e.nativeEvent.button == 2) return;
                         item.onSpread()
                     }}
-                    className={"size-12 cursor flex-center ts " + (item.spread ? " " : " angle-90-")}><Icon size={12} icon={ChevronDownSvg}></Icon></span>}
+                    className={"size-12 cursor flex-center ts " + (item.spread ? " " : " angle-90-")}>
+                    {item.willLoadSubs && <Spin></Spin>}
+                    {!item.willLoadSubs && <Icon size={12} icon={ChevronDownSvg}></Icon>}
+                </span>}
                 <span onMouseDown={e => {
                     e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
@@ -43,11 +48,8 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
             </div>}
         </div>
     }
-
-
-    return <div key={item.id} data-id={item.id} className="visible-hover padding-b-10">
+    return <div key={item.id} data-id={item.id} className="shy-ws-pages-item visible-hover padding-b-10">
         {renderHead()}
-        {item.willLoadSubs == true && <div className='shy-ws-item-page-loading'><Spin></Spin></div>}
         <PageItemBox style={{ display: item.spread != false ? "block" : "none" }} items={item.childs || []} deep={(props.deep || 0) + 1}></PageItemBox>
     </div>
 })

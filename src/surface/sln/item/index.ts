@@ -137,9 +137,13 @@ export class PageItem {
     }
     get prev() {
         var pa = this.parent;
-        if (pa.childs?.length > 0) {
+        if (pa?.childs?.length > 0) {
             var currentAt = pa.childs.findIndex(g => g == this);
             return pa.childs[currentAt - 1];
+        }
+        else {
+            var currentAt = this.workspace.childs.findIndex(g => g === this);
+            return this.workspace.childs[currentAt - 1]
         }
     }
     get next() {
@@ -157,7 +161,7 @@ export class PageItem {
     at: number;
     get index() {
         if (this.parent) return this.parent?.childs.findIndex(g => g === this);
-        return null;
+        return this.workspace.childs.findIndex(g => g === this);
     }
     load(data) {
         for (var n in data) {
@@ -186,7 +190,8 @@ export class PageItem {
         return {
             id: this.id,
             url: this.url,
-            text: this.text, sn: this.sn,
+            text: this.text,
+            sn: this.sn,
             icon: this.icon,
             pageType: this.pageType
         }
@@ -309,8 +314,7 @@ export class PageItem {
     }
     async getPageItemMenus() {
         var items: MenuItem<string>[] = [];
-        if (this.mime == Mime.pages)
-        {
+        if (this.mime == Mime.pages) {
             items = [
 
                 {

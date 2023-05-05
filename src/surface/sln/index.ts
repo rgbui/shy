@@ -5,7 +5,7 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point, Rect } from "rich/src/common/vector/point";
 import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
-import { makeObservable, observable } from "mobx";
+import { makeObservable, observable} from "mobx";
 import { CacheKey, yCache } from "../../../net/cache";
 import { surface } from "../store";
 import { MouseDragger } from "rich/src/common/dragger";
@@ -14,6 +14,7 @@ import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
 import { Mime } from "./declare";
+
 export class Sln extends Events {
     constructor() {
         super();
@@ -46,7 +47,7 @@ export class Sln extends Events {
                 dis: 5,
                 isCross: true,
                 moveStart(ev, data, crossData) {
-                    data.item = (event.target as HTMLElement).closest('.shy-ws-item');
+                    data.item = (event.target as HTMLElement).closest('.shy-ws-item,.shy-ws-pages-item');
                     self.dragIds = [item.id];
                     self.isDrag = true;
                     crossData.type = 'pageItem';
@@ -58,16 +59,17 @@ export class Sln extends Events {
                 },
                 moveEnd(ev, isMove, data) {
                     if (isMove) {
-                        if (self.hover) {
+                        if (self.hover?.item) {
                             if (!self.dragIds.some(s => s == self.hover?.item.id)) {
                                 var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
                                 var overItem = self.hover?.item;
                                 if (self.hover.direction == 'top') {
-                                    if (overItem.prev) pageItemStore.moveToPageItem(dragItem, overItem.prev);
-                                    else pageItemStore.movePrependPageItem(dragItem, overItem.parent);
+                                    if (overItem.prev) pageItemStore.moveToAfterPageItem(dragItem, overItem.prev);
+                                    else if (overItem.parent) pageItemStore.movePrependPageItem(dragItem, overItem.parent);
+                                    else pageItemStore.moveToBeforePageItem(dragItem,overItem)
                                 }
                                 else if (self.hover.direction == 'bottom') {
-                                    pageItemStore.moveToPageItem(dragItem, overItem);
+                                    pageItemStore.moveToAfterPageItem(dragItem, overItem);
                                 }
                                 else if (self.hover.direction == 'bottom-sub') {
                                     pageItemStore.movePrependPageItem(dragItem, overItem);
@@ -81,6 +83,7 @@ export class Sln extends Events {
                     }
                     self.isDrag = false;
                     self.dragIds = [];
+                    self.hover = { item: null, direction: 'none' };
                     ghostView.unload();
                 }
             })
@@ -139,6 +142,20 @@ export class Sln extends Events {
             var pageItem: PageItem;
             var pageItemEl: HTMLElement;
             var direction;
+            var rect = Rect.fromEle(this.el);
+            if (this.scrolTime) { clearInterval(this.scrolTime); this.scrolTime = null }
+            if (event.clientY < rect.top + 80) {
+                this.el.scrollTop = this.el.scrollTop - 10;
+                this.scrolTime = setInterval(() => {
+                    this.el.scrollTop = this.el.scrollTop - 80;
+                }, 300);
+            }
+            if (event.clientY > rect.bottom - 80) {
+                this.el.scrollTop = this.el.scrollTop + 10;
+                this.scrolTime = setInterval(() => {
+                    this.el.scrollTop = this.el.scrollTop + 80;
+                }, 300);
+            }
             if (this.el.contains(target)) {
                 var dataEleId = target.closest('[data-id]');
                 var dataId = dataEleId?.getAttribute('data-id');
@@ -148,14 +165,15 @@ export class Sln extends Events {
                 }
             }
             if (!pageItem) {
-                var rect = Rect.fromEle(this.el);
-                if (event.clientY >= rect.top) {
-                    pageItem = surface.workspace.childs.first();
-                    direction = 'top'
-                }
-                else if (event.clientY <= rect.bottom) {
-                    pageItem = surface.workspace.childs.last();
-                    direction = 'bottom';
+                if (event.clientX > rect.left - 10 && event.clientX < rect.right + 10) {
+                    if (event.clientY <= rect.top) {
+                        pageItem = surface.workspace.childs.first();
+                        direction = 'top'
+                    }
+                    else if (event.clientY >= rect.bottom) {
+                        pageItem = surface.workspace.childs.last();
+                        direction = 'bottom';
+                    }
                 }
             }
             if (pageItem) {
@@ -163,16 +181,24 @@ export class Sln extends Events {
                     if (pageItem.mime == Mime.pages) {
                         if (!direction) {
                             if (pageItem.childs.length > 0) {
-                                pageItem = pageItem.childs.first();
-                                direction = 'top'
+                                var first = pageItem.childs.first();
+                                var firstEl = this.el.querySelector(`[data-id='${first.id}']`) as HTMLElement;
+                                var firstRect = Rect.fromEle(firstEl);
+                                if (firstRect.containY(event.clientY) || event.clientY < firstRect.top) {
+                                    pageItem = pageItem.childs.first();
+                                    direction = 'top'
+                                }
+                                else {
+                                    pageItem = pageItem.childs.last();
+                                    direction = 'bottom'
+                                }
                             }
                             else {
                                 direction = 'bottom-sub'
                             }
                         }
                         else {
-                            if (pageItem.childs.length > 0)
-                                pageItem = direction == 'top' ? pageItem.childs.first() : pageItem.childs.last()
+                            if (pageItem.childs.length > 0) pageItem = direction == 'top' ? pageItem.childs.first() : pageItem.childs.last()
                             else direction = 'bottom-sub'
                         }
                     }
@@ -180,7 +206,7 @@ export class Sln extends Events {
                         if (pageItemEl) {
                             var itemEl = pageItemEl.querySelector('.shy-ws-item-page') as HTMLElement
                             var pe = Rect.fromEle(itemEl);
-                            var paddingLeft = parseFloat(getComputedStyle(itemEl).paddingLeft);
+                            var paddingLeft = parseFloat(getComputedStyle(itemEl).paddingLeft) + 20;
                             if (pageItem.spread == true) {
                                 if (event.clientX > pe.left + paddingLeft && event.clientY > pe.top + 10) {
                                     direction = 'bottom-sub'
@@ -215,8 +241,12 @@ export class Sln extends Events {
                     }
                 }
             }
-            if (pageItem && direction) this.hover = { item: pageItem, direction };
+            if (pageItem && direction && pageItem !== dragItem) this.hover = { item: pageItem, direction };
             else this.hover = { item: null, direction: 'none' };
         }
+        else {
+            if (this.scrolTime) { clearInterval(this.scrolTime); this.scrolTime = null }
+        }
     }
+    scrolTime;
 }

@@ -14,6 +14,8 @@
     user-select: none;
 }
 
+
+
 .shy-ws-item {
     &-page {
         color        : rgba(25, 23, 17, 0.6);
@@ -82,59 +84,72 @@
         &-selected:hover {
             color     : rgb(55, 53, 47);
             background: rgba(55, 53, 47, 0.08);
+
             >span {
                 font-weight: bold;
-            }
-        }
-
-        .shy-ws-item-page-drop {
-            &-bottom {
-                &::after {
-                    content       : '\20';
-                    position      : absolute;
-                    top           : 0px;
-                    right         : 0px;
-                    left          : 0px;
-                    bottom        : 0px;
-                    z-index       : 1;
-                    pointer-events: none;
-                    border-bottom : 2px solid #e16259;
-                }
-            }
-
-            &-top {
-                &::after {
-                    content       : '\20';
-                    position      : absolute;
-                    top           : 0px;
-                    right         : 0px;
-                    left          : 0px;
-                    bottom        : 0px;
-                    z-index       : 1;
-                    pointer-events: none;
-                    border-top    : 2px solid #e16259;
-                }
-            }
-
-            &-bottom-sub {
-                &::after {
-                    content       : '\20';
-                    position      : absolute;
-                    top           : 0px;
-                    right         : 0px;
-                    left          : 0px;
-                    bottom        : 0px;
-                    z-index       : 1;
-                    pointer-events: none;
-                    border-bottom : 2px solid #e16259;
-                }
             }
         }
     }
 }
 
+.shy-ws-item-page-drop {
+    &-bottom {
+        &::after {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            right         : 0px;
+            left          : 0px;
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-bottom : 2px solid #e16259;
+        }
+    }
+
+    &-top {
+        &::after {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            right         : 0px;
+            left          : 0px;
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-top    : 2px solid #e16259;
+        }
+    }
+
+    &-bottom-sub {
+        &::before {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            width         : var(--gap-left);
+            left          : 0px;
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-bottom : 2px solid rgba(55, 53, 47, 0.2);
+        }
+
+        &::after {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            right         : 0px;
+            left          : var(--gap-left);
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-bottom : 2px solid #e16259;
+        }
+    }
+}
+
 .shy-ws-menu {
-    font-weight:500;
+    font-weight: 500;
 
     .shy-ws-pages-head {
         span {
@@ -155,14 +170,17 @@
         &-page {
             color    : rgba(92, 94, 102, 1);
             font-size: 16px;
+
             &:hover {
                 background: rgba(128, 132, 142, 0.14);
             }
+
             &-selected,
             &-selected:hover {
                 background: rgba(128, 132, 142, 0.20);
+
                 >span {
-                    font-weight:500;
+                    font-weight: 500;
                 }
             }
         }
