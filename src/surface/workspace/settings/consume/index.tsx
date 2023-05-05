@@ -11,6 +11,9 @@ import { SaveTip } from "../../../../component/tip/save.tip";
 
 @observer
 export class ConsumeView extends React.Component {
+    render(): React.ReactNode {
+        return <></>
+    }
     // constructor(props) {
     //     super(props);
     //     makeObservable(this, {

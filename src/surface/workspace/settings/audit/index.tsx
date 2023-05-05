@@ -10,6 +10,9 @@ import { SaveTip } from "../../../../component/tip/save.tip";
 
 @observer
 export class AuditView extends React.Component {
+    render(): React.ReactNode {
+        return <></>
+    }
     // constructor(props) {
     //     super(props);
     //     makeObservable(this, {
