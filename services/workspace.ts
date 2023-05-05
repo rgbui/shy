@@ -5,15 +5,32 @@ import { surface } from "../src/surface/store";
 import { del, get, patch, post, put } from "rich/net/annotation";
 import { Workspace } from "../src/surface/workspace";
 import { FileMd5 } from "../src/util/file";
+import { channel } from "rich/net/channel";
 
 class WorkspaceService extends BaseService {
     @get('/ws/basic')
-    async queryWsBasic(data: { id?: string, name?: string }) {
-        return await masterSock.get('/ws/basic', data);
+    async queryWsBasic(args) {
+        var sock = args.sock;
+        delete args.sock;
+        if (!sock) {
+            var g = await channel.get('/ws/query', { name: args.wsId });
+            if (g.ok) {
+                sock = Workspace.getWsSock(g.data.pids, 'ws')
+            }
+        }
+        return await sock.get('/ws/basic', args);
     }
     @get('/ws/info')
-    async queryWsInfo(data: { id?: string, name?: string }) {
-        return await masterSock.get('/ws/info', data);
+    async queryWsInfo(args) {
+        var sock = args.sock;
+        delete args.sock;
+        if (!sock) {
+            var g = await channel.get('/ws/query', { name: args.wsId });
+            if (g.ok) {
+                sock = Workspace.getWsSock(g.data.pids, 'ws')
+            }
+        }
+        return await sock.get('/ws/info', args);
     }
     @get('/ws/query')
     async queryWs(data: { wsId: string }) {
