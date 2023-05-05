@@ -4,11 +4,12 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Divider } from "rich/component/view/grid";
 import { Textarea } from "rich/component/view/input/textarea";
-import { SelectBox } from "rich/component/view/select/box";
 import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
 import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
+import { Workspace } from "../..";
+import { ShyAlert } from "rich/component/lib/alert";
 
 @observer
 export class SafeSetting extends React.Component {
@@ -19,22 +20,23 @@ export class SafeSetting extends React.Component {
             error: observable
         })
     }
-    data: { access: number, accessJoinTip: boolean, accessTalkLimit: string, accessJoinLimit: string, acessJoinAgree: string } = {
-        access: 1,
-        accessJoinTip: false,
-        accessTalkLimit: 'none',
-        accessJoinLimit: 'none',
-        acessJoinAgree: ''
-    };
+    data: {
+        access: number,
+        accessProfile: Workspace['accessProfile']
+    } = {
+            access: 1,
+            accessProfile: {
+                disabledJoin: false,
+                joinProtocol: '',
+                checkJoinProtocol: false
+            }
+        };
     error: Record<string, any> = {};
     tip: SaveTip;
     componentDidMount() {
         this.data = {
             access: surface.workspace.access,
-            accessJoinTip: surface.workspace.accessJoinTip,
-            accessTalkLimit: surface.workspace.accessTalkLimit,
-            accessJoinLimit: surface.workspace.accessJoinLimit,
-            acessJoinAgree: surface.workspace.acessJoinAgree
+            accessProfile: lodash.cloneDeep(surface.workspace.accessProfile)
         };
         this.forceUpdate();
     }
@@ -43,10 +45,7 @@ export class SafeSetting extends React.Component {
         if (this.tip) {
             if (lodash.isEqual(this.data, lodash.pick(surface.workspace, [
                 'access',
-                'accessJoinTip',
-                'accessTalkLimit',
-                'accessJoinLimit',
-                'acessJoinAgree:'
+                'accessProfile'
             ]))) this.tip.close()
             else this.tip.open();
         }
@@ -54,19 +53,17 @@ export class SafeSetting extends React.Component {
     async save() {
         var r = await channel.patch('/ws/patch', { data: this.data });
         if (r.ok) {
-            Object.assign(surface.workspace, this.data);
+            Object.assign(surface.workspace, lodash.cloneDeep(this.data));
             this.tip.close();
+            ShyAlert('更改成功')
         }
     }
     reset() {
         runInAction(() => {
-            this.data = lodash.pick(surface.workspace, [
+            this.data = lodash.cloneDeep(lodash.pick(surface.workspace, [
                 'access',
-                'accessJoinTip',
-                'accessTalkLimit',
-                'accessJoinLimit',
-                'acessJoinAgree:'
-            ]) as any;
+                'accessProfile'
+            ]) as any);
             this.error = {};
             this.tip.close();
         })
@@ -78,26 +75,24 @@ export class SafeSetting extends React.Component {
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14 gap-t-10">通用的设置</div>
-                <div className="remark f-12 gap-h-10">设置后该空间将对互联网完全的公开，请谨慎设置。公开的空间可能会产生大量的流量消耗</div>
+                <div className="remark f-12 gap-h-10">设置后该空间将对互联网完全的公开。公开的空间可能会产生大量的流量消耗，请谨慎设置</div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto f-14">允许任何人可以访问空间</div>
+                    <div className="flex-auto f-14">公开至互联网</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('access', e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14">允许访客加入空间成为成员</div>
-                    <div className="flex-fixed"><Switch onChange={e => this.change('accessJoinTip', e)} checked={this.data.accessJoinTip}></Switch></div>
+                    <div className="flex-auto  f-14">禁止访客加入空间成为成员</div>
+                    <div className="flex-fixed"><Switch onChange={e => this.change('accessProfile.disabledJoin', e)} checked={this.data.accessProfile.disabledJoin ? true : false}></Switch></div>
                 </div>
             </div>
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14 gap-t-10">加入空间成为成员的准入条件</div>
-                <div className="remark f-12 gap-h-10">设置后加入的成员需满足以下条件才可以加入</div>
-
                 <div className="gap-h-10">
                     <div className="f-14">服务协议</div>
                     <div className="remark f-12 gap-h-10">加入空间时，用户需要同意该协议才可以成为成员。</div>
                     <div className="max-w-500">
-                        <Textarea style={{minHeight:150}} value={this.data.acessJoinAgree} onChange={e => this.change('acessJoinAgree', e)} placeholder="支持markdown语法" ></Textarea>
+                        <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder="支持markdown语法" ></Textarea>
                     </div>
                 </div>
             </div>

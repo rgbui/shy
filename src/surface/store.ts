@@ -22,7 +22,7 @@ export class Surface extends Events {
             workspace: observable,
             temporaryWs: observable,
             wss: observable,
-            showHeadTip: computed,
+            showJoinTip: computed,
             showSlideBar: computed,
             showSln: computed,
             slnSpread: observable,
@@ -176,8 +176,8 @@ export class Surface extends Events {
     /**
      * 
      */
-    get showHeadTip() {
-        if (this.user.isSign) return this.temporaryWs && this.temporaryWs?.accessJoinTip == true
+    get showJoinTip() {
+        if (this.user.isSign) return this.temporaryWs && this.temporaryWs?.accessProfile.disabledJoin !== true
         else return false;
     }
     get showSlideBar() {

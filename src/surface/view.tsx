@@ -40,10 +40,10 @@ export var SurfaceView = observer(function () {
          <SideBar></SideBar>
             <Route path={[ShyUrl.ws, ShyUrl.page]}>
                 {surface.showWorkspace && <div className="shy-surface-content">
-                    {surface.showHeadTip && <div className="shy-surface-content-head" style={{ height: 40 }}>
+                    {surface.showJoinTip && <div className="shy-surface-content-head" style={{ height: 40 }}>
                         <JoinTip></JoinTip>
                     </div>}
-                    <div className="shy-surface-content-box" style={{ height: surface.showHeadTip ? "calc(100vh - 40px)" : "100vh" }}>
+                    <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>
                         <SideSln></SideSln>
                         <SupervisorView></SupervisorView>
                     </div>
