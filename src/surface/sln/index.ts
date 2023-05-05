@@ -2,7 +2,7 @@ import { Events } from "rich/util/events";
 import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItem } from "./item";
 import { useSelectMenuItem } from "rich/component/view/menu";
-import { Point } from "rich/src/common/vector/point";
+import { Point, Rect } from "rich/src/common/vector/point";
 import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
 import { makeObservable, observable } from "mobx";
@@ -14,22 +14,22 @@ import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
 import { Mime } from "./declare";
-
 export class Sln extends Events {
     constructor() {
         super();
         makeObservable(this, {
             selectIds: observable,
             editId: observable,
-            hoverId: observable,
+            hover: observable,
             dragIds: observable,
             isDrag: observable
         });
     }
+    el: HTMLElement;
     selectIds: string[] = [];
     editId: string = '';
-    hoverId: string = '';
     dragIds: string[] = [];
+    hover: { item: PageItem, direction: 'none' | 'top' | 'bottom' | 'bottom-sub' } = { item: null, direction: 'none' }
     isDrag: boolean = false;
     keyboardPlate = new KeyboardPlate();
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
@@ -58,11 +58,20 @@ export class Sln extends Events {
                 },
                 moveEnd(ev, isMove, data) {
                     if (isMove) {
-                        if (self.hoverId) {
-                            if (!self.dragIds.some(s => s == self.hoverId)) {
+                        if (self.hover) {
+                            if (!self.dragIds.some(s => s == self.hover?.item.id)) {
                                 var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
-                                var overItem = surface.workspace.find(g => g.id == self.hoverId);
-                                pageItemStore.moveToPageItem(dragItem, overItem);
+                                var overItem = self.hover?.item;
+                                if (self.hover.direction == 'top') {
+                                    if (overItem.prev) pageItemStore.moveToPageItem(dragItem, overItem.prev);
+                                    else pageItemStore.movePrependPageItem(dragItem, overItem.parent);
+                                }
+                                else if (self.hover.direction == 'bottom') {
+                                    pageItemStore.moveToPageItem(dragItem, overItem);
+                                }
+                                else if (self.hover.direction == 'bottom-sub') {
+                                    pageItemStore.movePrependPageItem(dragItem, overItem);
+                                }
                             }
                         }
                     }
@@ -122,5 +131,92 @@ export class Sln extends Events {
         var newItem = await pageItemStore.createFolder(surface.workspace, { text });
         surface.workspace.childs.push(newItem);
         return newItem;
+    }
+    globalMove(event: MouseEvent) {
+        if (this.isDrag && this.el) {
+            var dragItem = surface.workspace.find(g => this.dragIds.some(s => s == g.id));
+            var target = event.target as HTMLElement;
+            var pageItem: PageItem;
+            var pageItemEl: HTMLElement;
+            var direction;
+            if (this.el.contains(target)) {
+                var dataEleId = target.closest('[data-id]');
+                var dataId = dataEleId?.getAttribute('data-id');
+                if (dataId) {
+                    pageItem = surface.workspace.find(c => c.id == dataId)
+                    if (pageItem) pageItemEl = dataEleId as HTMLElement;
+                }
+            }
+            if (!pageItem) {
+                var rect = Rect.fromEle(this.el);
+                if (event.clientY >= rect.top) {
+                    pageItem = surface.workspace.childs.first();
+                    direction = 'top'
+                }
+                else if (event.clientY <= rect.bottom) {
+                    pageItem = surface.workspace.childs.last();
+                    direction = 'bottom';
+                }
+            }
+            if (pageItem) {
+                if (dragItem.mime == Mime.page) {
+                    if (pageItem.mime == Mime.pages) {
+                        if (!direction) {
+                            if (pageItem.childs.length > 0) {
+                                pageItem = pageItem.childs.first();
+                                direction = 'top'
+                            }
+                            else {
+                                direction = 'bottom-sub'
+                            }
+                        }
+                        else {
+                            if (pageItem.childs.length > 0)
+                                pageItem = direction == 'top' ? pageItem.childs.first() : pageItem.childs.last()
+                            else direction = 'bottom-sub'
+                        }
+                    }
+                    else {
+                        if (pageItemEl) {
+                            var itemEl = pageItemEl.querySelector('.shy-ws-item-page') as HTMLElement
+                            var pe = Rect.fromEle(itemEl);
+                            var paddingLeft = parseFloat(getComputedStyle(itemEl).paddingLeft);
+                            if (pageItem.spread == true) {
+                                if (event.clientX > pe.left + paddingLeft && event.clientY > pe.top + 10) {
+                                    direction = 'bottom-sub'
+                                }
+                            }
+                            if (!direction) {
+                                if (event.clientY > pe.middle) {
+                                    direction = 'bottom';
+                                }
+                                else {
+                                    direction = 'top'
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (dragItem.mime == Mime.pages) {
+                    var pa = pageItem.closest(x => x.mime == Mime.pages);
+                    if (pa) {
+                        var pv = this.el.querySelector(`[data-id='${pa.id}']`);
+                        if (pv) {
+                            var pr = Rect.fromEle(pv as HTMLElement);
+                            if (event.clientY < pr.top + 10) {
+                                pageItem = pa;
+                                direction = 'top'
+                            }
+                            else {
+                                pageItem = pa;
+                                direction = 'bottom';
+                            }
+                        }
+                    }
+                }
+            }
+            if (pageItem && direction) this.hover = { item: pageItem, direction };
+            else this.hover = { item: null, direction: 'none' };
+        }
     }
 }

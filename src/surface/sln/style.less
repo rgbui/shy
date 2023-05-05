@@ -1,75 +1,29 @@
 .shy-ws-pages {
     position: relative;
+
     &-head {
-        color          : rgba(55, 53, 47, 0.4);
+        color: rgba(55, 53, 47, 0.4);
     }
+
     .shy-icon {
         color: rgba(55, 53, 47, 0.45);
     }
 }
 
+.shy-wss {
+    user-select: none;
+}
+
 .shy-ws-item {
     &-page {
-        // cursor          : pointer;
-        // position        : relative;
-        color           : rgba(25, 23, 17, 0.6);
-        font-size       : 14px;
-        border-top      : 2px solid transparent;
-        border-bottom   : 2px solid transparent;
+        color        : rgba(25, 23, 17, 0.6);
+        font-size    : 14px;
+        border-top   : 2px solid transparent;
+        border-bottom: 2px solid transparent;
 
         .shy-icon {
             color: rgba(55, 53, 47, 0.45);
         }
-
-        // border-radius: 4px;
-
-        // &-spread {
-        //     color          : inherit;
-        //     display        : inline-flex;
-        //     justify-content: center;
-        //     align-items    : center;
-        //     width          : 20px;
-        //     height         : 20px;
-        //     flex-shrink    : 0;
-        //     border-radius  : 3px;
-
-        //     &:hover {
-        //         background-color: rgba(55, 53, 47, 0.08);
-        //     }
-        // }
-
-        // &-icon {
-        //     color          : rgba(55, 53, 47, 0.4);
-        //     fill           : rgba(55, 53, 47, 0.4);
-        //     display        : flex;
-        //     align-items    : center;
-        //     justify-content: center;
-        //     flex-shrink    : 0;
-        //     flex-grow      : 0;
-        //     width          : 20px;
-        //     height         : 20px;
-        //     margin-right   : 4px;
-        //     transition     : background 20ms ease-in 0s;
-        //     border-radius  : 3px;
-        //     font-style     : normal;
-
-        //     &:hover {
-        //         background-color: rgba(55, 53, 47, 0.08);
-        //     }
-        // }
-
-        // >span {
-        //     color        : inherit;
-        //     flex-grow    : 1;
-        //     flex-shrink  : 1;
-        //     height       : 20px;
-        //     line-height  : 20px;
-        //     padding-right: 10px;
-        //     white-space  : nowrap;
-        //     min-width    : 0px;
-        //     overflow     : hidden;
-        //     text-overflow: ellipsis;
-        // }
 
         &-input {
             flex-grow: 1.0;
@@ -128,25 +82,89 @@
         &-selected:hover {
             color     : rgb(55, 53, 47);
             background: rgba(55, 53, 47, 0.08);
-
             >span {
                 font-weight: bold;
             }
         }
 
-        &-dragover {
-            &::after {
-                content       : '\20';
-                position      : absolute;
-                top           : 0px;
-                right         : 0px;
-                left          : 0px;
-                bottom        : 0px;
-                z-index       : 1;
-                pointer-events: none;
-                border-bottom : 2px solid #e16259;
+        .shy-ws-item-page-drop {
+            &-bottom {
+                &::after {
+                    content       : '\20';
+                    position      : absolute;
+                    top           : 0px;
+                    right         : 0px;
+                    left          : 0px;
+                    bottom        : 0px;
+                    z-index       : 1;
+                    pointer-events: none;
+                    border-bottom : 2px solid #e16259;
+                }
+            }
+
+            &-top {
+                &::after {
+                    content       : '\20';
+                    position      : absolute;
+                    top           : 0px;
+                    right         : 0px;
+                    left          : 0px;
+                    bottom        : 0px;
+                    z-index       : 1;
+                    pointer-events: none;
+                    border-top    : 2px solid #e16259;
+                }
+            }
+
+            &-bottom-sub {
+                &::after {
+                    content       : '\20';
+                    position      : absolute;
+                    top           : 0px;
+                    right         : 0px;
+                    left          : 0px;
+                    bottom        : 0px;
+                    z-index       : 1;
+                    pointer-events: none;
+                    border-bottom : 2px solid #e16259;
+                }
             }
         }
     }
 }
 
+.shy-ws-menu {
+    font-weight:500;
+
+    .shy-ws-pages-head {
+        span {
+            color           : rgba(92, 94, 102, 1);
+            background-color: transparent !important;
+
+            &:hover {
+                background-color: transparent !important;
+            }
+        }
+    }
+
+    .shy-icon {
+        color: rgba(25, 23, 17, 0.8)
+    }
+
+    .shy-ws-item {
+        &-page {
+            color    : rgba(92, 94, 102, 1);
+            font-size: 16px;
+            &:hover {
+                background: rgba(128, 132, 142, 0.14);
+            }
+            &-selected,
+            &-selected:hover {
+                background: rgba(128, 132, 142, 0.20);
+                >span {
+                    font-weight:500;
+                }
+            }
+        }
+    }
+}

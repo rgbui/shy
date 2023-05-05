@@ -124,6 +124,7 @@ export class Workspace {
     public access: number = 0;
     public accessJoinTip: boolean = false;
     public slnStyle: 'menu' | 'note' = 'note';
+    public allowSlnIcon:boolean=false;
     /**
      * 访客发言限制
      */
