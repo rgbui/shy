@@ -285,7 +285,7 @@ push('/ws/member/exit', '{wsId:string,sock:any}', 'SockResponse<void>', ['del'])
 push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/member/delete', '{userid:string}', 'SockResponse<void>', ['del']);
-push('/ws/is/member', '{sock?:any,wsId:string}', 'SockResponse<{exists:boolean}>', ['get']);
+push('/ws/is/member', '{sock?:any,wsId:string}', 'SockResponse<{exists:boolean,workspace:Record<string,any>}>', ['get']);
 push('/ws/roles', '{}', 'SockResponse<{list:any[]}>', ['get']);
 push('/ws/role/patch', '{roleId:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/role/create', '{data:Record<string,any>}', 'SockResponse<{role:Record<string,any>}>', ['put']);
