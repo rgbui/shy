@@ -13,8 +13,7 @@ import { isMobileOnly } from "react-device-detect";
 import { useForm } from "rich/component/view/form/dialoug";
 
 export var WorkspaceProfile = observer(function () {
-    async function mousedown(event: React.MouseEvent)
-    {
+    async function mousedown(event: React.MouseEvent) {
         if (!surface.workspace.isMember) return;
         if (isMobileOnly) return;
         var ele = event.currentTarget as HTMLElement;
@@ -99,7 +98,7 @@ export var WorkspaceProfile = observer(function () {
                 <Icon size={16} icon={MenuSvg}></Icon>
             </span>}
             <span className="flex-auto bold f-16 text-overflow gap-r-5">{surface.workspace.text}</span>
-            <Icon icon={ChevronDownSvg} size={16} className={'padding-r-10 remark flex-fixed'}></Icon>
+            {surface.workspace.isMember && <Icon icon={ChevronDownSvg} size={16} className={'padding-r-10 remark flex-fixed'}></Icon>}
         </div>
         {surface.workspace.cover && <div className="shy-ws-profile-cover">
             <img src={autoImageUrl(surface.workspace.cover.url, 500)} />
