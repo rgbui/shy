@@ -218,7 +218,8 @@ export class Workspace {
         return !this.member && surface.user.isSign && this.access == 1
     }
     get isOwner() {
-        return surface.user.id == this.owner ? true : false;
+        var ow=this.owner?this.owner:this.creater;
+        return surface.user?.id == ow? true : false;
     }
     isAllow(...permissions: AtomPermission[]) {
         return this.memberPermissions.some(s => permissions.includes(s))
