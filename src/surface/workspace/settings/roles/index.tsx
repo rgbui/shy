@@ -34,7 +34,7 @@ import { util } from 'rich/util/util';
 import { surface } from '../../../store';
 import { SaveTip } from '../../../../component/tip/save.tip';
 import "./style.less";
-import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
+import { AtomPermission, getCommonPerssions, getAtomPermissionComputedChanges, getAtomPermissionOptions } from "rich/src/page/permission";
 import { WorkspaceRole } from '../..';
 import { ToolTip } from 'rich/component/view/tooltip';
 import { SelectBox } from 'rich/component/view/select/box';
@@ -44,6 +44,7 @@ import { useUserPicker } from 'rich/extensions/at/picker';
 import { Confirm } from 'rich/component/lib/confirm';
 import { SearchListType } from 'rich/component/types';
 import { Spin } from 'rich/component/view/spin';
+import { PageLayoutType } from 'rich/src/page/declare';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',
@@ -366,19 +367,9 @@ export class WorkspaceRoles extends React.Component {
                             border
                             multiple
                             computedChanges={async (vs, v) => {
-                                if (v == AtomPermission.docInteraction) lodash.remove(vs, g => ![AtomPermission.docExport].includes(g))
-                                else if (v == AtomPermission.docExport) lodash.remove(vs, g => ![AtomPermission.docInteraction].includes(g))
-                                else vs = []
-                                if (!vs.includes(v)) vs.push(v)
-                                return vs;
+                                return getAtomPermissionComputedChanges(PageLayoutType.doc, vs, v);
                             }}
-                            options={[
-                                { text: '可编辑', value: AtomPermission.docEdit },
-                                { text: '可导出', value: AtomPermission.docExport },
-                                { text: '可评论', value: AtomPermission.docInteraction },
-                                { text: '可查看', value: AtomPermission.docView },
-                                { text: '无权限', value: AtomPermission.docNotAllow },
-                            ]}
+                            options={getAtomPermissionOptions(PageLayoutType.doc)}
                             value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('doc'))}
                             onChange={e => { save(e) }}
                         ></SelectBox>
@@ -396,16 +387,9 @@ export class WorkspaceRoles extends React.Component {
                             multiple
                             border
                             computedChanges={async (vs, v) => {
-                                vs = []
-                                if (!vs.includes(v)) vs.push(v)
-                                return vs;
+                                return getAtomPermissionComputedChanges(PageLayoutType.textChannel, vs, v);
                             }}
-                            options={[
-                                { text: '可编辑', value: AtomPermission.channelEdit },
-                                { text: '可发言', value: AtomPermission.channelInteraction },
-                                { text: '可查看', value: AtomPermission.channelView },
-                                { text: '无权限', value: AtomPermission.channelNotAllow },
-                            ]}
+                            options={getAtomPermissionOptions(PageLayoutType.textChannel)}
                             value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('channel'))}
                             onChange={e => { save(e) }}
                         ></SelectBox>
@@ -421,20 +405,10 @@ export class WorkspaceRoles extends React.Component {
                         <SelectBox
                             small
                             border
-                            options={[
-                                { text: '可编辑表格', value: AtomPermission.dbEdit },
-                                { text: '可编辑数据', value: AtomPermission.dbDataEdit },
-                                { text: '可添加数据', value: AtomPermission.dbInteraction },
-                                { text: '可查看', value: AtomPermission.dbView },
-                                { text: '无权限', value: AtomPermission.dbNotAllow },
-                            ]}
+                            options={getAtomPermissionOptions(PageLayoutType.db)}
                             multiple
                             computedChanges={async (vs, v) => {
-                                if (v == AtomPermission.dbDataEdit) lodash.remove(vs, g => ![AtomPermission.dbInteraction].includes(g))
-                                else if (v == AtomPermission.dbInteraction) lodash.remove(vs, g => ![AtomPermission.dbDataEdit].includes(g))
-                                else vs = []
-                                if (!vs.includes(v)) vs.push(v)
-                                return vs;
+                                return getAtomPermissionComputedChanges(PageLayoutType.db, vs, v);
                             }}
                             value={self.editRole?.permissions?.filter(g => AtomPermission[g]?.startsWith('db'))}
                             onChange={e => { save(e) }}
