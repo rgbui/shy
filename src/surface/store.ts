@@ -49,6 +49,8 @@ export class Surface extends Events {
                     l.unreadChats = [];
                 })
                 this.wss = list;
+                if (this.temporaryWs && this.wss.some(s => s.id == this.temporaryWs.id))
+                    this.temporaryWs = null;
             }
         }
     }

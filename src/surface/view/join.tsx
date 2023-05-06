@@ -2,14 +2,21 @@ import { observer } from "mobx-react";
 import React from "react";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
+import { useJoinWorkspaceProtocol } from "../workspace/create/protocol";
 export var JoinTip = observer(function () {
     async function mousedown(event: React.MouseEvent) {
+        var agree = false;
+        if (surface.workspace?.accessProfile?.checkJoinProtocol) {
+            var rg = await useJoinWorkspaceProtocol({ center: true, centerTop: 100 }, surface.workspace);
+            if (!rg) return;
+            agree = true;
+        }
         await channel.put('/user/join/ws', {
             wsId: surface.workspace.id
         });
         await channel.put('/ws/invite/join', {
             wsId: surface.workspace.id,
-            sock: surface.workspace.sock
+            sock: surface.workspace.sock, agree
         });
         surface.loadWorkspaceList();
         await surface.onLoadWorkspace(surface.workspace.id);
