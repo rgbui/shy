@@ -194,7 +194,7 @@ export class Workspace {
     get sock() {
         if (this._sock) return this._sock;
         return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'ws'), {
-            'shy-sockId': this.tim.id,
+            'shy-sockId': this.tim?.id,
             'shy-wsId': this.id
         });
     }

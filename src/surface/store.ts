@@ -10,7 +10,6 @@ import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import "./message.center";
-import { PageItem } from "./sln/item";
 
 export class Surface extends Events {
     constructor() {
@@ -70,17 +69,17 @@ export class Surface extends Events {
                 if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
-                await ws.createTim();
-                var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
-                var g = await ws.sock.get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
+                var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
                 if (g.data.accessForbidden) {
                     this.canAccessPage = false;
                     return
                 }
+                await ws.createTim();
                 if (g.data.workspace) {
                     ws.load({ ...g.data.workspace });
                 }
-                var willPageItem = g.data.page as PageItem;
+                // var willPageItem = g.data.page as PageItem;
                 this.canAccessPage = true;
                 if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
                 if (g.data.roles) await ws.onLoadRoles(g.data.roles)
