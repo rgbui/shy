@@ -10,6 +10,7 @@ import { CacheKey, sCache } from "../../net/cache";
 import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import "./message.center";
+import { PageItem } from "./sln/item";
 
 export class Surface extends Events {
     constructor() {
@@ -26,7 +27,7 @@ export class Surface extends Events {
             showSln: computed,
             slnSpread: observable,
             showWorkspace: computed,
-            canAccessPage: observable
+            accessPage: observable
         });
     }
     slnSpread: boolean = null;
@@ -36,7 +37,14 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: LinkWorkspaceOnline[] = [];
     temporaryWs: LinkWorkspaceOnline = null;
-    canAccessPage: boolean = null;
+    /**
+     * 当前页面的访问权限
+     * none: 无权限
+     * accessWorkspace: 可以访问工作区
+     * accessPage: 可以访问页面
+     * forbidden: 禁止访问
+     */
+    accessPage: 'none' | 'forbidden' | 'accessWorkspace' | 'accessPage' = 'none';
     async loadWorkspaceList() {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
@@ -71,24 +79,35 @@ export class Surface extends Events {
                 if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
-                var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
+                var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
+                if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
+                else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
                 var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
                 if (g.data.accessForbidden) {
-                    this.canAccessPage = false;
+                    this.accessPage = 'forbidden';
                     return
                 }
-                await ws.createTim();
                 if (g.data.workspace) {
                     ws.load({ ...g.data.workspace });
                 }
-                // var willPageItem = g.data.page as PageItem;
-                this.canAccessPage = true;
                 if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
-                if (g.data.roles) await ws.onLoadRoles(g.data.roles)
-                else await ws.onLoadRoles()
-                if (g.data.member) await ws.loadMember(g.data.member as any)
-                else await ws.loadMember(null);
-                await ws.onLoadPages();
+                ws.roles = g.data.roles || [];
+                ws.member = g.data.member || null;
+                var willPageItem = g.data.page as PageItem;
+                if (ws.access == 0
+                    &&
+                    !ws.member
+                    &&
+                    willPageItem
+                ) {
+                    this.accessPage = 'accessPage';
+                    ws.load({ childs: [willPageItem] })
+                }
+                else {
+                    this.accessPage = 'accessWorkspace';
+                    await ws.onLoadPages();
+                }
+                if (surface.user.isSign) await ws.createTim();
                 await sCache.set(CacheKey.wsHost, ws.sn);
                 runInAction(() => {
                     if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;

@@ -40,12 +40,12 @@ export var SurfaceView = observer(function () {
         return <div className='shy-surface'>
             <SideBar></SideBar>
             <Route path={[ShyUrl.ws, ShyUrl.page]}>
-                {surface.canAccessPage === false && <ViewNotAllow></ViewNotAllow>}
+                {surface.accessPage == 'forbidden' && <ViewNotAllow></ViewNotAllow>}
                 {surface.showWorkspace && <div className="shy-surface-content">
                     {surface.showJoinTip && <div className="shy-surface-content-head h-40" >
                         <JoinTip></JoinTip>
                     </div>}
-                    {surface.canAccessPage !== false && <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>
+                    {surface.accessPage != 'forbidden' && <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>
                         <SideSln></SideSln>
                         <SupervisorView></SupervisorView>
                     </div>}

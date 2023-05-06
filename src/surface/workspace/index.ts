@@ -380,9 +380,6 @@ export class Workspace {
         else if (x.at == y.at) return 0;
         else return -1;
     }
-    async loadMember(member: WorkspaceMember) {
-        this.member = member;
-    }
     async onNotifyViewOperater(data: UserAction) {
         var ec = parseElementUrl(data.elementUrl);
         if (ec.type == ElementType.PageItem) {
