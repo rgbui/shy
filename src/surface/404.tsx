@@ -26,14 +26,14 @@ export var View404 = observer(function () {
 })
 
 export var ViewNotAllow = observer(function () {
-    return <div className='shy-404'>
-        <div className='shy-404-content'>
+    return <div className='flex-center flex-auto v100'>
+        <div className='gap-t-200 w-500'>
             <div className="h2 flex-center">该页面未开启公开访问</div>
             <Divider></Divider>
             <div>
                 <div className="flex-center remark">如您拥有该页面的访问权限，请登录后查看</div>
-                <div className="flex-center gap-h-10"><Button onClick={e => UrlRoute.push(ShyUrl.myWorkspace)}>立即使用诗云</Button></div>
-                {!(surface.user?.isSign) && <div>您尚未登录 诗云，立即<a href='https://shy.live/sign/in'>登录</a></div>}
+                <div className="flex-center gap-h-20"><Button onClick={e => UrlRoute.push(ShyUrl.myWorkspace)}>立即使用诗云</Button></div>
+                {!(surface.user?.isSign) && <div className="flex-center">您尚未登录 诗云，立即<a href='https://shy.live/sign/in'>登录</a></div>}
             </div>
         </div>
     </div >
