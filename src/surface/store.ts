@@ -171,7 +171,10 @@ export class Surface extends Events {
      * 
      */
     get showJoinTip() {
-        if (this.user.isSign) return this.temporaryWs && this.temporaryWs?.accessProfile.disabledJoin !== true
+        if (this.user.isSign) {
+            if (!this.showSlideBar) return false;
+            return this.temporaryWs && this.temporaryWs?.accessProfile.disabledJoin !== true
+        }
         else return false;
     }
     get showSlideBar() {
