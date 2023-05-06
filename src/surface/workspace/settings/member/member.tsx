@@ -19,6 +19,7 @@ import { Spin } from 'rich/component/view/spin';
 import { Pagination } from 'rich/component/view/pagination';
 import { Confirm } from 'rich/component/lib/confirm';
 import { ToolTip } from 'rich/component/view/tooltip';
+import { masterSock } from '../../../../../net/sock';
 
 @observer
 export class WorkspaceMembers extends React.Component {
@@ -115,7 +116,13 @@ export class WorkspaceMembers extends React.Component {
     }
     async removeUser(member) {
         if (await Confirm(`确认要移除成员吗`)) {
-            channel.del('/ws/member/delete', { userid: member.userid })
+            await channel.del('/ws/member/delete', {
+                userid: member.userid
+            })
+            await masterSock.delete('/user/del/join/ws', {
+                wsId: surface.workspace.id,
+                userid: member.userid
+            })
             this.loadMembers();
         }
     }

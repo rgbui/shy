@@ -168,10 +168,10 @@ class WorkspaceService extends BaseService {
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/ws/members', args);
     }
-    @del('/ws/memeber/delete')
+    @del('/ws/member/delete')
     async deleteWsMemeber(args) {
         args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.delete('/ws/memeber/delete', args);
+        return await surface.workspace.sock.delete('/ws/member/delete', args);
     }
     @get('/ws/roles')
     async getWsRoles(args) {
