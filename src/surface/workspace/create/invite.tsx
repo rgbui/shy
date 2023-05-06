@@ -3,8 +3,6 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Button } from "rich/component/view/button";
-import { Row, Space } from "rich/component/view/grid";
-import { Loading } from "rich/component/view/loading";
 import { channel } from "rich/net/channel";
 import { Workspace } from "..";
 import { surface } from "../../store";
@@ -16,6 +14,7 @@ import { Spin } from "rich/component/view/spin";
 import { isMobileOnly } from "react-device-detect";
 import { Confirm } from "rich/component/lib/confirm";
 import { useJoinWorkspaceProtocol } from "./protocol";
+
 export var InviteView = observer(function () {
     var local = useLocalObservable<{
         ws: Partial<Workspace>,
@@ -87,12 +86,15 @@ export var InviteView = observer(function () {
             <div className="flex-center f-16 bold gap-h-20">
                 邀请您加入{local.ws.text}
             </div>
-            <div className="flex-center gap-h-10 r-gap-w-10">
-                <Button onClick={e => join()}>加入</Button><Button onClick={e => refuse()} ghost>拒绝</Button>
-            </div>
+
             <div >
                 <WsAvatar wsId={local.ws.id}></WsAvatar>
             </div>
+
+            <div className="gap-h-10 r-gap-w-10">
+                <Button block onClick={e => join()}>接受邀请</Button>
+            </div>
+
         </div>}
 
     </div>
