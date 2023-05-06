@@ -12,23 +12,32 @@ import { Mime } from "../../declare";
 import { Spin } from "rich/component/view/spin";
 
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
-
     let refInput = React.useRef<HTMLInputElement>(null);
     let refEditText = React.useRef<string>(null);
     var item = props.item;
     var gapLeft = 0 + (props.deep || 0) * 15
     var style: Record<string, any> = {};
     style.paddingLeft = gapLeft;
-    style['--gap-left'] = (gapLeft +20) + 'px';
+    style['--gap-left'] = (gapLeft + 20) + 'px';
 
     var isInEdit = item.id == surface.sln.editId;
-    var isCanEdit = item.isAllow(AtomPermission.docEdit, AtomPermission.channelEdit, AtomPermission.dbEdit);
+    var isCanEdit = item.isAllow(
+        AtomPermission.docEdit,
+        AtomPermission.channelEdit,
+        AtomPermission.dbEdit,
+        AtomPermission.wsEdit);
     var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
+    if (!isCanEdit) isCanPlus = false;
     if (surface.workspace.slnStyle == 'menu') isCanPlus = false;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
-
     async function mousedown(event: MouseEvent) {
         var target = event.target as HTMLElement;
+        if (!isCanEdit) {
+            if (target.closest('.shy-ws-item-page-spread')) {
+                item.onSpread();
+            }
+            return
+        }
         if (target.closest('.shy-ws-item-page-spread')) {
             item.onSpread();
         }
@@ -52,7 +61,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         item.text = input.value.trim();
     }
     function contextmenu(event: MouseEvent) {
-        if (item.isAllow(AtomPermission.docEdit)) {
+        if (isCanEdit) {
             event.preventDefault();
             item.onContextmenu(event);
         }

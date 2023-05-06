@@ -10,15 +10,21 @@ import { surface } from "../../../store";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
+    var isCanEdit = item.isAllow(
+        AtomPermission.docEdit,
+        AtomPermission.channelEdit,
+        AtomPermission.dbEdit,
+        AtomPermission.wsEdit);
     function renderHead() {
         var gap = 30;
-
         return <div
             onContextMenu={e => {
+                if (!isCanEdit) return;
                 e.preventDefault();
                 item.onContextmenu(e.nativeEvent)
             }}
             onMouseDown={e => {
+                if (!isCanEdit) return;
                 if (e.nativeEvent.button == 2) return
                 item.onMousedownItem(e.nativeEvent)
             }}
@@ -41,7 +47,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     item.onSpread()
                 }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor">{item.text || "我的页面"}</span>
             </div>
-            {item.isAllow(AtomPermission.wsEdit) && <div className='flex-fixed flex-end visible padding-r-5'>
+            {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>
                 <span className="size-20 flex-center cursor item-hover round">
                     <Icon icon={PlusSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onAdd() }}></Icon>
                 </span>
