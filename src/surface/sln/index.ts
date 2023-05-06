@@ -5,7 +5,7 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point, Rect } from "rich/src/common/vector/point";
 import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
-import { makeObservable, observable} from "mobx";
+import { makeObservable, observable } from "mobx";
 import { CacheKey, yCache } from "../../../net/cache";
 import { surface } from "../store";
 import { MouseDragger } from "rich/src/common/dragger";
@@ -14,6 +14,7 @@ import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
 import { Mime } from "./declare";
+import { log } from "../../../common/log";
 
 export class Sln extends Events {
     constructor() {
@@ -41,7 +42,7 @@ export class Sln extends Events {
     }
     async onMousedownItem(item: PageItem, event: MouseEvent) {
         var self = this;
-        if (surface.workspace?.isAllow(AtomPermission.docEdit)) {
+        if (item.isCanEdit) {
             MouseDragger<{ item: HTMLElement }>({
                 event,
                 dis: 5,
@@ -58,33 +59,39 @@ export class Sln extends Events {
                     ghostView.move(Point.from(ev));
                 },
                 moveEnd(ev, isMove, data) {
-                    if (isMove) {
-                        if (self.hover?.item) {
-                            if (!self.dragIds.some(s => s == self.hover?.item.id)) {
-                                var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
-                                var overItem = self.hover?.item;
-                                if (self.hover.direction == 'top') {
-                                    if (overItem.prev) pageItemStore.moveToAfterPageItem(dragItem, overItem.prev);
-                                    else if (overItem.parent) pageItemStore.movePrependPageItem(dragItem, overItem.parent);
-                                    else pageItemStore.moveToBeforePageItem(dragItem,overItem)
-                                }
-                                else if (self.hover.direction == 'bottom') {
-                                    pageItemStore.moveToAfterPageItem(dragItem, overItem);
-                                }
-                                else if (self.hover.direction == 'bottom-sub') {
-                                    pageItemStore.movePrependPageItem(dragItem, overItem);
+                    try {
+                        if (isMove) {
+                            if (self.hover?.item) {
+                                if (!self.dragIds.some(s => s == self.hover?.item.id)) {
+                                    var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
+                                    var overItem = self.hover?.item;
+                                    if (self.hover.direction == 'top') {
+                                        if (overItem.prev) pageItemStore.moveToAfterPageItem(dragItem, overItem.prev);
+                                        else if (overItem.parent) pageItemStore.movePrependPageItem(dragItem, overItem.parent);
+                                        else pageItemStore.moveToBeforePageItem(dragItem, overItem)
+                                    }
+                                    else if (self.hover.direction == 'bottom') {
+                                        pageItemStore.moveToAfterPageItem(dragItem, overItem);
+                                    }
+                                    else if (self.hover.direction == 'bottom-sub') {
+                                        pageItemStore.movePrependPageItem(dragItem, overItem);
+                                    }
                                 }
                             }
                         }
+                        else {
+                            if (item.mime == Mime.page) channel.air('/page/open', { item });
+                        }
                     }
-                    else {
-                        if (item.mime == Mime.page)
-                            channel.air('/page/open', { item });
+                    catch (ex) {
+                        log.error(ex);
                     }
-                    self.isDrag = false;
-                    self.dragIds = [];
-                    self.hover = { item: null, direction: 'none' };
-                    ghostView.unload();
+                    finally {
+                        self.isDrag = false;
+                        self.dragIds = [];
+                        self.hover = { item: null, direction: 'none' };
+                        ghostView.unload();
+                    }
                 }
             })
         }

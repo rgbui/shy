@@ -10,11 +10,7 @@ import { surface } from "../../../store";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
-    var isCanEdit = item.isAllow(
-        AtomPermission.docEdit,
-        AtomPermission.channelEdit,
-        AtomPermission.dbEdit,
-        AtomPermission.wsEdit);
+    var isCanEdit =item.isCanEdit;
     function renderHead() {
         var gap = 30;
         return <div
@@ -24,7 +20,6 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 item.onContextmenu(e.nativeEvent)
             }}
             onMouseDown={e => {
-                if (!isCanEdit) return;
                 if (e.nativeEvent.button == 2) return
                 item.onMousedownItem(e.nativeEvent)
             }}

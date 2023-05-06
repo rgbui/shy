@@ -7,7 +7,7 @@ import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { Mime } from "../declare";
-import { makeObservable, observable, runInAction } from "mobx";
+import { computed, makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { SnapStore } from "../../../../services/snap/store";
@@ -94,7 +94,8 @@ export class PageItem {
             description: observable,
             unreadChats: observable,
             pageType: observable,
-            subCount: observable
+            subCount: observable,
+            isCanEdit: computed
         });
     }
     get sln() {
@@ -228,7 +229,7 @@ export class PageItem {
     async onSpread(spread?: boolean) {
         var sp = typeof spread == 'boolean' ? !spread : this.spread;
         this.spread = sp == false ? true : false;
-        if (this.spread == true && this.checkedHasChilds == false) {
+        if (this.spread == true && this.checkedHasChilds == false && this.subCount > 0) {
             if (this.checkedHasChilds == false && !(this.childs?.length > 0)) {
                 var sus = await channel.get('/page/item/subs', { id: this.id });
                 if (sus.ok == true) {
@@ -433,6 +434,7 @@ export class PageItem {
     onMousedownItem(event: MouseEvent) {
         this.sln.onMousedownItem(this, event);
     }
+
     onContextmenu(event: MouseEvent) {
         this.sln.onOpenItemMenu(this, event);
     }
@@ -506,7 +508,7 @@ export class PageItem {
                 var c = this.workspace.isAllow(...ps);
                 if (c) return c;
                 else {
-                    var pa = this.closest(g => g.isAllow(...ps));
+                    var pa = this.closest(g => g.isAllow(...ps), true);
                     if (pa) return true;
                     else return false;
                 }
@@ -533,6 +535,12 @@ export class PageItem {
                 return false;
             }
         }
+    }
+    get isCanEdit() {
+        return this.isAllow(AtomPermission.docEdit,
+            AtomPermission.channelEdit,
+            AtomPermission.dbEdit,
+            AtomPermission.wsEdit)
     }
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)
