@@ -21,22 +21,19 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     style['--gap-left'] = (gapLeft + 20) + 'px';
 
     var isInEdit = item.id == surface.sln.editId;
-    var isCanEdit = item.isAllow(
-        AtomPermission.docEdit,
-        AtomPermission.channelEdit,
-        AtomPermission.dbEdit,
-        AtomPermission.wsEdit);
+    var isCanEdit =item.isCanEdit;
     var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
     if (!isCanEdit) isCanPlus = false;
     if (surface.workspace.slnStyle == 'menu') isCanPlus = false;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     async function mousedown(event: MouseEvent) {
         var target = event.target as HTMLElement;
-        if (!isCanEdit) {
+        if(!isCanEdit){
             if (target.closest('.shy-ws-item-page-spread')) {
                 item.onSpread();
             }
-            return
+            else item.onMousedownItem(event)
+            return;
         }
         if (target.closest('.shy-ws-item-page-spread')) {
             item.onSpread();
