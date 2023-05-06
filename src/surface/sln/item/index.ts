@@ -12,7 +12,7 @@ import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { SnapStore } from "../../../../services/snap/store";
 import { PageLayoutType } from "rich/src/page/declare";
-import { AtomPermission } from "rich/src/page/permission";
+import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import lodash from "lodash";
 import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
@@ -493,24 +493,46 @@ export class PageItem {
         }
     }
     isAllow(...ps: AtomPermission[]) {
-        return true
-    }
-    getPagePermissions() {
-        return []
-        // var ps = surface.workspace.memberPermissions;
-        // if (surface.workspace.member) {
-        //     return ps;
-        // } else {
-        //     if (this.permission == PagePermission.canEdit) {
-        //         return getEditPerssions()
-        //     }
-        //     else if (this.permission == PagePermission.canInteraction) {
-        //         return getCommonPerssions()
-        //     }
-        //     else {
-        //         return []
-        //     }
-        // }
+        if (this.workspace?.access == 1) {
+            //表示是公开的
+            return getCommonPerssions().some(s => ps.includes(s))
+        }
+        if (this.share == 'net' && this.netPermissions?.some(s => ps.includes(s))) return true;
+        if (this.workspace?.isMember) {
+            // 如果是成员，那么就看成员权限
+            var me = this.workspace.member;
+            var rs = this.memberPermissions.filter(g => g.userid && g.userid == me.id || g.userid && g.userid == 'all' || g.roleId && me.roleIds.includes(g.roleId));
+            if (rs.length == 0) {
+                var c = this.workspace.isAllow(...ps);
+                if (c) return c;
+                else {
+                    var pa = this.closest(g => g.isAllow(...ps));
+                    if (pa) return true;
+                    else return false;
+                }
+            }
+            var g = rs.some(s => s.permissions.some(p => ps.includes(p)))
+            return g;
+        }
+        else {
+            if (surface.user.isSign) {
+                // 如果是登录用户，那么就看登录用户的权限
+                var rg = this.inviteUsersPermissions.find(g => g.userid == surface.user.id);
+                if (rg) {
+                    var d = rg.permissions.some(s => ps.includes(s))
+                    if (!d) {
+                        if (this.share == 'net' && this.netPermissions) return this.netPermissions.some(s => ps.includes(s))
+                        return false;
+                    }
+                    else return d;
+                }
+                else return false;
+            }
+            else {
+                if (this.share == 'net' && this.netPermissions) return this.netPermissions.some(s => ps.includes(s))
+                return false;
+            }
+        }
     }
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)

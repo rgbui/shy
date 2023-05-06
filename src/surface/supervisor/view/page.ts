@@ -9,7 +9,6 @@ import { surface } from "../../store";
 import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
-
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
@@ -30,7 +29,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
             }
             if (store.item) {
-                page.permissons = store.item.getPagePermissions();
+                // page.permissons = store.item.getPagePermissions();
                 page.pageInfo = store.item;
                 if (store.item.mime == Mime.table) {
                     page.pageLayout = { type: PageLayoutType.db };
