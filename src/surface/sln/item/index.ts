@@ -434,7 +434,6 @@ export class PageItem {
     onMousedownItem(event: MouseEvent) {
         this.sln.onMousedownItem(this, event);
     }
-
     onContextmenu(event: MouseEvent) {
         this.sln.onOpenItemMenu(this, event);
     }

@@ -37,10 +37,10 @@ export var SurfaceView = observer(function () {
     if (local.loading) return <div className='shy-surface-loading'><Loading /></div>
     else {
         return <div className='shy-surface'>
-         <SideBar></SideBar>
+            <SideBar></SideBar>
             <Route path={[ShyUrl.ws, ShyUrl.page]}>
                 {surface.showWorkspace && <div className="shy-surface-content">
-                    {surface.showJoinTip && <div className="shy-surface-content-head" style={{ height: 40 }}>
+                    {surface.showJoinTip && <div className="shy-surface-content-head h-40" >
                         <JoinTip></JoinTip>
                     </div>}
                     <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>

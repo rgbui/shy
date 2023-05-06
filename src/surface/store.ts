@@ -26,7 +26,8 @@ export class Surface extends Events {
             showSlideBar: computed,
             showSln: computed,
             slnSpread: observable,
-            showWorkspace: computed
+            showWorkspace: computed,
+            canAccessPage: observable
         });
     }
     slnSpread: boolean = null;
@@ -36,6 +37,7 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: LinkWorkspaceOnline[] = [];
     temporaryWs: LinkWorkspaceOnline = null;
+    canAccessPage: boolean = null;
     async loadWorkspaceList() {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
@@ -55,7 +57,7 @@ export class Surface extends Events {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
             if (typeof name == 'undefined') {
-                if (!this.workspace) {
+                if (this.workspace) {
                     this.workspace.exitWorkspace()
                 }
                 return this.workspace = null;
@@ -71,24 +73,15 @@ export class Surface extends Events {
                 await ws.createTim();
                 var willPageId = UrlRoute.match(config.isPro ? ShyUrl.page : ShyUrl.wsPage)?.pageId;
                 var g = await ws.sock.get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                if (g.data.accessForbidden) {
+                    this.canAccessPage = false;
+                    return
+                }
                 if (g.data.workspace) {
                     ws.load({ ...g.data.workspace });
                 }
                 var willPageItem = g.data.page as PageItem;
-                /**
-                 * 不是成员，且空间为非公开，页面也不是非公开，那么不能访问
-                */
-                if (!g.data.member) {
-                    /**
-                     *空间不是公开的，页面也不是公开的，那么就不能访问
-                     */
-                    if (ws.access == 0 || typeof ws.access == 'undefined') {
-                        if (!(willPageItem && willPageItem.share == 'net')) {
-                            UrlRoute.push(ShyUrl._404);
-                            return;
-                        }
-                    }
-                }
+                this.canAccessPage = true;
                 if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
                 if (g.data.roles) await ws.onLoadRoles(g.data.roles)
                 else await ws.onLoadRoles()
@@ -198,8 +191,9 @@ export class Surface extends Events {
                     return false;
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
     get showWorkspace() {
         return surface.workspace ? true : false;
