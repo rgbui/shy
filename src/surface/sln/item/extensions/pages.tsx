@@ -2,7 +2,6 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { ChevronDownSvg, PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { AtomPermission } from "rich/src/page/permission";
 import { PageItem } from "..";
 import { PageItemBox } from "../view/box";
 import { Spin } from "rich/component/view/spin";
