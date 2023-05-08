@@ -31,7 +31,7 @@ class MessageCenter {
         return new Set()
     }
     @air('/page/open')
-    async pageOpen(args: { item?: string | { id: string }, elementUrl?: string, config?: { isTemplate?: boolean } }) {
+    async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean } }) {
         var { item, elementUrl } = args;
         if (item) {
             if ((item as PageItem)?.id) elementUrl = (item as PageItem).elementUrl;
