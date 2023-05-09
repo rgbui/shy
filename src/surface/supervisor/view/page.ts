@@ -23,8 +23,7 @@ export async function createPageContent(store: PageViewStore) {
                     if (r === false) isCanEdit = false;
                 }
             }
-            console.log(isCanEdit, 'isCanEdit')
-            var pd = await store.snapStore.querySnap(isCanEdit);
+            var pd = await store.snapStore.querySnap(isCanEdit?false:true);
             var page = new Page();
             page.openSource = store.source;
             page.customElementUrl = store.elementUrl;

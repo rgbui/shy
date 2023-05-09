@@ -155,7 +155,7 @@ export function workspaceNotifys(tim: Tim) {
             var r = surface.workspace.viewOnlineUsers.get(e.viewId);
             var se: Set<string>;
             if (r) { r.users.add(e.userid); se = r.users; }
-            else { se = new Set(e.userid); surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users: se }) }
+            else { se = new Set(); se.add(e.userid); surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users: se }) }
             channel.air('/user/view/onlines', { viewId: e.viewId, users: se })
         }
     });
