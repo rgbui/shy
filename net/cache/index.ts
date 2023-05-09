@@ -14,7 +14,13 @@ export enum CacheKey {
     ws_toggle_pages = 6,
     slideWidth = 7,
     timUrl = 8,
-    roomCache = '/room/{roomId}/cache/seq'
+    roomCache = '/room/{roomId}/cache/seq',
+    /**
+     * 当前页面的item浏览模式，
+     * 编辑模式
+     * 预览模式
+     */
+    itemMode = '/{itemId}/mode',
 }
 const FLAG = 'shy.';
 class SyCache {

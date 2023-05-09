@@ -151,7 +151,7 @@ push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any',
 push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
-push('/current/workspace', '', '{id:string,sn:number,text:string,url:string,roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
+push('/current/workspace', '', '{id:string,sn:number,text:string,url:string,isMember?:boolean,isOwner?:boolean,access?:0|1,accessProfile?:{disabledJoin: boolean,checkJoinProtocol: boolean,joinProtocol: string},roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
 push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
@@ -312,8 +312,6 @@ push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', [
 push('/page/item/create', '{wsId?:string,data:Record<string,any>}', 'SockResponse<{ item:Record<string,any> }>', ['put'])
 push('/page/word/query', '{word:string}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/guid', '', 'string', ['query']);
-//push(`/page/query/permissions`, '{pageId:string}', 'AtomPermission[]', ['query'])
-
 push('/view/snap/query', '{ elementUrl: string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
 push('/view/snap/store', '{  elementUrl: string, seq: number, content: any }', 'Promise<void>', ['act'])
