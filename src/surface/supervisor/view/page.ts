@@ -9,10 +9,22 @@ import { surface } from "../../store";
 import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
+import { log } from "../../../../common/log";
+import { yCache } from "../../../../net/cache";
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
-            var pd = await store.snapStore.querySnap();
+            var isCanEdit = false;
+            if (store.item) {
+                isCanEdit = store.item?.isCanEdit;
+                console.log(isCanEdit)
+                if (isCanEdit) {
+                    var r = await yCache.get(`/{${store.item.id}}/mode`);
+                    if (r === false) isCanEdit = false;
+                }
+            }
+            console.log(isCanEdit, 'isCanEdit')
+            var pd = await store.snapStore.querySnap(isCanEdit);
             var page = new Page();
             page.openSource = store.source;
             page.customElementUrl = store.elementUrl;
@@ -77,6 +89,7 @@ export async function createPageContent(store: PageViewStore) {
             })
             page.on(PageDirective.error, error => {
                 console.error(error);
+                log.error(error);
             });
             page.on(PageDirective.save, async () => {
                 await store.snapStore.forceSave();

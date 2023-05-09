@@ -14,7 +14,7 @@ import { computed, makeObservable, observable } from "mobx";
 import { config } from "../../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
-import { AtomPermission, getCommonPerssions, getEditPerssions } from "rich/src/page/permission";
+import { AtomPermission, getCommonPerssions, getEditOwnPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
@@ -234,7 +234,7 @@ export class Workspace {
     get memberPermissions() {
         var ps: AtomPermission[] = [];
         if (surface.user?.id == this.owner) {
-            return getEditPerssions()
+            return getEditOwnPerssions()
         }
         if (this.member) {
             if (this.member.roleIds.length > 0) {

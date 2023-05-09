@@ -137,14 +137,13 @@ export class SnapStore extends Events {
     async forceSave() {
         await this.saveToService();
     }
-    async querySnap() {
-
+    async querySnap(readonly?: boolean) {
         var seq: number;
         var local: view_snap;
         if (config.isPc) local = await yCache.get(this.localId);
-
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
+
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
             file: IconArguments,
@@ -153,11 +152,12 @@ export class SnapStore extends Events {
         }>('/view/snap/query', {
             elementUrl: this.elementUrl,
             wsId: surface.workspace.id,
-            seq
+            seq,
+            readonly: readonly ? true : false
         });
         if (r.ok) {
             if (r.data.localExisting == true) return { content: local?.content ? JSON.parse(local?.content) : {} };
-            return { operates: r.data.operates as ViewOperate[], content: r.data.content ? JSON.parse(r.data.content) : {} }
+            return { operates: r.data.operates as ViewOperate[] || [], content: r.data.content ? JSON.parse(r.data.content) : {} }
         }
     }
     async rollupSnap(snapId: string) {
