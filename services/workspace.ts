@@ -301,7 +301,8 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/random/online/users')
     async wsRandomOnLineUsers(args) {
-        args.wsId = surface.workspace.id;
+        if (!args.wsId)
+            args.wsId = surface.workspace.id;
         return await masterSock.get('/ws/random/online/users', args)
     }
     @get('/ws/view/online/users')
