@@ -11,6 +11,8 @@ import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
 
+
+
 class MessageCenter {
     @query('/ws/current/pages')
     getWsPages() {
@@ -22,11 +24,16 @@ class MessageCenter {
         if (surface.workspace) return surface.workspace.onLineUsers;
         return new Set()
     }
-    @query('/user/get/view/onlines')
-    getViewOnlines(e: { viewId: string }) {
+    @query('/get/view/onlines')
+    async getViewOnlines(e: { viewUrl: string, viewEdit?: boolean }) {
         if (surface.workspace) {
-            var users = surface.workspace.viewOnlineUsers.get(e.viewId)
-            if (users) return users;
+            var os = e.viewEdit ? surface.workspace.viewEditOnlineUsers : surface.workspace.viewOnlineUsers;
+            var ub = os.get(e.viewUrl)
+            if (!ub || ub?.load == false) {
+                await surface.workspace.loadViewOnlineUsers(e.viewUrl)
+                ub = os.get(e.viewUrl)
+            }
+            if (ub) return ub.users;
         }
         return new Set()
     }

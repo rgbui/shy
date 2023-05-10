@@ -67,7 +67,7 @@ export class Surface extends Events {
             if (typeof (name as any) == 'number') name = name.toString();
             if (typeof name == 'undefined') {
                 if (this.workspace) {
-                    this.workspace.exitWorkspace()
+                    await this.workspace.exitWorkspace()
                 }
                 return this.workspace = null;
             }
@@ -119,7 +119,7 @@ export class Surface extends Events {
             }
             else {
                 if (this.workspace) {
-                    this.workspace.exitWorkspace()
+                    await this.workspace.exitWorkspace()
                 }
                 this.workspace = null;
                 if (config.isPc) {

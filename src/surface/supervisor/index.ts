@@ -45,26 +45,17 @@ export class Supervisor extends Events {
                 ElementType.PageItem,
                 ElementType.Room,
                 ElementType.Schema
-            ].includes(mainStore.pe.type)) await surface.workspace.onLoadElementUrl(elementUrl);
-            this.page = mainStore;
-            if (this.page.item) {
-                surface.workspace.enterPage(this.page.item.id);
+            ].includes(mainStore.pe.type)) {
+                await surface.workspace.onLoadElementUrl(elementUrl);
             }
-            /**
-             * 3小时主动同步一次，服务器缓存用户所在的视图在线状态过期时间是6小时
-             */
-            this.time = setInterval(() => this.syncWorkspaceView(), 1000 * 60 * 60 * 3);
+            this.page = mainStore;
+            surface.workspace.enterPage(this.page.elementUrl, await mainStore.canEdit());
         }
         catch (ex) {
             console.error(ex);
         }
         finally {
             this.opening = false;
-        }
-    }
-    async syncWorkspaceView() {
-        if (this.page.item) {
-            surface.workspace.enterPage(this.page.item.id);
         }
     }
     async onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {

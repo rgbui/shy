@@ -10,20 +10,11 @@ import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
-import { yCache } from "../../../../net/cache";
+
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
-            var isCanEdit = false;
-            if (store.item) {
-                isCanEdit = store.item?.isCanEdit;
-                console.log(isCanEdit)
-                if (isCanEdit) {
-                    var r = await yCache.get(`/{${store.item.id}}/mode`);
-                    if (r === false) isCanEdit = false;
-                }
-            }
-            var pd = await store.snapStore.querySnap(isCanEdit?false:true);
+            var pd = await store.snapStore.querySnap(await store.canEdit());
             var page = new Page();
             page.openSource = store.source;
             page.customElementUrl = store.elementUrl;

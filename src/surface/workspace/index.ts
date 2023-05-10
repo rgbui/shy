@@ -159,6 +159,7 @@ export class Workspace {
      */
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
+    public viewEditOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
     constructor() {
         makeObservable(this, {
@@ -183,6 +184,7 @@ export class Workspace {
             createPageConfig: observable,
             defaultPageId: observable,
             viewOnlineUsers: observable,
+            viewEditOnlineUsers: observable,
             onLineUsers: observable,
             invite: observable,
             slnStyle: observable,
@@ -218,8 +220,8 @@ export class Workspace {
         return !this.member && surface.user.isSign && this.access == 1
     }
     get isOwner() {
-        var ow=this.owner?this.owner:this.creater;
-        return surface.user?.id == ow? true : false;
+        var ow = this.owner ? this.owner : this.creater;
+        return surface.user?.id == ow ? true : false;
     }
     isAllow(...permissions: AtomPermission[]) {
         return this.memberPermissions.some(s => permissions.includes(s))
@@ -418,15 +420,15 @@ export class Workspace {
         }
         return url + 'invite/' + this.invite;
     }
-    async loadViewOnlineUsers(viewId: string) {
-        var rs = this.viewOnlineUsers.get(viewId);
+    async loadViewOnlineUsers(viewUrl: string) {
+        var rs = this.viewOnlineUsers.get(viewUrl);
         if (!rs) {
-            var r = await channel.get('/ws/view/online/users', { viewId });
-            this.viewOnlineUsers.set(viewId, { load: true, users: new Set(r.data.users) });
+            var r = await channel.get('/ws/view/online/users', { viewUrl });
+            this.viewOnlineUsers.set(viewUrl, { load: true, users: new Set(r.data.users) });
         }
         else {
             if (rs.load == false) {
-                var r = await channel.get('/ws/view/online/users', { viewId });
+                var r = await channel.get('/ws/view/online/users', { viewUrl });
                 if (r.ok) {
                     r.data.users.forEach(u => {
                         rs.users.add(u);
@@ -499,10 +501,13 @@ export class Workspace {
         this.tim.only('reconnected_workspace', async () => {
             var data = await self.getTimHeads();
             data.sockId = self.tim.id;
-            data.workspaceId = self.id;
+            data.wsId = self.id;
             data.userid = surface.user.id;
-            if (self.currentPageId) data.viewId = self.currentPageId;
-            await self.tim.syncSend(HttpMethod.post, '/user/reconnected_workspace', data);
+            if (surface.supervisor?.page) {
+                data.viewUrl = surface.supervisor.page.elementUrl
+                data.viewEdit = await surface.supervisor.page.canEdit()
+            }
+            await self.tim.syncSend(HttpMethod.post, '/sync', data);
         })
         await this.enterWorkspace();
     }
@@ -513,30 +518,30 @@ export class Workspace {
     static getWsSock(pids: Pid[], type: PidType) {
         return Sock.createSock(this.getWsSockUrl(pids, type))
     }
-    currentPageId: string;
-    async enterPage(pageId: string) {
+    async enterPage(viewUrl: string, canEdit?: boolean) {
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
-        data.workspaceId = this.id;
-        data.viewId = pageId;
+        data.wsId = this.id;
+        data.viewUrl = viewUrl;
         data.userid = surface.user.id;
-        this.currentPageId = pageId;
-        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', data);
+        data.viewEdit = canEdit || false;
+        await this.tim.syncSend(HttpMethod.post, '/sync', data);
     }
     async enterWorkspace() {
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
-        data.workspaceId = this.id;
+        data.wsId = this.id;
         data.userid = surface.user.id;
-        if (this.currentPageId) data.viewId = this.currentPageId;
-        await this.tim.syncSend(HttpMethod.post, '/workspace/enter', data);
+        if (surface.supervisor?.page) {
+            data.viewUrl = surface.supervisor.page.elementUrl
+            data.viewEdit = (await surface.supervisor.page.canEdit())
+        }
+        await this.tim.syncSend(HttpMethod.post, '/sync', data);
     }
     async exitWorkspace() {
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
-        data.workspaceId = this.id;
-        if (this.currentPageId) data.viewId = this.currentPageId;
-        await this.tim.syncSend(HttpMethod.post, '/workspace/leave', data);
+        await this.tim.syncSend(HttpMethod.post, '/sync', data);
     }
     async getTimHeads() {
         var device = await sCache.get(CacheKey.device);

@@ -11,6 +11,7 @@ import { masterSock } from "../../../net/sock";
 import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl } from "../../history";
 import { useOpenUserSettings } from "./settings";
+import { surface } from "../store";
 
 export class User {
     public id: string = null;
@@ -117,11 +118,18 @@ export class User {
         var self = this;
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
-        await this.tim.syncSend(HttpMethod.post, '/user/online', data);
+        await this.tim.syncSend(HttpMethod.post, '/sync', data);
         this.tim.only('reconnected', async () => {
             var data = await self.getTimHeads();
             data.sockId = self.tim.id;
-            self.tim.syncSend(HttpMethod.post, '/user/reconnected', data);
+            if (surface.workspace) {
+                data.wsId = surface.workspace.id;
+                if (surface.supervisor?.page) {
+                    data.viewUrl = surface.supervisor.page.elementUrl;
+                    data.viewEdit = await surface.supervisor.page.canEdit();
+                }
+            }
+            self.tim.syncSend(HttpMethod.post, '/sync', data);
         })
         userTimNotify(this.tim);
     }

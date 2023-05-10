@@ -12,6 +12,7 @@ import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { PageItem } from "../../sln/item";
 import { channel } from "rich/net/channel";
 import { PageDirective } from "rich/src/page/directive";
+import { yCache } from "../../../../net/cache";
 
 export class PageViewStore extends Events {
     source: 'page' | 'slide' | 'dialog' | 'popup';
@@ -144,6 +145,17 @@ export class PageViewStore extends Events {
             this.elementUrl = elementUrl;
             PageViewStores.createPageViewStore(this.elementUrl, this.source, this.config);
         }
+    }
+    async canEdit() {
+        var isCanEdit = false;
+        if (this.item) {
+            isCanEdit = this.item?.isCanEdit;
+            if (isCanEdit) {
+                var r = await yCache.get(`/{${this.item.id}}/mode`);
+                if (r === false) isCanEdit = false;
+            }
+        }
+        return isCanEdit;
     }
 }
 

@@ -20,18 +20,13 @@ export enum MessageUrl {
     pageItemOperate = '/ws/page/item/operate/notify',
     viewOperate = '/ws/view/operate/notify',
     dateGridOperator = '/ws/datagrid/schema/operate/notify',
-    enterWorkspace = '/ws/enter/notify',
-    leaveWorkspace = '/ws/leave/notify',
-    enterView = '/view/enter/notify',
-    leaveView = '/view/leave/notify',
+    workspaceSync = '/ws/sync',
     channelNotify = '/ws/channel/notify',
     channelDeletedNotify = '/ws/channel/deleted/notify',
     channelPatchNotify = '/ws/channel/patch/notify',
     channelEmojiNotify = '/ws/channel/emoji/notify',
     patchWsNotify = '/ws/patch/notify'
 }
-
-
 
 export function userTimNotify(tim: Tim) {
     /**
@@ -83,12 +78,16 @@ export function userTimNotify(tim: Tim) {
         console.log(e.requestUserid);
         userChannelStore.loadPends();
     });
-
     //私信
     tim.on(MessageUrl.userTalkNotify, e => userChannelStore.notifyChat(e));
-
 }
 
+export type SparkSession = {
+    userid?: string,
+    workspaceId?: string;
+    viewUrl?: string;
+    viewEdit?: boolean
+}
 
 export function workspaceNotifys(tim: Tim) {
 
@@ -128,49 +127,64 @@ export function workspaceNotifys(tim: Tim) {
     tim.only('/ws/page/item/operate/notify', e => { PageItemOperateNotify(e); });
     //页面数据表格元数据
     tim.only('/ws/datagrid/schema/operate/notify', e => { });
-
-    /**
-     * 用户进入这个空间
-     */
-    tim.only(MessageUrl.enterWorkspace, (e: { wsId: string, userid: string }) => {
-        if (surface.workspace?.id == e.wsId) {
-            surface.workspace.onLineUsers.add(e.userid)
+    tim.only(MessageUrl.workspaceSync, (e: {
+        os: SparkSession,
+        exit: {
+            exitWorkspace: boolean,
+            exitView: boolean
+        },
+        ns: SparkSession
+    }) => {
+        if (surface.workspace?.id == e?.ns?.workspaceId) {
+            surface.workspace.onLineUsers.add(e.ns.userid)
             channel.air('/user/onlines', { users: surface.workspace.onLineUsers })
         }
-    });
-    /**
-     * 用户离开这个空间
-     */
-    tim.only(MessageUrl.leaveWorkspace, (e: { wsId: string, userid: string }) => {
-        if (surface.workspace?.id == e.wsId) {
-            surface.workspace.onLineUsers.delete(e.userid)
+        if (surface.workspace?.id == e?.os?.workspaceId && e.exit.exitWorkspace && e.os?.workspaceId != e.ns?.workspaceId) {
+            surface.workspace.onLineUsers.delete(e.os.userid)
             channel.air('/user/onlines', { users: surface.workspace.onLineUsers })
         }
-    });
-    /**
-    * 用户进入这个页面
-    */
-    tim.only(MessageUrl.enterView, (e: { viewId: string, wsId: string, userid: string }) => {
-        if (surface.workspace?.id == e.wsId) {
-            var r = surface.workspace.viewOnlineUsers.get(e.viewId);
-            var se: Set<string>;
-            if (r) { r.users.add(e.userid); se = r.users; }
-            else { se = new Set(); se.add(e.userid); surface.workspace.viewOnlineUsers.set(e.viewId, { load: false, users: se }) }
-            channel.air('/user/view/onlines', { viewId: e.viewId, users: se })
-        }
-    });
-    /**
-     * 用户离开这个页面
-     */
-    tim.only(MessageUrl.leaveView, (e: { viewId: string, wsId: string, userid: string }) => {
-        if (surface.workspace?.id == e.wsId) {
-            var r = surface.workspace.viewOnlineUsers.get(e.viewId);
-            if (r) {
-                r.users.delete(e.userid)
-                channel.air('/user/view/onlines', { viewId: e.viewId, users: r.users })
+        if (surface.workspace?.id == e?.ns?.workspaceId) {
+            if (e.ns.viewUrl) {
+                var vo = e.ns.viewEdit ? surface.workspace.viewEditOnlineUsers : surface.workspace.viewOnlineUsers;
+                var r = vo.get(e.ns.viewUrl);
+                var se: Set<string>;
+                if (r) { r.users.add(e.ns.userid); se = r.users; }
+                else {
+                    se = new Set();
+                    se.add(e.ns.userid);
+                    vo.set(e.ns.viewUrl, { load: false, users: se })
+                }
+                var go = e.ns.viewEdit ? surface.workspace.viewOnlineUsers : surface.workspace.viewEditOnlineUsers;
+                var gr = go.get(e.ns.viewUrl);
+                if (gr) gr.users.delete(e.ns.userid);
+                channel.air('/user/view/onlines', {
+                    viewUrl: e.ns.viewUrl,
+                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users,
+                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.ns.viewUrl)?.users,
+                })
             }
         }
-    });
+        if (surface.workspace?.id == e?.os?.workspaceId) {
+            if (e.os?.viewUrl && e.exit.exitView) {
+
+                var vo = e?.os?.viewEdit ? surface.workspace.viewOnlineUsers : surface.workspace.viewEditOnlineUsers;
+                var gr = vo.get(e.os?.viewUrl);
+                if (gr) gr.users.delete(e?.os.userid);
+
+                channel.air('/user/view/onlines', {
+                    viewUrl: e.ns.viewUrl,
+                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users,
+                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.ns.viewUrl)?.users,
+                })
+
+            }
+        }
+    })
+
+
+
+
+
     tim.only(MessageUrl.patchWsNotify, (e: { wsId: string, data: Record<string, any> }) => {
         if (surface.workspace?.id == e.wsId) {
             Object.assign(surface.workspace, e.data);
