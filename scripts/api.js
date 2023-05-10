@@ -209,10 +209,10 @@ push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
 push('/user/onlines', '{users:Set<string>}', 'void', ['air']);
-push('/user/view/onlines', '{viewId:string,users:Set<string>}', 'void', ['air']);
-push('/user/get/onlines', '{wsId?:string}', '{users:Set<string>}', ['query']);
-push('/user/get/view/onlines', '{viewId:string}', '{users:Set<string>}', ['query']);
+push('/user/view/onlines', '{viewUrl:string,users:Set<string>,editUsers:Set<string>}', 'void', ['air']);
+push('/get/view/onlines', '{viewUrl:string,viewEdit?:boolean}', '{users:Set<string>}', ['query']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
+
 
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
@@ -271,7 +271,6 @@ push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?:
 push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,files?:any[],isEdited?:boolean}`, 'SockResponse<void>', ['patch'])
 push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);
 push('/ws/random/online/users', '{wsId:string,size?:number}', 'SockResponse<{count:number,users:string[]}>', ['get'])
-push('/ws/online/users', '{wsId:string}', 'SockResponse<{users:string[]}>', ['get'])
 push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: string,file: any,isEdited:boolean}', 'void', ['air']);
 push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
@@ -294,7 +293,9 @@ push('/ws/role/members', '{roleId:string,page:number,size:number,word?:string}',
 push('/ws/set/domain', '{wsId?:string,domain:string}', 'SockResponse<{exists?:boolean,illegal?:boolean}>', ['patch'])
 push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 'SockResponse<void>', ['patch'])
 push('/ws/discovery', '{word?:string,page?:number,size?:number,type?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
-push('/ws/view/online/users', '{viewId:string}', 'SockResponse<{ users:string[] }>', ['get']);
+push('/ws/view/online/users', '{viewUrl:string,read?:boolean}', 'SockResponse<{users:string[]}>', ['get']);
+push('/ws/online/users', '{wsId?:string}', 'SockResponse<{users:string[]}>', ['get']);
+
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
 push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/ws/comment/list', '{elementUrl: string,wsId?: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
@@ -302,7 +303,7 @@ push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, r
 push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
-push('/robots/info','{ids:string[]}','SockResponse<{list:any[]}>', ['get']);
+push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 
 push('/page/items', '{ids:string[],sock?:any,wsId?:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item/subs', '{id:string}', 'SockResponse<{ list:any[] }>', ['get'])
