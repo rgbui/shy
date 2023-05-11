@@ -2,7 +2,7 @@
 import lodash from "lodash";
 import { act, air, get, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
-import { ElementType, getElementUrl, parseElementUrl } from "rich/net/element.type";
+import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
@@ -12,7 +12,6 @@ import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
 import { getPageItemElementUrl } from "./sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
-
 
 
 class MessageCenter {
@@ -44,8 +43,10 @@ class MessageCenter {
         var { item, elementUrl } = args;
         if (item) {
             if ((item as PageItem)?.elementUrl) elementUrl = (item as PageItem).elementUrl;
-            else if (typeof item == 'string') {
-                var r = await channel.get('/page/query/info', { id: item });
+            else {
+                var r = await channel.get('/page/query/info', {
+                    id: (item as any)?.id || item
+                });
                 if (r) {
                     elementUrl = r.data.elementUrl;
                 }
