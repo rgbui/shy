@@ -383,16 +383,10 @@ export class Workspace {
         else return -1;
     }
     async onNotifyViewOperater(data: UserAction) {
-        console.log('data',data);
-        var ec = parseElementUrl(data.elementUrl);
-        if (ec.type == ElementType.PageItem) {
-            var item = surface.workspace.find(g => g.id == ec.id);
-            if (item) {
-                var pv = PageViewStores.getPageViewStore(item.elementUrl);
-                if (pv?.page) {
-                    pv?.page.syncUserActions([data], surface.supervisor.isShowElementUrl(item.elementUrl) ? 'notifyView' : 'notify')
-                }
-            }
+        console.log('data', data);
+        var pv = PageViewStores.getPageViewStore(data.elementUrl);
+        if (pv?.page) {
+            pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
         }
     }
     get pages() {

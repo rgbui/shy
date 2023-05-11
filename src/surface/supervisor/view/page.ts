@@ -75,6 +75,14 @@ export async function createPageContent(store: PageViewStore) {
                     });
                 }
             });
+            page.on(PageDirective.syncHistory, async (seq) => {
+                await store.snapStore.viewSnap({
+                    seq: seq,
+                    content: await page.getString(),
+                    plain: await page.getPlain(),
+                    text: store.item?.text
+                });
+            })
             page.on(PageDirective.changePageLayout, async () => {
                 store.updateElementUrl(store.item.elementUrl);
             })
@@ -110,7 +118,7 @@ export async function createPageContent(store: PageViewStore) {
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
-                await page.syncUserActions(operates, 'load');
+                await page.onSyncUserActions(operates, 'load');
                 var seq = operates.max(o => o.seq);
                 var op = operates.find(g => g.seq == seq);
                 page.on(PageDirective.mounted, async () => {
