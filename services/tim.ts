@@ -167,7 +167,7 @@ export function workspaceNotifys(tim: Tim) {
         if (surface.workspace?.id == e?.os?.workspaceId) {
             if (e.os?.viewUrl && e.exit.exitView) {
 
-                var vo = e?.os?.viewEdit ? surface.workspace.viewOnlineUsers : surface.workspace.viewEditOnlineUsers;
+                var vo = e?.os?.viewEdit ? surface.workspace.viewEditOnlineUsers : surface.workspace.viewOnlineUsers;
                 var gr = vo.get(e.os?.viewUrl);
                 if (gr) gr.users.delete(e?.os.userid);
 
