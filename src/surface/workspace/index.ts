@@ -383,6 +383,7 @@ export class Workspace {
         else return -1;
     }
     async onNotifyViewOperater(data: UserAction) {
+        console.log('data',data);
         var ec = parseElementUrl(data.elementUrl);
         if (ec.type == ElementType.PageItem) {
             var item = surface.workspace.find(g => g.id == ec.id);

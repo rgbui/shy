@@ -21,7 +21,7 @@ export class PageViewStore extends Events {
     page: Page = null;
     view: PageSupervisorView | PageSupervisorDialog = null;
     snapSaving: boolean = false;
-    config?: { type?: PageLayoutType, isTemplate?: boolean } = {};
+    config?: { force?: boolean, type?: PageLayoutType, isTemplate?: boolean } = {};
     constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();
         this.elementUrl = options.elementUrl;
@@ -151,7 +151,7 @@ export class PageViewStore extends Events {
         if (this.item) {
             isCanEdit = this.item?.isCanEdit;
             if (isCanEdit) {
-                var r = await yCache.get(`/{${this.item.id}}/mode`);
+                var r = await yCache.get(`/${this.item.id}/mode`);
                 if (r === false) isCanEdit = false;
             }
         }
@@ -167,16 +167,21 @@ export class PageViewStores {
     static createPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'page', config?: PageViewStore['config']) {
         var s = this.stores.get(elementUrl);
         if (Array.isArray(s) && s.length > 0) {
-            var r = s.find(g => g.source == source)
-            if (r) {
-                if (config) r.loadConfig(config);
-                return r;
+            if (config?.force == true) {
+                lodash.remove(s, g => g.source == source);
+            }
+            else {
+                var r = s.find(g => g.source == source)
+                if (r) {
+                    if (config) r.loadConfig(config);
+                    return r;
+                }
             }
         }
-        var pvs = new PageViewStore({ elementUrl, source, config });
-        if (Array.isArray(s)) s.push(pvs)
-        else this.stores.set(elementUrl, [pvs]);
-        return pvs;
+        var pv = new PageViewStore({ elementUrl, source, config });
+        if (Array.isArray(s)) s.push(pv)
+        else this.stores.set(elementUrl, [pv]);
+        return pv;
     }
     static getPageViewStore(elementUrl: string, source: PageViewStore['source'] = 'page') {
         var s = this.stores.get(elementUrl);

@@ -16,6 +16,7 @@ export async function createPageContent(store: PageViewStore) {
         if (!store.page) {
             var pd = await store.snapStore.querySnap((await store.canEdit()) ? false : true);
             var page = new Page();
+            page.canEdit = await store.canEdit();
             page.openSource = store.source;
             page.customElementUrl = store.elementUrl;
             store.page = page;
@@ -101,6 +102,11 @@ export async function createPageContent(store: PageViewStore) {
                     page.forceUpdate();
                 }
             });
+            page.on(PageDirective.reload, async () => {
+                page.onUnmount();
+                delete store.page;
+                createPageContent(store);
+            })
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;

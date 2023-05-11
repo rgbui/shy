@@ -125,9 +125,12 @@ export function workspaceNotifys(tim: Tim) {
     tim.only(MessageUrl.channelEmojiNotify, e => { channel.fire(MessageUrl.channelEmojiNotify, e) });
 
     //页面侧栏
-    tim.only('/ws/page/item/operate/notify', e => { PageItemOperateNotify(e); });
+    tim.only(MessageUrl.pageItemOperate, e => {
+        console.log('ggggg', e);
+        PageItemOperateNotify(e);
+    });
     //页面数据表格元数据
-    tim.only('/ws/datagrid/schema/operate/notify', e => { });
+    tim.only(MessageUrl.dateGridOperator, e => { });
     tim.only(MessageUrl.workspaceSync, (e: {
         os: SparkSession,
         exit: {
