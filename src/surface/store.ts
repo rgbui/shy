@@ -170,8 +170,8 @@ export class Surface extends Events {
     async onChangeWorkspace(workspace: Partial<Workspace>) {
         if (workspace.id != this.workspace?.id) {
             runInAction(() => {
-                var od = surface.wss.find(c => c.id == this.workspace.id);
-                if (!od && surface.temporaryWs?.id == this.workspace.id) od = surface.temporaryWs;
+                var od = surface.wss.find(c => c.id == this.workspace?.id);
+                if (!od && surface.temporaryWs?.id == this.workspace?.id) od = surface.temporaryWs;
                 if (od && od.randomOnlineUsers.has(surface.user.id))
                     od.randomOnlineUsers.delete(surface.user.id);
                 if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) - 1;
@@ -185,7 +185,7 @@ export class Surface extends Events {
                 if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) + 1;
             })
         }
-        else if (workspace.id == this.workspace.id) {
+        else if (workspace.id == this.workspace?.id) {
             if (UrlRoute.isMatch(ShyUrl.me) || UrlRoute.isMatch(ShyUrl.discovery)) {
                 await this.onLoadWorkspace(workspace.id);
             }
