@@ -14,7 +14,7 @@ import { log } from "../../../../common/log";
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
-            var pd = await store.snapStore.querySnap(await store.canEdit());
+            var pd = await store.snapStore.querySnap((await store.canEdit()) ? false : true);
             var page = new Page();
             page.openSource = store.source;
             page.customElementUrl = store.elementUrl;
