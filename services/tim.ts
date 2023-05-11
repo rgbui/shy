@@ -159,8 +159,8 @@ export function workspaceNotifys(tim: Tim) {
                 if (gr) gr.users.delete(e.ns.userid);
                 channel.air('/user/view/onlines', {
                     viewUrl: e.ns.viewUrl,
-                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users,
-                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.ns.viewUrl)?.users,
+                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users || new Set(),
+                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.ns.viewUrl)?.users || new Set(),
                 })
             }
         }
@@ -172,19 +172,14 @@ export function workspaceNotifys(tim: Tim) {
                 if (gr) gr.users.delete(e?.os.userid);
 
                 channel.air('/user/view/onlines', {
-                    viewUrl: e.ns.viewUrl,
-                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users,
-                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.ns.viewUrl)?.users,
+                    viewUrl: e.os?.viewUrl,
+                    users: surface.workspace.viewOnlineUsers.get(e.os?.viewUrl)?.users || new Set(),
+                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.os?.viewUrl)?.users || new Set(),
                 })
 
             }
         }
     })
-
-
-
-
-
     tim.only(MessageUrl.patchWsNotify, (e: { wsId: string, data: Record<string, any> }) => {
         if (surface.workspace?.id == e.wsId) {
             Object.assign(surface.workspace, e.data);

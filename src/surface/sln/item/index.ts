@@ -494,7 +494,8 @@ export class PageItem {
         }
     }
     isAllow(...ps: AtomPermission[]) {
-        if(this.workspace.isOwner)return true;
+        if (!this.workspace) return false;
+        if (this.workspace.isOwner) return true;
         if (this.workspace?.access == 1) {
             //表示是公开的
             return getCommonPerssions().some(s => ps.includes(s))

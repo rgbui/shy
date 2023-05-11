@@ -12,7 +12,6 @@ import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
-import { AtomPermission } from "rich/src/page/permission";
 import { Mime } from "./declare";
 import { log } from "../../../common/log";
 
