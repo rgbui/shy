@@ -504,7 +504,7 @@ export class PageItem {
         if (this.workspace?.isMember) {
             // 如果是成员，那么就看成员权限
             var me = this.workspace.member;
-            var rs = this.memberPermissions.filter(g => g.userid && g.userid == me.id || g.userid && g.userid == 'all' || g.roleId && me.roleIds.includes(g.roleId));
+            var rs = (this.memberPermissions || []).filter(g => g.userid && g.userid == me.id || g.userid && g.userid == 'all' || g.roleId && me.roleIds.includes(g.roleId));
             if (rs.length == 0) {
                 var c = this.workspace.isAllow(...ps);
                 if (c) return c;
