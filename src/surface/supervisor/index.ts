@@ -30,11 +30,9 @@ export class Supervisor extends Events {
      * 对话框页面
      */
     dialog: PageViewStore = null;
-    time;
     async onOpen(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.page?.elementUrl) return;
         this.opening = true;
-        if (this.time) { clearInterval(this.time); this.time = null; }
         try {
             var mainStore = PageViewStores.createPageViewStore(elementUrl, 'page', config);
             /**
