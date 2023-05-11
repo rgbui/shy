@@ -169,7 +169,21 @@ export class Surface extends Events {
     }
     async onChangeWorkspace(workspace: Partial<Workspace>) {
         if (workspace.id != this.workspace?.id) {
+            runInAction(() => {
+                var od = surface.wss.find(c => c.id == this.workspace.id);
+                if (!od && surface.temporaryWs?.id == this.workspace.id) od = surface.temporaryWs;
+                if (od && od.randomOnlineUsers.has(surface.user.id))
+                    od.randomOnlineUsers.delete(surface.user.id);
+                if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) - 1;
+            })
             await this.onLoadWorkspace(workspace.id);
+            runInAction(() => {
+                var od = surface.wss.find(c => c.id == workspace.id);
+                if (!od && surface.temporaryWs?.id == workspace.id) od = surface.temporaryWs;
+                if (od && !od.randomOnlineUsers.has(surface.user.id))
+                    od.randomOnlineUsers.add(surface.user.id);
+                if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) + 1;
+            })
         }
         else if (workspace.id == this.workspace.id) {
             if (UrlRoute.isMatch(ShyUrl.me) || UrlRoute.isMatch(ShyUrl.discovery)) {

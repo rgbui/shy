@@ -61,7 +61,7 @@ export var SideBar = observer(function () {
                 {workspace.memberOnlineCount > 0 && <span className="gap-l-10">{workspace.memberOnlineCount}人在线</span>}
                 {!workspace.memberOnlineCount && workspace.memberCount > 20 && <span className="gap-l-10">{workspace.memberCount}成员</span>}
             </div>
-            {workspace.randomOnlineUsers.size > 0 && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
+            {workspace.randomOnlineUsers.size > 0 && !(workspace.randomOnlineUsers.size == 1 && surface.user && workspace.randomOnlineUsers.has(surface.user?.id)) && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
         </div>
     }
     if (isMobileOnly) {
