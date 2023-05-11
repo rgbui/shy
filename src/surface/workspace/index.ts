@@ -210,7 +210,9 @@ export class Workspace {
     }
     get url() {
         if (config.isPro || config.isPc) {
-            if (this.customSiteDomain) return this.customSiteDomain;
+            if (this.customSiteDomain) {
+                return (this.customSiteDomainProtocol ? "https://" : "http") + this.customSiteDomain;
+            }
             var host = this.siteDomain || this.sn;
             return `https://${host}.shy.live`
         }

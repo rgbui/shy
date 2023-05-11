@@ -20,6 +20,7 @@ import { ShyAlert } from "rich/component/lib/alert";
 import { PageViewStores } from "../../supervisor/view/store";
 import { Confirm } from "rich/component/lib/confirm";
 import { useForm } from "rich/component/view/form/dialoug";
+import { getPageItemElementUrl } from "./util";
 
 export class PageItem {
     id: string = null;
@@ -113,21 +114,7 @@ export class PageItem {
         return this.workspace.url + this.path;
     }
     get elementUrl() {
-        if (this.pageType == PageLayoutType.db) {
-            return getElementUrl(ElementType.Schema, this.id);
-        }
-        else if (this.pageType == PageLayoutType.doc || this.pageType == PageLayoutType.board || this.pageType == PageLayoutType.docCard) {
-            return getElementUrl(ElementType.PageItem, this.id);
-        }
-        else if (this.pageType == PageLayoutType.dbView) {
-            return getElementUrl(ElementType.SchemaView, this.parent.id, this.id);
-        }
-        else if (this.pageType == PageLayoutType.dbForm) {
-            return getElementUrl(ElementType.SchemaRecordView, this.parent.id, this.id);
-        }
-        else if (this.pageType == PageLayoutType.textChannel) {
-            return getElementUrl(ElementType.Room, this.id);
-        }
+        return getPageItemElementUrl(this);
     }
     get workspace() {
         return surface.workspace

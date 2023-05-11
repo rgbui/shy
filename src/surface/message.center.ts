@@ -10,6 +10,8 @@ import { UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
+import { getPageItemElementUrl } from "./sln/item/util";
+import { ShyAlert } from "rich/component/lib/alert";
 
 
 
@@ -41,8 +43,17 @@ class MessageCenter {
     async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, force?: boolean } }) {
         var { item, elementUrl } = args;
         if (item) {
-            if ((item as PageItem)?.id) elementUrl = (item as PageItem).elementUrl;
-            else elementUrl = getElementUrl(ElementType.PageItem, item as string);
+            if ((item as PageItem)?.elementUrl) elementUrl = (item as PageItem).elementUrl;
+            else if (typeof item == 'string') {
+                var r = await channel.get('/page/query/info', { id: item });
+                if (r) {
+                    elementUrl = r.data.elementUrl;
+                }
+                else {
+                    ShyAlert('页面不存在')
+                    return;
+                }
+            }
         }
         await surface.supervisor.onOpen(elementUrl, args.config);
         if (surface.supervisor.page?.item) {
@@ -96,6 +107,7 @@ class MessageCenter {
                     sn: item.sn,
                     text: item.text,
                     url: item.url,
+                    elementUrl: item.elementUrl,
                     locker: item.locker
                 }
             };
@@ -104,7 +116,10 @@ class MessageCenter {
             var r = await surface.workspace.sock.get('/page/item', { id: args.id });
             if (r.ok && r.data.item) return {
                 ok: true,
-                data: Object.assign({ url: surface.workspace.url + '/page/' + r.data.item.sn },
+                data: Object.assign({
+                    url: surface.workspace.url + '/page/' + r.data.item.sn,
+                    elementUrl: getPageItemElementUrl(r.data.item as any)
+                },
                     lodash.pick(r.data.item,
                         [
                             'id',

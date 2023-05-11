@@ -75,7 +75,7 @@ function build(fileName) {
 
     fs.writeFileSync(fileName, `
 import { TableSchema } from "../blocks/data-grid/schema/meta";
-import { LinkPageItem } from "../extensions/at/declare";
+import { LinkPageItem } from "../src/page/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";

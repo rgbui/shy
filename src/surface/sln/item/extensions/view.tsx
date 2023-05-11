@@ -4,12 +4,11 @@ import { PageItemBox } from "../view/box";
 import { observer } from "mobx-react";
 import { PageItem } from "..";
 import { surface } from "../../../store";
-import { AtomPermission } from "rich/src/page/permission";
-import { getPageIcon, getPageText } from "rich/extensions/at/declare";
 import { DotNumber } from "rich/component/view/dot";
 import { ChevronDownSvg, DotSvg, DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Mime } from "../../declare";
 import { Spin } from "rich/component/view/spin";
+import { getPageIcon, getPageText } from "rich/src/page/declare";
 
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     let refInput = React.useRef<HTMLInputElement>(null);
