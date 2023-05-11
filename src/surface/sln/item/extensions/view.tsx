@@ -89,7 +89,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 {!item.willLoadSubs && item.subCount > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
                 {!item.willLoadSubs && item.subCount == 0 && surface.workspace.slnStyle != 'menu' && <Icon size={16} icon={DotSvg}></Icon>}
             </span>
-            <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover round-3 flex-center gap-r-5 '><Icon size={surface.workspace.slnStyle == 'menu' ? 20 : 16} icon={surface.workspace.allowSlnIcon ? getPageIcon({ pageType: item.pageType }) : getPageIcon(item)}></Icon></i>
+            <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover round-3 flex-center gap-r-5 '><Icon size={surface.workspace.slnStyle == 'menu' ? 20 : 18} icon={surface.workspace.allowSlnIcon ? getPageIcon({ pageType: item.pageType }) : getPageIcon(item)}></Icon></i>
             {!isInEdit && <span className="text-overflow flex-auto h-20 l-20 padding-r-10">{getPageText(item)}</span>}
             {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
                 onBlur={blur}
