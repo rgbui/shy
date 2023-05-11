@@ -11,6 +11,7 @@ import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import "./message.center";
 import { PageItem } from "./sln/item";
+import { PageViewStores } from "./supervisor/view/store";
 
 export class Surface extends Events {
     constructor() {
@@ -176,6 +177,7 @@ export class Surface extends Events {
                     od.randomOnlineUsers.delete(surface.user.id);
                 if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) - 1;
             })
+            await PageViewStores.clearPageViewStore()
             await this.onLoadWorkspace(workspace.id);
             runInAction(() => {
                 var od = surface.wss.find(c => c.id == workspace.id);

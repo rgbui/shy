@@ -157,6 +157,9 @@ export class PageViewStore extends Events {
         }
         return isCanEdit;
     }
+    async clear() {
+
+    }
 }
 
 export class PageViewStores {
@@ -182,6 +185,12 @@ export class PageViewStores {
             var r = s.find(g => g.source == source)
             if (r) return r;
         }
+    }
+    static async clearPageViewStore() {
+        for (var [k, v] of this.stores) {
+            await v.clear()
+        }
+        this.stores.clear();
     }
 }
 

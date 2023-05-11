@@ -5,6 +5,7 @@ import { Tim } from "../net/primus/tim";
 import { surface } from "../src/surface/store";
 import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
+import { runInAction } from "mobx";
 
 export enum MessageUrl {
     userTalkNotify = '/user/chat/notify',
@@ -179,6 +180,19 @@ export function workspaceNotifys(tim: Tim) {
 
             }
         }
+
+
+        if (e?.ns?.workspaceId) {
+            var od = surface.wss.find(c => c.id == e?.ns?.workspaceId);
+            if (!od && surface.temporaryWs?.id == e?.ns?.workspaceId) od = surface.temporaryWs;
+            if (od) od.overlayDate = new Date(0);
+        }
+        if (e?.os?.workspaceId) {
+            var od = surface.wss.find(c => c.id == e?.os?.workspaceId);
+            if (!od && surface.temporaryWs?.id == e?.os?.workspaceId) od = surface.temporaryWs;
+            if (od) od.overlayDate = new Date(0);
+        }
+
     })
     tim.only(MessageUrl.patchWsNotify, (e: { wsId: string, data: Record<string, any> }) => {
         if (surface.workspace?.id == e.wsId) {
