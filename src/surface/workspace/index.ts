@@ -499,6 +499,7 @@ export class Workspace {
         workspaceNotifys(this.tim);
         var self = this;
         this.tim.only('reconnected_workspace', async () => {
+            if (this.tim === surface.user.tim) return;
             var data = await self.getTimHeads();
             data.sockId = self.tim.id;
             data.wsId = self.id;
@@ -517,15 +518,6 @@ export class Workspace {
     }
     static getWsSock(pids: Pid[], type: PidType) {
         return Sock.createSock(this.getWsSockUrl(pids, type))
-    }
-    async enterPage(viewUrl: string, canEdit?: boolean) {
-        var data = await this.getTimHeads();
-        data.sockId = this.tim.id;
-        data.wsId = this.id;
-        data.viewUrl = viewUrl;
-        data.userid = surface.user.id;
-        data.viewEdit = canEdit || false;
-        await this.tim.syncSend(HttpMethod.post, '/sync', data);
     }
     async enterWorkspace() {
         var data = await this.getTimHeads();
