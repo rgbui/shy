@@ -49,7 +49,7 @@ export class Supervisor extends Events {
                 await surface.workspace.onLoadElementUrl(elementUrl);
             }
             this.page = mainStore;
-            surface.workspace.enterPage(this.page.elementUrl, await mainStore.canEdit());
+            surface.workspace.enterWorkspace();
         }
         catch (ex) {
             console.error(ex);
