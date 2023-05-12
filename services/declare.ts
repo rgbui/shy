@@ -10,3 +10,4 @@ import './workspace';
 import "./page";
 import "./interactive";
 import "./ai";
+import "./link";
