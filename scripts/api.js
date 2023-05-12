@@ -281,7 +281,7 @@ push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:strin
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 
 push('/ws/member/exit', '{wsId:string,sock:any}', 'SockResponse<void>', ['del']);
-push('/ws/member/word/query', '{word:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
+push('/ws/member/word/query', '{wsId?:string,word?:string,size?:number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/member/delete', '{userid:string}', 'SockResponse<void>', ['del']);
 push('/ws/is/member', '{sock?:any,wsId:string}', 'SockResponse<{exists:boolean,workspace:Record<string,any>}>', ['get']);
@@ -311,7 +311,7 @@ push('/page/parent/ids', '{wsId?:string,id:string}', 'SockResponse<{ parentIds:s
 push('/page/parent/subs', '{wsId?:string,parentIds:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
 push('/page/item/create', '{wsId?:string,data:Record<string,any>}', 'SockResponse<{ item:Record<string,any> }>', ['put'])
-push('/page/word/query', '{word:string}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
+push('/page/word/query', '{wsId?:string,word?:string,size?:number}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/guid', '', 'string', ['query']);
 push('/view/snap/query', '{ elementUrl: string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
@@ -334,7 +334,7 @@ push(`/user/interactives`, '{wsId?:string,schemaId:string,ids:string[],es:string
 
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
 
-push(`/tag/word/query`, '{word:string,wsId?:string}', 'SockResponse<{list:any[],total:number}>', ['get']);
+push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get']);
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 
 
