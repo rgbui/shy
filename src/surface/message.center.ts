@@ -108,8 +108,7 @@ class MessageCenter {
                     sn: item.sn,
                     text: item.text,
                     url: item.url,
-                    elementUrl: item.elementUrl,
-                    locker: item.locker
+                    elementUrl: item.elementUrl
                 }
             };
         }

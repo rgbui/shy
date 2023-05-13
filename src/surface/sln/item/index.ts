@@ -1,7 +1,6 @@
 
 import { util } from "rich/util/util";
 import { surface } from "../../store";
-import { ElementType, getElementUrl } from "rich/net/element.type";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
@@ -60,11 +59,6 @@ export class PageItem {
      * 可以指定角色，也可以指定具体的人
      */
     public memberPermissions: { roleId: string, userid: string, permissions: AtomPermission[] }[] = [];
-    locker: {
-        lock: boolean,
-        date: number,
-        userid: string
-    } = null;
     public editDate: Date = null;
     public editor: string = null;
     speak?: 'more' | 'only' = 'more';
@@ -89,7 +83,6 @@ export class PageItem {
             netPermissions: observable,
             memberPermissions: observable,
             inviteUsersPermissions: observable,
-            locker: observable,
             editDate: observable,
             editor: observable,
             description: observable,
@@ -198,7 +191,6 @@ export class PageItem {
             netPermissions: lodash.cloneDeep(this.netPermissions),
             inviteUsersPermissions: lodash.cloneDeep(this.inviteUsersPermissions),
             memberPermissions: lodash.cloneDeep(this.memberPermissions),
-            locker: this.locker,
             description: this.description
         }
     }
