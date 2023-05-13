@@ -269,8 +269,10 @@ export class PageItem {
         this.sln.onEditItem(this);
     }
     async onRemove() {
-        if (this.mime == Mime.pages && await Confirm('确定要删除吗，该操作不可撤消'))
-            pageItemStore.deletePageItem(this);
+        if (this.mime == Mime.pages) {
+            if (await Confirm('确定要删除吗，该操作不可撤消'))
+                pageItemStore.deletePageItem(this);
+        }
         else pageItemStore.deletePageItem(this);
     }
     async onCopy() {
@@ -291,11 +293,11 @@ export class PageItem {
         var ps = PageViewStores.getPageViewStore(this.elementUrl);
         if (ps?.page) {
             var content = await ps?.page.get();
-            await itemS.page.onReplace(this.id, content);
+            await itemS.page.onLoadContentOperates(this.id, content);
         }
         else {
             var pd = await (SnapStore.createSnap(this.elementUrl)).querySnap();
-            await itemS.page.onReplace(this.id, pd.content, pd.operates);
+            await itemS.page.onLoadContentOperates(this.id, pd.content, pd.operates);
         }
         itemS.page.onSave();
         itemS.page.forceUpdate();
