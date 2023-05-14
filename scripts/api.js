@@ -324,7 +324,7 @@ push('/view/snap/patch', '{id:string,data:Record<string,any>}', 'SockResponse<vo
 push('/view/snap/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}', 'SockResponse<{seq:number,id:string}>', ['post']);
 
-push(`/get/page/refs`, '{wsId?:string,pageId:string,size?:number,desc?:boolean}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
+push(`/get/page/refs`, '{wsId?:string,pageId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:PageItemLink[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/row/block/sync/refs`, '{wsId?:string,pageId?:string,operators:any[]}', 'SockResponse<{results:{ id: string, error?: string }[]}>', ['post'])
 
 
@@ -334,7 +334,7 @@ push(`/user/interactives`, '{wsId?:string,schemaId:string,ids:string[],es:string
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
 
 
-push(`/get/tag/refs`, '{wsId?:string,tagId:string,size?:number,desc?:boolean}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
+push(`/get/tag/refs`, '{wsId?:string,tagId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:PageItemLink[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get']);
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 
