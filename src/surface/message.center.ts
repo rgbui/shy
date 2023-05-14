@@ -141,6 +141,10 @@ class MessageCenter {
     async updateUser(args: { data: Record<string, any> }) {
         await surface.user.onUpdateUserInfo(args.data);
     }
+    @query('/current/page')
+    queryPage() {
+        return surface.supervisor?.page?.item
+    }
     @query('/current/workspace')
     queryWorkspace() {
         return surface.workspace;
