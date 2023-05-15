@@ -49,10 +49,10 @@ export class SelectPayView extends EventsComponent {
         }
         var price = this.orderInfo.price;
         if (this.orderInfo.kind == 'meal-1') {
-            price = 150;
+            price = 199;
         }
         else if (this.orderInfo.kind == 'meal-2') {
-            price = 480
+            price = 360
         }
         var r = await usePayOrder({
             kind: this.orderInfo.kind,
@@ -72,21 +72,21 @@ export class SelectPayView extends EventsComponent {
     }
     render() {
         return <div className="shy-pay-selector">
-            <h3>购买套餐</h3>
+            <div className="h3 gap-h-10">购买支付</div>
             <div className="shy-pay-items">
                 <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
                     <h4>个人版</h4>
                     <span>按量付费</span>
-                    <div>适用于个人笔记</div>
+                    <div>适用于个人知识管理</div>
                 </div>
                 <div onMouseDown={e => { this.orderInfo.kind = 'meal-1'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'meal-1' ? " hover" : "")}>
                     <h4>团队版</h4>
-                    <div>150元/年</div>
+                    <div>199元/年</div>
                     <div>适用于小团体</div>
                 </div>
                 <div onMouseDown={e => { this.orderInfo.kind = 'meal-2'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'meal-2' ? " hover" : "")}>
                     <h4>社区版</h4>
-                    <div>480元/年</div>
+                    <div>360元/年</div>
                     <div>适用于开放式社区空间</div>
                 </div>
             </div>
@@ -100,7 +100,7 @@ export class SelectPayView extends EventsComponent {
                 <Row valign="middle">
                     <Col span={12}>
                         {this.orderInfo.kind == 'fill' && <div className="shy-pay-money"><span>充值&nbsp;</span><Input size={'default'} value={this.orderInfo.price.toString()} onChange={e => { var v = parseFloat(e); !(!isNaN(v) && v >= 1 && v <= 5000) ? undefined : this.orderInfo.price = v; this.forceUpdate() }}></Input><em>&nbsp;￥</em></div>}
-                        {this.orderInfo.kind != 'fill' && <span style={{ fontSize: '24px' }}>{this.orderInfo.kind == 'meal-1' ? "￥150" : "￥480"}</span>}
+                        {this.orderInfo.kind != 'fill' && <span style={{ fontSize: '24px' }}>{this.orderInfo.kind == 'meal-1' ? "￥199" : "￥360"}</span>}
                     </Col>
                     <Col span={12} align={'end'}>
                         {this.orderInfo.kind != 'fill' && <SelectBox value={this.orderInfo.count} options={[
@@ -110,34 +110,18 @@ export class SelectPayView extends EventsComponent {
                             { text: '4年', value: 4 },
                             { text: '5年', value: 5 }
                         ]} onChange={e => { this.orderInfo.count = e; this.forceUpdate(); }}></SelectBox>}
-                        {this.orderInfo.kind == 'fill' && <Remark><span>空间:&nbsp;5元/1G/1年</span>&nbsp;&nbsp;<span>流量:&nbsp;3元/1G</span>&nbsp;&nbsp;<span>数据:&nbsp;3元/1万条</span></Remark>}
+                        {this.orderInfo.kind == 'fill' && <Remark><span>空间:&nbsp;2元/1G/1年</span>&nbsp;&nbsp;<span>流量:&nbsp;0.5元/1G</span>&nbsp;&nbsp;<span>数据:&nbsp;3元/1万条</span></Remark>}
                     </Col>
                 </Row>
             </div>
             <div className="shy-pay-buttons">
-                <Row style={{ marginBottom: 10 }}>
-                    <Col span={12}>
-                        <CheckBox checked={this.checkAgree} onChange={e => { this.checkAgree = e; this.forceUpdate() }} >同意《<a>诗云付费服务协议</a>》</CheckBox>
-                    </Col>
-                </Row>
+                <div className="gap-h-10">
+                    <CheckBox checked={this.checkAgree} onChange={e => { this.checkAgree = e; this.forceUpdate() }} >同意《<a href='https://shy.live/service_protocol' target='_blank'>诗云用户协议</a>》</CheckBox>
+                </div>
                 <Row>
                     <Col span={12}><Button size='larger' style={{ marginRight: 3 }} block onClick={e => this.onClose()} ghost>取消</Button></Col>
-                    <Col span={12}><Button size='larger' style={{ marginLeft: 3 }} block onClick={e => this.openPay(e)}>支付&nbsp;￥{this.orderInfo.kind == 'fill' ? this.orderInfo.price : (this.orderInfo.kind == 'meal-1' ? 150 : 480) * this.orderInfo.count}</Button></Col>
+                    <Col span={12}><Button size='larger' style={{ marginLeft: 3 }} block onClick={e => this.openPay(e)}>支付&nbsp;￥{this.orderInfo.kind == 'fill' ? this.orderInfo.price : (this.orderInfo.kind == 'meal-1' ? 199 : 360) * this.orderInfo.count}</Button></Col>
                 </Row>
-            </div>
-            <div className="shy-pay-remark">
-                <p >付费须知</p>
-                <ol>
-                    <li>
-                        付费后的空间，参于的协作成员不需要付费且功能上没有任何限制
-                    </li>
-                    <li>
-                        每个用户都有一定的欠费额度(信用越好，额度越高），当处于欠费额度区间时，功能上没有限制且不会有骚扰式的提醒
-                    </li>
-                    <li>
-                        诗云的空间不会放广告，但后续允许用户自已放广告，收益归空间用户
-                    </li>
-                </ol>
             </div>
         </div>
     }
