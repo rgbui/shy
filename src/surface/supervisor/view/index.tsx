@@ -38,7 +38,7 @@ export class PageSupervisorView extends React.Component<{
     }
     componentDidUpdate(prevProps: Readonly<{ store: PageViewStore; }>, prevState: Readonly<{}>, snapshot?: any): void {
         if (this.props?.store?.elementUrl != prevProps?.store?.elementUrl) {
-            if (prevProps?.store) prevProps?.store.page.cacheFragment()
+            if (prevProps?.store?.page) prevProps?.store?.page.cacheFragment()
             this.load();
         }
     }
