@@ -11,12 +11,12 @@ class PageService extends BaseService {
 
     @get('/get/page/refs')
     async addPageRef(args) {
-        return surface.workspace.sock.put('/get/page/refs', { ...args, wsId: surface.workspace.id });
+        return surface.workspace.sock.get('/get/page/refs', { ...args, wsId: surface.workspace.id });
     }
 
     @get('/get/tag/refs')
     async syncPageRef(args) {
-        return surface.workspace.sock.patch('/get/tag/refs', { ...args, wsId: surface.workspace.id });
+        return surface.workspace.sock.get('/get/tag/refs', { ...args, wsId: surface.workspace.id });
     }
 
     @get('/tag/word/query')
