@@ -3,11 +3,10 @@ import lodash from "lodash";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
 import { TrashSvg, UnpaySvg } from "rich/component/svgs";
-import { Col, Divider, Row, Space } from "rich/component/view/grid";
+import { Divider, } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
 import { useSelectMenuItem } from "rich/component/view/menu";
-import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { usePayOrder } from "../../../../component/pay";
@@ -84,24 +83,17 @@ export class ShyPayList extends React.Component {
             }
         }
         return <div className="shy-pay-list">
-            <h2 className="h2">支付记录</h2>
+            <div className="h2">支付记录</div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
                 <div className='shy-ws-member-head'>
-                    <Row style={{ marginBottom: 0 }}>
-                        <Col span={6} style={{ height: 30 }} valign={'middle'}>
+                    <div className="flex">
+                        <div className="flex-auto">
                             <span style={{ fontSize: 14 }}>订单{this.total > 0 ? '共' + this.total + '条记录' : ''}</span>
-                        </Col>
-                        <Col span={18} style={{ height: 30 }} valign={'middle'} align={'end'}>
-                            <Space>
-                                {/* <span style={{ fontSize: 14 }}>显示角色:</span>
-                                <Select style={{ fontSize: 14 }} value={this.roleId} dropStyle={{ width: 120 }} onChange={e => this.roleId = e} options={options}></Select> */}
-                                <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.load()} placeholder='搜索订单...'></Input>
-                            </Space>
-                        </Col>
-                    </Row>
+                        </div>
+                        <div className="flex-fixed"> <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.load()} placeholder='搜索订单...'></Input></div>
+                    </div>
                 </div>
-                {/* <Divider></Divider> */}
                 {this.loading && <Spin block></Spin>}
                 <div className="shy-page-order-list">
                     <table>
@@ -123,8 +115,7 @@ export class ShyPayList extends React.Component {
                     </table>
                     <Pagination size={this.size} index={this.page} total={this.total} onChange={e => { this.page = e; this.load() }}></Pagination>
                 </div>
-
-                {!this.loading && this.orders.length == 0 && <Row><Col><Remark>没有支付记录</Remark></Col></Row>}
+                {!this.loading && this.orders.length == 0 && <div className="remark f-12 flex-center gap-h-20">没有支付记录</div>}
             </div>
         </div>
     }
