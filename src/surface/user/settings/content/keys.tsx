@@ -41,8 +41,8 @@ export class ShyUserPks extends React.Component {
 
         var self = this;
         async function open(event: React.MouseEvent) {
-            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ text: '添加私钥', name: 'add', icon: PlusSvg }]);
-            if (r) {
+            // var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ text: '添加私钥', name: 'add', icon: PlusSvg }]);
+            // if (r) {
                 var g = await useForm({
                     title: '创建个人身份私钥',
                     remark: '私钥名称',
@@ -57,7 +57,7 @@ export class ShyUserPks extends React.Component {
                     await self.load()
                     ShyAlert('个人身份私钥添加成功')
                 }
-            }
+            // }
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
@@ -101,8 +101,13 @@ export class ShyUserPks extends React.Component {
             await self.load();
             ShyAlert('个人身份私钥编辑成功')
         }
-        return <div>
-            <div className="flex"><span className="flex-fixed h2">个人身份私钥</span><span className="flex-auto flex-end"><span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span></span></div>
+        return <div className="visible-hover">
+            <div className="flex">
+                <span className="flex-fixed h2">个人身份私钥</span>
+                <span className="flex-auto flex-end visible">
+                    <span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon size={20} icon={PlusSvg}></Icon></span>
+                </span>
+            </div>
             <Divider></Divider>
             {this.loading && <Spin block></Spin>}
             {!this.loading && <div>
@@ -116,16 +121,16 @@ export class ShyUserPks extends React.Component {
                             <div className="remark">{pk.public_key}</div>
                         </div>
                         <div className="flex-fixed flex r-gap-l-5">
-                            <span onMouseDown={e => openPkProperty(pk, e)} className="flex-center size-24 cursor item-hover round"><Icon icon={DotsSvg}></Icon></span>
+                            <span onMouseDown={e => openPkProperty(pk, e)} className="flex-center size-24 cursor item-hover round"><Icon size={20} icon={DotsSvg}></Icon></span>
                         </div>
                     </div>
                 })}
             </div>}
 
             <div className="remark gap-h-30">
-                个人身份私钥主要分类
+                <div >个人身份私钥分类</div>
                 <div>1.生活交易 适用于交易安全方面的私钥</div>
-                <div>2.日常行烽 适用于签名社区内的交互行为</div>
+                <div>2.日常行为 适用于签名社区内的交互行为</div>
             </div>
         </div>
     }
