@@ -28,4 +28,8 @@ class PageService extends BaseService {
     async tagCreate(args) {
         return surface.workspace.sock.put('/tag/create', { ...args, wsId: surface.workspace.id })
     }
+    @get('/tag/query')
+    async tagQuery(args) {
+        return surface.workspace.sock.get('/tag/query', { ...args, wsId: surface.workspace.id })
+    }
 }

@@ -335,10 +335,10 @@ push(`/user/interactives`, '{wsId?:string,schemaId:string,ids:string[],es:string
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
 
 
-push(`/get/tag/refs`, '{wsId?:string,tagId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
+push(`/get/tag/refs`, '{wsId?:string,tagId?:string,tag?:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get']);
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
-
+push('/tag/query','{id?:string,ids?:string[]}','SockResponse<{list:any[],tag:any}>',['get']);
 
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
