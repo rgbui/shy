@@ -42,4 +42,8 @@ class UserPay extends BaseService {
     async WeixinOpenSign(args) {
         return await masterSock.put('/open/sign', args);
     }
+    @get('/check/feature')
+    async checkFeature(args) {
+        return await masterSock.get('/check/feature', args);
+    }
 }

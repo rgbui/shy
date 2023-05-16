@@ -79,7 +79,7 @@ import { LinkPageItem } from "../src/page/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
-import { UserBasic, UserStatus } from "../types/user";
+import { PayFeatureCheck, UserBasic, UserStatus } from "../types/user";
 import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
 export type SockResponse<T, U = string> = {
         /**
@@ -239,7 +239,7 @@ push('/repeat/qr_pay/order', '{orderId:string,platform:string}', 'SockResponse<{
 push('/user/order/list', '{page?: number, size?: number, word?: string, status?: string,deal?:boolean}', 'SockResponse<{page:number,size:number,list:any[],total:number}>', ['get']);
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
 push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
-
+push('/check/feature','{type:PayFeatureCheck,config?:{fileSize?:number}}','SockResponse<{warn:boolean,limit:boolean,wallet:{due:Date,oveDue:boolean,meal:string,money:number},free:Record<string,any>,consume:Record<string,any>}>', ['get']);
 push('/query/wiki/answer', '{ask: string, robotId: string}', 'SockResponse<{contents:{ id: string, content: string, rank: number, max: number }[]}>', ['get']);
 push('/text/ai', '{input: string, model?: string, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
 push('/text/ai/stream', '{question: string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean)=>void}', 'SockResponse<void>', ['post'])
@@ -339,7 +339,6 @@ push(`/get/tag/refs`, '{wsId?:string,tagId?:string,tag?:string,size?:number,desc
 push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get']);
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 push('/tag/query','{id?:string,ids?:string[]}','SockResponse<{list:any[],tag:any}>',['get']);
-
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
