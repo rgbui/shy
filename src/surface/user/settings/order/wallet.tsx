@@ -41,7 +41,10 @@ export class ShyWallet extends React.Component {
                 return '团队版';
             }
             else if (self.wallet.meal == 'meal-2') {
-                return '无限流量';
+                return '社区版';
+            }
+            else if (self.wallet.meal == 'meal') {
+                return '云端版'
             }
             else return '无'
         }
@@ -57,7 +60,7 @@ export class ShyWallet extends React.Component {
             </Row>
             <Row style={{ marginTop: 20 }}>
                 <Space >
-                    <span>套餐:<em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i>{dayjs(this.wallet.due).format('YYYY.MM.DD')}到期</i>}</span>
+                    <span>套餐:<em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal' || this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i>{dayjs(this.wallet.due).format('YYYY.MM.DD')}到期</i>}</span>
                     <Button link onClick={e => openPay('meal-2')}>开通套餐</Button>
                 </Space>
             </Row>
