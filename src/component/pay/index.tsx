@@ -4,12 +4,13 @@ import React from 'react';
 import { ShyAlert } from 'rich/component/lib/alert';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { Icon } from 'rich/component/view/icon';
-import { Loading } from 'rich/component/view/loading';
 import { PopoverSingleton } from 'rich/extensions/popover/popover';
 import { channel } from 'rich/net/channel';
 import { config } from '../../../common/config';
 import { WeixinPaySvg, AlipaySvg } from '../svgs';
 import "./style.less";
+import { Spin } from 'rich/component/view/spin';
+
 export class PayView extends EventsComponent {
     async predictCreateOrder() {
         this.loading = true;
@@ -96,7 +97,7 @@ export class PayView extends EventsComponent {
         if (!this.orderInfo.platform) return <div className='shy-pay-view'>
             <div className='h3'>选择支付方式</div>
             <div className='flex'>
-                <a onMouseDown={e => { this.openSetPlatform('weixin') }} className={'flex-inline  flex-center gap-r-20 cursor'}><Icon icon={WeixinPaySvg}></Icon><span  className='inline-block gap-l-5 text'>微信</span></a>
+                <a onMouseDown={e => { this.openSetPlatform('weixin') }} className={'flex-inline  flex-center gap-r-20 cursor'}><Icon icon={WeixinPaySvg}></Icon><span className='inline-block gap-l-5 text'>微信</span></a>
                 <a onMouseDown={e => { this.openSetPlatform('alipay') }} className={'flex-inline flex-center cursor'}><Icon size={30} icon={AlipaySvg}></Icon><span className='text'>支付宝</span></a>
             </div>
         </div>
@@ -106,7 +107,7 @@ export class PayView extends EventsComponent {
             <div className='shy-pay-view-head'>
                 <span>{this.orderInfo.platform == 'weixin' ? "微信" : "支付宝"}扫码支付<em>{this.orderInfo.amount * this.orderInfo.count}元</em></span>
             </div>
-            {this.loading && <Loading></Loading>}
+            {this.loading && <Spin block></Spin>}
             {this.orderInfo.id && !this.loading && <iframe style={{ width: size, height: size, border: 0 }} src={payUrl}></iframe>}
         </div>
     }
