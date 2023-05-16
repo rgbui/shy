@@ -41,7 +41,7 @@ export class ShyFeature extends React.Component {
 
             <div className="gap-h-10">
                 <div className="h2 flex-center">价格</div>
-                <div className="text-center gap-h-10 f-14">不限空间、不限人数、不限功能、按量付费</div>
+                <div className="text-center gap-h-20 f-14">不限空间、不限人数、不限功能、按量付费</div>
                 <div className="flex flex-top flex-full">
                     <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed   box-border  gap-r-10 padding-14 shadow  round r-gap-10">
                         <div className="h3">免费</div>
@@ -66,7 +66,7 @@ export class ShyFeature extends React.Component {
                 </div>
             </div>
 
-            <div className="gap-h-30">
+            <div className="gap-h-40">
                 <div className="h2 flex-center">套餐包</div>
                 <div className="flex-center   gap-h-20">不按人头收费、支持独立域名及app、自建服务器</div>
                 <div className="flex flex-top flex-full">
@@ -91,9 +91,10 @@ export class ShyFeature extends React.Component {
                 </div>
             </div>
 
-            <div className="gap-h-30">
+            <div className="gap-h-40">
 
                 <div className="h2 flex-center">功能列表</div>
+                <div className="flex-center gap-h-20">专业的块编辑器，释放每一个人的创造性</div>
                 <div className="margin-auto  shadow  max-w-500 padding-14 round-8 bg-white r-gap-h-10  r-padding-10 r-border-bottom f-14">
                     <div className="flex"><span className="flex-auto">文档</span><span className="flex-fixed"><Icon size={20} icon={CheckSvg}></Icon></span></div>
                     <div className="flex"><span className="flex-auto">数据表格</span><span className="flex-fixed"><Icon size={20} icon={CheckSvg}></Icon></span></div>
@@ -130,7 +131,7 @@ export class ShyFeature extends React.Component {
                 </div>
             </div>
 
-            <div className="gap-h-30">
+            <div className="gap-h-40">
                 <div className="h2 flex-center">为什么按量付费</div>
                 <div className="margin-auto  shadow  max-w-500 bg-white padding-14 round-8 l-30"  >
                     诗云的商业模式很简单。我们组织人员开发了产品，用户使用产品需要支付基础的软件服务费。
@@ -145,7 +146,7 @@ export class ShyFeature extends React.Component {
                     你搭建的网络世界就是你自已的数字资产(区块链确权）。你为自已打工，而不是为平台，你幸苦赚钱，别人不应该抽成。
                 </div>
             </div>
-            
+
         </div>
     }
 }
