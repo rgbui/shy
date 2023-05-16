@@ -12,6 +12,7 @@ import { useUpdatePhone } from '../../common/phone';
 import { useUpdatePaw } from '../../common/setPaw';
 import { autoImageUrl } from 'rich/net/element.type';
 import { ShyAlert } from 'rich/component/lib/alert';
+import { InviteCode } from '../task/inviteCode';
 
 @observer
 export class UserSettingsView extends React.Component<{ close?: () => void, setMode(): void }> {
@@ -90,19 +91,24 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
                 </div>
             </div>
             <Divider></Divider>
-            <Row>
-                <Col><h5>密码</h5></Col>
-                <Col style={{ marginTop: 10 }}><Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? "修改密码" : "设置密码"}</Button></Col>
-            </Row>
-            {/*<Row>
-                <Col><h5>删除帐户</h5></Col>
-                <Col>
-                    <Remark>删除帐户后将清理相关的帐号</Remark>
-                </Col>
-                <Col align='start'>
-                    <Button ghost>删除帐户</Button>
-                </Col>
-            </Row> */}
+            <div className='gap-h-30 gap-t-40'>
+                <div className='h4'>邀请好友</div>
+                <InviteCode></InviteCode>
+            </div>
+            <div className='gap-h-30'>
+                <div className='h4'>密码</div>
+                <div className='remark f-12'>设置帐号的登录密码</div>
+                <div className='gap-h-10'>
+                    <Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? "修改密码" : "设置密码"}</Button>
+                </div>
+            </div>
+            <div className='gap-h-30'>
+                <div className='h4'>注销帐号</div>
+                <div className='remark f-12'>注销帐号将清理帐号相关的信息</div>
+                <div className='gap-h-10'>
+                    <Button onClick={e => ShyAlert('暂时不支持注销帐号')} ghost>注销帐号</Button>
+                </div>
+            </div>
         </div>
     }
     onUpdate = () => { this.forceUpdate() }
