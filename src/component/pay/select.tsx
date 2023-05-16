@@ -9,9 +9,9 @@ import { CheckBox } from "rich/component/view/checkbox/index";
 import { AlipaySvg, WeixinPaySvg } from "../svgs";
 import "./style.less";
 import { SelectBox } from "rich/component/view/select/box";
-import { Remark } from "rich/component/view/text";
 import { usePayOrder } from ".";
 import { ShyAlert } from "rich/component/lib/alert";
+import { channel } from "rich/net/channel";
 
 export class SelectPayView extends EventsComponent {
     orderInfo: {
@@ -33,15 +33,35 @@ export class SelectPayView extends EventsComponent {
         this.orderInfo.platform = 'weixin';
         this.orderInfo.price = 100;
         this.orderInfo.count = 1;
+        await this.loadUserWallert();
         this.forceUpdate()
+    }
+    wallet: { money: number, isDue: boolean, meal: string, due: Date } = { money: 0, isDue: false, meal: '', due: null }
+    async loadUserWallert() {
+        var r = await channel.get('/user/wallet');
+        if (r?.ok) {
+            this.wallet = r.data as any;
+        }
+    }
+    getLowerPay() {
+        var basePrice = 60;
+        if (this.wallet.meal == 'meal' && this.wallet.isDue !== true) {
+            basePrice = 0;
+        }
+        var g = (this.wallet.money || 0 > 20) ? 0 : 20 - (this.wallet.money || 0);
+        var willPay = basePrice + g;
+        return willPay > 1 ? willPay : 1;
     }
     async openPay(event: React.MouseEvent) {
         if (this.checkAgree == false) {
             return ShyAlert('请同意诗云服务协议', 'warn')
         }
+        if (this.orderInfo.kind == 'fill' && this.orderInfo.price < this.getLowerPay()) {
+            return ShyAlert('充值的金额不能小于' + this.getLowerPay() + "元", 'warn')
+        }
         var count = this.orderInfo.kind == 'fill' ? 1 : this.orderInfo.count;
         var subject = '';
-        if (this.orderInfo.kind == 'fill') subject = '诗云空间充值￥' + this.orderInfo.price;
+        if (this.orderInfo.kind == 'fill') subject = '诗云付费充值￥' + this.orderInfo.price;
         else if (this.orderInfo.kind == 'meal-1') subject = '诗云空间团队版';
         else if (this.orderInfo.kind == 'meal-2') subject = '诗云空间无限流量版';
         if (this.orderInfo.kind != 'fill' && this.orderInfo.count > 1) {
@@ -71,14 +91,22 @@ export class SelectPayView extends EventsComponent {
         this.emit('close');
     }
     render() {
+        var isFill = ['meal', 'meal-1', 'meal-2'].includes(this.wallet.meal) ? true : false;
         return <div className="shy-pay-selector">
             <div className="h3 gap-h-10">购买支付</div>
             <div className="shy-pay-items">
-                <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
-                    <h4>个人版</h4>
-                    <span>按量付费</span>
-                    <div>适用于个人知识管理</div>
-                </div>
+
+                {!isFill && <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
+                    <h4>云端版</h4>
+                    <div>软件服务费 60元 <span className="del">100元</span>/年</div>
+                    <div>按量付费,适用于知识管理</div>
+                </div>}
+
+                {!isFill && <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
+                    <h4>充值</h4>
+                    <div>按量付费</div>
+                </div>}
+
                 <div onMouseDown={e => { this.orderInfo.kind = 'meal-1'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'meal-1' ? " hover" : "")}>
                     <h4>团队版</h4>
                     <div>199元/年</div>
@@ -110,7 +138,9 @@ export class SelectPayView extends EventsComponent {
                             { text: '4年', value: 4 },
                             { text: '5年', value: 5 }
                         ]} onChange={e => { this.orderInfo.count = e; this.forceUpdate(); }}></SelectBox>}
-                        {this.orderInfo.kind == 'fill' && <Remark><span>空间:&nbsp;2元/1G/1年</span>&nbsp;&nbsp;<span>流量:&nbsp;0.5元/1G</span>&nbsp;&nbsp;<span>数据:&nbsp;3元/1万条</span></Remark>}
+                        {this.orderInfo.kind == 'fill' && <div className="remark">
+                            最低支付{this.getLowerPay()}元
+                        </div>}
                     </Col>
                 </Row>
             </div>

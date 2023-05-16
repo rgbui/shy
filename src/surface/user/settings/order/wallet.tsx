@@ -27,7 +27,7 @@ export class ShyWallet extends React.Component {
             this.wallet = r.data as any;
         }
     }
-    wallet: { money: number, meal: string, due: Date } = { money: 0, meal: '', due: null }
+    wallet: { money: number, isDue: boolean, meal: string, due: Date } = { isDue: false, money: 0, meal: '', due: null }
     render() {
         var self = this;
         async function openPay(kind: "fill" | "meal-1" | "meal-2") {
