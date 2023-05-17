@@ -14,6 +14,9 @@ import { autoImageUrl } from 'rich/net/element.type';
 import { Textarea } from 'rich/component/view/input/textarea';
 import { ShyAlert } from 'rich/component/lib/alert';
 import { fileSock, masterSock } from '../../../../net/sock';
+import { Confirm } from 'rich/component/lib/confirm';
+import { useForm } from 'rich/component/view/form/dialoug';
+import { ShyUrl, UrlRoute } from '../../../history';
 
 @observer
 export class WorkspaceSettingsView extends React.Component {
@@ -69,6 +72,22 @@ export class WorkspaceSettingsView extends React.Component {
                     description: surface.workspace.slogan,
                     file: r.data.file
                 });
+            }
+        }
+    }
+    async cancelWorkspace(event: React.MouseEvent) {
+        var r = await useForm({
+            title: '注销空间',
+            remark: `输入注销空间的名称[${surface.workspace.text}]`,
+            fields: [{ name: 'name', type: 'input', text: '空间名称' }]
+        });
+        if(r?.name == surface.workspace.text) {
+            var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: surface.workspace.id });
+            if (g.ok) {
+                var rg = await masterSock.delete('/ws/clear', { wsId: surface.workspace.id });
+                if (rg.ok) {
+                    UrlRoute.push(ShyUrl.myWorkspace)
+                }
             }
         }
     }
@@ -162,9 +181,7 @@ export class WorkspaceSettingsView extends React.Component {
                     {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
                 </div>
             </div>
-
             <Divider></Divider>
-
             <div className='gap-h-10'>
                 <div className='bold f-14'>工作空间描述</div>
                 <div className='remark f-12 gap-h-10'>修改工作空间描述</div>
@@ -184,9 +201,17 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'>导出数据</div>
-                <div className='remark f-12 gap-h-10'>导出空间所有的数据</div>
+                <div className='remark f-12 gap-h-10'>导出空间所有的数据(暂不开放）</div>
                 <div className='shy-ws-settings-view-domain'>
                     <Button onClick={e => this.createWorkspaceTemplate(e)} ghost>导出数据</Button>
+                </div>
+            </div>
+            <Divider></Divider>
+            <div className='gap-h-10'>
+                <div className='bold f-14'>注销空间</div>
+                <div className='remark f-12 gap-h-10'>注销空间不可撤消，空间内的数据将自动清理</div>
+                <div className='shy-ws-settings-view-domain'>
+                    <Button onClick={e => this.createWorkspaceTemplate(e)} ghost>注销空间</Button>
                 </div>
             </div>
         </div>
