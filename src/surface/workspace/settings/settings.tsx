@@ -12,6 +12,8 @@ import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
 import { Textarea } from 'rich/component/view/input/textarea';
+import { ShyAlert } from 'rich/component/lib/alert';
+import { fileSock, masterSock } from '../../../../net/sock';
 
 @observer
 export class WorkspaceSettingsView extends React.Component {
@@ -48,9 +50,26 @@ export class WorkspaceSettingsView extends React.Component {
         surface.workspace.onUpdateInfo({ cover: null })
     }
     async openDomain(event: React.MouseEvent) {
+        ShyAlert('该功能暂不开放')
+        return;
         var r = await useSetWsDomain(surface.workspace.id, '');
         if (r) {
             surface.workspace.siteDomain = r;
+        }
+    }
+    async createWorkspaceTemplate(event: React.MouseEvent) {
+        var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
+        if (g.ok) {
+            var r = await fileSock.post('/download/file', { url: g.data.url });
+            if (r.ok) {
+                await masterSock.post('/create/workspace/template', {
+                    wsId: surface.workspace.id,
+                    templateUrl: r.data.file.url,
+                    text: surface.workspace.text,
+                    description: surface.workspace.slogan,
+                    file: r.data.file
+                });
+            }
         }
     }
     data = {
@@ -156,10 +175,18 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'>空间域名</div>
-                <div className='remark f-12 gap-h-10'>自定义空间二级域名</div>
+                <div className='remark f-12 gap-h-10'>自定义空间二级域名(暂不开放）</div>
                 <div className='shy-ws-settings-view-domain'>
                     <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
-                    {!surface.workspace.siteDomain && <Button disabled onClick={e => this.openDomain(e)} ghost>更换空间域名</Button>}
+                    {!surface.workspace.siteDomain && <Button onClick={e => this.openDomain(e)} ghost>更换空间域名</Button>}
+                </div>
+            </div>
+            <Divider></Divider>
+            <div className='gap-h-10'>
+                <div className='bold f-14'>导出数据</div>
+                <div className='remark f-12 gap-h-10'>导出空间所有的数据</div>
+                <div className='shy-ws-settings-view-domain'>
+                    <Button onClick={e => this.createWorkspaceTemplate(e)} ghost>导出数据</Button>
                 </div>
             </div>
         </div>
