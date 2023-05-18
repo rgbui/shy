@@ -12,6 +12,7 @@ import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
 import { getPageItemElementUrl } from "./sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
+import { useSelectPayView } from "../component/pay/select";
 
 
 class MessageCenter {
@@ -188,5 +189,9 @@ class MessageCenter {
     @act('/cache/set')
     async cacheSet(args: { key: string, value }) {
         return await yCache.set(args.key, args.value);
+    }
+    @act('/open/pay')
+    async openPay(){
+        await useSelectPayView('fill');
     }
 }

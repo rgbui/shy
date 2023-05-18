@@ -1,6 +1,7 @@
 import { del, get, put } from "rich/net/annotation";
 import { masterSock } from "../../net/sock";
 import { BaseService } from "../common/base";
+import { surface } from "../../src/surface/store";
 
 
 
@@ -44,6 +45,7 @@ class UserPay extends BaseService {
     }
     @get('/check/feature')
     async checkFeature(args) {
+        args.wsId = surface.workspace.id;
         return await masterSock.get('/check/feature', args);
     }
 }

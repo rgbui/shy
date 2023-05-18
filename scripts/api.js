@@ -79,8 +79,9 @@ import { LinkPageItem } from "../src/page/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
-import { PayFeatureCheck, UserBasic, UserStatus } from "../types/user";
+import { UserBasic, UserStatus } from "../types/user";
 import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
+import { PayFeatureCheck } from "../component/pay";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -151,7 +152,7 @@ push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any',
 push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
-push('/current/workspace', '', '{id:string,sn:number,text:string,url:string,isMember?:boolean,isOwner?:boolean,access?:0|1,accessProfile?:{disabledJoin: boolean,checkJoinProtocol: boolean,joinProtocol: string},roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
+push('/current/workspace', '', '{owner:string,creater:string, id:string,sn:number,text:string,url:string,isMember?:boolean,isOwner?:boolean,access?:0|1,accessProfile?:{disabledJoin: boolean,checkJoinProtocol: boolean,joinProtocol: string},roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
 push('/current/page','{}','LinkPageItem', ['query'])
@@ -339,6 +340,6 @@ push(`/get/tag/refs`, '{wsId?:string,tagId?:string,tag?:string,size?:number,desc
 push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get']);
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 push('/tag/query','{id?:string,ids?:string[]}','SockResponse<{list:any[],tag:any}>',['get']);
-
+push('/open/pay','{}','{}',['act'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
