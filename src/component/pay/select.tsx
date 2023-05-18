@@ -48,7 +48,7 @@ export class SelectPayView extends EventsComponent {
         if (this.wallet.meal == 'meal' && this.wallet.isDue !== true) {
             basePrice = 0;
         }
-        var g = (this.wallet.money || 0 > 20) ? 0 : 20 - (this.wallet.money || 0);
+        var g = 20 - (this.wallet.money || 0);
         var willPay = basePrice + g;
         return willPay > 1 ? willPay : 1;
     }
@@ -94,7 +94,7 @@ export class SelectPayView extends EventsComponent {
         var isFill = ['meal', 'meal-1', 'meal-2'].includes(this.wallet.meal) ? true : false;
         return <div className="shy-pay-selector">
             <div className="h3 gap-h-10">购买支付</div>
-            <div className="shy-pay-items">
+            <div className="shy-pay-items flex-top">
 
                 {!isFill && <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
                     <h4>云端版</h4>
@@ -102,7 +102,7 @@ export class SelectPayView extends EventsComponent {
                     <div>按量付费,适用于知识管理</div>
                 </div>}
 
-                {!isFill && <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
+                {isFill && <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
                     <h4>充值</h4>
                     <div>按量付费</div>
                 </div>}
@@ -114,7 +114,7 @@ export class SelectPayView extends EventsComponent {
                 </div>
                 <div onMouseDown={e => { this.orderInfo.kind = 'meal-2'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'meal-2' ? " hover" : "")}>
                     <h4>社区版</h4>
-                    <div>360元/年</div>
+                    <div>360元<span className="del">480元</span>/年</div>
                     <div>适用于开放式社区空间</div>
                 </div>
             </div>

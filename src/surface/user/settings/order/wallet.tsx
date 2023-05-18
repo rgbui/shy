@@ -9,7 +9,8 @@ import { Divider, Row, Space } from "rich/component/view/grid";
 import { channel } from "rich/net/channel";
 import { useSelectPayView } from "../../../../component/pay/select";
 import "./style.less";
-
+import Big from 'big.js';
+import { Price } from "../../../../util/price";
 @observer
 export class ShyWallet extends React.Component {
     constructor(props) {
@@ -53,7 +54,7 @@ export class ShyWallet extends React.Component {
             <Divider></Divider>
             <Row style={{ marginTop: 20 }}>
                 <Space >
-                    <span>余额:{this.wallet.money}元</span>
+                    <span>余额:{Price.toFixed(this.wallet.money)}元</span>
                     <Button link onClick={e => openPay('fill')}>充值</Button>
                     <Button style={{ visibility: 'hidden' }} link disabled>兑换码</Button>
                 </Space>
