@@ -298,7 +298,7 @@ push('/ws/view/online/users', '{viewUrl:string,read?:boolean}', 'SockResponse<{u
 push('/ws/online/users', '{wsId?:string}', 'SockResponse<{users:string[]}>', ['get']);
 
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
-push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{ list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
+push('/ws/search', '{page?:number,size?:number,mime?:string,word:string,wsId?:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{pages:LinkPageItem[],list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/ws/comment/list', '{elementUrl: string,wsId?: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string}', 'SockResponse<{data:any}>', ['put']);
 push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
