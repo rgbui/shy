@@ -234,7 +234,6 @@ export class PageItem {
             })
         }
         return this.childs.map(c => c);
-
     }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
@@ -298,7 +297,6 @@ export class PageItem {
         var items: MenuItem<string>[] = [];
         if (this.mime == Mime.pages) {
             items = [
-
                 {
                     name: 'rename',
                     icon: RenameSvg,
@@ -383,9 +381,11 @@ export class PageItem {
                 this.onRemove();
                 break;
             case 'rename':
-                if (this.mime == Mime.page) {
+                if (this.mime == Mime.pages) {
                     var r = await useForm({
-                        title: '修改分类名称', fields: [
+                        title: '修改分类名称',
+                        head: false,
+                        fields: [
                             { name: 'title', type: 'input', text: '分类名称' }
                         ],
                         model: { title: this.text },
@@ -402,6 +402,30 @@ export class PageItem {
                 else {
                     this.onEdit();
                 }
+                break;
+            case 'createFolder':
+                var r = await useForm({
+                    title: '创建分类',
+                    fields: [{ name: 'text', text: '分类名称', type: 'input' }],
+                    async checkModel(model) {
+                        if (!model.text) return '分类名称不能为空'
+                        if (model.text.length > 30) return '分类名称过长'
+                        return '';
+                    }
+                });
+                if (r?.text) {
+                    surface.sln.onCreateFolder(r.text)
+                }
+                break;
+            case 'toggleFolder':
+                this.onSpread();
+                break;
+            case 'unAllFolders':
+                runInAction(() => {
+                    surface.workspace.childs.each(g => {
+                        g.spread = false;
+                    })
+                })
                 break;
             case 'link':
                 CopyText(this.url);
