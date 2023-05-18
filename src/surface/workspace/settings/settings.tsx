@@ -213,7 +213,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <div className='bold f-14'>注销空间</div>
                 <div className='remark f-12 gap-h-10'>注销空间不可撤消，空间内的数据将自动清理</div>
                 <div className='shy-ws-settings-view-domain'>
-                    <Button onClick={e => this.cancelWorkspace(e)} ghost>注销空间</Button>
+                    <Button onClick={e => this.cancelWorkspace(e)} danger >注销空间</Button>
                 </div>
             </div>
         </div>
