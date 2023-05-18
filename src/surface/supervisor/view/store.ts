@@ -21,7 +21,12 @@ export class PageViewStore extends Events {
     page: Page = null;
     view: PageSupervisorView | PageSupervisorDialog = null;
     snapSaving: boolean = false;
-    config?: { force?: boolean, type?: PageLayoutType, isTemplate?: boolean } = {};
+    config?: {
+        force?: boolean,
+        type?: PageLayoutType,
+        isTemplate?: boolean,
+        blockId?: string
+    } = {};
     constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();
         this.elementUrl = options.elementUrl;
@@ -179,6 +184,7 @@ export class PageViewStores {
             }
         }
         var pv = new PageViewStore({ elementUrl, source, config });
+        pv.loadConfig(config);
         if (Array.isArray(s)) s.push(pv)
         else this.stores.set(elementUrl, [pv]);
         return pv;

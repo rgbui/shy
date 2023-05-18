@@ -40,7 +40,7 @@ class MessageCenter {
         return new Set()
     }
     @air('/page/open')
-    async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, force?: boolean } }) {
+    async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, blockId?: string, force?: boolean } }) {
         var { item, elementUrl } = args;
         if (item) {
             if ((item as PageItem)?.elementUrl) elementUrl = (item as PageItem).elementUrl;
@@ -191,7 +191,7 @@ class MessageCenter {
         return await yCache.set(args.key, args.value);
     }
     @act('/open/pay')
-    async openPay(){
+    async openPay() {
         await useSelectPayView('fill');
     }
 }

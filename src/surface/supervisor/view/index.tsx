@@ -6,6 +6,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../../store";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
+import { Spin } from "rich/component/view/spin";
 
 @observer
 export class PageSupervisorView extends React.Component<{
@@ -67,6 +68,7 @@ export class PageSupervisorView extends React.Component<{
     el: HTMLElement;
     render() {
         return <div ref={e => this.el = e} className={"shy-supervisor-view" + (this.props.slide ? " shadow" : "")} style={this.props.style || {}}>
+            {this.loading && <Spin block></Spin>}
             <div className="shy-supervisor-view-content" ref={e => this.pageEl = e}>
             </div>
             {this.props.slide && <div onMouseDown={e => this.mousedown(e)} className="cursor-col z-2000 w-10 pos pos-t pos-b pos-l border-left"></div>}

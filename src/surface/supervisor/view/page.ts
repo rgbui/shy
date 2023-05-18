@@ -10,6 +10,7 @@ import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
+import { util } from "rich/util/util";
 
 export async function createPageContent(store: PageViewStore) {
     try {
@@ -115,6 +116,14 @@ export async function createPageContent(store: PageViewStore) {
                 delete store.page;
                 createPageContent(store);
             })
+            page.on(PageDirective.mounted, async () => {
+                if (store.config.blockId) {
+                    var b = page.find(g => g.id == store.config.blockId);
+                    if (b) {
+                        page.onHighlightBlock([b], true);
+                    }
+                }
+            })
             await page.load(pd.content);
             if (Array.isArray(pd.operates) && pd.operates.length > 0) {
                 var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
@@ -146,6 +155,11 @@ export async function createPageContent(store: PageViewStore) {
             store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
             if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
                 await store.page.loadSchemaView(store.elementUrl);
+            }
+            await util.delay(500);
+            if (store.config.blockId) {
+                var b = store.page.find(g => g.id == store.config.blockId);
+                if (b) store.page.onHighlightBlock([b], true);
             }
         }
         if (store.page?.pageLayout?.type == PageLayoutType.textChannel) {
