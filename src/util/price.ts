@@ -32,6 +32,6 @@ export const Price = {
         return parseFloat(num1.toString());
     },
     toFixed(price:number,dig=2) {
-        return new Big(dig).toFixed(dig);
+        return new Big(price).toFixed(dig);
     }
 }
