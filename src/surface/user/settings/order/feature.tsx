@@ -68,7 +68,7 @@ export class ShyFeature extends React.Component {
 
             <div className="gap-h-40">
                 <div className="h2 flex-center">套餐包</div>
-                <div className="flex-center   gap-h-20">不按人头收费、支持独立域名及app、自建服务器</div>
+                <div className="flex-center   gap-h-20">不按人数收费、支持独立域名及app、自建服务器</div>
                 <div className="flex flex-top flex-full">
                     <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-r-10 box-border padding-14 shadow  round r-gap-5">
                         <div className="h3">团队版</div>
@@ -80,7 +80,7 @@ export class ShyFeature extends React.Component {
                     </div>
                     <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-l-10 box-border padding-14 shadow  round r-gap-5">
                         <div className="h3">社区版</div>
-                        <div className="flex"><span className="flex-auto">360元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></span></div>
+                        <div className="flex"><span className="flex-auto">360<span className="del f-12">480</span>元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></span></div>
                         <div className="flex"><span>适用于开放性社区，流量无限</span></div>
                         <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">50G</span></div>
                         <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">无限</span></div>

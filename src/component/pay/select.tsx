@@ -50,7 +50,7 @@ export class SelectPayView extends EventsComponent {
         }
         var g = 20 - (this.wallet.money || 0);
         var willPay = basePrice + g;
-        return willPay > 1 ? willPay : 1;
+        return willPay > 10 ? willPay : 10;
     }
     async openPay(event: React.MouseEvent) {
         if (this.checkAgree == false) {
@@ -98,7 +98,7 @@ export class SelectPayView extends EventsComponent {
 
                 {!isFill && <div onMouseDown={e => { this.orderInfo.kind = 'fill'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'fill' ? " hover" : "")}>
                     <h4>云端版</h4>
-                    <div>软件服务费 60元 <span className="del">100元</span>/年</div>
+                    <div>软件服务 60<span className="del f-12">100</span>元/年</div>
                     <div>按量付费,适用于知识管理</div>
                 </div>}
 
@@ -114,7 +114,7 @@ export class SelectPayView extends EventsComponent {
                 </div>
                 <div onMouseDown={e => { this.orderInfo.kind = 'meal-2'; this.forceUpdate() }} className={"shy-pay-item" + (this.orderInfo.kind == 'meal-2' ? " hover" : "")}>
                     <h4>社区版</h4>
-                    <div>360元<span className="del">480元</span>/年</div>
+                    <div>360<span className="del f-12">480</span>元/年</div>
                     <div>适用于开放式社区空间</div>
                 </div>
             </div>

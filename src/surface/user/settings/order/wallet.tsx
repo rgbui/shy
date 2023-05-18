@@ -9,7 +9,6 @@ import { Divider, Row, Space } from "rich/component/view/grid";
 import { channel } from "rich/net/channel";
 import { useSelectPayView } from "../../../../component/pay/select";
 import "./style.less";
-import Big from 'big.js';
 import { Price } from "../../../../util/price";
 @observer
 export class ShyWallet extends React.Component {
