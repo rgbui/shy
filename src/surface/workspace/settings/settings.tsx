@@ -14,7 +14,6 @@ import { autoImageUrl } from 'rich/net/element.type';
 import { Textarea } from 'rich/component/view/input/textarea';
 import { ShyAlert } from 'rich/component/lib/alert';
 import { fileSock, masterSock } from '../../../../net/sock';
-import { Confirm } from 'rich/component/lib/confirm';
 import { useForm } from 'rich/component/view/form/dialoug';
 import { ShyUrl, UrlRoute } from '../../../history';
 
@@ -61,19 +60,22 @@ export class WorkspaceSettingsView extends React.Component {
         }
     }
     async createWorkspaceTemplate(event: React.MouseEvent) {
-        var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
-        if (g.ok) {
-            var r = await fileSock.post('/download/file', { url: g.data.url });
-            if (r.ok) {
-                await masterSock.post('/create/workspace/template', {
-                    wsId: surface.workspace.id,
-                    templateUrl: r.data.file.url,
-                    text: surface.workspace.text,
-                    description: surface.workspace.slogan,
-                    file: r.data.file
-                });
+        if (surface.workspace.sn == 24) {
+            var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
+            if (g.ok) {
+                var r = await fileSock.post('/download/file', { url: g.data.url });
+                if (r.ok) {
+                    await masterSock.post('/create/workspace/template', {
+                        wsId: surface.workspace.id,
+                        templateUrl: r.data.file.url,
+                        text: surface.workspace.text,
+                        description: surface.workspace.slogan,
+                        file: r.data.file
+                    });
+                }
             }
         }
+        else ShyAlert('该功能暂不开放')
     }
     async cancelWorkspace(event: React.MouseEvent) {
         var r = await useForm({
@@ -81,7 +83,7 @@ export class WorkspaceSettingsView extends React.Component {
             remark: `输入注销空间的名称[${surface.workspace.text}]`,
             fields: [{ name: 'name', type: 'input', text: '空间名称' }]
         });
-        if(r?.name == surface.workspace.text) {
+        if (r?.name == surface.workspace.text) {
             var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: surface.workspace.id });
             if (g.ok) {
                 var rg = await masterSock.delete('/ws/clear', { wsId: surface.workspace.id });
@@ -211,7 +213,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <div className='bold f-14'>注销空间</div>
                 <div className='remark f-12 gap-h-10'>注销空间不可撤消，空间内的数据将自动清理</div>
                 <div className='shy-ws-settings-view-domain'>
-                    <Button onClick={e => this.createWorkspaceTemplate(e)} ghost>注销空间</Button>
+                    <Button onClick={e => this.cancelWorkspace(e)} ghost>注销空间</Button>
                 </div>
             </div>
         </div>
