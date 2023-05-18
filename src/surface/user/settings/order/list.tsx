@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import lodash from "lodash";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { TrashSvg, UnpaySvg } from "rich/component/svgs";
+import { DotSvg, TrashSvg, UnpaySvg } from "rich/component/svgs";
 import { Divider, } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
@@ -108,7 +108,7 @@ export class ShyPayList extends React.Component {
                                     <td>{order.payedDate ? dayjs(order.payedDate).format('YYYY.MM.DD HH:mm') : ""}</td>
                                     <td>{getStatus(order)}</td>
                                     <td>{order.createDate ? dayjs(order.createDate).format('YYYY.MM.DD HH:mm') : ""}</td>
-                                    <td><a onMouseDown={e => openOrder(order, e)}><Icon size={14} icon={'elipsis:sy'}></Icon></a></td>
+                                    <td><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor"><Icon size={16} icon={DotSvg}></Icon></span></td>
                                 </tr>
                             })}
                         </tbody>
