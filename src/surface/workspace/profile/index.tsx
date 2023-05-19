@@ -88,7 +88,7 @@ export var WorkspaceProfile = observer(function () {
                 }
             }
             else if (se.item.name == 'showMenu' || se.item.name == 'showNote') {
-                surface.workspace.onUpdateInfo({ slnStyle: se.item.name ? "menu" : 'note' })
+                surface.workspace.onUpdateInfo({ slnStyle: se.item.name == "showMenu" ? "menu" : 'note' })
             }
         }
     }

@@ -384,8 +384,8 @@ export class Workspace {
         else if (x.at == y.at) return 0;
         else return -1;
     }
-    async onNotifyViewOperater(data: UserAction) {
-        console.log('data', data);
+    async onNotifyViewOperater(data: UserAction)
+    {
         var pv = PageViewStores.getPageViewStore(data.elementUrl);
         if (pv?.page) {
             pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
