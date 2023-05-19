@@ -53,6 +53,6 @@ export var SideSln = observer(function () {
         <SlnView></SlnView>
         <div className='shy-slide-resize' onMouseDown={mousedown}></div>
     </div>
-        {!isMobileOnly && <div className='shy-slide-reaction'></div>}
+        {/* {!isMobileOnly && <div className='shy-slide-reaction'></div>} */}
     </>
 })
