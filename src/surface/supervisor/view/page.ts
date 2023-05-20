@@ -156,7 +156,6 @@ export async function createPageContent(store: PageViewStore) {
             if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
                 await store.page.loadSchemaView(store.elementUrl);
             }
-            await util.delay(500);
             if (store.config.blockId) {
                 var b = store.page.find(g => g.id == store.config.blockId);
                 if (b) store.page.onHighlightBlock([b], true);
