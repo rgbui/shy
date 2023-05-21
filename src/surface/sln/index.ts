@@ -79,7 +79,7 @@ export class Sln extends Events {
                             }
                         }
                         else {
-                            if (item.mime == Mime.page) channel.air('/page/open', { item });
+                            if ([Mime.page, Mime.table].includes(item.mime)) channel.air('/page/open', { item });
                         }
                     }
                     catch (ex) {
@@ -95,7 +95,7 @@ export class Sln extends Events {
             })
         }
         else {
-            if (item.mime == Mime.page) channel.air('/page/open', { item });
+            if ([Mime.page, Mime.table].includes(item.mime)) channel.air('/page/open', { item });
         }
     }
     async onOpenItem(item: PageItem) {
