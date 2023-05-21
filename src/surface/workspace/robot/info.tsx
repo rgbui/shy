@@ -1,7 +1,7 @@
 import lodash from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { EditSvg, PicSvg, PictureSvg } from "rich/component/svgs";
+import { EditSvg, PicSvg } from "rich/component/svgs";
 import { Button } from "rich/component/view/button";
 import { useForm } from "rich/component/view/form/dialoug";
 import { useSelectMenuItem } from "rich/component/view/menu";
@@ -20,7 +20,7 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
             { text: '重命名', icon: EditSvg, name: 'rname' },
             { text: '上传头像', icon: PicSvg, name: 'avatar' },
             { type: MenuItemType.divide },
-            { text: '上传封面', icon: PictureSvg, name: 'cover' },
+            { text: '上传封面', icon: PicSvg, name: 'cover' },
             // { type: MenuItemType.divide },
             // { text: '移除头像', icon: EditSvg, name: 'delete' },
             // { text: '移除封面', icon: EditSvg, name: 'delete' },
