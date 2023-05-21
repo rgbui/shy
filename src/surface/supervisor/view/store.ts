@@ -178,7 +178,7 @@ export class PageViewStores {
             else {
                 var r = s.find(g => g.source == source)
                 if (r) {
-                    if (config) r.loadConfig(config);
+                    r.loadConfig(config);
                     return r;
                 }
             }
