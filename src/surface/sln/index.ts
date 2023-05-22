@@ -213,7 +213,7 @@ export class Sln extends Events {
                             var itemEl = pageItemEl.querySelector('.shy-ws-item-page') as HTMLElement
                             var pe = Rect.fromEle(itemEl);
                             var paddingLeft = parseFloat(getComputedStyle(itemEl).paddingLeft) + 20;
-                            if (pageItem.spread == true) {
+                            if (pageItem.spread == true || pageItem.childs.length == 0) {
                                 if (event.clientX > pe.left + paddingLeft && event.clientY > pe.top + 10) {
                                     direction = 'bottom-sub'
                                 }
