@@ -45,6 +45,7 @@ export class User {
     public allowSendLetter = true;
     public allowAddFriend = true;
     public experienceHelp: boolean = true;
+    public isAutoCreateWorkspace: boolean = true;
     constructor() {
         makeObservable(this, {
             id: observable,
