@@ -22,10 +22,7 @@ export async function createPageContent(store: PageViewStore) {
             store.page = page;
             if (store.config?.type) store.page.pageLayout = { type: store.config.type };
             else {
-                if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
-                    store.page.pageLayout = { type: PageLayoutType.dbForm };
-                }
-                else if (store.pe.type == ElementType.SchemaFieldBlogData) {
+                if (store.pe.type == ElementType.SchemaFieldBlogData) {
                     page.pageLayout = { type: PageLayoutType.blog };
                     page.customElementUrl = store.elementUrl;
                     page.requireSelectLayout = false;
@@ -74,12 +71,12 @@ export async function createPageContent(store: PageViewStore) {
                     });
                 }
             });
-            page.on(PageDirective.syncHistory, async (seq) => {
+            page.on(PageDirective.syncHistory, async (data) => {
                 await store.snapStore.viewSnap({
-                    seq: seq,
                     content: await page.getString(),
                     plain: await page.getPlain(),
-                    text: store.item?.text
+                    text: store.item?.text,
+                    ...data,
                 });
             })
             page.on(PageDirective.changePageLayout, async () => {
@@ -122,26 +119,7 @@ export async function createPageContent(store: PageViewStore) {
                     }
                 }
             })
-            await page.load(pd.content);
-            if (Array.isArray(pd.operates) && pd.operates.length > 0) {
-                var operates = pd.operates.map(op => op.operate ? op.operate : op) as any;
-                await page.onSyncUserActions(operates, 'load');
-                var seq = operates.max(o => o.seq);
-                var op = operates.find(g => g.seq == seq);
-                page.on(PageDirective.mounted, async () => {
-                    await store.snapStore.viewSnap({
-                        seq: seq,
-                        content: await page.getString(),
-                        plain: await page.getPlain(),
-                        text: store.item?.text,
-                        force: true,
-                        creater: op.creater
-                    });
-                })
-            }
-            if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
-                await page.loadSchemaView(store.elementUrl);
-            }
+            await page.load(pd.content, pd.operates);
             var bound = Rect.fromEle(store.view.pageEl);
             page.render(store.view.pageEl, {
                 width: bound.width,
@@ -151,8 +129,8 @@ export async function createPageContent(store: PageViewStore) {
         else {
             var bound = Rect.fromEle(store.view.pageEl);
             store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
-            if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
-                await store.page.loadSchemaView(store.elementUrl);
+            if ([ElementType.SchemaRecordView, ElementType.SchemaData].includes(store.pe.type)) {
+                await store.page.loadPageSchema();
             }
             if (store.config.blockId) {
                 var b = store.page.find(g => g.id == store.config.blockId);

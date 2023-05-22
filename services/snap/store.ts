@@ -2,7 +2,7 @@
 import { QueueHandle } from "rich/component/lib/queue";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { ElementType, getElementUrl } from "rich/net/element.type";
-import { UserAction } from "rich/src/history/action";
+import { UserAction, ViewOperate } from "rich/src/history/action";
 import { Events } from "rich/util/events";
 import { yCache } from "../../net/cache";
 import { view_snap } from "../../net/db";
@@ -13,10 +13,6 @@ import { surface } from "../../src/surface/store";
 const DELAY_TIME = 1000 * 60 * 3;
 const MAX_OPERATE_COUNT = 50;
 var snapSyncMaps: Map<string, SnapStore> = new Map();
-export type ViewOperate = {
-    operate?: UserAction,
-    seq: number
-}
 export class SnapStore extends Events {
     elementUrl: string;
     private constructor(elementUrl: string) { super(); this.elementUrl = elementUrl; }
