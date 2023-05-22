@@ -10,7 +10,6 @@ import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
-import { util } from "rich/util/util";
 
 export async function createPageContent(store: PageViewStore) {
     try {
@@ -60,13 +59,16 @@ export async function createPageContent(store: PageViewStore) {
                 page.pageInfo = store.item;
             };
             page.on(PageDirective.history, async function (action) {
-                var syncBlock = action.syncBlock;
-                if (syncBlock) {
-                    var snap = SnapStore.createSnap(syncBlock.elementUrl)
-                    var r = await snap.viewOperator(action.get() as any);
-                    await snap.viewSnap({ seq: r.seq, content: await syncBlock.getSyncString() });
-                }
-                else {
+                if (Array.isArray(action.syncBlocks))
+                    for (var syncBlock of action.syncBlocks) {
+                        var snap = SnapStore.createSnap(syncBlock.elementUrl)
+                        var r = await snap.viewOperator(action.get() as any);
+                        await snap.viewSnap({
+                            seq: r.seq,
+                            content: await syncBlock.getSyncString()
+                        });
+                    }
+                if (action.syncPage) {
                     var r = await store.snapStore.viewOperator(action.get() as any);
                     await store.snapStore.viewSnap({
                         seq: r.seq,
