@@ -45,7 +45,7 @@ export var WorkspaceCreateView = observer(function () {
     }
     async function back() {
         if (surface.workspace) return UrlRoute.pushToWs(surface.workspace.sn);
-        else return UrlRoute.push(ShyUrl.myWorkspace)
+        else return UrlRoute.push(ShyUrl.home)
     }
 
     return <div>

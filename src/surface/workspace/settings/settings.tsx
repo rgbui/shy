@@ -88,7 +88,7 @@ export class WorkspaceSettingsView extends React.Component {
             if (g.ok) {
                 var rg = await masterSock.delete('/ws/clear', { wsId: surface.workspace.id });
                 if (rg.ok) {
-                    UrlRoute.push(ShyUrl.myWorkspace)
+                    UrlRoute.push(ShyUrl.home)
                 }
             }
         }

@@ -148,7 +148,6 @@ export var Login = observer(function () {
             local.failMsg = '';
             if (local.step == 'register') {
                 local.step = 'name';
-
             }
             else {
                 if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
@@ -272,13 +271,13 @@ export var Login = observer(function () {
     let location = useLocation();
     async function successAfter() {
         if (config.isServerSide) {
-            return UrlRoute.push(ShyUrl.home)
+            return UrlRoute.push(ShyUrl.serverCenter)
         }
         if ((location?.state as any)?.back) {
             UrlRoute.redict((location?.state as any)?.back)
         }
         else {
-            UrlRoute.push(ShyUrl.myWorkspace);
+            UrlRoute.push(ShyUrl.home);
         }
     }
     React.useEffect(() => {

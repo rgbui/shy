@@ -64,7 +64,7 @@ export var InviteView = observer(function () {
         return UrlRoute.pushToWs(local.ws.siteDomain || local.ws.sn);
     }
     async function refuse() {
-        UrlRoute.push(ShyUrl.myWorkspace);
+        UrlRoute.push(ShyUrl.home);
     }
     React.useEffect(() => {
         loadInviteWorkspace();

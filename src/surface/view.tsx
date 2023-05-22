@@ -24,7 +24,7 @@ export var SurfaceView = observer(function () {
             await surface.loadWorkspaceList();
             var willWs = await Surface.getWsName();
             if (willWs) await surface.onLoadWorkspace(willWs)
-            else UrlRoute.redict(ShyUrl.myWorkspace)
+            else UrlRoute.redict(ShyUrl.home)
         }
         catch (ex) {
         }

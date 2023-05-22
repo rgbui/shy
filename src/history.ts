@@ -65,8 +65,8 @@ export enum ShyUrl {
     page = '/page/:pageId',
     invite = '/invite/:id',
     workCreate = '/work/create',
-    myWorkspace = '/my/workspace',
+    home = '/home',
     discovery = '/discovery',
     _404 = '/404',
-    home = '/home'
+    serverCenter = '/center'
 }

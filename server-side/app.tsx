@@ -28,7 +28,7 @@ export function App() {
                 <Route path={ShyUrl.root} exact component={ServerSlideView}></Route>
                 <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
                 <Route path={ShyUrl.signIn} exact component={Login}></Route>
-                <Route path={ShyUrl.home} exact component={ServerSlideView}></Route>
+                <Route path={ShyUrl.serverCenter} exact component={ServerSlideView}></Route>
                 <Route path={ShyUrl._404} exact component={View404}></Route>
                 <Route component={View404}></Route>
             </Switch>
