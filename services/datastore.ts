@@ -68,4 +68,9 @@ class DataStoreService {
         args.wsId = surface.workspace.id;
         return surface.workspace.sock.delete('/datastore/remove/ids', args)
     }
+    @get('/datastore/exists/user/submit')
+    async dataStoreExistsSubmit(args) {
+        args.wsId = surface.workspace.id;
+        return surface.workspace.sock.get('/datastore/exists/user/submit', args);
+    }
 }

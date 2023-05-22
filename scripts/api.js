@@ -166,7 +166,7 @@ push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,ac
 push('/schema/list', '{page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
 push('/schema/ids/list', '{ids:string[]}', 'SockResponse<{list:Partial<TableSchema>[]}>', ['get'])
 push('/schema/delete', '{wsId?:string,id:string}', 'SockResponse<void>', ['del']);
-push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,data:Record<string,any>}>', ['put']);
+push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos?:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,data:Record<string,any>}>', ['put']);
 push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
 push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:string}', ['del']);
 push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', 'SockResponse<void>', ['patch']);
@@ -180,6 +180,7 @@ push('/datastore/statistics/value', '{schemaId:string,filter?:Record<string, any
 push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
 push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
 push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
+push('/datastore/exists/user/submit','{schemaId:string}','SockResponse<{exists:boolean}>',['get']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
