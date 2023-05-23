@@ -51,12 +51,9 @@ export class PageViewStore extends Events {
             }
         });
     }
-    get snapStore() {
-        var url = this.elementUrl;
-        if (this.pe.type == ElementType.SchemaRecordViewData) {
-            url = getElementUrl(ElementType.SchemaRecordView, this.pe.id, this.pe.id1)
-        }
-        return SnapStore.createSnap(url);
+    get snapStore()
+    {
+        return SnapStore.createSnap(this.elementUrl);
     }
     private _pe: {
         type: ElementType;
