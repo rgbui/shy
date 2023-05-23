@@ -13,6 +13,7 @@ import { pageItemStore } from "./sln/item/store/sync";
 import { getPageItemElementUrl } from "./sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useSelectPayView } from "../component/pay/select";
+import { SnapStore } from "../../services/snap/store";
 
 
 class MessageCenter {
@@ -193,5 +194,23 @@ class MessageCenter {
     @act('/open/pay')
     async openPay() {
         await useSelectPayView('fill');
+    }
+    @act('/view/snap/store')
+    async viewSnapStore(args: {
+        elementUrl: string,
+        seq?: number,
+        content: string,
+        plain: string,
+        text: string
+    }) {
+        var ss = await SnapStore.createSnap(args.elementUrl);
+        if (ss) {
+            await ss.viewSnap({
+                seq: args.seq,
+                content: args.content,
+                plain: args.plain,
+                text: args.text
+            });
+        }
     }
 }
