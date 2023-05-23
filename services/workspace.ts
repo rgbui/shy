@@ -67,7 +67,7 @@ class WorkspaceService extends BaseService {
                 sn: rr.data.workspace.sn,
                 // templateId?: string
             });
-            return { ok: true, data: { workspace: rr.data.workspace } }
+            return { ok: true, data: { workspace: rr.data.workspace,pids:rr.data.pids } }
         }
         else return { ok: false, warn: rr.warn }
     }
