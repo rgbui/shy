@@ -211,7 +211,8 @@ class MessageCenter {
                 seq: args.seq,
                 content: args.content,
                 plain: args.plain,
-                text: args.text
+                text: args.text,
+                force: true
             });
         }
     }
