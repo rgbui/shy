@@ -18,7 +18,6 @@ export async function createPageContent(store: PageViewStore) {
             page.canEdit = await store.canEdit();
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
-            console.log('sss', store.config)
             page.customElementUrl = store.elementUrl;
             store.page = page;
             if (store.config?.type) store.page.pageLayout = { type: store.config.type }
