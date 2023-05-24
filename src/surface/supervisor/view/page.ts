@@ -10,7 +10,6 @@ import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
-
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
@@ -21,14 +20,7 @@ export async function createPageContent(store: PageViewStore) {
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
             page.customElementUrl = store.elementUrl;
             store.page = page;
-            if (store.config?.type) store.page.pageLayout = { type: store.config.type };
-            else {
-                if (store.pe.type == ElementType.SchemaFieldBlogData) {
-                    page.pageLayout = { type: PageLayoutType.blog };
-                    page.customElementUrl = store.elementUrl;
-                    page.requireSelectLayout = false;
-                }
-            }
+            if (store.config?.type) store.page.pageLayout = { type: store.config.type }
             if (store.item) {
                 // page.permissons = store.item.getPagePermissions();
                 page.pageInfo = store.item;
@@ -37,21 +29,6 @@ export async function createPageContent(store: PageViewStore) {
                     page.requireSelectLayout = false;
                 }
             }
-            if (store.pe.type == ElementType.SchemaFieldBlogData) {
-                var rf = (await store.getSchemaRowField());
-                var blogPageItem = await surface.workspace.loadOtherPage(rf?.id, {
-                    mime: Mime.blog,
-                    pageType: PageLayoutType.blog,
-                    parentId: 'blog'
-                });
-                if (blogPageItem) {
-                    if (rf?.id !== blogPageItem.id) {
-                        await store.storeRowFieldContent(blogPageItem.get());
-                    }
-                }
-                store.cachePageItem = blogPageItem;
-                page.pageInfo = store.item;
-            };
             page.on(PageDirective.history, async function (action) {
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
@@ -68,7 +45,8 @@ export async function createPageContent(store: PageViewStore) {
                         seq: r.seq,
                         content: await page.getString(),
                         plain: await page.getPlain(),
-                        text: store.item?.text
+                        text: store.item?.text,
+                        thumb: await page.getThumb(),
                     });
                 }
             });
@@ -77,6 +55,7 @@ export async function createPageContent(store: PageViewStore) {
                     content: await page.getString(),
                     plain: await page.getPlain(),
                     text: store.item?.text,
+                    thumb: await page.getThumb(),
                     ...data,
                 });
             })

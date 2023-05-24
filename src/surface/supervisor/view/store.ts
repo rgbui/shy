@@ -1,5 +1,5 @@
 import { makeObservable, observable } from "mobx";
-import { ElementType, getElementUrl, parseElementUrl } from "rich/net/element.type";
+import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { Page } from "rich/src/page";
 import { PageSupervisorView } from "./index";
 import { surface } from "../../store";
@@ -75,9 +75,6 @@ export class PageViewStore extends Events {
         else if ([ElementType.SchemaView, ElementType.SchemaRecordView].includes(this.pe.type)) {
             return surface.workspace.find(g => g.id == this.pe.id1)
         }
-        else if ([ElementType.SchemaFieldBlogData].includes(this.pe.type)) {
-
-        }
         return null;
     }
     onOpenFieldProperty(e: React.MouseEvent) {
@@ -86,49 +83,6 @@ export class PageViewStore extends Events {
     async loadConfig(config?: PageViewStore['config']) {
         if (config) this.config = lodash.cloneDeep(config);
         else this.config = {}
-    }
-    async getSchema() {
-        if ([ElementType.SchemaView,
-        ElementType.SchemaFieldBlogData,
-        ElementType.SchemaFieldData,
-        ElementType.SchemaFieldNameData,
-        ElementType.SchemaRecordView,
-        ElementType.SchemaRecordViewData,
-        ElementType.Schema].includes(this.pe.type)) {
-            return await TableSchema.loadTableSchema(this.pe.id)
-        }
-    }
-    async getSchemaRow() {
-        if ([
-            ElementType.SchemaFieldBlogData,
-            ElementType.SchemaFieldData,
-            ElementType.SchemaFieldNameData,
-            ElementType.SchemaRecordViewData
-        ].includes(this.pe.type)) {
-            var schema = await this.getSchema()
-            var row = await schema.rowGet(this.pe.id2);
-            if (row) return row;
-        }
-    }
-    async getSchemaRowField() {
-        if ([
-            ElementType.SchemaFieldBlogData,
-            ElementType.SchemaFieldData,
-            ElementType.SchemaFieldNameData
-        ].includes(this.pe.type)) {
-            var row = await this.getSchemaRow();
-            if (row) {
-                var schema = await this.getSchema();
-                var field = schema.fields.find(g => g.id == this.pe.id1 || g.name == this.pe.id1);
-                return field.getValue(row)
-            }
-        }
-    }
-    async storeRowFieldContent(data: Record<string, any>) {
-        var schema = await this.getSchema();
-        var row = await this.getSchemaRow();
-        var field = schema.fields.find(g => g.id == this.pe.id1 || g.name == this.pe.id1);
-        await schema.rowUpdateFieldObject({ rowId: row.id, fieldName: field.name, data })
     }
     async onFullDisplay() {
         await surface.supervisor.onOpenDialog(null)
