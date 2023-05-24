@@ -549,7 +549,8 @@ export class PageItem {
         }
     }
     get isCanEdit() {
-        return this.isAllow(AtomPermission.docEdit,
+        return this.isAllow(
+            AtomPermission.docEdit,
             AtomPermission.channelEdit,
             AtomPermission.dbEdit,
             AtomPermission.wsEdit)

@@ -8,7 +8,6 @@ import { Events } from "rich/util/events";
 import lodash from "lodash";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageSupervisorDialog } from "./dialoug";
-import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { PageItem } from "../../sln/item";
 import { channel } from "rich/net/channel";
 import { PageDirective } from "rich/src/page/directive";
@@ -51,8 +50,7 @@ export class PageViewStore extends Events {
             }
         });
     }
-    get snapStore()
-    {
+    get snapStore() {
         return SnapStore.createSnap(this.elementUrl);
     }
     private _pe: {
@@ -104,6 +102,18 @@ export class PageViewStore extends Events {
     }
     async canEdit() {
         var isCanEdit = false;
+        if (this.pe.type == ElementType.SchemaRecordView) {
+            /**
+             * 这里的权限需要重新归纳设计
+             */
+            isCanEdit = true;
+        }
+        else if (this.pe.type == ElementType.SchemaRecordViewData) {
+            /**
+            * 这里的权限需要重新归纳设计
+            */
+            isCanEdit = true;
+        }
         if (this.item) {
             isCanEdit = this.item?.isCanEdit;
             if (isCanEdit) {
