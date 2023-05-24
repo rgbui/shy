@@ -18,6 +18,7 @@ export async function createPageContent(store: PageViewStore) {
             page.canEdit = await store.canEdit();
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
+            console.log('sss', store.config)
             page.customElementUrl = store.elementUrl;
             store.page = page;
             if (store.config?.type) store.page.pageLayout = { type: store.config.type }
@@ -109,7 +110,7 @@ export async function createPageContent(store: PageViewStore) {
         else {
             var bound = Rect.fromEle(store.view.pageEl);
             store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
-            if ([ElementType.SchemaRecordView, ElementType.SchemaRecordViewData].includes(store.pe.type)) {
+            if ([ElementType.SchemaRecordView, ElementType.SchemaData].includes(store.pe.type)) {
                 await store.page.loadPageSchema();
             }
             if (store.config.blockId) {

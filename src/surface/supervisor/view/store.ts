@@ -108,7 +108,7 @@ export class PageViewStore extends Events {
              */
             isCanEdit = true;
         }
-        else if (this.pe.type == ElementType.SchemaRecordViewData) {
+        else if (this.pe.type == ElementType.SchemaData) {
             /**
             * 这里的权限需要重新归纳设计
             */
