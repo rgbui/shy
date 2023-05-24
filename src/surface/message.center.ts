@@ -106,6 +106,9 @@ class MessageCenter {
                 data: {
                     icon: item.icon,
                     pageType: item.pageType,
+                    cover: lodash.cloneDeep(item.cover),
+                    plain: lodash.cloneDeep(item.plain),
+                    thumb: lodash.cloneDeep(item.thumb),
                     id: item.id,
                     sn: item.sn,
                     text: item.text,
@@ -121,16 +124,18 @@ class MessageCenter {
                 data: Object.assign({
                     url: surface.workspace.url + '/page/' + r.data.item.sn,
                     elementUrl: getPageItemElementUrl(r.data.item as any)
-                },
-                    lodash.pick(r.data.item,
-                        [
-                            'id',
-                            'icon',
-                            'locker',
-                            'sn',
-                            'text',
-                            'pageType'
-                        ]))
+                }, lodash.pick(r.data.item,
+                    [
+                        'id',
+                        'icon',
+                        'locker',
+                        'sn',
+                        'text',
+                        'pageType',
+                        'cover',
+                        'plain',
+                        'thumb'
+                    ]))
             }
             else return { ok: false, warn: r.warn };
         }
@@ -161,9 +166,6 @@ class MessageCenter {
             var pe = parseElementUrl(args.elementUrl);
             if ([ElementType.PageItem, ElementType.Schema, ElementType.Room].includes(pe.type)) {
                 itemId = pe.id;
-            }
-            else if (ElementType.SchemaFieldBlogData == pe.type) {
-
             }
         }
         if (itemId) {

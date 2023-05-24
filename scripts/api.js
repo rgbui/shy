@@ -318,7 +318,7 @@ push('/page/word/query', '{wsId?:string,word?:string,size?:number}', 'SockRespon
 push('/guid', '', 'string', ['query']);
 push('/view/snap/query', '{ elementUrl: string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
-push('/view/snap/store', '{  elementUrl: string, seq: number, content: any,plain?:string,text?:string }', 'Promise<void>', ['act'])
+push('/view/snap/store', '{  elementUrl: string, seq: number, content: any,plain?:string,text?:string,thumb?:any }', 'Promise<void>', ['act'])
 
 
 push('/view/snap/list', '{wsId?: string, elementUrl: string, page: number, size: number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])

@@ -27,6 +27,9 @@ export class PageItem {
     icon?: IconArguments = null;
     childs?: PageItem[] = [];
     text: string = ''
+    public cover: { abled: boolean, url: string, thumb: string, top: number };
+    public plain: string;
+    public thumb: IconArguments;
     spread: boolean = false;
     creater: string = '';
     description: string = '';
@@ -65,6 +68,9 @@ export class PageItem {
     speakDate?: Date = null;
     textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
     unreadChats: { id: string, roomId: string, seq: number }[] = [];
+
+
+
     constructor() {
         makeObservable(this, {
             id: observable,

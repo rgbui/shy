@@ -1,6 +1,6 @@
 
 import { QueueHandle } from "rich/component/lib/queue";
-import { IconArguments } from "rich/extensions/icon/declare";
+import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { UserAction, ViewOperate } from "rich/src/history/action";
 import { Events } from "rich/util/events";
@@ -13,6 +13,7 @@ import { surface } from "../../src/surface/store";
 const DELAY_TIME = 1000 * 60 * 3;
 const MAX_OPERATE_COUNT = 50;
 var snapSyncMaps: Map<string, SnapStore> = new Map();
+
 export class SnapStore extends Events {
     elementUrl: string;
     private constructor(elementUrl: string) { super(); this.elementUrl = elementUrl; }
@@ -40,10 +41,10 @@ export class SnapStore extends Events {
             return r.data;
         }
     }
-    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string };
+    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string, thumb?: ResourceArguments };
     private localTime;
     private viewSnapQueue: QueueHandle;
-    async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
+    async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments, force?: boolean }) {
         if (typeof this.viewSnapQueue == 'undefined') this.viewSnapQueue = new QueueHandle();
         await this.viewSnapQueue.create(async () => {
             /**
@@ -71,10 +72,11 @@ export class SnapStore extends Events {
             content: snap.content,
             date: new Date(),
             plain: (snap.plain || ''),
-            text: snap.text
+            text: snap.text,
+            thumb: snap.thumb
         };
     }
-    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, force?: boolean }) {
+    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments, force?: boolean }) {
 
         await this.storeLocal(snap);
         this.operateCount += 1;
@@ -108,6 +110,7 @@ export class SnapStore extends Events {
                         seq: this.localViewSnap.seq,
                         content: this.localViewSnap.content,
                         plain: this.localViewSnap.plain,
+                        thumb: this.localViewSnap.thumb,
                         pageText: this.localViewSnap.text
                     })
                     if (r.ok) {
