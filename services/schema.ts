@@ -8,10 +8,14 @@ import { surface } from "../src/surface/store";
 
 class SchemaService {
     @put('/schema/create')
-    async createSchema() {
-        var data = { ...arguments[0] };
-        data.workspaceId = surface.workspace.id;
-        return await surface.workspace.sock.put('/schema/create', data);
+    async createSchema(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.put('/schema/create', args);
+    }
+    @put('/schema/create/define')
+    async createSchemaDefine(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.put('/schema/create/define', args);
     }
     @get('/schema/query')
     async searchSchema() {
