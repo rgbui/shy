@@ -67,7 +67,7 @@ class WorkspaceService extends BaseService {
                 sn: rr.data.workspace.sn,
                 // templateId?: string
             });
-            return { ok: true, data: { workspace: rr.data.workspace,pids:rr.data.pids } }
+            return { ok: true, data: { workspace: rr.data.workspace, pids: rr.data.pids } }
         }
         else return { ok: false, warn: rr.warn }
     }
@@ -321,5 +321,12 @@ class WorkspaceService extends BaseService {
         args.wsId = surface.workspace.id;
         return await masterSock.get('/robots/info', args);
     }
+
+    @get('/view/browse')
+    async viewBrowse(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.get('/view/browse', args);
+    }
+    
 }
 

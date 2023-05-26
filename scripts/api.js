@@ -327,7 +327,7 @@ push('/view/snap/content', '{wsId?:string,id:string}', 'SockResponse<{id:string,
 push('/view/snap/patch', '{id:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/view/snap/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}', 'SockResponse<{seq:number,id:string}>', ['post']);
-
+push('/view/browse','{elementUrl:string,wsId?:string}','{list:any[],page:number,size:number,total:number}',['get']);
 push(`/get/page/refs`, '{wsId?:string,pageId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/row/block/sync/refs`, '{wsId?:string,pageId?:string,operators:any[]}', 'SockResponse<{results:{ id: string, error?: string }[]}>', ['post'])
 
