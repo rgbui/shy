@@ -30,8 +30,11 @@ export class Supervisor extends Events {
      * 对话框页面
      */
     dialog: PageViewStore = null;
+    elementUrls: { date: Date, elementUrl: string, source: PageViewStore['source'] }[] = [];
     async onOpen(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.page?.elementUrl) return;
+        this.elementUrls.push({ date: new Date(), elementUrl, source: 'page' })
+        if (this.elementUrls.length > 20) this.elementUrls = this.elementUrls.slice(-20)
         this.opening = true;
         try {
             var mainStore = PageViewStores.createPageViewStore(elementUrl, 'page', config);

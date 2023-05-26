@@ -1,5 +1,5 @@
 
-import lodash from "lodash";
+import lodash, { chain } from "lodash";
 import { ElementType } from "rich/net/element.type";
 import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
@@ -10,6 +10,7 @@ import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
+import { channel } from "rich/net/channel";
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
@@ -91,6 +92,13 @@ export async function createPageContent(store: PageViewStore) {
                 page.onUnmount();
                 delete store.page;
                 createPageContent(store);
+            })
+            page.on(PageDirective.back, async () => {
+                var r = surface.supervisor.elementUrls.findLast(g => g.elementUrl !== page.elementUrl && g.source == 'page');
+                console.log('gggg',r);
+                if (r) {
+                    channel.air('/page/open', { elementUrl: r.elementUrl })
+                }
             })
             page.on(PageDirective.mounted, async () => {
                 if (store.config.blockId) {
