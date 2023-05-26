@@ -29,8 +29,8 @@ export async function createPageContent(store: PageViewStore) {
                     page.requireSelectLayout = false;
                 }
             }
-            page.on(PageDirective.history, async function (action)
-            {
+            page.on(PageDirective.history, async function (action) {
+                console.log('action', action, 'syncBlocks');
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
                         var snap = SnapStore.createSnap(syncBlock.elementUrl)
