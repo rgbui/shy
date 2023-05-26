@@ -59,7 +59,8 @@ class MessageCenter {
             }
         }
         await surface.supervisor.onOpen(elementUrl, args.config);
-        if (surface.supervisor.page?.item) {
+        if (surface.supervisor.page?.item)
+        {
             var it = surface.supervisor.page?.item;
             UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
             it.onUpdateDocument();
