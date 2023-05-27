@@ -36,7 +36,7 @@ function renderEl() {
         isUserRender = true;
         if (user.avatar) {
             userEl.insertAdjacentHTML('afterbegin',
-                `<a href="/my/workspace">
+                `<a href="/home">
             <div class="shy-avatar" style="width: 40px; height: 40px;"><img src="${user.avatar.url}" style="width: 40px; height: 40px;"></div>
             </a>`)
 
