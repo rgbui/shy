@@ -44,7 +44,7 @@ export class ShyFeature extends React.Component {
                 <div className="text-center gap-h-20 f-14">不限空间、不限人数、不限功能、按量付费</div>
                 <div className="flex flex-top flex-full">
                     <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed   box-border  gap-r-10 padding-14 shadow  round r-gap-10">
-                        <div className="h3">免费</div>
+                        <div className="h3">个人免费版</div>
                         <div>本地100% 永久免费使用</div>
                         <div>社区支持</div>
                         <div>支持局域网多人协作</div>
@@ -54,9 +54,9 @@ export class ShyFeature extends React.Component {
                         <div className="flex">安装诗云服务端(数据存储在本地)</div>
                     </div>
                     <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed  box-border  gap-l-10 padding-14 shadow  round r-gap-10">
-                        <div className="h3">云端</div>
+                        <div className="h3">个人专业版</div>
                         <div className="flex"><span className="flex-auto">按量付费</span><span className="flex-fixed"><Button onClick={e => openPay('fill')} >购买</Button></span></div>
-                        <div className="flex"><span className="flex-auto">软件服务费</span><span className="flex-fixed"><span>60<span className="remark del f-12 gap-l-5">100</span>元/年</span></span></div>
+                        <div className="flex"><span className="flex-auto">软件服务费</span><span className="flex-fixed"><span>160<span className="remark del f-12 gap-l-5">199</span>元/年</span></span></div>
                         <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">2元/G/年</span></div>
                         <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">0.5元/G</span></div>
                         <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">3元/1万条</span></div>
@@ -70,17 +70,17 @@ export class ShyFeature extends React.Component {
                 <div className="h2 flex-center">套餐包</div>
                 <div className="flex-center   gap-h-20">不按人数收费、支持独立域名及app、自建服务器</div>
                 <div className="flex flex-top flex-full">
-                    <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-r-10 box-border padding-14 shadow  round r-gap-5">
+                    {/* <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-r-10 box-border padding-14 shadow  round r-gap-5">
                         <div className="h3">团队版</div>
                         <div className="flex"><span className="flex-auto">199元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-1' && openPay('meal-1')} ghost={this.wallet.meal == 'meal-1' ? true : false}>{this.wallet.meal == 'meal-1' ? "使用中" : "升级"}</Button></span></div>
                         <div className="flex"><span>适用于小规模团队</span></div>
                         <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">20G</span></div>
                         <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">100G</span></div>
                         <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">30万条</span></div>
-                    </div>
+                    </div> */}
                     <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-l-10 box-border padding-14 shadow  round r-gap-5">
                         <div className="h3">社区版</div>
-                        <div className="flex"><span className="flex-auto">360<span className="del f-12">480</span>元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></span></div>
+                        <div className="flex"><span className="flex-auto">999元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></span></div>
                         <div className="flex"><span>适用于开放性社区，流量无限</span></div>
                         <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">50G</span></div>
                         <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">无限</span></div>
