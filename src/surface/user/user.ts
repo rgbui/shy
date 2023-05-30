@@ -1,6 +1,6 @@
 import lodash from "lodash";
 import { makeObservable, observable } from "mobx";
-import { IconArguments } from "rich/extensions/icon/declare";
+import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
 import { channel } from "rich/net/channel";
 import { UserStatus } from "rich/types/user";
 import { util } from "rich/util/util";
@@ -25,7 +25,7 @@ export class User {
     public paw: string = null;
     public checkPaw: boolean = null;
     public name: string = null;
-    public avatar: IconArguments = null;
+    public avatar: ResourceArguments = null;
     public cover: IconArguments = null;
     public email: string = null;
     public checkEmail: boolean = null;

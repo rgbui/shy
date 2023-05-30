@@ -54,10 +54,10 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
                             await masterSock.patch('/robot/set', {
                                 id: this.props.robot.id,
                                 data: {
-                                    avatar: { name: 'image', url: rg.data.file.url }
+                                    avatar: { name: 'upload', url: rg.data.file.url }
                                 }
                             })
-                            this.props.robot.avatar = { name: 'image', url: rg.data.file.url }
+                            this.props.robot.avatar = { name: 'upload', url: rg.data.file.url }
                         }
                     }
                 }

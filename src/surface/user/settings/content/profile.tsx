@@ -26,7 +26,7 @@ export class UserSettingProfile extends React.Component {
             var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
                 if (r.data.file.url) {
-                    surface.user.onUpdateUserInfo({ avatar: { name: 'image', url: r.data.file.url } })
+                    surface.user.onUpdateUserInfo({ avatar: { name:'upload', url: r.data.file.url } })
                 }
             }
         }
@@ -40,7 +40,7 @@ export class UserSettingProfile extends React.Component {
             var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
                 if (r.data.file.url) {
-                    surface.user.onUpdateUserInfo({ cover: { name: 'image', url: r.data.file.url } })
+                    surface.user.onUpdateUserInfo({ cover: { name:'image', url: r.data.file.url } })
                 }
             }
         }
