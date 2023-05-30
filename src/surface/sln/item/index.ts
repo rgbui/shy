@@ -1,7 +1,7 @@
 
 import { util } from "rich/util/util";
 import { surface } from "../../store";
-import { IconArguments } from "rich/extensions/icon/declare";
+import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
@@ -29,7 +29,7 @@ export class PageItem {
     text: string = ''
     public cover: { abled: boolean, url: string, thumb: string, top: number };
     public plain: string;
-    public thumb: IconArguments;
+    public thumb: ResourceArguments;
     spread: boolean = false;
     creater: string = '';
     description: string = '';
