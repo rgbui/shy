@@ -43,51 +43,75 @@ export class ShyFeature extends React.Component {
                 <div className="h2 flex-center">价格</div>
                 <div className="text-center gap-h-20 f-14">不限空间、不限人数、不限功能、按量付费</div>
                 <div className="flex flex-top flex-full">
-                    <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed   box-border  gap-r-10 padding-14 shadow  round r-gap-10">
+                    <div style={{ width: 'calc(33% - 10px)' }} className="flex-fixed   box-border  gap-r-10 padding-14 shadow  round r-gap-10">
                         <div className="h3">个人免费版</div>
                         <div>本地100% 永久免费使用</div>
                         <div>社区支持</div>
                         <div>支持局域网多人协作</div>
-                        <div className="flex">
-                            <span className="flex-auto">线上免费存储</span><span className="flex-fixed">200M</span>
-                        </div>
-                        <div className="flex">安装诗云服务端(数据存储在本地)</div>
+                        <div className="flex"><span className="flex-auto">线上免费存储</span><span className="flex-fixed">200M</span></div>
+                        <div>超出按量付费</div>
+                        <div>充值用很久</div>
                     </div>
-                    <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed  box-border  gap-l-10 padding-14 shadow  round r-gap-10">
+                    <div style={{ width: 'calc(33% - 10px)' }} className="flex-fixed  box-border  gap-l-10 padding-14 shadow  round r-gap-10">
                         <div className="h3">个人专业版</div>
-                        <div className="flex"><span className="flex-auto">按量付费</span><span className="flex-fixed"><Button onClick={e => openPay('fill')} >购买</Button></span></div>
-                        <div className="flex"><span className="flex-auto">软件服务费</span><span className="flex-fixed"><span>160<span className="remark del f-12 gap-l-5">199</span>元/年</span></span></div>
-                        <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">2元/G/年</span></div>
-                        <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">0.5元/G</span></div>
-                        <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">3元/1万条</span></div>
-                        <div className="flex"><span className="flex-auto">语音</span><span className="flex-fixed">1元/1小时</span></div>
-                        <div className="flex"><span className="flex-auto">其它</span></div>
+                        <div className="flex"><span className="flex-auto">160<span className="del gap-l-10">199</span>元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-1' && openPay('meal-1')} ghost={this.wallet.meal == 'meal-1' ? true : false}>{this.wallet.meal == 'meal-1' ? "使用中" : "升级"}</Button></span></div>
+                        <div className="flex"><span>适用于个人及小群体</span></div>
+                        <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">50G</span></div>
+                        <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">250G</span></div>
+                        <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">30万条</span></div>
+                        <div className="flex"><span>支持自定义二级域名</span></div>
+                        <div>超出按量付费</div>
+                    </div>
+                    <div style={{ width: 'calc(33% - 10px)' }} className="flex-fixed gap-l-10 box-border padding-14 shadow  round r-gap-5">
+                        <div className="h3">社区版</div>
+                        <div className="flex"><span className="flex-auto">800<span className="del gap-l-10">999</span>元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></span></div>
+                        <div className="flex"><span>适用于开放性社区，流量无限</span></div>
+                        <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">200G</span></div>
+                        <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">无限</span></div>
+                        <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">200万条</span></div>
+                        <div className="flex"><span>支持自定义域名</span></div>
+                        <div className="flex"><span>支持商业独立运营</span></div>
+                        <div className="flex"><span>支持发行独立app(待开发)</span></div>
+                        <div>超出按量付费</div>
                     </div>
                 </div>
             </div>
 
             <div className="gap-h-40">
-                <div className="h2 flex-center">套餐包</div>
-                <div className="flex-center   gap-h-20">不按人数收费、支持独立域名及app、自建服务器</div>
-                <div className="flex flex-top flex-full">
-                    {/* <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-r-10 box-border padding-14 shadow  round r-gap-5">
-                        <div className="h3">团队版</div>
-                        <div className="flex"><span className="flex-auto">199元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-1' && openPay('meal-1')} ghost={this.wallet.meal == 'meal-1' ? true : false}>{this.wallet.meal == 'meal-1' ? "使用中" : "升级"}</Button></span></div>
-                        <div className="flex"><span>适用于小规模团队</span></div>
-                        <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">20G</span></div>
-                        <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">100G</span></div>
-                        <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">30万条</span></div>
-                    </div> */}
-                    <div style={{ width: 'calc(50% - 10px)' }} className="flex-fixed gap-l-10 box-border padding-14 shadow  round r-gap-5">
-                        <div className="h3">社区版</div>
-                        <div className="flex"><span className="flex-auto">999元/年</span><span className="flex-fixed"><Button onClick={e => this.wallet.meal != 'meal-2' && openPay('meal-2')} ghost={this.wallet.meal == 'meal-2' ? true : false}>{this.wallet.meal == 'meal-2' ? "使用中" : "升级"}</Button></span></div>
-                        <div className="flex"><span>适用于开放性社区，流量无限</span></div>
-                        <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">50G</span></div>
-                        <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">无限</span></div>
-                        <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">100万条</span></div>
-                        <div className="flex"><span>支持自定义域名</span></div>
-                        <div className="flex"><span>支持发行独立app(待开发)</span></div>
+                <div className="h2 flex-center">按量计费</div>
+                <div className="flex flex-center">
+                    <div style={{ width: 'calc(50% - 10px)' }} className=" gap-l-10 box-border padding-14 shadow  round r-gap-5">
+                        {/* <div className="h3">社区版</div> */}
+                        <div className="flex"><span className="flex-auto">空间</span><span className="flex-fixed">2元/G/年</span></div>
+                        <div className="flex"><span className="flex-auto">流量</span><span className="flex-fixed">0.5元/G</span></div>
+                        <div className="flex"><span className="flex-auto">数据</span><span className="flex-fixed">3元/1万条</span></div>
+                        <div className="flex"><span className="flex-auto">语音</span><span className="flex-fixed">1元/1小时</span></div>
+                        <div className="flex"><span className="flex-auto">AI写作</span><span className="flex-fixed">0.5元/1万字</span></div>
                     </div>
+                </div>
+            </div>
+
+            <div className="gap-h-40">
+                <div className="h2 flex-center">个人用户该如何付费</div>
+                <div className="margin-auto  shadow  max-w-500 bg-white padding-14 round-8 l-30"  >
+                    如果您想把知识存在本地，建议您找台空闲的电脑安装一下诗云的服务端。之后在局域网可以多人整理知识了。诗云对此是免费的，也不会特意限制功能，除了各别无法免费的功能如AI写作。
+                    <br />
+                    <br />
+                    如果使用云端，建议充一下值，诗云是按使用量收费的，最低充99元。个人用量不大，用两三年都没什么问题，用完再充。功能及协作没什么限制，AI写作也能用。
+                    <br />
+                    <br />
+                    如果您是知识整理的深度用户，有大量的数据文件，建议您购买个人专业版，它会比按量付费更实惠，支持自定义二级域名。
+                </div>
+            </div>
+
+
+            <div className="gap-h-40">
+                <div className="h2 flex-center">搭个团队社区该如何付费</div>
+                <div className="margin-auto  shadow  max-w-500 bg-white padding-14 round-8 l-30"  >
+                    如果您的社区用户几百人，个人专业版实际就够了。
+                    <br />
+                    <br />
+                    如果您需要保持商业化独立运营，建议您选择社区版。它比站点更便宜、更容易维护。
                 </div>
             </div>
 
@@ -131,21 +155,7 @@ export class ShyFeature extends React.Component {
                 </div>
             </div>
 
-            <div className="gap-h-40">
-                <div className="h2 flex-center">为什么按量付费</div>
-                <div className="margin-auto  shadow  max-w-500 bg-white padding-14 round-8 l-30"  >
-                    诗云的商业模式很简单。我们组织人员开发了产品，用户使用产品需要支付基础的软件服务费。
-                    余下的参考其它云服务商的价格，也支持你本地存储云端化、自建服务器。
-                    <br />
-                    <br />
-                    诗云是一个社区化协作工具，我们提供一种基于富文本编辑器的方式支持大家灵活运营自已的小社区。
-                    在这个小社区里创作、治理、营收、数据全归大家所拥有。
-                    <br />
-                    <br />
-                    我们不是平台，我们只是想帮肋大家搭建一个独属于自已的网络世界。就像线下的店铺，你可以自已装修、自已经营、自已收款。
-                    你搭建的网络世界就是你自已的数字资产(区块链确权）。你为自已打工，而不是为平台，你幸苦赚钱，别人不应该抽成。
-                </div>
-            </div>
+
 
         </div>
     }
