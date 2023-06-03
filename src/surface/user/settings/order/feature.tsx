@@ -48,9 +48,9 @@ export class ShyFeature extends React.Component {
                         <div>本地100% 永久免费使用</div>
                         <div>社区支持</div>
                         <div>支持局域网多人协作</div>
-                        <div className="flex"><span className="flex-auto">线上免费存储</span><span className="flex-fixed">200M</span></div>
-                        <div>超出按量付费</div>
-                        <div>充值用很久</div>
+                        <div className="flex"><span className="flex-auto">云端免费存储</span><span className="flex-fixed">200M</span></div>
+                        <div className="flex"><span className="flex-auto">云端按量计费</span><span className="flex-fixed"><Button onClick={e => openPay('fill')}>充值</Button></span></div>
+                        <div>价格低廉，按需付费，充一次用很久</div>
                     </div>
                     <div style={{ width: 'calc(33% - 10px)' }} className="flex-fixed  box-border  gap-l-10 padding-14 shadow  round r-gap-10">
                         <div className="h3">个人专业版</div>
@@ -79,6 +79,11 @@ export class ShyFeature extends React.Component {
 
             <div className="gap-h-40">
                 <div className="h2 flex-center">按量计费</div>
+                <div className="flex-center remark gap-h-10">
+                    诗云是采购云服务商的，计费价格参考其它云服务商，一般1~2倍。
+                    <br />
+                    价格低廉，按需付费，充一次用很久
+                </div>
                 <div className="flex flex-center">
                     <div style={{ width: 'calc(50% - 10px)' }} className=" gap-l-10 box-border padding-14 shadow  round r-gap-5">
                         {/* <div className="h3">社区版</div> */}
@@ -94,7 +99,7 @@ export class ShyFeature extends React.Component {
             <div className="gap-h-40">
                 <div className="h2 flex-center">个人用户该如何付费</div>
                 <div className="margin-auto  shadow  max-w-500 bg-white padding-14 round-8 l-30"  >
-                    如果您想把知识存在本地，建议您找台空闲的电脑安装一下诗云的服务端。之后在局域网可以多人整理知识了。诗云对此是免费的，也不会特意限制功能，除了各别无法免费的功能如AI写作。
+                    如果您想把知识存在本地，建议您找台空闲的电脑安装一下诗云的服务端。之后在局域网可以多人整理知识了。诗云对此是免费的，也不会特意限制功能，除了各别无法免费的功能(如AI写作)。
                     <br />
                     <br />
                     如果使用云端，建议充一下值，诗云是按使用量收费的，最低充99元。个人用量不大，用两三年都没什么问题，用完再充。功能及协作没什么限制，AI写作也能用。
