@@ -50,7 +50,7 @@ class WorkspaceService extends BaseService {
         dataServiceAddress?: string,
         searchServiceAddress?: string,
         fileServiceAddress?: string,
-        templateId?: string
+        templateUrl?: string
     }) {
         var rr = await masterSock.put('/ws/create', {
             text: data.text,
@@ -65,6 +65,7 @@ class WorkspaceService extends BaseService {
                 wsId: rr.data.workspace.id,
                 text: data.text,
                 sn: rr.data.workspace.sn,
+                templateUrl: data.templateUrl
                 // templateId?: string
             });
             return { ok: true, data: { workspace: rr.data.workspace, pids: rr.data.pids } }
@@ -327,6 +328,6 @@ class WorkspaceService extends BaseService {
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/view/browse', args);
     }
-    
+
 }
 
