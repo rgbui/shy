@@ -69,6 +69,19 @@ export async function createPageContent(store: PageViewStore) {
                 log.error(error);
             });
             page.on(PageDirective.save, async () => {
+              
+                var syncBlocks = page.findAll(g => g.syncBlockId ? true : false);
+                for (let i = 0; i < syncBlocks.length; i++) {
+                    if (syncBlocks[i].elementUrl) {
+                        try {
+                            var snap = SnapStore.createSnap(syncBlocks[i].elementUrl);
+                            await snap.forceSave();
+                        }
+                        catch (ex) {
+                            console.error(ex);
+                        }
+                    }
+                }
                 await store.snapStore.forceSave();
             });
             page.on(PageDirective.blur, async () => {
@@ -95,7 +108,7 @@ export async function createPageContent(store: PageViewStore) {
             })
             page.on(PageDirective.back, async () => {
                 var r = surface.supervisor.elementUrls.findLast(g => g.elementUrl !== page.elementUrl && g.source == 'page');
-                console.log('gggg',r);
+                console.log('gggg', r);
                 if (r) {
                     channel.air('/page/open', { elementUrl: r.elementUrl })
                 }

@@ -77,7 +77,6 @@ export class SnapStore extends Events {
         };
     }
     async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments, force?: boolean }) {
-
         await this.storeLocal(snap);
         this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);

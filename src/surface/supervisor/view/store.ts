@@ -46,7 +46,7 @@ export class PageViewStore extends Events {
         });
         this.snapStore.only('saveSuccessful', () => {
             if (this.item) {
-                this.item.onChange({ editDate: new Date(), editor: surface.user.id })
+                this.item.onChange({ editDate: new Date(), editor: surface.user.id }, undefined, true)
             }
         });
     }

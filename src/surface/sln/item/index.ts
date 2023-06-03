@@ -454,12 +454,13 @@ export class PageItem {
             this.onChange({ icon });
         }
     }
-    async onChange(pageInfo: Record<string, any>, force?: boolean) {
+    async onChange(pageInfo: Record<string, any>, force?: boolean,onlyUpdateItem?:boolean) {
         if (force != true) {
             var keys = Object.keys(pageInfo);
             var json = util.pickJson(this, keys);
             if (util.valueIsEqual(json, pageInfo)) return;
         }
+        if(onlyUpdateItem!==true)
         channel.air('/page/update/info', { id: this.id, pageInfo });
     }
     getVisibleIds() {
