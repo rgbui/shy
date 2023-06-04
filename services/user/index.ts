@@ -11,6 +11,7 @@ import { userNativeStore } from "../../native/store/user";
 import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";
 import lodash from "lodash";
+import { ShyAlert } from "rich/component/lib/alert";
 
 var batchUserBasic = new MergeSock(async (datas) => {
     var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, { ids: lodash.uniq(datas.map(d => d.args)) });
@@ -31,9 +32,9 @@ class UserService extends BaseService {
         var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string>
         if (!(data.phone.startsWith('5') && data.phone.length == '13524169334'.length)) {
             result = this.createResponse({ $phone: data.phone, $code: data.code });
-             if (result.ok == false) return result;
+            if (result.ok == false) return result;
         }
-       
+
         result = await masterSock.put('/phone/sign', data);
         return result;
     }
@@ -139,6 +140,10 @@ class UserService extends BaseService {
     async uploadFile(args: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         var { file, uploadProgress } = args;
         try {
+            if (args.file.size > 1024 * 1024 * 50) {
+                ShyAlert('暂时不支持上传超过50M的文件')
+                return { ok: false, warn: '文件大小不能超过50M' }
+            }
             if (!file.md5) file.md5 = await FileMd5(file);
             var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
             if (d.ok) {

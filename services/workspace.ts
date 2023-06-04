@@ -6,6 +6,7 @@ import { del, get, patch, post, put } from "rich/net/annotation";
 import { Workspace } from "../src/surface/workspace";
 import { FileMd5 } from "../src/util/file";
 import { channel } from "rich/net/channel";
+import { ShyAlert } from "rich/component/lib/alert";
 
 class WorkspaceService extends BaseService {
     private wsPids: Map<string, any[]> = new Map();
@@ -131,6 +132,10 @@ class WorkspaceService extends BaseService {
     @post('/ws/upload/file')
     async uploadFile(data: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
+            if (data.file.size > 1024 * 1024 * 50) {
+                ShyAlert('暂时不支持上传超过50M的文件')
+                return { ok: false, warn: '文件大小不能超过50M' }
+            }
             var masterFile;
             var { file, uploadProgress } = data;
             if (!file.md5) file.md5 = await FileMd5(file);
