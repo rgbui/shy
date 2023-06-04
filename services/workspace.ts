@@ -8,28 +8,30 @@ import { FileMd5 } from "../src/util/file";
 import { channel } from "rich/net/channel";
 
 class WorkspaceService extends BaseService {
-    @get('/ws/basic')
-    async queryWsBasic(args) {
-        var sock = args.sock;
-        delete args.sock;
-        if (!sock) {
-            var g = await channel.get('/ws/query', { name: args.wsId });
+    private wsPids: Map<string, any[]> = new Map();
+    private async getWsSock(wsId: string) {
+        var sock;
+        var pids = this.wsPids.get(wsId);
+        if (pids) {
+            sock = Workspace.getWsSock(pids, 'ws')
+        }
+        else {
+            var g = await channel.get('/ws/query', { name: wsId });
             if (g.ok) {
                 sock = Workspace.getWsSock(g.data.pids, 'ws')
+                this.wsPids.set(wsId, g.data.pids)
             }
         }
+        return sock;
+    }
+    @get('/ws/basic')
+    async queryWsBasic(args) {
+        var sock = await this.getWsSock(args.wsId);
         return await sock.get('/ws/basic', args);
     }
     @get('/ws/info')
     async queryWsInfo(args) {
-        var sock = args.sock;
-        delete args.sock;
-        if (!sock) {
-            var g = await channel.get('/ws/query', { name: args.wsId });
-            if (g.ok) {
-                sock = Workspace.getWsSock(g.data.pids, 'ws')
-            }
-        }
+        var sock = await this.getWsSock(args.wsId);
         return await sock.get('/ws/info', args);
     }
     @get('/ws/query')
@@ -251,7 +253,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/page/word/query')
     async pageWordQuery(args) {
-        return await surface.workspace.sock.get('/page/word/query', { word: args.word,size:args.size, wsId: surface.workspace.id });
+        return await surface.workspace.sock.get('/page/word/query', { word: args.word, size: args.size, wsId: surface.workspace.id });
     }
     @get('/ws/search')
     async wsSearch(args) {
@@ -295,16 +297,20 @@ class WorkspaceService extends BaseService {
         });
     }
 
-    @get('/ws/online/users')
-    async wsOnlineUsers(args) {
-        args.wsId = surface.workspace.id;
-        return await masterSock.get('/ws/online/users', args);
-    }
+
     @get('/ws/random/online/users')
     async wsRandomOnLineUsers(args) {
         if (!args.wsId)
             args.wsId = surface.workspace.id;
-        return await masterSock.get('/ws/random/online/users', args)
+        var sock = await this.getWsSock(args.wsId);
+        return await sock.get('/ws/random/online/users', args)
+    }
+    @get('/ws/online/users')
+    async wsOnlineUsers(args) {
+        if (!args.wsId)
+            args.wsId = surface.workspace.id;
+        var sock = await this.getWsSock(args.wsId);
+        return await sock.get('/ws/online/users', args);
     }
     @get('/ws/view/online/users')
     async wsGetViewOnLineUsers(args) {
