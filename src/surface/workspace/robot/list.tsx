@@ -14,6 +14,7 @@ import { Divider } from "rich/component/view/grid";
 import { RobotWikiList } from "./wiki/index";
 import { RobotTasksList } from "./task/view";
 import { RobotInfo } from "rich/types/user";
+import { config } from "../../../../common/config";
 
 @observer
 export class RobotList extends React.Component {
@@ -49,13 +50,18 @@ export class RobotList extends React.Component {
         var r = await useSelectMenuItem(
             { roundPoint: Point.from(event) },
             [
-                { name: 'addWiki', text: '创建知识问答机器人', icon: PageSvg },
-                { name: 'addCommand', text: '创建命令机器人', icon: AiSvg }
+                { name: 'addWiki', text: '创建知识专家机器人', icon: PageSvg },
+                {
+                    name: 'addCommand',
+                    text: '创建命令机器人',
+                    icon: AiSvg,
+                    disabled: surface.workspace.sn == 25 || config.isDev ? false : true
+                }
             ]
         );
         if (r) {
             if (r.item.name == 'addWiki') {
-                var g = await useForm({ title: '创建知识问答机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
+                var g = await useForm({ title: '创建知识专家机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
@@ -99,7 +105,7 @@ export class RobotList extends React.Component {
             </div>
             <Divider></Divider>
             <div className="flex gap-h-10">
-                <span className="remark">创建专属于自已的知识问答、指令执行机器人</span>
+                <span className="remark">创建专属于自已的知识专家、指令执行机器人</span>
                 <span className="size-20 cursor item-hover round flex-center flex-fixed pointer" onMouseDown={e => this.add(e)}><Icon size={18} icon={PlusSvg}></Icon></span>
             </div>
             <div className="">

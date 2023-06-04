@@ -59,7 +59,7 @@ export class ContentViewer extends React.Component {
                     var g = await masterSock.post<{ tokenCount: number }>('/robot/doc/embedding', { id: doc.id });
                     if (g.ok) {
                         if (g.data.tokenCount > 3800) {
-                            ShyAlert('当前文档内容过长，无法嵌入到机器人中')
+                            ShyAlert('当前文档内容过长，无法训练至机器人中')
                         }
                         else {
                             doc.embedding = true;
@@ -68,7 +68,7 @@ export class ContentViewer extends React.Component {
                 }
                 catch (ex) {
                     console.error(ex);
-                    local.error = '微调出错'
+                    local.error = '训练出错'
                 }
                 finally {
                     local.embedding = false;
@@ -107,8 +107,8 @@ export class ContentViewer extends React.Component {
             <div className="flex-end gap-h-10">
                 <span className="error">{local.error}</span>
                 <Button className="gap-r-10" loading={local.saveLoading} onMouseDown={e => save()}>保存</Button>
-                {doc.embedding == true && <Button ghost>已微调</Button>}
-                {doc.embedding == false && <Button loading={local.embedding} onMouseDown={e => setEmbedding()}>微调</Button>}
+                {doc.embedding == true && <Button ghost>已训练</Button>}
+                {doc.embedding == false && <Button loading={local.embedding} onMouseDown={e => setEmbedding()}>训练</Button>}
             </div>
             <div className="remark gap-h-10"><label>标题:</label></div>
             <div className="gap-h-10"><Input ref={e => local.input = e} value={doc.text || ''} onChange={e => input(e)} ></Input></div>
