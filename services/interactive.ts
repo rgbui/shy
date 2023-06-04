@@ -11,7 +11,6 @@ class interactiveService {
     }
     @get('/user/interactives')
     async getUserInteractives(args: {}) {
-        
         return surface.workspace.sock.get('/user/interactives', {
             ...args,
             wsId: surface.workspace.id
