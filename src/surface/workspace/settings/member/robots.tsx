@@ -40,7 +40,7 @@ export class RecommendRobots extends React.Component {
                 {this.search.loading && <SpinBox></SpinBox>}
                 {this.search.list.map(l => {
                     return <div onClick={e => this.currentRobot = l} className="flex gap-h-10 item-hove round item-hover padding-10" key={l.id}>
-                        <div className="flex-auto"><Avatar size={40} userid={l.id}></Avatar></div>
+                        <div className="flex-auto"><Avatar showName size={40} userid={l.id}></Avatar></div>
                         <div className="flex-fixed">
                             {this.currentRobots.some(s => s.userid == l.id) && <Button ghost>已添加</Button>}
                             {!this.currentRobots.some(s => s.userid == l.id) && <Button onClick={(e, b) => {
