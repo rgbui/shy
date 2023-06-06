@@ -232,7 +232,7 @@ module.exports = {
             }
         },
         {
-            test: /\.(jpe?g|png|gif|bmp|webp)$/,
+            test: /\.(jpe?g|png|gif|bmp|webp|ico)$/,
             type: 'asset/resource',
             generator: {
                 filename: versionPrefix + 'assert/img/[name]-[contenthash:8][ext]',

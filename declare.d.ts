@@ -48,6 +48,7 @@ declare module '*.jpeg';
 declare module '*.webp';
 declare module '*.gif';
 declare module "*.md";
+declare module "*.ico";
 
 interface File {
   md5?: string
