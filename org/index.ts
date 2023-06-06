@@ -43,7 +43,7 @@ function renderEl() {
         }
         else {
             userEl.insertAdjacentHTML('afterbegin',
-                `<a href="/my/workspace">
+                `<a href="/home">
             <div class="shy-avatar" style="width: 40px; height: 40px;"><span class='shy-avatar-name' style="width: 40px; height: 40px;display:block;text-align:center;line-height:40px">${user.name.slice(0, 1)}</span></div>
             </a>`)
         }
