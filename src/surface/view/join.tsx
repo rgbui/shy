@@ -16,7 +16,9 @@ export var JoinTip = observer(function () {
         });
         await channel.put('/ws/invite/join', {
             wsId: surface.workspace.id,
-            sock: surface.workspace.sock, agree
+            sock: surface.workspace.sock,
+            agree,
+            username: surface.user.name,
         });
         surface.loadWorkspaceList();
         await surface.onLoadWorkspace(surface.workspace.id);

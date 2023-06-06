@@ -265,7 +265,7 @@ push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>'
 push('/ws/create', '{text:string,dataServiceAddress?:string,searchServiceAddress?:string,fileServiceAddress?:string,templateUrl?:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['put'])
 push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
 push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get']);
-push('/ws/invite/join', '{wsId:string,sock?:any,agree?:boolean}', 'SockResponse<void>', ['put']);
+push('/ws/invite/join', '{wsId:string,sock?:any,agree?:boolean,username:string}', 'SockResponse<void>', ['put']);
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/upload/file', '{file:File,uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])

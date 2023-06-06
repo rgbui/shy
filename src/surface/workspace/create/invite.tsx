@@ -59,7 +59,12 @@ export var InviteView = observer(function () {
         }
         var sock = Workspace.getWsSock(local.pids, 'ws')
         await channel.put('/user/join/ws', { wsId: local.ws.id });
-        var r = await channel.put('/ws/invite/join', { wsId: local.ws.id, sock, agree });
+        var r = await channel.put('/ws/invite/join', {
+            wsId: local.ws.id,
+            username: surface.user.name,
+            sock,
+            agree
+        });
         await surface.loadWorkspaceList();
         return UrlRoute.pushToWs(local.ws.siteDomain || local.ws.sn);
     }
