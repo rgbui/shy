@@ -31,6 +31,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
             }
             page.on(PageDirective.history, async function (action) {
+                if (!page.canEdit) return;
                 console.log('action', action, 'syncBlocks');
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
@@ -69,7 +70,7 @@ export async function createPageContent(store: PageViewStore) {
                 log.error(error);
             });
             page.on(PageDirective.save, async () => {
-              
+                if (!page.canEdit) return;
                 var syncBlocks = page.findAll(g => g.syncBlockId ? true : false);
                 for (let i = 0; i < syncBlocks.length; i++) {
                     if (syncBlocks[i].elementUrl) {
