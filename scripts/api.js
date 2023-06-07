@@ -148,8 +148,8 @@ push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['ac
 push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageItem}`, `void`, ['air']);
 push('/page/query/info', `{id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean}}`, `void`, ['air']);
-push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
-push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean}}', 'any', ['air']);
+push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean}}', 'any', ['air']);
+push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
 push('/current/workspace', '', '{owner:string,creater:string, id:string,sn:number,text:string,url:string,isMember?:boolean,isOwner?:boolean,access?:0|1,accessProfile?:{disabledJoin: boolean,checkJoinProtocol: boolean,joinProtocol: string},roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])

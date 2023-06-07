@@ -109,7 +109,6 @@ export async function createPageContent(store: PageViewStore) {
             })
             page.on(PageDirective.back, async () => {
                 var r = surface.supervisor.elementUrls.findLast(g => g.elementUrl !== page.elementUrl && g.source == 'page');
-                console.log('gggg', r);
                 if (r) {
                     channel.air('/page/open', { elementUrl: r.elementUrl })
                 }
