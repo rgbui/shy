@@ -19,6 +19,7 @@ import { UserAvatars } from "rich/component/view/avator/users"
 import { channel } from "rich/net/channel";
 import { runInAction } from "mobx";
 import { isMobileOnly } from "react-device-detect";
+import { ShyUtil } from "../../util";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
@@ -28,7 +29,7 @@ export var SideBar = observer(function () {
             <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
         </a>
         else return <a className="shy-sidebar-ws-name  relative">
-            <span style={{ fontSize: 18 }}>{workspace?.text?.slice(0, 2)}</span>
+            <span style={{ fontSize: 18 }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
             <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
         </a>
     }

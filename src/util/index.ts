@@ -41,7 +41,7 @@ export var ShyUtil = {
         }
         return s;
     },
-    urlParam(name:string) {
+    urlParam(name: string) {
         var search = window.location.search;
         // var age = getSearchString('age', search); //结果：18
         // var id = getSearchString('id', search); //结果：2
@@ -59,6 +59,11 @@ export var ShyUtil = {
             }
             return obj[key];
         }
-        return getSearchString(name,search);
+        return getSearchString(name, search);
+    },
+    firstToUpper(word: string) {
+        const firstLetter = word.charAt(0);
+        const capitalizedWord = firstLetter.toUpperCase() + word.slice(1);
+        return capitalizedWord
     }
 }
