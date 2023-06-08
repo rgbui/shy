@@ -47,6 +47,7 @@ export class SnapStore extends Events {
     async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments, force?: boolean }) {
         if (typeof this.viewSnapQueue == 'undefined') this.viewSnapQueue = new QueueHandle();
         await this.viewSnapQueue.create(async () => {
+            console.log('snap', snap);
             /**
             * 本地先存起来
             */
@@ -102,6 +103,7 @@ export class SnapStore extends Events {
                     seq: this.localViewSnap.seq
                 });
                 if (tryLocker.ok && tryLocker.data.lock == true) {
+                    console.log('save', this.localViewSnap);
                     var r = await surface.workspace.sock.put('/view/snap', {
                         elementUrl: this.elementUrl,
                         wsId: surface.workspace.id,
@@ -141,6 +143,7 @@ export class SnapStore extends Events {
         if (config.isPc) local = await yCache.get(this.localId);
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
+        console.log('query seq', seq);
 
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
