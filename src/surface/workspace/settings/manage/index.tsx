@@ -138,7 +138,7 @@ export class WorkspaceManage extends React.Component {
                 <div className="remark f-12 gap-h-10">资源管理器(侧栏）风格显示设置</div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1">自定义图标</div>
-                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={surface.workspace.allowSlnIcon ? false : true}></Switch></div>
+                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon ? false : true}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1">布局风格</div>
