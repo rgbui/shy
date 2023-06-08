@@ -83,7 +83,7 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
     }
     render() {
         var robot = this.props.robot;
-        return <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
+        return <div className="shy-user-settings-profile-box-card settings w100" style={{ margin: '20px 0px' }}>
             <div className="bg">
                 {!robot.cover?.url && <div style={{ height: 100, backgroundColor: robot?.cover?.color ? robot?.cover?.color : 'rgb(192,157,156)' }}></div>}
                 {robot.cover?.url && <img style={{ height: 180 }} src={autoImageUrl(robot.cover?.url, 900)} />}

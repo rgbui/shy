@@ -15,6 +15,7 @@ import { RobotWikiList } from "./wiki/index";
 import { RobotTasksList } from "./task/view";
 import { RobotInfo } from "rich/types/user";
 import { config } from "../../../../common/config";
+import { useOpenRobotSettings } from "./view";
 
 @observer
 export class RobotList extends React.Component {
@@ -92,13 +93,10 @@ export class RobotList extends React.Component {
     }
     open(robot: RobotInfo) {
         this.currentRobot = robot;
+        useOpenRobotSettings(this.currentRobot);
     }
     currentRobot: RobotInfo = null;
     render() {
-        if (this.currentRobot) {
-            if (this.currentRobot.scene == 'wiki') return <RobotWikiList robotList={this} robot={this.currentRobot}></RobotWikiList>
-            else return <RobotTasksList robotList={this} robot={this.currentRobot}></RobotTasksList>
-        }
         return <div>
             <div className="h2 flex">
                 <span className="flex-auto">机器人列表</span>

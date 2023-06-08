@@ -13,12 +13,11 @@ import { MenuItemType } from "rich/component/view/menu/declare";
 import { surface } from "../../../store";
 import { Confirm } from "rich/component/lib/confirm";
 import { RobotInfo, RobotTask } from "rich/types/user";
-import { RobotList } from "../list";
 import { RobotInfoView } from "../info";
 import { RobotInfoDescriptionView } from "../description";
 
 @observer
-export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotList: RobotList }> {
+export class RobotTasksList extends React.Component<{ robot: RobotInfo, close?: () => void }> {
     constructor(props) {
         super(props);
         this.robot = props.robot;
@@ -101,7 +100,7 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotLis
         }
     }
     async back() {
-        this.props.robotList.currentRobot = null;
+        if (typeof this.props.close == 'function') this.props.close()
     }
     render() {
         return <div>
@@ -115,7 +114,7 @@ export class RobotTasksList extends React.Component<{ robot: RobotInfo, robotLis
             <div>
                 <RobotInfoView robot={this.robot}></RobotInfoView>
             </div>
-            
+
             <div className="flex border-bottom gap-h-10 r-padding-w-10 r-h-30 r-cursor">
                 <span onClick={e => this.tab = '1'} className={" " + (this.tab == '1' ? "border-b-p" : "")}>常规</span>
                 <span onClick={e => this.tab = '2'} className={" " + (this.tab == '2' ? "border-b-p" : "")}>指令</span>

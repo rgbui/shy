@@ -71,7 +71,7 @@ export class SafeSetting extends React.Component {
     render() {
         return <div className='shy-ws-manage'>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <div className="h2">空全设置</div>
+            <div className="h2">安全设置</div>
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14 gap-t-10">通用的设置</div>

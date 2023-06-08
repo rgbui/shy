@@ -2,11 +2,11 @@ import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { ArrowLeftSvg, DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg } from "rich/component/svgs";
+import { ArrowLeftSvg, CheckSvg, ChevronDownSvg, DotSvg, DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg, UploadSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType } from "rich/component/view/menu/declare";
-import { Point } from "rich/src/common/vector/point";
+import { Point, Rect } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
 import { surface } from "../../../store";
 import { WikiDoc } from "../declare";
@@ -16,16 +16,18 @@ import { ShyUtil } from "../../../../util";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { RobotInfo } from "rich/types/user";
-import { RobotList } from "../list";
 import { RobotInfoView } from "../info";
 import { RobotInfoDescriptionView } from "../description";
+import { ToolTip } from "rich/component/view/tooltip";
+import { RobotInfoPromptView } from "./prompt";
 
-export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: RobotList }) => {
+export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => void }) => {
     var local = useLocalObservable<{
         loading: boolean,
         robot: RobotInfo,
         docs: WikiDoc[],
         editDoc: WikiDoc,
+        renameDoc: WikiDoc,
         cv: ContentViewer,
         docPanel: HTMLElement,
         tab: string,
@@ -37,7 +39,8 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
             docs: [],
             editDoc: null,
             docPanel: null,
-            tab: '1'
+            tab: '1',
+            renameDoc: null
         }
     })
     async function load() {
@@ -91,16 +94,26 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
             { name: 'add', text: "添加", icon: PlusSvg },
             { name: 'addSub', text: '添加子文档', icon: PlusAreaSvg },
             { type: MenuItemType.divide },
-            // { name: 'edit',text:'重命名',icon:EditSvg}, 
-            { name: 'fine', text: '微调', icon: RefreshSvg },
+            { name: 'edit', text: '重命名', icon: EditSvg },
+            { name: 'fine', text: '训练', icon: RefreshSvg, checkLabel: doc.embedding ? true : false },
+            { type: MenuItemType.divide },
             { name: 'delete', text: '删除', icon: TrashSvg }
         ])
         if (r) {
             if (r.item?.name == 'edit') {
-
+                local.renameDoc = doc;
+                await util.delay(100);
+                var de = document.querySelector('[data-wiki-id=\'' + doc.id + '\']');
+                if (de) {
+                    var input = de.querySelector('input') as HTMLInputElement;
+                    if (input) {
+                        input.focus();
+                    }
+                }
             }
             else if (r.item?.name == 'fine') {
-                await masterSock.post('/robot/doc/embedding', { id: doc.id })
+                if (doc.embedding == true && await Confirm('已训练，是否仍然训练'))
+                    await masterSock.post('/robot/doc/embedding', { id: doc.id })
             }
             else if (r.item?.name == 'delete') {
                 if (await Confirm('确认删除吗')) {
@@ -228,23 +241,51 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
             })
         }
     }
+    async function updateDoc(doc: WikiDoc, props: Record<string, any>) {
+        Object.assign(doc, props);
+        await masterSock.patch('/patch/doc', { id: doc.id, data: props })
+    }
     function renderDocs(docs: WikiDoc[], parentDoc: WikiDoc, level: number = 0) {
         if (!parentDoc || parentDoc?.spread === true) {
             return <div>
                 {docs.map(doc => {
                     return <div key={doc.id} >
-                        <div data-wiki-id={doc.id} onMouseDown={e => mousedownDoc(e, doc)} >
-                            <div className={"visible-hover cursor flex h-30 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>
-                                <span className="size-20 flex-center item-hover round"
+                        <div data-wiki-id={doc.id}
+                            onMouseDown={e => mousedownDoc(e, doc)}
+                            onContextMenu={e => {
+                                e.preventDefault()
+                                contextmenuItem(e, doc, parentDoc)
+                            }}
+                        >
+                            <div className={"visible-hover cursor flex h-30 gap-h-5 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>
+                                {local.renameDoc !== doc && <><span className={"size-20 flex-center item-hover round ts" + (doc.spread ? '' : ' rotate-90-')}
                                     onMouseDown={e => { doc.spread = doc.spread ? false : true; e.stopPropagation() }}>
-                                    <Icon icon={doc.spread ? "arrow-down:sy" : 'arrow-right:sy'}></Icon></span>
-                                <span className="flex-fixed size-20 round item-hover flex-center cursor">
-                                    <Icon size={16} icon={PageSvg}></Icon>
+                                    {doc.childs?.length > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
+                                    {!(Array.isArray(doc.childs) && doc.childs.length > 0) && <Icon size={16} icon={DotSvg}></Icon>}
                                 </span>
-                                <span className="flex-auto text-overflow">{doc.text || '知识'}</span>
-                                <span className="flex-fixed">
-                                    <span className="flex-center size-20 item-hover visible round" onClick={e => contextmenuItem(e, doc, parentDoc)}><Icon size={20} icon={DotsSvg}></Icon></span>
-                                </span>
+                                    <span className="flex-fixed size-20 round text-1 item-hover flex-center cursor">
+                                        <Icon size={16} icon={PageSvg}></Icon>
+                                    </span>
+                                    <span className="flex-auto text-overflow">{doc.text || '知识'}</span>
+                                    <span className="flex-fixed flex">
+                                        {doc.embedding && <ToolTip overlay={'已微调'}><span className="flex-center text-1 size-20 item-hover  round" ><Icon size={16} icon={CheckSvg}></Icon></span></ToolTip>}
+                                        <span className="flex-center size-20 item-hover visible round" onClick={e => contextmenuItem(e, doc, parentDoc)}><Icon size={20} icon={DotsSvg}></Icon></span>
+                                    </span></>}
+                                {local.renameDoc == doc && <>
+                                    <input className="no-border"
+                                        style={{ border: '1px solid #eee' }}
+                                        defaultValue={doc.text || '知识'}
+                                        onChange={e => {
+                                        }}
+                                        onBlur={e => {
+                                            var value = (e.target as HTMLInputElement).value.trim()
+                                            if (value) {
+                                                updateDoc(doc, { text: value })
+                                                local.renameDoc = null;
+                                            }
+                                        }}
+                                    />
+                                </>}
                             </div>
                         </div>
                         {doc.childs && renderDocs(doc.childs, doc, level + 1)}
@@ -255,7 +296,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
         else return <></>
     }
     function back() {
-        props.robotList.currentRobot = null;
+        if (typeof props.close == 'function') props.close()
     }
     return <div>
         <div className="flex">
@@ -266,19 +307,23 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
         <div>
             <RobotInfoView robot={props.robot}></RobotInfoView>
         </div>
-        <div className="flex border-bottom gap-h-10 r-padding-w-10 r-h-30 r-cursor">
+        <div className="flex border-bottom gap-h-10 gap-b-20 r-padding-w-15 r-h-30 r-cursor">
             <span onClick={e => local.tab = '1'} className={" " + (local.tab == '1' ? "border-b-p" : "")}>常规</span>
-            <span onClick={e => local.tab = '2'} className={" " + (local.tab == '2' ? "border-b-p" : "")}>知识</span>
+            <span onClick={e => local.tab = '3'} className={" " + (local.tab == '3' ? "border-b-p" : "")}>prompt</span>
+            <span onClick={e => local.tab = '2'} className={" " + (local.tab == '2' ? "border-b-p" : "")}>知识库</span>
         </div>
         {local.tab == '1' && <div>
             <RobotInfoDescriptionView robot={props.robot}></RobotInfoDescriptionView>
         </div>}
         {local.tab == '2' && <div>
-            <div className="flex flex-top">
-                <div className="flex-fixed w-200">
+            <div className="flex flex-top flex-full gap-t-10">
+                <div className="flex-fixed w-200 border-right padding-r-10 gap-r-10">
                     <div className="flex">
-                        <span className="flex-auto">知识</span>
-                        <span onMouseDown={e => add(e)} className="size-20 cursor round item-hover flex-center flex-fixed"><Icon size={16} icon={PlusSvg}></Icon></span>
+                        <span className="flex-auto flex">
+                            <span className="item-hover round padding-h-3 padding-w-5 cursor">机器人语料库</span>
+                        </span>
+                        <span onMouseDown={e => add(e)}
+                            className="size-20 cursor round item-hover flex-center flex-fixed"><Icon size={16} icon={PlusSvg}></Icon></span>
                     </div>
                     <div ref={e => local.docPanel = e}>{renderDocs(local.docs, null)}</div>
                 </div>
@@ -287,6 +332,8 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, robotList: Robot
                 </div>
             </div>
         </div>}
-
+        {local.tab == '3' && <div>
+            <RobotInfoPromptView robot={props.robot}></RobotInfoPromptView>
+        </div>}
     </div>
 })
