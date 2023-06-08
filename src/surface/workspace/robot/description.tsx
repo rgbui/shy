@@ -27,11 +27,6 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
         if (!this.remark) return ShyAlert('请介绍一下机器人,如何使用它')
         try {
             b.loading = true;
-            var rs = this.remark.split(/\r?\n/g);
-            for (let i = 0; i < rs.length; i++) {
-                if (!rs[i].endsWith('  ')) rs[i] += "  "
-            }
-            this.remark = rs.join("\n");
             await masterSock.patch('/robot/set', {
                 id: this.props.robot.id,
                 data: {
