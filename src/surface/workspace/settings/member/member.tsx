@@ -157,7 +157,7 @@ export class WorkspaceMembers extends React.Component {
                 <Divider></Divider>
                 {this.searchList.loading && <div className='flex-center gap-h-20'><Spin></Spin></div>}
                 {this.searchList.list.map(me => {
-                    return <div key={me.id} className='shy-ws-member flex round padding-10'>
+                    return <div key={me.id} className='shy-ws-member flex round padding-10 visible-hover'>
                         <div className='flex-fixed w-240'>
                             <Avatar showName showSn={false} size={30} userid={me.userid}></Avatar>
                         </div>
@@ -173,7 +173,7 @@ export class WorkspaceMembers extends React.Component {
                         </div>
                         <div className='flex-fixed'>
                             {surface.workspace.owner != me.userid && !this.currentRobots.some(s => s.userid == me.userid) && <ToolTip overlay={'移出成员'}>
-                                <span onMouseDown={e => this.removeUser(me)} className='flex-center size-24 item-hover cursor round'>
+                                <span onMouseDown={e => this.removeUser(me)} className='flex-center size-24 item-hover cursor round visible'>
                                     <Icon size={14} icon={CloseSvg}></Icon>
                                 </span>
                             </ToolTip>}
