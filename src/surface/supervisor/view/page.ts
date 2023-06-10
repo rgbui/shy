@@ -32,7 +32,7 @@ export async function createPageContent(store: PageViewStore) {
             }
             page.on(PageDirective.history, async function (action) {
                 if (!page.canEdit) return;
-                console.log('action', action, 'syncBlocks');
+                // console.log('action', action, 'syncBlocks');
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
                         var snap = SnapStore.createSnap(syncBlock.elementUrl)
