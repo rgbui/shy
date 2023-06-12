@@ -136,9 +136,12 @@ export class Sln extends Events {
                 return PageItemView;
         }
     }
-    async onCreateFolder(text: string) {
-        var newItem = await pageItemStore.createFolder(surface.workspace, { text });
-        surface.workspace.childs.push(newItem);
+    async onCreateFolder(text: string, posItem?: PageItem) {
+        var newItem = await pageItemStore.createFolder(surface.workspace, {
+            mime: Mime.pages,
+            text
+        }, posItem);
+      
         return newItem;
     }
     globalMove(event: MouseEvent) {

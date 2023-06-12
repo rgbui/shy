@@ -164,7 +164,11 @@ class PageItemStore {
         return newItem;
     }
     public async createFolder(workspace: Workspace, data: Record<string, any>, next?: PageItem) {
-        if (next) return await this.insertAfterPageItem(next, data)
+        if (next) {
+            var newBlock = await this.insertAfterPageItem(next, data);
+            (next.parent?.childs || surface.workspace.childs).splice(next.index + 1, 0, newBlock);
+            return newBlock;
+        }
         else {
             var actions: PageItemAction[] = [];
             data.id = config.guid();
@@ -183,6 +187,7 @@ class PageItemStore {
                     newItem.load(re);
                 }
             }
+            surface.workspace.childs.push(newItem);
             return newItem;
         }
     }

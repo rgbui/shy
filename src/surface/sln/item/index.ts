@@ -428,7 +428,7 @@ export class PageItem {
                     }
                 });
                 if (r?.text) {
-                    surface.sln.onCreateFolder(r.text)
+                    surface.sln.onCreateFolder(r.text,this)
                 }
                 break;
             case 'toggleFolder':

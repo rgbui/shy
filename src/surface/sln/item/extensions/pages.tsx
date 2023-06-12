@@ -9,7 +9,7 @@ import { surface } from "../../../store";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
-    var isCanEdit =item.isCanEdit;
+    var isCanEdit = item.isCanEdit;
     function renderHead() {
         var gap = 30;
         return <div
@@ -36,7 +36,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     {!item.willLoadSubs && <Icon size={12} icon={ChevronDownSvg}></Icon>}
                 </span>}
                 <span onMouseDown={e => {
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
                 }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor">{item.text || "我的页面"}</span>
