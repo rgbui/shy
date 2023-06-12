@@ -211,7 +211,7 @@ export class PageItem {
             else break;
         }
     }
-    async onSpread(spread?: boolean) {
+    async onSpread(spread?: boolean, spreadParent?: boolean) {
         var sp = typeof spread == 'boolean' ? !spread : this.spread;
         this.spread = sp == false ? true : false;
         if (this.spread == true && this.checkedHasChilds == false && this.subCount > 0) {
@@ -225,6 +225,14 @@ export class PageItem {
             else {
                 this.checkedHasChilds = true;
             }
+        }
+        if (spreadParent == true) {
+            this.closest(g => {
+                if (g.spread == false) {
+                    g.spread = true;
+                }
+                return false;
+            })
         }
         channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
     }
@@ -454,14 +462,14 @@ export class PageItem {
             this.onChange({ icon });
         }
     }
-    async onChange(pageInfo: Record<string, any>, force?: boolean,onlyUpdateItem?:boolean) {
+    async onChange(pageInfo: Record<string, any>, force?: boolean, onlyUpdateItem?: boolean) {
         if (force != true) {
             var keys = Object.keys(pageInfo);
             var json = util.pickJson(this, keys);
             if (util.valueIsEqual(json, pageInfo)) return;
         }
-        if(onlyUpdateItem!==true)
-        channel.air('/page/update/info', { id: this.id, pageInfo });
+        if (onlyUpdateItem !== true)
+            channel.air('/page/update/info', { id: this.id, pageInfo });
     }
     getVisibleIds() {
         var ids: string[] = [this.id];

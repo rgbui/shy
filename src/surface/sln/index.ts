@@ -103,7 +103,7 @@ export class Sln extends Events {
     }
     onFocusItem(item?: PageItem) {
         if (item && this.selectIds.length == 1 && this.selectIds[0] == item.id) {
-            item.onSpread()
+            item.onSpread(true, true);
             return;
         }
         this.selectIds = item ? [item.id] : [];
