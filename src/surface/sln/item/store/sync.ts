@@ -64,7 +64,7 @@ class PageItemStore {
         surface.sln.onDeleteRefocusItem(pageItem);
         actions.push({ directive: ItemOperatorDirective.remove, pageId: pageItem.id, data: { parentId: pageItem.parentId } });
         await this.save(pageItem.workspace.id, { operate: ItemOperator.delete, actions });
-        if (typeof pageItem?.parent.subCount == 'number') {
+        if (typeof pageItem?.parent?.subCount == 'number') {
             pageItem.parent.subCount = pageItem.parent.subCount - 1;
         }
     }
