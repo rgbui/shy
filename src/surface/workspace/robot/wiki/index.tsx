@@ -20,6 +20,7 @@ import { RobotInfoView } from "../info";
 import { RobotInfoDescriptionView } from "../description";
 import { ToolTip } from "rich/component/view/tooltip";
 import { RobotInfoPromptView } from "./prompt";
+import "./style.less";
 
 export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => void }) => {
     var local = useLocalObservable<{
@@ -159,13 +160,13 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
     }
     function mousedownDoc(e: React.MouseEvent, doc: WikiDoc) {
         e.preventDefault();
-        if (local.editDoc?.id == doc.id) return;
-        var overDrop: { id: string, doc: WikiDoc, el: HTMLElement, drop: 'up' | 'up-sub' } = {
+        var overDrop: { id: string, doc: WikiDoc, el: HTMLElement, drop: 'top' | 'bottom' | 'bottom-sub' } = {
             id: null,
             doc: null,
             el: null,
             drop: null
         };
+
         MouseDragger({
             event: e.nativeEvent,
             dis: 5,
@@ -181,55 +182,139 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                         var id = c.getAttribute('data-wiki-id');
                         if (doc.id != id) {
                             var currentDoc = local.docs.arrayJsonFind('childs', g => g.id == id);
-                            if (overDrop?.el && overDrop.id != id) {
-                                overDrop?.el.classList.remove('border-b-p');
+                            if (overDrop?.el) {
+                                overDrop?.el.classList.remove(
+                                    'shy-robot-wiki-item-top',
+                                    'shy-robot-wiki-item-bottom',
+                                    'shy-robot-wiki-item-bottom-sub'
+                                );
                             }
-                            c.classList.add('border-b-p')
-                            overDrop = {
-                                id: id,
-                                el: c as HTMLElement,
-                                doc: currentDoc,
-                                drop: currentDoc.spread == true ? "up-sub" : 'up'
-                            };
+                            var cRect = Rect.fromEle(c as HTMLElement);
+                            var paddingLeft = parseFloat(c.getAttribute('data-wiki-padding-left'))
+                            if (currentDoc.spread == true && currentDoc.childs.length > 0) {
+                                if (e.clientX > cRect.left + paddingLeft) {
+                                    overDrop = {
+                                        id: id,
+                                        el: c as HTMLElement,
+                                        doc: currentDoc,
+                                        drop: 'bottom-sub'
+                                    };
+                                }
+                                else {
+                                    overDrop = {
+                                        id: id,
+                                        el: c as HTMLElement,
+                                        doc: currentDoc,
+                                        drop: 'bottom'
+                                    };
+                                }
+                                c.classList.add('shy-robot-wiki-item-' + overDrop.drop)
+                            }
+                            else {
+                                var drop: any = 'bottom'
+                                if (e.clientY < cRect.middle) {
+                                    drop = 'bottom-sub'
+                                }
+                                c.classList.add('shy-robot-wiki-item-' + drop);
+                                overDrop = {
+                                    id: id,
+                                    el: c as HTMLElement,
+                                    doc: currentDoc,
+                                    drop: drop
+                                };
+                            }
                             return;
                         }
                     }
+                    else {
+                        var dc = Rect.fromEle(local.docPanel);
+                        var drop;
+                        var cd: WikiDoc;
+                        var ce: any;
+                        if (Math.abs(e.clientY - dc.top) < Math.abs(e.clientY - dc.bottom)) {
+                            drop = 'top';
+                            cd = local.docs.first();
+                            ce = local.docPanel.querySelector('[data-wiki-id="' + cd.id + '"]');
+                            if (overDrop?.el) {
+                                overDrop?.el.classList.remove(
+                                    'shy-robot-wiki-item-top',
+                                    'shy-robot-wiki-item-bottom',
+                                    'shy-robot-wiki-item-bottom-sub'
+                                );
+                            }
+                            overDrop = {
+                                id: id,
+                                el: ce as HTMLElement,
+                                doc: cd,
+                                drop: drop
+                            };
+                        }
+                        else {
+                            drop = 'bottom';
+                            cd = local.docs.last();
+                            ce = local.docPanel.querySelector('[data-wiki-id="' + cd.id + '"]');
+                            if (overDrop?.el) {
+                                overDrop?.el.classList.remove(
+                                    'shy-robot-wiki-item-top',
+                                    'shy-robot-wiki-item-bottom',
+                                    'shy-robot-wiki-item-bottom-sub'
+                                );
+                            }
+                            overDrop = {
+                                id: id,
+                                el: ce as HTMLElement,
+                                doc: cd,
+                                drop: drop
+                            };
+                        }
+                        return;
+                    }
                 }
                 if (overDrop?.el) {
-                    overDrop?.el.classList.remove('border-b-p');
+                    overDrop?.el.classList.remove(
+                        'shy-robot-wiki-item-top',
+                        'shy-robot-wiki-item-bottom',
+                        'shy-robot-wiki-item-bottom-sub'
+                    );
                     overDrop = { id: null, doc: null, el: null, drop: null }
                 }
             },
             moveEnd(e, isMove) {
                 ghostView.unload();
                 if (overDrop?.el) {
-                    overDrop.el.classList.remove('border-b-p');
+                    overDrop.el.classList.remove(
+                        'shy-robot-wiki-item-top',
+                        'shy-robot-wiki-item-bottom',
+                        'shy-robot-wiki-item-bottom-sub'
+                    );
                     dragPos(doc, overDrop.doc, overDrop.drop)
                 }
-                if (!isMove && local.cv)
+                if (!isMove && local.cv) {
                     local.cv.load(doc, local.robot)
+                    local.editDoc = doc;
+                }
             }
         })
     }
-    async function dragPos(doc: WikiDoc, dropDoc: WikiDoc, arrow: 'up' | 'up-sub') {
-        var parentId = arrow == 'up-sub' ? dropDoc.id : dropDoc.parentId;
+    async function dragPos(doc: WikiDoc, dropDoc: WikiDoc, arrow: 'bottom' | 'bottom-sub' | 'top') {
+        var parentId = arrow == 'bottom-sub' ? dropDoc.id : dropDoc.parentId;
         var g = await masterSock.post('/doc/move', {
             id: doc.id,
             pos: {
                 parentId,
-                id: arrow == 'up-sub' ? (dropDoc.childs || [])[0]?.id : dropDoc.id,
-                arrow: 'up'
+                id: arrow == 'bottom-sub' ? (dropDoc.childs || [])[0]?.id : dropDoc.id,
+                arrow: arrow == 'bottom' ? 'down' : 'up'
             }
         })
         if (g.ok) {
             runInAction(() => {
                 local.docs.arrayJsonRemove('childs', g => g.id == doc.id)
-                if (arrow == 'up-sub') {
+                if (arrow == 'bottom-sub') {
                     if (!Array.isArray(dropDoc.childs)) dropDoc.childs = [];
                     dropDoc.childs.push(doc);
                     doc.parentId = dropDoc.id;
                 }
-                else {
+                else if (arrow == 'bottom') {
                     var docs = (dropDoc.parentId ? local.docs.arrayJsonFind('childs', g => g.id == dropDoc.parentId).childs : local.docs)
                     var at = docs.findIndex(g => g.id == dropDoc.id);
                     docs.forEach((c, i) => {
@@ -237,6 +322,15 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                     })
                     doc.at = dropDoc.at + 1;
                     docs.splice(at + 1, 0, doc);
+                }
+                else if (arrow == 'top') {
+                    var docs = (dropDoc.parentId ? local.docs.arrayJsonFind('childs', g => g.id == dropDoc.parentId).childs : local.docs)
+                    var at = docs.findIndex(g => g.id == dropDoc.id);
+                    docs.forEach((c, i) => {
+                        if (i > at) { c.at += 1 }
+                    })
+                    doc.at = dropDoc.at;
+                    docs.splice(at, 0, doc);
                 }
             })
         }
@@ -251,6 +345,9 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                 {docs.map(doc => {
                     return <div key={doc.id} >
                         <div data-wiki-id={doc.id}
+                            data-padding-left={level * 20}
+                            style={{ '--gap-left': (level * 20) + 'px' } as any}
+                            className="shy-robot-wiki-item"
                             onMouseDown={e => mousedownDoc(e, doc)}
                             onContextMenu={e => {
                                 e.preventDefault()
