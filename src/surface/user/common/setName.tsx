@@ -10,7 +10,7 @@ import { surface } from "../../store";
 class UserModifyName extends EventsComponent {
     render() {
         return <Dialoug className={'shy-join-friend'} head={<span>设置用户名</span>}>
-            <Row>
+            <Row style={{ marginTop: 30, marginBottom: 30 }}>
                 <Col>用户名</Col>
                 <Col><Input value={this.name} onChange={e => this.name = e}></Input></Col>
             </Row>

@@ -10,15 +10,17 @@ import { channel } from "rich/net/channel";
 class UserUpdatePhone extends EventsComponent {
     render() {
         return <Dialoug className={'shy-join-friend'} head={<span>设置手机号</span>}>
-            <Row>
-                <Col>手机</Col>
-                <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
-            </Row>
-            <Row style={{ margin: '10px 0px' }}>
-                <Col>验证码</Col>
-                <Col span={14}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
-                <Col span={8} style={{ marginLeft: 20 }}><Button block size='medium' ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? `已发送${this.sendCount}s` : `获取短信验证码`}</Button></Col>
-            </Row>
+            <div className="gap-h-30">
+                <Row>
+                    <Col>手机</Col>
+                    <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
+                </Row>
+                <Row style={{ margin: '10px 0px' }}>
+                    <Col>验证码</Col>
+                    <Col span={14}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
+                    <Col span={8} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? `已发送${this.sendCount}s` : `获取短信验证码`}</Button></Col>
+                </Row>
+            </div>
             <Row>
                 <Col><Button block ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
             </Row>

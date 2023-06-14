@@ -12,18 +12,19 @@ class UserUpdatePaw extends EventsComponent {
         return <Dialoug className={'shy-join-friend'}
             head={<span>设置密码</span>}
         >
-            {this.checkPaw && <Row>
+            <div className="gap-h-30"> {this.checkPaw && <Row>
                 <Col>老密码</Col>
                 <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
             </Row>}
-            <Row style={{ margin: '10px 0px' }}>
-                <Col>新密码</Col>
-                <Col><Input type="password" value={this.newPaw} onChange={e => this.newPaw = e}></Input></Col>
-            </Row>
-            <Row style={{ margin: '10px 0px' }}>
-                <Col>确认新密码</Col>
-                <Col><Input type="password" value={this.confirmPaw} onChange={e => this.confirmPaw = e}></Input></Col>
-            </Row>
+                <Row style={{ margin: '10px 0px' }}>
+                    <Col>新密码</Col>
+                    <Col><Input type="password" value={this.newPaw} onChange={e => this.newPaw = e}></Input></Col>
+                </Row>
+                <Row style={{ margin: '10px 0px' }}>
+                    <Col>确认新密码</Col>
+                    <Col><Input type="password" value={this.confirmPaw} onChange={e => this.confirmPaw = e}></Input></Col>
+                </Row>
+            </div>
             <Row>
                 <Col><Button block ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
             </Row>
