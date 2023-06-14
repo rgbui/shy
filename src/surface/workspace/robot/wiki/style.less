@@ -1,0 +1,57 @@
+.shy-robot-wiki-item {
+    position: relative;
+
+    &-bottom {
+        &::after {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            right         : 0px;
+            left          : 0px;
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-bottom : 2px solid #e16259;
+        }
+    }
+
+    &-top {
+        &::after {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            right         : 0px;
+            left          : 0px;
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-top    : 2px solid #e16259;
+        }
+    }
+
+    &-bottom-sub {
+        &::before {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            width         : var(--gap-left);
+            left          : 0px;
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-bottom : 2px solid rgba(55, 53, 47, 0.2);
+        }
+
+        &::after {
+            content       : '\20';
+            position      : absolute;
+            top           : 0px;
+            right         : 0px;
+            left          : var(--gap-left);
+            bottom        : 0px;
+            z-index       : 1;
+            pointer-events: none;
+            border-bottom : 2px solid #e16259;
+        }
+    }
+}
