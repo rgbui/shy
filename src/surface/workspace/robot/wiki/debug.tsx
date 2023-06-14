@@ -16,8 +16,6 @@ import { GetRobotApplyArgs, RobotInfo } from "rich/types/user";
 import { util } from "rich/util/util";
 import { surface } from "../../../store";
 import { marked } from "marked";
-import { makeObservable, observable, toJS } from "mobx";
-import { observer } from "mobx-react";
 import { Divider } from "rich/component/view/grid";
 import { DoubleRightSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
@@ -52,9 +50,9 @@ export class RobotDebug extends EventsComponent {
                             <div dangerouslySetInnerHTML={{ __html: msg.content }}>
                             </div>
                             {msg.prompt && <div>
-                                {msg.promptSpread && <div onClick={e => msg.promptSpread = false}><Markdown md={msg.prompt}></Markdown></div>}
+                                {msg.promptSpread && <div onClick={e => { msg.promptSpread = false; this.forceUpdate() }}><Markdown md={msg.prompt}></Markdown></div>}
                                 {!msg.promptSpread && <ToolTip overlay={'展开实际发送的prompt'}>
-                                    <span onClick={e => msg.promptSpread = true} className="size-24 flex-center cursor round item-hover"><Icon icon={DoubleRightSvg}></Icon></span>
+                                    <span onClick={e => { msg.promptSpread = true; this.forceUpdate() }} className="size-24 flex-center cursor round item-hover"><Icon icon={DoubleRightSvg}></Icon></span>
                                 </ToolTip>}
                             </div>}
                         </div>
@@ -116,7 +114,7 @@ export class RobotDebug extends EventsComponent {
                     <label className="flex-fixed flex-end gap-r-10 w-80 ">{arg.text}:</label>
                     <div className="flex-auto">
                         <Textarea
-                            style={{ height: 40 }}
+                            style={{ height: 60 }}
                             value={this.sendData[arg.name] || ''}
                             onChange={e => {
                                 this.sendData[arg.name] = e;
