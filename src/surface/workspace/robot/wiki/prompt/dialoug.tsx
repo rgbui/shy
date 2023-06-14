@@ -1,5 +1,5 @@
 import lodash from "lodash";
-import { makeAutoObservable, makeObservable, observable } from "mobx";
+import {  makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import { ReactNode } from "react";
@@ -11,7 +11,9 @@ import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
 import { Textarea } from "rich/component/view/input/textarea";
 import { SelectBox } from "rich/component/view/select/box";
+import { useIconPicker } from "rich/extensions/icon";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
+import { Rect } from "rich/src/common/vector/point";
 import { RobotApply, RobotApplyOptions, RobotInfo } from "rich/types/user";
 
 @observer
@@ -25,6 +27,12 @@ export class RobotInfoPromptForm extends EventsComponent {
     async open(prompt: ArrayOf<RobotInfo['prompts']>) {
         this.prompt = lodash.cloneDeep(prompt) || { apply: RobotApply.channel, text: '', prompt: '' };
     }
+    async changeIcon(event: React.MouseEvent) {
+        var r = await useIconPicker({ roundArea: Rect.fromEle(event.currentTarget as HTMLElement) });
+        if (r) {
+            this.prompt.icon = r;
+        }
+    }
     onSave() {
         this.emit('save');
     }
@@ -36,8 +44,8 @@ export class RobotInfoPromptForm extends EventsComponent {
         return <div className="w-450 padding-14 round ">
             <div className="h-20"><span>Prompt模板</span></div>
             <div className="flex gap-h-10">
-                <span className="flex-fixed size-30 flex-center round item-hover cursor"><Icon icon={this.prompt.icon || Edit1Svg}></Icon></span>
-                <span className="flex-auto"><Input value={this.prompt.text} onChange={e => this.prompt.text = e}></Input></span>
+                <span className="flex-fixed size-30 flex-center round item-hover cursor" onClick={e => this.changeIcon(e)}><Icon icon={this.prompt.icon || Edit1Svg}></Icon></span>
+                <span className="flex-auto"><Input placeholder="prompt名称" value={this.prompt.text} onChange={e => this.prompt.text = e}></Input></span>
             </div>
             <div className="h-20"><span>应用:</span></div>
             <div className="h-30 gap-h-10">
@@ -54,7 +62,7 @@ export class RobotInfoPromptForm extends EventsComponent {
                 {this.prompt.apply == RobotApply.pageContinue && <div className="remark f-14 gap-b-10">模板参数{'{content}:前文，{context}:上下文'}</div>}
                 {this.prompt.apply == RobotApply.pageSumit && <div className="remark f-14 gap-b-10">模板参数{'{content}:上文，{context}:上下文'}</div>}
                 {this.prompt.apply == RobotApply.askWrite && <div className="remark f-14 gap-b-10">模板参数{'{prompt}:提示，{context}:上下文'}</div>}
-                {this.prompt.apply == RobotApply.selectionAskWrite && <div className="remark f-14 gap-b-10">模板参数{'{selection}:选中内容，{context}:上下文'}</div>}
+                {this.prompt.apply == RobotApply.selectionAskWrite && <div className="remark f-14 gap-b-10">模板参数{'{selection}:选中内容，{prompt}:提示，{context}:上下文'}</div>}
             </div>
             <Divider></Divider>
             <div className="flex-end ">
