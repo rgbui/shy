@@ -11,8 +11,6 @@ import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Divider } from "rich/component/view/grid";
-import { RobotWikiList } from "./wiki/index";
-import { RobotTasksList } from "./task/view";
 import { RobotInfo } from "rich/types/user";
 import { config } from "../../../../common/config";
 import { useOpenRobotSettings } from "./view";

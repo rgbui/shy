@@ -141,7 +141,6 @@ export class Sln extends Events {
             mime: Mime.pages,
             text
         }, posItem);
-      
         return newItem;
     }
     globalMove(event: MouseEvent) {
