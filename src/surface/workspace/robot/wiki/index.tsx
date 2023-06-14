@@ -2,7 +2,7 @@ import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { ArrowLeftSvg, CheckSvg, ChevronDownSvg, DotSvg, DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg, UploadSvg } from "rich/component/svgs";
+import { ArrowLeftSvg, CheckSvg, ChevronDownSvg, DebugSvg, DotSvg, DotsSvg, EditSvg, PageSvg, PlusAreaSvg, PlusSvg, RefreshSvg, TrashSvg, UploadSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItemType } from "rich/component/view/menu/declare";
@@ -21,6 +21,7 @@ import { RobotInfoDescriptionView } from "../description";
 import { ToolTip } from "rich/component/view/tooltip";
 import { RobotInfoPromptView } from "./prompt";
 import "./style.less";
+import { useRobotDebug } from "./debug";
 
 export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => void }) => {
     var local = useLocalObservable<{
@@ -395,6 +396,12 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
     function back() {
         if (typeof props.close == 'function') props.close()
     }
+    async function openDebug(e: React.MouseEvent) {
+        var r = await useRobotDebug(props.robot);
+        if (r) {
+
+        }
+    }
     return <div>
         <div className="flex">
             <div className="flex-fixed flex item-hover padding-w-3 round cursor" onMouseDown={e => back()}>
@@ -404,10 +411,13 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
         <div>
             <RobotInfoView robot={props.robot}></RobotInfoView>
         </div>
-        <div className="flex border-bottom gap-h-10 gap-b-20 r-padding-w-15 r-h-30 r-cursor">
-            <span onClick={e => local.tab = '1'} className={" " + (local.tab == '1' ? "border-b-p" : "")}>常规</span>
-            <span onClick={e => local.tab = '3'} className={" " + (local.tab == '3' ? "border-b-p" : "")}>prompt</span>
-            <span onClick={e => local.tab = '2'} className={" " + (local.tab == '2' ? "border-b-p" : "")}>知识库</span>
+        <div className="flex border-bottom gap-h-10 gap-b-20  r-h-30 r-cursor">
+            <span onClick={e => local.tab = '1'} className={"flex-fixed padding-w-15 " + (local.tab == '1' ? "border-b-p" : "")}>常规</span>
+            <span onClick={e => local.tab = '3'} className={"flex-fixed padding-w-15 " + (local.tab == '3' ? "border-b-p" : "")}>prompt</span>
+            <span onClick={e => local.tab = '2'} className={"flex-fixed padding-w-15 " + (local.tab == '2' ? "border-b-p" : "")}>知识库</span>
+            <span className="flex-auto flex-end">
+                <ToolTip overlay={'调试'}><span onMouseDown={e => openDebug(e)} className="flex-center size-24 round item-hover cursor"><Icon size={18} icon={DebugSvg}></Icon></span></ToolTip>
+            </span>
         </div>
         {local.tab == '1' && <div>
             <RobotInfoDescriptionView robot={props.robot}></RobotInfoDescriptionView>
