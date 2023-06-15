@@ -180,7 +180,9 @@ export class PageItem {
             text: this.text,
             sn: this.sn,
             icon: this.icon,
-            pageType: this.pageType
+            pageType: this.pageType,
+            createDate: this.createDate,
+            editDate: this.editDate
         }
     }
     getItem() {
@@ -428,7 +430,7 @@ export class PageItem {
                     }
                 });
                 if (r?.text) {
-                    surface.sln.onCreateFolder(r.text,this)
+                    surface.sln.onCreateFolder(r.text, this)
                 }
                 break;
             case 'toggleFolder':
