@@ -33,9 +33,10 @@ export class RobotDebug extends EventsComponent {
         if (!prompt) this.prompt = this.robot.prompts?.first() || null;
         this.forceUpdate();
     }
-    messages: { id: string, userid: string, date: Date, promptSpread?: boolean, content: string, prompt?: string }[] = [];
+    messages: { id: string, promptId?: string, userid: string, date: Date, promptSpread?: boolean, content: string, prompt?: string }[] = [];
     renderMessages() {
         return this.messages.map(msg => {
+            var pro = msg.promptId ? this.robot.prompts.find(p => p.id == msg.promptId) : undefined;
             return <div key={msg.id} >
                 <UserBox userid={msg.userid}>{(user) => {
                     return <div className="flex flex-top gap-h-10">
@@ -47,12 +48,13 @@ export class RobotDebug extends EventsComponent {
                                 <span className="flex-fixed">{user.name}</span>
                                 <span className="flex-auto gap-l-10 remark">{dayjs(msg.date).format('YYYY-MM-DD HH:mm:ss')}</span>
                             </div>
+                            {pro && <div className="flex remark"><span>prompt模板:</span><span>{pro.text}</span></div>}
                             <div dangerouslySetInnerHTML={{ __html: msg.content }}>
                             </div>
                             {msg.prompt && <div>
-                                {msg.promptSpread && <div onClick={e => { msg.promptSpread = false; this.forceUpdate() }}><Markdown md={msg.prompt}></Markdown></div>}
+                                {msg.promptSpread && <div className="remark f-12 item-hover round padding-5" onClick={e => { msg.promptSpread = false; this.forceUpdate() }}><Markdown md={msg.prompt}></Markdown></div>}
                                 {!msg.promptSpread && <ToolTip overlay={'展开实际发送的prompt'}>
-                                    <span onClick={e => { msg.promptSpread = true; this.forceUpdate() }} className="size-24 flex-center cursor round item-hover"><Icon icon={DoubleRightSvg}></Icon></span>
+                                    <span onClick={e => { msg.promptSpread = true; this.forceUpdate() }} className="size-24 flex-center cursor round item-hover remark"><Icon icon={DoubleRightSvg}></Icon></span>
                                 </ToolTip>}
                             </div>}
                         </div>
@@ -64,15 +66,22 @@ export class RobotDebug extends EventsComponent {
     async send(event: React.MouseEvent, b: Button) {
         try {
             var self = this;
+            var sd = lodash.cloneDeep(this.sendData);
+            for (let n in this.sendData) {
+                this.sendData[n] = '';
+            }
             b.loading = true;
             var args: { name: string, input?: boolean, text: string, tip?: string }[] = [];
             args = GetRobotApplyArgs(this.prompt.apply);
             var parg = args.find(g => g.input == true);
-            var ask = this.sendData[parg.name];
-            var sd = { id: util.guid(), userid: surface.user?.id, date: new Date(), promptSpread: false, prompt: ask, content: ask }
-            this.messages.push(sd)
+            var ask = sd[parg.name];
+            var sender = { id: util.guid(), userid: surface.user?.id, date: new Date(), promptSpread: false, prompt: ask, content: ask }
+            this.messages.push(sender)
             this.forceUpdate();
-            var cb = { id: util.guid(), userid: this.robot.id, date: new Date(), content: '' };
+            if (this.scrollEl) {
+                this.scrollEl.scrollTop = this.scrollEl.scrollHeight;
+            }
+            var cb = { promptId: this.prompt.id, id: util.guid(), userid: this.robot.id, date: new Date(), content: '' };
             this.messages.push(cb);
             this.forceUpdate();
             var g = await channel.get('/query/wiki/answer', { robotId: this.robot.id, ask: ask });
@@ -80,10 +89,10 @@ export class RobotDebug extends EventsComponent {
                 var text = '';
                 cb.content = `<span class='typed-print'></span>`;
                 var content = getTemplateInstance(this.prompt.prompt, {
-                    ...this.sendData,
+                    ...sd,
                     context: g.data.contents[0].content
                 });
-                sd.prompt = content;
+                sender.prompt = content;
                 this.forceUpdate();
                 await channel.post('/text/ai/stream', {
                     question: content,
@@ -91,7 +100,10 @@ export class RobotDebug extends EventsComponent {
                         console.log(str, done);
                         if (typeof str == 'string') text += str;
                         cb.content = marked.parse(text + (done ? "" : "<span class='typed-print'></span>"));
-                        self.forceUpdate();
+                        self.forceUpdate(() => {
+                            var el = document.querySelector('.typed-print');
+                            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        });
                     }
                 });
             }
@@ -132,15 +144,17 @@ export class RobotDebug extends EventsComponent {
             </div>
         </div>
     }
+    scrollEl: HTMLElement;
     render(): ReactNode {
-        return <div className="bg-white round padding-14 w-800 min-h-300 flex flex-full flex-col">
+        return <div className="bg-white round padding-14 w-800  flex flex-full flex-col">
             <div className="flex h-30">
                 <span className="flex-fixed gap-r-10">测试</span>
                 <span className="flex-fixed w-120">
-                    <SelectBox
+                    <SelectBox inline
                         value={this.prompt?.id}
                         onChange={e => {
                             this.prompt = (this.robot?.prompts || []).find(c => c.id == e)
+                            this.forceUpdate()
                         }}
                         options={(this.robot?.prompts || []).map(pro => {
                             return {
@@ -151,8 +165,8 @@ export class RobotDebug extends EventsComponent {
                 </span>
             </div>
             <Divider></Divider>
-            <div className="flex">
-                <div className="flex-auto max-h-400 min-h-60 overflow-y padding-w-10">
+            <div className="flex flex-full">
+                <div ref={e => this.scrollEl = e} className="flex-auto max-h-400 min-h-120 padding-b-50 overflow-y padding-w-10">
                     {this.renderMessages()}
                     {this.messages.length == 0 && <div className="remark flex-center">
                         无记录
@@ -160,7 +174,7 @@ export class RobotDebug extends EventsComponent {
                 </div>
                 <div className="flex-fixed w-200 border-left padding-w-10">
                     <div className="flex">prompt模板:</div>
-                    <div className="remark">{this.prompt?.prompt}</div>
+                    <div className="remark pre">{this.prompt?.prompt}</div>
                 </div>
             </div>
             <Divider></Divider>

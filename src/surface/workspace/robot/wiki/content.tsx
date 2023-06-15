@@ -58,7 +58,7 @@ export class ContentViewer extends React.Component {
                 try {
                     var g = await masterSock.post<{ tokenCount: number }>('/robot/doc/embedding', { id: doc.id });
                     if (g.ok) {
-                        if (g.data.tokenCount > 3800) {
+                        if (g.data.tokenCount > 4000 * 4) {
                             ShyAlert('当前文档内容过长，无法训练至机器人中')
                         }
                         else {
@@ -116,15 +116,16 @@ export class ContentViewer extends React.Component {
             <div className="gap-h-10">
                 {doc.contents?.map((c, i) => {
                     return <div key={c.id}>
-                        <Textarea maxLength={3800} style={{ minHeight: 400 }} value={c.content} onChange={e => {
+                        <Textarea maxLength={4000 * 4} style={{ minHeight: 400 }} value={c.content} onChange={e => {
                             c.content = e;
                             doc.embedding = false;
                             autoSave();
                         }}></Textarea>
-                        <div className="remark f-12 gap-h-5">支持markdown语法，限3800字内</div>
+                        <div className="remark f-12 gap-h-5">支持markdown语法，限{4000 * 4}字内</div>
                     </div>
                 })}
             </div>
+            <div className="h-150"></div>
         </div>
     }
 }
