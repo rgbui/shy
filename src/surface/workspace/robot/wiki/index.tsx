@@ -191,7 +191,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                                 );
                             }
                             var cRect = Rect.fromEle(c as HTMLElement);
-                            var paddingLeft = parseFloat(c.getAttribute('data-wiki-padding-left'))
+                            var paddingLeft = parseFloat(c.getAttribute('data-padding-left'))
                             if (currentDoc.spread == true && currentDoc.childs.length > 0) {
                                 if (e.clientX > cRect.left + paddingLeft) {
                                     overDrop = {
@@ -346,8 +346,8 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                 {docs.map(doc => {
                     return <div key={doc.id} >
                         <div data-wiki-id={doc.id}
-                            data-padding-left={level * 20}
-                            style={{ '--gap-left': (level * 20) + 'px' } as any}
+                            data-padding-left={level * 20 + 20}
+                            style={{ '--gap-left': (level * 20 + 20) + 'px' } as any}
                             className="shy-robot-wiki-item"
                             onMouseDown={e => mousedownDoc(e, doc)}
                             onContextMenu={e => {
@@ -356,7 +356,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                             }}
                         >
                             <div className={"visible-hover cursor flex h-30 gap-h-5 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>
-                                {local.renameDoc !== doc && <><span className={"size-20 flex-center item-hover round ts" + (doc.spread ? '' : ' rotate-90-')}
+                                {local.renameDoc !== doc && <><span className={"flex-fixed size-20 flex-center item-hover round ts" + (doc.spread ? '' : ' rotate-90-')}
                                     onMouseDown={e => { doc.spread = doc.spread ? false : true; e.stopPropagation() }}>
                                     {doc.childs?.length > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
                                     {!(Array.isArray(doc.childs) && doc.childs.length > 0) && <Icon size={16} icon={DotSvg}></Icon>}

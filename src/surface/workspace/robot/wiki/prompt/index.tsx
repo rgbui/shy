@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { ButtonSvg, CheckSvg, DotsSvg, Edit1Svg, EditSvg, NoneSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
+import { ButtonSvg, CheckSvg, DebugSvg, DotsSvg, Edit1Svg, EditSvg, NoneSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { RobotApply, RobotApplyOptions, RobotInfo } from "rich/types/user";
 import { useRobotInfoPromputForm } from "./dialoug";
@@ -11,6 +11,7 @@ import { MenuItemType } from "rich/component/view/menu/declare";
 import lodash from "lodash";
 import { masterSock } from "../../../../../../net/sock";
 import { useIconPicker } from "rich/extensions/icon";
+import { useRobotDebug } from "../debug";
 
 @observer
 export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
@@ -33,14 +34,20 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
         var r = await useSelectMenuItem({ roundPoint: Point.from(event) },
             [
                 { text: '编辑', icon: EditSvg, name: 'edit' },
-                { text: '调试', icon: ButtonSvg, name: 'debug' },
+                { text: '调试', icon: DebugSvg, name: 'debug' },
                 { text: pro.abled == false ? "启用" : "禁用", icon: pro.abled == false ? NoneSvg : CheckSvg, name: 'abled' },
                 { type: MenuItemType.divide },
                 { text: '删除', icon: TrashSvg, name: 'delete' }
             ]
         );
         if (r) {
-            if (r.item.name == 'abled') {
+            if (r.item.name == 'debug') {
+                var g = await useRobotDebug(this.props.robot, pro);
+                if (r) {
+
+                }
+            }
+            else if (r.item.name == 'abled') {
                 pro.abled = !pro.abled;
                 await masterSock.patch('/robot/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
             }
@@ -72,7 +79,7 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
                 {(robot.prompts || []).map(pro => {
                     var ra = RobotApplyOptions.find(g => g.value == pro.apply);
                     if (ra?.value == RobotApply.none) ra = null;
-                    return <div className={"border flex-fixed w-250 h-120 round padding-10 " + (pro.abled == false ? " op-4" : "")} key={pro.id}>
+                    return <div className={"border flex-fixed w-250 h-180 round padding-10 " + (pro.abled == false ? " op-4" : "")} key={pro.id}>
                         <div className="flex h-30">
                             <span className="flex-fixed size-24 round item-hover cursor flex-center" onClick={e => this.changeIcon(e, pro)}><Icon size={16} icon={pro.icon || Edit1Svg}></Icon></span>
                             <span className="flex-auto bold flex"><span>{pro.text}</span>{ra && <em className="gap-l-10 bg-primary padding-w-3 padding-h-1 text-white round cursor">{ra.text}</em>}</span>
@@ -80,7 +87,8 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
                                 <Icon size={20} icon={DotsSvg}></Icon>
                             </span>
                         </div>
-                        <div className="text-1">{pro.prompt}</div>
+                        <div className="text-1 h-150 overflow-y pre" dangerouslySetInnerHTML={{ __html: pro.prompt }}>
+                        </div>
                     </div>
                 })}
             </div>
