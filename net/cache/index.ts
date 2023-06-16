@@ -1,4 +1,3 @@
-import { config } from "../../common/config";
 import { Aes } from "../../src/util/crypto";
 import { iframeChannel } from "../../auth/iframe";
 /**
@@ -38,7 +37,7 @@ class SyCache {
     }
     private async getValue(key: CacheKey | string): Promise<{ value: any, expire: number }> {
         var k = this.getKey(key);
-        var value = window.isAuth == false && config.isWeb ? await iframeChannel('localStorage.getItem', [k]) : localStorage.getItem(k);
+        var value = window.isAuth == false &&window.shyConfig.isWeb ? await iframeChannel('localStorage.getItem', [k]) : localStorage.getItem(k);
         if (value) {
             try {
                 return JSON.parse(this.de(value))
@@ -49,7 +48,7 @@ class SyCache {
         }
     }
     private getKey(key: CacheKey | string) {
-        if (config.isPro) return FLAG + key;
+        if (window.shyConfig.isPro) return FLAG + key;
         else return FLAG + (typeof key == 'number' ? CacheKey[key] : key);
     }
     async get<T = any>(key: CacheKey | string): Promise<T> {
@@ -71,7 +70,7 @@ class SyCache {
             }
             t = Date.now() + expire * getN();
         }
-        window.isAuth == false && config.isWeb ? await iframeChannel('localStorage.setItem', [k, this.en(JSON.stringify({ value, expire: t }))]) : localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
+        window.isAuth == false &&window.shyConfig.isWeb ? await iframeChannel('localStorage.setItem', [k, this.en(JSON.stringify({ value, expire: t }))]) : localStorage.setItem(k, this.en(JSON.stringify({ value, expire: t })))
     }
     async has(key: CacheKey | string) {
         var r = await this.get(key);

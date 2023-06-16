@@ -3,7 +3,6 @@ import { ShyUrl, UrlRoute } from "../../../history";
 import { surface } from "../../store";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
-import { config } from "../../../../common/config";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;
@@ -17,7 +16,7 @@ export class LogOut extends React.Component {
                 surface.workspace = null;
                 if (surface.user?.tim)
                     surface.user.tim.close();
-                if (config.isPro) location.href = 'https://shy.live'
+                if (window.shyConfig.isPro) location.href = 'https://shy.live'
                 else UrlRoute.push(ShyUrl.root);
             }
         }

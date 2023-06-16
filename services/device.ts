@@ -4,7 +4,6 @@ import { put, query } from "rich/net/annotation";
 import { UA } from "rich/util/ua";
 import { CacheKey, sCache } from "../net/cache";
 import { masterSock } from "../net/sock";
-import { config } from "../common/config";
 import { fingerFlag } from "../src/util/finger";
 class UserDeviceService {
     @put('/device/sign')
@@ -20,7 +19,7 @@ class UserDeviceService {
         await sCache.set(CacheKey.finger, cacFinger);
         var r = await masterSock.put<{ deviceId: string }, string>('/device/sign', {
             finger: cacFinger,
-            platform: config.platform,
+            platform: window.shyConfig.platform,
             browser: UA.browser,
             device: UA.device,
             os: UA.os,

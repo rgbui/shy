@@ -10,7 +10,6 @@ import { LinkWorkspaceOnline } from "../workspace";
 import LogoSrc from "../../assert/img/shy.logo.256.png";
 import { ShyUrl, UrlRoute } from "../../history";
 import { autoImageUrl } from "rich/net/element.type";
-import { config } from "../../../common/config";
 import { UA } from "rich/util/ua";
 import { ToolTip } from "rich/component/view/tooltip";
 import { DotNumber } from "rich/component/view/dot/index";
@@ -70,7 +69,7 @@ export var SideBar = observer(function () {
     }
     return <div className='shy-sidebar'>
         <a className="shy-sidebar-operator"
-            style={{ position: 'relative', marginTop: config.isPc && UA.isMacOs ? 30 : 20 }}
+            style={{ position: 'relative', marginTop: window.shyConfig.isPc && UA.isMacOs ? 30 : 20 }}
             onMouseDown={e => { UrlRoute.push(ShyUrl.me) }
             }>
             <ToolTip placement="right" overlay={'私信'}> <img src={LogoSrc} style={{ width: 48, height: 48, borderRadius: 16 }} /></ToolTip>

@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { config } from "../../common/config";
 import { ShyUrl, UrlRoute } from "../history";
 import { Divider } from "rich/component/view/grid";
 import { surface } from "./store";
@@ -8,10 +7,10 @@ import { Button } from "rich/component/view/button";
 export var View404 = observer(function () {
     function back(event: React.MouseEvent) {
         event.preventDefault();
-        if (config.isPc || config.isDev) {
+        if (window.shyConfig.isPc || window.shyConfig.isDev) {
             UrlRoute.push(ShyUrl.root)
         }
-        else if (config.isPro) {
+        else if (window.shyConfig.isPro) {
             location.href = 'https://shy.live'
         }
     }

@@ -1,5 +1,4 @@
 import { query } from "rich/net/annotation";
-import { config } from "../../common/config";
 
 
 
@@ -13,6 +12,6 @@ class CommonService {
     }
     @query('/guid')
     getGuid(){
-        return config.guid();
+        return window.shyConfig.guid();
     }
 }

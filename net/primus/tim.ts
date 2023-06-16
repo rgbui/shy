@@ -1,5 +1,4 @@
 import { util } from 'rich/util/util';
-import { config } from '../../common/config';
 import { log } from '../../common/log';
 import { Sock } from '../sock';
 import { GenreConsistency } from '../sock/genre';
@@ -16,7 +15,7 @@ export class Tim {
     async load(url: string) {
         var self = this;
         this.url = url;
-        this.id = config.guid();
+        this.id = window.shyConfig.guid();
         var Primus = await loadPrimus();
         var primus = new Primus(url, {
             // pingTimeout: 30000 * 4

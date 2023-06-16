@@ -4,7 +4,6 @@ import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Workspace } from "..";
 import { UserBasic } from "rich/types/user";
-import { config } from "../../../../common/config";
 
 export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
     ShyAlert('正在初始化创建空间', 'success', 1000 * 60 * 5);
@@ -22,7 +21,7 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                     templateUrl: templateUrl
                 });
                 var robotId = '9096421bfe01464fafcd10a7dc93b038';
-                if (config.isDev) robotId = '3703b4ee85694df89aa76b39aac6ba7f';
+                if (window.shyConfig.isDev) robotId = '3703b4ee85694df89aa76b39aac6ba7f';
                 var ms = Workspace.getWsSock(rr.data.pids, 'ws');
                 var d = await masterSock.get<{ robot: UserBasic }>('/get/robot', { id: robotId });
                 await ms.put('/ws/member/add/robot', {
@@ -33,7 +32,7 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                  * 自动加到诗云的云云社区
                  */
                 var wsName = '1'
-                if (config.isDev) wsName = '34';
+                if (window.shyConfig.isDev) wsName = '34';
                 var ws = await channel.get('/ws/query', { name: wsName });
                 var sock = Workspace.getWsSock(ws.data.pids, 'ws')
                 await channel.put('/user/join/ws', { wsId: ws.data.workspace.id });

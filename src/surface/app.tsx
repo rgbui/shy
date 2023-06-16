@@ -8,7 +8,6 @@ import { WorkspaceCreateView } from './workspace/create';
 import { SurfaceView } from './view';
 import { View404 } from './404';
 import { InviteView } from './workspace/create/invite';
-import { config } from '../../common/config';
 import { surface } from './store';
 import { MyWorkSpace } from './view/my';
 import { channel } from "rich/net/channel";
@@ -25,7 +24,7 @@ export function App() {
       await surface.user.createTim()
     }
     else {
-      if (config.isPc) {
+      if (window.shyConfig.isPc) {
         UrlRoute.push(ShyUrl.signIn);
       }
     }
@@ -51,7 +50,7 @@ export function App() {
     }
   }, [])
   function renderRoutes() {
-    if (config.isDev || config.isBeta) {
+    if (window.shyConfig.isDev || window.shyConfig.isBeta) {
       return <Router history={SyHistory}>
         <Switch>
           <Route path={ShyUrl.root} exact component={SurfaceView}></Route>
@@ -65,7 +64,7 @@ export function App() {
           <Route component={View404}></Route>
         </Switch>
       </Router>
-    } else if (config.isPc) {
+    } else if (window.shyConfig.isPc) {
       return <Router history={SyHistory}>
         <Switch>
           <Route path={ShyUrl.root} exact component={SurfaceView}></Route>
@@ -80,7 +79,7 @@ export function App() {
         </Switch>
       </Router>
     }
-    else if (config.isPro) {
+    else if (window.shyConfig.isPro) {
       var isOrg = location.hostname == 'shy.live';
       if (isOrg) {
         return <Router history={SyHistory}>

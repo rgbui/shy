@@ -1,6 +1,5 @@
 import lodash from "lodash";
 import { runInAction } from "mobx";
-import { config } from "../../../../../common/config";
 import { PageItem } from "..";
 import { surface } from "../../../store";
 import { Workspace } from "../../../workspace";
@@ -82,7 +81,7 @@ class PageItemStore {
             if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
             var actions: PageItemAction[] = [];
             if (typeof data.id == 'undefined')
-                data.id = config.guid();
+                data.id = window.shyConfig.guid();
             data.workspaceId = pageItem.workspaceId;
             data.parentId = pageItem.id;
             data.at = pageItem.childs.last() ? (pageItem.childs.last().at + 1) : 0;
@@ -119,7 +118,7 @@ class PageItemStore {
         var next = pageItem.next;
         var oldPs = pageItem.parent ? pageItem.parent.childs : surface.workspace.childs;
         var ns = oldPs.findAll((g, i) => i > index);
-        data.id = config.guid();
+        data.id = window.shyConfig.guid();
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.parentId;
         data.at = pageItem.at + 1;
@@ -171,7 +170,7 @@ class PageItemStore {
         }
         else {
             var actions: PageItemAction[] = [];
-            data.id = config.guid();
+            data.id = window.shyConfig.guid();
             data.workspaceId = workspace.id;
             data.at = (workspace.childs.last()?.at || 0) + 1;
             data.subCount = 0;

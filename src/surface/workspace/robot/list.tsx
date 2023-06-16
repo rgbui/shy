@@ -12,7 +12,6 @@ import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Divider } from "rich/component/view/grid";
 import { RobotInfo } from "rich/types/user";
-import { config } from "../../../../common/config";
 import { useOpenRobotSettings } from "./view";
 
 @observer
@@ -54,7 +53,7 @@ export class RobotList extends React.Component {
                     name: 'addCommand',
                     text: '创建命令机器人',
                     icon: AiSvg,
-                    disabled: surface.workspace.sn == 25 || config.isDev ? false : true
+                    disabled: surface.workspace.sn == 25 ||window.shyConfig.isDev ? false : true
                 }
             ]
         );

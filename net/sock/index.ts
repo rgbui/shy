@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { CacheKey, sCache } from "../cache";
 import { SockResponse, SockType } from "./type";
-import { config } from "../../common/config";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
 import { surface } from "../../src/surface/store";
@@ -49,8 +48,8 @@ export class Sock {
         if (this._remote) return this._remote;
         else {
             this._remote = axios.create();
-            if (config.isDev) this._remote.defaults.timeout = 1000 * 60 * 10;
-            else if (config.isBeta || config.isPro) {
+            if (window.shyConfig.isDev) this._remote.defaults.timeout = 1000 * 60 * 10;
+            else if (window.shyConfig.isBeta || window.shyConfig.isPro) {
                 // if (this.type != SockType.file)
                 this._remote.defaults.timeout = 1000 * 60 * 20;
             }

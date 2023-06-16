@@ -6,7 +6,6 @@ import { EventsComponent } from 'rich/component/lib/events.component';
 import { Icon } from 'rich/component/view/icon';
 import { PopoverSingleton } from 'rich/extensions/popover/popover';
 import { channel } from 'rich/net/channel';
-import { config } from '../../../common/config';
 import { WeixinPaySvg, AlipaySvg } from '../svgs';
 import "./style.less";
 import { Spin } from 'rich/component/view/spin';
@@ -66,7 +65,7 @@ export class PayView extends EventsComponent {
         platform: string
     }) {
         this.orderInfo = lodash.cloneDeep(orderInfo);
-        this.orderInfo.sockId = config.guid();
+        this.orderInfo.sockId = window.shyConfig.guid();
         await this.predictCreateOrder();
     }
     onMessage = (event: MessageEvent<any>) => {

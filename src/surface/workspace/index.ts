@@ -11,7 +11,6 @@ import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
 import { useOpenWorkspaceSettings } from "./settings";
 import { computed, makeObservable, observable } from "mobx";
-import { config } from "../../../common/config";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
 import { AtomPermission, getCommonPerssions, getEditOwnPerssions } from "rich/src/page/permission";
@@ -209,7 +208,7 @@ export class Workspace {
         });
     }
     get url() {
-        if (config.isPro || config.isPc) {
+        if (window.shyConfig.isPro || window.shyConfig.isPc) {
             if (this.customSiteDomain) {
                 return (this.customSiteDomainProtocol ? "https://" : "http") + this.customSiteDomain;
             }
@@ -367,7 +366,7 @@ export class Workspace {
         }
         var pageItem = new PageItem();
         if (id) pageItem.id = id;
-        else pageItem.id = config.guid();
+        else pageItem.id = window.shyConfig.guid();
         if (pageItemInfo) Object.assign(pageItem, pageItemInfo)
         var data = pageItem.getItem();
         if (pageItemInfo) Object.assign(data, pageItemInfo)
@@ -412,7 +411,7 @@ export class Workspace {
         if (this.customSiteDomain) {
             url = `${this.customSiteDomainProtocol || 'https'}://${this.customSiteDomain}/`
         }
-        if (config.isDev || config.isBeta) {
+        if (window.shyConfig.isDev || window.shyConfig.isBeta) {
             url = location.protocol + '//' + location.host + "/"
         }
         return url + 'invite/' + this.invite;

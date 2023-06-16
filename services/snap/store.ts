@@ -7,7 +7,6 @@ import { Events } from "rich/util/events";
 import { yCache } from "../../net/cache";
 import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
-import { config } from "../../common/config";
 import { log } from "../../common/log";
 import { surface } from "../../src/surface/store";
 const DELAY_TIME = 1000 * 60 * 3;
@@ -51,7 +50,7 @@ export class SnapStore extends Events {
             /**
             * 本地先存起来
             */
-            if (config.isPc) {
+            if (window.shyConfig.isPc) {
                 await yCache.set(this.localId, {
                     id: this.localId,
                     content: snap.content,
@@ -140,7 +139,7 @@ export class SnapStore extends Events {
     async querySnap(readonly?: boolean) {
         var seq: number;
         var local: view_snap;
-        if (config.isPc) local = await yCache.get(this.localId);
+        if (window.shyConfig.isPc) local = await yCache.get(this.localId);
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
         //console.log('query seq', seq);

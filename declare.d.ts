@@ -65,7 +65,22 @@ interface Window {
     warn(msg: string);
     success(msg: string);
   },
-  isAuth?: boolean
+  isAuth?: boolean,
+  shyConfig?: {
+    mode: 'pro' | 'dev' | 'beta' | 'desktop',
+    isPro: boolean,
+    isUserWs: boolean,
+    isBeta: boolean,
+    isDev: boolean,
+    version: string,
+    isWeb: boolean,
+    isPc: boolean,
+    isMobile: boolean,
+    isServerSide: boolean,
+    platform: 'web' | 'desktop' | 'mobile' | "server-side",
+    guid(): string,
+    isOnline: boolean
+  }
 }
 
 /**

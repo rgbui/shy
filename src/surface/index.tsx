@@ -1,7 +1,7 @@
 window.isAuth = false;
-import { config } from '../../common/config';
+import "../../common/config";
 import { createAuthIframe } from '../../auth/iframe';
-if (config.isWeb) createAuthIframe();
+if (window.shyConfig.isWeb) createAuthIframe();
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import "rich";

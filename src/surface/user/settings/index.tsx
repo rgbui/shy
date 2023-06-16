@@ -8,7 +8,6 @@ import { makeObservable, observable } from 'mobx';
 import { Singleton } from 'rich/component/lib/Singleton';
 import { Divider } from 'rich/component/view/grid';
 import { Remark } from 'rich/component/view/text';
-import { config } from "../../../../common/config";
 import { UserSettingProfile } from './content/profile';
 import { ShyAppUpdate } from './app/upgrade';
 import { ShyAppLang } from './app/lang';
@@ -46,8 +45,8 @@ class UserSettings extends EventsComponent {
         this.emit('close');
     }
     singout() {
-        if (config.isPro) {
-            if (location.hostname == 'shy.live' || config.isPc) {
+        if (window.shyConfig.isPro) {
+            if (location.hostname == 'shy.live' || window.shyConfig.isPc) {
                 SyHistory.push(ShyUrl.signOut);
                 this.close()
             }
@@ -93,7 +92,7 @@ class UserSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('lang')} className={this.mode == 'lang' ? "hover" : ""}>语言</a>
                         {/*<Divider style={{ margin: '0px 15px' }}></Divider> */}
                         <a onMouseDown={e => this.setMode('update')} className={this.mode == 'update' ? "hover" : ""}>更新日志</a>
-                        <Remark style={{ marginLeft: 15 }}>v{config.version}</Remark>
+                        <Remark style={{ marginLeft: 15 }}>v{window.shyConfig.version}</Remark>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <a className='warn' onClick={e => this.singout()}> 退出登录</a>
                     </div>

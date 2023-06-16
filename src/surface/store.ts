@@ -7,7 +7,6 @@ import { ShyUrl, UrlRoute } from "../history";
 import { LinkWorkspaceOnline, Workspace } from "./workspace";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
-import { config } from "../../common/config";
 import { channel } from "rich/net/channel";
 import "./message.center";
 import { PageItem } from "./sln/item";
@@ -123,14 +122,14 @@ export class Surface extends Events {
                     await this.workspace.exitWorkspace()
                 }
                 this.workspace = null;
-                if (config.isPc) {
+                if (window.shyConfig.isPc) {
                     UrlRoute.push(ShyUrl.signIn);
                 }
-                else if (config.isPro) {
+                else if (window.shyConfig.isPro) {
                     if (location.host == 'shy.live') UrlRoute.push(ShyUrl.root);
                     else location.href = 'https://shy.live';
                 }
-                else if (config.isDev)
+                else if (window.shyConfig.isDev)
                     UrlRoute.push(ShyUrl.signIn);
             }
         }

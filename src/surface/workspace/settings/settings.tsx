@@ -16,8 +16,6 @@ import { ShyAlert } from 'rich/component/lib/alert';
 import { fileSock, masterSock } from '../../../../net/sock';
 import { useForm } from 'rich/component/view/form/dialoug';
 import { ShyUrl, UrlRoute } from '../../../history';
-import { config } from '../../../../common/config';
-
 @observer
 export class WorkspaceSettingsView extends React.Component {
     constructor(props) {
@@ -61,7 +59,7 @@ export class WorkspaceSettingsView extends React.Component {
         }
     }
     async createWorkspaceTemplate(event: React.MouseEvent) {
-        if (surface.workspace.sn == 24 || config.isDev) {
+        if (surface.workspace.sn == 24 ||window.shyConfig.isDev) {
             var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
             if (g.ok) {
                 var r = await fileSock.post('/download/file', { url: g.data.file.url });

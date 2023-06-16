@@ -17,7 +17,6 @@ import { Icon } from "rich/component/view/icon";
 import { WechatSvg } from "../../../../component/svgs";
 import { WeixinOpen } from "../../../../component/winxin/open";
 import "./style.less"
-import { config } from "../../../../../common/config";
 import { ShyUtil } from "../../../../util";
 import { isMobileOnly } from "react-device-detect";
 import React from "react";
@@ -270,7 +269,7 @@ export var Login = observer(function () {
     }
     let location = useLocation();
     async function successAfter() {
-        if (config.isServerSide) {
+        if (window.shyConfig.isServerSide) {
             return UrlRoute.push(ShyUrl.serverCenter)
         }
         if ((location?.state as any)?.back) {
@@ -292,7 +291,7 @@ export var Login = observer(function () {
     }, []);
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
-        <div className='shy-login-logo'><a href={config.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={config.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{config.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
+        <div className='shy-login-logo'><a href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
         <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-40" : " w-350")} >
             <div className="text-center gap-b-10 error">需要邀请码才能注册</div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>

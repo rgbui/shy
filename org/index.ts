@@ -5,7 +5,7 @@
  * 静态的网页在depoly项目下面有一个packOrg里面进行模板的处理
  * 静态的网页会取org.html里面的脚本和样式
  */
-
+import "../common/config";
 import "rich/util/array";
 import "../services/user/index";
 import "../services/common/common";

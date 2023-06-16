@@ -3,11 +3,10 @@
 
 import { iframeChannel } from "../../auth/iframe";
 import { dbStore } from "../../auth/view";
-import { config } from "../../common/config";
 export class DbService<T extends { id: string }>{
     constructor(private name: string) { }
     private async channelStore(d) {
-        if (config.isPc || config.isMobile) return await dbStore(d);
+        if (window.shyConfig.isPc || window.shyConfig.isMobile) return await dbStore(d);
         else return await iframeChannel('dbStore', d);
     }
     async findOne(where: Partial<T>): Promise<T> {
