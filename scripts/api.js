@@ -218,7 +218,7 @@ push('/get/view/onlines', '{viewUrl:string,viewEdit?:boolean}', '{users:Set<stri
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
 
 push('/sync/wiki/doc','{wsId?:string,elementUrl:string,pageText:string,robotId:string,contents:{id:string,content:string}[]}', 'SockResponse<{doc:{id:string}}>', ['put']);
-
+push('/robot/doc/embedding','{id:string}','SockResponse<{totalCount:number}>',['post'])
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
 push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
