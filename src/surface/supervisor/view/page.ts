@@ -1,5 +1,5 @@
 
-import lodash, { chain } from "lodash";
+import lodash from "lodash";
 import { ElementType } from "rich/net/element.type";
 import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";

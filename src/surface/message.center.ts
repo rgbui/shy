@@ -6,7 +6,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
-import { UrlRoute } from "../history";
+import { ShyUrl, UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
@@ -58,10 +58,22 @@ class MessageCenter {
                 }
             }
         }
+        if (window.location.hash) {
+            args.config = Object.assign(args.config || {},
+                {
+                    blockId: window.location.hash.slice(1)
+                }
+            )
+        }
         await surface.supervisor.onOpen(elementUrl, args.config);
         if (surface.supervisor.page?.item) {
             var it = surface.supervisor.page?.item;
-            UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
+            var willPageId = UrlRoute.isMatch(ShyUrl.root) ? surface.workspace.defaultPageId : undefined;
+            if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
+            else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
+            if (!(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn.toString())) {
+                UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
+            }
             it.onUpdateDocument();
             surface.sln.onFocusItem(it);
         }
