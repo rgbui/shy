@@ -14,4 +14,5 @@ export interface WikiDoc {
     workspaceId: string;
     parentId: string;
     childs: WikiDoc[];
+    elementUrl: string
 }

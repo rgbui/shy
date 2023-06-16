@@ -1,6 +1,6 @@
 
 
-import lodash from "lodash";
+import lodash, { chain } from "lodash";
 import React from "react";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
@@ -12,6 +12,10 @@ import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import { RobotInfo } from "rich/types/user";
 import { ShyAlert } from "rich/component/lib/alert";
+import { ElementType, parseElementUrl } from "rich/net/element.type";
+import { channel } from "rich/net/channel";
+import { getPageIcon, getPageText } from "rich/src/page/declare";
+import { Icon } from "rich/component/view/icon";
 
 @observer
 export class ContentViewer extends React.Component {
@@ -28,7 +32,9 @@ export class ContentViewer extends React.Component {
         saveLoading: false,
         embedding: false,
         input: null,
-        error: ''
+        error: '',
+        relevanceData: null,
+        pe: null
     }
     robot: RobotInfo = null;
     async load(doc: WikiDoc, robot: RobotInfo) {
@@ -41,6 +47,16 @@ export class ContentViewer extends React.Component {
                 doc.contents = g.data.contents || [{ content: '', id: util.guid() }];
                 if (doc.contents.length == 0) {
                     doc.contents = [{ content: '', id: util.guid() }];
+                }
+            }
+        }
+        if (this.doc.elementUrl) {
+            var pe = parseElementUrl(this.doc.elementUrl);
+            if (pe?.type == ElementType.PageItem) {
+                var item = (await channel.get('/page/item', { id: pe.id })).data.item;
+                if (item) {
+                    local.relevanceData = item;
+                    local.pe = pe;
                 }
             }
         }
@@ -112,6 +128,15 @@ export class ContentViewer extends React.Component {
             </div>
             <div className="remark gap-h-10"><label>标题:</label></div>
             <div className="gap-h-10"><Input ref={e => local.input = e} value={doc.text || ''} onChange={e => input(e)} ></Input></div>
+            {local.pe?.type == ElementType.PageItem && <>
+                <div className="remark gap-h-10"><label>关联:</label></div>
+                <div className="gap-h-10 flex">
+                    <span className="item-hover round cursor padding-w-5 padding-h-2 flex">
+                        <Icon size={18} icon={getPageIcon(local.relevanceData.icon)}></Icon>
+                        {getPageText(local.relevanceData)}
+                    </span>
+                </div>
+            </>}
             <div className="remark gap-h-10"><label>内容:</label></div>
             <div className="gap-h-10">
                 {doc.contents?.map((c, i) => {
