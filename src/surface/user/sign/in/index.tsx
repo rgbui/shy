@@ -158,7 +158,7 @@ export var Login = observer(function () {
         if (local.step == 'register') {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input onEnter={e => local.step == 'login' ? loginOrRegister() : undefined}  size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
                 </div>
                 <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
@@ -184,10 +184,10 @@ export var Login = observer(function () {
         else {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input size={'larger'} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input size={'larger'}  onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
                 </div>
                 {local.loginType == 'paw' && <div className='shy-login-box-account'>
-                    <Input size="larger" type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
+                    <Input size="larger"  onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
                 </div>}
                 {local.loginType == 'code' && <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
@@ -291,7 +291,7 @@ export var Login = observer(function () {
     }, []);
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
-        <div className='shy-login-logo'><a href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
+        <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
         <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-40" : " w-350")} >
             <div className="text-center gap-b-10 error">需要邀请码才能注册</div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
