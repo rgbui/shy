@@ -59,7 +59,7 @@ export class WorkspaceSettingsView extends React.Component {
         }
     }
     async createWorkspaceTemplate(event: React.MouseEvent) {
-        if (surface.workspace.sn == 24 ||window.shyConfig.isDev) {
+        if (surface.workspace.sn == 24 || window.shyConfig.isDev) {
             var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
             if (g.ok) {
                 var r = await fileSock.post('/download/file', { url: g.data.file.url });
@@ -118,6 +118,7 @@ export class WorkspaceSettingsView extends React.Component {
         text: '',
         slogan: ''
     }
+    nameInput: Input;
     componentDidMount() {
         this.data = { text: surface.workspace.text, slogan: surface.workspace.slogan };
         this.forceUpdate();
@@ -135,6 +136,7 @@ export class WorkspaceSettingsView extends React.Component {
         runInAction(() => {
             this.data = { text: surface.workspace.text, slogan: surface.workspace.slogan };
             this.error = { text: '', slogan: '' };
+            if (this.nameInput) this.nameInput.updateValue(this.data.text);
             this.tip.close();
         })
     }
@@ -166,7 +168,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <div className='bold f-14'>空间名称</div>
                 <div className='remark f-12 gap-h-10'>修改空间名称</div>
                 <div className='max-w-500'>
-                    <Input value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
+                    <Input ref={e => this.nameInput = e} value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
                 </div>
             </div>
             <Divider></Divider>
