@@ -53,13 +53,13 @@ export class RobotList extends React.Component {
                     name: 'addCommand',
                     text: '创建命令机器人',
                     icon: AiSvg,
-                    disabled: surface.workspace.sn == 25 ||window.shyConfig.isDev ? false : true
+                    disabled: surface.workspace.sn == 25 || window.shyConfig.isDev ? false : true
                 }
             ]
         );
         if (r) {
             if (r.item.name == 'addWiki') {
-                var g = await useForm({ title: '创建知识专家机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
+                var g = await useForm({ maskCloseNotSave: true, title: '创建知识专家机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
@@ -73,7 +73,7 @@ export class RobotList extends React.Component {
                 }
             }
             else if (r.item.name == 'addCommand') {
-                var g = await useForm({ title: '创建命令机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
+                var g = await useForm({ maskCloseNotSave: true, title: '创建命令机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'command', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
