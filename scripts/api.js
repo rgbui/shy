@@ -344,5 +344,7 @@ push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockRespons
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 push('/tag/query', '{id?:string,ids?:string[]}', 'SockResponse<{list:any[],tag:any}>', ['get']);
 push('/open/pay', '{}', '{}', ['act'])
+push('/shy/share','{type: "weibo"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}','{}',['act'])
+
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

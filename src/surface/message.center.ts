@@ -14,6 +14,7 @@ import { getPageItemElementUrl } from "./sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useSelectPayView } from "../component/pay/select";
 import { SnapStore } from "../../services/snap/store";
+import { masterSock } from "../../net/sock";
 
 
 class MessageCenter {
@@ -226,6 +227,38 @@ class MessageCenter {
                 text: args.text,
                 force: true
             });
+        }
+    }
+    
+    @act('/shy/share')
+    async shyShare(args: { type: string, title: string, description?: string, pic?: string, url: string }) {
+        if (args.type == 'weibo') {
+
+        }
+        else {
+            var r = await masterSock.get('/wx/share',{ url: args.url });
+            //**配置微信信息**
+            (window as any).wx.config(r.data);
+            (window as any).wx.ready(function () {
+                // 微信分享的数据
+                var shareData = {
+                    "imgUrl": args.pic,
+                    "link": args.url,
+                    "desc": args.description,
+                    "title": args.title,
+                    success: function () {
+                        // 分享成功可以做相应的数据处理
+                    }
+                };
+                if (args.type == 'updateTimelineShareData') {
+                    //分享微信朋友圈
+                    (window as any).wx.updateTimelineShareData(shareData);
+                }
+                else {
+                    //分享给朋友
+                    (window as any).wx.updateAppMessageShareData(shareData);
+                }
+            })
         }
     }
 }
