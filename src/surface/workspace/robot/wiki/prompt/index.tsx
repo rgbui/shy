@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { ButtonSvg, CheckSvg, DebugSvg, DotsSvg, Edit1Svg, EditSvg, NoneSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
+import { CheckSvg, DebugSvg, DotsSvg, Edit1Svg, EditSvg, NoneSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { RobotApply, RobotApplyOptions, RobotInfo } from "rich/types/user";
 import { useRobotInfoPromputForm } from "./dialoug";
@@ -27,7 +27,7 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
             else {
                 this.props.robot.prompts = [g];
             }
-            await masterSock.patch('/robot/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+            await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
         }
     }
     async onProperty(event: React.MouseEvent, pro: RobotInfo['prompts'][0]) {
@@ -49,18 +49,18 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
             }
             else if (r.item.name == 'abled') {
                 pro.abled = !pro.abled;
-                await masterSock.patch('/robot/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+                await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
             }
             else if (r.item.name == 'edit') {
                 var g = await useRobotInfoPromputForm(pro);
                 if (g) {
                     Object.assign(pro, g);
-                    await masterSock.patch('/robot/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+                    await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
                 }
             }
             else if (r.item.name == 'delete') {
                 lodash.remove(this.props.robot.prompts, g => g.id == pro.id)
-                await masterSock.patch('/robot/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+                await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
             }
         }
     }
@@ -68,7 +68,7 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
         var r = await useIconPicker({ roundArea: Rect.fromEle(event.currentTarget as HTMLElement) });
         if (r) {
             pro.icon = r;
-            await masterSock.patch('/robot/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+            await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
         }
     }
     render() {

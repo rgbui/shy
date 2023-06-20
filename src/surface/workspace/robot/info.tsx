@@ -90,7 +90,7 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
             </div>
             <div className='shy-settings-user-avatar' style={{ top: robot.cover?.url ? 180 : 100 }}>
                 {robot?.avatar && <img src={autoImageUrl(robot.avatar.url, 120)} />}
-                {!robot?.avatar && <span>{robot.name.slice(0, 1)}</span>}
+                {!robot?.avatar && <span>{(robot.name||'').slice(0, 1)}</span>}
             </div>
             <div className="shy-user-settings-profile-box-card-operators">
                 <h2>{robot.name}#{robot.sn}</h2>
