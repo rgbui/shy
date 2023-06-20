@@ -17,9 +17,7 @@ import { ToolTip } from "rich/component/view/tooltip";
 
 class JoinFriend extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'}
-            head={<span>搜索添加好友</span>}
-        >
+        return <Dialoug className={'shy-join-friend'}>
             <div className="flex gap-h-10">
                 <Input
                     onClear={() => { this.word = ''; this.list = []; this.forceUpdate() }}
