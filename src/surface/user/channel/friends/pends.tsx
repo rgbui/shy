@@ -44,7 +44,7 @@ export var PendListView = observer(function () {
                     </>
                     }
                     {r.friendId == surface.user?.id && <>
-                        <div className="flex-fixed w-200 flex"><Avatar showName size={32} userid={r.friendId}></Avatar></div>
+                        <div className="flex-fixed w-200 flex"><Avatar showName size={32} userid={r.userid}></Avatar></div>
                         <span className="flex-auto text-1  f-12">来自ta的好友请求</span>
                         <div className="flex-fixed flex-end" style={{ paddingRight: 120 }}>
                             <ToolTip overlay={"同意好友请求"}><span className="size-24 flex-center round item-hover cursor gap-r-10" onMouseDown={e => agree(r)}><Icon size={16} icon={CheckSvg}></Icon></span></ToolTip>
