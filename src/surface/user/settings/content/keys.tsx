@@ -43,20 +43,21 @@ export class ShyUserPks extends React.Component {
         async function open(event: React.MouseEvent) {
             // var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ text: '添加私钥', name: 'add', icon: PlusSvg }]);
             // if (r) {
-                var g = await useForm({
-                    title: '创建个人身份私钥',
-                    remark: '私钥名称',
-                    fields: [{ name: 'name', text: '名称', type: 'input' }],
-                    checkModel: async (model) => {
-                        if (model.name) return '名称不能为空'
-                        return ''
-                    }
-                });
-                if (g) {
-                    await masterSock.put('/user/create/pk', { name: g.name });
-                    await self.load()
-                    ShyAlert('个人身份私钥添加成功')
+            var g = await useForm({
+                maskCloseNotSave: true,
+                title: '创建个人身份私钥',
+                remark: '私钥名称',
+                fields: [{ name: 'name', text: '名称', type: 'input' }],
+                checkModel: async (model) => {
+                    if (model.name) return '名称不能为空'
+                    return ''
                 }
+            });
+            if (g) {
+                await masterSock.put('/user/create/pk', { name: g.name });
+                await self.load()
+                ShyAlert('个人身份私钥添加成功')
+            }
             // }
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
@@ -86,6 +87,7 @@ export class ShyUserPks extends React.Component {
         }
         async function editProperty(pk: UserPks, event: React.MouseEvent) {
             var g = await useForm({
+                maskCloseNotSave: true,
                 title: '编辑私钥名称',
                 remark: '私钥名称',
                 model: { name: pk.name },
