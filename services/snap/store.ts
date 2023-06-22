@@ -40,10 +40,10 @@ export class SnapStore extends Events {
             return r.data;
         }
     }
-    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string, thumb?: ResourceArguments };
+    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string, thumb?: ResourceArguments[] };
     private localTime;
     private viewSnapQueue: QueueHandle;
-    async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments, force?: boolean }) {
+    async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments[], force?: boolean }) {
         if (typeof this.viewSnapQueue == 'undefined') this.viewSnapQueue = new QueueHandle();
         await this.viewSnapQueue.create(async () => {
             //console.log('snap', snap);
@@ -76,7 +76,7 @@ export class SnapStore extends Events {
             thumb: snap.thumb
         };
     }
-    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments, force?: boolean }) {
+    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments[], force?: boolean }) {
         await this.storeLocal(snap);
         this.operateCount += 1;
         if (this.localTime) clearTimeout(this.localTime);

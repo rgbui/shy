@@ -49,6 +49,7 @@ export class PageViewStore extends Events {
                 this.item.onChange({ editDate: new Date(), editor: surface.user.id }, undefined, true)
             }
         });
+        
     }
     get snapStore() {
         return SnapStore.createSnap(this.elementUrl);
