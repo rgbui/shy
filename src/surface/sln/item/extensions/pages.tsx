@@ -39,7 +39,20 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     // e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
-                }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor">{item.text || "我的页面"}</span>
+                }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor flex">
+                    <span>{item.text || "我的页面"}</span>
+                    {surface.workspace.slnStyle != 'menu' && <span
+                        // onMouseDown={e => {
+                        //     e.stopPropagation();
+                        //     if (e.nativeEvent.button == 2) return;
+                        //     item.onSpread()
+                        // }}
+                        className={"size-20 cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
+                        {item.willLoadSubs && <Spin></Spin>}
+                        {!item.willLoadSubs && <Icon size={16} icon={ChevronDownSvg}></Icon>}
+                    </span>}
+                </span>
+
             </div>
             {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>
                 <span className="size-20 flex-center cursor item-hover round">
