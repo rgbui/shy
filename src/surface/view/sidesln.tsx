@@ -18,7 +18,7 @@ export var SideSln = observer(function () {
         var width = await yCache.get<number>(CacheKey.slideWidth);
         if (typeof width == 'number') local.slideWidth = width;
     }
-    React.useEffect(() => {
+    React.useEffect(()=>{
         load();
     }, [])
     function mousedown(event: React.MouseEvent) {

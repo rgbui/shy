@@ -50,7 +50,8 @@ export function App() {
     }
   }, [])
   function renderRoutes() {
-    if (window.shyConfig.isDev || window.shyConfig.isBeta) {
+    if (window.shyConfig.isDev || window.shyConfig.isBeta)
+    { 
       return <Router history={SyHistory}>
         <Switch>
           <Route path={ShyUrl.root} exact component={SurfaceView}></Route>

@@ -1,6 +1,6 @@
 import { createBrowserHistory } from "history";
 import { generatePath, matchPath } from "react-router";
-export const SyHistory = createBrowserHistory();
+export const SyHistory = createBrowserHistory()
 export function currentParams(routePath: string): Record<string, any> {
     var r = matchPath(location.pathname, {
         exact: true,
