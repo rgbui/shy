@@ -63,8 +63,10 @@ class UserUpdateEmail extends EventsComponent {
         var re = await channel.patch('/email/check/update', { email: this.email, code: this.code });
         this.button.loading = false;
         if (re.ok) this.emit('save', this.email)
-        else this.error = re.warn;
-        this.forceUpdate();
+        else {
+            this.error = re.warn;
+            this.forceUpdate();
+        }
     }
     open(options: { email: string }) {
         this.email = options.email;
