@@ -11,6 +11,7 @@ export interface WikiDoc {
     url: string;
     tokenCount: number;
     embedding: boolean,
+    embeddingTip:string,
     workspaceId: string;
     parentId: string;
     childs: WikiDoc[];

@@ -11,7 +11,6 @@ import { WikiDoc } from "../declare";
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import { RobotInfo } from "rich/types/user";
-import { ShyAlert } from "rich/component/lib/alert";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { channel } from "rich/net/channel";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
@@ -72,22 +71,21 @@ export class ContentViewer extends React.Component {
                 local.embedding = true;
                 local.error = '';
                 try {
-                    var g = await masterSock.post<{ tokenCount: number }>('/robot/doc/embedding', { id: doc.id });
-                    if (g.ok) {
-                        if (g.data.tokenCount > 4000 * 4) {
-                            ShyAlert('当前文档内容过长，无法训练至机器人中')
-                        }
-                        else {
+                    await masterSock.fetchStream({ url: '/robot/doc/embedding/stream', data: { id: doc.id }, method: 'post' }, (str, done) => {
+                        doc.embeddingTip = str;
+                        if (done) {
                             doc.embedding = true;
+                            doc.embeddingTip = '';
+                            local.embedding = false;
                         }
-                    }
+                    })
                 }
                 catch (ex) {
                     console.error(ex);
                     local.error = '训练出错'
                 }
                 finally {
-                    local.embedding = false;
+                    // local.embedding = false;
                 }
             }
         }
@@ -126,6 +124,10 @@ export class ContentViewer extends React.Component {
                 {doc.embedding == true && <Button ghost>已训练</Button>}
                 {doc.embedding == false && <Button loading={local.embedding} onMouseDown={e => setEmbedding()}>训练</Button>}
             </div>
+            {doc.embeddingTip && <div className="flex flex-center">
+                <span className="bg-p text-white padding-w-5 round padding-h-2">训练进度：{doc.embeddingTip}</span>
+                <span className="remark gap-l-10">训练中请不要离开</span>
+            </div>}
             <div className="remark gap-h-10"><label>标题:</label></div>
             <div className="gap-h-10"><Input ref={e => local.input = e} value={doc.text || ''} onChange={e => input(e)} ></Input></div>
             {local.pe?.type == ElementType.PageItem && <>
