@@ -56,6 +56,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                     else if (x.at == y.at) return 0;
                     else return -1;
                 })
+                docs.forEach(d => d.embeddingTip = '')
                 docs = ShyUtil.flatArrayConvertTree(docs);
                 docs.arrayJsonEach('childs', g => {
                     g.spread = false;
