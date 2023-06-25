@@ -13,7 +13,7 @@ class UserUpdatePaw extends EventsComponent {
             head={<span>设置密码</span>}
         >
             <div className="gap-h-30"> {this.checkPaw && <Row>
-                <Col>老密码</Col>
+                <Col>旧密码</Col>
                 <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
             </Row>}
                 <Row style={{ margin: '10px 0px' }}>

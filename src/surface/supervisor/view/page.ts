@@ -86,8 +86,7 @@ export async function createPageContent(store: PageViewStore) {
                 await store.snapStore.forceSave();
             });
             page.on(PageDirective.blur, async () => {
-                if (store.source == 'slide')
-                    store.emit('close');
+                if (store.source == 'slide')store.emit('close'); 
             });
             page.on(PageDirective.close, async () => {
                 store.emit('close');
