@@ -26,7 +26,8 @@ export class PageSupervisorView extends React.Component<{
     dc = (event: MouseEvent) => {
         var t = event.target as HTMLElement;
         if (this.el && this.props.slide) {
-            if (!this.el.contains(t)) {
+            var sapp = document.querySelector('.shy-app');
+            if (!this.el.contains(t) && sapp && sapp.contains(t)) {
                 this.onClose()
             }
         }
