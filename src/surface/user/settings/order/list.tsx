@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import lodash from "lodash";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { DotSvg, TrashSvg, UnpaySvg } from "rich/component/svgs";
+import { DotSvg, DotsSvg, TrashSvg, UnpaySvg } from "rich/component/svgs";
 import { Divider, } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
@@ -99,8 +99,8 @@ export class ShyPayList extends React.Component {
                     <table>
                         <thead><tr><th>订单号</th><th>类别</th><th>订单内容</th><th>金额</th><th>支付时间</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead>
                         <tbody>
-                            {!this.loading && this.orders.map(order => {
-                                return <tr key={order.id}>
+                            {!this.loading && this.orders.map((order,i) => {
+                                return <tr key={order.id+i.toString()}>
                                     <td>{order.orderId}</td>
                                     <td>{getKind(order)}</td>
                                     <td>{order.subject}</td>
@@ -108,7 +108,7 @@ export class ShyPayList extends React.Component {
                                     <td>{order.payedDate ? dayjs(order.payedDate).format('YYYY.MM.DD HH:mm') : ""}</td>
                                     <td>{getStatus(order)}</td>
                                     <td>{order.createDate ? dayjs(order.createDate).format('YYYY.MM.DD HH:mm') : ""}</td>
-                                    <td><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor"><Icon size={16} icon={DotSvg}></Icon></span></td>
+                                    <td><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor"><Icon size={16} icon={DotsSvg}></Icon></span></td>
                                 </tr>
                             })}
                         </tbody>
