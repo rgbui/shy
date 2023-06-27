@@ -22,13 +22,19 @@ export class SelectPayView extends EventsComponent {
         amount: number,
         platform: 'alipay' | 'weixin'
     } = {} as any;
+    allowKind: boolean = false;
     loading: boolean = false;
     checkAgree: boolean = false;
     constructor(props) {
         super(props)
     }
-    async open(kind: 'fill' | 'meal-1' | 'meal-2') {
-        this.orderInfo.kind = kind;
+    async open(kind: 'fill' | 'meal' | 'meal-1' | 'meal-2') {
+        
+        if (kind == 'meal') { this.allowKind = true }
+        else this.allowKind = false;
+        if (kind == 'meal') this.orderInfo.kind = kind == 'meal' ? 'meal-1' : 'meal-2';
+        else this.orderInfo.kind = kind;
+
         this.orderInfo.platform = 'weixin';
         this.orderInfo.price = 100;
         if (kind == 'meal-1') this.orderInfo.price = 160;
@@ -37,7 +43,7 @@ export class SelectPayView extends EventsComponent {
         this.forceUpdate()
     }
 
-    async openPay(event: React.MouseEvent) {
+    async pay(event: React.MouseEvent) {
         if (this.checkAgree == false) {
             return ShyAlert('请同意诗云服务协议', 'warn')
         }
@@ -81,18 +87,18 @@ export class SelectPayView extends EventsComponent {
             <div className="shy-pay-items flex-top">
                 {this.orderInfo.kind == 'fill' && <div className="r-padding-h-5  round l-20">
                     <div>按量付费，适用于轻度知识工作者</div>
-                    <div>不限空间、不限人数、不限功能、按量付费</div>
-                    <div>价格低廉，按需付费，充一次用很久</div>
+                    {/* <div>不限空间、不限人数、不限功能、按量付费</div>
+                    <div>价格低廉，按需付费，充一次用很久</div> */}
                 </div>}
                 {this.orderInfo.kind == 'meal-1' && <div className="r-padding-h-5  round l-20">
                     <div>适用于中度知识工作者及小群体</div>
-                    <div>不限空间、不限人数、不限功能、超出按量付费</div>
-                    <div>支持自定义二级域名</div>
+                    {/* <div>不限空间、不限人数、不限功能、超出按量付费</div>
+                    <div>支持自定义二级域名</div> */}
                 </div>}
                 {this.orderInfo.kind == 'meal-2' && <div className="r-padding-h-5  round l-20">
                     <div>适用于开放性的社区群体</div>
-                    <div>不限空间、不限人数、不限功能、超出按量付费</div>
-                    <div>支持商业独立运营</div>
+                    {/* <div>不限空间、不限人数、不限功能、超出按量付费</div>
+                    <div>支持商业独立运营</div> */}
                 </div>}
             </div>
             <h3>支付方式</h3>
@@ -123,7 +129,7 @@ export class SelectPayView extends EventsComponent {
             <div className="shy-pay-buttons">
                 <div className="flex-end r-gap-r-10">
                     <Button size='larger' style={{ width: 180 }} onClick={e => this.onClose()} ghost>取消</Button>
-                    <Button size='larger' style={{ width: 180 }} onClick={e => this.openPay(e)}>支付</Button>
+                    <Button size='larger' style={{ width: 180 }} onClick={e => this.pay(e)}>支付</Button>
                 </div>
             </div>
         </div>
@@ -131,7 +137,7 @@ export class SelectPayView extends EventsComponent {
 }
 
 
-export async function useSelectPayView(kind: 'fill' | 'meal-1' | 'meal-2') {
+export async function useSelectPayView(kind: 'fill' | 'meal' | 'meal-1' | 'meal-2') {
     let popover = await PopoverSingleton(SelectPayView, { mask: true, shadow: true });
     let fv = await popover.open({ center: true });
     fv.open(kind);
