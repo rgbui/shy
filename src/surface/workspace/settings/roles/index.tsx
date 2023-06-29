@@ -187,9 +187,9 @@ export class WorkspaceRoles extends React.Component {
             <div className='shy-ws-roles-list-box'>
                 <div className='shy-ws-roles-list-box-head flex'>
                     <div className='flex-auto'><span>角色</span></div>
-                    <div className='flex-fixed'><Button size='small' onClick={e => this.addRole()}>添加角色</Button></div>
+                    <div className='flex-fixed'><Button style={{ fontSize: '12px' }} size='small' onClick={e => this.addRole()}>添加角色</Button></div>
                 </div>
-                {this.roles.length == 0 && <div className='remark flex-center gap-h-20'>还没有创建任何角色</div>}
+                {this.roles.length == 1 && <div className='remark flex-center gap-h-20'>还没有创建任何角色</div>}
                 {this.roles.filter(g => g.id ? true : false).map(r => {
                     return <div key={r.id} className='shy-ws-roles-list-role-info' onMouseDown={e => this.openEditRole(r)} >
                         <div className='flex-fixed flex'>
