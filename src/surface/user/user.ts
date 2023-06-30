@@ -127,7 +127,7 @@ export class User {
                 data.wsId = surface.workspace.id;
                 if (surface.supervisor?.page) {
                     data.viewUrl = surface.supervisor.page.elementUrl;
-                    data.viewEdit = await surface.supervisor.page.canEdit();
+                    data.viewEdit = surface.supervisor.page?.page?.isCanEdit || false;
                 }
             }
             self.tim.syncSend(HttpMethod.post, '/sync', data);
