@@ -113,10 +113,6 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
-    /***
-     * 页面的一些其它的pageItem,如blog文档，该文档脱离正常的pages，其parentId='blog'
-     */
-    public otherChilds: PageItem[] = [];
     public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
@@ -158,7 +154,6 @@ export class Workspace {
      */
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
-    public viewEditOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
     constructor() {
         makeObservable(this, {
@@ -168,7 +163,6 @@ export class Workspace {
             icon: observable,
             cover: observable,
             childs: observable,
-            otherChilds: observable,
             siteDomain: observable,
             customSiteDomain: observable,
             slogan: observable,
@@ -183,7 +177,6 @@ export class Workspace {
             createPageConfig: observable,
             defaultPageId: observable,
             viewOnlineUsers: observable,
-            viewEditOnlineUsers: observable,
             onLineUsers: observable,
             invite: observable,
             slnStyle: observable,
@@ -216,6 +209,14 @@ export class Workspace {
             return `https://${host}.shy.live`
         }
         else return 'http://' + location.host + "/ws/" + this.sn + "";
+    }
+    resolve(url: string | { pageId?: string | number, elementUrl?: string }) {
+        if (typeof url == 'string')
+            return this.url + (url.startsWith('/') ? url : '/' + url)
+        else if (url?.pageId)
+            return this.url + '/page/' + url.pageId;
+        else if (url.elementUrl)
+            return this.url + '/r?url=' + encodeURIComponent(url.elementUrl);
     }
     get isJoinTip() {
         return !this.member && surface.user.isSign && this.access == 1
@@ -343,48 +344,12 @@ export class Workspace {
             }
         }
     }
-    /**
-     * 获取加载页面，没有挂在侧栏的一些页面
-     * 例如：文档blog
-     * @param id 
-     * @param pageItemInfo 
-     * @returns 
-     */
-    async loadOtherPage(id: string, pageItemInfo?: Partial<PageItem>) {
-        if (id) {
-            var pageItem = surface.workspace.otherChilds.find(c => c.id == id);
-            if (!pageItem) {
-                var g = await channel.get('/page/item', { id });
-                if (g) {
-                    pageItem = new PageItem();
-                    pageItem.load(g.data.item);
-                    surface.workspace.otherChilds.push(pageItem);
-                    return pageItem;
-                }
-            }
-            else return pageItem;
-        }
-        var pageItem = new PageItem();
-        if (id) pageItem.id = id;
-        else pageItem.id = window.shyConfig.guid();
-        if (pageItemInfo) Object.assign(pageItem, pageItemInfo)
-        var data = pageItem.getItem();
-        if (pageItemInfo) Object.assign(data, pageItemInfo)
-        delete data.sn;
-        var r = await channel.put('/page/item/create', { wsId: surface.workspace.id, data });
-        if (r.ok) {
-            pageItem.load(r.data.item);
-            surface.workspace.otherChilds.push(pageItem);
-            return pageItem;
-        }
-    }
     pageSort = (x, y) => {
         if (x.at > y.at) return 1;
         else if (x.at == y.at) return 0;
         else return -1;
     }
-    async onNotifyViewOperater(data: UserAction)
-    {
+    async onNotifyViewOperater(data: UserAction) {
         var pv = PageViewStores.getPageViewStore(data.elementUrl);
         if (pv?.page) {
             pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
@@ -420,7 +385,11 @@ export class Workspace {
         var rs = this.viewOnlineUsers.get(viewUrl);
         if (!rs) {
             var r = await channel.get('/ws/view/online/users', { viewUrl });
-            this.viewOnlineUsers.set(viewUrl, { load: true, users: new Set(r.data.users) });
+            var ns = new Set<string>();
+            r.data.users.forEach(u => {
+                ns.add(u);
+            })
+            this.viewOnlineUsers.set(viewUrl, { load: true, users: ns });
         }
         else {
             if (rs.load == false) {
@@ -502,11 +471,9 @@ export class Workspace {
             data.userid = surface.user.id;
             if (surface.supervisor?.page) {
                 data.viewUrl = surface.supervisor.page.elementUrl
-                data.viewEdit = await surface.supervisor.page.canEdit()
             }
             await self.tim.syncSend(HttpMethod.post, '/sync', data);
         })
-        await this.enterWorkspace();
     }
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {
@@ -516,17 +483,18 @@ export class Workspace {
         return Sock.createSock(this.getWsSockUrl(pids, type))
     }
     async enterWorkspace() {
+        if (!surface.user.isSign) return;
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
         data.wsId = this.id;
         data.userid = surface.user.id;
         if (surface.supervisor?.page) {
             data.viewUrl = surface.supervisor.page.elementUrl
-            data.viewEdit = (await surface.supervisor.page.canEdit())
         }
         await this.tim.syncSend(HttpMethod.post, '/sync', data);
     }
     async exitWorkspace() {
+        if (!surface.user.isSign) return;
         var data = await this.getTimHeads();
         data.sockId = this.tim.id;
         await this.tim.syncSend(HttpMethod.post, '/sync', data);
