@@ -59,6 +59,11 @@ class Config {
 }
 export var config = new Config();
 window.shyConfig = config;
+window.shyLog = (...args) => {
+    if (config.isDev || config.isBeta) {
+        console.log(...args);
+    }
+}
 window.addEventListener("online", function () {
     window.shyConfig.isOnline = window.navigator.onLine ? true : false;
 }, false);
