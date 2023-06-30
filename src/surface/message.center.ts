@@ -15,6 +15,8 @@ import { ShyAlert } from "rich/component/lib/alert";
 import { useSelectPayView } from "../component/pay/select";
 import { SnapStore } from "../../services/snap/store";
 import { masterSock } from "../../net/sock";
+import { TableSchema } from "rich/blocks/data-grid/schema/meta";
+import { AtomPermission } from "rich/src/page/permission";
 
 
 class MessageCenter {
@@ -29,17 +31,17 @@ class MessageCenter {
         return new Set()
     }
     @query('/get/view/onlines')
-    async getViewOnlines(e: { viewUrl: string, viewEdit?: boolean }) {
+    async getViewOnlines(e: { viewUrl: string }) {
         if (surface.workspace) {
-            var os = e.viewEdit ? surface.workspace.viewEditOnlineUsers : surface.workspace.viewOnlineUsers;
+            var os = surface.workspace.viewOnlineUsers;
             var ub = os.get(e.viewUrl)
             if (!ub || ub?.load == false) {
                 await surface.workspace.loadViewOnlineUsers(e.viewUrl)
                 ub = os.get(e.viewUrl)
             }
-            if (ub) return ub.users;
+            if (ub) return { users: ub.users };
         }
-        return new Set()
+        return { users: new Set() }
     }
     @air('/page/open')
     async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, blockId?: string, force?: boolean } }) {
@@ -126,7 +128,12 @@ class MessageCenter {
                     sn: item.sn,
                     text: item.text,
                     url: item.url,
-                    elementUrl: item.elementUrl
+                    elementUrl: item.elementUrl,
+                    share: item.share,
+                    netPermissions: item.netPermissions,
+                    memberPermissions: item.memberPermissions,
+                    inviteUsersPermissions: item.inviteUsersPermissions,
+                    parentId: item.parentId
                 }
             };
         }
@@ -147,11 +154,123 @@ class MessageCenter {
                         'pageType',
                         'cover',
                         'plain',
-                        'thumb'
+                        'thumb',
+                        'share',
+                        'netPermissions',
+                        'memberPermissions',
+                        'inviteUsersPermissions',
+                        'parentId'
                     ]))
             }
             else return { ok: false, warn: r.warn };
         }
+    }
+    @get('/page/allow')
+    async pageAllow(args: { elementUrl: string }) {
+        var allow: {
+            isOwner?: boolean,
+            isWs?: boolean,
+            netPermissions?: AtomPermission[],
+            permissions?: AtomPermission[],
+            memberPermissions?: PageItem['memberPermissions']
+        } = {}
+        if (surface.workspace.isOwner) return allow = { isOwner: true }
+        var pe = parseElementUrl(args.elementUrl);
+        function ge(item: PageItem) {
+            if (!item) return;
+            if (surface.user?.isSign) {
+                if (surface.workspace.isMember) {
+                    var me = surface.workspace.member;
+                    if (Array.isArray(item.memberPermissions) && item.memberPermissions.length > 0) {
+                        var rs = (item.memberPermissions || []).filter(g => g.userid && g.userid == me.id || g.userid && g.userid == 'all' || g.roleId && me.roleIds.includes(g.roleId));
+                        if (rs.length > 0) {
+                            return {
+                                item: item,
+                                memberPermissions: rs
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (item.share == 'net' && Array.isArray(item.netPermissions) && item.netPermissions.length > 0) {
+                        return {
+                            item,
+                            netPermissions: item.netPermissions
+                        }
+                    }
+                }
+            }
+            else {
+                if (item.share == 'net' && Array.isArray(item.netPermissions) && item.netPermissions.length > 0) {
+                    return {
+                        item,
+                        netPermissions: item.netPermissions
+                    }
+                }
+            }
+        }
+        async function findParents(item: PageItem) {
+            var fp;
+            var p = item;
+            if (p) {
+                while (true) {
+                    var r = ge(p);
+                    if (r) { fp = r; break; }
+                    else {
+                        var parentId = p.parentId;
+                        if (parentId) {
+                            var pa = await channel.get('/page/query/info', { id: parentId });
+                            if (pa?.ok) {
+                                p = pa.data as PageItem;
+                            }
+                            else break
+                        }
+                        else break
+                    }
+                }
+            }
+            if (fp) {
+                return fp;
+            }
+            else {
+                fp = {
+                    isWs: true,
+                    permissions: surface.workspace.allMemeberPermissions
+                }
+                return fp;
+            }
+        }
+        switch (pe.type) {
+            case ElementType.PageItem:
+            case ElementType.Room:
+            case ElementType.Schema:
+                var item = await channel.get('/page/query/info', { id: pe.id });
+                allow = await findParents(item.data as PageItem);
+                break;
+            case ElementType.SchemaRecordView:
+                var schema = await TableSchema.loadTableSchema(pe.id);
+                var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
+                var sc = ge(sv as any);
+                if (sc) allow = sc;
+                else {
+                    var item = await channel.get('/page/query/info', { id: schema.id });
+                    allow = await findParents(item as PageItem);
+                }
+                break;
+            case ElementType.SchemaData:
+                var schema = await TableSchema.loadTableSchema(pe.id);
+                var row = await schema.rowGet(pe.id1);
+                if (row) {
+                    var sr = ge(row.config as any);
+                    if (sr) allow = sr;
+                    else {
+                        var item = await channel.get('/page/query/info', { id: schema.id });
+                        allow = await findParents(item as PageItem);
+                    }
+                }
+                break;
+        }
+        return allow;
     }
     @query('/query/current/user')
     queryCurrentUser() {
@@ -183,7 +302,6 @@ class MessageCenter {
         }
         if (itemId) {
             var item = surface.workspace.find(g => g.id == itemId);
-            if (!item) item = surface.workspace.otherChilds.find(g => g.id == itemId);
             if (item) {
                 await pageItemStore.updatePageItem(item, args.pageInfo);
                 item.onUpdateDocument();
@@ -229,14 +347,13 @@ class MessageCenter {
             });
         }
     }
-    
     @act('/shy/share')
     async shyShare(args: { type: string, title: string, description?: string, pic?: string, url: string }) {
         if (args.type == 'weibo') {
 
         }
         else {
-            var r = await masterSock.get('/wx/share',{ url: args.url });
+            var r = await masterSock.get('/wx/share', { url: args.url });
             //**配置微信信息**
             (window as any).wx.config(r.data);
             (window as any).wx.ready(function () {
