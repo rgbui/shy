@@ -5,7 +5,6 @@ import { Tim } from "../net/primus/tim";
 import { surface } from "../src/surface/store";
 import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
-import { runInAction } from "mobx";
 
 export enum MessageUrl {
     userTalkNotify = '/user/chat/notify',
@@ -87,7 +86,6 @@ export type SparkSession = {
     userid?: string,
     workspaceId?: string;
     viewUrl?: string;
-    viewEdit?: boolean
 }
 
 export function workspaceNotifys(tim: Tim) {
@@ -126,7 +124,6 @@ export function workspaceNotifys(tim: Tim) {
 
     //页面侧栏
     tim.only(MessageUrl.pageItemOperate, e => {
-        console.log('ggggg', e);
         PageItemOperateNotify(e);
     });
     //页面数据表格元数据
@@ -149,38 +146,29 @@ export function workspaceNotifys(tim: Tim) {
         }
         if (surface.workspace?.id == e?.ns?.workspaceId) {
             if (e.ns.viewUrl) {
-                var vo = e.ns.viewEdit ? surface.workspace.viewEditOnlineUsers : surface.workspace.viewOnlineUsers;
+                var vo = surface.workspace.viewOnlineUsers;
                 var r = vo.get(e.ns.viewUrl);
-                var se: Set<string>;
-                if (r) { r.users.add(e.ns.userid); se = r.users; }
+                if (r) { r.users.add(e.ns.userid); }
                 else {
-                    se = new Set();
+                    var se = new Set<string>();
                     se.add(e.ns.userid);
                     vo.set(e.ns.viewUrl, { load: false, users: se })
                 }
-                var go = e.ns.viewEdit ? surface.workspace.viewOnlineUsers : surface.workspace.viewEditOnlineUsers;
-                var gr = go.get(e.ns.viewUrl);
-                if (gr) gr.users.delete(e.ns.userid);
                 channel.air('/user/view/onlines', {
                     viewUrl: e.ns.viewUrl,
-                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users || new Set(),
-                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.ns.viewUrl)?.users || new Set(),
+                    users: surface.workspace.viewOnlineUsers.get(e.ns.viewUrl)?.users || new Set()
                 })
             }
         }
         if (surface.workspace?.id == e?.os?.workspaceId) {
             if (e.os?.viewUrl && e.exit.exitView) {
-
-                var vo = e?.os?.viewEdit ? surface.workspace.viewEditOnlineUsers : surface.workspace.viewOnlineUsers;
+                var vo = surface.workspace.viewOnlineUsers;
                 var gr = vo.get(e.os?.viewUrl);
                 if (gr) gr.users.delete(e?.os.userid);
-
                 channel.air('/user/view/onlines', {
                     viewUrl: e.os?.viewUrl,
                     users: surface.workspace.viewOnlineUsers.get(e.os?.viewUrl)?.users || new Set(),
-                    editUsers: surface.workspace.viewEditOnlineUsers.get(e.os?.viewUrl)?.users || new Set(),
                 })
-
             }
         }
 

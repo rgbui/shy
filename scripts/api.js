@@ -75,13 +75,14 @@ function build(fileName) {
 
     fs.writeFileSync(fileName, `
 import { TableSchema } from "../blocks/data-grid/schema/meta";
-import { LinkPageItem } from "../src/page/declare";
+import { LinkPageItem,LinkWs} from "../src/page/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
 import { UserBasic, UserStatus } from "../types/user";
 import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { PayFeatureCheck } from "../component/pay";
+import { AtomPermission } from "../src/page/permission";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -147,21 +148,22 @@ push('/gallery/query', `{type: GalleryType, word: string}`, `{ok:boolean,data:Ou
 push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['act']);
 push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageItem}`, `void`, ['air']);
 push('/page/query/info', `{id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
-push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean}}`, `void`, ['air']);
-push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean}}', 'any', ['air']);
-push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean}}', 'any', ['air']);
+push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}`, `void`, ['air']);
+push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['air']);
+push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['air']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
-push('/current/workspace', '', '{owner:string,creater:string, id:string,sn:number,text:string,url:string,isMember?:boolean,isOwner?:boolean,access?:0|1,accessProfile?:{disabledJoin: boolean,checkJoinProtocol: boolean,joinProtocol: string},roles:{ id: string,text: string,color: string,permissions: number[],icon?: IconArguments}[]}', ['query'])
+push('/current/workspace', '', 'LinkWs', ['query'])
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
 push('/current/page', '{}', 'LinkPageItem', ['query'])
 push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
 push('/cache/get', '{key:string}', 'Promise<any>', ['query']);
 push('/cache/set', '{key:string,value:any}', 'Promise<void>', ['act']);
+push('/page/allow','{elementUrl:string}','Promise<{ isOwner?: boolean,isWs?: boolean,netPermissions?: AtomPermission[],item?:LinkPageItem,permissions?: AtomPermission[],memberPermissions?:{userid?:string,roleId?:string,permissions?: AtomPermission[]}[]}>',['get']);
 
 push('/schema/create', '{text:string,wsId?:string,url:string}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
-push('/schema/create/define','{text:string,wsId?:string,fields?:any[],views?:any[],datas?:any[]}','SockResponse<{schema:Partial<TableSchema>}>',['put']);
+push('/schema/create/define', '{text:string,wsId?:string,fields?:any[],views?:any[],datas?:any[]}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
 push('/schema/query', '{id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
 push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
 push('/schema/list', '{page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
@@ -213,12 +215,12 @@ push('/user/write/off', '{sn:number}', 'SockResponse<void>', ['del'])
 push('/user/join/ws', '{wsId:string}', 'SockResponse<void>', ['put']);
 push('/user/exit/ws', '{wsId:string}', 'SockResponse<void>', ['del']);
 push('/user/onlines', '{users:Set<string>}', 'void', ['air']);
-push('/user/view/onlines', '{viewUrl:string,users:Set<string>,editUsers:Set<string>}', 'void', ['air']);
-push('/get/view/onlines', '{viewUrl:string,viewEdit?:boolean}', '{users:Set<string>}', ['query']);
+push('/user/view/onlines', '{viewUrl:string,users:Set<string>}', 'void', ['air']);
+push('/get/view/onlines', '{viewUrl:string}', '{users:Set<string>}', ['query']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
 
-push('/sync/wiki/doc','{wsId?:string,elementUrl:string,pageText:string,robotId:string,contents:{id:string,content:string}[]}', 'SockResponse<{doc:{id:string}}>', ['put']);
-push('/robot/doc/embedding','{id:string}','SockResponse<{totalCount:number}>',['post'])
+push('/sync/wiki/doc', '{wsId?:string,elementUrl:string,pageText:string,robotId:string,contents:{id:string,content:string}[]}', 'SockResponse<{doc:{id:string}}>', ['put']);
+push('/robot/doc/embedding', '{id:string}', 'SockResponse<{totalCount:number}>', ['post'])
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
 push('/friends', '{page?:number,size?:number}', 'SockResponse<{list:any[],total:number,page:number,size:number}>', ['get'])
 push('/friend/delete', '{id:string}', 'SockResponse<void>', ['del'])
@@ -322,29 +324,26 @@ push('/view/snap/query', '{ elementUrl: string}', 'SockResponse<{content:string,
 push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
 push('/view/snap/store', '{  elementUrl: string, seq: number, content: any,plain?:string,text?:string,thumb?:any }', 'Promise<void>', ['act'])
 
-
 push('/view/snap/list', '{wsId?: string, elementUrl: string, page: number, size: number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push('/view/snap/content', '{wsId?:string,id:string}', 'SockResponse<{id:string,content:string}>', ['get'])
 push('/view/snap/patch', '{id:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/view/snap/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:string,pageTitle?:string}', 'SockResponse<{seq:number,id:string}>', ['post']);
-push('/view/browse','{elementUrl:string,wsId?:string}','{list:any[],page:number,size:number,total:number}',['get']);
+push('/view/browse', '{elementUrl:string,wsId?:string}', '{list:any[],page:number,size:number,total:number}', ['get']);
 push(`/get/page/refs`, '{wsId?:string,pageId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/row/block/sync/refs`, '{wsId?:string,pageId?:string,operators:any[]}', 'SockResponse<{results:{ id: string, error?: string }[]}>', ['post'])
-
 
 push(`/interactive/emoji`, '{elementUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherExists:boolean}>', ['patch'])
 push(`/user/interactives`, '{wsId?:string,schemaId:string,ids:string[],es:string[]}', 'SockResponse<{list:Record<string,string[]>}>', ['get'])
 
 push(`/bookmark/url`, '{url:string}', 'SockResponse<{title:string,description:string,image:ResourceArguments,icon:ResourceArguments}>', ['put']);
 
-
 push(`/get/tag/refs`, '{wsId?:string,tagId?:string,tag?:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/tag/word/query`, '{word?:string,wsId?:string,size?:number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get']);
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 push('/tag/query', '{id?:string,ids?:string[]}', 'SockResponse<{list:any[],tag:any}>', ['get']);
 push('/open/pay', '{}', '{}', ['act'])
-push('/shy/share','{type: "weibo"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}','{}',['act'])
+push('/shy/share', '{type: "weibo"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}', '{}', ['act'])
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

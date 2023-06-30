@@ -268,7 +268,7 @@ document.addEventListener("visibilitychange", function (e) {
 
     }
 });
-window.addEventListener('pageshow', function () { console.log('pageshow') });
-window.addEventListener('pagehide', function () { console.log('pagehide') })
+window.addEventListener('pageshow', function () { this.shyLog('pageshow') });
+window.addEventListener('pagehide', function () { this.shyLog('pagehide') })
 // window.addEventListener('blur', function () { console.log('blur'); });
 // window.addEventListener('focus', function () { console.log('focus'); });
