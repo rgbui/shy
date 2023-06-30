@@ -14,13 +14,15 @@ import { channel } from "rich/net/channel";
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
-            var pd = await store.snapStore.querySnap((await store.canEdit()) ? false : true);
             var page = new Page();
-            page.canEdit = await store.canEdit();
+            page.edit = store.config.isCanEdit;
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
+            page.schemaInitRecordData = store.config.initData;
             page.customElementUrl = store.elementUrl;
             store.page = page;
+            await page.cachCurrentPermissions();
+            var pd = await store.snapStore.querySnap(page.isCanEdit ? false : true);
             if (store.config?.type) store.page.pageLayout = { type: store.config.type }
             if (store.item) {
                 // page.permissons = store.item.getPagePermissions();
@@ -31,7 +33,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
             }
             page.on(PageDirective.history, async function (action) {
-                if (!page.canEdit) return;
+                if (!page.isCanEdit) return;
                 // console.log('action', action, 'syncBlocks');
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
@@ -43,6 +45,10 @@ export async function createPageContent(store: PageViewStore) {
                         });
                     }
                 if (action.syncPage) {
+                    if (page.views.length == 0) {
+                        console.error('page views.lenght happend save');
+                        return;
+                    }
                     var r = await store.snapStore.viewOperator(action.get() as any);
                     await store.snapStore.viewSnap({
                         seq: r.seq,
@@ -54,6 +60,11 @@ export async function createPageContent(store: PageViewStore) {
                 }
             });
             page.on(PageDirective.syncHistory, async (data) => {
+                if (!page.isCanEdit) return;
+                if (page.views.length == 0) {
+                    console.error('page views.lenght happend save');
+                    return;
+                }
                 await store.snapStore.viewSnap({
                     content: await page.getString(),
                     plain: await page.getPlain(),
@@ -70,7 +81,7 @@ export async function createPageContent(store: PageViewStore) {
                 log.error(error);
             });
             page.on(PageDirective.save, async () => {
-                if (!page.canEdit) return;
+                if (!page.isCanEdit) return;
                 var syncBlocks = page.findAll(g => g.syncBlockId ? true : false);
                 for (let i = 0; i < syncBlocks.length; i++) {
                     if (syncBlocks[i].elementUrl) {
@@ -86,7 +97,7 @@ export async function createPageContent(store: PageViewStore) {
                 await store.snapStore.forceSave();
             });
             page.on(PageDirective.blur, async () => {
-                if (store.source == 'slide')store.emit('close'); 
+                if (store.source == 'slide') store.emit('close');
             });
             page.on(PageDirective.close, async () => {
                 store.emit('close');
@@ -137,6 +148,9 @@ export async function createPageContent(store: PageViewStore) {
                 var b = store.page.find(g => g.id == store.config.blockId);
                 if (b) store.page.onHighlightBlock([b], true);
             }
+        }
+        if (store.page.openSource == 'page') {
+            surface.workspace.enterWorkspace();
         }
         if (store.page?.pageLayout?.type == PageLayoutType.textChannel) {
             var ws = surface.wss.find(g => g.id == surface.workspace?.id);
