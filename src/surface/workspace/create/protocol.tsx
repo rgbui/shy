@@ -12,10 +12,10 @@ import { ShyAlert } from "rich/component/lib/alert";
 class JoinWorkspaceProtocol extends EventsComponent {
     render() {
         return <Dialoug className={'shy-join-friend'}
-            head={<span>加入成员服务协议</span>}
+            // head={<span>加入<b className="bold">{this.ws?.text}</b>空间</span>}
         >
             <div className="flex remark">
-                您需要同意以下协议才能加入该空间
+                您需要同意以下协议才能加入空间
             </div>
             <div className="border gap-h-10 round  padding-10 overlay-y  max-h-300 ">
                 <Markdown md={this.ws?.accessProfile?.joinProtocol}></Markdown>
