@@ -6,6 +6,7 @@ import { channel } from "rich/net/channel";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Workspace } from "../workspace";
 import { surface } from "../store";
+import { isMobileOnly } from "react-device-detect";
 
 export var DiscoveryView = observer(function () {
     var local = useLocalObservable(() => {
@@ -42,20 +43,20 @@ export var DiscoveryView = observer(function () {
     }, [])
     return <div className='shy-discovery' >
         <div className="shy-discovery-wrapper">
-            <div className="shy-discovery-cover" style={{
+            <div className={"shy-discovery-cover flex-center flex-col" + (isMobileOnly ? " " : " gap-w-100 round-16 gap-t-20 ")} style={{
                 backgroundImage: 'url(' + pic + ')',
                 backgroundSize: 'cover',
                 // backgroundAttachment: 'fixed',
-                height: 240
+                height: isMobileOnly ? 120 : 240
             }}>
                 <h3>在 诗云 找到自己的社区</h3>
                 <p>从游戏、音乐到教育，总有你的一片天地。</p>
             </div>
-            <div className="shy-discovery-ws">
+            <div className={"shy-discovery-ws padding-b-100" + (isMobileOnly ? " gap-l-20 gap-r-10 " : " gap-l-100 gap-r-90")}>
                 <h2>推荐社区</h2>
                 <div className="shy-discovery-ws-list">
                     {local.list.map(w => {
-                        return <div onMouseDown={e => openWs(w)} key={w.id}><WsAvatar wsId={w.id} ></WsAvatar></div>
+                        return <div style={{ width: isMobileOnly ? "100%" : "25%" }} onMouseDown={e => openWs(w)} key={w.id}><WsAvatar wsId={w.id} ></WsAvatar></div>
                     })}
                 </div>
             </div>
