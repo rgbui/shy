@@ -16,6 +16,7 @@ import { ShyAlert } from 'rich/component/lib/alert';
 import { fileSock, masterSock } from '../../../../net/sock';
 import { useForm } from 'rich/component/view/form/dialoug';
 import { ShyUrl, UrlRoute } from '../../../history';
+
 @observer
 export class WorkspaceSettingsView extends React.Component {
     constructor(props) {
@@ -51,11 +52,16 @@ export class WorkspaceSettingsView extends React.Component {
         surface.workspace.onUpdateInfo({ cover: null })
     }
     async openDomain(event: React.MouseEvent) {
-        ShyAlert('该功能暂不开放')
-        return;
-        var r = await useSetWsDomain(surface.workspace.id, '');
-        if (r) {
-            surface.workspace.siteDomain = r;
+        var us = await surface.user.wallet();
+        if (!us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+            var r = await useSetWsDomain(surface.workspace.id, '');
+            if (r) {
+                surface.workspace.siteDomain = r;
+            }
+        }
+        else {
+            ShyAlert('该功能暂不开放')
+            return;
         }
     }
     async createWorkspaceTemplate(event: React.MouseEvent) {
