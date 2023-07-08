@@ -11,7 +11,6 @@ import { PageSupervisorDialog } from "./dialoug";
 import { PageItem } from "../../sln/item";
 import { channel } from "rich/net/channel";
 import { PageDirective } from "rich/src/page/directive";
-import { yCache } from "../../../../net/cache";
 
 export class PageViewStore extends Events {
     source: 'page' | 'slide' | 'dialog' | 'popup';
@@ -24,7 +23,9 @@ export class PageViewStore extends Events {
         force?: boolean,
         type?: PageLayoutType,
         isTemplate?: boolean,
-        blockId?: string
+        blockId?: string,
+        initData?: Record<string, any>,
+        isCanEdit?: boolean
     } = {};
     constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();
@@ -49,7 +50,7 @@ export class PageViewStore extends Events {
                 this.item.onChange({ editDate: new Date(), editor: surface.user.id }, undefined, true)
             }
         });
-        
+
     }
     get snapStore() {
         return SnapStore.createSnap(this.elementUrl);
@@ -68,10 +69,10 @@ export class PageViewStore extends Events {
     cachePageItem: PageItem;
     get item() {
         if (this.cachePageItem) return this.cachePageItem;
-        if ([ElementType.PageItem, ElementType.Room, ElementType.Schema].includes(this.pe.type)) {
+        if (this.elementUrl && [ElementType.PageItem, ElementType.Room, ElementType.Schema].includes(this.pe.type)) {
             return surface.workspace?.find(g => g.id == this.pe.id);
         }
-        else if ([ElementType.SchemaView, ElementType.SchemaRecordView].includes(this.pe.type)) {
+        else if (this.elementUrl && [ElementType.SchemaView, ElementType.SchemaRecordView].includes(this.pe.type)) {
             return surface.workspace.find(g => g.id == this.pe.id1)
         }
         return null;
@@ -100,29 +101,6 @@ export class PageViewStore extends Events {
             this.elementUrl = elementUrl;
             PageViewStores.createPageViewStore(this.elementUrl, this.source, this.config);
         }
-    }
-    async canEdit() {
-        var isCanEdit = false;
-        if (this.pe.type == ElementType.SchemaRecordView) {
-            /**
-             * 这里的权限需要重新归纳设计
-             */
-            isCanEdit = true;
-        }
-        else if (this.pe.type == ElementType.SchemaData) {
-            /**
-            * 这里的权限需要重新归纳设计
-            */
-            isCanEdit = true;
-        }
-        if (this.item) {
-            isCanEdit = this.item?.isCanEdit;
-            if (isCanEdit) {
-                var r = await yCache.get(`/${this.item.id}/mode`);
-                if (r === false) isCanEdit = false;
-            }
-        }
-        return isCanEdit;
     }
     async clear() {
 
