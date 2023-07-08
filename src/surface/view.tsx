@@ -1,6 +1,5 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from 'react';
-import { Loading } from "rich/component/view/loading";
 import { Surface, surface } from "./store";
 import { SideBar } from "./view/sidebar";
 import { UserChannel } from "./user/channel/view";
@@ -12,6 +11,7 @@ import { SideSln } from "./view/sidesln";
 import { SupervisorView } from "./supervisor/view";
 import { ViewNotAllow } from "./404";
 import { channel } from "rich/net/channel";
+import { Spin } from "rich/component/view/spin";
 
 export var SurfaceView = observer(function () {
     var local = useLocalObservable(() => {
@@ -36,11 +36,11 @@ export var SurfaceView = observer(function () {
     React.useEffect(() => {
         load();
     }, [])
-    if (local.loading) return <div className='shy-surface-loading'><Loading /></div>
+    if (local.loading) return <div className='shy-surface-loading'><Spin></Spin></div>
     else {
         return <div className='shy-surface'>
             <SideBar></SideBar>
-            <Route path={[ShyUrl.ws, ShyUrl.page]} render={props => {
+            <Route path={[ShyUrl.ws, ShyUrl.page, ShyUrl.wsResource, ShyUrl.resource]} render={props => {
                 return <SurfacePage pathname={props.location.pathname}></SurfacePage>
             }}>
             </Route>
@@ -51,15 +51,19 @@ export var SurfaceView = observer(function () {
     return <></>;
 })
 
-
 export var SurfacePage = observer((props: { pathname: string }) => {
-    async function load()
-    {
+    async function load() {
         if (SyHistory.action == 'POP') {
             if (surface.workspace) {
-                var page = await surface.workspace.getDefaultPage();
-                console.log('gggg');
-                channel.air('/page/open', { item: page });
+                if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
+                    var ul = new URL(location.href);
+                    var url = ul.searchParams.get('url');
+                    channel.air('/page/open', { elementUrl: url })
+                }
+                else {
+                    var page = await surface.workspace.getDefaultPage();
+                    channel.air('/page/open', { item: page });
+                }
             }
         }
     }
