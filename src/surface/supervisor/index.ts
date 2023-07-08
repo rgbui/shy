@@ -5,6 +5,7 @@ import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
 import { ElementType } from "rich/net/element.type";
 import { surface } from "../store";
+import { isMobileOnly } from "react-device-detect";
 
 export class Supervisor extends Events {
     constructor() {
@@ -32,6 +33,13 @@ export class Supervisor extends Events {
     dialog: PageViewStore = null;
     elementUrls: { date: Date, elementUrl: string, source: PageViewStore['source'] }[] = [];
     async onOpen(elementUrl: string, config?: PageViewStore['config']) {
+        if (isMobileOnly) {
+            surface.mobileSlnSpread = false;
+        }
+        if (!elementUrl) {
+            console.trace(elementUrl);
+            return;
+        }
         if (elementUrl == this.page?.elementUrl) return;
         this.elementUrls.push({ date: new Date(), elementUrl, source: 'page' })
         if (this.elementUrls.length > 20) this.elementUrls = this.elementUrls.slice(-20)
@@ -42,7 +50,7 @@ export class Supervisor extends Events {
              * 这里打开的elementType，但workspace没有，需要递归查找
              * 对于Schema可能需要自动创建
              */
-            if (!mainStore.item && [
+            if (mainStore.elementUrl && !mainStore.item && [
                 ElementType.PageItem,
                 ElementType.Room,
                 ElementType.Schema
@@ -50,7 +58,6 @@ export class Supervisor extends Events {
                 await surface.workspace.onLoadElementUrl(elementUrl);
             }
             this.page = mainStore;
-            surface.workspace.enterWorkspace();
         }
         catch (ex) {
             console.error(ex);

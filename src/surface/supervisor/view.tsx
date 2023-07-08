@@ -15,7 +15,7 @@ export var SupervisorView = observer(function () {
             window.removeEventListener('resize', resize)
         }
     }, [])
-    return <div className='shy-supervisor' style={{ display: surface.supervisor.page && surface.slnSpread !== true ? undefined : "none" }}>
+    return <div className='shy-supervisor' style={{ display: surface.supervisor.page && surface.mobileSlnSpread !== true ? undefined : "none" }}>
         {surface.supervisor.opening && <></>}
         {surface.supervisor.opening == false && <>
             {surface.supervisor.page && <PageSupervisorView style={{ right: surface.supervisor.slide ? surface.supervisor.slide_pos + "%" : undefined }} store={surface.supervisor.page} ></PageSupervisorView>}

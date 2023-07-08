@@ -47,8 +47,8 @@ export var SideSln = observer(function () {
     return surface.showSln && <><div className={'shy-slide'}
         ref={e => local.slideEl = e}
         style={{
-            width: isMobileOnly && surface.slnSpread === true ? '100%' : local.slideWidth,
-            display: surface.supervisor.page && isMobileOnly && surface.slnSpread !== true ? "none" : undefined
+            width: isMobileOnly && surface.mobileSlnSpread === true ? '100%' : local.slideWidth,
+            display: surface.supervisor.page && isMobileOnly && surface.mobileSlnSpread !== true ? "none" : undefined
         }}>
         <SlnView></SlnView>
         <div className='shy-slide-resize' onMouseDown={mousedown}></div>

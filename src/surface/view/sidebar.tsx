@@ -17,8 +17,8 @@ import { userChannelStore } from "../user/channel/store";
 import { UserAvatars } from "rich/component/view/avator/users"
 import { channel } from "rich/net/channel";
 import { runInAction } from "mobx";
-import { isMobileOnly } from "react-device-detect";
 import { ShyUtil } from "../../util";
+import { isMobileOnly } from "react-device-detect";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
@@ -64,13 +64,14 @@ export var SideBar = observer(function () {
             {workspace.randomOnlineUsers.size > 0 && !(workspace.randomOnlineUsers.size == 1 && surface.user && workspace.randomOnlineUsers.has(surface.user?.id)) && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
         </div>
     }
-    if (isMobileOnly) {
-        return <></>
-    }
     return <div className='shy-sidebar'>
         <a className="shy-sidebar-operator"
             style={{ position: 'relative', marginTop: window.shyConfig.isPc && UA.isMacOs ? 30 : 20 }}
-            onMouseDown={e => { UrlRoute.push(ShyUrl.me) }
+            onMouseDown={e => {
+                if (isMobileOnly) return;
+                UrlRoute.push(ShyUrl.me);
+                surface.workspace.exitWorkspace();
+            }
             }>
             <ToolTip placement="right" overlay={'私信'}> <img src={LogoSrc} style={{ width: 48, height: 48, borderRadius: 16 }} /></ToolTip>
             <DotNumber count={userChannelStore.unReadChatCount} ></DotNumber>
@@ -82,7 +83,7 @@ export var SideBar = observer(function () {
                 return <ToolTip key={ws.id} placement="right" mouseenter={(e, t) => loadWsOnline(ws, t)} overlay={renderWsOverlay(ws)}><div onMouseDown={e => surface.onChangeWorkspace(ws)} className={'shy-sidebar-ws' + (surface.workspace?.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div></ToolTip>
             })}
             <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-            <a className="shy-sidebar-operator" onMouseDown={e => UrlRoute.push(ShyUrl.discovery)}><Icon size={24} icon={PubWorkspace}></Icon></a>
+            <a className="shy-sidebar-operator" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a>
             {/*<div className="shy-sidebar-divider"></div><a className="shy-sidebar-operator"><Icon size={24} icon={DownloadSvg}></Icon></a> */}
         </div>
     </div>
