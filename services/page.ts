@@ -4,6 +4,8 @@ import { UserAction } from "rich/src/history/action";
 import { surface } from "../src/surface/store";
 import { BaseService } from "./common/base";
 import { SnapStore } from "./snap/store";
+import { IconArguments } from "rich/extensions/icon/declare";
+import { wss } from "./workspace";
 
 class PageService extends BaseService {
     @get('/page/items')
@@ -27,7 +29,6 @@ class PageService extends BaseService {
         if (!args.wsId) args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/page/parent/subs', args);
     }
-
     @get('/page/item')
     async queryPageItem(args: { id: string }) {
         return await surface.workspace.sock.get('/page/item', args);
@@ -37,9 +38,22 @@ class PageService extends BaseService {
         if (!args.wsId) args.wsId = surface.workspace.id;
         return await surface.workspace.sock.put('/page/item/create', args);
     }
-    @get('/page/query/links')
-    async pageQueryLinks(args: { word: string }) {
-
+    @get('/view/snap/query/readonly')
+    async getAutoPageSyncBlock(args: { wsId?: string, elementUrl: string }) {
+        var wsId = args.wsId || surface.workspace.id;
+        var sock = args?.wsId ? await wss.getWsSock(args.wsId) : surface.workspace.sock;
+        var r = await sock.get<{
+            localExisting: boolean,
+            file: IconArguments,
+            operates: any[],
+            content: string
+        }>('/view/snap/query', {
+            elementUrl: args.elementUrl,
+            wsId: wsId,
+            seq: -1,
+            readonly: true
+        });
+        return r
     }
     @get('/view/snap/query')
     async getPageSyncBlock(args: { elementUrl: string }) {
@@ -56,7 +70,7 @@ class PageService extends BaseService {
         var snapStore = SnapStore.createSnap(args.elementUrl);
         return snapStore.viewSnap({ seq: args.seq, content: args.content })
     }
-  
+
     @get('/view/snap/list')
     async viewSnapList(args) {
         return surface.workspace.sock.get('/view/snap/list', { ...args, wsId: surface.workspace.id });
@@ -78,4 +92,16 @@ class PageService extends BaseService {
         return surface.workspace.sock.post('/view/snap/rollup', { ...args, wsId: surface.workspace.id });
     }
 
+    @post('/screenshot/png')
+    async screenShotPng(args) {
+        return surface.workspace.sock.post('/screenshot/png', { ...args, wsId: surface.workspace.id });
+    }
+    @post('/screenshot/pdf')
+    async screenshotPdf(args) {
+        return surface.workspace.sock.post('/screenshot/pdf', { ...args, wsId: surface.workspace.id });
+    }
+    @post('/import/page')
+    async importPage(args) {
+        return surface.workspace.sock.post('/import/page', { ...args, wsId: surface.workspace.id });
+    }
 }

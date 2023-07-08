@@ -94,6 +94,7 @@ export function workspaceNotifys(tim: Tim) {
     //文档
     tim.only(MessageUrl.viewOperate, e => {
         if (surface.workspace?.id == e.workspaceId) {
+            window.shyLog('notify view operate', e);
             surface.workspace.onNotifyViewOperater(e);
         }
     });

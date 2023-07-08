@@ -17,7 +17,7 @@ import { SnapStore } from "../../services/snap/store";
 import { masterSock } from "../../net/sock";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { AtomPermission } from "rich/src/page/permission";
-
+import { Workspace } from "./workspace";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -165,6 +165,31 @@ class MessageCenter {
             else return { ok: false, warn: r.warn };
         }
     }
+    @get('/page/query/elementUrl')
+    async pageQueryElementUrl(args: { elementUrl: string }) {
+        var pe = parseElementUrl(args.elementUrl);
+        switch (pe.type) {
+            case ElementType.PageItem:
+            case ElementType.Room:
+            case ElementType.Schema:
+                var item = await channel.get('/page/query/info', { id: pe.id });
+                return item
+                break;
+            case ElementType.SchemaView:
+            case ElementType.SchemaRecordView:
+                var schema = await TableSchema.loadTableSchema(pe.id);
+                var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
+                return sv
+                break;
+            case ElementType.SchemaData:
+                var schema = await TableSchema.loadTableSchema(pe.id);
+                var row = await schema.rowGet(pe.id1);
+                if (row) {
+                    return row;
+                }
+                break;
+        }
+    }
     @get('/page/allow')
     async pageAllow(args: { elementUrl: string }) {
         var allow: {
@@ -284,9 +309,43 @@ class MessageCenter {
     queryPage() {
         return surface.supervisor?.page?.item
     }
-    @query('/current/workspace')
-    queryWorkspace() {
-        return surface.workspace;
+    @get('/ws/create/object')
+    async queryWorkspace(args: { wsId: string }) {
+        if (surface.workspace?.id == args.wsId)
+            return surface.workspace;
+        else {
+            var r = await channel.get('/ws/query', { name: args.wsId });
+            if (r?.data.workspace) {
+                var ws = new Workspace();
+                ws.load({ ...r.data.workspace });
+                if (Array.isArray(r.data.pids)) {
+                    ws.pids = r.data.pids;
+                }
+                var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id });
+                if (g.data.accessForbidden) {
+                    return
+                }
+                if (g.data.workspace) {
+                    ws.load({ ...g.data.workspace });
+                }
+                if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
+                ws.roles = g.data.roles || [];
+                ws.member = g.data.member || null;
+                var willPageItem = g.data.page as PageItem;
+                if (ws.access == 0
+                    &&
+                    !ws.member
+                    &&
+                    willPageItem
+                ) {
+                    ws.load({ childs: [willPageItem] })
+                }
+                else {
+                    await ws.onLoadPages();
+                }
+                return ws;
+            }
+        }
     }
     @air('/page/update/info')
     async pageUpdateInfo(args: { id?: string, elementUrl?: string, pageInfo: Partial<PageItem> }) {

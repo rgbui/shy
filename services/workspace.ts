@@ -10,8 +10,8 @@ import { ShyAlert } from "rich/component/lib/alert";
 
 class WorkspaceService extends BaseService {
     private wsPids: Map<string, any[]> = new Map();
-    private async getWsSock(wsId: string) {
-        var sock;
+    async getWsSock(wsId: string) {
+        var sock: Sock;
         var pids = this.wsPids.get(wsId);
         if (pids) {
             sock = Workspace.getWsSock(pids, 'ws')
@@ -301,8 +301,6 @@ class WorkspaceService extends BaseService {
             ...args
         });
     }
-
-
     @get('/ws/random/online/users')
     async wsRandomOnLineUsers(args) {
         if (!args.wsId)
@@ -333,12 +331,33 @@ class WorkspaceService extends BaseService {
         args.wsId = surface.workspace.id;
         return await masterSock.get('/robots/info', args);
     }
-
     @get('/view/browse')
     async viewBrowse(args) {
         args.wsId = surface.workspace.id;
         return await surface.workspace.sock.get('/view/browse', args);
     }
-
+    @post('/create/template')
+    async createTemplate(args) {
+        args.wsId = surface.workspace.id;
+        return await surface.workspace.sock.post('/create/template', args);
+    }
+    @post('/create/workspace/template')
+    async createWorkspace(args) {
+        return await masterSock.post('/create/workspace/template', args);
+    }
+    @get('/get/workspace/template')
+    async getWorkspaceTemplate(args) {
+        return await masterSock.get('/get/workspace/template', args);
+    }
+    @get('/search/workspace/template')
+    async searchWorkspaceTemplate(args) {
+        return masterSock.get('/search/workspace/template', args);
+    }
+    @post('/workspace/template/useCount')
+    async workspaceTemplateUseCount(args) {
+        return masterSock.post('/workspace/template/useCount', args);
+    }
 }
 
+
+export var wss = new WorkspaceService();
