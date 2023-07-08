@@ -69,8 +69,6 @@ export class PageItem {
     textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
     unreadChats: { id: string, roomId: string, seq: number }[] = [];
 
-
-
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -250,6 +248,23 @@ export class PageItem {
             })
         }
         return this.childs.map(c => c);
+    }
+    async onSync(consideSelf?: boolean) {
+        if (consideSelf == true) {
+            var rg = await channel.get('/page/item', { id: this.id });
+            if (rg.ok) {
+                this.load(rg.data.item);
+            }
+        }
+        if (this.checkedHasChilds) {
+            var sus = await channel.get('/page/item/subs', { id: this.id });
+            runInAction(() => {
+                if (sus.ok == true) {
+                    this.load({ childs: sus.data.list })
+                }
+                this.checkedHasChilds = true;
+            })
+        }
     }
     async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
@@ -561,10 +576,12 @@ export class PageItem {
     }
     get isCanEdit() {
         return this.isAllow(
+            AtomPermission.all,
             AtomPermission.docEdit,
             AtomPermission.channelEdit,
             AtomPermission.dbEdit,
-            AtomPermission.wsEdit)
+            AtomPermission.wsEdit
+        )
     }
     find(predict: (item: PageItem) => boolean) {
         return this.childs.arrayJsonFind('childs', predict)
