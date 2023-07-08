@@ -145,4 +145,10 @@ export class User {
         } as any
     }
     tim: Tim
+    async wallet(): Promise<{ money: number, isDue: boolean, meal: "meal-1" | "meal-2", due: Date }> {
+        var r = await channel.get('/user/wallet');
+        if (r?.ok) {
+            return r.data as any;
+        }
+    }
 }
