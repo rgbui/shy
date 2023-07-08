@@ -44,6 +44,17 @@ export var UrlRoute = {
         }
         else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
     },
+    pushToResource(wsSn: number | string, elementUrl: string) {
+        if (window.shyConfig.isPro) {
+            if (location.host == wsSn + '.shy.live') {
+                return SyHistory.push(this.gen(ShyUrl.resource, {}) + "?url=" + encodeURIComponent(elementUrl));
+            }
+            else {
+                return SyHistory.push(this.gen(ShyUrl.wsResource, { wsId: wsSn }) + "?url=" + encodeURIComponent(elementUrl))
+            }
+        }
+        else return SyHistory.push(this.gen(ShyUrl.wsResource, { wsId: wsSn }) + "?url=" + encodeURIComponent(elementUrl))
+    },
     isMatch(url: ShyUrl) {
         return currentParams(url) ? true : false;
     },
@@ -62,6 +73,10 @@ export enum ShyUrl {
     me = '/me',
     wsPage = '/ws/:wsId/page/:pageId',
     page = '/page/:pageId',
+    wsResource = '/ws/:wsId/r',
+    resource = '/r',
+    pageContent = '/pc',
+    wsPageContent = '/ws/:wsId/pc',
     invite = '/invite/:id',
     workCreate = '/work/create',
     home = '/home',
