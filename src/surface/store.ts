@@ -25,12 +25,12 @@ export class Surface extends Events {
             showJoinTip: computed,
             showSlideBar: computed,
             showSln: computed,
-            slnSpread: observable,
+            mobileSlnSpread: observable,
             showWorkspace: computed,
             accessPage: observable
         });
     }
-    slnSpread: boolean = null;
+    mobileSlnSpread: boolean = null;
     supervisor: Supervisor = new Supervisor();
     user: User = new User();
     sln: Sln = new Sln();
@@ -62,7 +62,7 @@ export class Surface extends Events {
             }
         }
     }
-    async onLoadWorkspace(name: string) {
+    async onLoadWorkspace(name: string,autoLoadPage=true) {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
             if (typeof name == 'undefined') {
@@ -109,13 +109,17 @@ export class Surface extends Events {
                 }
                 if (surface.user.isSign) await ws.createTim();
                 await sCache.set(CacheKey.wsHost, ws.sn);
+                if (this.workspace) {
+                    await this.workspace.exitWorkspace()
+                }
                 runInAction(() => {
                     if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
                     else this.temporaryWs = null;
                     this.workspace = ws;
                 })
-                var page = await ws.getDefaultPage();
-                channel.air('/page/open', { item: page });
+                if(autoLoadPage){
+                    await this.onLoadPage();
+                }
             }
             else {
                 if (this.workspace) {
@@ -130,11 +134,22 @@ export class Surface extends Events {
                     else location.href = 'https://shy.live';
                 }
                 else if (window.shyConfig.isDev)
-                    UrlRoute.push(ShyUrl.signIn);
+                    UrlRoute.push(ShyUrl.home);
             }
         }
         catch (ex) {
             console.error(ex)
+        }
+    }
+    async onLoadPage() {
+        if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
+            var ul = new URL(location.href);
+            var url = ul.searchParams.get('url');
+            channel.air('/page/open', { elementUrl: url })
+        }
+        else {
+            var page = await surface.workspace.getDefaultPage();
+            channel.air('/page/open', { item: page });
         }
     }
     async exitWorkspace() {
@@ -152,6 +167,9 @@ export class Surface extends Events {
         sn = UrlRoute.match(ShyUrl.wsPage)?.wsId;
         if (!sn) {
             sn = UrlRoute.match(ShyUrl.ws)?.wsId;
+        }
+        if (!sn) {
+            sn = UrlRoute.match(ShyUrl.wsResource)?.wsId;
         }
         if (!sn && location.host && /[\da-z\-]+\.shy\.live/.test(location.host)) {
             domain = location.host.replace(/\.shy\.live$/g, '');
@@ -172,7 +190,7 @@ export class Surface extends Events {
             runInAction(() => {
                 var od = surface.wss.find(c => c.id == this.workspace?.id);
                 if (!od && surface.temporaryWs?.id == this.workspace?.id) od = surface.temporaryWs;
-                if (od && od.randomOnlineUsers.has(surface.user.id))
+                if (od && od.randomOnlineUsers && od.randomOnlineUsers.has(surface.user.id))
                     od.randomOnlineUsers.delete(surface.user.id);
                 if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) - 1;
             })
@@ -181,7 +199,7 @@ export class Surface extends Events {
             runInAction(() => {
                 var od = surface.wss.find(c => c.id == workspace.id);
                 if (!od && surface.temporaryWs?.id == workspace.id) od = surface.temporaryWs;
-                if (od && !od.randomOnlineUsers.has(surface.user.id))
+                if (od && od.randomOnlineUsers && !od.randomOnlineUsers.has(surface.user.id))
                     od.randomOnlineUsers.add(surface.user.id);
                 if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) + 1;
             })
