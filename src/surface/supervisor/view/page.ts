@@ -1,6 +1,5 @@
 
 import lodash from "lodash";
-import { ElementType } from "rich/net/element.type";
 import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageLayoutType } from "rich/src/page/declare";
@@ -11,10 +10,12 @@ import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
 import { channel } from "rich/net/channel";
+
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
             var page = new Page();
+            page.ws = surface.workspace;
             page.edit = store.config.isCanEdit;
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
@@ -33,7 +34,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
             }
             page.on(PageDirective.history, async function (action) {
-                if (!page.isCanEdit) return;
+                if (!page.canEdit({ ignoreLocker: true })) return;
                 // console.log('action', action, 'syncBlocks');
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
@@ -103,7 +104,7 @@ export async function createPageContent(store: PageViewStore) {
                 store.emit('close');
             });
             page.on(PageDirective.spreadSln, async () => {
-                surface.slnSpread = true;
+                surface.mobileSlnSpread = true;
             });
             page.on(PageDirective.rollup, async (id) => {
                 var pd = await store.snapStore.rollupSnap(id);
@@ -117,6 +118,14 @@ export async function createPageContent(store: PageViewStore) {
                 delete store.page;
                 createPageContent(store);
             })
+            page.on(PageDirective.syncItems, async () => {
+                if (store.item) {
+                    await store.item.onSync();
+                }
+                page.onUnmount();
+                delete store.page;
+                await createPageContent(store);
+            })
             page.on(PageDirective.back, async () => {
                 var r = surface.supervisor.elementUrls.findLast(g => g.elementUrl !== page.elementUrl && g.source == 'page');
                 if (r) {
@@ -124,12 +133,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
             })
             page.on(PageDirective.mounted, async () => {
-                if (store.config.blockId) {
-                    var b = page.find(g => g.id == store.config.blockId);
-                    if (b) {
-                        page.onHighlightBlock([b], true);
-                    }
-                }
+                store.page.onHighlightBlock(store.config.blockId, true);
             })
             await page.load(pd.content, pd.operates);
             var bound = Rect.fromEle(store.view.pageEl);
@@ -140,14 +144,8 @@ export async function createPageContent(store: PageViewStore) {
         }
         else {
             var bound = Rect.fromEle(store.view.pageEl);
-            store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
-            if ([ElementType.SchemaRecordView, ElementType.SchemaData].includes(store.pe.type)) {
-                await store.page.loadPageSchema();
-            }
-            if (store.config.blockId) {
-                var b = store.page.find(g => g.id == store.config.blockId);
-                if (b) store.page.onHighlightBlock([b], true);
-            }
+            await store.page.renderFragment(store.view.pageEl, { width: bound.width, height: bound.height });
+            store.page.onHighlightBlock(store.config.blockId, true);
         }
         if (store.page.openSource == 'page') {
             surface.workspace.enterWorkspace();
