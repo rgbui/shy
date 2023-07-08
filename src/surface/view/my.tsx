@@ -31,5 +31,5 @@ export var MyWorkSpace = observer(function () {
     }
 
     React.useEffect(() => { load(); })
-    return <div><Spin></Spin></div>
+    return <div className="flex-center"><Spin></Spin></div>
 })
