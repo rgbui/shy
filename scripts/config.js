@@ -16,7 +16,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var mode = 'dev';
-var argv = (process.env.NODE_ENV||'').split(/[\s,]+/);
+var argv = (process.env.NODE_ENV || '').split(/[\s,]+/);
 if (process.argv.some(s => s == '--pro')) mode = 'pro';
 else if (process.argv.some(s => s == '--beta')) mode = 'beta';
 if (argv.some(s => s == '--pro')) mode = 'pro';
@@ -151,7 +151,7 @@ else {
     })
     if (platform == 'web') {
         Object.assign(viewEntrys, {
-            org: './org/index.ts',
+            org: './org/index.tsx',
         })
         htmls.push(new HtmlWebpackPlugin({
             template: path.join(__dirname, "org.html"), // 婧愭ā鏉挎枃浠�

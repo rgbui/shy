@@ -5,15 +5,21 @@
  * 静态的网页在depoly项目下面有一个packOrg里面进行模板的处理
  * 静态的网页会取org.html里面的脚本和样式
  */
+
 import "../common/config";
-import "rich/util/array";
-import "../services/user/index";
-import "../services/common/common";
+import "rich";
+import "../services/declare";
+import "../src/surface/message.center";
+import "../src/assert/theme.less";
 import "./style.less";
 import "rich/src/assert/atom.less";
 import { channel } from "rich/net/channel";
 window.isAuth = false;
 import { createAuthIframe } from '../auth/iframe';
+import { config } from "../common/config";
+import ReactDOM from "react-dom";
+import React from "react";
+import { TemplateView } from "rich/extensions/template";
 createAuthIframe();
 var user, isUserRender;
 function getEle(selector) {
@@ -39,7 +45,6 @@ function renderEl() {
                 `<a href="/home">
             <div class="shy-avatar" style="width: 40px; height: 40px;"><img src="${user.avatar.url}" style="width: 40px; height: 40px;"></div>
             </a>`)
-
         }
         else {
             userEl.insertAdjacentHTML('afterbegin',
@@ -50,7 +55,7 @@ function renderEl() {
     }
 }
 loadUser();
-window.addEventListener('DOMContentLoaded', (e) => {
+function load() {
     renderEl()
     var ele = getEle('.shy-site-head-menu');
     ele.addEventListener('mousedown', e => {
@@ -64,6 +69,19 @@ window.addEventListener('DOMContentLoaded', (e) => {
             if (te.tagName.toLowerCase() != 'a') eb.style.display = 'none';
         })
     }
+    if (location.pathname == '/template' || config.isDev) {
+        loadTemplate()
+    }
+}
+function loadTemplate() {
+    var el = document.querySelector('[data-template-flag]');
+    ReactDOM.render(
+        <TemplateView isOrg />,
+        el
+    )
+}
+window.addEventListener('DOMContentLoaded', (e) => {
+    load();
 })
 document.addEventListener('scroll', (e) => {
     var head = getEle('.shy-site-head');
