@@ -12,12 +12,15 @@ export function currentParams(routePath: string): Record<string, any> {
     return undefined;
 }
 export var UrlRoute = {
-    push(url: ShyUrl, state?: Record<string, any>, isRedict?: boolean) {
+    push(url: ShyUrl,
+        state?: Record<string, any>,
+        isRedict?: boolean
+    ) {
         if (url == ShyUrl.workCreate && window.shyConfig.isPro) {
             if (isRedict) return location.href = 'https://shy.live' + url;
         }
         else if (url == ShyUrl.signIn) {
-            if (window.shyConfig.isPro && window.shyConfig.isUserWs) {
+            if (window.shyConfig.isPro && window.shyConfig.isDomainWs) {
                 return location.href = 'https://shy.live' + url
             }
         }
@@ -27,11 +30,6 @@ export var UrlRoute = {
         SyHistory.push(url, state)
     },
     pushToWs(sn: number | string, isRedict?: boolean) {
-        // if (window.shyConfig.isPro) {
-        //     if (isRedict) location.href = `https://${sn}.shy.live/`
-        //     return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
-        // }
-        // else 
         return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
     },
     pushToPage(wsSn: number | string, pageSn: number) {
@@ -40,7 +38,8 @@ export var UrlRoute = {
                 return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
             else {
-                return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
+                if (location.host == 'shy.live') return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
+                else location.href = 'https://shy.live/' + wsSn + '/page/' + pageSn;
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))

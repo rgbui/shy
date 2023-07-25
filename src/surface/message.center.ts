@@ -47,7 +47,8 @@ class MessageCenter {
     @air('/page/open')
     async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, blockId?: string, force?: boolean } }) {
         var { item, elementUrl } = args;
-        if (item) {
+        if (item)
+        {
             if ((item as PageItem)?.elementUrl) elementUrl = (item as PageItem).elementUrl;
             else {
                 var r = await channel.get('/page/query/info', {
@@ -75,11 +76,11 @@ class MessageCenter {
             var willPageId = UrlRoute.isMatch(ShyUrl.root) ? surface.workspace.defaultPageId : undefined;
             if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
             else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
+            it.onUpdateDocument();
+            surface.sln.onFocusItem(it);
             if (!(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn.toString())) {
                 UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
             }
-            it.onUpdateDocument();
-            surface.sln.onFocusItem(it);
         }
     }
     @post('/clone/page')
@@ -202,12 +203,12 @@ class MessageCenter {
                 break;
             case ElementType.SchemaView:
             case ElementType.SchemaRecordView:
-                var schema = await TableSchema.loadTableSchema(pe.id,args.ws);
+                var schema = await TableSchema.loadTableSchema(pe.id, args.ws);
                 var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
                 return sv
                 break;
             case ElementType.SchemaData:
-                var schema = await TableSchema.loadTableSchema(pe.id,args.ws);
+                var schema = await TableSchema.loadTableSchema(pe.id, args.ws);
                 var row = await schema.rowGet(pe.id1);
                 if (row) {
                     return row;
@@ -298,7 +299,7 @@ class MessageCenter {
                 allow = await findParents(item.data as PageItem);
                 break;
             case ElementType.SchemaRecordView:
-                var schema = await TableSchema.loadTableSchema(pe.id,undefined);
+                var schema = await TableSchema.loadTableSchema(pe.id, undefined);
                 var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
                 var sc = ge(sv as any);
                 if (sc) allow = sc;
@@ -308,7 +309,7 @@ class MessageCenter {
                 }
                 break;
             case ElementType.SchemaData:
-                var schema = await TableSchema.loadTableSchema(pe.id,undefined);
+                var schema = await TableSchema.loadTableSchema(pe.id, undefined);
                 var row = await schema.rowGet(pe.id1);
                 if (row) {
                     var sr = ge(row.config as any);
