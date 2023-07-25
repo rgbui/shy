@@ -10,7 +10,7 @@ import { Workspace } from "../..";
 import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { useSelectWorkspacePage } from "rich/extensions/link/select"
-import { Point } from "rich/src/common/vector/point";
+import { Point, Rect } from "rich/src/common/vector/point";
 import { SelectBox } from "rich/component/view/select/box";
 import { MenuFolderSvg, TreeListSvg } from "rich/component/svgs";
 
@@ -88,7 +88,7 @@ export class WorkspaceManage extends React.Component {
             this.tip.close();
     }
     async open(e: React.MouseEvent) {
-        var g = await useSelectWorkspacePage({ roundPoint: Point.from(e) });
+        var g = await useSelectWorkspacePage({ roundArea: Rect.fromEle(e.currentTarget as HTMLElement) });
         if (g) {
             this.data.defaultPageId = g.id;
             this.data.defaultPageTitle = g.text;
@@ -134,8 +134,8 @@ export class WorkspaceManage extends React.Component {
             </div>
             <Divider></Divider>
             <div className="gap-h-10">
-                <div className="bold f-14">资源管理器设置</div>
-                <div className="remark f-12 gap-h-10">资源管理器(侧栏）风格显示设置</div>
+                <div className="bold f-14">左边侧边栏设置</div>
+                <div className="remark f-12 gap-h-10">左边侧边栏风格显示设置</div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1">自定义图标</div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon ? false : true}></Switch></div>

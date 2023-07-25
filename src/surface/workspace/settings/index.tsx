@@ -19,6 +19,9 @@ import { SafeSetting } from "./safe";
 import { WorkspaceSettingsView } from "./settings";
 import { RobotList } from "../robot/list";
 import { RecommendRobots } from "./member/robots";
+import { SitePublishView } from "./publish";
+import { config } from "../../../../common/config";
+
 
 @observer
 export class WsSettings extends EventsComponent {
@@ -74,6 +77,9 @@ export class WsSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} >成员</a>
                         <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请</a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
+                        {config.isTestBeta && <><h4>发布管理</h4>
+                            <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} >发布</a>
+                            <Divider style={{ margin: '0px 15px' }}></Divider></>}
                         <h4>机器人</h4>
                         <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} >推荐机器人</a>
                         <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} >自定义机器人</a>
@@ -94,6 +100,7 @@ export class WsSettings extends EventsComponent {
                         {this.mode == 'consume' && <ConsumeView></ConsumeView>}
                         {this.mode == 'robots' && <RobotList></RobotList>}
                         {this.mode == 'robotMember' && <RecommendRobots></RecommendRobots>}
+                        {this.mode == 'publish' && <SitePublishView></SitePublishView>}
                     </div>
                 </div>
                 <div className='shy-ws-settings-operators'>

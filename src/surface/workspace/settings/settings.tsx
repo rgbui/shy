@@ -60,7 +60,7 @@ export class WorkspaceSettingsView extends React.Component {
             }
         }
         else {
-            ShyAlert('该功能暂不开放')
+            ShyAlert('需要开通专业版才能自定义空间二级域名')
             return;
         }
     }
@@ -147,6 +147,7 @@ export class WorkspaceSettingsView extends React.Component {
         })
     }
     render() {
+        var domain = surface.workspace.siteDomain || surface.workspace.sn;
         return <div>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
             <div className="h2">工作空间</div>
@@ -201,11 +202,16 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'>空间域名</div>
-                <div className='remark f-12 gap-h-10'>自定义空间二级域名(暂不开放）</div>
+                <div className='remark f-12 gap-h-10 flex'>需要公开至互联网才能访问<a className='link-remark underline gap-r-5' href={'https://' + domain + '.shy.live'}>{'https://' + domain + '.shy.live'}</a></div>
+                <div className='remark f-12 gap-h-10 flex'>任何时候都能访问<a className='link-remark underline gap-r-5' href={'https://shy.live/ws/' + domain}>{'https://shy.live/ws/' + domain}</a></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + (surface.workspace.siteDomain || surface.workspace.sn) + '.shy.live'}>https://{surface.workspace.siteDomain || surface.workspace.sn}.shy.live</a>
-                    {!surface.workspace.siteDomain && <Button onClick={e => this.openDomain(e)} ghost>更换空间域名</Button>}
+                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + domain + '.shy.live'}>https://{domain}.shy.live</a>
                 </div>
+                {!surface.workspace.siteDomain && <div className='flex'>
+                    <Button onClick={e => this.openDomain(e)} ghost>自定义空间二级域名</Button>
+                    <div className='remark f-12 gap-h-10 flex gap-l-10'>自定义二级域名如https://mysite.shy.live</div>
+                </div>
+                }
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>

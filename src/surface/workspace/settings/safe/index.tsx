@@ -68,6 +68,19 @@ export class SafeSetting extends React.Component {
             this.tip.close();
         })
     }
+    async openAccess(access: number) {
+        if (access == 1) {
+            var us = await surface.user.wallet();
+            if (us.money > 5 || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+
+            }
+            else {
+                ShyAlert('需要充值才能公开至互联网')
+                return;
+            }
+        }
+        this.change('access', access);
+    }
     render() {
         return <div className='shy-ws-manage'>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
@@ -78,7 +91,7 @@ export class SafeSetting extends React.Component {
                 <div className="remark f-12 gap-h-10">设置后该空间将对互联网完全的公开。公开的空间可能会产生大量的流量消耗，请谨慎设置</div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto f-14">公开至互联网</div>
-                    <div className="flex-fixed"><Switch onChange={e => this.change('access', e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
+                    <div className="flex-fixed"><Switch onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14">禁止访客加入空间成为成员</div>
