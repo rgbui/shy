@@ -158,7 +158,7 @@ export var Login = observer(function () {
         if (local.step == 'register') {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input onEnter={e => local.step == 'login' ? loginOrRegister() : undefined}  size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
                 </div>
                 <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
@@ -173,7 +173,7 @@ export var Login = observer(function () {
                     <Input size="larger" name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
                 </div>}
                 {local.step == 'register' && <div className='shy-login-box-agree'>
-                    <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></label>
+                    <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a className="link-red" href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a className="link-red" href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></label>
                 </div>}
                 <div className='shy-login-box-button'>
                     <Button size='medium' block onClick={e => loginOrRegister()}>{'注册'}</Button >
@@ -184,10 +184,10 @@ export var Login = observer(function () {
         else {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input size={'larger'}  onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input size={'larger'} onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
                 </div>
                 {local.loginType == 'paw' && <div className='shy-login-box-account'>
-                    <Input size="larger"  onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
+                    <Input size="larger" onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
                 </div>}
                 {local.loginType == 'code' && <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
