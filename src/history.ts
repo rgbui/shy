@@ -27,11 +27,12 @@ export var UrlRoute = {
         SyHistory.push(url, state)
     },
     pushToWs(sn: number | string, isRedict?: boolean) {
-        if (window.shyConfig.isPro) {
-            if (isRedict) location.href = `https://${sn}.shy.live/`
-            return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
-        }
-        else return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
+        // if (window.shyConfig.isPro) {
+        //     if (isRedict) location.href = `https://${sn}.shy.live/`
+        //     return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
+        // }
+        // else 
+        return SyHistory.push(this.gen(ShyUrl.ws, { wsId: sn }))
     },
     pushToPage(wsSn: number | string, pageSn: number) {
         if (window.shyConfig.isPro) {

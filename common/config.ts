@@ -1,4 +1,5 @@
 
+import { channel } from 'rich/net/channel';
 import * as short from 'short-uuid';
 class Config {
     /**
@@ -55,6 +56,16 @@ class Config {
     isOnline: boolean;
     constructor() {
         this.isOnline = window.navigator.onLine ? true : false;
+    }
+    get isTestBeta() {
+        if (this.isDev || this.isBeta) {
+            return true;
+        }
+        var u = channel.query('/query/current/user');
+        if (u && u.sn < 10) {
+            return true;
+        }
+        return false;
     }
 }
 export var config = new Config();

@@ -8,6 +8,7 @@ import { Icon } from "rich/component/view/icon";
 import { useTemplateView } from "rich/extensions/template";
 import { config } from "../../../../common/config";
 import { channel } from "rich/net/channel";
+import { AtomPermission } from "rich/src/page/permission";
 
 export var SlnView = observer(function () {
     React.useEffect(() => {
@@ -35,8 +36,6 @@ export var SlnView = observer(function () {
                 text: '',
                 templateUrl: ut.file?.url,
                 wsId: surface.workspace.id,
-                // templateUrl:ut.file?.url, 
-                // pageId?: string, 
                 parentId: pageItem.id
             });
             if (rr.ok) {
@@ -47,12 +46,14 @@ export var SlnView = observer(function () {
     }
     function renderBottoms() {
         if (surface.workspace?.sn > 20 && config.isPro) return <></>
-        return <div className="gap-t-20">
-            <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                <span className="gap-l-10 item-hover round size-20 flex-center"><Icon size={18} icon={CubesSvg}></Icon></span>
-                <span>模板</span>
+        if (surface.workspace.isAllow(AtomPermission.wsEdit))
+            return <div className="gap-t-20">
+                <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
+                    <span className="gap-l-10 item-hover round size-20 flex-center"><Icon size={18} icon={CubesSvg}></Icon></span>
+                    <span>模板</span>
+                </div>
             </div>
-        </div>
+        else return <></>
     }
     return <div className='shy-wss h100' onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
         {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + (surface.workspace.slnStyle || 'note')}>

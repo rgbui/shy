@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import { Icon } from "rich/component/view/icon";
 import { surface } from "../store";
 import PubWorkspace from "../../assert/svg/pubWorkspace.svg";
-import DownloadSvg from "../../assert/svg/download.svg";
 import { PlusSvg } from "rich/component/svgs";
 import { LinkWorkspaceOnline } from "../workspace";
 import LogoSrc from "../../assert/img/shy.logo.256.png";

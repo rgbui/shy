@@ -26,11 +26,13 @@ export class Surface extends Events {
             showSlideBar: computed,
             showSln: computed,
             mobileSlnSpread: observable,
+            slnSpread: observable,
             showWorkspace: computed,
             accessPage: observable
         });
     }
     mobileSlnSpread: boolean = null;
+    slnSpread: boolean = null;
     supervisor: Supervisor = new Supervisor();
     user: User = new User();
     sln: Sln = new Sln();
@@ -62,7 +64,7 @@ export class Surface extends Events {
             }
         }
     }
-    async onLoadWorkspace(name: string,autoLoadPage=true) {
+    async onLoadWorkspace(name: string, autoLoadPage = true) {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
             if (typeof name == 'undefined') {
@@ -117,7 +119,7 @@ export class Surface extends Events {
                     else this.temporaryWs = null;
                     this.workspace = ws;
                 })
-                if(autoLoadPage){
+                if (autoLoadPage) {
                     await this.onLoadPage();
                 }
             }

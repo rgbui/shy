@@ -20,14 +20,15 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     style['--gap-left'] = (gapLeft + 20) + 'px';
 
     var isInEdit = item.id == surface.sln.editId;
-    var isCanEdit =item.isCanEdit;
+    var isCanEdit = item.isCanEdit;
     var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
     if (!isCanEdit) isCanPlus = false;
     if (surface.workspace.slnStyle == 'menu') isCanPlus = false;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);
     async function mousedown(event: MouseEvent) {
+        if (event.button == 2) return;
         var target = event.target as HTMLElement;
-        if(!isCanEdit){
+        if (!isCanEdit) {
             if (target.closest('.shy-ws-item-page-spread')) {
                 item.onSpread();
             }
@@ -57,8 +58,8 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         item.text = input.value.trim();
     }
     function contextmenu(event: MouseEvent) {
+        event.preventDefault();
         if (isCanEdit) {
-            event.preventDefault();
             item.onContextmenu(event);
         }
     }
@@ -81,8 +82,14 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     function renderItem() {
         return <div className={'shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor  ' + (isSelected ? " shy-ws-item-page-selected" : "") + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}
             style={style}
-            onContextMenu={e => contextmenu(e.nativeEvent)}
-            onMouseDown={e => mousedown(e.nativeEvent)}
+            onContextMenu={e => {
+                e.preventDefault()
+                contextmenu(e.nativeEvent)
+                return false;
+            }}
+            onMouseDown={e => {
+                mousedown(e.nativeEvent)
+            }}
         >
             <span className={"size-20 round flex-center flex-fixed shy-ws-item-page-spread ts " + (item.spread ? " " : " angle-90-") + (surface.workspace.slnStyle == 'menu' ? (" visible" + (item.subCount == 0 ? '' : " item-hover")) : " item-hover")}>
                 {item.willLoadSubs && <Spin></Spin>}

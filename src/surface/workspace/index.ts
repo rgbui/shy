@@ -1,5 +1,5 @@
 
-import { IconArguments } from "rich/extensions/icon/declare";
+import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
 import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
@@ -67,6 +67,22 @@ export type LinkWorkspaceOnline = {
     loadingOnlineUsers: boolean,
     unreadChats: { id: string, roomId: string, seq: number }[]
 } & Partial<Workspace>
+
+export type WorkspaceNavMenuItem = {
+    id: string,
+    date?: number,
+    userid?: string,
+    text: string,
+    type: 'logo' | 'text' | 'link',
+    pic?: ResourceArguments,
+    icon?: IconArguments,
+    childs?: WorkspaceNavMenuItem[],
+    urlType?: 'page' | 'url',
+    url?: string,
+    pageId?: string,
+    pageText?: string,
+    spread?: boolean
+}
 
 
 export class Workspace {
@@ -155,6 +171,22 @@ export class Workspace {
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
+
+    public publishConfig: {
+        abled: boolean,
+        defineNavMenu: boolean,
+        navMenus: WorkspaceNavMenuItem[],
+        defineContent: boolean,
+        contentTheme: 'default' | 'none' | 'wiki',
+        defineBottom:boolean
+    } = {
+            abled: false,
+            defineNavMenu: false,
+            navMenus: [],
+            defineContent: false,
+            contentTheme: 'default',
+            defineBottom:false
+        }
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -181,7 +213,8 @@ export class Workspace {
             invite: observable,
             slnStyle: observable,
             isOwner: computed,
-            isMember: computed
+            isMember: computed,
+            publishConfig: observable
         })
     }
     private _sock: Sock;
@@ -226,6 +259,7 @@ export class Workspace {
         return surface.user?.id == ow ? true : false;
     }
     isAllow(...permissions: AtomPermission[]) {
+        if (this.isOwner) return true;
         return this.memberPermissions.some(s => permissions.includes(s))
     }
     get isMember() {
@@ -334,7 +368,7 @@ export class Workspace {
     }
     async onLoadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
-        var rr = await channel.get('/page/items', { ids, sock: this.sock, wsId: this.id });
+        var rr = await channel.get('/page/items', { ids, wsId: this.id, sock: this.sock, ws: undefined });
         if (rr) {
             if (Array.isArray(rr?.data?.list)) {
                 var pages = rr.data.list;
@@ -409,12 +443,12 @@ export class Workspace {
             var id = pe.id;
             var item = this.find(g => g.id == id);
             if (!item) {
-                var pa = await channel.get('/page/parent/ids', { id });
+                var pa = await channel.get('/page/parent/ids', { id, ws: undefined });
                 if (pa.ok) {
                     if (pa.data.exists == false && pe.type == ElementType.Schema) {
                         var viewItem = this.find(g => g.mime == Mime.pages);
                         if (viewItem) {
-                            var sch = await TableSchema.loadTableSchema(id);
+                            var sch = await TableSchema.loadTableSchema(id, undefined);
                             if (sch) {
                                 item = await pageItemStore.appendPageItem(viewItem, {
                                     id: sch.id,
@@ -430,7 +464,7 @@ export class Workspace {
                     else if (pa.data.exists == true) {
                         pa.data.parentIds.removeAll(c => this.find(g => g.id == c && g.checkedHasChilds == true) ? true : false);
                         if (pa.data.parentIds.length > 0) {
-                            var rlist = await channel.get('/page/parent/subs', { parentIds: pa.data.parentIds });
+                            var rlist = await channel.get('/page/parent/subs', { parentIds: pa.data.parentIds, ws: surface.workspace });
                             if (rlist.ok) {
                                 var list = rlist.data.list;
                                 list.sort(this.pageSort);

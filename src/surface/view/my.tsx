@@ -24,7 +24,8 @@ export var MyWorkSpace = observer(function () {
         } else {
             if (surface.user.isAutoCreateWorkspace === false) {
                 var rr = await autoCreateWorkspaceAndJoinWorkspace()
-                return UrlRoute.pushToWs(rr.workspace.sn, true);
+                if (rr) return UrlRoute.pushToWs(rr.workspace.sn, true);
+                else UrlRoute.push(ShyUrl.workCreate)
             }
             else return UrlRoute.push(ShyUrl.workCreate);
         }

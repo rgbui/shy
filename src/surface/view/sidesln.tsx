@@ -18,7 +18,7 @@ export var SideSln = observer(function () {
         var width = await yCache.get<number>(CacheKey.slideWidth);
         if (typeof width == 'number') local.slideWidth = width;
     }
-    React.useEffect(()=>{
+    React.useEffect(() => {
         load();
     }, [])
     function mousedown(event: React.MouseEvent) {
@@ -48,7 +48,7 @@ export var SideSln = observer(function () {
         ref={e => local.slideEl = e}
         style={{
             width: isMobileOnly && surface.mobileSlnSpread === true ? '100%' : local.slideWidth,
-            display: surface.supervisor.page && isMobileOnly && surface.mobileSlnSpread !== true ? "none" : undefined
+            display: surface.supervisor.page && (isMobileOnly && surface.mobileSlnSpread !== true || surface.slnSpread === false) ? "none" : undefined
         }}>
         <SlnView></SlnView>
         <div className='shy-slide-resize' onMouseDown={mousedown}></div>

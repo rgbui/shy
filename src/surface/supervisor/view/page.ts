@@ -10,6 +10,7 @@ import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
 import { channel } from "rich/net/channel";
+import { isMobileOnly } from "react-device-detect";
 
 export async function createPageContent(store: PageViewStore) {
     try {
@@ -104,7 +105,8 @@ export async function createPageContent(store: PageViewStore) {
                 store.emit('close');
             });
             page.on(PageDirective.spreadSln, async () => {
-                surface.mobileSlnSpread = true;
+                if (isMobileOnly) surface.mobileSlnSpread = true;
+                else surface.slnSpread = surface.slnSpread === false ? true : false;
             });
             page.on(PageDirective.rollup, async (id) => {
                 var pd = await store.snapStore.rollupSnap(id);
