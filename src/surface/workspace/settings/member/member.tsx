@@ -43,7 +43,8 @@ export class WorkspaceMembers extends React.Component {
                 page: this.searchList.page,
                 size: this.searchList.size,
                 word: this.searchList.word || undefined,
-                roleId: this.searchList.roleId || undefined
+                roleId: this.searchList.roleId || undefined,
+                ws:undefined
             });
             if (r.ok) {
                 Object.assign(this.searchList, r.data);

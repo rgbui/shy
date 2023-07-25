@@ -107,7 +107,7 @@ export class WorkspaceRoles extends React.Component {
         this.roleUserSearch.loading = true;
         try {
             this.roleUserSearch.error = '';
-            var r = await channel.get('/ws/role/members', { roleId: role.id, page: this.roleUserSearch.page, size: this.roleUserSearch.size });
+            var r = await channel.get('/ws/role/members', {ws:undefined, roleId: role.id, page: this.roleUserSearch.page, size: this.roleUserSearch.size });
             if (r.ok) {
                 Object.assign(this.roleUserSearch, r.data);
             }
@@ -445,7 +445,7 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     async onAddRoleMember(e: React.MouseEvent) {
-        var r = await useUserPicker({ center: true, centerTop: 100 });
+        var r = await useUserPicker({ center: true, centerTop: 100 },undefined);
         if (r) {
             var g = await surface.workspace.sock.put('/ws/user/put/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: r.id });
             await this.loadRoleMemebers(this.editRole)

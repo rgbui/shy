@@ -11,8 +11,7 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
         var g = await masterSock.get<{ template: { id: string, text: string, url: string, file: { url: string } } }>('/get/auto/create/workspace/template');
         if (g.ok) {
             var templateUrl = g.data.template.url || g.data.template.file?.url;
-            if (templateUrl)
-            {
+            if (templateUrl) {
                 /**
                  * 自动创建空间
                  */
@@ -36,7 +35,7 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                 var ws = await channel.get('/ws/query', { name: wsName });
                 var sock = Workspace.getWsSock(ws.data.pids, 'ws')
                 await channel.put('/user/join/ws', { wsId: ws.data.workspace.id });
-                await channel.put('/ws/invite/join', { wsId: ws.data.workspace.id,username:surface.user.name, sock, agree: false });
+                await channel.put('/ws/invite/join', { wsId: ws.data.workspace.id, username: surface.user.name, sock, agree: false });
                 await channel.patch('/user/patch', { data: { isAutoCreateWorkspace: true } });
                 return rr.data;
             }
