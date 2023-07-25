@@ -9,17 +9,16 @@ import { Mime } from "../declare";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
-import { SnapStore } from "../../../../services/snap/store";
-import { PageLayoutType } from "rich/src/page/declare";
+import { PageLayoutType, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import lodash from "lodash";
-import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
+import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
-import { PageViewStores } from "../../supervisor/view/store";
 import { Confirm } from "rich/component/lib/confirm";
 import { useForm } from "rich/component/view/form/dialoug";
 import { getPageItemElementUrl } from "./util";
+import { Page } from "rich/src/page";
 
 export class PageItem {
     id: string = null;
@@ -68,7 +67,6 @@ export class PageItem {
     speakDate?: Date = null;
     textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
     unreadChats: { id: string, roomId: string, seq: number }[] = [];
-
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -216,7 +214,7 @@ export class PageItem {
         this.spread = sp == false ? true : false;
         if (this.spread == true && this.checkedHasChilds == false && this.subCount > 0) {
             if (this.checkedHasChilds == false && !(this.childs?.length > 0)) {
-                var sus = await channel.get('/page/item/subs', { id: this.id });
+                var sus = await channel.get('/page/item/subs', { ws: undefined, id: this.id });
                 if (sus.ok == true) {
                     this.load({ childs: sus.data.list })
                 }
@@ -238,7 +236,7 @@ export class PageItem {
     }
     async getSubItems() {
         if (!this.checkedHasChilds) {
-            var sus = await channel.get('/page/item/subs', { id: this.id });
+            var sus = await channel.get('/page/item/subs', { ws: undefined, id: this.id });
             runInAction(() => {
                 if (sus.ok == true) {
                     this.load({ childs: sus.data.list })
@@ -253,14 +251,26 @@ export class PageItem {
         if (consideSelf == true) {
             var rg = await channel.get('/page/item', { id: this.id });
             if (rg.ok) {
+                var s = this.spread;
                 this.load(rg.data.item);
+                this.spread = s;
             }
         }
         if (this.checkedHasChilds) {
-            var sus = await channel.get('/page/item/subs', { id: this.id });
+            var sus = await channel.get('/page/item/subs', { id: this.id, ws: undefined });
             runInAction(() => {
                 if (sus.ok == true) {
-                    this.load({ childs: sus.data.list })
+                    var rs: { id: string, spread: boolean }[] = [];
+                    this.each(g => {
+                        rs.push({ id: g.id, spread: g.spread })
+                    })
+                    this.load({ childs: sus.data.list });
+                    this.each(g => {
+                        var r = rs.find(c => c.id == g.id);
+                        if (r) {
+                            g.spread = r.spread;
+                        }
+                    })
                 }
                 this.checkedHasChilds = true;
             })
@@ -298,31 +308,19 @@ export class PageItem {
         else pageItemStore.deletePageItem(this);
     }
     async onCopy() {
-        var data = {
-            icon: lodash.cloneDeep(this.icon),
+        await channel.post('/clone/page', {
+            pageId: this.id,
             text: util.getListName(this.parent.childs,
-                this.text,
+                getPageText(this),
                 g => g.text,
                 (c, i) => i > 0 ? `${c}(${i})` : `${c}`
             ),
-            mime: Mime.page,
-            pageType: this.pageType,
-            spread: false,
-        };
-        var item = await pageItemStore.insertAfterPageItem(this, data);
-        await item.onOpenItem();
-        var itemS = surface.supervisor.page;
-        var ps = PageViewStores.getPageViewStore(this.elementUrl);
-        if (ps?.page) {
-            var content = await ps?.page.get();
-            await itemS.page.onLoadContentOperates(this.id, content);
+            downPageId: this.id
+        })
+        var nextItem = this.next
+        if (nextItem) {
+            nextItem.onOpenItem();
         }
-        else {
-            var pd = await (SnapStore.createSnap(this.elementUrl)).querySnap();
-            await itemS.page.onLoadContentOperates(this.id, pd.content, pd.operates);
-        }
-        itemS.page.onSave();
-        itemS.page.forceUpdate();
     }
     async getPageItemMenus() {
         var items: MenuItem<string>[] = [];
@@ -359,9 +357,17 @@ export class PageItem {
         }
         else {
             items.push({
-                name: 'remove',
-                icon: TrashSvg,
-                text: '删除'
+                name: 'openRight',
+                icon: LogoutSvg,
+                text: '在右侧边栏打开'
+            });
+            items.push({
+                type: MenuItemType.divide,
+            });
+            items.push({
+                name: 'link',
+                icon: LinkSvg,
+                text: '复制访问链接'
             });
             items.push({
                 type: MenuItemType.divide,
@@ -370,7 +376,7 @@ export class PageItem {
                 items.push({
                     name: 'copy',
                     icon: DuplicateSvg,
-                    text: '拷贝'
+                    text: '拷贝副本'
                 });
             }
             items.push({
@@ -382,9 +388,9 @@ export class PageItem {
                 type: MenuItemType.divide,
             })
             items.push({
-                name: 'link',
-                icon: LinkSvg,
-                text: '复制访问链接'
+                name: 'remove',
+                icon: TrashSvg,
+                text: '删除'
             });
             if (this.editor) {
                 items.push({
@@ -461,6 +467,12 @@ export class PageItem {
             case 'link':
                 CopyText(this.url);
                 ShyAlert('访问链接已复制')
+                break;
+            case 'openRight':
+                var page: Page = await channel.air('/page/slide', { elementUrl: this.elementUrl })
+                if (page) {
+                    await channel.air('/page/slide', { elementUrl: null });
+                }
                 break;
         }
     }
