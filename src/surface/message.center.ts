@@ -1,9 +1,9 @@
 
 import lodash from "lodash";
-import { act, air, get, query } from "rich/net/annotation";
+import { act, air, get, post, query } from "rich/net/annotation";
 import { channel } from "rich/net/channel";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
-import { PageLayoutType } from "rich/src/page/declare";
+import { LinkWs, PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
 import { ShyUrl, UrlRoute } from "../history";
@@ -18,6 +18,7 @@ import { masterSock } from "../../net/sock";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { AtomPermission } from "rich/src/page/permission";
 import { Workspace } from "./workspace";
+import { wss } from "../../services/workspace";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -81,6 +82,26 @@ class MessageCenter {
             surface.sln.onFocusItem(it);
         }
     }
+    @post('/clone/page')
+    async pageClone(args: { pageId: string, text?: string, parentId?: string, downPageId?: string }) {
+        var r = await surface.workspace.sock.post('/clone/page', {
+            wsId: surface.workspace.id,
+            sourcePageId: args.pageId,
+            // newPageId: string,
+            newPageText: args.text,
+            parentId: args.parentId,
+            downPageId: args.downPageId
+        })
+        var items = r.data.items;
+        var item = surface.workspace.find(g => args.parentId && g.id == args.parentId || args.downPageId && g.id == args.downPageId)
+        if (item) {
+            if (args.downPageId) item = item.parent;
+            if (item) {
+                await item.onSync()
+            }
+        }
+        return { ok: true, data: { items } };
+    }
     @air('/page/dialog')
     async pageDialog(args: { elementUrl: string, config?: { isTemplate?: boolean } }) {
         return await surface.supervisor.onOpenDialog(args.elementUrl, args.config);
@@ -113,8 +134,8 @@ class MessageCenter {
         }
     }
     @get('/page/query/info')
-    async pageQueryInfo(args: { id: string }) {
-        var item = surface.workspace.find(g => g.id == args.id);
+    async pageQueryInfo(args: { ws?: LinkWs, id: string }) {
+        var item = surface?.workspace?.find(g => g.id == args.id);
         if (item) {
             return {
                 ok: true,
@@ -124,6 +145,7 @@ class MessageCenter {
                     cover: lodash.cloneDeep(item.cover),
                     plain: lodash.cloneDeep(item.plain),
                     thumb: lodash.cloneDeep(item.thumb),
+                    mime: item.mime,
                     id: item.id,
                     sn: item.sn,
                     text: item.text,
@@ -138,11 +160,13 @@ class MessageCenter {
             };
         }
         else {
-            var r = await surface.workspace.sock.get('/page/item', { id: args.id });
+            var sock = args.ws && args.ws?.id != surface?.workspace?.id ? await wss.getWsSock(args.ws?.id) : surface.workspace.sock;
+            var ws = args.ws || surface.workspace;
+            var r = await sock.get('/page/item', { id: args.id });
             if (r.ok && r.data.item) return {
                 ok: true,
                 data: Object.assign({
-                    url: surface.workspace.url + '/page/' + r.data.item.sn,
+                    url: ws.url + '/page/' + r.data.item.sn,
                     elementUrl: getPageItemElementUrl(r.data.item as any)
                 }, lodash.pick(r.data.item,
                     [
@@ -159,30 +183,31 @@ class MessageCenter {
                         'netPermissions',
                         'memberPermissions',
                         'inviteUsersPermissions',
-                        'parentId'
+                        'parentId',
+                        'mime'
                     ]))
             }
             else return { ok: false, warn: r.warn };
         }
     }
     @get('/page/query/elementUrl')
-    async pageQueryElementUrl(args: { elementUrl: string }) {
+    async pageQueryElementUrl(args: { ws?: LinkWs, elementUrl: string }) {
         var pe = parseElementUrl(args.elementUrl);
         switch (pe.type) {
             case ElementType.PageItem:
             case ElementType.Room:
             case ElementType.Schema:
-                var item = await channel.get('/page/query/info', { id: pe.id });
+                var item = await channel.get('/page/query/info', { ws: args.ws, id: pe.id });
                 return item
                 break;
             case ElementType.SchemaView:
             case ElementType.SchemaRecordView:
-                var schema = await TableSchema.loadTableSchema(pe.id);
+                var schema = await TableSchema.loadTableSchema(pe.id,args.ws);
                 var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
                 return sv
                 break;
             case ElementType.SchemaData:
-                var schema = await TableSchema.loadTableSchema(pe.id);
+                var schema = await TableSchema.loadTableSchema(pe.id,args.ws);
                 var row = await schema.rowGet(pe.id1);
                 if (row) {
                     return row;
@@ -273,7 +298,7 @@ class MessageCenter {
                 allow = await findParents(item.data as PageItem);
                 break;
             case ElementType.SchemaRecordView:
-                var schema = await TableSchema.loadTableSchema(pe.id);
+                var schema = await TableSchema.loadTableSchema(pe.id,undefined);
                 var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
                 var sc = ge(sv as any);
                 if (sc) allow = sc;
@@ -283,7 +308,7 @@ class MessageCenter {
                 }
                 break;
             case ElementType.SchemaData:
-                var schema = await TableSchema.loadTableSchema(pe.id);
+                var schema = await TableSchema.loadTableSchema(pe.id,undefined);
                 var row = await schema.rowGet(pe.id1);
                 if (row) {
                     var sr = ge(row.config as any);
