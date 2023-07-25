@@ -1,6 +1,7 @@
 
 import { surface } from "../src/surface/store";
 import { del, put, get, patch } from "rich/net/annotation";
+import { wss } from "./workspace";
 
 class DataStoreService {
     @put('/datastore/add')
@@ -25,18 +26,21 @@ class DataStoreService {
     }
     @get('/datastore/query')
     async query(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/query', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/query', args)
     }
     @get('/datastore/query/list')
     async queryList(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/query/list', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/query/list', args)
     }
     @get('/datastore/query/ids')
     async queryIds(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/query/ids', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/query/ids', args)
     }
     @get('/datastore/query/all')
     async queryAll(args) {
@@ -45,18 +49,21 @@ class DataStoreService {
     }
     @get('/datastore/group')
     async group(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/group', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/group', args)
     }
     @get('/datastore/statistics')
     async statistics(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/statistics', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/statistics', args)
     }
     @get('/datastore/statistics/value')
     async statisticsValue(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/statistics/value', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/statistics/value', args)
     }
     @put('/datastore/row/object/update')
     async datastoreRowObjectUpdate(args) {
@@ -70,7 +77,8 @@ class DataStoreService {
     }
     @get('/datastore/exists/user/submit')
     async dataStoreExistsSubmit(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.get('/datastore/exists/user/submit', args);
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/exists/user/submit', args);
     }
 }

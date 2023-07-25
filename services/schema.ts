@@ -5,6 +5,7 @@
 
 import { put, get, del } from "rich/net/annotation";
 import { surface } from "../src/surface/store";
+import { wss } from "./workspace";
 
 class SchemaService {
     @put('/schema/create')
@@ -18,8 +19,10 @@ class SchemaService {
         return await surface.workspace.sock.put('/schema/create/define', args);
     }
     @get('/schema/query')
-    async searchSchema() {
-        return await surface.workspace.sock.get('/schema/query', arguments[0]);
+    async searchSchema(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/schema/query', args);
     }
     @put('/schema/operate')
     async schemaOperate(args: { operate: Record<string, any> }) {
@@ -32,17 +35,16 @@ class SchemaService {
     }
     @get('/schema/list')
     async getSchemas(args: Record<string, any>) {
-        return await surface.workspace.sock.get('/schema/list', {
-            wsId: surface.workspace.id,
-            ...(args || {})
-        })
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/schema/list', args)
     }
     @get('/schema/ids/list')
     async getSchemasByIds(args: Record<string, any>) {
-        return await surface.workspace.sock.get('/schema/ids/list', {
-            wsId: surface.workspace.id,
-            ...(args || {})
-        })
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        console.log(args, sock);
+        return await sock.get('/schema/ids/list', args)
     }
     @del('/schema/delete')
     async deleteSchema(args: Record<string, any>) {

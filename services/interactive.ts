@@ -1,5 +1,6 @@
-import { patch,get} from "rich/net/annotation";
+import { patch, get } from "rich/net/annotation";
 import { surface } from "../src/surface/store";
+import { wss } from "./workspace";
 
 class interactiveService {
     @patch('/interactive/emoji')
@@ -11,7 +12,9 @@ class interactiveService {
     }
     @get('/user/interactives')
     async getUserInteractives(args: {}) {
-        return surface.workspace.sock.get('/user/interactives', {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/user/interactives', {
             ...args,
             wsId: surface.workspace.id
         })

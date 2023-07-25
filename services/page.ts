@@ -6,32 +6,38 @@ import { BaseService } from "./common/base";
 import { SnapStore } from "./snap/store";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { wss } from "./workspace";
+import { LinkWs } from "rich/src/page/declare";
 
 class PageService extends BaseService {
     @get('/page/items')
-    async pageItems(args: { ids: string[], sock?: any, wsId?: string }) {
-        var sock = args.sock || surface.workspace.sock;
-        var wsId = args.wsId || surface.workspace.id;
-        return await sock.get('/page/items', { wsId: wsId, ids: args.ids });
+    async pageItems(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/items', args);
     }
     @get('/page/item/subs')
     async pageItemSubs(args: Record<string, any>) {
-        if (!args.wsId) args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/page/item/subs', args);
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/item/subs', args);
     }
     @get('/page/parent/ids')
     async pageParentIds(args: Record<string, any>) {
-        if (!args.wsId) args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/page/parent/ids', args);
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/parent/ids', args);
     }
     @get('/page/parent/subs')
     async pageParentSubs(args: Record<string, any>) {
-        if (!args.wsId) args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/page/parent/subs', args);
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/parent/subs', args);
     }
     @get('/page/item')
-    async queryPageItem(args: { id: string }) {
-        return await surface.workspace.sock.get('/page/item', args);
+    async queryPageItem(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/item', args);
     }
     @put('/page/item/create')
     async pageItemCreate(args: Record<string, any>) {
@@ -40,25 +46,39 @@ class PageService extends BaseService {
     }
     @get('/view/snap/query/readonly')
     async getAutoPageSyncBlock(args: { wsId?: string, elementUrl: string }) {
-        var wsId = args.wsId || surface.workspace.id;
-        var sock = args?.wsId ? await wss.getWsSock(args.wsId) : surface.workspace.sock;
-        var r = await sock.get<{
+        if (!args) args = {} as any
+        var sock = await wss.getArgsSock(args);
+        return await sock.get<{
             localExisting: boolean,
             file: IconArguments,
             operates: any[],
             content: string
         }>('/view/snap/query', {
             elementUrl: args.elementUrl,
-            wsId: wsId,
+            wsId: args.wsId,
             seq: -1,
             readonly: true
         });
-        return r
     }
     @get('/view/snap/query')
-    async getPageSyncBlock(args: { elementUrl: string }) {
-        var snapStore = SnapStore.createSnap(args.elementUrl);
-        return { ok: true, data: await snapStore.querySnap() }
+    async getPageSyncBlock(args: { ws: LinkWs, elementUrl: string }) {
+        console.log('args', args);
+        if (args.ws?.id == surface.workspace?.id || !args.ws) {
+            var snapStore = SnapStore.createSnap(args.elementUrl);
+            return { ok: true, data: await snapStore.querySnap() }
+        }
+        var sock = await wss.getArgsSock(args.ws);
+        return await sock.get<{
+            localExisting: boolean,
+            file: IconArguments,
+            operates: any[],
+            content: string
+        }>('/view/snap/query', {
+            elementUrl: args.elementUrl,
+            wsId: args.ws?.id,
+            seq: -1,
+            readonly: false
+        })
     }
     @act('/view/snap/operator')
     async PageViewOperator(args: { elementUrl: string, operate: Partial<UserAction> }) {
@@ -70,14 +90,27 @@ class PageService extends BaseService {
         var snapStore = SnapStore.createSnap(args.elementUrl);
         return snapStore.viewSnap({ seq: args.seq, content: args.content })
     }
+    @put('/view/snap/direct')
+    async PageViewDirect(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        sock.put('/view/snap/direct', {
+            ...args,
+            wsId: surface.workspace.id
+        });
+    }
 
     @get('/view/snap/list')
     async viewSnapList(args) {
-        return surface.workspace.sock.get('/view/snap/list', { ...args, wsId: surface.workspace.id });
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/view/snap/list', { ...args, wsId: surface.workspace.id });
     }
     @get('/view/snap/content')
     async viewSnapContent(args) {
-        return surface.workspace.sock.get('/view/snap/content', { ...args, wsId: surface.workspace.id });
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/view/snap/content', { ...args, wsId: surface.workspace.id });
     }
     @del('/view/snap/del')
     async viewSnapDelete(args) {

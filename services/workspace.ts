@@ -25,14 +25,40 @@ class WorkspaceService extends BaseService {
         }
         return sock;
     }
+    async getArgsSock(args) {
+        var sock: Sock;
+        if (args.wsId) {
+            if (args.wsId == surface.workspace?.id)
+                return surface.workspace.sock;
+            else return await this.getWsSock(args.wsId);
+        }
+        if (args.sock) {
+            sock = args.sock;
+            delete args.sock;
+            return sock;
+        }
+        if (args.ws) {
+            var ws = args.ws;
+            args.wsId = ws.id;
+            delete args.ws;
+            if (ws.id == surface.workspace?.id)
+                return surface.workspace.sock;
+            else return await this.getWsSock(ws.id);
+        }
+        if (surface.workspace) {
+            args.wsId = surface.workspace.id;
+            args.sockId = surface.workspace.tim.id;
+        }
+        return surface.workspace?.sock;
+    }
     @get('/ws/basic')
     async queryWsBasic(args) {
-        var sock = await this.getWsSock(args.wsId);
+        var sock = await this.getArgsSock(args);
         return await sock.get('/ws/basic', args);
     }
     @get('/ws/info')
     async queryWsInfo(args) {
-        var sock = await this.getWsSock(args.wsId);
+        var sock = await this.getArgsSock(args);
         return await sock.get('/ws/info', args);
     }
     @get('/ws/query')
@@ -98,8 +124,8 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/channel/list')
     async getChatList(args) {
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/channel/list', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/channel/list', args);
     }
     @del('/ws/channel/cancel')
     async getChatCancel(args) {
@@ -121,8 +147,8 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/channel/abled/send')
     async getChannelAbledSend(args) {
-        if (!args.wsId) args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/channel/abled/send', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/channel/abled/send', args);
     }
 
     /**
@@ -130,7 +156,7 @@ class WorkspaceService extends BaseService {
     * @returns 
     */
     @post('/ws/upload/file')
-    async uploadFile(data: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+    async uploadFile(data:{ file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             if (data.file.size > 1024 * 1024 * 50) {
                 ShyAlert('暂时不支持上传超过50M的文件')
@@ -167,14 +193,14 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/member/word/query')
     async memberWordQuery(args) {
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/member/word/query', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/member/word/query', args);
     }
     @get('/ws/members')
     async getMembers(args) {
         if (!args) args = {};
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/members', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/members', args);
     }
     @del('/ws/member/delete')
     async deleteWsMemeber(args) {
@@ -184,8 +210,8 @@ class WorkspaceService extends BaseService {
     @get('/ws/roles')
     async getWsRoles(args) {
         if (!args) args = {};
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/roles', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/roles', args);
     }
     @patch('/ws/role/patch')
     async rolePatch(args) {
@@ -204,8 +230,9 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/role/members')
     async roleUsers(args) {
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/role/members', args);
+        if (!args) args = {};
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/role/members', args);
     }
     @patch('/ws/set/domain')
     async wsSetDomain(args) {
@@ -243,8 +270,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/access/info')
     async wsAccessInfo(args) {
-        var sock = args.sock || surface.workspace.sock;
-        delete args.sock;
+        var sock = await this.getArgsSock(args);
         return await sock.get('/ws/access/info', args);
     }
     @del('/ws/member/exit')
@@ -258,11 +284,13 @@ class WorkspaceService extends BaseService {
     }
     @get('/page/word/query')
     async pageWordQuery(args) {
-        return await surface.workspace.sock.get('/page/word/query', { word: args.word, size: args.size, wsId: surface.workspace.id });
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/page/word/query', { word: args.word, size: args.size, wsId: surface.workspace.id });
     }
     @get('/ws/search')
     async wsSearch(args) {
-        return await surface.workspace.sock.get('/ws/search', {
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/search', {
             wsId: surface.workspace.id,
             ...args
         });
@@ -270,7 +298,8 @@ class WorkspaceService extends BaseService {
 
     @get('/ws/comment/list')
     async wsCommentList(args) {
-        return await surface.workspace.sock.get('/ws/comment/list', {
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/comment/list', {
             wsId: surface.workspace.id,
             ...args
         });
@@ -303,28 +332,24 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/random/online/users')
     async wsRandomOnLineUsers(args) {
-        if (!args.wsId)
-            args.wsId = surface.workspace.id;
-        var sock = await this.getWsSock(args.wsId);
+        var sock = await this.getArgsSock(args);
         return await sock.get('/ws/random/online/users', args)
     }
     @get('/ws/online/users')
     async wsOnlineUsers(args) {
-        if (!args.wsId)
-            args.wsId = surface.workspace.id;
-        var sock = await this.getWsSock(args.wsId);
+        var sock = await this.getArgsSock(args);
         return await sock.get('/ws/online/users', args);
     }
     @get('/ws/view/online/users')
     async wsGetViewOnLineUsers(args) {
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/view/online/users', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/view/online/users', args);
     }
     @get('/ws/robots')
     async wsRobots(args) {
         if (typeof args == 'undefined') args = {}
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/ws/robots', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/robots', args);
     }
     @get('/robots/info')
     async robotsInfo(args) {
@@ -333,8 +358,8 @@ class WorkspaceService extends BaseService {
     }
     @get('/view/browse')
     async viewBrowse(args) {
-        args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.get('/view/browse', args);
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/view/browse', args);
     }
     @post('/create/template')
     async createTemplate(args) {
