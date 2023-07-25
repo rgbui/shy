@@ -1,6 +1,7 @@
 
 import { channel } from 'rich/net/channel';
 import * as short from 'short-uuid';
+
 class Config {
     /**
      * * 打包发布的版本
@@ -16,15 +17,12 @@ class Config {
     get isPro() {
         return this.mode == 'pro'
     }
-    get isUserWs() {
+    get isDomainWs() {
         if (this.isPro) {
             if (location.host == 'shy.live') return false;
             else return true;
         }
-        else {
-            if (location.pathname.startsWith('/ws')) return true;
-            else return false;
-        }
+        return false;
     }
     get isBeta() {
         return this.mode == 'beta'

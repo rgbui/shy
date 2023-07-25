@@ -69,7 +69,7 @@ interface Window {
   shyConfig?: {
     mode: 'pro' | 'dev' | 'beta' | 'desktop',
     isPro: boolean,
-    isUserWs: boolean,
+    isDomainWs: boolean,
     isBeta: boolean,
     isDev: boolean,
     version: string,
@@ -79,7 +79,8 @@ interface Window {
     isServerSide: boolean,
     platform: 'web' | 'desktop' | 'mobile' | "server-side",
     guid(): string,
-    isOnline: boolean
+    isOnline: boolean,
+    isTestBeta: boolean
   },
   shyLog: (...args: any[]) => void
 }
