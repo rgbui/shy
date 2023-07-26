@@ -12,6 +12,36 @@ import { SupervisorView } from "./supervisor/view";
 import { ViewNotAllow } from "./404";
 import { channel } from "rich/net/channel";
 import { Spin } from "rich/component/view/spin";
+export var SurfacePage = observer((props: { pathname: string }) => {
+    async function load() {
+        if (SyHistory.action == 'POP') {
+            if (surface.workspace) {
+                if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
+                    var ul = new URL(location.href);
+                    var url = ul.searchParams.get('url');
+                    channel.air('/page/open', { elementUrl: url })
+                }
+                else {
+                    var page = await surface.workspace.getDefaultPage();
+                    channel.air('/page/open', { item: page });
+                }
+            }
+        }
+    }
+    React.useEffect(() => {
+        load();
+    }, [props.pathname]);
+    return <>{surface.accessPage == 'forbidden' && <ViewNotAllow></ViewNotAllow>}
+        {surface.showWorkspace && <div className="shy-surface-content">
+            {surface.showJoinTip && <div className="shy-surface-content-head h-40" >
+                <JoinTip></JoinTip>
+            </div>}
+            {surface.accessPage != 'forbidden' && <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>
+                <SideSln></SideSln>
+                <SupervisorView></SupervisorView>
+            </div>}
+        </div>}</>
+})
 
 export var SurfaceView = observer(function () {
     var local = useLocalObservable(() => {
@@ -51,33 +81,3 @@ export var SurfaceView = observer(function () {
     return <></>;
 })
 
-export var SurfacePage = observer((props: { pathname: string }) => {
-    async function load() {
-        if (SyHistory.action == 'POP') {
-            if (surface.workspace) {
-                if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
-                    var ul = new URL(location.href);
-                    var url = ul.searchParams.get('url');
-                    channel.air('/page/open', { elementUrl: url })
-                }
-                else {
-                    var page = await surface.workspace.getDefaultPage();
-                    channel.air('/page/open', { item: page });
-                }
-            }
-        }
-    }
-    React.useEffect(() => {
-        load();
-    }, [props.pathname]);
-    return <>{surface.accessPage == 'forbidden' && <ViewNotAllow></ViewNotAllow>}
-        {surface.showWorkspace && <div className="shy-surface-content">
-            {surface.showJoinTip && <div className="shy-surface-content-head h-40" >
-                <JoinTip></JoinTip>
-            </div>}
-            {surface.accessPage != 'forbidden' && <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>
-                <SideSln></SideSln>
-                <SupervisorView></SupervisorView>
-            </div>}
-        </div>}</>
-})
