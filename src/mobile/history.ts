@@ -6,8 +6,7 @@ export function currentParams(routePath: string): Record<string, any> {
         exact: true,
         path: routePath
     });
-    if (r && r.params)
-    {
+    if (r && r.params) {
         return r.params;
     }
     return undefined;
@@ -18,7 +17,7 @@ export var UrlRoute = {
             if (isRedict) return location.href = 'https://shy.live' + url;
         }
         else if (url == ShyUrl.signIn) {
-            if (window.shyConfig.isPro && window.shyConfig.isUserWs) {
+            if (window.shyConfig.isPro && window.shyConfig.isDomainWs) {
                 return location.href = 'https://shy.live' + url
             }
         }

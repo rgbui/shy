@@ -10,6 +10,7 @@ import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { Workspace } from "../..";
 import { ShyAlert } from "rich/component/lib/alert";
+import { config } from "../../../../../common/config";
 
 @observer
 export class SafeSetting extends React.Component {
@@ -71,7 +72,7 @@ export class SafeSetting extends React.Component {
     async openAccess(access: number) {
         if (access == 1) {
             var us = await surface.user.wallet();
-            if (us.money > 5 || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+            if (config.isTestBeta || us.money > 5 || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
 
             }
             else {
