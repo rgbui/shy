@@ -44,6 +44,7 @@ export var SideSln = observer(function () {
             }
         })
     }
+    if (surface.isDefineWorkspaceMenu) return <></>
     return surface.showSln && <><div className={'shy-slide'}
         ref={e => local.slideEl = e}
         style={{
@@ -53,6 +54,5 @@ export var SideSln = observer(function () {
         <SlnView></SlnView>
         <div className='shy-slide-resize' onMouseDown={mousedown}></div>
     </div>
-        {/* {!isMobileOnly && <div className='shy-slide-reaction'></div>} */}
     </>
 })

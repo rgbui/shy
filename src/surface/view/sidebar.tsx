@@ -21,6 +21,7 @@ import { isMobileOnly } from "react-device-detect";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
+    if (surface.isDefineWorkspaceMenu) return <></>
     function renderWs(workspace: LinkWorkspaceOnline) {
         if (workspace.icon) return <a className="shy-sidebar-ws-icon relative">
             <img src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />

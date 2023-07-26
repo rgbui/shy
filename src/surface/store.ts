@@ -11,6 +11,7 @@ import { channel } from "rich/net/channel";
 import "./message.center";
 import { PageItem } from "./sln/item";
 import { PageViewStores } from "./supervisor/view/store";
+import { config } from "../../common/config";
 
 export class Surface extends Events {
     constructor() {
@@ -255,6 +256,13 @@ export class Surface extends Events {
     }
     get showWorkspace() {
         return surface.workspace ? true : false;
+    }
+    /**
+     * 是否自定义workspace头部菜单
+     */
+    get isDefineWorkspaceMenu() {
+        if ((config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled && surface.workspace?.publishConfig?.defineContent && (surface.workspace?.publishConfig?.contentTheme == 'wiki' || surface.workspace?.publishConfig?.contentTheme == 'none')) return true;
+        return false;
     }
 }
 export var surface = new Surface();
