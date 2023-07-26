@@ -39,7 +39,7 @@ export var UrlRoute = {
             }
             else {
                 if (location.host == 'shy.live') return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
-                else location.href = 'https://shy.live/' + wsSn + '/page/' + pageSn;
+                else location.href = 'https://shy.live/ws/' + wsSn + '/page/' + pageSn;
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
