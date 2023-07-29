@@ -3,12 +3,14 @@ import { surface } from "../../store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer } from "mobx-react";
 import { UserProfile } from "../../user/profile";
-import { CubesSvg } from "rich/component/svgs";
+import { CubesSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useTemplateView } from "rich/extensions/template";
 import { config } from "../../../../common/config";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
+import { useTrashBox } from "rich/extensions/trash";
+
 export var SlnView = observer(function () {
     React.useEffect(() => {
         function keyup(event: KeyboardEvent) {
@@ -43,14 +45,28 @@ export var SlnView = observer(function () {
             }
         }
     }
+    async function openTrash(e: React.MouseEvent) {
+        var item = surface.workspace.childs.last();
+        var rg = await useTrashBox({
+            ws: surface.workspace,
+            parentId: item.id
+        });
+        if (rg) {
+            await item.onSync(true);
+        }
+    }
     function renderBottoms() {
         if (surface.isPubSite) return <></>
         if (surface.workspace?.sn > 20 && config.isPro) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
-            return <div className="gap-t-20">
+            return <div className="gap-b-20">
                 <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-10 item-hover round size-20 flex-center"><Icon size={18} icon={CubesSvg}></Icon></span>
+                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={CubesSvg}></Icon></span>
                     <span>模板</span>
+                </div>
+                <div onMouseDown={e => openTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
+                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={16} icon={TrashSvg}></Icon></span>
+                    <span>垃圾桶</span>
                 </div>
             </div>
         else return <></>

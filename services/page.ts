@@ -9,6 +9,26 @@ import { wss } from "./workspace";
 import { LinkWs } from "rich/src/page/declare";
 
 class PageService extends BaseService {
+
+    @get('/page/deleted/query')
+    async pageDeletedQuery(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/deleted/query', args);
+    }
+    @del('/page/deleted/clean')
+    async pageDeletedClean(args: Record<string, any>) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.delete('/page/deleted/clean', args);
+    }
+    @post('/page/item/recover')
+    async pageItemRecover(args: Record<string, any>) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.post('/page/item/recover', args);
+    }
+
     @get('/page/items')
     async pageItems(args) {
         if (!args) args = {}
