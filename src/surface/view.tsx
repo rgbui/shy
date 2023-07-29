@@ -12,6 +12,7 @@ import { SupervisorView } from "./supervisor/view";
 import { ViewNotAllow } from "./404";
 import { channel } from "rich/net/channel";
 import { Spin } from "rich/component/view/spin";
+import { DefinePageNavBar } from "rich/src/page/view/common";
 export var SurfacePage = observer((props: { pathname: string }) => {
     async function load() {
         if (SyHistory.action == 'POP') {
@@ -31,16 +32,25 @@ export var SurfacePage = observer((props: { pathname: string }) => {
     React.useEffect(() => {
         load();
     }, [props.pathname]);
-    return <>{surface.accessPage == 'forbidden' && <ViewNotAllow></ViewNotAllow>}
-        {surface.showWorkspace && <div className="shy-surface-content">
+    if (surface.accessPage == 'forbidden') return <ViewNotAllow></ViewNotAllow>
+    if (surface.workspace) {
+        var isDefinePageNav = surface.isPubSite && surface.isPubSiteDefineBarMenu && !surface.isPubSiteHideMenu;
+        var h = 0;
+        if (surface.showJoinTip) h += 40;
+        if (isDefinePageNav) h += 48;
+        return <div className="shy-surface-content">
             {surface.showJoinTip && <div className="shy-surface-content-head h-40" >
                 <JoinTip></JoinTip>
             </div>}
-            {surface.accessPage != 'forbidden' && <div className="shy-surface-content-box" style={{ height: surface.showJoinTip ? "calc(100vh - 40px)" : "100vh" }}>
+            {isDefinePageNav && <div style={{ height: 48 }}>
+                <DefinePageNavBar style={{ marginLeft: 20, marginRight: 20 }} ws={surface.workspace} user={surface.user}></DefinePageNavBar>
+            </div>}
+            <div className="shy-surface-content-box" style={{ height: h > 0 ? `calc(100vh - ${h}px)` : "100vh" }}>
                 <SideSln></SideSln>
                 <SupervisorView></SupervisorView>
-            </div>}
-        </div>}</>
+            </div>
+        </div>
+    }
 })
 
 export var SurfaceView = observer(function () {

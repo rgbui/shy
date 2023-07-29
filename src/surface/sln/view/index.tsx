@@ -9,7 +9,6 @@ import { useTemplateView } from "rich/extensions/template";
 import { config } from "../../../../common/config";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
-
 export var SlnView = observer(function () {
     React.useEffect(() => {
         function keyup(event: KeyboardEvent) {
@@ -24,7 +23,7 @@ export var SlnView = observer(function () {
             document.removeEventListener('keyup', keyup);
             document.removeEventListener('mousemove', move);
         }
-    }, [])
+    },[])
     async function openTemplate(e: React.MouseEvent) {
         var ut = await useTemplateView();
         if (ut) {
@@ -45,6 +44,7 @@ export var SlnView = observer(function () {
         }
     }
     function renderBottoms() {
+        if (surface.isPubSite) return <></>
         if (surface.workspace?.sn > 20 && config.isPro) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-t-20">
@@ -57,7 +57,7 @@ export var SlnView = observer(function () {
     }
     return <div className='shy-wss h100' onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
         {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + (surface.workspace.slnStyle || 'note')}>
-            <WorkspaceProfile ></WorkspaceProfile>
+            {!(surface.isPubSite && surface.isPubSiteDefineBarMenu) && <WorkspaceProfile ></WorkspaceProfile>}
             <div className='shy-ws-items' ref={e => surface.sln.el = e}>
                 {surface.workspace.childs.map(ws => {
                     var View = surface.sln.getMimeViewComponent(ws.mime);
@@ -65,7 +65,7 @@ export var SlnView = observer(function () {
                 })}
                 {renderBottoms()}
             </div>
-            <UserProfile></UserProfile>
+            {!surface.isPubSite && <UserProfile></UserProfile>}
         </div>}
     </div>
 })

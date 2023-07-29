@@ -38,6 +38,8 @@ export class SitePublishView extends React.Component {
             abled: false,
             defineNavMenu: false,
             navMenus: [],
+            isFullWidth: true,
+            smallFont: true,
             contentTheme: 'default',
             defineContent: false,
             defineBottom: false
@@ -62,8 +64,14 @@ export class SitePublishView extends React.Component {
         this.data = {
             publishConfig: lodash.cloneDeep(surface.workspace.publishConfig)
         };
-        if (!this.data.publishConfig?.navMenus || Array.isArray(this.data.publishConfig?.navMenus) && this.data.publishConfig.navMenus.length == 1) {
-            this.data.publishConfig.navMenus = [{ id: config.guid(), date: Date.now(), userid: surface.user?.id, type: 'logo', text: 'logo', }]
+        if (!this.data.publishConfig?.navMenus || Array.isArray(this.data.publishConfig?.navMenus) && this.data.publishConfig.navMenus.length == 0) {
+            this.data.publishConfig.navMenus = [{
+                id: config.guid(),
+                date: Date.now(),
+                userid: surface.user?.id,
+                type: 'logo',
+                text: surface.workspace.text,
+            }]
         }
         this.error = {};
         if (this.tip) this.tip.close();
@@ -301,19 +309,19 @@ export class SitePublishView extends React.Component {
     renderContent() {
         return <div>
             <div className="flex f-14">
-                <span>自定义应用内容格式</span>
+                <span>自定义应用页面排版</span>
                 <Switch checked={this.data.publishConfig.defineContent} onChange={e => {
                     this.change('publishConfig.defineContent', e)
                 }}></Switch>
             </div>
             {this.data.publishConfig.defineContent && <><Divider></Divider>
                 <div className="flex">
-                    <div className="flex-auto">内容排版</div>
+                    <div className="flex-auto">页面排版</div>
                     <div className="flex-fixed">
                         <SelectBox border value={this.data.publishConfig.contentTheme || 'default'} options={
                             [
                                 { text: '默认', value: 'default' },
-                                { text: 'Wiki', value: 'wiki' },
+                                // { text: 'Wiki', value: 'wiki' },
                                 { text: '无侧边栏', value: 'none' }
                             ]
                         }
@@ -323,6 +331,18 @@ export class SitePublishView extends React.Component {
                         ></SelectBox>
                     </div>
                 </div>
+                {/* <div className="flex">
+                    <span>页面宽屏</span>
+                    <Switch checked={this.data.publishConfig.isFullWidth} onChange={e => {
+                        this.change('publishConfig.isFullWidth', e)
+                    }}></Switch>
+                </div>
+                <div className="flex">
+                    <span>页面小字号</span>
+                    <Switch checked={this.data.publishConfig.smallFont} onChange={e => {
+                        this.change('publishConfig.smallFont', e)
+                    }}></Switch>
+                </div> */}
             </>}
         </div>
     }

@@ -587,6 +587,7 @@ export class PageItem {
         }
     }
     get isCanEdit() {
+        if (surface.isPubSite) return false;
         return this.isAllow(
             AtomPermission.all,
             AtomPermission.docEdit,

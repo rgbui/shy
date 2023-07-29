@@ -22,6 +22,7 @@ class Config {
             if (location.host == 'shy.live') return false;
             else return true;
         }
+        // if(this.isDev)return true;
         return false;
     }
     get isBeta() {

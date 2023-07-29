@@ -264,5 +264,14 @@ export class Surface extends Events {
         if ((config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled && surface.workspace?.publishConfig?.defineContent && (surface.workspace?.publishConfig?.contentTheme == 'wiki' || surface.workspace?.publishConfig?.contentTheme == 'none')) return true;
         return false;
     }
+    get isPubSiteDefineBarMenu() {
+        return this.isPubSite && surface.workspace?.publishConfig?.navMenus?.length > 0 && surface.workspace?.publishConfig?.defineNavMenu
+    }
+    get isPubSiteHideMenu() {
+        return this.isPubSite && surface.workspace?.publishConfig?.defineContent && (surface.workspace?.publishConfig?.contentTheme == 'wiki' || surface.workspace?.publishConfig?.contentTheme == 'none')
+    }
+    get isPubSite() {
+        return (config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled
+    }
 }
 export var surface = new Surface();

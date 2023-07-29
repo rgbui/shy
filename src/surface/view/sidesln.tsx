@@ -5,6 +5,7 @@ import { surface } from "../store";
 import { yCache, CacheKey } from "../../../net/cache";
 import { SlnView } from "../sln/view";
 import { isMobileOnly } from "react-device-detect";
+import "./style.less";
 
 export var SideSln = observer(function () {
     var local = useLocalObservable(() => {
@@ -44,15 +45,19 @@ export var SideSln = observer(function () {
             }
         })
     }
-    if (surface.isDefineWorkspaceMenu) return <></>
-    return surface.showSln && <><div className={'shy-slide'}
+    if (surface.isPubSiteHideMenu) return <></>
+    var classList: string[] = ['shy-slide'];
+    if (surface.isPubSiteDefineBarMenu) {
+        classList.push('shy-slide-define-default')
+    }
+    return surface.showSln && <><div className={classList.join(" ")}
         ref={e => local.slideEl = e}
         style={{
             width: isMobileOnly && surface.mobileSlnSpread === true ? '100%' : local.slideWidth,
             display: surface.supervisor.page && (isMobileOnly && surface.mobileSlnSpread !== true || surface.slnSpread === false) ? "none" : undefined
         }}>
         <SlnView></SlnView>
-        <div className='shy-slide-resize' onMouseDown={mousedown}></div>
+        {<div className='shy-slide-resize' onMouseDown={mousedown}></div>}
     </div>
     </>
 })

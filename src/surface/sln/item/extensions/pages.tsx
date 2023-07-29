@@ -33,7 +33,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     }}
                     className={"size-12 cursor flex-center ts " + (item.spread ? " " : " angle-90-")}>
                     {item.willLoadSubs && <Spin></Spin>}
-                    {!item.willLoadSubs && <Icon size={12} icon={ChevronDownSvg}></Icon>}
+                    {!item.willLoadSubs && <Icon size={14} icon={ChevronDownSvg}></Icon>}
                 </span>}
                 <span onMouseDown={e => {
                     // e.stopPropagation();

@@ -177,15 +177,19 @@ export class Workspace {
         defineNavMenu: boolean,
         navMenus: WorkspaceNavMenuItem[],
         defineContent: boolean,
+        isFullWidth: boolean,
+        smallFont: boolean,
         contentTheme: 'default' | 'none' | 'wiki',
-        defineBottom:boolean
+        defineBottom: boolean
     } = {
             abled: false,
             defineNavMenu: false,
             navMenus: [],
             defineContent: false,
+            isFullWidth: true,
+            smallFont: true,
             contentTheme: 'default',
-            defineBottom:false
+            defineBottom: false
         }
     constructor() {
         makeObservable(this, {
