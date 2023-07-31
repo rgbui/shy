@@ -8,6 +8,7 @@ import { Icon } from "rich/component/view/icon";
 import { channel } from "rich/net/channel";
 import { useSelectPayView } from "../../../../component/pay/select";
 import "./style.less";
+import { S } from "rich/i18n/view";
 
 @observer
 export class ShyFeature extends React.Component {
@@ -40,7 +41,7 @@ export class ShyFeature extends React.Component {
         return <div className="shy-app-lang">
 
             <div className="gap-h-10">
-                <div className="h2 flex-center">价格</div>
+                <div className="h2 flex-center"><S>价格</S></div>
                 <div className="text-center gap-h-20 f-14">不限空间、不限人数、不限功能、按量付费</div>
                 <div className="flex flex-top flex-full">
                     <div style={{ width: 'calc(33% - 10px)' }} className="flex-fixed   box-border  gap-r-10 padding-14 shadow  round r-gap-10">

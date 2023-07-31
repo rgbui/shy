@@ -6,16 +6,17 @@ import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { surface } from "../../store";
+import { S } from "rich/i18n/view";
 
 class UserModifyName extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'} head={<span>设置用户名</span>}>
+        return <Dialoug className={'shy-join-friend'} head={<span><S>设置用户名</S></span>}>
             <Row style={{ marginTop: 30, marginBottom: 30 }}>
-                <Col>用户名</Col>
+                <Col><S>用户名</S></Col>
                 <Col><Input value={this.name} onChange={e => this.name = e}></Input></Col>
             </Row>
             <Row style={{ marginTop: 10 }}>
-                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
+                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
             </Row>
             <div>
                 {this.error && <ErrorText >{this.error}</ErrorText>}

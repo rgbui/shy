@@ -19,6 +19,7 @@ import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { AtomPermission } from "rich/src/page/permission";
 import { Workspace } from "./workspace";
 import { wss } from "../../services/workspace";
+import { lst } from "rich/i18n/store";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -58,7 +59,7 @@ class MessageCenter {
                     elementUrl = r.data.elementUrl;
                 }
                 else {
-                    ShyAlert('页面不存在')
+                    ShyAlert(lst('页面不存在'))
                     return;
                 }
             }
