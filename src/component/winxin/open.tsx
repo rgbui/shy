@@ -1,6 +1,7 @@
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
+import { S } from "rich/i18n/view";
 export class WeixinOpen extends EventsComponent<{ onChange?: (data: { exists: boolean, open: { openId: string, nickname: string } }) => void }> {
     loading: boolean = false;
     sockId: string = '';
@@ -33,7 +34,7 @@ export class WeixinOpen extends EventsComponent<{ onChange?: (data: { exists: bo
         var size = 200;
         var src = `https://open.shy.live/static/qr.html?size=${size}&url=${encodeURIComponent(url)}&sockId=${encodeURIComponent(this.sockId)}`
         return <div className="padding-20">
-            <div className="flex-center gap-b-10 f-16 bold">微信扫码登陆</div>
+            <div className="flex-center gap-b-10 f-16 bold"><S>微信扫码登陆</S></div>
             <div className="flex-center"> <iframe style={{ border: 'none', margin: 0, padding: 0, width: size, height: size }} src={src}></iframe></div>
         </div>
     }

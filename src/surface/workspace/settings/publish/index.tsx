@@ -22,6 +22,9 @@ import { BoxTip } from "rich/component/view/tooltip/box";
 import { ShyUtil } from "../../../../util";
 import { useIconPicker } from "rich/extensions/icon";
 import { PageContentView } from "rich/extensions/page";
+import { Tip } from "rich/component/view/tooltip/tip";
+import { lst } from "rich/i18n/store";
+import { S, Sp } from "rich/i18n/view";
 
 @observer
 export class SitePublishView extends React.Component {
@@ -112,20 +115,20 @@ export class SitePublishView extends React.Component {
                         key={e.id}>
                         <BoxTip overlay={
                             <div className="flex-center">
-                                <ToolTip overlay={'上移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'down')} ><Icon size={16} icon={ArrowDownSvg}></Icon></a></ToolTip>
-                                <ToolTip overlay={'下移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'up')}><Icon size={16} icon={ArrowUpSvg}></Icon></a></ToolTip>
-                                <ToolTip overlay={'添加'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'add')}><Icon size={16} icon={PlusSvg}></Icon></a></ToolTip>
-                                <ToolTip overlay={'添加子菜单'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'add-sub')}><Icon size={16} icon={PlusAreaSvg}></Icon></a></ToolTip>
-                                <ToolTip overlay={'删除'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'remove')}><Icon size={16} icon={TrashSvg}></Icon></a></ToolTip>
+                                <Tip text={'上移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'down')} ><Icon size={16} icon={ArrowDownSvg}></Icon></a></Tip>
+                                <Tip text={'下移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'up')}><Icon size={16} icon={ArrowUpSvg}></Icon></a></Tip>
+                                <Tip text={'添加'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'add')}><Icon size={16} icon={PlusSvg}></Icon></a></Tip>
+                                <Tip text={'添加子菜单'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'add-sub')}><Icon size={16} icon={PlusAreaSvg}></Icon></a></Tip>
+                                <Tip text={'删除'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, childs, 'remove')}><Icon size={16} icon={TrashSvg}></Icon></a></Tip>
                             </div>
                         }><div onMouseDown={eg => {
                             self.editItem = e
-                            if (self.refInput) self.refInput.updateValue(e.text || '菜单项')
+                            if (self.refInput) self.refInput.updateValue(e.text || lst('菜单项'))
                             e.spread = e.spread === true ? false : true;
                             self.forceUpdate();
                         }} className={"flex  round min-w-120 item-hover  padding-w-10 padding-h-5  " + (self.editItem == e ? "dashed" : 'border-t')} >
                                 {e.icon && <span className="flex-fixed size-20 flex-center"><Icon size={18} icon={e.icon}></Icon></span>}
-                                <span className="flex-auto text-overflow">{e.text || '菜单项'}</span>
+                                <span className="flex-auto text-overflow">{e.text || lst('菜单项')}</span>
                                 <span className="flex-fixed">
                                     {Array.isArray(e.childs) && e.childs.length > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
                                 </span>
@@ -140,7 +143,7 @@ export class SitePublishView extends React.Component {
                 item.pageId = g.id;
                 item.pageText = g.text;
                 item.icon = g.icon;
-                if (!item.text || item.text == '菜单项') item.text = g.text;
+                if (!item.text || item.text == lst('菜单项')) item.text = g.text;
                 self.checkChange();
             }
         }
@@ -154,24 +157,24 @@ export class SitePublishView extends React.Component {
         }
         function renderEditForm(item: WorkspaceNavMenuItem) {
             return <div className="card">
-                <div className="h4">自定义{item.type == 'logo' ? "LOGO" : "项"}</div>
+                <div className="h4"><S>自定义</S>{item.type == 'logo' ? "LOGO" : lst("项")}</div>
                 <div className="r-gap-h-10">
                     {item.type !== "logo" && <div className="flex">
-                        <label className="flex-fixed w-80 flex-end gap-r-5">名称:</label>
+                        <label className="flex-fixed w-80 flex-end gap-r-5"><S>名称</S>:</label>
                         <div className="flex-auto flex">
-                            <ToolTip overlay={'设置图标'}>
+                            <Tip text={'设置图标'}>
                                 <span onMouseDown={e => {
                                     changeIcon(e, item)
                                 }} className="size-30 cursor flex-fixed round item-hover flex-center"><Icon size={20} icon={item.icon || NoneSvg}></Icon></span>
-                            </ToolTip>
-                            <Input ref={e => self.refInput = e} className="flex-auto" value={item.text || '菜单项'}
+                            </Tip>
+                            <Input ref={e => self.refInput = e} className="flex-auto" value={item.text || lst('菜单项')}
                                 onChange={e => { item.text = e; self.checkChange() }}></Input>
                         </div>
                     </div>}
                     {item.type == 'logo' &&
                         <><div className="flex">
-                            <label className="flex-fixed w-80 flex-end gap-r-5">名称:</label>
-                            <Input ref={e => self.refInput = e} className="flex-auto" value={item.text || '菜单项'}
+                            <label className="flex-fixed w-80 flex-end gap-r-5"><S>名称</S>:</label>
+                            <Input ref={e => self.refInput = e} className="flex-auto" value={item.text || lst('菜单项')}
                                 onChange={e => { item.text = e; self.checkChange() }}></Input>
                         </div>
                             <div className="flex">
@@ -181,23 +184,23 @@ export class SitePublishView extends React.Component {
                         </>
                     }
                     <div className="flex">
-                        <label className="flex-fixed w-80 flex-end gap-r-5">外链:</label>
+                        <label className="flex-fixed w-80 flex-end gap-r-5"><S>外链</S>:</label>
                         <div className="flex-auto">
                             <SelectBox border value={item.urlType} onChange={e => { item.urlType = e; self.checkChange() }} options={[
-                                { text: '无连接', value: 'none' },
-                                { text: '跳转页面', value: 'page' },
-                                { text: '跳转网址', value: 'url' }
+                                { text: lst('无连接'), value: 'none' },
+                                { text: lst('跳转页面'), value: 'page' },
+                                { text: lst('跳转网址'), value: 'url' }
                             ]}></SelectBox>
                         </div>
                     </div>
                     {item.urlType == 'url' && <div className="flex">
-                        <label className="flex-fixed w-80 flex-end gap-r-5">外链:</label>
+                        <label className="flex-fixed w-80 flex-end gap-r-5"><S>外链</S>:</label>
                         <div className="flex-auto">
-                            <Input placeholder="输入网址" value={item.url} onChange={e => { item.url = e; self.checkChange() }}></Input>
+                            <Input placeholder={lst("输入网址")} value={item.url} onChange={e => { item.url = e; self.checkChange() }}></Input>
                         </div>
                     </div>}
                     {item.urlType == 'page' && <div className="flex">
-                        <label className="flex-fixed w-80 flex-end gap-r-5">页面:</label>
+                        <label className="flex-fixed w-80 flex-end gap-r-5"><S>页面</S>:</label>
                         <div className="flex-auto">
                             <Input onMousedown={e => openSelectPage(e, item)} value={item.pageText} readonly></Input>
                         </div>
@@ -253,7 +256,7 @@ export class SitePublishView extends React.Component {
         return <div>
             <Divider></Divider>
             <div className="flex f-14">
-                <span>自定义应用头部导航条</span>
+                <span><S>自定义应用头部导航条</S></span>
                 <Switch checked={this.data.publishConfig.defineNavMenu} onChange={e => {
                     this.change('publishConfig.defineNavMenu', e)
                 }}></Switch>
@@ -268,25 +271,25 @@ export class SitePublishView extends React.Component {
                                     <BoxTip overlay={
                                         <div className="flex-center">
                                             {e.type != 'logo' && <>
-                                                <ToolTip overlay={'前移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'up')} ><Icon size={16} icon={ArrowLeftSvg}></Icon></a></ToolTip>
-                                                <ToolTip overlay={'后移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'down')}><Icon size={16} icon={ArrowRightSvg}></Icon></a></ToolTip>
-                                                <ToolTip overlay={'添加'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'add')}><Icon size={16} icon={PlusSvg}></Icon></a></ToolTip>
-                                                <ToolTip overlay={'添加子菜单'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'add-sub')}><Icon size={16} icon={PlusAreaSvg}></Icon></a></ToolTip>
-                                                <ToolTip overlay={'删除'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'remove')}><Icon size={16} icon={TrashSvg}></Icon></a></ToolTip>
+                                                <Tip text={'前移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'up')} ><Icon size={16} icon={ArrowLeftSvg}></Icon></a></Tip>
+                                                <Tip text={'后移'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'down')}><Icon size={16} icon={ArrowRightSvg}></Icon></a></Tip>
+                                                <Tip text={'添加'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'add')}><Icon size={16} icon={PlusSvg}></Icon></a></Tip>
+                                                <Tip text={'添加子菜单'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'add-sub')}><Icon size={16} icon={PlusAreaSvg}></Icon></a></Tip>
+                                                <Tip text={'删除'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'remove')}><Icon size={16} icon={TrashSvg}></Icon></a></Tip>
                                             </>}
                                             {e.type == 'logo' && <>
-                                                <ToolTip overlay={'添加菜单'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'add')}><Icon size={16} icon={PlusAreaSvg}></Icon></a></ToolTip>
+                                                <Tip text={'添加菜单'}><a className="flex-center size-24 round item-hover gap-5 cursor text" onMouseDown={c => operatorItem(e, this.data.publishConfig.navMenus, 'add')}><Icon size={16} icon={PlusAreaSvg}></Icon></a></Tip>
                                             </>}
                                         </div>
                                     }><div onMouseDown={eg => {
                                         e.spread = e.spread === true ? false : true;
                                         this.editItem = e
-                                        if (self.refInput) self.refInput.updateValue(e.text || '菜单项')
+                                        if (self.refInput) self.refInput.updateValue(e.text || lst('菜单项'))
                                         self.forceUpdate();
                                     }} style={{ height: h }} className={"flex round padding-w-10  " + (this.editItem == e ? "dashed" : 'border-t')}>
                                             {e.type == 'logo' && e.pic && <img className="obj-center gap-r-10" style={{ height: 40 }} src={e.pic?.url} />}
                                             {e.icon && <span className="flex-fixed size-20 flex-center"><Icon size={18} icon={e.icon}></Icon></span>}
-                                            <span className={"flex-auto" + (e.text ? " bold f-16" : " remark")}>{e.text || '菜单项'}</span>
+                                            <span className={"flex-auto" + (e.text ? " bold f-16" : " remark")}>{e.text || lst('菜单项')}</span>
                                             <span className="flex-fixed">
                                                 {Array.isArray(e.childs) && e.childs.length > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
                                             </span>
@@ -309,20 +312,20 @@ export class SitePublishView extends React.Component {
     renderContent() {
         return <div>
             <div className="flex f-14">
-                <span>自定义应用页面排版</span>
+                <span><S>自定义应用页面排版</S></span>
                 <Switch checked={this.data.publishConfig.defineContent} onChange={e => {
                     this.change('publishConfig.defineContent', e)
                 }}></Switch>
             </div>
             {this.data.publishConfig.defineContent && <><Divider></Divider>
                 <div className="flex">
-                    <div className="flex-auto">页面排版</div>
+                    <div className="flex-auto"><S>页面排版</S></div>
                     <div className="flex-fixed">
                         <SelectBox border value={this.data.publishConfig.contentTheme || 'default'} options={
                             [
-                                { text: '默认', value: 'default' },
+                                { text: lst('默认'), value: 'default' },
                                 // { text: 'Wiki', value: 'wiki' },
-                                { text: '无侧边栏', value: 'none' }
+                                { text: lst('无侧边栏'), value: 'none' }
                             ]
                         }
                             onChange={e => {
@@ -349,7 +352,7 @@ export class SitePublishView extends React.Component {
     renderBottom() {
         return <div>
             <div className="flex f-14">
-                <span>自定义应用底部内容</span>
+                <span><S>自定义应用底部内容</S></span>
                 <Switch checked={this.data.publishConfig.defineBottom} onChange={e => {
                     this.change('publishConfig.defineBottom', e)
                 }}></Switch>
@@ -372,15 +375,15 @@ export class SitePublishView extends React.Component {
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip><div className="h2">发布应用</div>
             <Divider></Divider>
             <div className="flex gap-t-20">
-                <span className="flex-auto">发布应用站点</span>
+                <span className="flex-auto"><S>发布应用站点</S></span>
                 <Switch checked={this.data.publishConfig.abled} onChange={e => {
                     this.change('publishConfig.abled', e)
                 }}></Switch>
             </div>
             <div className="flex">
                 <span className="f-14 remark ">
-                    公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.shy.live`} target="_blank">{`https://${domain}.shy.live`}</a>访问
-                </span>
+                    <Sp key={'公开至互联网后发布才有效果，发布后通过'} data={{url:`https://${domain}.shy.live`}}>公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.shy.live`} target="_blank">{`https://${domain}.shy.live`}</a>访问</Sp>
+            </span>
             </div>
             {this.data.publishConfig.abled && <div className="r-gap-h-10">
                 {this.renderContent()}

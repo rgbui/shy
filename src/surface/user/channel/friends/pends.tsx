@@ -7,8 +7,9 @@ import { Icon } from "rich/component/view/icon";
 import { CheckSvg, CloseSvg } from "rich/component/svgs";
 import { Input } from "rich/component/view/input";
 import { userChannelStore } from "../store";
-import { ToolTip } from "rich/component/view/tooltip";
 import lodash from "lodash";
+import { Tip } from "rich/component/view/tooltip/tip";
+import { S } from "rich/i18n/view";
 
 export var PendListView = observer(function () {
     var refInput = React.useRef<Input>(null);
@@ -31,24 +32,24 @@ export var PendListView = observer(function () {
     }, [])
     return <div className="shy-friends">
         {/* <div className="shy-friends-search"><Input ref={e => refInput.current = e} placeholder="搜索" clear /></div> */}
-        <div className="shy-friends-head"><span className="f-12">待处理数-{userChannelStore.pends.total}</span></div>
+        <div className="shy-friends-head"><span className="f-12"><S>待处理数</S>-{userChannelStore.pends.total}</span></div>
         <div className="shy-friends-list">
             {userChannelStore.pends.list.map(r => {
                 return <div key={r.id} className='shy-friends-user'>
                     {r.friendId != surface.user?.id && r.userid == surface.user?.id && <>
                         <div className="flex-fixed w-200 flex"><Avatar showName size={32} userid={r.friendId}></Avatar></div>
-                        <span className="flex-auto text-1 f-12">已发送好友请求</span>
+                        <span className="flex-auto text-1 f-12"><S>已发送好友请求</S></span>
                         <div className="flex-fixed flex-end" style={{ paddingRight: 120 }}>
-                            <ToolTip overlay={"撤消好友请求"}><span className="size-24 flex-center round item-hover cursor" onMouseDown={e => removeSend(r)}><Icon size={16} icon={CloseSvg}></Icon></span></ToolTip>
+                            <Tip text={"撤消好友请求"}><span className="size-24 flex-center round item-hover cursor" onMouseDown={e => removeSend(r)}><Icon size={16} icon={CloseSvg}></Icon></span></Tip>
                         </div>
                     </>
                     }
                     {r.friendId == surface.user?.id && <>
                         <div className="flex-fixed w-200 flex"><Avatar showName size={32} userid={r.userid}></Avatar></div>
-                        <span className="flex-auto text-1  f-12">来自ta的好友请求</span>
+                        <span className="flex-auto text-1  f-12"><S>来自ta的好友请求</S></span>
                         <div className="flex-fixed flex-end" style={{ paddingRight: 120 }}>
-                            <ToolTip overlay={"同意好友请求"}><span className="size-24 flex-center round item-hover cursor gap-r-10" onMouseDown={e => agree(r)}><Icon size={16} icon={CheckSvg}></Icon></span></ToolTip>
-                            <ToolTip overlay={"拒绝好友请求"}><span className="size-24 flex-center round item-hover cursor" onMouseDown={e => removeSend(r)}><Icon size={16} icon={CloseSvg}></Icon></span></ToolTip>
+                            <Tip text={"同意好友请求"}><span className="size-24 flex-center round item-hover cursor gap-r-10" onMouseDown={e => agree(r)}><Icon size={16} icon={CheckSvg}></Icon></span></Tip>
+                            <Tip text={"拒绝好友请求"}><span className="size-24 flex-center round item-hover cursor" onMouseDown={e => removeSend(r)}><Icon size={16} icon={CloseSvg}></Icon></span></Tip>
                         </div>
                     </>}
                 </div>

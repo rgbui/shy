@@ -15,6 +15,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { channel } from "rich/net/channel";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
 import { Icon } from "rich/component/view/icon";
+import { S } from "rich/i18n/view";
 
 @observer
 export class ContentViewer extends React.Component {
@@ -120,18 +121,18 @@ export class ContentViewer extends React.Component {
         return <div>
             <div className="flex-end gap-h-10">
                 <span className="error">{local.error}</span>
-                <Button className="gap-r-10" loading={local.saveLoading} onMouseDown={e => save()}>保存</Button>
-                {doc.embedding == true && <Button ghost>已训练</Button>}
-                {doc.embedding == false && <Button loading={local.embedding} onMouseDown={e => setEmbedding()}>训练</Button>}
+                <Button className="gap-r-10" loading={local.saveLoading} onMouseDown={e => save()}><S>保存</S></Button>
+                {doc.embedding == true && <Button ghost><S>已训练</S></Button>}
+                {doc.embedding == false && <Button loading={local.embedding} onMouseDown={e => setEmbedding()}><S>训练</S></Button>}
             </div>
             {doc.embeddingTip && <div className="flex flex-center">
-                <span className="bg-p text-white padding-w-5 round padding-h-2">训练进度：{doc.embeddingTip}</span>
-                <span className="remark gap-l-10">训练中请不要离开</span>
+                <span className="bg-p text-white padding-w-5 round padding-h-2"><S>训练进度</S>：{doc.embeddingTip}</span>
+                <span className="remark gap-l-10"><S>训练中请不要离开</S></span>
             </div>}
-            <div className="remark gap-h-10"><label>标题:</label></div>
+            <div className="remark gap-h-10"><label><S>标题</S>:</label></div>
             <div className="gap-h-10"><Input ref={e => local.input = e} value={doc.text || ''} onChange={e => input(e)} ></Input></div>
             {local.pe?.type == ElementType.PageItem && <>
-                <div className="remark gap-h-10"><label>关联:</label></div>
+                <div className="remark gap-h-10"><label><S>关联</S>:</label></div>
                 <div className="gap-h-10 flex">
                     <span className="item-hover round cursor padding-w-5 padding-h-2 flex">
                         <Icon size={18} icon={getPageIcon(local.relevanceData.icon)}></Icon>
@@ -139,7 +140,7 @@ export class ContentViewer extends React.Component {
                     </span>
                 </div>
             </>}
-            <div className="remark gap-h-10"><label>内容:</label></div>
+            <div className="remark gap-h-10"><label><S>内容</S>:</label></div>
             <div className="gap-h-10">
                 {doc.contents?.map((c, i) => {
                     return <div key={c.id}>
@@ -148,7 +149,7 @@ export class ContentViewer extends React.Component {
                             doc.embedding = false;
                             autoSave();
                         }}></Textarea>
-                        <div className="remark f-12 gap-h-5">支持markdown语法，限{4000 * 4}字内</div>
+                        <div className="remark f-12 gap-h-5"><S>支持markdown语法，限16000字内</S></div>
                     </div>
                 })}
             </div>

@@ -13,6 +13,8 @@ import { Pagination } from "rich/component/view/pagination";
 import { channel } from "rich/net/channel";
 import { makeObservable, observable } from "mobx";
 import { RobotDetail } from "./robot.detail";
+import { S } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
 
 @observer
 export class RecommendRobots extends React.Component {
@@ -32,21 +34,21 @@ export class RecommendRobots extends React.Component {
         }
         return <div>
             <div className="h2">
-                <span>推荐服务机器人</span>
+                <span><S>推荐服务机器人</S></span>
             </div>
             <Divider></Divider>
-            <div className="remark f-12 gap-h-10">添加服务机器人至空间</div>
+            <div className="remark f-12 gap-h-10"><S>添加服务机器人至空间</S></div>
             <div>
                 {this.search.loading && <SpinBox></SpinBox>}
                 {this.search.list.map(l => {
                     return <div onClick={e => this.currentRobot = l} className="flex gap-h-10 item-hove round item-hover padding-10" key={l.id}>
                         <div className="flex-auto"><Avatar showName size={40} userid={l.id}></Avatar></div>
                         <div className="flex-fixed">
-                            {this.currentRobots.some(s => s.userid == l.id) && <Button ghost>已添加</Button>}
+                            {this.currentRobots.some(s => s.userid == l.id) && <Button ghost><S>已添加</S></Button>}
                             {!this.currentRobots.some(s => s.userid == l.id) && <Button onClick={(e, b) => {
                                 e.stopPropagation()
                                 this.addMember(l, e, b)
-                            }}>添加至空间</Button>}
+                            }}><S>添加至空间</S></Button>}
                         </div>
                     </div>
                 })}
@@ -115,12 +117,12 @@ export class RecommendRobots extends React.Component {
                 wsId: surface.workspace.id,
                 robotInfo: l
             });
-            ShyAlert('添加成功')
+            ShyAlert(lst('添加成功'))
             await this.load()
         }
         catch (ex) {
             console.error(ex);
-            ShyAlert('添加失败')
+            ShyAlert(lst('添加失败'))
         }
         finally {
             b.loading = false;

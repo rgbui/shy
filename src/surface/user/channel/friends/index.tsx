@@ -11,6 +11,7 @@ import { BlackListView } from "./blacklist";
 import { FrendListView } from "./list";
 import { PendListView } from "./pends";
 import "./style.less";
+import { S } from "rich/i18n/view";
 
 export var FriendsView = observer(function () {
     function setMode(mode: string) {
@@ -29,13 +30,13 @@ export var FriendsView = observer(function () {
         <div className="shy-user-channel-friends-head flex">
             <div className="shy-user-channel-friends-head-tabs flex-auto">
                 <Icon icon={FriendSvg}></Icon>
-                <span>好友</span>
+                <span><S>好友</S></span>
                 <div className="line"></div>
-                <a onMouseDown={e => setMode('online')} className={userChannelStore.mode == 'online' ? "hover" : ""}>在线</a>
-                <a onMouseDown={e => setMode('all')} className={userChannelStore.mode == 'all' ? "hover" : ""}>全部</a>
-                <a onMouseDown={e => setMode('pending')} className={userChannelStore.mode == 'pending' ? "hover" : ""}>待定</a>
-                <a onMouseDown={e => setMode('shield')} className={userChannelStore.mode == "shield" ? "hover" : ""}>屏蔽</a>
-                <Button size="small" className="gap-l-10" onClick={e => joinFriend(e)}>添加好友</Button>
+                <a onMouseDown={e => setMode('online')} className={userChannelStore.mode == 'online' ? "hover" : ""}><S>在线</S></a>
+                <a onMouseDown={e => setMode('all')} className={userChannelStore.mode == 'all' ? "hover" : ""}><S>全部</S></a>
+                <a onMouseDown={e => setMode('pending')} className={userChannelStore.mode == 'pending' ? "hover" : ""}><S>待定</S></a>
+                <a onMouseDown={e => setMode('shield')} className={userChannelStore.mode == "shield" ? "hover" : ""}><S>屏蔽</S></a>
+                <Button size="small" className="gap-l-10" onClick={e => joinFriend(e)}><S>添加好友</S></Button>
             </div>
             <div className="shy-user-channel-friends-head-btns flex-fixed flex-end gap-r-10" style={{ width: 80 }}>
                 <span className='round item-hover cursor size-24 flex-center'> <Icon size={18} icon={"help:sy"}></Icon></span>

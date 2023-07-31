@@ -18,6 +18,7 @@ import { channel } from "rich/net/channel";
 import { runInAction } from "mobx";
 import { ShyUtil } from "../../util";
 import { isMobileOnly } from "react-device-detect";
+import { lst } from "rich/i18n/store";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
@@ -73,7 +74,7 @@ export var SideBar = observer(function () {
                 surface.workspace.exitWorkspace();
             }
             }>
-            <ToolTip placement="right" overlay={'私信'}> <img src={LogoSrc} style={{ width: 48, height: 48, borderRadius: 16 }} /></ToolTip>
+            <ToolTip placement="right" overlay={lst('私信')}> <img src={LogoSrc} style={{ width: 48, height: 48, borderRadius: 16 }} /></ToolTip>
             <DotNumber count={userChannelStore.unReadChatCount} ></DotNumber>
         </a>
         <div className="shy-sidebar-divider"></div>

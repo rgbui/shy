@@ -14,6 +14,8 @@ import lodash from "lodash";
 import { Icon } from "rich/component/view/icon";
 import { PlusSvg } from "rich/component/svgs";
 import { ToolTip } from "rich/component/view/tooltip";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 class JoinFriend extends EventsComponent {
     render() {
@@ -23,18 +25,18 @@ class JoinFriend extends EventsComponent {
                     onClear={() => { this.word = ''; this.list = []; this.forceUpdate() }}
                     onChange={e => { this.word = e; this.onSearch() }}
                     onEnter={e => this.onSearch()}
-                    placeholder="搜索好友" clear>
+                    placeholder={lst("搜索好友")} clear>
                 </Input>
             </div>
             <Divider></Divider>
             <div className="padding-b-10 min-h-50">
                 {this.loading && <Loading></Loading>}
-                {this.list.length == 0 && <div className="remark flex-center h-40 f-12">没有搜到任何用户</div>}
+                {this.list.length == 0 && <div className="remark flex-center h-40 f-12"><S>没有搜到任何用户</S></div>}
                 {this.list.map(l => {
                     return <div className="flex item-hover padding-10 round" key={l.id}>
                         <Avatar showName showSn className="flex-fixed" userid={l.id} size={30}></Avatar>
                         <div className="flex-auto flex-end">
-                            <ToolTip overlay={'添加好友'}><span onClick={e => this.joinUser(l.id)} className="size-24 text-1 flex-center round item-hover cursor">
+                            <ToolTip overlay={lst('添加好友')}><span onClick={e => this.joinUser(l.id)} className="size-24 text-1 flex-center round item-hover cursor">
                                 <Icon size={16} icon={PlusSvg}></Icon>
                             </span>
                             </ToolTip>
@@ -63,19 +65,19 @@ class JoinFriend extends EventsComponent {
         var r = await channel.put('/friend/join', { userid });
         if (r.ok) {
             if (r.data.exists) {
-                ShyAlert('好友请求已发送')
+                ShyAlert(lst('好友请求已发送'))
             }
             else if (r.data.exists == false) {
-                ShyAlert('帐号不存在')
+                ShyAlert(lst('帐号不存在'))
             }
             else if ((r.data as any).black == true) {
-                ShyAlert('你被TA拉黑，无法加好友')
+                ShyAlert(lst('你被TA拉黑，无法加好友'))
             }
             else if (r.data.refuse == true) {
-                ShyAlert('当前帐号不允许你加Ta为好友')
+                ShyAlert(lst('当前帐号不允许你加Ta为好友'))
             }
             else if (r.data.send) {
-                ShyAlert('已发送好友请求')
+                ShyAlert(lst('已发送好友请求'))
                 this.emit('close')
             }
         }

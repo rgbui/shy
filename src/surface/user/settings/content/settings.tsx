@@ -13,6 +13,8 @@ import { useUpdatePaw } from '../../common/setPaw';
 import { autoImageUrl } from 'rich/net/element.type';
 import { ShyAlert } from 'rich/component/lib/alert';
 import { InviteCode } from '../task/inviteCode';
+import { lst } from 'rich/i18n/store';
+import { S } from 'rich/i18n/view';
 
 @observer
 export class UserSettingsView extends React.Component<{ close?: () => void, setMode(): void }> {
@@ -55,12 +57,12 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
         var r = await useUpdatePaw({ checkPaw: this.dataUser.checkPaw });
         if (r) {
             this.dataUser.checkPaw = true;
-            ShyAlert('密码设置成功')
+            ShyAlert(lst('密码设置成功'))
         }
     }
     render() {
         return <div>
-            <h2 className="h2">我的帐号</h2>
+            <h2 className="h2"><S>我的帐号</S></h2>
             <Divider></Divider>
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
                 <div className="bg">
@@ -73,40 +75,40 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
                 </div>
                 <div className="shy-user-settings-profile-box-card-operators">
                     <h2>{surface.user.name}#{surface.user.sn}</h2>
-                    <Button onClick={e => this.props.setMode()}>编辑个人资料</Button>
+                    <Button onClick={e => this.props.setMode()}><S>编辑个人资料</S></Button>
                 </div>
                 <div className="shy-user-settings-profile-box-card-options">
                     <Row>
-                        <Col span={24}><span>用户名</span></Col>
-                        <Col span={12}>{surface.user?.name}#{surface.user?.sn}</Col><Col span={12} align={'end'}><Button onClick={e => this.modifyUserName(e)}>编辑</Button></Col>
+                        <Col span={24}><span><S>用户名</S></span></Col>
+                        <Col span={12}>{surface.user?.name}#{surface.user?.sn}</Col><Col span={12} align={'end'}><Button onClick={e => this.modifyUserName(e)}><S>编辑</S></Button></Col>
                     </Row>
                     <Row>
-                        <Col span={24}><span>电子邮箱</span></Col>
-                        <Col span={12}><span>{this.dataUser?.email || '您还没有添加邮箱'}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? '更换' : '新增'}</Button></Col>
+                        <Col span={24}><span><S>电子邮箱</S></span></Col>
+                        <Col span={12}><span>{this.dataUser?.email || lst('您还没有添加邮箱')}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? lst('更换') : lst('新增')}</Button></Col>
                     </Row>
                     <Row>
-                        <Col span={24}><span>手机号</span></Col>
-                        <Col span={12}><span>{this.dataUser?.phone || '您还没有添加手机号'}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? '更换' : '新增'}</Button></Col>
+                        <Col span={24}><span><S>手机号</S></span></Col>
+                        <Col span={12}><span>{this.dataUser?.phone || lst('您还没有添加手机号')}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? lst('更换') : lst('新增')}</Button></Col>
                     </Row>
                 </div>
             </div>
             <Divider></Divider>
             <div className='gap-h-30 gap-t-40'>
-                <div className='h4'>邀请好友</div>
+                <div className='h4'><S>邀请好友</S></div>
                 <InviteCode></InviteCode>
             </div>
             <div className='gap-h-30'>
-                <div className='h4'>密码</div>
-                <div className='remark f-12'>设置帐号的登录密码</div>
+                <div className='h4'><S>密码</S></div>
+                <div className='remark f-12'><S>设置帐号的登录密码</S></div>
                 <div className='gap-h-10'>
-                    <Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? "修改密码" : "设置密码"}</Button>
+                    <Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? lst("修改密码") : lst("设置密码")}</Button>
                 </div>
             </div>
             <div className='gap-h-30'>
-                <div className='h4'>注销帐号</div>
-                <div className='remark f-12'>注销帐号将清理帐号相关的信息</div>
+                <div className='h4'><S>注销帐号</S></div>
+                <div className='remark f-12'><S>注销帐号将清理帐号相关的信息</S></div>
                 <div className='gap-h-10'>
-                    <Button onClick={e => ShyAlert('暂时不支持注销帐号')} ghost>注销帐号</Button>
+                    <Button onClick={e => ShyAlert(lst('暂时不支持注销帐号'))} ghost><S>注销帐号</S></Button>
                 </div>
             </div>
         </div>

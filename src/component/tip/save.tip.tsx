@@ -4,6 +4,7 @@ import { Button } from "rich/component/view/button";
 import { Col, Row } from "rich/component/view/grid";
 import { AnimateCommand, AnimateCSS } from "rich/component/animate";
 import "./style.less";
+import { S } from "rich/i18n/view";
 
 export class SaveTip extends React.Component<{
     save: (event: React.MouseEvent) => void,
@@ -28,10 +29,10 @@ export class SaveTip extends React.Component<{
         if (this.visible == false) return <></>
         return <div className="shy-save-tip">
             <Row style={{ marginBottom: 0 }}>
-                <Col span={12}><span>注意！您尚未保存更改！</span></Col>
+                <Col span={12}><span><S>注意！您尚未保存更改！</S></span></Col>
                 <Col span={12} align={'end'}><Button onClick={e => this.reset(e)}
-                    link style={{ marginRight: 10 }}>重置</Button>
-                    <Button onClick={e => this.save(e)}>保存变更</Button>
+                    link style={{ marginRight: 10 }}><S>重置</S></Button>
+                    <Button onClick={e => this.save(e)}><S>保存变更</S></Button>
                 </Col>
             </Row>
         </div>

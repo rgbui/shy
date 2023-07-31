@@ -20,6 +20,8 @@ import { Pagination } from 'rich/component/view/pagination';
 import { Confirm } from 'rich/component/lib/confirm';
 import { ToolTip } from 'rich/component/view/tooltip';
 import { masterSock } from '../../../../../net/sock';
+import { lst } from 'rich/i18n/store';
+import { S } from 'rich/i18n/view';
 
 @observer
 export class WorkspaceMembers extends React.Component {
@@ -80,7 +82,7 @@ export class WorkspaceMembers extends React.Component {
         if (Array.isArray(member.roleIds)) {
             roles = roles.findAll(g => !member.roleIds.includes(g.id));
         }
-        if (roles.length == 0) return ShyAlert('请添加角色');
+        if (roles.length == 0) return ShyAlert(lst('请添加角色'));
         var r = await useSelectMenuItem(
             { roundArea: Rect.fromEvent(event) },
             roles.map(r => {
@@ -111,12 +113,12 @@ export class WorkspaceMembers extends React.Component {
                 userid: member.userid, roleIds: member.roleIds
             });
             if (g.ok) {
-                ShyAlert('移除成功')
+                ShyAlert(lst('移除成功'))
             }
         }
     }
     async removeUser(member) {
-        if (await Confirm(`确认要移除成员吗`)) {
+        if (await Confirm(lst(`确认要移除成员吗`))) {
             await channel.del('/ws/member/delete', {
                 userid: member.userid
             })
@@ -135,23 +137,23 @@ export class WorkspaceMembers extends React.Component {
                 value: r.id
             }
         });
-        options.splice(0, 0, { text: '@所有人', value: '' })
+        options.splice(0, 0, { text: lst('@所有人'), value: '' })
         return options;
     }
     render() {
         return <div className='shy-ws-members'>
-            <div className="h2">成员</div>
+            <div className="h2"><S>成员</S></div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
                 <div className='shy-ws-member-head'>
                     <div className='flex'>
                         <div className='flex-fixed'>
-                            <span>{this.searchList.total}成员</span>
+                            <span>{this.searchList.total}<S>成员</S></span>
                         </div>
                         <div className='flex-auto flex-end'>
-                            <span style={{ fontSize: 14 }}>显示角色:</span>
+                            <span style={{ fontSize: 14 }}><S>显示角色</S>:</span>
                             <Select style={{ fontSize: 14 }} value={this.searchList.roleId} dropStyle={{ width: 120 }} onChange={e => { this.searchList.roleId = e; this.loadMembers() }} options={this.getRoleOptions()}></Select>
-                            <Input style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder='搜索用户...'></Input>
+                            <Input style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder={lst('搜索用户...')}></Input>
                         </div>
                     </div>
                 </div>

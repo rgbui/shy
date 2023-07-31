@@ -9,6 +9,8 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Spin } from "rich/component/view/spin";
 import { Rect } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 export interface UserPks {
     id: string;
@@ -45,39 +47,39 @@ export class ShyUserPks extends React.Component {
             // if (r) {
             var g = await useForm({
                 maskCloseNotSave: true,
-                title: '创建个人身份私钥',
-                remark: '私钥名称',
-                fields: [{ name: 'name', text: '名称', type: 'input' }],
+                title: lst('创建个人身份私钥'),
+                remark: lst('私钥名称'),
+                fields: [{ name: 'name', text: lst('名称'), type: 'input' }],
                 checkModel: async (model) => {
-                    if (model.name) return '名称不能为空'
+                    if (model.name) return lst('名称不能为空')
                     return ''
                 }
             });
             if (g) {
                 await masterSock.put('/user/create/pk', { name: g.name });
                 await self.load()
-                ShyAlert('个人身份私钥添加成功')
+                ShyAlert(lst('个人身份私钥添加成功'))
             }
             // }
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-                { name: 'edit', text: "编辑名称", icon: EditSvg },
+                { name: 'edit', text: lst("编辑名称"), icon: EditSvg },
                 ...(self.pks.length > 2 && pk.mode == 'active' ? [
-                    { name: 'check', text: "启用", checkLabel: pk.check },
-                    { name: 'uncheck', text: "禁用", checkLabel: !pk.check }
+                    { name: 'check', text: lst("启用"), checkLabel: pk.check },
+                    { name: 'uncheck', text: lst("禁用"), checkLabel: !pk.check }
                 ] : [])
             ]);
             if (r) {
                 if (r.item.name == 'check') {
                     await masterSock.patch('/user/update/pk', { id: pk.id, check: true })
                     await self.load();
-                    ShyAlert('个人身份私钥启用成功')
+                    ShyAlert(lst('个人身份私钥启用成功'))
                 }
                 else if (r.item.name == 'uncheck') {
                     await masterSock.patch('/user/update/pk', { id: pk.id, check: false })
                     await self.load();
-                    ShyAlert('个人身份私钥禁用成功')
+                    ShyAlert(lst('个人身份私钥禁用成功'))
                 }
                 else if (r.item?.name == 'edit') {
                     editProperty(pk, event)
@@ -88,12 +90,12 @@ export class ShyUserPks extends React.Component {
         async function editProperty(pk: UserPks, event: React.MouseEvent) {
             var g = await useForm({
                 maskCloseNotSave: true,
-                title: '编辑私钥名称',
-                remark: '私钥名称',
+                title: lst('编辑私钥名称'),
+                remark: lst('私钥名称'),
                 model: { name: pk.name },
-                fields: [{ name: 'name', text: '名称', type: 'input' }],
+                fields: [{ name: 'name', text: lst('名称'), type: 'input' }],
                 checkModel: async (model) => {
-                    if (model.name) return '名称不能为空'
+                    if (model.name) return lst('名称不能为空')
                     return ''
                 }
             });
@@ -101,11 +103,11 @@ export class ShyUserPks extends React.Component {
                 await masterSock.patch('/user/update/pk', { id: pk.id, name: g.name });
             }
             await self.load();
-            ShyAlert('个人身份私钥编辑成功')
+            ShyAlert(lst('个人身份私钥编辑成功'))
         }
         return <div className="visible-hover">
             <div className="flex">
-                <span className="flex-fixed h2">个人身份私钥</span>
+                <span className="flex-fixed h2"><S>个人身份私钥</S></span>
                 <span className="flex-auto flex-end visible">
                     <span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon size={20} icon={PlusSvg}></Icon></span>
                 </span>
@@ -118,7 +120,7 @@ export class ShyUserPks extends React.Component {
                         <div className="flex-auto">
                             <div className="flex">
                                 <span>{pk.name}</span>
-                                <span className=" gap-l-10 f-12 bg-primary round text-white op-7 padding-w-5 padding-h-1">{pk.mode == 'deal' ? "交易" : "日常"}</span>
+                                <span className=" gap-l-10 f-12 bg-primary round text-white op-7 padding-w-5 padding-h-1">{pk.mode == 'deal' ? lst("交易") : lst("日常")}</span>
                             </div>
                             <div className="remark">{pk.public_key}</div>
                         </div>
@@ -130,9 +132,9 @@ export class ShyUserPks extends React.Component {
             </div>}
 
             <div className="remark gap-h-30">
-                <div >个人身份私钥分类</div>
-                <div>1.生活交易 适用于交易安全方面的私钥</div>
-                <div>2.日常行为 适用于签名社区内的交互行为</div>
+                <div><S>个人身份私钥分类</S></div>
+                <div><S key="生活交易私钥说明">1.生活交易 适用于交易安全方面的私钥</S></div>
+                <div><S key='日常行为私钥说明'>2.日常行为 适用于签名社区内的交互行为</S></div>
             </div>
         </div>
     }

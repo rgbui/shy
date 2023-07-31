@@ -3,6 +3,7 @@ import { ShyUrl, UrlRoute } from "../../../history";
 import { surface } from "../../store";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
+import { S } from "rich/i18n/view";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;
@@ -23,7 +24,7 @@ export class LogOut extends React.Component {
     }
     render() {
         return <div className='shy-logout'>
-            <span>正在退出中...</span>
+            <span><S>正在退出中...</S></span>
         </div>
     }
 }

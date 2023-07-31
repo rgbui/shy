@@ -12,6 +12,8 @@ import lodash from "lodash";
 import { masterSock } from "../../../../../../net/sock";
 import { useIconPicker } from "rich/extensions/icon";
 import { useRobotDebug } from "../debug";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 @observer
 export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
@@ -33,11 +35,11 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
     async onProperty(event: React.MouseEvent, pro: RobotInfo['prompts'][0]) {
         var r = await useSelectMenuItem({ roundPoint: Point.from(event) },
             [
-                { text: '编辑', icon: EditSvg, name: 'edit' },
-                { text: '调试', icon: DebugSvg, name: 'debug' },
-                { text: pro.abled == false ? "启用" : "禁用", icon: pro.abled == false ? NoneSvg : CheckSvg, name: 'abled' },
+                { text: lst('编辑'), icon: EditSvg, name: 'edit' },
+                { text: lst('调试'), icon: DebugSvg, name: 'debug' },
+                { text: pro.abled == false ? lst("启用") : lst("禁用"), icon: pro.abled == false ? NoneSvg : CheckSvg, name: 'abled' },
                 { type: MenuItemType.divide },
-                { text: '删除', icon: TrashSvg, name: 'delete' }
+                { text: lst('删除'), icon: TrashSvg, name: 'delete' }
             ]
         );
         if (r) {
@@ -74,7 +76,7 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
     render() {
         var robot = this.props.robot;
         return <div>
-            <div className="h4 flex"><span className="flex-auto">Prompt模板</span><span onClick={e => this.addPrompt()} className=" flex-fixed size-24 item-hover round cursor flex-center"><Icon icon={PlusSvg}></Icon></span></div>
+            <div className="h4 flex"><span className="flex-auto"><S>Prompt模板</S></span><span onClick={e => this.addPrompt()} className=" flex-fixed size-24 item-hover round cursor flex-center"><Icon icon={PlusSvg}></Icon></span></div>
             <div className="flex flex-wrap r-gap-r-10 r-gap-b-10">
                 {(robot.prompts || []).map(pro => {
                     var ra = RobotApplyOptions.find(g => g.value == pro.apply);

@@ -4,6 +4,7 @@ import React from "react";
 import LogoSrc from "../../src/assert/img/shy.blue.svg";
 import { serverSlideStore } from "../store";
 import { Switch } from "rich/component/view/switch";
+import { S } from "rich/i18n/view";
 export class ServerSlideConfig extends EventsComponent {
     config: {
         version: string,
@@ -21,14 +22,14 @@ export class ServerSlideConfig extends EventsComponent {
     render() {
         return <div className="w-300 min-h-200 padding-14 round">
             <div className="flex-center">
-                <LogoSrc style={{ width: 54, height: 54 }}></LogoSrc><span style={{ fontSize: 24 }}>诗云服务端</span>
+                <LogoSrc style={{ width: 54, height: 54 }}></LogoSrc><span style={{ fontSize: 24 }}><S>诗云服务端</S></span>
             </div>
             <div className="flex gap-h-10">
-                <span className="flex-fixed w-120 flex-end gap-r-5">版本:</span>
+                <span className="flex-fixed w-120 flex-end gap-r-5"><S>版本</S>:</span>
                 <span className="flex-auto">{this.config.version}</span>
             </div>
             <div className="flex gap-h-10">
-                <span className="flex-fixed w-120 flex-end gap-r-5">开机启动:</span>
+                <span className="flex-fixed w-120 flex-end gap-r-5"><S>开机启动</S>:</span>
                 <span className="flex-auto"><Switch onChange={e => {
                     this.config.isAutoStartup = e;
                     serverSlideStore.shyServiceSlideElectron.setStartUp(this.config.isAutoStartup)
@@ -36,7 +37,7 @@ export class ServerSlideConfig extends EventsComponent {
                 }} checked={this.config.isAutoStartup}></Switch></span>
             </div>
             <div className="flex gap-h-10">
-                <span className="flex-fixed w-120 flex-end gap-r-5">缩小到拖盘:</span>
+                <span className="flex-fixed w-120 flex-end gap-r-5"><S>缩小到拖盘</S>:</span>
                 <span className="flex-auto"><Switch onChange={e => {
                     this.config.closeTray = e;
                     serverSlideStore.shyServiceSlideElectron.setTray(this.config.closeTray)

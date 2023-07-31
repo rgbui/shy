@@ -11,6 +11,7 @@ import { autoImageUrl } from "rich/net/element.type";
 import { AtomPermission } from "rich/src/page/permission";
 import { isMobileOnly } from "react-device-detect";
 import { useForm } from "rich/component/view/form/dialoug";
+import { lst } from "rich/i18n/store";
 
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
@@ -22,38 +23,38 @@ export var WorkspaceProfile = observer(function () {
         var menus: MenuItem<string>[] = [];
         if (surface.workspace.isOwner) {
             menus = [
-                { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                { name: 'createFolder', icon: FolderPlusSvg, text: '创建类别' },
+                { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
+                { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建类别') },
                 { type: MenuItemType.divide },
-                { text: '风格', type: MenuItemType.text },
-                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
-                { name: 'showNote', icon: TreeListSvg, text: '目录', checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
+                { text: lst('风格'), type: MenuItemType.text },
+                { name: 'showMenu', icon: MenuFolderSvg, text: lst('菜单'), checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
+                { name: 'showNote', icon: TreeListSvg, text: lst('目录'), checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
-                { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
+                { name: 'invite', text: lst('邀请其ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
             ]
         }
         else if (surface.workspace.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
             menus = [
-                { name: 'setting', icon: SettingsSvg, text: '空间设置' },
-                { name: 'createFolder', icon: FolderPlusSvg, text: '创建类别' },
+                { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
+                { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建类别') },
                 { type: MenuItemType.divide },
-                { text: '风格', type: MenuItemType.text },
-                { name: 'showMenu', icon: MenuFolderSvg, text: '菜单', checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
-                { name: 'showNote', icon: TreeListSvg, text: '目录', checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
+                { text: lst('风格'), type: MenuItemType.text },
+                { name: 'showMenu', icon: MenuFolderSvg, text: lst('菜单'), checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
+                { name: 'showNote', icon: TreeListSvg, text: lst('目录'), checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
-                { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
+                { name: 'invite', text: lst('邀请其ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
-                { name: 'exit', text: '退出空间', icon: LogoutSvg }
+                { name: 'exit', text: lst('退出空间'), icon: LogoutSvg }
             ]
         }
         else {
             menus = [
-                { name: 'invite', text: '邀请其ta人', icon: AddUserSvg },
+                { name: 'invite', text: lst('邀请其ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
-                { name: 'exit', text: '退出空间', icon: LogoutSvg }
+                { name: 'exit', text: lst('退出空间'), icon: LogoutSvg }
             ]
         }
         var se = await useSelectMenuItem(
@@ -75,11 +76,11 @@ export var WorkspaceProfile = observer(function () {
             }
             else if (se.item.name == 'createFolder') {
                 var r = await useForm({
-                    title: '创建分类',
-                    fields: [{ name: 'text', text: '分类名称', type: 'input' }],
+                    title: lst('创建分类'),
+                    fields: [{ name: 'text', text: lst('分类名称'), type: 'input' }],
                     async checkModel(model) {
-                        if (!model.text) return '分类名称不能为空'
-                        if (model.text.length > 30) return '分类名称过长'
+                        if (!model.text) return lst('分类名称不能为空')
+                        if (model.text.length > 30) return lst('分类名称过长')
                         return '';
                     }
                 });

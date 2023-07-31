@@ -4,9 +4,10 @@ import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Workspace } from "..";
 import { UserBasic } from "rich/types/user";
+import { lst } from "rich/i18n/store";
 
 export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
-    ShyAlert('正在初始化创建空间', 'success', 1000 * 60 * 5);
+    ShyAlert(lst('正在初始化创建空间'), 'success', 1000 * 60 * 5);
     try {
         var g = await masterSock.get<{ template: { id: string, text: string, url: string, file: { url: string } } }>('/get/auto/create/workspace/template');
         if (g.ok) {

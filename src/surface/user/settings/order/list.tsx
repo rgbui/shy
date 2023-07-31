@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import lodash from "lodash";
 import React from "react";
 import { Confirm } from "rich/component/lib/confirm";
-import { DotSvg, DotsSvg, TrashSvg, UnpaySvg } from "rich/component/svgs";
+import { DotsSvg, TrashSvg, UnpaySvg } from "rich/component/svgs";
 import { Divider, } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
@@ -12,6 +12,8 @@ import { Rect } from "rich/src/common/vector/point";
 import { usePayOrder } from "../../../../component/pay";
 import { Pagination } from "rich/component/view/pagination";
 import { Spin } from "rich/component/view/spin";
+import { S } from "rich/i18n/view";
+import { ls } from "rich/i18n/store";
 
 export class ShyPayList extends React.Component {
     page: number = 1;
@@ -36,7 +38,11 @@ export class ShyPayList extends React.Component {
     async load() {
         this.loading = true;
         this.forceUpdate();
-        var r = await channel.get('/user/order/list', { word: this.word, page: this.page, size: this.size });
+        var r = await channel.get('/user/order/list', {
+            word: this.word,
+            page: this.page,
+            size: this.size
+        });
         if (r.ok) {
             this.page = r.data.page;
             this.size = r.data.size;
@@ -50,24 +56,24 @@ export class ShyPayList extends React.Component {
         var self = this;
         function getKind(order) {
             var kind = order.kind;
-            if (kind == 'fill') return '充值'
-            else if (kind == 'meal-1') return '升级团队版'
-            else if (kind == 'meal-2') return '升级社区版'
+            if (kind == 'fill') return ls.t('充值')
+            else if (kind == 'meal-1') return ls.t('升级团队版')
+            else if (kind == 'meal-2') return ls.t('升级社区版')
         }
         function getStatus(order) {
             var status = order.status;
-            if (status == 'created') return '等待支付'
-            else if (status == 'payed') return '已支付'
+            if (status == 'created') return ls.t('等待支付')
+            else if (status == 'payed') return ls.t('已支付')
         }
         async function openOrder(order, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) },
                 [
-                    { name: 'repay', icon: UnpaySvg, disabled: order.status == 'payed' ? true : false, text: '重新支付' },
-                    { name: 'delete', icon: TrashSvg, text: '删除' }
+                    { name: 'repay', icon: UnpaySvg, disabled: order.status == 'payed' ? true : false, text: ls.t('重新支付') },
+                    { name: 'delete', icon: TrashSvg, text: ls.t('删除') }
                 ]);
             if (r?.item) {
                 if (r.item.name == 'delete') {
-                    if (await Confirm('确认删除订单')) {
+                    if (await Confirm(ls.t('确认删除订单'))) {
                         await channel.del('/user/del/order', { orderId: order.orderId });
                         await self.load();
                     }
@@ -83,7 +89,7 @@ export class ShyPayList extends React.Component {
             }
         }
         return <div className="shy-pay-list">
-            <div className="h2">支付记录</div>
+            <div className="h2"><S>支付记录</S></div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
                 <div className='shy-ws-member-head'>
@@ -91,16 +97,16 @@ export class ShyPayList extends React.Component {
                         <div className="flex-auto">
                             <span style={{ fontSize: 14 }}>订单{this.total > 0 ? '共' + this.total + '条记录' : ''}</span>
                         </div>
-                        <div className="flex-fixed"> <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.load()} placeholder='搜索订单...'></Input></div>
+                        <div className="flex-fixed"> <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.load()} placeholder={ls.t('搜索订单...')}></Input></div>
                     </div>
                 </div>
                 {this.loading && <Spin block></Spin>}
                 <div className="shy-page-order-list">
                     <table>
-                        <thead><tr><th>订单号</th><th>类别</th><th>订单内容</th><th>金额</th><th>支付时间</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead>
+                        <thead><tr><th><S>订单号</S></th><th><S>类别</S></th><th><S>订单内容</S></th><th><S>金额</S></th><th><S>支付时间</S></th><th><S>状态</S></th><th><S>创建时间</S></th><th><S>操作</S></th></tr></thead>
                         <tbody>
-                            {!this.loading && this.orders.map((order,i) => {
-                                return <tr key={order.id+i.toString()}>
+                            {!this.loading && this.orders.map((order, i) => {
+                                return <tr key={order.id + i.toString()}>
                                     <td>{order.orderId}</td>
                                     <td>{getKind(order)}</td>
                                     <td>{order.subject}</td>
@@ -115,7 +121,7 @@ export class ShyPayList extends React.Component {
                     </table>
                     <Pagination size={this.size} index={this.page} total={this.total} onChange={e => { this.page = e; this.load() }}></Pagination>
                 </div>
-                {!this.loading && this.orders.length == 0 && <div className="remark f-12 flex-center gap-h-20">没有支付记录</div>}
+                {!this.loading && this.orders.length == 0 && <div className="remark f-12 flex-center gap-h-20"><S>没有支付记录</S></div>}
             </div>
         </div>
     }

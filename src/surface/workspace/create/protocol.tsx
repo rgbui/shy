@@ -8,23 +8,25 @@ import { Markdown } from "rich/component/view/markdown";
 import { Button } from "rich/component/view/button";
 import { CheckBox } from "rich/component/view/checkbox";
 import { ShyAlert } from "rich/component/lib/alert";
+import { S } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
 
 class JoinWorkspaceProtocol extends EventsComponent {
     render() {
         return <Dialoug className={'shy-join-friend'}
-            // head={<span>加入<b className="bold">{this.ws?.text}</b>空间</span>}
+        // head={<span>加入<b className="bold">{this.ws?.text}</b>空间</span>}
         >
             <div className="flex remark">
-                您需要同意以下协议才能加入空间
+                <S>您需要同意以下协议才能加入空间</S>
             </div>
             <div className="border gap-h-10 round  padding-10 overlay-y  max-h-300 ">
                 <Markdown md={this.ws?.accessProfile?.joinProtocol}></Markdown>
             </div>
             <div className="flex">
-                <CheckBox checked={this.checked} onChange={e => this.checked = e}>我已阅读并同意</CheckBox>
+                <CheckBox checked={this.checked} onChange={e => this.checked = e}><S>我已阅读并同意</S></CheckBox>
             </div>
             <div className="flex-center r-gap-10">
-                <Button onClick={e => this.save()}>确认</Button>
+                <Button onClick={e => this.save()}><S>确认</S></Button>
             </div>
         </Dialoug>
     }
@@ -37,7 +39,7 @@ class JoinWorkspaceProtocol extends EventsComponent {
     }
     save() {
         if (this.checked) this.emit('save')
-        else ShyAlert('您需要同意才能加入')
+        else ShyAlert(lst('您需要同意才能加入'))
     }
 }
 

@@ -6,6 +6,7 @@ import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
 import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
+import { S, Sp } from "rich/i18n/view";
 
 export class ShySafe extends React.Component {
     constructor(props) {
@@ -66,43 +67,43 @@ export class ShySafe extends React.Component {
     render() {
         return <div className="shy-open">
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <h2 className="h2">隐私与安全</h2>
+            <h2 className="h2"><S>隐私与安全</S></h2>
             <Divider></Divider>
             <div>
                 <div className="gap-h-10">
-                    <div className="f-12 remark">加好友设置</div>
+                    <div className="f-12 remark"><S>加好友设置</S></div>
                     <div className="flex gap-h-5">
-                        <div className="bold flex-auto">允许Ta人向您直接发起好友邀请</div>
+                        <div className="bold flex-auto"><S>允许Ta人向您直接发起好友邀请</S></div>
                         <div className="flex-fixed w-100  flex-end flex-inline"><Switch onChange={e => this.change('allowAddFriend', e)} checked={this.data.allowAddFriend}></Switch></div>
                     </div>
                     <div className="text-1 f-12">
-                        您可以设置防止Ta人对您的骚扰
+                        <S>您可以设置防止Ta人对您的骚扰</S>
                     </div>
                 </div>
                 <Divider></Divider>
                 <div className="gap-h-10">
-                    <div className="f-12 remark">私聊设置</div>
+                    <div className="f-12 remark"><S>私聊设置</S></div>
                     <div className="flex gap-h-5">
-                        <div className="bold flex-auto">允许Ta人向您直接发起私聊</div>
+                        <div className="bold flex-auto"><S>允许Ta人向您直接发起私聊</S></div>
                         <div className="flex-fixed w-100 flex-end flex-inline"><Switch onChange={e => this.change('allowSendLetter', e)} checked={this.data.allowSendLetter}></Switch></div>
                     </div>
                     <div className="text-1 f-12">
-                        您可以设置防止Ta人对您的骚扰
+                        <S>您可以设置防止Ta人对您的骚扰</S>
                     </div>
                 </div>
                 <Divider></Divider>
                 <div className="gap-h-10">
                     <div className="flex ">
-                        <div className="bold flex-auto">允许诗云对屏幕的使用操作进行追踪</div>
+                        <div className="bold flex-auto"><S>允许诗云对屏幕的使用操作进行追踪</S></div>
                         <div className="flex-fixed w-100 flex-end flex-inline"><Switch onChange={e => this.change('experienceHelp', e)} checked={this.data.experienceHelp}></Switch></div>
                     </div>
                     <div className="text-1 f-12">
-                        该设置允许我们收集您在使用诗云与屏幕进行交互记录，我们可以用该数据更好的完善诗云。
+                        <S>该设置允许我们收集您在使用诗云与屏幕进行交互记录，我们可以用该数据更好的完善诗云。</S>
                     </div>
                 </div>
                 <Divider></Divider>
                 <div className="code-block gap-t-20 flex f-14 padding-20 round-8">
-                    快来阅读一下我们的《<a className="link" href='https://shy.live/service_protocol' target="_blank">服务条款</a>》和《<a className="link" href='https://shy.live/privacy_protocol' target="_blank">隐私条款</a>》
+                   <Sp key={'快来阅读我们服务协议'}>快来阅读一下我们的《<a className="link" href='https://shy.live/service_protocol' target="_blank">服务条款</a>》和《<a className="link" href='https://shy.live/privacy_protocol' target="_blank">隐私条款</a>》</Sp> 
                 </div>
             </div>
         </div>

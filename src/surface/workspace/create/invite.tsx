@@ -14,6 +14,8 @@ import { Spin } from "rich/component/view/spin";
 import { isMobileOnly } from "react-device-detect";
 import { Confirm } from "rich/component/lib/confirm";
 import { useJoinWorkspaceProtocol } from "./protocol";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 export var InviteView = observer(function () {
     var local = useLocalObservable<{
@@ -44,7 +46,7 @@ export var InviteView = observer(function () {
     }
     async function join() {
         if (!surface.user.isSign) {
-            if (await Confirm('您还未登录，是否登录后加入？')) {
+            if (await Confirm(lst('您还未登录，是否登录后加入？'))) {
                 var inviteCode = UrlRoute.match(ShyUrl.invite)?.id;
                 var url = '/invite/' + inviteCode;
                 UrlRoute.push(ShyUrl.signIn, { back: url });
@@ -81,7 +83,7 @@ export var InviteView = observer(function () {
     return <div className="shy-invite padding-w-80 padding-b-40 round-16" style={{ width: isMobileOnly ? "calc(100vw - 40px)" : 350 }}>
         {local.ws.accessProfile?.disabledJoin && <div>
             <div className="flex-center  gap-h-30">
-                <span className="error-bg round padding-w-5 padding-h-2">您无法加入，该空间已禁止成员加入</span>
+                <span className="error-bg round padding-w-5 padding-h-2"><S>您无法加入，该空间已禁止成员加入</S></span>
             </div>
             <div>
                 <WsAvatar wsId={local.ws.id}></WsAvatar>
@@ -89,7 +91,7 @@ export var InviteView = observer(function () {
         </div>}
         {!local.ws.accessProfile.disabledJoin && <div>
             <div className="flex-center f-16 bold gap-h-20">
-                邀请您加入{local.ws.text}
+                <S>邀请您加入</S>{local.ws.text}
             </div>
 
             <div >
@@ -97,7 +99,7 @@ export var InviteView = observer(function () {
             </div>
 
             <div className="gap-h-10 r-gap-w-10">
-                <Button block onClick={e => join()}>接受邀请</Button>
+                <Button block onClick={e => join()}><S>接受邀请</S></Button>
             </div>
 
         </div>}

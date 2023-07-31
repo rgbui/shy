@@ -12,6 +12,7 @@ import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";
 import lodash from "lodash";
 import { ShyAlert } from "rich/component/lib/alert";
+import { lst } from "rich/i18n/store";
 
 var batchUserBasic = new MergeSock(async (datas) => {
     var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, { ids: lodash.uniq(datas.map(d => d.args)) });
@@ -141,8 +142,8 @@ class UserService extends BaseService {
         var { file, uploadProgress } = args;
         try {
             if (args.file.size > 1024 * 1024 * 50) {
-                ShyAlert('暂时不支持上传超过50M的文件')
-                return { ok: false, warn: '文件大小不能超过50M' }
+                ShyAlert(lst('暂时不支持上传超过50M的文件'))
+                return { ok: false, warn: lst('文件大小不能超过50M') }
             }
             if (!file.md5) file.md5 = await FileMd5(file);
             var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
@@ -152,7 +153,7 @@ class UserService extends BaseService {
             else return { ok: false, warn: d.warn }
         }
         catch (ex) {
-            return { ok: false, warn: '上传文件失败' }
+            return { ok: false, warn: lst('上传文件失败') }
         }
     }
     @del('/user/write/off')

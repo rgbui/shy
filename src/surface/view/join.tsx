@@ -3,6 +3,7 @@ import React from "react";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
 import { useJoinWorkspaceProtocol } from "../workspace/create/protocol";
+import { S } from "rich/i18n/view";
 export var JoinTip = observer(function () {
     async function mousedown(event: React.MouseEvent) {
         var agree = false;
@@ -24,7 +25,7 @@ export var JoinTip = observer(function () {
         await surface.onLoadWorkspace(surface.workspace.id);
     }
     return <div className='shy-supervisor-join-tip' >
-        <span>您当前处于预览模式，加入该空间一起协作吧</span>
+        <span><S>您当前处于预览模式，加入该空间一起协作吧</S></span>
         <a onMouseDown={e => mousedown(e)}>加入&nbsp;{surface.workspace?.text}</a>
     </div>
 })

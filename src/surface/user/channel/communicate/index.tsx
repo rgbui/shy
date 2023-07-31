@@ -6,11 +6,12 @@ import "./style.less";
 import { UserBox } from "rich/component/view/avator/user";
 import { RenderChatsView } from "./render";
 import { ChannelTextType } from "rich/extensions/chats/declare";
-import { util } from "rich/util/util";
 import { UserChannel } from "../declare";
 import { Avatar } from "rich/component/view/avator/face";
 import { InputChatBox } from "rich/component/view/input.chat/box";
 import { ResourceArguments } from "rich/extensions/icon/declare";
+import { lst } from "rich/i18n/store";
+import { Sp } from "rich/i18n/view";
 
 export class CommunicateView extends React.Component<{ userChannel: UserChannel }>{
     componentDidMount(): void {
@@ -76,7 +77,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
     replyChat = async (d: ChannelTextType) => {
         if (this.richInput) {
             var use = await channel.get('/user/basic', { userid: d.userid });
-            this.richInput.openReply({ text: `回复${use.data.user.name}:${d.content}`, replyId: d.id })
+            this.richInput.openReply({ text: lst('回复') + `${use.data.user.name}:${d.content}`, replyId: d.id })
         }
     }
     reditChat = (d: ChannelTextType) => {
@@ -94,7 +95,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
                             <div className="gap-w-20">
                                 <Avatar user={user} size={80}></Avatar>
                                 <div className="h3">{user.name}</div>
-                                <div className="remark f-12">这是您与<span className="bold text-1">@{user.name}</span>私信记录的开头。</div>
+                                <div className="remark f-12"><Sp key="这是您与{name}私信记录的开头。" data={{ name: user.name }}>这是您与<span className="bold text-1">@{user.name}</span>私信记录的开头。</Sp></div>
                             </div>
                             {props.userChannel.room.isLoadChat && <RenderChatsView userChannel={props.userChannel} reditChat={this.reditChat} replyChat={this.replyChat}></RenderChatsView>}
                         </div>

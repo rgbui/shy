@@ -10,6 +10,7 @@ import { masterSock } from "../net/sock";
 import { useServerNumberView } from "./create/server.number";
 import { buildServiceNumberAddress, Pid, ServerServiceMachineIdKey, ServiceMachine, ServiceNumber, ShyServiceSlideElectron } from "./declare";
 import { usePidView } from "./machine/pid";
+import { lst } from "rich/i18n/store";
 
 export class ServerSlideStore {
     machineCode: string = null;
@@ -36,7 +37,7 @@ export class ServerSlideStore {
     time;
     async load() {
         var g = await this.shyServiceSlideElectron.getDeviceID();
-        console.log('device code',g);
+        console.log('device code', g);
         if (g) { this.machineCode = g; }
         var mid = await yCache.get(ServerServiceMachineIdKey);
         var filter: Record<string, any> = {};
@@ -88,7 +89,7 @@ export class ServerSlideStore {
         var f = await useServerNumberView(serverSlideStore.service_number) as ServiceNumber;
         if (f) {
             await masterSock.patch('/service/patch/number', { id: serverSlideStore.service_number.id, data: f })
-            ShyAlert('编辑成功');
+            ShyAlert(lst('编辑成功'));
         }
     }
     async changeService() {
@@ -99,7 +100,7 @@ export class ServerSlideStore {
     }
     async copyAddress() {
         CopyText(buildServiceNumberAddress(serverSlideStore.service_number))
-        ShyAlert('复制地址成功');
+        ShyAlert(lst('复制地址成功'));
     }
     async savePid(pid: Pid) {
         var g = await serverSlideStore.shyServiceSlideElectron.savePid(lodash.cloneDeep(serverSlideStore.service_number), lodash.cloneDeep(pid));
@@ -129,7 +130,7 @@ export class ServerSlideStore {
         }
     }
     async removePid(pid: Pid, event: React.MouseEvent) {
-        if (await Confirm('确认删除吗')) {
+        if (await Confirm(lst('确认删除吗'))) {
             await serverSlideStore.stopPid(pid, event);
             await masterSock.delete('/delete/pid', { id: pid.id })
             lodash.remove(serverSlideStore.pids, c => c.id == pid.id);

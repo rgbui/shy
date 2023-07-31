@@ -19,7 +19,8 @@ import { marked } from "marked";
 import { Divider } from "rich/component/view/grid";
 import { DoubleRightSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { ToolTip } from "rich/component/view/tooltip";
+import { Tip } from "rich/component/view/tooltip/tip";
+import { S } from "rich/i18n/view";
 
 export class RobotDebug extends EventsComponent {
     constructor(props) {
@@ -48,14 +49,14 @@ export class RobotDebug extends EventsComponent {
                                 <span className="flex-fixed">{user.name}</span>
                                 <span className="flex-auto gap-l-10 remark">{dayjs(msg.date).format('YYYY-MM-DD HH:mm:ss')}</span>
                             </div>
-                            {pro && <div className="flex remark"><span>prompt模板:</span><span>{pro.text}</span></div>}
+                            {pro && <div className="flex remark"><span><S>prompt模板</S>:</span><span>{pro.text}</span></div>}
                             <div dangerouslySetInnerHTML={{ __html: msg.content }}>
                             </div>
                             {msg.prompt && <div>
                                 {msg.promptSpread && <div className="remark f-12 item-hover round padding-5" onClick={e => { msg.promptSpread = false; this.forceUpdate() }}><Markdown md={msg.prompt}></Markdown></div>}
-                                {!msg.promptSpread && <ToolTip overlay={'展开实际发送的prompt'}>
+                                {!msg.promptSpread && <Tip overlay={'展开实际发送的prompt'}>
                                     <span onClick={e => { msg.promptSpread = true; this.forceUpdate() }} className="size-24 flex-center cursor round item-hover remark"><Icon icon={DoubleRightSvg}></Icon></span>
-                                </ToolTip>}
+                                </Tip>}
                             </div>}
                         </div>
                     </div>

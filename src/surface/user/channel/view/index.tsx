@@ -9,6 +9,7 @@ import { userChannelStore } from "../store";
 import { UserChannels } from "./channels";
 import { UserChannelSearch } from "./search";
 import "./style.less";
+import { S } from "rich/i18n/view";
 
 export var UserChannel = observer(function () {
     return <div className="shy-user-channel">
@@ -18,7 +19,7 @@ export var UserChannel = observer(function () {
             </div>
             <div className={"shy-user-friends cursor" + (userChannelStore.showFriend ? " hover" : "")} onMouseDown={e => userChannelStore.openFriends()}>
                 <Icon icon={FriendSvg}></Icon>
-                <span>好友</span>
+                <span><S>好友</S></span>
             </div>
             <UserChannels></UserChannels>
             <UserProfile></UserProfile>

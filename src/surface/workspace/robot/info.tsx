@@ -13,14 +13,17 @@ import { masterSock } from "../../../../net/sock";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
 
+import { S } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
+
 @observer
 export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
     onEdit = async (event: React.MouseEvent) => {
         var menus: MenuItem<string>[] = [
-            { text: '重命名', icon: EditSvg, name: 'rname' },
-            { text: '上传头像', icon: PicSvg, name: 'avatar' },
+            { text: lst('重命名'), icon: EditSvg, name: 'rname' },
+            { text: lst('上传头像'), icon: PicSvg, name: 'avatar' },
             { type: MenuItemType.divide },
-            { text: '上传封面', icon: PicSvg, name: 'cover' },
+            { text: lst('上传封面'), icon: PicSvg, name: 'cover' },
             // { type: MenuItemType.divide },
             // { text: '移除头像', icon: EditSvg, name: 'delete' },
             // { text: '移除封面', icon: EditSvg, name: 'delete' },
@@ -31,13 +34,13 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
                 var model = { text: this.props.robot.name }
                 var f = await useForm({
                     head: false,
-                    fields: [{ name: 'text', text: '机器人名称', type: 'input' }],
-                    title: '编辑机器人名称',
+                    fields: [{ name: 'text', text: lst('机器人名称'), type: 'input' }],
+                    title: lst('编辑机器人名称'),
                     remark: '',
                     footer: false,
                     model: lodash.cloneDeep(model),
                     checkModel: async (model) => {
-                        if (!model.text) return '机器人名称不能为空';
+                        if (!model.text) return lst('机器人名称不能为空') ;
                     }
                 });
                 if (f && !lodash.isEqual(f, model)) {
@@ -94,7 +97,7 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
             </div>
             <div className="shy-user-settings-profile-box-card-operators">
                 <h2>{robot.name}#{robot.sn}</h2>
-                <Button onClick={e => this.onEdit(e)}>编辑机器人资料</Button>
+                <Button onClick={e => this.onEdit(e)}><S>编辑机器人资料</S></Button>
             </div>
         </div>
     }

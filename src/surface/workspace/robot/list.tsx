@@ -13,6 +13,8 @@ import { surface } from "../../store";
 import { Divider } from "rich/component/view/grid";
 import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "./view";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 @observer
 export class RobotList extends React.Component {
@@ -48,10 +50,10 @@ export class RobotList extends React.Component {
         var r = await useSelectMenuItem(
             { roundPoint: Point.from(event) },
             [
-                { name: 'addWiki', text: '创建知识专家机器人', icon: PageSvg },
+                { name: 'addWiki', text:lst('创建知识专家机器人') , icon: PageSvg },
                 {
                     name: 'addCommand',
-                    text: '创建命令机器人',
+                    text: lst('创建命令机器人'),
                     icon: AiSvg,
                     disabled: surface.workspace.sn == 25 || window.shyConfig.isDev ? false : true
                 }
@@ -59,7 +61,7 @@ export class RobotList extends React.Component {
         );
         if (r) {
             if (r.item.name == 'addWiki') {
-                var g = await useForm({ maskCloseNotSave: true, title: '创建知识专家机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
+                var g = await useForm({ maskCloseNotSave: true, title: lst('创建知识专家机器人'), fields: [{ name: 'text', type: 'input', text: lst('机器人名称') }, { name: 'slogan', type: 'textarea', text:lst('描述' ) }] })
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
@@ -73,7 +75,7 @@ export class RobotList extends React.Component {
                 }
             }
             else if (r.item.name == 'addCommand') {
-                var g = await useForm({ maskCloseNotSave: true, title: '创建命令机器人', fields: [{ name: 'text', type: 'input', text: '机器人名称' }, { name: 'slogan', type: 'textarea', text: '描述' }] })
+                var g = await useForm({ maskCloseNotSave: true, title: lst('创建命令机器人'), fields: [{ name: 'text', type: 'input', text: lst('机器人名称') }, { name: 'slogan', type: 'textarea', text: lst('描述') }] })
                 if (g) {
                     var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'command', name: g.text, slogan: g.slogan } });
                     if (s.ok) {
@@ -96,11 +98,11 @@ export class RobotList extends React.Component {
     render() {
         return <div>
             <div className="h2 flex">
-                <span className="flex-auto">机器人列表</span>
+                <span className="flex-auto"><S>机器人列表</S></span>
             </div>
             <Divider></Divider>
             <div className="flex gap-h-10">
-                <span className="remark">创建专属于自已的知识专家、指令执行机器人</span>
+                <span className="remark"><S>创建专属于自已的知识专家、指令执行机器人</S></span>
                 <span className="size-20 cursor item-hover round flex-center flex-fixed pointer" onMouseDown={e => this.add(e)}><Icon size={18} icon={PlusSvg}></Icon></span>
             </div>
             <div className="">

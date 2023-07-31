@@ -4,6 +4,7 @@ import { ShyUrl, UrlRoute } from "../history";
 import { Divider } from "rich/component/view/grid";
 import { surface } from "./store";
 import { Button } from "rich/component/view/button";
+import { S } from "rich/i18n/view";
 export var View404 = observer(function () {
     function back(event: React.MouseEvent) {
         event.preventDefault();
@@ -18,7 +19,7 @@ export var View404 = observer(function () {
         <div className='shy-404-content'>
             <h3 style={{ textAlign: 'center', fontSize: 120 }}>404</h3>
             <div className="shy-404-content-text">
-                <span>当前的页面不存在,返回至<a onClick={e => back(e)} href='https://shy.live'>诗云</a></span>
+                <span><S>当前的页面不存在,返回至</S><a onClick={e => back(e)} href='https://shy.live'><S>诗云</S></a></span>
             </div>
         </div>
     </div>

@@ -9,6 +9,8 @@ import { Textarea } from "rich/component/view/input/textarea";
 import { Markdown } from "rich/component/view/markdown";
 import { RobotInfo } from "rich/types/user";
 import { masterSock } from "../../../../net/sock";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 @observer
 export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo }>{
@@ -24,7 +26,7 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
     isEdit: boolean = false;
     remark: string = '';
     onSave = async (b: Button) => {
-        if (!this.remark) return ShyAlert('请介绍一下机器人,如何使用它')
+        if (!this.remark) return ShyAlert(lst('请介绍一下机器人,如何使用它'))
         try {
             b.loading = true;
             await masterSock.patch('/robot/set', {
@@ -50,15 +52,15 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
         return <div>
             {this.isEdit && <div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto remark">介绍一下机器人</div>
+                    <div className="flex-auto remark"><S>介绍一下机器人</S></div>
                     <div className="flex-fixed flex  r-gap-l-10">
-                        <Button onClick={(e, b) => this.onSave(b)} >保存</Button>
-                        <Button onClick={e => this.isEdit = false} ghost>退出编辑</Button>
+                        <Button onClick={(e, b) => this.onSave(b)} ><S>保存</S></Button>
+                        <Button onClick={e => this.isEdit = false} ghost><S>退出编辑</S></Button>
                     </div>
                 </div>
                 <Textarea
                     style={{ height: 500 }}
-                    placeholder="介绍一下机器人,如何使用它，支持markdown语法"
+                    placeholder={lst("介绍一下机器人,如何使用它，支持markdown语法")}
                     value={robot.remark}
                     onChange={e => this.remark = e}
                 ></Textarea>
@@ -70,7 +72,7 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                         onMouseDown={e => this.isEdit = true}
                     >
                         <Icon size={14} icon={EditSvg}></Icon>
-                        <span>编辑</span>
+                        <span><S>编辑</S></span>
                     </span>
                 </div>
                 <Markdown md={this.remark}></Markdown>

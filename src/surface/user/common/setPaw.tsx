@@ -5,28 +5,29 @@ import { Dialoug, Row, Col } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
+import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
 
 class UserUpdatePaw extends EventsComponent {
     render() {
         return <Dialoug className={'shy-join-friend'}
-            head={<span>设置密码</span>}
+            head={<span><S>设置密码</S></span>}
         >
             <div className="gap-h-30"> {this.checkPaw && <Row>
-                <Col>旧密码</Col>
+                <Col><S>旧密码</S></Col>
                 <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
             </Row>}
                 <Row style={{ margin: '10px 0px' }}>
-                    <Col>新密码</Col>
+                    <Col><S>新密码</S></Col>
                     <Col><Input type="password" value={this.newPaw} onChange={e => this.newPaw = e}></Input></Col>
                 </Row>
                 <Row style={{ margin: '10px 0px' }}>
-                    <Col>确认新密码</Col>
+                    <Col><S>确认新密码</S></Col>
                     <Col><Input type="password" value={this.confirmPaw} onChange={e => this.confirmPaw = e}></Input></Col>
                 </Row>
             </div>
             <Row>
-                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
+                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
             </Row>
             <div>
                 {this.error && <ErrorText >{this.error}</ErrorText>}

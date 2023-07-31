@@ -9,6 +9,8 @@ import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
 import { userChannelStore } from "../store";
+import { S } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
 
 export var UserChannelSearch = observer(function () {
     var refInput = React.useRef<Input>(null);
@@ -50,7 +52,7 @@ export var UserChannelSearch = observer(function () {
     return <div className="shy-user-channel-slide-head-search">
         <Input size='small'
             ref={e => refInput.current = e}
-            placeholder="搜索"
+            placeholder={lst("搜索")}
             onChange={e => { local.start = true; change(e) }}
             clear onClear={onClear}
         />
@@ -61,7 +63,7 @@ export var UserChannelSearch = observer(function () {
                 })
             }
             {local.users.length == 0 && <div className="shy-user-channel-search-result">
-                <Remark>没有搜索</Remark>
+                <Remark><S>没有搜索</S></Remark>
             </div>}
         </div>, ele.current)}
     </div>

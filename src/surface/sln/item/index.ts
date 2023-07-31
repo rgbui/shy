@@ -19,6 +19,7 @@ import { Confirm } from "rich/component/lib/confirm";
 import { useForm } from "rich/component/view/form/dialoug";
 import { getPageItemElementUrl } from "./util";
 import { Page } from "rich/src/page";
+import { lst } from "rich/i18n/store";
 
 export class PageItem {
     id: string = null;
@@ -302,7 +303,7 @@ export class PageItem {
     }
     async onRemove() {
         if (this.mime == Mime.pages) {
-            if (await Confirm('确定要删除吗，该操作不可撤消'))
+            if (await Confirm(lst('确定要删除吗，该操作不可撤消')))
                 pageItemStore.deletePageItem(this);
         }
         else pageItemStore.deletePageItem(this);
@@ -329,29 +330,29 @@ export class PageItem {
                 {
                     name: 'rename',
                     icon: RenameSvg,
-                    text: '编辑分类'
+                    text: lst('编辑分类')
                 },
                 {
                     name: 'createFolder',
                     icon: FolderPlusSvg,
-                    text: '创建分类'
+                    text: lst('创建分类')
                 },
                 { type: MenuItemType.divide },
                 {
                     name: 'toggleFolder',
                     icon: this.spread ? FolderCloseSvg : FolderOpenSvg,
-                    text: this.spread ? "折叠分类" : '展开分类'
+                    text: this.spread ? lst("折叠分类") : lst('展开分类')
                 },
                 {
                     name: 'unAllFolders',
                     icon: SeoFolderSvg,
-                    text: '折叠所有分类'
+                    text: lst('折叠所有分类')
                 },
                 { type: MenuItemType.divide },
                 {
                     name: 'remove',
                     icon: TrashSvg,
-                    text: '删除'
+                    text: lst('删除')
                 }
             ]
         }
@@ -359,7 +360,7 @@ export class PageItem {
             items.push({
                 name: 'openRight',
                 icon: LogoutSvg,
-                text: '在右侧边栏打开'
+                text: lst('在右侧边栏打开')
             });
             items.push({
                 type: MenuItemType.divide,
@@ -367,7 +368,7 @@ export class PageItem {
             items.push({
                 name: 'link',
                 icon: LinkSvg,
-                text: '复制访问链接'
+                text: lst('复制访问链接')
             });
             items.push({
                 type: MenuItemType.divide,
@@ -376,13 +377,13 @@ export class PageItem {
                 items.push({
                     name: 'copy',
                     icon: DuplicateSvg,
-                    text: '拷贝副本'
+                    text: lst('拷贝副本')
                 });
             }
             items.push({
                 name: 'rename',
                 icon: RenameSvg,
-                text: '重命名'
+                text: lst('重命名')
             });
             items.push({
                 type: MenuItemType.divide,
@@ -390,7 +391,7 @@ export class PageItem {
             items.push({
                 name: 'remove',
                 icon: TrashSvg,
-                text: '删除'
+                text: lst('删除')
             });
             if (this.editor) {
                 items.push({
@@ -399,11 +400,11 @@ export class PageItem {
                 var r = await channel.get('/user/basic', { userid: this.editor });
                 if (r?.data?.user) items.push({
                     type: MenuItemType.text,
-                    text: '编辑人 ' + r.data.user.name
+                    text: lst('编辑人 ') + r.data.user.name
                 });
                 if (this.editDate) items.push({
                     type: MenuItemType.text,
-                    text: '编辑于 ' + util.showTime(this.editDate)
+                    text: lst('编辑于 ') + util.showTime(this.editDate)
                 });
             }
         }
@@ -420,15 +421,15 @@ export class PageItem {
             case 'rename':
                 if (this.mime == Mime.pages) {
                     var r = await useForm({
-                        title: '修改分类名称',
+                        title: lst('修改分类名称'),
                         head: false,
                         fields: [
-                            { name: 'title', type: 'input', text: '分类名称' }
+                            { name: 'title', type: 'input', text: lst('分类名称') }
                         ],
                         model: { title: this.text },
                         async checkModel(model) {
-                            if (!model.text) return '分类名称不能为空'
-                            if (model.text.length > 30) return '分类名称过长'
+                            if (!model.text) return lst('分类名称不能为空')
+                            if (model.text.length > 30) return lst('分类名称过长')
                             return '';
                         }
                     });
@@ -442,11 +443,11 @@ export class PageItem {
                 break;
             case 'createFolder':
                 var r = await useForm({
-                    title: '创建分类',
-                    fields: [{ name: 'text', text: '分类名称', type: 'input' }],
+                    title: lst('创建分类'),
+                    fields: [{ name: 'text', text: lst('分类名称'), type: 'input' }],
                     async checkModel(model) {
-                        if (!model.text) return '分类名称不能为空'
-                        if (model.text.length > 30) return '分类名称过长'
+                        if (!model.text) return lst('分类名称不能为空')
+                        if (model.text.length > 30) return lst('分类名称过长')
                         return '';
                     }
                 });
@@ -466,7 +467,7 @@ export class PageItem {
                 break;
             case 'link':
                 CopyText(this.url);
-                ShyAlert('访问链接已复制')
+                ShyAlert(lst(lst('访问链接已复制')))
                 break;
             case 'openRight':
                 var page: Page = await channel.air('/page/slide', { elementUrl: this.elementUrl })
@@ -510,7 +511,7 @@ export class PageItem {
         return ids;
     }
     onUpdateDocument() {
-        document.title = this.text || '页面';
+        document.title = getPageText(this);
         if (this.icon) {
             if (this.icon.name == 'emoji') {
                 var canvas = document.createElement('canvas');

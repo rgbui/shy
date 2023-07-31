@@ -10,6 +10,7 @@ import { config } from "../../../../common/config";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
 import { useTrashBox } from "rich/extensions/trash";
+import { S } from "rich/i18n/view";
 
 export var SlnView = observer(function () {
     React.useEffect(() => {
@@ -62,11 +63,11 @@ export var SlnView = observer(function () {
             return <div className="gap-b-20">
                 <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
                     <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={CubesSvg}></Icon></span>
-                    <span>模板</span>
+                    <span><S>模板</S></span>
                 </div>
                 <div onMouseDown={e => openTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
                     <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={16} icon={TrashSvg}></Icon></span>
-                    <span>垃圾桶</span>
+                    <span><S>垃圾桶</S></span>
                 </div>
             </div>
         else return <></>

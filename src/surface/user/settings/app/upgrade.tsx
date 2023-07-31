@@ -2,7 +2,7 @@ import React from "react";
 import { Divider } from "rich/component/view/grid";
 import { Markdown } from "rich/component/view/markdown";
 import { Spin } from "rich/component/view/spin";
-import { Remark } from "rich/component/view/text";
+import { S } from "rich/i18n/view";
 import { util } from "rich/util/util";
 export class ShyAppUpdate extends React.Component {
     md: string = '';
@@ -19,9 +19,9 @@ export class ShyAppUpdate extends React.Component {
     }
     render() {
         return <div className="shy-app-update">
-            <h2 className="h2">更新日志</h2>
+            <h2 className="h2"><S>更新日志</S></h2>
             <Divider></Divider>
-            <div className="remark">记录着我们成长的脚步，也记录着大家对我们的期望</div>
+            <div className="remark"><S>记录着我们成长的脚步，也记录着大家对我们的期望</S></div>
             <div className="shy-app-update-content">
                 {this.loading && <Spin block></Spin>}
                 <Markdown md={this.md}></Markdown>

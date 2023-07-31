@@ -16,6 +16,8 @@ import { ShyAlert } from 'rich/component/lib/alert';
 import { fileSock, masterSock } from '../../../../net/sock';
 import { useForm } from 'rich/component/view/form/dialoug';
 import { ShyUrl, UrlRoute } from '../../../history';
+import { lst } from 'rich/i18n/store';
+import { S } from 'rich/i18n/view';
 
 @observer
 export class WorkspaceSettingsView extends React.Component {
@@ -60,7 +62,7 @@ export class WorkspaceSettingsView extends React.Component {
             }
         }
         else {
-            ShyAlert('需要开通专业版才能自定义空间二级域名')
+            ShyAlert(lst('需要开通专业版才能自定义空间二级域名'))
             return;
         }
     }
@@ -80,13 +82,13 @@ export class WorkspaceSettingsView extends React.Component {
                 }
             }
         }
-        else ShyAlert('该功能暂不开放')
+        else ShyAlert(lst('该功能暂不开放'))
     }
     async cancelWorkspace(event: React.MouseEvent) {
         var r = await useForm({
-            title: '注销空间',
-            remark: `输入注销空间的名称[${surface.workspace.text}]`,
-            fields: [{ name: 'name', type: 'input', text: '空间名称' }]
+            title: lst('注销空间'),
+            remark: lst(`输入注销空间的名称[{text}]`, { text: surface.workspace.text }),
+            fields: [{ name: 'name', type: 'input', text: lst('空间名称') }]
         });
         if (r?.name == surface.workspace.text) {
             var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: surface.workspace.id });
@@ -106,14 +108,14 @@ export class WorkspaceSettingsView extends React.Component {
         if (typeof data.text != 'undefined' && data.text) {
             this.error.text = '';
             if (data.text.length > 30) {
-                this.error.text = '呢称过长';
+                this.error.text =lst('呢称过长') ;
                 return;
             }
         }
         if (typeof data.slogan != 'undefined' && data.slogan) {
             this.error.slogan = '';
             if (data.slogan.length > 140) {
-                this.error.slogan = '介绍过长,不能超过140个字符';
+                this.error.slogan =lst('介绍过长,不能超过140个字符') ;
                 return;
             }
         }
@@ -150,21 +152,21 @@ export class WorkspaceSettingsView extends React.Component {
         var domain = surface.workspace.siteDomain || surface.workspace.sn;
         return <div>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <div className="h2">工作空间</div>
+            <div className="h2"><S>工作空间</S></div>
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>空间头像</div>
+                <div className='bold f-14'><S>空间头像</S></div>
                 <div className='remark f-12 gap-h-10'></div>
                 <div>
                     <Space valign='start'>
                         <div className='shy-settings-ws-avatar' onClick={() => this.onUploadFace()} >
                             {surface.workspace.icon && <img className='w100 h100 circle' src={autoImageUrl(surface.workspace.icon.url, 120)} />}
                             {!surface.workspace.icon && <span className='w100 h100 circle flex-center'>{surface.workspace.text.slice(0, 1)}</span>}
-                            <div className='shy-settings-ws-avatar-hover'>添加图片</div>
+                            <div className='shy-settings-ws-avatar-hover'><S>添加图片</S></div>
                         </div>
                         <div>
-                            <p style={{ fontSize: 12, marginBottom: 10 }}>建议使用 200x200 以上的图片。</p>
-                            <Button ghost onClick={e => this.onUploadFace()}>上传图片</Button>
+                            <p style={{ fontSize: 12, marginBottom: 10 }}><S>建议使用 200x200 以上的图片。</S></p>
+                            <Button ghost onClick={e => this.onUploadFace()}><S>上传图片</S></Button>
                         </div>
                     </Space>
                 </div>
@@ -172,61 +174,61 @@ export class WorkspaceSettingsView extends React.Component {
 
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>空间名称</div>
-                <div className='remark f-12 gap-h-10'>修改空间名称</div>
+                <div className='bold f-14'><S>空间名称</S></div>
+                <div className='remark f-12 gap-h-10'><S>修改空间名称</S></div>
                 <div className='max-w-500'>
-                    <Input ref={e => this.nameInput = e} value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={'请输入你的工作空间名称'}></Input>
+                    <Input ref={e => this.nameInput = e} value={this.data.text} onChange={e => this.setData({ text: e })} placeholder={lst('请输入你的工作空间名称')}></Input>
                 </div>
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>空间横幅背景</div>
-                <div className='remark f-12 gap-h-10'>更换控间横幅</div>
+                <div className='bold f-14'><S>空间横幅背景</S></div>
+                <div className='remark f-12 gap-h-10'><S>更换控间横幅</S></div>
                 <div className='flex flex-top'>
                     {surface.workspace.cover && <div className='shy-settings-ws-cover' onClick={() => this.onUploadCover()} >
                         {surface.workspace.cover && <img src={autoImageUrl(surface.workspace.cover.url, 500)} />}
-                        <div className='shy-settings-ws-cover-hover'>更换横幅</div>
+                        <div className='shy-settings-ws-cover-hover'><S>更换横幅</S></div>
                     </div>}
-                    {surface.workspace.cover && <Button className='gap-l-10' ghost onClick={() => this.onRemoveCover()}>移除横幅背景</Button>}
-                    {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}>上传横幅背景</Button>}
+                    {surface.workspace.cover && <Button className='gap-l-10' ghost onClick={() => this.onRemoveCover()}><S>移除横幅背景</S></Button>}
+                    {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}><S>上传横幅背景</S></Button>}
                 </div>
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>工作空间描述</div>
-                <div className='remark f-12 gap-h-10'>修改工作空间描述</div>
+                <div className='bold f-14'><S>工作空间描述</S></div>
+                <div className='remark f-12 gap-h-10'><S>修改工作空间描述</S></div>
                 <div className='max-w-500'>
-                    <Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={'请输入你的工作空间描述'}></Textarea>
+                    <Textarea value={this.data.slogan} onChange={e => this.setData({ slogan: e })} placeholder={lst('请输入你的工作空间描述')}></Textarea>
                 </div>
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>空间域名</div>
-                <div className='remark f-12 gap-h-10 flex'>需要公开至互联网才能访问<a className='link-remark underline gap-r-5' href={'https://' + domain + '.shy.live'}>{'https://' + domain + '.shy.live'}</a></div>
-                <div className='remark f-12 gap-h-10 flex'>任何时候都能访问<a className='link-remark underline gap-r-5' href={'https://shy.live/ws/' + domain}>{'https://shy.live/ws/' + domain}</a></div>
+                <div className='bold f-14'><S>空间域名</S></div>
+                <div className='remark f-12 gap-h-10 flex'><S>需要公开至互联网才能访问</S><a className='link-remark underline gap-r-5' href={'https://' + domain + '.shy.live'}>{'https://' + domain + '.shy.live'}</a></div>
+                <div className='remark f-12 gap-h-10 flex'><S>任何时候都能访问</S><a className='link-remark underline gap-r-5' href={'https://shy.live/ws/' + domain}>{'https://shy.live/ws/' + domain}</a></div>
                 <div className='shy-ws-settings-view-domain'>
                     <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + domain + '.shy.live'}>https://{domain}.shy.live</a>
                 </div>
                 {!surface.workspace.siteDomain && <div className='flex'>
-                    <Button onClick={e => this.openDomain(e)} ghost>自定义空间二级域名</Button>
-                    <div className='remark f-12 gap-h-10 flex gap-l-10'>自定义二级域名如https://mysite.shy.live</div>
+                    <Button onClick={e => this.openDomain(e)} ghost><S>自定义空间二级域名</S></Button>
+                    <div className='remark f-12 gap-h-10 flex gap-l-10'><S>自定义二级域名如</S>https://mysite.shy.live</div>
                 </div>
                 }
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>导出数据</div>
-                <div className='remark f-12 gap-h-10'>导出空间所有的数据(暂不开放）</div>
+                <div className='bold f-14'><S>导出数据</S></div>
+                <div className='remark f-12 gap-h-10'><S>导出空间所有的数据(暂不开放）</S></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <Button onClick={e => this.createWorkspaceTemplate(e)} ghost>导出数据</Button>
+                    <Button onClick={e => this.createWorkspaceTemplate(e)} ghost><S>导出数据</S></Button>
                 </div>
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
-                <div className='bold f-14'>注销空间</div>
-                <div className='remark f-12 gap-h-10'>注销空间不可撤消，空间内的数据将自动清理</div>
+                <div className='bold f-14'><S>注销空间</S></div>
+                <div className='remark f-12 gap-h-10'><S>注销空间不可撤消，空间内的数据将自动清理</S></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <Button onClick={e => this.cancelWorkspace(e)} danger >注销空间</Button>
+                    <Button onClick={e => this.cancelWorkspace(e)} danger ><S>注销空间</S></Button>
                 </div>
             </div>
         </div>

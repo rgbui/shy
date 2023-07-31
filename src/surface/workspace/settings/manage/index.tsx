@@ -13,6 +13,8 @@ import { useSelectWorkspacePage } from "rich/extensions/link/select"
 import { Point, Rect } from "rich/src/common/vector/point";
 import { SelectBox } from "rich/component/view/select/box";
 import { MenuFolderSvg, TreeListSvg } from "rich/component/svgs";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -98,57 +100,57 @@ export class WorkspaceManage extends React.Component {
     render() {
         return <div className='shy-ws-manage'>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <div className="h2">空间管理</div>
+            <div className="h2"><S>空间管理</S></div>
             <Divider></Divider>
             <div className="gap-h-10">
-                <div className="bold f-14">新页面默认选项</div>
-                <div className="remark f-12 gap-h-10">在创建新页面时，默认开启以下配置</div>
+                <div className="bold f-14"><S>新页面默认选项</S></div>
+                <div className="remark f-12 gap-h-10"><S>在创建新页面时，默认开启以下配置</S></div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">自适应宽度</div>
+                    <div className="flex-auto  f-14 text-1"><S>自适应宽度</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.isFullWidth', e)} checked={this.data.createPageConfig.isFullWidth}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">小字体</div>
+                    <div className="flex-auto  f-14 text-1"><S>小字体</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.smallFont', e)} checked={this.data.createPageConfig.smallFont}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">目录大纲</div>
+                    <div className="flex-auto  f-14 text-1"><S>目录大纲</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.nav', e)} checked={this.data.createPageConfig.nav}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">显示关联引用(反链）</div>
+                    <div className="flex-auto  f-14 text-1"><S>显示关联引用(反链）</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.autoRefPages', e)} checked={this.data.createPageConfig.autoRefPages}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">父页面引用子页面</div>
+                    <div className="flex-auto  f-14 text-1"><S>父页面引用子页面</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.autoRefSubPages', e)} checked={this.data.createPageConfig.autoRefSubPages}></Switch></div>
                 </div>
             </div>
             <Divider></Divider>
             <div className="gap-h-10">
-                <div className="bold f-14">空间默认首页</div>
-                <div className="remark f-12 gap-h-10">通过自定义域名打开时，默认显示初始页面</div>
+                <div className="bold f-14"><S>空间默认首页</S></div>
+                <div className="remark f-12 gap-h-10"><S>通过自定义域名打开时，默认显示初始页面</S></div>
                 <div className="max-w-500">
                     <Input onMousedown={e => this.open(e)} value={this.data.defaultPageTitle} readonly></Input>
                 </div>
             </div>
             <Divider></Divider>
             <div className="gap-h-10">
-                <div className="bold f-14">左边侧边栏设置</div>
-                <div className="remark f-12 gap-h-10">左边侧边栏风格显示设置</div>
+                <div className="bold f-14"><S>左边侧边栏设置</S></div>
+                <div className="remark f-12 gap-h-10"><S>左边侧边栏风格显示设置</S></div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">自定义图标</div>
+                    <div className="flex-auto  f-14 text-1"><S>自定义图标</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon ? false : true}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1">布局风格</div>
+                    <div className="flex-auto  f-14 text-1"><S>布局风格</S></div>
                     <div className="flex-fixed">
                         <SelectBox
                             small
                             border
                             options={[
-                                { text: '目录', value: 'note', icon: TreeListSvg },
-                                { text: '菜单', value: 'menu', icon: MenuFolderSvg },
+                                { text: lst('目录'), value: 'note', icon: TreeListSvg },
+                                { text: lst('菜单'), value: 'menu', icon: MenuFolderSvg },
                             ]}
                             value={this.data.slnStyle}
                             onChange={e => { this.change('slnStyle', e) }}

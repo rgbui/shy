@@ -7,6 +7,7 @@ import { WsAvatar } from "rich/component/view/avator/ws";
 import { Workspace } from "../workspace";
 import { surface } from "../store";
 import { isMobileOnly } from "react-device-detect";
+import { S } from "rich/i18n/view";
 
 export var DiscoveryView = observer(function () {
     var local = useLocalObservable(() => {
@@ -49,11 +50,11 @@ export var DiscoveryView = observer(function () {
                 // backgroundAttachment: 'fixed',
                 height: isMobileOnly ? 120 : 240
             }}>
-                <h3>在 诗云 找到自己的社区</h3>
-                <p>从游戏、音乐到教育，总有你的一片天地。</p>
+                <h3><S key='discovery title'>在 诗云 找到自己的社区</S></h3>
+                <p><S key='discovery description'>从游戏、音乐到教育，总有你的一片天地。</S></p>
             </div>
             <div className={"shy-discovery-ws padding-b-100" + (isMobileOnly ? " gap-l-20 gap-r-10 " : " gap-l-100 gap-r-90")}>
-                <h2>推荐社区</h2>
+                <h2><S>推荐社区</S></h2>
                 <div className="shy-discovery-ws-list">
                     {local.list.map(w => {
                         return <div style={{ width: isMobileOnly ? "100%" : "25%" }} onMouseDown={e => openWs(w)} key={w.id}><WsAvatar wsId={w.id} ></WsAvatar></div>

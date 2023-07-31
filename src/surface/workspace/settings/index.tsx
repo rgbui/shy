@@ -21,6 +21,8 @@ import { RobotList } from "../robot/list";
 import { RecommendRobots } from "./member/robots";
 import { SitePublishView } from "./publish";
 import { config } from "../../../../common/config";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 
 @observer
@@ -51,7 +53,7 @@ export class WsSettings extends EventsComponent {
         this.visible = true;
     }
     deleteSpace() {
-        ShyAlert('暂时不支持删除空间')
+        ShyAlert(lst('暂时不支持删除空间'))
     }
     el: HTMLElement;
     render() {
@@ -61,30 +63,30 @@ export class WsSettings extends EventsComponent {
                 <div className='flex-fixed w-200 shy-ws-settings-slide h100 box-border overflow-y'>
                     <div className='padding-h-60'>
                         <h4>{surface.workspace.text}</h4>
-                        <a onMouseDown={e => this.setMode('settings')} className={this.mode == 'settings' ? "hover" : ""} >概况</a>
-                        <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}>角色组</a>
-                        <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}>空间设置 </a>
+                        <a onMouseDown={e => this.setMode('settings')} className={this.mode == 'settings' ? "hover" : ""} ><S>概况</S></a>
+                        <a onMouseDown={e => this.setMode('roles')} className={this.mode == 'roles' ? "hover" : ""}><S>角色组</S></a>
+                        <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}><S>空间设置</S> </a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>安全管理</h4>
-                        <a onMouseDown={e => this.setMode('safe')} className={this.mode == 'safe' ? "hover" : ""}>安全设置</a>
+                        <h4><S>安全管理</S></h4>
+                        <a onMouseDown={e => this.setMode('safe')} className={this.mode == 'safe' ? "hover" : ""}><S>安全设置</S></a>
                         {/*<a onMouseDown={e => this.setMode('audit')} className={this.mode == 'audit' ? "hover" : ""}>内容过滤</a> */}
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>帐单</h4>
-                        <a onMouseDown={e => this.mode = 'price'} className={this.mode == 'price' ? "hover" : ""}>定价</a>
+                        <h4><S>帐单</S></h4>
+                        <a onMouseDown={e => this.mode = 'price'} className={this.mode == 'price' ? "hover" : ""}><S>定价</S></a>
                         {/*<a onMouseDown={e => this.setMode('consume')} className={this.mode == 'consume' ? "hover" : ""}>空间使用量</a> */}
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>成员管理</h4>
-                        <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} >成员</a>
-                        <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请</a>
+                        <h4><S>成员管理</S></h4>
+                        <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} ><S>成员</S></a>
+                        <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}><S>邀请</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        {config.isTestBeta && <><h4>发布管理</h4>
-                            <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} >发布</a>
+                        {config.isTestBeta && <><h4><S>发布管理</S></h4>
+                            <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} ><S>发布</S></a>
                             <Divider style={{ margin: '0px 15px' }}></Divider></>}
-                        <h4>机器人</h4>
-                        <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} >推荐机器人</a>
-                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} >自定义机器人</a>
+                        <h4><S>机器人</S></h4>
+                        <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} ><S>推荐机器人</S></a>
+                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>自定义机器人</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <a className="warn" onMouseDown={e => this.deleteSpace()}>删除空间</a>
+                        <a className="warn" onMouseDown={e => this.deleteSpace()}><S>删除空间</S></a>
                     </div>
                 </div>
                 <div className='flex-fixed shy-ws-settings-content  h100 box-border overflow-y'>
@@ -110,7 +112,7 @@ export class WsSettings extends EventsComponent {
                                 fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)"
                                 d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
                         </span>
-                        <label>退出</label>
+                        <label><S>退出</S></label>
                     </a>
                 </div>
             </div>

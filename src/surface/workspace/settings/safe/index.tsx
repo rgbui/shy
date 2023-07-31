@@ -11,6 +11,8 @@ import { SaveTip } from "../../../../component/tip/save.tip";
 import { Workspace } from "../..";
 import { ShyAlert } from "rich/component/lib/alert";
 import { config } from "../../../../../common/config";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 
 @observer
 export class SafeSetting extends React.Component {
@@ -56,7 +58,7 @@ export class SafeSetting extends React.Component {
         if (r.ok) {
             Object.assign(surface.workspace, lodash.cloneDeep(this.data));
             this.tip.close();
-            ShyAlert('更改成功')
+            ShyAlert(lst('更改成功'))
         }
     }
     reset() {
@@ -76,7 +78,7 @@ export class SafeSetting extends React.Component {
 
             }
             else {
-                ShyAlert('需要充值才能公开至互联网')
+                ShyAlert(lst('需要充值才能公开至互联网'))
                 return;
             }
         }
@@ -85,30 +87,30 @@ export class SafeSetting extends React.Component {
     render() {
         return <div className='shy-ws-manage'>
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
-            <div className="h2">安全设置</div>
+            <div className="h2"><S>安全设置</S></div>
             <Divider></Divider>
             <div className="gap-h-10">
-                <div className="bold f-14 gap-t-10">通用的设置</div>
-                <div className="remark f-12 gap-h-10">设置后该空间将对互联网完全的公开。公开的空间可能会产生大量的流量消耗，请谨慎设置</div>
+                <div className="bold f-14 gap-t-10"><S>通用的设置</S></div>
+                <div className="remark f-12 gap-h-10"><S>设置后该空间将对互联网完全的公开。公开的空间可能会产生大量的流量消耗，请谨慎设置</S></div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto f-14">公开至互联网</div>
+                    <div className="flex-auto f-14"><S>公开至互联网</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14">禁止访客加入空间成为成员</div>
+                    <div className="flex-auto  f-14"><S>禁止访客加入空间成为成员</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('accessProfile.disabledJoin', e)} checked={this.data.accessProfile.disabledJoin ? true : false}></Switch></div>
                 </div>
             </div>
             <Divider></Divider>
             <div className="gap-h-10">
-                <div className="bold f-14 gap-t-10">加入空间成为成员的准入条件</div>
+                <div className="bold f-14 gap-t-10"><S>加入空间成为成员的准入条件</S></div>
                 <div className="gap-h-10">
                     <div className="flex gap-h-10">
-                        <div className="flex-auto  f-14">服务协议</div>
+                        <div className="flex-auto  f-14"><S>服务协议</S></div>
                         <div className="flex-fixed"><Switch onChange={e => this.change('accessProfile.checkJoinProtocol', e)} checked={this.data.accessProfile.checkJoinProtocol ? true : false}></Switch></div>
                     </div>
                     {this.data.accessProfile.checkJoinProtocol &&
-                        <><div className="remark f-12 gap-h-10">加入空间时，用户需要同意以下协议才可以成为成员。</div>
+                        <><div className="remark f-12 gap-h-10"><S>加入空间时，用户需要同意以下协议才可以成为成员。</S></div>
                             <div className="max-w-500">
                                 <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder="支持markdown语法" ></Textarea>
                             </div>

@@ -45,6 +45,9 @@ import { Confirm } from 'rich/component/lib/confirm';
 import { SearchListType } from 'rich/component/types';
 import { Spin } from 'rich/component/view/spin';
 import { PageLayoutType } from 'rich/src/page/declare';
+import { lst } from 'rich/i18n/store';
+import { S } from 'rich/i18n/view';
+import { Tip } from 'rich/component/view/tooltip/tip';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',
@@ -107,7 +110,7 @@ export class WorkspaceRoles extends React.Component {
         this.roleUserSearch.loading = true;
         try {
             this.roleUserSearch.error = '';
-            var r = await channel.get('/ws/role/members', {ws:undefined, roleId: role.id, page: this.roleUserSearch.page, size: this.roleUserSearch.size });
+            var r = await channel.get('/ws/role/members', { ws: undefined, roleId: role.id, page: this.roleUserSearch.page, size: this.roleUserSearch.size });
             if (r.ok) {
                 Object.assign(this.roleUserSearch, r.data);
             }
@@ -126,9 +129,9 @@ export class WorkspaceRoles extends React.Component {
     async operatorRole(role, event: React.MouseEvent) {
         event.stopPropagation();
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-            { name: 'edit', icon: EditSvg, text: '编辑' },
+            { name: 'edit', icon: EditSvg, text: lst('编辑') },
             { type: MenuItemType.divide },
-            { name: 'delete', icon: TrashSvg, text: '删除' }
+            { name: 'delete', icon: TrashSvg, text: lst('删除') }
         ]);
         if (r && r.item.name == 'delete') {
             var re = await channel.del('/ws/role/delete', { roleId: role.id });
@@ -145,13 +148,13 @@ export class WorkspaceRoles extends React.Component {
     }
     async loadRoles() {
         this.roles = lodash.cloneDeep(surface.workspace.roles);
-        this.roles.push({ text: '所有人', permissions: surface.workspace.allMemeberPermissions || getCommonPerssions() })
+        this.roles.push({ text: lst('所有人'), permissions: surface.workspace.allMemeberPermissions || getCommonPerssions() })
         this.bakeRoles = lodash.cloneDeep(this.roles);
     }
     async addRole() {
         var r = await channel.put('/ws/role/create', {
             data: {
-                text: '新角色',
+                text: lst('新角色'),
                 color: RoleColors[lodash.random(0, RoleColors.length)],
                 permissions: getCommonPerssions()
             }
@@ -163,21 +166,21 @@ export class WorkspaceRoles extends React.Component {
         }
     }
     get allRole() {
-        return this.roles.find(g => g.text == '所有人');
+        return this.roles.find(g => g.text == lst('所有人'));
     }
     renderRoles() {
         return <div className="shy-ws-roles-list">
-            <div className='h2'>角色</div>
+            <div className='h2'><S>角色</S></div>
             <Divider></Divider>
-            <div className='remark gap-h-10'>使用角色来组织你的空间成员并自定义权限</div>
+            <div className='remark gap-h-10'><S>使用角色来组织你的空间成员并自定义权限</S></div>
             <div className="shy-ws-roles-everyone flex cursor round padding-20" onMouseDown={e => this.openEditRole(this.allRole)}>
                 <div className='flex-auto flex'>
                     <div className='flex-fixed circle bg-white size-40 flex-center remark'>
                         <Icon size={24} icon={MemberSvg}></Icon>
                     </div>
                     <div className='flex-auto gap-l-10'>
-                        <h3>默认权限</h3>
-                        <div className='remark f-12 gap-t-5'>@所有人.适用所有空间成员</div>
+                        <h3><S>默认权限</S></h3>
+                        <div className='remark f-12 gap-t-5'><S>@所有人.适用所有空间成员</S></div>
                     </div>
                 </div>
                 <div className='flex-fixed gap-r-10'>
@@ -186,10 +189,10 @@ export class WorkspaceRoles extends React.Component {
             </div>
             <div className='shy-ws-roles-list-box'>
                 <div className='shy-ws-roles-list-box-head flex'>
-                    <div className='flex-auto'><span>角色</span></div>
-                    <div className='flex-fixed'><Button style={{ fontSize: '12px' }} size='small' onClick={e => this.addRole()}>添加角色</Button></div>
+                    <div className='flex-auto'><span><S>角色</S></span></div>
+                    <div className='flex-fixed'><Button style={{ fontSize: '12px' }} size='small' onClick={e => this.addRole()}><S>添加角色</S></Button></div>
                 </div>
-                {this.roles.length == 1 && <div className='remark flex-center gap-h-20'>还没有创建任何角色</div>}
+                {this.roles.length == 1 && <div className='remark flex-center gap-h-20'><S>还没有创建任何角色</S></div>}
                 {this.roles.filter(g => g.id ? true : false).map(r => {
                     return <div key={r.id} className='shy-ws-roles-list-role-info' onMouseDown={e => this.openEditRole(r)} >
                         <div className='flex-fixed flex'>
@@ -220,27 +223,27 @@ export class WorkspaceRoles extends React.Component {
                     <div className='flex-auto cursor flex'>
                         <span className='item-hover round flex padding-w-10 padding-h-2 '>
                             <Icon size={14} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
-                            <span className='gap-l-5' onMouseDown={e => this.editRole = null}>后退</span>
+                            <span className='gap-l-5' onMouseDown={e => this.editRole = null}><S>后退</S></span>
                         </span>
                     </div>
                     <div className='flex-fixed'>
-                        <ToolTip overlay={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={16} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></ToolTip>
+                        <Tip text={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={16} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></Tip>
                     </div>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {
                     return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span style={{ backgroundColor: r.color }}></span><span>{r.text}</span></a>
                 })}
-                <a className={this.editRole?.text == '所有人' && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole(this.allRole)}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span>@所有人</span></a>
+                <a className={this.editRole?.text == lst('所有人') && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole(this.allRole)}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span><S>@所有人</S></span></a>
             </div>
             <div className="shy-ws-roles-edit-tab">
                 <div className='shy-ws-roles-edit-tab-title'><Row>
-                    <Col span={12}><span>编辑角色-{this.editRole.text}</span></Col>
+                    <Col span={12}><span><S>编辑角色</S>-{this.editRole.text}</span></Col>
                     {/*<Col span={12} align={'end'}><Icon icon='elipsis:sy'></Icon></Col> */}
                 </Row></div>
                 <div className="shy-ws-roles-edit-tab-head">
-                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}>显示</a>
-                    <a onMouseDown={e => this.mode = 'permission'} className={this.mode == 'permission' ? "hover" : ""}>权限</a>
-                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}>管理成员</a>
+                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}><S>显示</S></a>
+                    <a onMouseDown={e => this.mode = 'permission'} className={this.mode == 'permission' ? "hover" : ""}><S>权限</S></a>
+                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}><S>管理成员</S></a>
                 </div>
                 <div className="shy-ws-roles-edit-tab-page">
                     {this.mode == 'info' && this.renderRoleInfo()}
@@ -308,13 +311,13 @@ export class WorkspaceRoles extends React.Component {
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
             <Row>
-                <Col><label>角色名称<i>*</i></label></Col>
+                <Col><label><S>角色名称</S><i>*</i></label></Col>
                 <Col><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></Col>
             </Row>
             <Divider></Divider>
             <Row>
-                <Col><label>角色颜色<i>*</i></label></Col>
-                <Col><Remark>成员将使用角色列表中最靠前的角色的颜色。</Remark></Col>
+                <Col><label><S>角色颜色</S><i>*</i></label></Col>
+                <Col><Remark><S>成员将使用角色列表中最靠前的角色的颜色。</S></Remark></Col>
                 <Col><div className='shy-ws-role-info-color-box'>
                     <div className='shy-ws-role-info-color' style={{
                         backgroundColor: this.editRole.color
@@ -351,15 +354,15 @@ export class WorkspaceRoles extends React.Component {
         }
         return <div className="shy-ws-role-permission">
             <div className='f-12 flex'>
-                <span className='flex-auto'>通用的空间权限</span>
-                <span className='flex-fixed '><Button style={{ padding: 0, margin: 0 }} link size={'small'} >清除权限</Button></span>
+                <span className='flex-auto'><S>通用的空间权限</S></span>
+                <span className='flex-fixed '><Button style={{ padding: 0, margin: 0 }} link size={'small'} ><S>清除权限</S></Button></span>
             </div>
 
             <div className='r-gap-h-10'>
                 <div className='flex'>
                     <div className='flex-auto'>
-                        <div>页面权限</div>
-                        <div className='remark f-12'>设置页面、白板、宣传页的权限</div>
+                        <div><S>页面权限</S></div>
+                        <div className='remark f-12'><S>设置页面、白板、宣传页的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -378,8 +381,8 @@ export class WorkspaceRoles extends React.Component {
                 <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
-                        <div>频道权限</div>
-                        <div className='remark f-12'> 设置频道的权限</div>
+                        <div><S>频道权限</S></div>
+                        <div className='remark f-12'> <S>设置频道的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -398,8 +401,8 @@ export class WorkspaceRoles extends React.Component {
                 <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
-                        <div>数据表格权限</div>
-                        <div className='remark f-12'>设置数据表格的权限</div>
+                        <div><S>数据表格权限</S></div>
+                        <div className='remark f-12'><S>设置数据表格的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -418,17 +421,17 @@ export class WorkspaceRoles extends React.Component {
                 <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
-                        <div>空间管理权限</div>
-                        <div className='remark f-12'>设置管理理员对空间的管理权限</div>
+                        <div><S>空间管理权限</S></div>
+                        <div className='remark f-12'><S>设置管理理员对空间的管理权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
                             small
                             border
                             options={[
-                                { text: '管理空间', value: AtomPermission.wsEdit },
-                                { text: '管理成员', value: AtomPermission.wsMemeberPermissions },
-                                { text: '无权限', value: AtomPermission.wsNotAllow }
+                                { text: lst('管理空间'), value: AtomPermission.wsEdit },
+                                { text: lst('管理成员'), value: AtomPermission.wsMemeberPermissions },
+                                { text: lst('无权限'), value: AtomPermission.wsNotAllow }
                             ]}
                             multiple
                             computedChanges={async (vs, v) => {
@@ -445,14 +448,14 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     async onAddRoleMember(e: React.MouseEvent) {
-        var r = await useUserPicker({ center: true, centerTop: 100 },undefined);
+        var r = await useUserPicker({ center: true, centerTop: 100 }, undefined);
         if (r) {
             var g = await surface.workspace.sock.put('/ws/user/put/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: r.id });
             await this.loadRoleMemebers(this.editRole)
         }
     }
     async removeRoleMember(id: string) {
-        if (await Confirm(`确定要从角色组[${this.editRole?.text}]移出成员吗`)) {
+        if (await Confirm(lst(`确定要从角色组[{text}]移出成员吗`, { text: this.editRole.text }))) {
             var g = await surface.workspace.sock.delete('/ws/user/delete/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: id });
             await this.loadRoleMemebers(this.editRole)
         }
@@ -460,7 +463,7 @@ export class WorkspaceRoles extends React.Component {
     renderRoleUsers() {
         return <div className="shy-ws-role-users">
             <div className='flex'>
-                <span className='flex-auto remark f-12'>成员列表{this.roleUserSearch.total ? `(${this.roleUserSearch.total})` : ''}</span>
+                <span className='flex-auto remark f-12'><S>成员列表</S>{this.roleUserSearch.total ? `(${this.roleUserSearch.total})` : ''}</span>
                 <span onClick={e => this.onAddRoleMember(e)} className='flex-fixed flex-center size-24 round item-hover round cursor'>
                     <Icon size={20} icon={PlusSvg}></Icon>
                 </span>
@@ -469,7 +472,7 @@ export class WorkspaceRoles extends React.Component {
             {this.roleUserSearch.list.map(ru => {
                 return <div className='flex gap-h-10 visible-hover' key={ru.id}>
                     <span className='flex-auto'><Avatar size={32} showName showSn userid={ru.userid}></Avatar></span>
-                    <ToolTip overlay={'移出成员'}>
+                    <ToolTip overlay={lst('移出成员')}>
                         <span onClick={e => this.removeRoleMember(ru.userid)} className='flex-fixed size-24 flex-center round item-hover cursor visible'>
                             <Icon size={14} icon={CloseSvg}></Icon>
                         </span>

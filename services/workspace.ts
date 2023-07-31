@@ -7,6 +7,7 @@ import { Workspace } from "../src/surface/workspace";
 import { FileMd5 } from "../src/util/file";
 import { channel } from "rich/net/channel";
 import { ShyAlert } from "rich/component/lib/alert";
+import { lst } from "rich/i18n/store";
 
 class WorkspaceService extends BaseService {
     private wsPids: Map<string, any[]> = new Map();
@@ -156,11 +157,11 @@ class WorkspaceService extends BaseService {
     * @returns 
     */
     @post('/ws/upload/file')
-    async uploadFile(data:{ file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+    async uploadFile(data: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
             if (data.file.size > 1024 * 1024 * 50) {
-                ShyAlert('暂时不支持上传超过50M的文件')
-                return { ok: false, warn: '文件大小不能超过50M' }
+                ShyAlert(lst('暂时不支持上传超过50M的文件'))
+                return { ok: false, warn: lst('文件大小不能超过50M') }
             }
             var masterFile;
             var { file, uploadProgress } = data;
@@ -172,8 +173,8 @@ class WorkspaceService extends BaseService {
             return { ok: true, data: masterFile }
         }
         catch (ex) {
-            console.error('上传文件失败', ex)
-            return { ok: false, warn: '上传文件失败' }
+            console.error(lst('上传文件失败'), ex)
+            return { ok: false, warn: lst('上传文件失败') }
         }
     }
     @post('/ws/download/url')
@@ -188,7 +189,7 @@ class WorkspaceService extends BaseService {
             return { ok: true, data: masterFile }
         }
         catch (ex) {
-            return { ok: false, warn: '下载文件失败' }
+            return { ok: false, warn: lst('下载文件失败') }
         }
     }
     @get('/ws/member/word/query')

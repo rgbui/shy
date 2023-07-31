@@ -1,4 +1,6 @@
 
+
+import { Langs } from 'rich/i18n/declare';
 import { channel } from 'rich/net/channel';
 import * as short from 'short-uuid';
 
@@ -66,8 +68,8 @@ class Config {
         }
         return false;
     }
-    get lang(): "zh" | "en" | "jp" {
-        return 'zh'
+    get lang(): Langs {
+        return 'Chinese'
     }
 }
 export var config = new Config();

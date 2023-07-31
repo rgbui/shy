@@ -1,4 +1,5 @@
 import lodash from "lodash";
+import { lst } from "rich/i18n/store";
 import { util } from "rich/util/util";
 var ifr: HTMLIFrameElement;
 var isLoadedIframeSuccess: boolean = false;
@@ -40,7 +41,7 @@ export async function iframeChannel(url: string, args?: any[]) {
                         resolve(data);
                     },
                     time: () => {
-                        reject('over time');
+                        reject(lst('响应超时'));
                         var ev = events.find(g => g.id == id);
                         lodash.remove(events, g => g.id == id);
                         if (ev.time) { clearTimeout(ev.time); ev.time = null }

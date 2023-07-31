@@ -11,6 +11,7 @@ import { useColorPicker } from "rich/component/view/color/picker";
 import { makeObservable, observable } from "mobx";
 import { autoImageUrl } from "rich/net/element.type";
 import { Textarea } from "rich/component/view/input/textarea";
+import { S } from "rich/i18n/view";
 
 const DEFAULT_COLOR = 'rgb(192,157,156)';
 
@@ -26,7 +27,7 @@ export class UserSettingProfile extends React.Component {
             var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
                 if (r.data.file.url) {
-                    surface.user.onUpdateUserInfo({ avatar: { name:'upload', url: r.data.file.url } })
+                    surface.user.onUpdateUserInfo({ avatar: { name: 'upload', url: r.data.file.url } })
                 }
             }
         }
@@ -40,7 +41,7 @@ export class UserSettingProfile extends React.Component {
             var r = await channel.post('/user/upload/file', { file, uploadProgress: (event) => { } })
             if (r.ok) {
                 if (r.data.file.url) {
-                    surface.user.onUpdateUserInfo({ cover: { name:'image', url: r.data.file.url } })
+                    surface.user.onUpdateUserInfo({ cover: { name: 'image', url: r.data.file.url } })
                 }
             }
         }
@@ -76,24 +77,24 @@ export class UserSettingProfile extends React.Component {
             return <svg aria-hidden="false" width="32" height="24" viewBox="0 0 24 24"><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" fillRule="evenodd" clipRule="evenodd" d="M8.99991 16.17L4.82991 12L3.40991 13.41L8.99991 19L20.9999 7.00003L19.5899 5.59003L8.99991 16.17Z"></path></svg>
         }
         return <div className="shy-user-settings-profile">
-            <h2 className="h2">用户个人资料</h2>
+            <h2 className="h2"><S>用户个人资料</S></h2>
             <Divider></Divider>
             <div className="shy-user-settings-profile-box">
                 <div className="shy-user-settings-profile-box-left">
                     <Row>
                         <Col>
-                            <h5>头像</h5>
+                            <h5><S>头像</S></h5>
                         </Col>
                         <Col span={12} align='start'>
                             <Space>
-                                <Button onClick={e => this.onUploadFace()}>上传头像</Button>
-                                {surface.user.avatar?.url && <Button ghost onClick={e => this.removeFace()}>移除头像</Button>}
+                                <Button onClick={e => this.onUploadFace()}><S>上传头像</S></Button>
+                                {surface.user.avatar?.url && <Button ghost onClick={e => this.removeFace()}><S>移除头像</S></Button>}
                             </Space>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <h5>个人资料颜色</h5>
+                            <h5><S>个人资料颜色</S></h5>
                         </Col>
                         <Col span={12} align='start'>
                             <div className="shy-user-settings-color">
@@ -101,7 +102,7 @@ export class UserSettingProfile extends React.Component {
                                     onMouseDown={e => this.onUpdateColor()}>
                                     {surface.user?.cover?.color == DEFAULT_COLOR && renderCheckSvg()}
                                 </div>
-                                <span>默认</span>
+                                <span><S>默认</S></span>
                             </div>
                             <div className="shy-user-settings-color">
                                 <div className="shy-user-settings-color-bg"
@@ -112,24 +113,24 @@ export class UserSettingProfile extends React.Component {
                                     <svg style={{ position: 'absolute', right: 2, top: 2 }} width="14" height="14" viewBox="0 0 16 16"><g fill="none"><path d="M-4-4h24v24H-4z"></path><path fill="hsl(0, calc(var(--saturation-factor, 1) * 0%), 100%)" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></g></svg>
                                     {surface.user?.cover?.color != DEFAULT_COLOR && renderCheckSvg()}
                                 </div>
-                                <span>自定义</span>
+                                <span><S>自定义</S></span>
                             </div>
                         </Col>
                     </Row>
                     <Row>
-                        <Col><h5>个人资料横幅</h5></Col>
+                        <Col><h5><S>个人资料横幅</S></h5></Col>
                         <Col>
-                            <Remark>我们建议使用至少 600x240 大小的图片。您可上传小于 5 MB 的 PNG、JPG 或动态 GIF。</Remark>
+                            <Remark><S key={'上传横幅图片要求'}>我们建议使用至少 600x240 大小的图片。您可上传小于 5 MB 的 PNG、JPG 或动态 GIF。</S></Remark>
                         </Col>
-                        <Col span={12} align='start' style={{marginTop:10}} >
+                        <Col span={12} align='start' style={{ marginTop: 10 }} >
                             <Space>
-                                <Button onClick={e => this.onUploadCover()}>上传横幅</Button>
-                                {surface.user?.cover?.url && <Button ghost onClick={e => this.removeCover()}>移除横幅</Button>}
+                                <Button onClick={e => this.onUploadCover()}><S>上传横幅</S></Button>
+                                {surface.user?.cover?.url && <Button ghost onClick={e => this.removeCover()}><S>移除横幅</S></Button>}
                             </Space>
                         </Col>
                     </Row>
                     <Row>
-                        <Col><h5>自我介绍</h5></Col>
+                        <Col><h5><S>自我介绍</S></h5></Col>
                         {/* <Col>
                             <Remark>如果您愿意，还可以使用 markdown 和链接。</Remark>
                         </Col> */}
@@ -139,19 +140,19 @@ export class UserSettingProfile extends React.Component {
                                 onChange={e => this.inputSlogan = e}></Textarea>
                         </Col>
                         {this.inputSlogan && <Col style={{ marginTop: 10 }}>
-                            <Button onClick={(e, b) => this.saveSlogan(e, b)}>保存</Button>
+                            <Button onClick={(e, b) => this.saveSlogan(e, b)}><S>保存</S></Button>
                         </Col>}
                     </Row>
                 </div>
                 <div className="shy-user-settings-profile-box-right">
-                    <h5>预览</h5>
+                    <h5><S>预览</S></h5>
                     <div className="shy-user-settings-profile-box-card">
                         <div className="bg">
                             {!surface.user.cover?.url && <div style={{ height: 60, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                            {surface.user.cover?.url && <img style={{ height: 120 }} src={autoImageUrl(surface.user.cover?.url,500)} />}
+                            {surface.user.cover?.url && <img style={{ height: 120 }} src={autoImageUrl(surface.user.cover?.url, 500)} />}
                         </div>
                         <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 120 : 60 }}>
-                            {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url,50) } />}
+                            {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 50)} />}
                             {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
                         </div>
                         <div className="shy-user-settings-profile-box-card-content">

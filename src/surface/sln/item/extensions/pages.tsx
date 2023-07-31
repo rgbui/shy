@@ -6,6 +6,7 @@ import { PageItem } from "..";
 import { PageItemBox } from "../view/box";
 import { Spin } from "rich/component/view/spin";
 import { surface } from "../../../store";
+import { lst } from "rich/i18n/store";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
@@ -40,7 +41,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
                 }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor flex">
-                    <span>{item.text || "我的页面"}</span>
+                    <span>{item.text || lst("我的页面") }</span>
                     {surface.workspace.slnStyle != 'menu' && <span
                         // onMouseDown={e => {
                         //     e.stopPropagation();

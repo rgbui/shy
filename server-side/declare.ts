@@ -1,3 +1,4 @@
+import { lst } from "rich/i18n/store";
 
 
 
@@ -105,8 +106,8 @@ export class Pid {
 export const ServerServiceMachineIdKey = 'ServerServiceMachineId';
 
 export var PidTypeOptions = [
-    { text: '数据服务', value: 'ws' },
-    { text: '即时通讯', value: 'tim' },
-    { text: '文件管理', value: 'file' },
+    { text: lst('数据服务'), value: 'ws' },
+    { text: lst('即时通讯'), value: 'tim' },
+    { text: lst('文件管理'), value: 'file' },
     // { text: '搜索服务', value: 'search' }
 ]

@@ -1,5 +1,4 @@
 
-
 /**
  * 打包发布的版本
  * dev 开发版
@@ -81,7 +80,7 @@ interface Window {
     guid(): string,
     isOnline: boolean,
     isTestBeta: boolean,
-    lang: 'zh' | 'en' | 'jp'
+    lang:  'Chinese' | 'English' | 'Japanese' | 'Korean' | 'German' | 'French' | 'Russian' | 'Italian' | 'Portuguese' | 'Spanish' | 'Dutch' | 'Arabic' | 'Indonesian';
   },
   shyLog: (...args: any[]) => void
 }

@@ -5,25 +5,27 @@ import { Col, Dialoug, Row } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/extensions/popover/popover";
+import { lst } from "rich/i18n/store";
+import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
 
 
 class UserUpdateEmail extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'} head={<span>设置邮箱</span>}>
+        return <Dialoug className={'shy-join-friend'} head={<span><S>设置邮箱</S></span>}>
             <div className="gap-h-30">
                 <Row>
-                    <Col>邮箱</Col>
+                    <Col><S>邮箱</S></Col>
                     <Col><Input value={this.email} onChange={e => this.email = e}></Input></Col>
                 </Row>
                 <Row style={{ margin: '10px 0px' }}>
-                    <Col>验证码</Col>
+                    <Col><S>验证码</S></Col>
                     <Col span={16}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
-                    <Col span={6} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? `已发送${this.sendCount}s` : `获取验证码`}</Button></Col>
+                    <Col span={6} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ?  lst(`已发送{sendCount}s`,{sendCount:this.sendCount})  : lst(`获取验证码`) }</Button></Col>
                 </Row>
             </div>
             <Row>
-                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}>保存</Button></Col>
+                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
             </Row>
             <div>
                 {this.error && <ErrorText >{this.error}</ErrorText>}

@@ -5,6 +5,7 @@ import { UserBox } from "rich/component/view/avator/user";
 import { DotNumber } from "rich/component/view/dot";
 import { surface } from "../../../store";
 import { userChannelStore } from "../store";
+import { S } from "rich/i18n/view";
 
 export var UserChannels = observer(function () {
     React.useEffect(() => {
@@ -12,7 +13,7 @@ export var UserChannels = observer(function () {
     }, [])
     return <div className="shy-user-channels">
         <div className="shy-user-channels-head">
-            <span>私信</span>
+            <span><S>私信</S></span>
             {/*<Icon style={{display:'none'}} size={14} icon={PlusSvg}></Icon> */}
         </div>
         {userChannelStore.channels.list.map(c => {

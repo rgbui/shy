@@ -1,4 +1,4 @@
-import { observer, useLocalObservable } from "mobx-react";
+import { observer } from "mobx-react";
 import React from "react";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useForm } from "rich/component/view/form/dialoug";
@@ -10,19 +10,13 @@ import { useServerNumberView } from "./server.number";
 import { FlashlampSvg, PlusSvg, ServerSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { surface } from "../../src/surface/store";
+import { S } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
 
 export var ServerConfigCreate = observer(function () {
-    var local = useLocalObservable(() => {
-        return {
-            isLocalOrServer: null
-        }
-    })
     React.useEffect(() => {
         if (!surface.user.isSign) surface.user.toSign()
     }, [])
-    async function flash(event: React.MouseEvent) {
-
-    }
     async function create(event: React.MouseEvent) {
         var f = await useServerNumberView(undefined) as ServiceNumber;
         if (f) {
@@ -50,7 +44,7 @@ export var ServerConfigCreate = observer(function () {
                 fields: [
                     {
                         name: 'serverNumber',
-                        text: '服务号',
+                        text: lst('服务号'),
                         type: 'select',
                         options: myList.map(c => {
                             return {
@@ -60,10 +54,10 @@ export var ServerConfigCreate = observer(function () {
                         })
                     }
                 ],
-                title: '绑定服务号',
-                remark: '请确保有相同服务号的电脑在局域网内是可连通的且能与服务号配置本置的mongodb、redis、es正常连接',
+                title: lst('绑定服务号'),
+                remark: lst('绑定服务号提示', '请确保有相同服务号的电脑在局域网内是可连通的且能与服务号配置本置的mongodb、redis、es正常连接'),
                 checkModel: async (model) => {
-                    if (!model.name) return '服务号不能为空';
+                    if (!model.name) return lst('服务号不能为空');
                 }
             });
             if (f) {
@@ -75,34 +69,32 @@ export var ServerConfigCreate = observer(function () {
                 if (r.ok) {
                     serverSlideStore.service_machine = r.data.serviceMachine;
                 }
-                else ShyAlert('绑定失败')
+                else ShyAlert(lst('绑定失败'))
             }
         }
-        else ShyAlert('你还没有创建过服务号')
+        else ShyAlert(lst('你还没有创建过服务号'))
     }
-
     return <div className=" gap-t-100 flex-center vw100 vh100">
         <div className="flex-center r-round r-gap-w-10  r-padding-14 r-cursor text-1 r-border r-shadow">
-
             <div className="item-hover flex flex-top w-180 " onMouseDown={e => create(e)}>
                 <Icon className='flxe-fixed' size={40} icon={FlashlampSvg}></Icon>
                 <div className="flex-auto gap-l-5">
-                    <span>快捷</span>
-                    <div className="remark f-12">一键安装创建服务号</div>
+                    <span><S>快捷</S></span>
+                    <div className="remark f-12"><S>一键安装创建服务号</S></div>
                 </div>
             </div>
             <div className="item-hover flex flex-top w-180" onMouseDown={e => create(e)}>
                 <Icon className='flxe-fixed' size={40} icon={PlusSvg}></Icon>
                 <div className="flex-auto gap-l-5">
-                    <span>创建</span>
-                    <div className="remark f-12">创建新的服务号</div>
+                    <span><S>创建</S></span>
+                    <div className="remark f-12"><S>创建新的服务号</S></div>
                 </div>
             </div>
             <div className="item-hover  flex flex-top   w-180" onMouseDown={e => bind(e)}>
                 <Icon className='flxe-fixed' size={34} icon={ServerSvg}></Icon>
                 <div className="flex-auto gap-l-5">
-                    <span>选择</span>
-                    <div className="remark f-12">选择已有的服务号</div>
+                    <span><S>选择</S></span>
+                    <div className="remark f-12"><S>选择已有的服务号</S></div>
                 </div>
             </div>
         </div>

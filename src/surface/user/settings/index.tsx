@@ -20,6 +20,7 @@ import { ShyAppear } from './app/appear';
 import { SaveTip } from '../../../component/tip/save.tip';
 import { ShyUserPks } from './content/keys';
 import { InviteList } from './task/invite';
+import { S } from 'rich/i18n/view';
 
 @observer
 class UserSettings extends EventsComponent {
@@ -66,35 +67,35 @@ class UserSettings extends EventsComponent {
             <div className='screen-content-1000 flex-full h100 relative'>
                 <div className='flex-fixed w-200 shy-user-settings-slide h100 box-border overflow-y'>
                     <div className='padding-h-60'>
-                        <h4>用户设置</h4>
-                        <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} >我的帐号</a>
-                        <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} >个人资料</a>
-                        <a onMouseDown={e => this.setMode('open')} className={this.mode == 'open' ? "hover" : ""} >第三方帐户</a>
+                        <h4><S>用户设置</S></h4>
+                        <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} ><S>我的帐号</S></a>
+                        <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} ><S>个人资料</S></a>
+                        <a onMouseDown={e => this.setMode('open')} className={this.mode == 'open' ? "hover" : ""} ><S>第三方帐户</S></a>
 
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>帐单设置</h4>
-                        <a onMouseDown={e => this.setMode('price')} className={this.mode == 'price' ? "hover" : ""}>定价</a>
-                        <a onMouseDown={e => this.setMode('wallet')} className={this.mode == 'wallet' ? "hover" : ""}>钱包</a>
-                        <a onMouseDown={e => this.setMode('orderList')} className={this.mode == 'orderList' ? "hover" : ""}>帐单</a>
+                        <h4><S>帐单设置</S></h4>
+                        <a onMouseDown={e => this.setMode('price')} className={this.mode == 'price' ? "hover" : ""}><S>定价</S></a>
+                        <a onMouseDown={e => this.setMode('wallet')} className={this.mode == 'wallet' ? "hover" : ""}><S>钱包</S></a>
+                        <a onMouseDown={e => this.setMode('orderList')} className={this.mode == 'orderList' ? "hover" : ""}><S>帐单</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>活动中心</h4>
-                        <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}>邀请好友</a>
+                        <h4><S>活动中心</S></h4>
+                        <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}><S>邀请好友</S></a>
 
 
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>安全设置</h4>
-                        <a onMouseDown={e => this.setMode('user-pks')} className={this.mode == 'user-pks' ? "hover" : ""} >个人私钥</a>
-                        <a onMouseDown={e => this.setMode('user-safe')} className={this.mode == 'user-safe' ? "hover" : ""} >隐私与安全</a>
+                        <h4><S>安全设置</S></h4>
+                        <a onMouseDown={e => this.setMode('user-pks')} className={this.mode == 'user-pks' ? "hover" : ""} ><S>个人私钥</S></a>
+                        <a onMouseDown={e => this.setMode('user-safe')} className={this.mode == 'user-safe' ? "hover" : ""} ><S>隐私与安全</S></a>
 
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <h4>APP设置</h4>
+                        <h4><S>APP设置</S></h4>
                         {/*<a onMouseDown={e => this.setMode('appear')} className={this.mode == 'appear' ? "hover" : ""}>外观</a> */}
-                        <a onMouseDown={e => this.setMode('lang')} className={this.mode == 'lang' ? "hover" : ""}>语言</a>
+                        <a onMouseDown={e => this.setMode('lang')} className={this.mode == 'lang' ? "hover" : ""}><S>语言</S></a>
                         {/*<Divider style={{ margin: '0px 15px' }}></Divider> */}
-                        <a onMouseDown={e => this.setMode('update')} className={this.mode == 'update' ? "hover" : ""}>更新日志</a>
+                        <a onMouseDown={e => this.setMode('update')} className={this.mode == 'update' ? "hover" : ""}><S>更新日志</S></a>
                         <Remark style={{ marginLeft: 15 }}>v{window.shyConfig.version}</Remark>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        <a className='warn' onClick={e => this.singout()}> 退出登录</a>
+                        <a className='warn' onClick={e => this.singout()}><S>退出登录</S></a>
                     </div>
                 </div>
                 <div className='flex-fixed shy-user-settings-content  h100 box-border overflow-y'>
@@ -120,7 +121,7 @@ class UserSettings extends EventsComponent {
                                 fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)"
                                 d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
                         </span>
-                        <label>退出</label>
+                        <label><S>退出</S></label>
                     </a>
                 </div>
             </div>

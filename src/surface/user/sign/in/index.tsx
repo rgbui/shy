@@ -19,7 +19,8 @@ import "./style.less"
 import { ShyUtil } from "../../../../util";
 import { isMobileOnly } from "react-device-detect";
 import React from "react";
-import { ls } from "rich/i18n/store";
+import { ls, lst } from "rich/i18n/store";
+import { S, Sp } from "rich/i18n/view";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -73,8 +74,8 @@ export var Login = observer(function () {
     async function phoneSign() {
         local.failMsg = '';
         if (lockButton()) return;
-        if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
-        if (!(phoneRegex.test(local.phone) || local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length)) return unlockButton() && (local.failMsg = '手机号格式不正确');
+        if (!local.phone) return unlockButton() && (local.failMsg = lst('请输入手机号'));
+        if (!(phoneRegex.test(local.phone) || local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length)) return unlockButton() && (local.failMsg = lst('手机号格式不正确'));
         var r = await channel.get('/phone/check/sign', { phone: local.phone });
         if (r && r.ok && r.data) {
             if (r.data.sign) local.step = 'login'
@@ -90,11 +91,11 @@ export var Login = observer(function () {
                     name={'phone'}
                     onEnter={e => phoneSign()}
                     onChange={e => local.phone = e}
-                    placeholder={'请输入您的手机号'}></Input>
+                    placeholder={lst('请输入您的手机号')}></Input>
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
-                <Button size='larger' block onClick={e => phoneSign()}>继续</Button >
+                <Button size='larger' block onClick={e => phoneSign()}><S>继续</S></Button >
             </div>
         </div>
     }
@@ -123,20 +124,20 @@ export var Login = observer(function () {
     async function loginOrRegister() {
         local.failMsg = '';
         if (lockButton()) return;
-        if (!local.phone) return unlockButton() && (local.failMsg = '请输入手机号');
-        if (!(phoneRegex.test(local.phone) || (local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length))) return unlockButton() && (local.failMsg = '手机号格式不正确');
+        if (!local.phone) return unlockButton() && (local.failMsg = lst('请输入手机号'));
+        if (!(phoneRegex.test(local.phone) || (local.phone.toString().startsWith('5') && local.phone.length == '13524169334'.length))) return unlockButton() && (local.failMsg = lst('手机号格式不正确'));
         if (local.loginType == 'paw' && local.step == 'login') {
-            if (!local.paw) return unlockButton() && (local.failMsg = '密码不能为空');
-            if (local.paw.length < 5) return unlockButton() && (local.failMsg = '密码输入不合法');
+            if (!local.paw) return unlockButton() && (local.failMsg = lst('密码不能为空'));
+            if (local.paw.length < 5) return unlockButton() && (local.failMsg = lst('密码输入不合法'));
         }
         else {
-            if (!local.verifyPhoneCode) return unlockButton() && (local.failMsg = '请输入手机短信验证码');
-            if (!phoneCode.test(local.verifyPhoneCode)) return unlockButton() && (local.failMsg = '手机短信验证码格式不正确');
+            if (!local.verifyPhoneCode) return unlockButton() && (local.failMsg = lst('请输入手机短信验证码'));
+            if (!phoneCode.test(local.verifyPhoneCode)) return unlockButton() && (local.failMsg = lst('手机短信验证码格式不正确'));
         }
         if (local.step == 'register') {
-            if (!local.inviteCode) return unlockButton() && (local.failMsg = '请输入邀请码');
-            if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = '邀请码输入不正确');
-            if (!local.agree) return unlockButton() && (local.failMsg = '如您不同意诗云相关的服务协议将无法注册!');
+            if (!local.inviteCode) return unlockButton() && (local.failMsg = lst('请输入邀请码'));
+            if (!inviteCode.test(local.inviteCode)) return unlockButton() && (local.failMsg = lst('邀请码输入不正确'));
+            if (!local.agree) return unlockButton() && (local.failMsg = lst('如您不同意诗云相关的服务协议将无法注册!'));
         }
         var result = local.loginType == 'paw' && local.step == 'login' ? await channel.put('/paw/sign', { phone: local.phone, paw: local.paw, inviteCode: undefined, weixinOpen: local.weixinOpen }) : await channel.put('/phone/sign', { phone: local.phone, code: local.verifyPhoneCode, inviteCode: local.step == 'register' ? local.inviteCode : undefined, weixinOpen: local.weixinOpen })
         unlockButton();
@@ -158,25 +159,25 @@ export var Login = observer(function () {
         if (local.step == 'register') {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} size="larger" value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={lst('请输入您的手机号')}></Input>
                 </div>
                 <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
                         name={'code'}
-                        placeholder={ls.t('请输入手机短信验证码')}
+                        placeholder={lst('请输入手机短信验证码')}
                         onChange={e => local.verifyPhoneCode = e}
                         onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
-                    {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}>获取短信验证码</Button>}
+                    {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}><S>获取短信验证码</S></Button>}
                     {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
                 </div>
                 {local.step == 'register' && <div className='shy-login-box-account'>
-                    <Input size="larger" name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={'请输入邀请码'}></Input>
+                    <Input size="larger" name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={lst('请输入邀请码')}></Input>
                 </div>}
                 {local.step == 'register' && <div className='shy-login-box-agree'>
-                    <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label>同意诗云<a className="link-red" href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a className="link-red" href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></label>
+                    <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label><Sp key={'同意诗云服务协议'}>同意诗云<a className="link-red" href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a className="link-red" href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></Sp></label>
                 </div>}
                 <div className='shy-login-box-button'>
-                    <Button size='medium' block onClick={e => loginOrRegister()}>{'注册'}</Button >
+                    <Button size='medium' block onClick={e => loginOrRegister()}><S>注册</S></Button >
                 </div>
                 {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             </div>
@@ -192,17 +193,17 @@ export var Login = observer(function () {
                 {local.loginType == 'code' && <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
                         name={'code'}
-                        placeholder={ls.t('请输入手机短信验证码')}
+                        placeholder={lst('请输入手机短信验证码')}
                         onChange={e => local.verifyPhoneCode = e}
                         onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
-                    {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}>获取短信验证码</Button>}
+                    {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}><S>获取短信验证码</S></Button>}
                     {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
                 </div>}
                 <div className='shy-login-box-button'>
-                    <Button size="larger" block onClick={e => loginOrRegister()}>{'登录'}</Button >
+                    <Button size="larger" block onClick={e => loginOrRegister()}><S>登录</S></Button >
                 </div>
                 <div className="shy-login-box-type">
-                    <span>您也可以使用<a onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? "密码登录" : "手机短信登录"}</a></span>
+                    <span><S>您也可以使用</S><a onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? lst("密码登录") : lst("手机短信登录")}</a></span>
                 </div>
                 {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             </div>
@@ -215,11 +216,11 @@ export var Login = observer(function () {
     async function updateName() {
         local.failMsg = '';
         if (lockButton()) return;
-        if (!local.name) return unlockButton() && (local.failMsg = '称呼不能为空');
-        if (local.name.length < 2) return unlockButton() && (local.failMsg = '称呼太短，至少两位');
-        if (local.name.length > 64) return unlockButton() && (local.failMsg = '称呼过长，长度限制在20位');
-        if (!local.paw) return unlockButton() && (local.failMsg = '密码不能为空');
-        if (local.paw.length < 5) return unlockButton() && (local.failMsg = '密码长度不能小于6位');
+        if (!local.name) return unlockButton() && (local.failMsg = lst('称呼不能为空'));
+        if (local.name.length < 2) return unlockButton() && (local.failMsg = lst('称呼太短，至少两位'));
+        if (local.name.length > 64) return unlockButton() && (local.failMsg = lst('称呼过长，长度限制在20位'));
+        if (!local.paw) return unlockButton() && (local.failMsg = lst('密码不能为空'));
+        if (local.paw.length < 5) return unlockButton() && (local.failMsg =lst( '密码长度不能小于6位'));
         await channel.patch('/sign/patch', { name: local.name, paw: local.paw });
         surface.user.name = local.name;
         if (local.expireTime) { clearInterval(local.expireTime); local.expireTime = null; }
@@ -228,14 +229,14 @@ export var Login = observer(function () {
     function renderName() {
         return <div className='shy-login-box'>
             <div className='shy-login-box-account'>
-                <Input size="larger" value={local.name || local.weixinOpen?.nickname} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={'请输入称呼'}></Input>
+                <Input size="larger" value={local.name || local.weixinOpen?.nickname} onEnter={e => updateName()} onChange={e => local.name = e} placeholder={lst('请输入称呼')}></Input>
             </div>
             <div className='shy-login-box-account'>
-                <Input size="larger" type='password' value={local.paw} onEnter={e => updateName()} onChange={e => local.paw = e} placeholder={'请输入密码'}></Input>
+                <Input size="larger" type='password' value={local.paw} onEnter={e => updateName()} onChange={e => local.paw = e} placeholder={lst('请输入密码')}></Input>
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
-                <Button size="larger" block onClick={e => updateName()}>保存</Button >
+                <Button size="larger" block onClick={e => updateName()}><S>保存</S></Button >
             </div>
         </div>
     }
@@ -245,7 +246,7 @@ export var Login = observer(function () {
     function renderWeixin() {
         return <>
             <WeixinOpen onChange={weixinOnChange}></WeixinOpen>
-            <div className="f-14 remark cursor flex-center" onMouseDown={e => local.step = 'phone'}>手机号登录</div>
+            <div className="f-14 remark cursor flex-center" onMouseDown={e => local.step = 'phone'}><S>手机号登录</S></div>
         </>
     }
     async function weixinOnChange(e: { exists: boolean, open: { openId: string, platform: string, nickname: string } }) {
@@ -291,21 +292,21 @@ export var Login = observer(function () {
     }, []);
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
-        <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? "诗云服务端" : '诗云'}</span></a></div>
+        <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? lst("诗云服务端") : lst('诗云')}</span></a></div>
         <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-40" : " w-350")} >
-            <div className="text-center gap-b-10 error">需要邀请码才能注册</div>
+            <div className="text-center gap-b-10 error"><S>需要邀请码才能注册</S></div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
-                {!['login', 'register', 'name'].includes(local.step) && <span>登录/注册&nbsp;诗云</span>}
-                {local.step == 'register' && <span>注册&nbsp;诗云</span>}
-                {local.step == 'login' && <span>登录&nbsp;诗云</span>}
-                {local.step == 'name' && <span>完善个人信息</span>}
+                {!['login', 'register', 'name'].includes(local.step) && <span><S>登录/注册</S>&nbsp;<S>诗云</S></span>}
+                {local.step == 'register' && <span><S>注册</S>&nbsp;<S>诗云</S></span>}
+                {local.step == 'login' && <span><S>登录</S>&nbsp;<S>诗云</S></span>}
+                {local.step == 'name' && <span><S>完善个人信息</S></span>}
             </div>}
-            {local.weixinOpen && local.step != 'name' && <div className="flex-center code-block padding-10">需要继续登录或注册完成微信帐号的绑定</div>}
+            {local.weixinOpen && local.step != 'name' && <div className="flex-center code-block padding-10"><S>需要继续登录或注册完成微信帐号的绑定</S></div>}
             {local.step == 'weixin-login' && renderWeixin()}
             {local.step == 'phone' && renderPhone()}
             {(local.step == 'login' || local.step == 'register') && renderLogin()}
             {local.step == 'name' && renderName()}
-            {!['login', 'register', 'name', 'weixin-login'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center">其他登录方式</Divider>
+            {!['login', 'register', 'name', 'weixin-login'].includes(local.step) && <><Divider style={{ marginTop: 20 }} align="center"><S>其他登录方式</S></Divider>
                 <div className="shy-login-open">
                     <Icon className={'cursor'} onClick={e => local.step = 'weixin-login'} size={40} icon={WechatSvg}></Icon>
                 </div></>}

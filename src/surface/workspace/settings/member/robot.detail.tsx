@@ -3,6 +3,7 @@ import React from "react";
 import { ArrowLeftSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { Markdown } from "rich/component/view/markdown";
+import { S } from "rich/i18n/view";
 import { autoImageUrl } from "rich/net/element.type";
 import { RobotInfo } from "rich/types/user";
 
@@ -13,7 +14,7 @@ export class RobotDetail extends React.Component<{ back: () => void, robot: Robo
         return <div>
             <div className="flex">
                 <div className="flex-fixed flex item-hover padding-w-3 round cursor" onMouseDown={e => this.props.back()}>
-                    <span className="size-24 gap-r-5 flex-center"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span>后退</span>
+                    <span className="size-24 gap-r-5 flex-center"><Icon size={16} icon={ArrowLeftSvg}></Icon> </span><span><S>后退</S></span>
                 </div>
             </div>
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
