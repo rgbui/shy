@@ -66,6 +66,9 @@ class Config {
         }
         return false;
     }
+    get lang(): "zh" | "en" | "jp" {
+        return 'zh'
+    }
 }
 export var config = new Config();
 window.shyConfig = config;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
-import { appLangProvider } from '../../i18n/provider';
 import { ShyUrl, SyHistory, UrlRoute } from '../history';
 import { Login } from './user/sign/in';
 import { LogOut } from './user/sign/out';
@@ -15,10 +14,11 @@ import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 import { isMobileOnly } from 'react-device-detect';
 import { Spin } from 'rich/component/view/spin';
 import { PageContentView } from './supervisor/content';
+import { ls } from 'rich/i18n/store';
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
-    await appLangProvider.import();
+    await ls.import();
     await channel.put('/device/sign');
     await surface.user.sign();
     if (surface.user.isSign) {
@@ -62,7 +62,7 @@ export function App() {
           <Route path={ShyUrl._404} exact component={View404}></Route>
           <Route path={[ShyUrl.ws, ShyUrl.resource, ShyUrl.wsResource, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
           <Route path={ShyUrl.invite} exact component={InviteView}></Route>
-          <Route path={[ShyUrl.pageContent,ShyUrl.wsPageContent]} component={PageContentView}></Route>
+          <Route path={[ShyUrl.pageContent, ShyUrl.wsPageContent]} component={PageContentView}></Route>
           <Route component={View404}></Route>
         </Switch>
       </Router>
@@ -77,7 +77,7 @@ export function App() {
           <Route path={ShyUrl._404} exact component={View404}></Route>
           <Route path={[ShyUrl.ws, ShyUrl.resource, ShyUrl.wsResource, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
           <Route path={ShyUrl.invite} exact component={InviteView}></Route>
-          <Route path={[ShyUrl.pageContent,ShyUrl.wsPageContent]} component={PageContentView}></Route>
+          <Route path={[ShyUrl.pageContent, ShyUrl.wsPageContent]} component={PageContentView}></Route>
           <Route component={View404}></Route>
         </Switch>
       </Router>
@@ -94,7 +94,7 @@ export function App() {
             <Route path={[ShyUrl.ws, ShyUrl.page, ShyUrl.resource, ShyUrl.wsResource, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
             <Route path={ShyUrl.invite} exact component={InviteView}></Route>
             <Route path={ShyUrl._404} exact component={View404}></Route>
-            <Route path={[ShyUrl.pageContent,ShyUrl.wsPageContent]} component={PageContentView}></Route>
+            <Route path={[ShyUrl.pageContent, ShyUrl.wsPageContent]} component={PageContentView}></Route>
             <Route component={View404}></Route>
           </Switch>
         </Router>
@@ -107,7 +107,7 @@ export function App() {
             <Route path={ShyUrl.invite} exact component={InviteView}></Route>
             <Route path={[ShyUrl.root, ShyUrl.resource, ShyUrl.wsResource, ShyUrl.ws, ShyUrl.page, ShyUrl.wsPage, ShyUrl.me, ShyUrl.discovery]} exact component={SurfaceView}></Route>
             <Route path={ShyUrl._404} exact component={View404}></Route>
-            <Route path={[ShyUrl.pageContent,ShyUrl.wsPageContent]} component={PageContentView}></Route>
+            <Route path={[ShyUrl.pageContent, ShyUrl.wsPageContent]} component={PageContentView}></Route>
             <Route component={View404}></Route>
           </Switch>
         </Router>

@@ -1,6 +1,5 @@
 
-import { AppLang } from "../../../../../i18n/enum";
-import { appLangProvider } from "../../../../../i18n/provider";
+
 import { ShyUrl, UrlRoute } from "../../../../history";
 import { CacheKey, sCache } from "../../../../../net/cache";
 import { surface } from "../../../store";
@@ -20,6 +19,7 @@ import "./style.less"
 import { ShyUtil } from "../../../../util";
 import { isMobileOnly } from "react-device-detect";
 import React from "react";
+import { ls } from "rich/i18n/store";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -163,7 +163,7 @@ export var Login = observer(function () {
                 <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
                         name={'code'}
-                        placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)}
+                        placeholder={ls.t('请输入手机短信验证码')}
                         onChange={e => local.verifyPhoneCode = e}
                         onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
                     {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}>获取短信验证码</Button>}
@@ -192,7 +192,7 @@ export var Login = observer(function () {
                 {local.loginType == 'code' && <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
                         name={'code'}
-                        placeholder={appLangProvider.getText(AppLang.PhoneVerifyCode)}
+                        placeholder={ls.t('请输入手机短信验证码')}
                         onChange={e => local.verifyPhoneCode = e}
                         onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
                     {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}>获取短信验证码</Button>}
