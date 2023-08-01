@@ -11,12 +11,9 @@ export class LogOut extends React.Component {
         if (this.isLogout == false) {
             var r = await channel.get('/sign/out');
             if (r.ok) {
+                surface.user?.removeTim();
                 surface.user = new User();
-                if (surface.workspace?.tim)
-                    surface.workspace.tim.close()
-                surface.workspace = null;
-                if (surface.user?.tim)
-                    surface.user.tim.close();
+                surface.workspace?.removeTim()
                 if (window.shyConfig.isPro) location.href = 'https://shy.live'
                 else UrlRoute.push(ShyUrl.root);
             }

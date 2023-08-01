@@ -24,7 +24,7 @@ import { pageItemStore } from "../sln/item/store/sync";
 import { PageLayoutType } from "rich/src/page/declare";
 import { SockType } from "../../../net/sock/type";
 import { Pid, PidType } from "./declare";
-import { CreateTim, Tim } from "../../../net/primus/tim";
+import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { workspaceNotifys } from "../../../services/tim";
 import { HttpMethod } from "../../../net/primus/http";
 
@@ -512,6 +512,9 @@ export class Workspace {
             }
             await self.tim.syncSend(HttpMethod.post, '/sync', data);
         })
+    }
+    async removeTim() {
+        await RemoveTim(this.dataServiceNumber || 'shy')
     }
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {

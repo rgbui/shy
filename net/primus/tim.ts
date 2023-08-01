@@ -34,7 +34,7 @@ export class Tim {
                 else {
                     var d = json.data;
                     var ses = self.events.findAll(g => g.url == json.url);
-                    
+
                     for (let i = 0; i < ses.length; i++) {
                         try {
                             ses[i].fn(d);
@@ -251,6 +251,13 @@ export async function CreateTim(serverNumber: string, url: string) {
         timPool.set(serverNumber, tim);
         await tim.load(url);
         return tim;
+    }
+}
+export async function RemoveTim(serverNumber: string) {
+    var tp = timPool.get(serverNumber);
+    if (tp) {
+        tp.close();
+        timPool.delete(serverNumber);
     }
 }
 

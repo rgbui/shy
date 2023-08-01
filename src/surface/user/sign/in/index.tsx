@@ -145,6 +145,7 @@ export var Login = observer(function () {
         else {
             await sCache.set(CacheKey.token, result.data.token, 180, 'd');
             surface.user.syncUserInfo(result.data.user);
+            await surface.user.createTim();
             local.failMsg = '';
             if (local.step == 'register') {
                 local.step = 'name';
@@ -174,7 +175,7 @@ export var Login = observer(function () {
                     <Input size="larger" name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={lst('请输入邀请码')}></Input>
                 </div>}
                 {local.step == 'register' && <div className='shy-login-box-agree'>
-                    <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label><Sp key={'同意诗云服务协议'}>同意诗云<a className="link-red" href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a className="link-red" href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></Sp></label>
+                    <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label><Sp text={'同意诗云服务协议'}>同意诗云<a className="link-red" href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a className="link-red" href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></Sp></label>
                 </div>}
                 <div className='shy-login-box-button'>
                     <Button size='medium' block onClick={e => loginOrRegister()}><S>注册</S></Button >
@@ -185,10 +186,10 @@ export var Login = observer(function () {
         else {
             return <div className='shy-login-box'>
                 <div className='shy-login-box-account'>
-                    <Input size={'larger'} onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={'请输入您的手机号'}></Input>
+                    <Input size={'larger'} onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} value={local.phone} name='phone' onChange={e => local.phone = e} placeholder={lst('请输入您的手机号')}></Input>
                 </div>
                 {local.loginType == 'paw' && <div className='shy-login-box-account'>
-                    <Input size="larger" onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={'请输入您的密码'}></Input>
+                    <Input size="larger" onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} type='password' value={local.paw} name='paw' onChange={e => local.paw = e} placeholder={lst('请输入您的密码')}></Input>
                 </div>}
                 {local.loginType == 'code' && <div className='shy-login-box-code'>
                     <Input size="larger" value={local.verifyPhoneCode}
@@ -259,6 +260,7 @@ export var Login = observer(function () {
                  */
                 await sCache.set(CacheKey.token, rd.token, 180, 'd');
                 surface.user.syncUserInfo(rd.user);
+                await surface.user.createTim();
                 return successAfter()
             }
         }

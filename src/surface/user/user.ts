@@ -6,7 +6,7 @@ import { UserStatus } from "rich/types/user";
 import { util } from "rich/util/util";
 import { sCache, CacheKey } from "../../../net/cache";
 import { HttpMethod } from "../../../net/primus/http";
-import { CreateTim, Tim } from "../../../net/primus/tim";
+import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { masterSock } from "../../../net/sock";
 import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl } from "../../history";
@@ -103,36 +103,41 @@ export class User {
             r.data.user.online = true;
             r.data.user.rk = r.data.rk;
             r.data.user.uk = r.data.uk;
-            Object.assign(this, r.data.user);
+            this.syncUserInfo(r.data.user);
         }
     }
-    async createTim() {
-        var url = await sCache.get(CacheKey.timUrl);
-        if (!url) {
-            var ms = await masterSock.get<{ url: string }, string>('/pid/provider/tim');
-            if (ms.ok) {
-                url = ms.data.url;
-                await sCache.set(CacheKey.timUrl, url);
-            }
-        }
-        this.tim = await CreateTim('shy', url);
-        var self = this;
-        var data = await this.getTimHeads();
-        data.sockId = this.tim.id;
-        await this.tim.syncSend(HttpMethod.post, '/sync', data);
-        this.tim.only('reconnected', async () => {
-            var data = await self.getTimHeads();
-            data.sockId = self.tim.id;
-            if (surface.workspace) {
-                data.wsId = surface.workspace.id;
-                if (surface.supervisor?.page) {
-                    data.viewUrl = surface.supervisor.page.elementUrl;
-                    data.viewEdit = surface.supervisor.page?.page?.isCanEdit || false;
+    async createTim(force?: boolean) {
+        if (!this.tim || force == true) {
+            var url = await sCache.get(CacheKey.timUrl);
+            if (!url) {
+                var ms = await masterSock.get<{ url: string }, string>('/pid/provider/tim');
+                if (ms.ok) {
+                    url = ms.data.url;
+                    await sCache.set(CacheKey.timUrl, url);
                 }
             }
-            self.tim.syncSend(HttpMethod.post, '/sync', data);
-        })
-        userTimNotify(this.tim);
+            this.tim = await CreateTim('shy', url);
+            var self = this;
+            var data = await this.getTimHeads();
+            data.sockId = this.tim.id;
+            await this.tim.syncSend(HttpMethod.post, '/sync', data);
+            this.tim.only('reconnected', async () => {
+                var data = await self.getTimHeads();
+                data.sockId = self.tim.id;
+                if (surface.workspace) {
+                    data.wsId = surface.workspace.id;
+                    if (surface.supervisor?.page) {
+                        data.viewUrl = surface.supervisor.page.elementUrl;
+                        data.viewEdit = surface.supervisor.page?.page?.isCanEdit || false;
+                    }
+                }
+                self.tim.syncSend(HttpMethod.post, '/sync', data);
+            })
+            userTimNotify(this.tim);
+        }
+    }
+    async removeTim() {
+        await RemoveTim('shy')
     }
     async getTimHeads() {
         var device = await sCache.get(CacheKey.device);
