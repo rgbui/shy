@@ -104,7 +104,7 @@ export class WorkspaceManage extends React.Component {
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14"><S>新页面默认选项</S></div>
-                <div className="remark f-12 gap-h-10"><S>在创建新页面时，默认开启以下配置</S></div>
+                <div className="remark f-12 gap-h-10"><S text='创建新页面时默认开启以下配置'>在创建新页面时，默认开启以下配置</S></div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1"><S>自适应宽度</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.isFullWidth', e)} checked={this.data.createPageConfig.isFullWidth}></Switch></div>
@@ -118,7 +118,7 @@ export class WorkspaceManage extends React.Component {
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.nav', e)} checked={this.data.createPageConfig.nav}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1"><S>显示关联引用(反链）</S></div>
+                    <div className="flex-auto  f-14 text-1"><S text='显示关联引用'>显示关联引用(反链）</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('createPageConfig.autoRefPages', e)} checked={this.data.createPageConfig.autoRefPages}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
@@ -129,7 +129,7 @@ export class WorkspaceManage extends React.Component {
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14"><S>空间默认首页</S></div>
-                <div className="remark f-12 gap-h-10"><S>通过自定义域名打开时，默认显示初始页面</S></div>
+                <div className="remark f-12 gap-h-10"><S text={'通过自定义域名打开时'}>通过自定义域名打开时，默认显示初始页面</S></div>
                 <div className="max-w-500">
                     <Input onMousedown={e => this.open(e)} value={this.data.defaultPageTitle} readonly></Input>
                 </div>

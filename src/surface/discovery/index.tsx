@@ -50,8 +50,8 @@ export var DiscoveryView = observer(function () {
                 // backgroundAttachment: 'fixed',
                 height: isMobileOnly ? 120 : 240
             }}>
-                <h3><S key='discovery title'>在 诗云 找到自己的社区</S></h3>
-                <p><S key='discovery description'>从游戏、音乐到教育，总有你的一片天地。</S></p>
+                <h3><S text='discovery title'>在 诗云 找到自己的社区</S></h3>
+                <p><S text='discovery description'>从游戏、音乐到教育，总有你的一片天地。</S></p>
             </div>
             <div className={"shy-discovery-ws padding-b-100" + (isMobileOnly ? " gap-l-20 gap-r-10 " : " gap-l-100 gap-r-90")}>
                 <h2><S>推荐社区</S></h2>

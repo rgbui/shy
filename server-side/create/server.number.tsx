@@ -40,9 +40,9 @@ export class ServerNumberView extends EventsComponent {
             <div className="flex"><Textarea value={this.sn.remark} onChange={e => { this.sn.remark = e; this.forceUpdate() }}></Textarea></div> */}
 
             <Divider></Divider>
-            <div className="flex"><label><S key="Mongodb">Mongodb(数据库)</S></label></div>
+            <div className="flex"><label><S text="Mongodb">Mongodb(数据库)</S></label></div>
             <div>
-                <div className="remark f-12"><S key='CheckMongodb'>检测是否能与mongodb正常连接，mongodb没设置帐号和密码可不填</S></div>
+                <div className="remark f-12"><S text='CheckMongodb'>检测是否能与mongodb正常连接，mongodb没设置帐号和密码可不填</S></div>
                 <div className="r-flex r-gap-h-10">
                     <div className="r-gap-r-5"><span className="flex-fixed flex-end w-100">IP:</span><div className="flex-auto"><Input value={this.sn.mongodb.ip} onChange={e => this.sn.mongodb.ip = e}></Input></div><span className="flex-fixed flex-end w-100"><S>端口</S>:</span ><div className="flex-auto"><InputNumber value={this.sn.mongodb.port} onChange={e => this.sn.mongodb.port = e}></InputNumber></div></div>
                     <div className="r-gap-r-5"><span className="flex-fixed flex-end w-100">帐号:</span><div className="flex-auto"><Input value={this.sn.mongodb.account} onChange={e => this.sn.mongodb.account = e}></Input></div><span className="flex-fixed flex-end w-100"><S>密码</S>:</span ><div className="flex-auto"><Input type="password" value={this.sn.mongodb.paw} onChange={e => this.sn.mongodb.paw = e}></Input></div></div>
@@ -50,8 +50,8 @@ export class ServerNumberView extends EventsComponent {
             </div>
 
             <Divider></Divider>
-            <div className="flex"><label><S key={'Redis'}>Redis(缓存)</S></label></div>
-            <div className="remark f-12"><S key={'CheckRedis'}>检测是否能与redis正常连接，redis没设置密码可不填</S></div>
+            <div className="flex"><label><S text={'Redis'}>Redis(缓存)</S></label></div>
+            <div className="remark f-12"><S text={'CheckRedis'}>检测是否能与redis正常连接，redis没设置密码可不填</S></div>
             <div className="r-flex r-gap-h-10">
                 <div className="r-gap-r-5"><span className="flex-fixed flex-end w-100">IP:</span><div className="flex-auto"><Input value={this.sn.redis.ip} onChange={e => this.sn.redis.ip = e}></Input></div><span className="flex-fixed flex-end w-100"><S>端口</S>:</span ><div className="flex-auto"><InputNumber value={this.sn.redis.port} onChange={e => this.sn.redis.port = e}></InputNumber></div></div>
                 <div className="r-gap-r-5">
@@ -62,9 +62,9 @@ export class ServerNumberView extends EventsComponent {
             </div>
 
             <Divider></Divider>
-            <div className="flex"><label><S key='ElasticSearch'>ElasticSearch(搜索引擎)</S></label></div>
+            <div className="flex"><label><S text='ElasticSearch'>ElasticSearch(搜索引擎)</S></label></div>
             <div className="r-flex r-gap-h-10">
-                <div className="remark f-12"><S key='CheckElasticSearch'>检测是否能与ElasticSearch正常连接</S></div>
+                <div className="remark f-12"><S text='CheckElasticSearch'>检测是否能与ElasticSearch正常连接</S></div>
                 <div className="r-gap-r-5"><span className="flex-fixed flex-end w-100"><S>网址</S>:</span><div className="flex-auto"><Input value={this.sn.search.url} onChange={e => this.sn.search.url = e}></Input></div></div>
             </div>
             <Divider></Divider>

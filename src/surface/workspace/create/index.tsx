@@ -76,7 +76,7 @@ export var WorkspaceCreateView = observer(function () {
                 <div className="gap-h-10 flex">
                     <Input value={local.service} onChange={e => local.service = e} placeholder={lst("服务号地址")} />
                 </div>
-                <div className="remark gap-h-10"><Sp key={'创建空间数据存储提示'}>数据将存储在您的电脑/局域网/服务器,请提前安装好<a href='https://shy.live/download' target="_blank">诗云服务端</a></Sp></div>
+                <div className="remark gap-h-10"><Sp text={'创建空间数据存储提示'}>数据将存储在您的电脑/局域网/服务器,请提前安装好<a href='https://shy.live/download' target="_blank">诗云服务端</a></Sp></div>
             </div>}
             <div className="gap-h-10 padding-t-20">
                 <Button size="larger" block ref={e => button = e} onClick={e => save()}><S>创建空间</S></Button>

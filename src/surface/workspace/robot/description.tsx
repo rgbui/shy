@@ -60,7 +60,7 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                 </div>
                 <Textarea
                     style={{ height: 500 }}
-                    placeholder={lst("介绍一下机器人,如何使用它，支持markdown语法")}
+                    placeholder={lst("介绍一下机器人","介绍一下机器人,如何使用它，支持markdown语法")}
                     value={robot.remark}
                     onChange={e => this.remark = e}
                 ></Textarea>

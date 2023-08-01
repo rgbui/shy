@@ -120,7 +120,7 @@ export class UserSettingProfile extends React.Component {
                     <Row>
                         <Col><h5><S>个人资料横幅</S></h5></Col>
                         <Col>
-                            <Remark><S key={'上传横幅图片要求'}>我们建议使用至少 600x240 大小的图片。您可上传小于 5 MB 的 PNG、JPG 或动态 GIF。</S></Remark>
+                            <Remark><S text={'上传横幅图片要求'}>我们建议使用至少 600x240 大小的图片。您可上传小于 5 MB 的 PNG、JPG 或动态 GIF。</S></Remark>
                         </Col>
                         <Col span={12} align='start' style={{ marginTop: 10 }} >
                             <Space>

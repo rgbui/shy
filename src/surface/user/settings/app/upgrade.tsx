@@ -21,7 +21,7 @@ export class ShyAppUpdate extends React.Component {
         return <div className="shy-app-update">
             <h2 className="h2"><S>更新日志</S></h2>
             <Divider></Divider>
-            <div className="remark"><S>记录着我们成长的脚步，也记录着大家对我们的期望</S></div>
+            <div className="remark"><S text='记录着我们成长的脚步'>记录着我们成长的脚步，也记录着大家对我们的期望</S></div>
             <div className="shy-app-update-content">
                 {this.loading && <Spin block></Spin>}
                 <Markdown md={this.md}></Markdown>

@@ -15,10 +15,12 @@ import { isMobileOnly } from 'react-device-detect';
 import { Spin } from 'rich/component/view/spin';
 import { PageContentView } from './supervisor/content';
 import { ls } from 'rich/i18n/store';
+import { blockStore } from 'rich/extensions/block/store';
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
     await ls.import();
+    await blockStore.import();
     await channel.put('/device/sign');
     await surface.user.sign();
     if (surface.user.isSign) {

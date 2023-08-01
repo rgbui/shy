@@ -165,7 +165,7 @@ export class WorkspaceSettingsView extends React.Component {
                             <div className='shy-settings-ws-avatar-hover'><S>添加图片</S></div>
                         </div>
                         <div>
-                            <p style={{ fontSize: 12, marginBottom: 10 }}><S>建议使用 200x200 以上的图片。</S></p>
+                            <p style={{ fontSize: 12, marginBottom: 10 }}><S text='建议使用200x200以上的图片'>建议使用 200x200 以上的图片。</S></p>
                             <Button ghost onClick={e => this.onUploadFace()}><S>上传图片</S></Button>
                         </div>
                     </Space>
@@ -218,7 +218,7 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'><S>导出数据</S></div>
-                <div className='remark f-12 gap-h-10'><S>导出空间所有的数据(暂不开放）</S></div>
+                <div className='remark f-12 gap-h-10'><S text='导出空间所有的数据'>导出空间所有的数据(暂不开放）</S></div>
                 <div className='shy-ws-settings-view-domain'>
                     <Button onClick={e => this.createWorkspaceTemplate(e)} ghost><S>导出数据</S></Button>
                 </div>
@@ -226,7 +226,7 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'><S>注销空间</S></div>
-                <div className='remark f-12 gap-h-10'><S>注销空间不可撤消，空间内的数据将自动清理</S></div>
+                <div className='remark f-12 gap-h-10'><S text='注销空间不可撤消'>注销空间不可撤消，空间内的数据将自动清理</S></div>
                 <div className='shy-ws-settings-view-domain'>
                     <Button onClick={e => this.cancelWorkspace(e)} danger ><S>注销空间</S></Button>
                 </div>

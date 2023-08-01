@@ -2,7 +2,7 @@ import { Events } from "rich/util/events";
 import { CacheKey, sCache } from "../../net/cache";
 import { SockResponse } from "../../net/sock/type";
 import { lst } from "rich/i18n/store";
-var VerifyOptions = {
+var VerifyOptions = () => ({
     phone: {
         regex: /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/,
         tip: lst('手机号格式不正确'),
@@ -13,7 +13,7 @@ var VerifyOptions = {
         tip: lst('手机短信验证码输入不正确'),
         nullTip: lst('手机短信验证码输入不能为空')
     }
-};
+});
 export class BaseService extends Events {
     /**
      * 
@@ -28,7 +28,7 @@ export class BaseService extends Events {
             for (let n in verifyParams) {
                 var isVerifyNull = n.startsWith('$');
                 let m = n.replace(/^\$/, '');
-                let op: { regex: RegExp, tip: string, nullTip: string } = VerifyOptions[m];
+                let op: { regex: RegExp, tip: string, nullTip: string } = VerifyOptions()[m];
                 if (typeof op == 'object') {
                     if (isVerifyNull == true && !verifyParams[n]) {
                         rs.ok = false;

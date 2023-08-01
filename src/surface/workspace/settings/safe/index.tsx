@@ -91,7 +91,7 @@ export class SafeSetting extends React.Component {
             <Divider></Divider>
             <div className="gap-h-10">
                 <div className="bold f-14 gap-t-10"><S>通用的设置</S></div>
-                <div className="remark f-12 gap-h-10"><S>设置后该空间将对互联网完全的公开。公开的空间可能会产生大量的流量消耗，请谨慎设置</S></div>
+                <div className="remark f-12 gap-h-10"><S text='设置空间公开提示'>设置后该空间将对互联网完全的公开。公开的空间可能会产生大量的流量消耗，请谨慎设置</S></div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto f-14"><S>公开至互联网</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
@@ -112,7 +112,7 @@ export class SafeSetting extends React.Component {
                     {this.data.accessProfile.checkJoinProtocol &&
                         <><div className="remark f-12 gap-h-10"><S>加入空间时，用户需要同意以下协议才可以成为成员。</S></div>
                             <div className="max-w-500">
-                                <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder="支持markdown语法" ></Textarea>
+                                <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder={lst("支持markdown语法")} ></Textarea>
                             </div>
                         </>
                     }

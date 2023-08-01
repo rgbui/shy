@@ -382,7 +382,7 @@ export class SitePublishView extends React.Component {
             </div>
             <div className="flex">
                 <span className="f-14 remark ">
-                    <Sp key={'公开至互联网后发布才有效果，发布后通过'} data={{url:`https://${domain}.shy.live`}}>公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.shy.live`} target="_blank">{`https://${domain}.shy.live`}</a>访问</Sp>
+                    <Sp text={'公开至互联网后发布才有效果'} data={{url:`https://${domain}.shy.live`}}>公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.shy.live`} target="_blank">{`https://${domain}.shy.live`}</a>访问</Sp>
             </span>
             </div>
             {this.data.publishConfig.abled && <div className="r-gap-h-10">

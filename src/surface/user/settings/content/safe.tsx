@@ -98,12 +98,12 @@ export class ShySafe extends React.Component {
                         <div className="flex-fixed w-100 flex-end flex-inline"><Switch onChange={e => this.change('experienceHelp', e)} checked={this.data.experienceHelp}></Switch></div>
                     </div>
                     <div className="text-1 f-12">
-                        <S>该设置允许我们收集您在使用诗云与屏幕进行交互记录，我们可以用该数据更好的完善诗云。</S>
+                        <S text='该设置允许我们收集您在使用诗云与屏幕进行交互记录'>该设置允许我们收集您在使用诗云与屏幕进行交互记录，我们可以用该数据更好的完善诗云。</S>
                     </div>
                 </div>
                 <Divider></Divider>
                 <div className="code-block gap-t-20 flex f-14 padding-20 round-8">
-                   <Sp key={'快来阅读我们服务协议'}>快来阅读一下我们的《<a className="link" href='https://shy.live/service_protocol' target="_blank">服务条款</a>》和《<a className="link" href='https://shy.live/privacy_protocol' target="_blank">隐私条款</a>》</Sp> 
+                   <Sp text={'快来阅读我们服务协议'}>快来阅读一下我们的《<a className="link" href='https://shy.live/service_protocol' target="_blank">服务条款</a>》和《<a className="link" href='https://shy.live/privacy_protocol' target="_blank">隐私条款</a>》</Sp> 
                 </div>
             </div>
         </div>

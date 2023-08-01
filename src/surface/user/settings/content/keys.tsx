@@ -133,8 +133,8 @@ export class ShyUserPks extends React.Component {
 
             <div className="remark gap-h-30">
                 <div><S>个人身份私钥分类</S></div>
-                <div><S key="生活交易私钥说明">1.生活交易 适用于交易安全方面的私钥</S></div>
-                <div><S key='日常行为私钥说明'>2.日常行为 适用于签名社区内的交互行为</S></div>
+                <div><S text="生活交易私钥说明">1.生活交易 适用于交易安全方面的私钥</S></div>
+                <div><S text='日常行为私钥说明'>2.日常行为 适用于签名社区内的交互行为</S></div>
             </div>
         </div>
     }

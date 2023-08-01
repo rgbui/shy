@@ -20,7 +20,7 @@ export class WorkspaceInvite extends React.Component {
             <Divider></Divider>
             <div className="bold f-14 gap-t-10"><S>通用的邀请链接</S></div>
             <div className="remark f-12 gap-h-10">
-                <S>任何得到此链接的人均可以加入这个空间(空间没有人数上限的限制)，你也可以</S><a className="link undeline cursor" onMouseDown={e => this.createInvite(true)}><S>重置链接</S></a>
+                <S text='得到此链接的人均可以加入这个空间'>任何得到此链接的人均可以加入这个空间(空间没有人数上限的限制)，你也可以</S><a className="link undeline cursor" onMouseDown={e => this.createInvite(true)}><S>重置链接</S></a>
             </div>
             <div className="flex max-w-500">
                 <Input ref={e => this.input = e}

@@ -102,7 +102,7 @@ export class RobotList extends React.Component {
             </div>
             <Divider></Divider>
             <div className="flex gap-h-10">
-                <span className="remark"><S>创建专属于自已的知识专家、指令执行机器人</S></span>
+                <span className="remark"><S text='创建专属于自已的机器人'>创建专属于自已的知识专家、指令执行机器人</S></span>
                 <span className="size-20 cursor item-hover round flex-center flex-fixed pointer" onMouseDown={e => this.add(e)}><Icon size={18} icon={PlusSvg}></Icon></span>
             </div>
             <div className="">

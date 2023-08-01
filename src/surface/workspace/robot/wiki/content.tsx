@@ -149,7 +149,7 @@ export class ContentViewer extends React.Component {
                             doc.embedding = false;
                             autoSave();
                         }}></Textarea>
-                        <div className="remark f-12 gap-h-5"><S>支持markdown语法，限16000字内</S></div>
+                        <div className="remark f-12 gap-h-5"><S text='支持markdown语法少于16000字'>支持markdown语法，限16000字内</S></div>
                     </div>
                 })}
             </div>

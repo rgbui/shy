@@ -47,7 +47,7 @@ export var InviteCode = observer(function () {
                 </div>
             </div>
                 <div className="remark gap-w-10 gap-b-10">
-                    <S key={'邀请成功福利说明'}>邀请成功后，可享受被邀请者消费的5%返利。可提现，福利终身有效。</S>
+                    <S text={'邀请成功福利说明'}>邀请成功后，可享受被邀请者消费的5%返利。可提现，福利终身有效。</S>
                 </div>
             </>
             }
