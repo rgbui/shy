@@ -28,7 +28,6 @@ class PageService extends BaseService {
         var sock = await wss.getArgsSock(args);
         return await sock.post('/page/item/recover', args);
     }
-
     @get('/page/items')
     async pageItems(args) {
         if (!args) args = {}
@@ -119,7 +118,6 @@ class PageService extends BaseService {
             wsId: surface.workspace.id
         });
     }
-
     @get('/view/snap/list')
     async viewSnapList(args) {
         if (!args) args = {}
@@ -144,7 +142,6 @@ class PageService extends BaseService {
     async viewSnapRollup(args) {
         return surface.workspace.sock.post('/view/snap/rollup', { ...args, wsId: surface.workspace.id });
     }
-
     @post('/screenshot/png')
     async screenShotPng(args) {
         return surface.workspace.sock.post('/screenshot/png', { ...args, wsId: surface.workspace.id });
@@ -155,6 +152,8 @@ class PageService extends BaseService {
     }
     @post('/import/page')
     async importPage(args) {
-        return surface.workspace.sock.post('/import/page', { ...args, wsId: surface.workspace.id });
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return sock.post('/import/page', { ...args });
     }
 }
