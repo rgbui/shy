@@ -3,7 +3,7 @@ import { surface } from "../../store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer } from "mobx-react";
 import { UserProfile } from "../../user/profile";
-import { CubesSvg, TrashSvg } from "rich/component/svgs";
+import { ChevronDownSvg, CubesSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useTemplateView } from "rich/extensions/template";
 import { config } from "../../../../common/config";
@@ -26,7 +26,7 @@ export var SlnView = observer(function () {
             document.removeEventListener('keyup', keyup);
             document.removeEventListener('mousemove', move);
         }
-    },[])
+    }, [])
     async function openTemplate(e: React.MouseEvent) {
         var ut = await useTemplateView();
         if (ut) {
@@ -72,10 +72,33 @@ export var SlnView = observer(function () {
             </div>
         else return <></>
     }
+    function renderFavs() {
+        if (surface.workspace?.favs?.length > 0) {
+            return <div className="shy-ws-pages-item visible-hover padding-b-10">
+                <div className="shy-ws-pages flex padding-w-10 padding-b-3">
+                    <span onMouseDown={e => {
+                        e.stopPropagation();
+                        surface.workspace.favSpread = !surface.workspace.favSpread;
+                    }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor flex"><S>星标收藏</S>
+                        <span className={"size-20 cursor visible  flex-center ts " + (surface.workspace.favSpread ? " " : " angle-90-")}>
+                            <Icon size={16} icon={ChevronDownSvg}></Icon>
+                        </span>
+                    </span>
+                </div>
+                {surface.workspace.favSpread && <div>
+                    {surface.workspace?.favs.map(ws => {
+                        var View = surface.sln.getMimeViewComponent(ws.mime);
+                        return <View key={ws.id} item={ws} deep={1} ></View>
+                    })}
+                </div>}
+            </div>
+        }
+    }
     return <div className='shy-wss h100' onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
         {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + (surface.workspace.slnStyle || 'note')}>
             {!(surface.isPubSite && surface.isPubSiteDefineBarMenu) && <WorkspaceProfile ></WorkspaceProfile>}
             <div className='shy-ws-items' ref={e => surface.sln.el = e}>
+                {renderFavs()}
                 {surface.workspace.childs.map(ws => {
                     var View = surface.sln.getMimeViewComponent(ws.mime);
                     return <View key={ws.id} item={ws} deep={-1} ></View>

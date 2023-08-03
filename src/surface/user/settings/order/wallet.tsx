@@ -36,7 +36,7 @@ export class ShyWallet extends React.Component {
     async coupon(e: React.MouseEvent) {
         var g = await useForm({
             title: ls.t('兑换券'),
-            remark: lst('请注意，兑换码只能兑换一次'),
+            remark: lst('请注意兑换码只能兑换一次','请注意，兑换码只能兑换一次'),
             fields: [
                 { name: "code", text: lst('兑换码'), type: 'input' }
             ],

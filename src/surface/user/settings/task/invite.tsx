@@ -7,7 +7,7 @@ import { Avatar } from "rich/component/view/avator/face";
 import { Pagination } from "rich/component/view/pagination";
 import { SpinBox } from "rich/component/view/spin";
 import { InviteCode } from "./inviteCode";
-import { S } from "rich/i18n/view";
+import { S, Sp } from "rich/i18n/view";
 
 @observer
 export class InviteList extends React.Component {
@@ -35,7 +35,7 @@ export class InviteList extends React.Component {
             <div className="gap-h-20">
                 {this.search.list.length == 0 && <div className="flex-center gap-h-20"><S>还没有邀请好友</S></div>}
                 {this.search.loading && <SpinBox ></SpinBox>}
-                {this.search.list.length > 0 && <div className="flex"><span className="item-hover padding-w-5 padding-h-2 round remark ">共邀请{this.search.total}人</span></div>}
+                {this.search.list.length > 0 && <div className="flex"><span className="item-hover padding-w-5 padding-h-2 round remark "><Sp text='共邀请{total}人' data={{total:this.search.total}}>共邀请{this.search.total}人</Sp></span></div>}
                 {this.search.list.map(r => {
                     return <div className="gap-h-10 item-hover round padding-10" key={r.id}>
                         <Avatar size={40} userid={r.id}></Avatar>

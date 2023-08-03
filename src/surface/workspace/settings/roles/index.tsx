@@ -241,9 +241,9 @@ export class WorkspaceRoles extends React.Component {
                     {/*<Col span={12} align={'end'}><Icon icon='elipsis:sy'></Icon></Col> */}
                 </Row></div>
                 <div className="shy-ws-roles-edit-tab-head">
-                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}><S>显示</S></a>
+                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == lst('所有人') && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}><S>显示</S></a>
                     <a onMouseDown={e => this.mode = 'permission'} className={this.mode == 'permission' ? "hover" : ""}><S>权限</S></a>
-                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == '所有人' && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}><S>管理成员</S></a>
+                    <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'user'} className={(this.editRole?.text == lst('所有人') && !this.editRole?.id ? "disabled " : "") + (this.mode == 'user' ? "hover" : "")}><S>管理成员</S></a>
                 </div>
                 <div className="shy-ws-roles-edit-tab-page">
                     {this.mode == 'info' && this.renderRoleInfo()}
@@ -317,7 +317,7 @@ export class WorkspaceRoles extends React.Component {
             <Divider></Divider>
             <Row>
                 <Col><label><S>角色颜色</S><i>*</i></label></Col>
-                <Col><Remark><S>成员将使用角色列表中最靠前的角色的颜色。</S></Remark></Col>
+                <Col><Remark><S text='成员将使用角色列表中最靠前的角色的颜色'>成员将使用角色列表中最靠前的角色的颜色。</S></Remark></Col>
                 <Col><div className='shy-ws-role-info-color-box'>
                     <div className='shy-ws-role-info-color' style={{
                         backgroundColor: this.editRole.color

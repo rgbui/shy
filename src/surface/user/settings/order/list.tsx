@@ -12,8 +12,8 @@ import { Rect } from "rich/src/common/vector/point";
 import { usePayOrder } from "../../../../component/pay";
 import { Pagination } from "rich/component/view/pagination";
 import { Spin } from "rich/component/view/spin";
-import { S } from "rich/i18n/view";
-import { ls } from "rich/i18n/store";
+import { S, Sp } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
 
 export class ShyPayList extends React.Component {
     page: number = 1;
@@ -56,24 +56,24 @@ export class ShyPayList extends React.Component {
         var self = this;
         function getKind(order) {
             var kind = order.kind;
-            if (kind == 'fill') return ls.t('充值')
-            else if (kind == 'meal-1') return ls.t('升级团队版')
-            else if (kind == 'meal-2') return ls.t('升级社区版')
+            if (kind == 'fill') return lst('充值')
+            else if (kind == 'meal-1') return lst('升级团队版')
+            else if (kind == 'meal-2') return lst('升级社区版')
         }
         function getStatus(order) {
             var status = order.status;
-            if (status == 'created') return ls.t('等待支付')
-            else if (status == 'payed') return ls.t('已支付')
+            if (status == 'created') return lst('等待支付')
+            else if (status == 'payed') return lst('已支付')
         }
         async function openOrder(order, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) },
                 [
-                    { name: 'repay', icon: UnpaySvg, disabled: order.status == 'payed' ? true : false, text: ls.t('重新支付') },
-                    { name: 'delete', icon: TrashSvg, text: ls.t('删除') }
+                    { name: 'repay', icon: UnpaySvg, disabled: order.status == 'payed' ? true : false, text: lst('重新支付') },
+                    { name: 'delete', icon: TrashSvg, text: lst('删除') }
                 ]);
             if (r?.item) {
                 if (r.item.name == 'delete') {
-                    if (await Confirm(ls.t('确认删除订单'))) {
+                    if (await Confirm(lst('确认删除订单'))) {
                         await channel.del('/user/del/order', { orderId: order.orderId });
                         await self.load();
                     }
@@ -95,9 +95,9 @@ export class ShyPayList extends React.Component {
                 <div className='shy-ws-member-head'>
                     <div className="flex">
                         <div className="flex-auto">
-                            <span style={{ fontSize: 14 }}>订单{this.total > 0 ? '共' + this.total + '条记录' : ''}</span>
+                            <span style={{ fontSize: 14 }}><S>订单</S>{this.total > 0 && <Sp text='共{total}条记录' data={{ total: this.total }}>{'共' + this.total + '条记录'}</Sp>}</span>
                         </div>
-                        <div className="flex-fixed"> <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.load()} placeholder={ls.t('搜索订单...')}></Input></div>
+                        <div className="flex-fixed"> <Input style={{ width: 180 }} value={this.word} onChange={e => this.word = e} onEnter={e => this.load()} placeholder={lst('搜索订单...')}></Input></div>
                     </div>
                 </div>
                 {this.loading && <Spin block></Spin>}
@@ -114,7 +114,7 @@ export class ShyPayList extends React.Component {
                                     <td>{order.payedDate ? dayjs(order.payedDate).format('YYYY.MM.DD HH:mm') : ""}</td>
                                     <td>{getStatus(order)}</td>
                                     <td>{order.createDate ? dayjs(order.createDate).format('YYYY.MM.DD HH:mm') : ""}</td>
-                                    <td><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor"><Icon size={16} icon={DotsSvg}></Icon></span></td>
+                                    <td><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor size-24"><Icon size={16} icon={DotsSvg}></Icon></span></td>
                                 </tr>
                             })}
                         </tbody>

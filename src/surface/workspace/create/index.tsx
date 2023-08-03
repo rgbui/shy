@@ -59,7 +59,7 @@ export var WorkspaceCreateView = observer(function () {
             <div className="h2 flex-center"><S>创建您的社区空间</S></div>
             <div className="remark flex-center gap-b-20">
                 {/* 创造、记录、管理、经营、沟通、协作无限 */}
-                <S key={'创建社区空间提示'}>沉淀知识、积累朋友、共同进步</S>
+                <S text={'创建社区空间提示'}>沉淀知识、积累朋友、共同进步</S>
             </div>
             <div className="gap-h-10">
                 <Input placeholder={lst("空间名称")} value={local.text} onChange={e => local.text = e} />

@@ -129,6 +129,8 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
+    public favs: PageItem[] = [];
+    public favSpread: boolean = true;
     public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
@@ -218,7 +220,9 @@ export class Workspace {
             slnStyle: observable,
             isOwner: computed,
             isMember: computed,
-            publishConfig: observable
+            publishConfig: observable,
+            favSpread: observable,
+            favs: observable,
         })
     }
     private _sock: Sock;
@@ -305,6 +309,13 @@ export class Workspace {
                     this.childs.push(pt);
                 })
             }
+            else if (n == 'favs') {
+                data[n].each(it => {
+                    var pt = new PageItem();
+                    pt.load(it);
+                    this.favs.push(pt);
+                })
+            }
             else {
                 this[n] = data[n];
             }
@@ -378,7 +389,10 @@ export class Workspace {
                 var pages = rr.data.list;
                 pages.sort(this.pageSort)
                 pages = ShyUtil.flatArrayConvertTree(pages);
-                this.load({ childs: pages });
+                var favs = rr.data.favs;
+                favs.sort(this.pageFSort);
+                favs = ShyUtil.flatArrayConvertTree(favs);
+                this.load({ childs: pages, favs });
             }
         }
     }
@@ -387,14 +401,16 @@ export class Workspace {
         else if (x.at == y.at) return 0;
         else return -1;
     }
+    pageFSort = (x, y) => {
+        if (x.fat > y.fat) return 1;
+        else if (x.fat == y.fat) return 0;
+        else return -1;
+    }
     async onNotifyViewOperater(data: UserAction) {
         var pv = PageViewStores.getPageViewStore(data.elementUrl);
         if (pv?.page) {
             pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
         }
-    }
-    get pages() {
-        return this.pages.map(pa => pa.get());
     }
     async onCreateInvite(isCopy?: boolean, force?: boolean) {
         if (force == true || !this.invite) {

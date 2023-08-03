@@ -88,7 +88,7 @@ export class SelectPayView extends EventsComponent {
             <div className="h3 gap-h-10">{text}</div>
             <div className="shy-pay-items flex-top">
                 {this.orderInfo.kind == 'fill' && <div className="r-padding-h-5  round l-20">
-                    <div><S>按量付费，适用于轻度知识工作者</S></div>
+                    <div><S text='按量付费适用于轻度知识工作者'>按量付费，适用于轻度知识工作者</S></div>
                     {/* <div>不限空间、不限人数、不限功能、按量付费</div>
                     <div>价格低廉，按需付费，充一次用很久</div> */}
                 </div>}
