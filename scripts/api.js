@@ -313,7 +313,7 @@ push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);
 push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, templateUrl: string, text?: string, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
 push('/get/workspace/template', '{wsId: string, pageId?: string}', 'SockResponse<{template:Record<string,any>}>', ['get'])
-push('/page/items', '{ws:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[] }>', ['get'])
+push('/page/items', '{ws:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[],favs:any[]}>', ['get'])
 push('/page/item/subs', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/parent/ids', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ parentIds:string[],exists:boolean }>', ['get'])
 push('/page/parent/subs', '{ws:LinkWs,wsId?:string,parentIds:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
@@ -356,6 +356,6 @@ push('/shy/share', '{type: "weibo"|"updateTimelineShareData"|"updateAppMessageSh
 push('/search/workspace/template', '{ classify: string,tags: string[],mime: string,page: number,word: string,size: number}', 'SockResponse<{page:number,list:any[],total:number,size:number}>', ['get']);
 push('/workspace/template/useCount', '{id:string}', 'SockResponse<void>', ['post']);
 push('/import/page', '{text?: string,templateUrl?: string,wsId?:string,parentId?:string,pageId?:string,}', 'SockResponse<void>', ['post'])
-
+push('/query/my/wss','{}','{wss:any[]}',['query'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
