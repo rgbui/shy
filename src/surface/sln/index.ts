@@ -34,9 +34,10 @@ export class Sln extends Events {
     isDrag: boolean = false;
     keyboardPlate = new KeyboardPlate();
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
+        var el = event.target as HTMLElement;
         var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) }, await item.getPageItemMenus());
         if (menuItem) {
-            item.onContextmenuClickItem(menuItem.item, menuItem.event);
+            item.onContextmenuClickItem(menuItem.item, menuItem.event, el);
         }
     }
     async onMousedownItem(item: PageItem, event: MouseEvent) {

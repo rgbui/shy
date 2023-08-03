@@ -12,7 +12,7 @@ import { channel } from "rich/net/channel";
 import { PageLayoutType, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import lodash from "lodash";
-import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
+import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Confirm } from "rich/component/lib/confirm";
@@ -20,10 +20,13 @@ import { useForm } from "rich/component/view/form/dialoug";
 import { getPageItemElementUrl } from "./util";
 import { Page } from "rich/src/page";
 import { lst } from "rich/i18n/store";
+import { useWsPicker } from "rich/extensions/ws/index";
 
 export class PageItem {
     id: string = null;
     sn?: number = null;
+    fav?: boolean = false;
+    fat?: number;
     icon?: IconArguments = null;
     childs?: PageItem[] = [];
     text: string = ''
@@ -323,6 +326,27 @@ export class PageItem {
             nextItem.onOpenItem();
         }
     }
+    async onFav(fav: boolean) {
+        if (fav) await pageItemStore.addFav(this);
+        else await pageItemStore.removeFav(this);
+    }
+    async onMove(el: HTMLElement) {
+        var r = await useWsPicker({ roundArea: Rect.fromEle(el) });
+        if (r) {
+            console.log('ggg', r, surface.workspace);
+            var g = await channel.post('/create/template', { config: { pageId: this.id } })
+            if (g.ok) {
+                var rr = await channel.post('/import/page', {
+                    text: this.text,
+                    templateUrl: g.data.file.url,
+                    wsId: r.id
+                });
+                if (rr.ok) {
+                    ShyAlert(lst('移动成功'))
+                }
+            }
+        }
+    }
     async getPageItemMenus() {
         var items: MenuItem<string>[] = [];
         if (this.mime == Mime.pages) {
@@ -362,6 +386,11 @@ export class PageItem {
                 icon: LogoutSvg,
                 text: lst('在右侧边栏打开')
             });
+            // items.push({
+            //     name: 'fav',
+            //     icon: { name: 'bytedance-icon', code: 'star' },
+            //     text: this.fav ? lst('取消收藏') : lst('收藏'),
+            // });
             items.push({
                 type: MenuItemType.divide,
             });
@@ -369,6 +398,12 @@ export class PageItem {
                 name: 'link',
                 icon: LinkSvg,
                 text: lst('复制访问链接')
+            });
+            items.push({
+                name: 'move',
+                iconSize: 18,
+                icon: { name: 'bytedance-icon', code: 'corner-up-right' },
+                text: lst('移动')
             });
             items.push({
                 type: MenuItemType.divide,
@@ -397,20 +432,20 @@ export class PageItem {
                 items.push({
                     type: MenuItemType.divide,
                 });
+                if (this.editDate) items.push({
+                    type: MenuItemType.text,
+                    text: lst('编辑于 ') + util.showTime(this.editDate)
+                });
                 var r = await channel.get('/user/basic', { userid: this.editor });
                 if (r?.data?.user) items.push({
                     type: MenuItemType.text,
                     text: lst('编辑人 ') + r.data.user.name
                 });
-                if (this.editDate) items.push({
-                    type: MenuItemType.text,
-                    text: lst('编辑于 ') + util.showTime(this.editDate)
-                });
             }
         }
         return items;
     }
-    async onContextmenuClickItem(menuItem: MenuItem<string>, event: MouseEvent) {
+    async onContextmenuClickItem(menuItem: MenuItem<string>, event: MouseEvent, sourceEl: HTMLElement) {
         switch (menuItem.name) {
             case 'copy':
                 this.onCopy();
@@ -467,13 +502,19 @@ export class PageItem {
                 break;
             case 'link':
                 CopyText(this.url);
-                ShyAlert(lst(lst('访问链接已复制')))
+                ShyAlert(lst('访问链接已复制'))
                 break;
             case 'openRight':
                 var page: Page = await channel.air('/page/slide', { elementUrl: this.elementUrl })
                 if (page) {
                     await channel.air('/page/slide', { elementUrl: null });
                 }
+                break;
+            case 'fav':
+                this.onFav(this.fav ? false : true);
+                break;
+            case 'move':
+                this.onMove(sourceEl)
                 break;
         }
     }
@@ -604,6 +645,7 @@ export class PageItem {
         this.childs.arrayJsonEach('childs', predict)
     }
 }
+
 
 
 

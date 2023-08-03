@@ -48,8 +48,7 @@ class MessageCenter {
     @air('/page/open')
     async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, blockId?: string, force?: boolean } }) {
         var { item, elementUrl } = args;
-        if (item)
-        {
+        if (item) {
             if ((item as PageItem)?.elementUrl) elementUrl = (item as PageItem).elementUrl;
             else {
                 var r = await channel.get('/page/query/info', {
@@ -463,5 +462,12 @@ class MessageCenter {
                 }
             })
         }
+    }
+
+    @query('/query/my/wss')
+    async queryWss(args: {}) {
+        var list = surface.wss.findAll(g => g.owner && g.owner == surface.user.id || !g.owner && g.creater == surface.user.id);
+        lodash.remove(list, g => g.id == surface.workspace.id)
+        return { wss: list };
     }
 }
