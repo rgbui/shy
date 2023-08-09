@@ -10,10 +10,17 @@ a {
     color          : #e16259;
     text-decoration: none;
 }
-em,i{
+
+em,
+i {
     font-style: normal;
-    
+
 }
+
+p {
+    margin: 0px;
+}
+
 @padding-gap: {
     @media (min-width: 1200px) {
         padding-left : 180px;
@@ -62,7 +69,6 @@ em,i{
     &-head {
         @padding-gap();
         align-items     : center;
-        background-color: #f2f3f5;
         box-sizing      : border-box;
         display         : flex;
         height          : 56px;
@@ -71,31 +77,39 @@ em,i{
         top             : 0;
         width           : 100%;
         z-index         : 99;
+        border-bottom   : 1px solid rgba(0, 0, 0, 0.05);
+        backdrop-filter : blur(24px);
+        background-color: hsla(0, 0%, 100%, .8);
 
         &-navs {
             display        : flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             align-items    : center;
-            padding-right  : 50px;
+
 
             a {
                 border-radius: 5px;
-                color        : #3e3e3e;
+                color        : rgb(17, 24, 39);
                 cursor       : pointer;
                 display      : inline-block;
                 height       : 30px;
                 line-height  : 30px;
                 margin-left  : 30px;
                 text-align   : center;
-                min-width    : 80px;
+                padding-left : 15px;
+                padding-right: 15px;
+                margin-left  : 10px;
+                margin-right : 10px;
+                font-size    : 14px;
+                font-weight  : 500;
+
+                &:hover {
+                    background-color: rgba(100, 116, 139, .1);
+                }
             }
         }
 
-        &.float {
-            backdrop-filter : blur(10px);
-            background-color: hsla(0, 0%, 100%, .65);
-            box-shadow      : 0 4px 8px rgba(0, 0, 0, .08);
-        }
+        &.float {}
     }
 }
 
@@ -191,123 +205,84 @@ em,i{
     }
 }
 
-.shy-site-content {
-    margin-top    : 56px;
-    padding-bottom: 100px;
+.shy-site-block {
 
-    .shy-site-block {
-        @padding-gap();
-        margin : 0px;
-        padding: 0px;
-    }
-}
-
-.shy-site-slogan {
-    padding-top: 80px;
-    position   : relative;
-
-
-    >p {
-        margin: 0px;
-    }
-
-    &-title {
-        position   : relative;
-        z-index    : 2;
-        text-align : center;
-        font-size  : 40px;
-        line-height: 64px;
-        color      : rgba(0, 0, 0);
-    }
-
-    &-content {
-        position   : relative;
-        z-index    : 2;
-        text-align : center;
-        font-size  : 16px;
-        color      : rgba(0, 0, 0, .7);
+    h1,
+    h2,
+    h3,
+    h4 {
         font-weight: 500;
-        margin     : 20px 0px !important;
     }
 
-    &-button {
-        position  : relative;
-        z-index   : 2;
-        margin    : 10px 0px !important;
-        text-align: center;
-
-        a {
-            display         : inline-flex;
-            background-color: #e16259;
-            color           : #fff;
-            border-radius   : 4px;
-            font-size       : 16px;
-            padding         : 8px 20px;
-            cursor          : pointer;
-            border          : 0px;
-            outline         : none;
-        }
-
+    >* {
+        @padding-gap();
     }
 
-    &-remark {
-        position  : relative;
-        z-index   : 2;
-        font-size : 12px;
-        text-align: center;
-        color     : rgba(0, 0, 0, .6);
+    &.bg-gray-white {
+        background-image: linear-gradient(to bottom, #f2f3f5, #fff);
     }
 
-    &-app {
-        position       : relative;
-        z-index        : 2;
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        margin-top     : 60px;
-
-        img {
-            padding      : 10px;
-            background   : rgb(255, 255, 255);
-            border-radius: 16px;
-            box-shadow   : rgba(79, 77, 192, 0.15) 0px 0px 60px -8px;
-            max-width    : 100%;
-        }
+    &.bg-white-gray {
+        background-image: linear-gradient(to bottom, #fff, #f2f3f5);
     }
 
-    &-bg {
-        pointer-events: none;
-
-        .shy-site-green-filter {
-            z-index                  : 1;
-            position                 : absolute;
-            top                      : 0%;
-            right                    : 0%;
-            width                    : 921px;
-            height                   : 921px;
-            animation-direction      : alternate;
-            animation-duration       : 3s;
-            animation-iteration-count: infinite;
-            animation-name           : filter-green-animate;
-            animation-timing-function: ease-in-out;
-            opacity                  : .5;
-        }
-
-        .shy-site-purple-filter {
-            z-index                  : 1;
-            position                 : absolute;
-            right                    : 358px;
-            bottom                   : 458px;
-            width                    : 615px;
-            height                   : 615px;
-            animation-direction      : alternate;
-            animation-duration       : 3s;
-            animation-iteration-count: infinite;
-            animation-name           : filter-purple-animate;
-            animation-timing-function: ease-in-out;
-            opacity                  : .5;
-        }
+    &.bg-gray-2 {
+        background-image: linear-gradient(to bottom, #f2f3f5, lighten(#B84C4E, 40%));
     }
+
+    &.bg-2-gray {
+        background-image: linear-gradient(to bottom, lighten(#B84C4E, 40%), #f2f3f5);
+    }
+
+    .text-linear-gradient {
+        background-clip        : text;
+        -webkit-background-clip: text;
+        background-image       : linear-gradient(91.23deg, #ff76ad 2.75%, #af41f0 80.76%);
+        color                  : transparent !important;
+    }
+
+
+    &.bg-2 {
+        background: #bbe0fa;
+    }
+
+    &.bg-3 {
+        background: #e9eff5;
+        color     : #101517;
+    }
+
+    &.bg-4 {
+        background: lighten(#B84C4E, 40%)
+    }
+
+
+    .shy-site-block-head {
+        font-size    : 36px;
+        font-weight  : 500;
+        margin-bottom: 20px;
+        color        : #000;
+    }
+
+    .shy-site-block-remark {
+        font-size: 24px;
+        color    : rgba(55, 53, 47, 0.5);
+    }
+
+    .shy-site-block-card {
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter        : blur(20px);
+        background-color       : rgba(255, 255, 255, .8);
+        border                 : 1px solid rgba(0, 0, 0, .12);
+        border-radius          : 0.6rem;
+        box-shadow             : 0 18px 36px -6px rgba(0, 0, 0, .06), 0 6px 12px -6px rgba(0, 0, 0, .06);
+    }
+
+    video {
+        border       : 1px solid rgba(0, 0, 0, .12);
+        border-radius: 0.6rem;
+        box-shadow   : 0 18px 36px -6px rgba(0, 0, 0, .06), 0 6px 12px -6px rgba(0, 0, 0, .06);
+    }
+
 }
 
 @keyframes filter-green-animate {
@@ -323,77 +298,7 @@ em,i{
 }
 
 
-.shy-site-price {
-    padding-top: 50px;
 
-    h2 {
-        font-size  : 36px;
-        text-align : center;
-        font-weight: normal;
-    }
-
-    h3,
-    h4 {
-        text-align: center;
-        font-size : 28px;
-    }
-
-    p {
-        text-align: center;
-    }
-
-    .shy-site-price-option {
-        display        : flex;
-        justify-content: flex-start;
-        align-items    : center;
-        font-size      : 14px;
-
-        >label {
-            display   : inline-block;
-            text-align: left;
-            flex-grow : 1.0;
-        }
-
-        >span {
-            display   : inline-block;
-            flex-grow : 1.0;
-            text-align: right;
-        }
-    }
-
-    .shy-site-price-remark {
-        // color     : rgba(0, 0, 0, .7);
-        text-align: left;
-        font-size : 14px;
-    }
-
-    .shy-site-price-items {
-        padding-top    : 20px;
-        display        : flex;
-        justify-content: flex-start;
-        align-items    : stretch;
-    }
-
-    .shy-site-price-item {
-        width           : 33.3%;
-        // flex-grow    : 1.0;
-        // flex-shrink  : 1.0;
-        box-sizing      : border-box;
-        padding         : 20px 23.33px 20px 20px;
-        background      : rgb(255, 255, 255);
-        border-radius   : 16px;
-        box-shadow      : rgba(79, 77, 192, 0.15) 0px 0px 60px -8px;
-        margin          : 0px 10px;
-
-        &:first-child {
-            margin-left: 0px;
-        }
-
-        &:last-child {
-            margin-right: 0px;
-        }
-    }
-}
 
 .shy-site-price-features {
     display: block;
@@ -412,20 +317,12 @@ em,i{
 .shy-site-download {
     padding-top: 50px;
 
-    h2 {
-        font-size  : 36px;
-        text-align : center;
-        font-weight: normal;
-    }
-
-    h3 {
-        text-align: center;
-    }
 
     &-platforms {
         padding-top    : 20px;
         display        : flex;
         justify-content: flex-start;
+        justify-content: center;
         align-items    : stretch;
     }
 
@@ -433,10 +330,7 @@ em,i{
         flex-grow    : 1.0;
         flex-shrink  : 1.0;
         box-sizing   : border-box;
-        padding      : 20px 23.33px 20px 20px;
-        background   : rgb(255, 255, 255);
-        border-radius: 16px;
-        box-shadow   : rgba(79, 77, 192, 0.15) 0px 0px 60px -8px;
+        padding      : 20px 23.33px 30px 20px;
         margin       : 0px 10px;
         margin-bottom: 20px;
 
@@ -444,7 +338,7 @@ em,i{
             display        : flex;
             justify-content: center;
             align-items    : center;
-            height         : 200px;
+            height         : 160px;
 
             svg {
                 max-width: 80px;
@@ -490,16 +384,7 @@ em,i{
     }
 }
 
-.shy-site-dao {
-    box-sizing    : border-box;
-    padding       : 10px 23.33px 20px 20px;
-    background    : rgb(255, 255, 255);
-    border-radius : 16px;
-    box-shadow    : rgba(79, 77, 192, 0.15) 0px 0px 60px -8px;
-    margin        : 0px 10px;
-    margin-top    : 100px;
-    padding-bottom: 150px;
-}
+
 
 .shy-site-protocol {
     a {

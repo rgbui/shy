@@ -13,50 +13,46 @@ import "../src/surface/message.center";
 import "../src/assert/theme.less";
 import "./style.less";
 import "rich/src/assert/atom.less";
-import { channel } from "rich/net/channel";
+
 window.isAuth = false;
 import { createAuthIframe } from '../auth/iframe';
-import { config } from "../common/config";
 import ReactDOM from "react-dom";
 import React from "react";
 import { TemplateView } from "rich/extensions/template";
+import { ProductView } from "./product";
+import { loadUser, renderSignEl } from "./sign";
+import { getEle } from "./util";
+import { DownloadView } from "./download";
+import { PriceView } from "./price";
 createAuthIframe();
-var user, isUserRender;
-function getEle(selector) {
-    return document.body.querySelector(selector) as HTMLElement;
-}
-async function loadUser() {
-    var r = await channel.get('/sign');
-    if (r.ok) {
-        user = r.data.user;
-        renderEl()
-    }
-}
-function renderEl() {
-    if (isUserRender) return;
-    if (!user) return;
-    var userEl = getEle('.shy-site-head-user');
-    if (userEl) {
-        var loginButton = getEle('.shy-site-head-user-sign');
-        loginButton.style.display = 'none';
-        isUserRender = true;
-        if (user.avatar) {
-            userEl.insertAdjacentHTML('afterbegin',
-                `<a href="/home">
-            <div class="shy-avatar" style="width: 40px; height: 40px;"><img src="${user.avatar.url}" style="width: 40px; height: 40px;"></div>
-            </a>`)
-        }
-        else {
-            userEl.insertAdjacentHTML('afterbegin',
-                `<a href="/home">
-            <div class="shy-avatar" style="width: 40px; height: 40px;"><span class='shy-avatar-name' style="width: 40px; height: 40px;display:block;text-align:center;line-height:40px">${user.name.slice(0, 1)}</span></div>
-            </a>`)
-        }
-    }
-}
 loadUser();
+
+function loadOrg() {
+    var el = document.querySelector('[data-site-app]');
+    if (el) {
+        var TemplateView = ProductView;
+        if (location.pathname == '/' || location.pathname == '/org')
+            TemplateView = ProductView;
+        else if (location.pathname == '/download')
+            TemplateView = DownloadView;
+        else if (location.pathname == '/price')
+            TemplateView = PriceView;
+        ReactDOM.render(
+            <TemplateView />,
+            el
+        )
+    }
+}
+function loadTemplate() {
+    var el = document.querySelector('[data-template-flag]');
+    ReactDOM.render(
+        <TemplateView isOrg />,
+        el
+    )
+}
+
 function load() {
-    renderEl()
+    renderSignEl()
     var ele = getEle('.shy-site-head-menu');
     ele.addEventListener('mousedown', e => {
         var nv = getEle('.shy-site-head-navs');
@@ -69,25 +65,57 @@ function load() {
             if (te.tagName.toLowerCase() != 'a') eb.style.display = 'none';
         })
     }
-    if (location.pathname == '/template' || config.isDev) {
+    if (location.pathname == '/template') {
         loadTemplate()
     }
-}
-function loadTemplate() {
-    var el = document.querySelector('[data-template-flag]');
-    ReactDOM.render(
-        <TemplateView isOrg />,
-        el
-    )
+    else if (['/org', '/', '/price', '/download'].includes(location.pathname)) {
+        loadOrg()
+    }
+    document.body.addEventListener('mousedown', e => {
+        var c = (e.target as HTMLElement).closest('.shy-site-tab-items');
+        if (c) {
+            var items = Array.from(c.children);
+            var item = items.find(g => g.contains(e.target as HTMLElement) || g === e.target);
+            if (item) {
+                var at = items.findIndex(c => c === item);
+                var pages = c.nextElementSibling as HTMLElement;
+                var pcs = Array.from(pages.children);
+                var count = Math.max(items.length, pcs.length);
+                for (let i = 0; i < count; i++) {
+                    if (i == at) {
+                        if (pcs[i]) (pcs[i] as HTMLElement).style.display = 'block';
+                        if (items[i]) items[i].classList.add('item-hover-focus');
+                    }
+                    else {
+                        if (pcs[i]) (pcs[i] as HTMLElement).style.display = 'none';
+                        if (items[i]) items[i].classList.remove('item-hover-focus');
+                    }
+                }
+            }
+        }
+
+        var dg = (e.target as HTMLElement).closest('[data-toggle]');
+        if (dg) {
+            var se = Array.from(dg.children);
+            var arrowIcon = se.find(c => c.classList.contains('shy-icon')) as HTMLElement
+            var ne = dg.nextElementSibling as HTMLElement;
+            if (ne) {
+                if (getComputedStyle(ne, null).display == 'none') {
+                    ne.style.display = 'block';
+                    arrowIcon.style.transform = 'rotate(0deg)';
+                }
+                else {
+                    ne.style.display = 'none';
+                    arrowIcon.style.transform = 'rotate(90deg)';
+                }
+            }
+        }
+
+    })
 }
 window.addEventListener('DOMContentLoaded', (e) => {
     load();
 })
-document.addEventListener('scroll', (e) => {
-    var head = getEle('.shy-site-head');
-    var top = document.documentElement.scrollTop || document.body.scrollTop;
-    if (top > 0) head.classList.add('float')
-    else head.classList.remove('float');
-})
+
 
 

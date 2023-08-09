@@ -107,7 +107,12 @@ var cps = [{
 {
     from: path.join(__dirname, "../../rich/extensions/data-grid/formula/docs"),
     to: versionPrefix + 'assert/data-grid/formula/docs'
-}];
+},
+{
+    from: path.join(__dirname, "../src/assert/resource"),
+    to: 'static/img'
+}
+];
 
 if (platform == 'server-side') {
     Object.assign(viewEntrys, {
@@ -362,6 +367,8 @@ if (isDev) {
             rewrites: [
                 { from: '/auth', to: "/auth.html" },
                 { from: '/org', to: "/org.html" },
+                { from: '/download', to: "/org.html" },
+                { from: '/price', to: "/org.html" },
                 { from: /^[a-zA-Z\d\/]+$/, to: '/shy.html' }
             ]
         }
