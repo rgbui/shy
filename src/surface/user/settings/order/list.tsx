@@ -114,7 +114,7 @@ export class ShyPayList extends React.Component {
                                     <td>{order.payedDate ? dayjs(order.payedDate).format('YYYY.MM.DD HH:mm') : ""}</td>
                                     <td>{getStatus(order)}</td>
                                     <td>{order.createDate ? dayjs(order.createDate).format('YYYY.MM.DD HH:mm') : ""}</td>
-                                    <td><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor size-24"><Icon size={16} icon={DotsSvg}></Icon></span></td>
+                                    <td className="text-center"><span onMouseDown={e => openOrder(order, e)} className="flex-center item-hover round cursor size-24"><Icon size={16} icon={DotsSvg}></Icon></span></td>
                                 </tr>
                             })}
                         </tbody>
