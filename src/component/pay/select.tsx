@@ -13,6 +13,7 @@ import { SelectBox } from "rich/component/view/select/box";
 import { Price } from "../../util/price";
 import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
+import { UrlRoute } from "../../history";
 
 export class SelectPayView extends EventsComponent {
     orderInfo: {
@@ -126,7 +127,7 @@ export class SelectPayView extends EventsComponent {
                 </div>
             </div>
             <div className="flex gap-h-10">
-                <CheckBox checked={this.checkAgree} onChange={e => { this.checkAgree = e; this.forceUpdate() }} ><Sp text='同意诗云服务协议'>同意《<a className="text-1 underline" href='https://shy.live/service_protocol' target='_blank'>诗云用户协议</a>》</Sp></CheckBox>
+                <CheckBox checked={this.checkAgree} onChange={e => { this.checkAgree = e; this.forceUpdate() }} ><Sp text='同意诗云服务协议'>同意《<a className="text-1 underline" href={UrlRoute.getUrl()+ '/service_protocol'} target='_blank'>诗云用户协议</a>》</Sp></CheckBox>
             </div>
             <div className="shy-pay-buttons">
                 <div className="flex-end r-gap-r-10">

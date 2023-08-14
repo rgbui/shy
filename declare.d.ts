@@ -15,6 +15,8 @@ declare var API_VERSION: string;
 declare var AUTH_URL: string;
 declare var ASSERT_URL: string;
 
+declare var REGIN: 'US' | 'CN';
+
 /**
  * 高德地图 key,密钥
  */
@@ -65,12 +67,14 @@ interface Window {
     success(msg: string);
   },
   isAuth?: boolean,
+  isSite?:boolean,
   shyConfig?: {
     mode: 'pro' | 'dev' | 'beta' | 'desktop',
     isPro: boolean,
     isDomainWs: boolean,
     isBeta: boolean,
     isDev: boolean,
+    isUS?:boolean,
     version: string,
     isWeb: boolean,
     isPc: boolean,
@@ -80,7 +84,7 @@ interface Window {
     guid(): string,
     isOnline: boolean,
     isTestBeta: boolean,
-    lang:  'Chinese' | 'English' | 'Japanese' | 'Korean' | 'German' | 'French' | 'Russian' | 'Italian' | 'Portuguese' | 'Spanish' | 'Dutch' | 'Arabic' | 'Indonesian';
+    lang: 'Chinese' | 'English' | 'Japanese' | 'Korean' | 'German' | 'French' | 'Russian' | 'Italian' | 'Portuguese' | 'Spanish' | 'Dutch' | 'Arabic' | 'Indonesian';
   },
   shyLog: (...args: any[]) => void
 }

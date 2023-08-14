@@ -29,7 +29,7 @@ export class SaveTip extends React.Component<{
         if (this.visible == false) return <></>
         return <div className="shy-save-tip">
             <Row style={{ marginBottom: 0 }}>
-                <Col span={12}><span><S>注意！您尚未保存更改！</S></span></Col>
+                <Col span={12}><span><S text='注意您尚未保存更改'>注意！您尚未保存更改！</S></span></Col>
                 <Col span={12} align={'end'}><Button onClick={e => this.reset(e)}
                     link style={{ marginRight: 10 }}><S>重置</S></Button>
                     <Button onClick={e => this.save(e)}><S>保存变更</S></Button>

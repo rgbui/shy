@@ -19,6 +19,9 @@ class Config {
     get isPro() {
         return this.mode == 'pro'
     }
+    get isUS() {
+        return REGIN == 'US'
+    }
     get isDomainWs() {
         if (this.isPro) {
             if (location.host == 'shy.live') return false;
@@ -69,7 +72,7 @@ class Config {
         return false;
     }
     get lang(): Langs {
-        return 'Chinese'
+        return this.isUS ? "English" : 'Chinese'
     }
 }
 export var config = new Config();
