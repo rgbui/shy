@@ -8,6 +8,7 @@ import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
+import { UrlRoute } from "../../../history";
 
 class WsDomain extends EventsComponent {
     render() {
@@ -17,7 +18,7 @@ class WsDomain extends EventsComponent {
             </Row>
             <Row>
                 <Col><S>域名</S></Col>
-                <Col valign="middle">https://<Input style={{ width: 120 }} value={this.name} onChange={e => this.name = e}></Input>.shy.live</Col>
+                <Col valign="middle">https://<Input style={{ width: 120 }} value={this.name} onChange={e => this.name = e}></Input>.{UrlRoute.getHost()}</Col>
             </Row>
             <Row style={{ marginTop: 10 }}>
                 <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>

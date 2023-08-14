@@ -247,7 +247,7 @@ export class Workspace {
                 return (this.customSiteDomainProtocol ? "https://" : "http") + this.customSiteDomain;
             }
             var host = this.siteDomain || this.sn;
-            return `https://${host}.shy.live`
+            return `https://${host}.` + UrlRoute.getHost()
         }
         else return 'http://' + location.host + "/ws/" + this.sn + "";
     }
@@ -426,7 +426,7 @@ export class Workspace {
     }
     getInviteUrl() {
         if (!this.invite) return '';
-        var url = `https://${this.siteDomain || this.sn}.shy.live/`
+        var url = `https://${this.siteDomain || this.sn}.${UrlRoute.getHost()}/`
         if (this.customSiteDomain) {
             url = `${this.customSiteDomainProtocol || 'https'}://${this.customSiteDomain}/`
         }

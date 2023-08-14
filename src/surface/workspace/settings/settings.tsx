@@ -204,14 +204,14 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'><S>空间域名</S></div>
-                <div className='remark f-12 gap-h-10 flex'><S>需要公开至互联网才能访问</S><a className='link-remark underline gap-r-5' href={'https://' + domain + '.shy.live'}>{'https://' + domain + '.shy.live'}</a></div>
-                <div className='remark f-12 gap-h-10 flex'><S>任何时候都能访问</S><a className='link-remark underline gap-r-5' href={'https://shy.live/ws/' + domain}>{'https://shy.live/ws/' + domain}</a></div>
+                <div className='remark f-12 gap-h-10 flex'><S>需要公开至互联网才能访问</S><a className='link-remark underline gap-r-5' href={'https://' + domain + '.'+UrlRoute.getHost()}>{'https://' + domain + '.'+UrlRoute.getHost()}</a></div>
+                <div className='remark f-12 gap-h-10 flex'><S>任何时候都能访问</S><a className='link-remark underline gap-r-5' href={UrlRoute.getUrl()+ '/ws/' + domain}>{UrlRoute.getUrl()+'/ws/' + domain}</a></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + domain + '.shy.live'}>https://{domain}.shy.live</a>
+                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + domain + '.'+UrlRoute.getHost()}>https://{domain}.{UrlRoute.getHost()}</a>
                 </div>
                 {!surface.workspace.siteDomain && <div className='flex'>
                     <Button onClick={e => this.openDomain(e)} ghost><S>自定义空间二级域名</S></Button>
-                    <div className='remark f-12 gap-h-10 flex gap-l-10'><S>自定义二级域名如</S>https://mysite.shy.live</div>
+                    <div className='remark f-12 gap-h-10 flex gap-l-10'><S>自定义二级域名如</S>https://mysite.{UrlRoute.getHost()}</div>
                 </div>
                 }
             </div>

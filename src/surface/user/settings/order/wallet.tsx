@@ -89,7 +89,7 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>套餐</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed"><em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal' || this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i className="text-1">[{dayjs(this.wallet.due).format('YYYY.MM.DD')}<S>到期</S>]</i>}</span>
-                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button ghost onClick={e => openPay('meal-1')}><S>个人专业版</S></Button>}
+                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button ghost onClick={e => openPay('meal-1')}><S>专业版</S></Button>}
                         <Button ghost onClick={e => openPay('meal-2')}><S>社区版</S></Button></span>
                 </div>  <Divider></Divider>
             </div>

@@ -110,7 +110,7 @@ export class SafeSetting extends React.Component {
                         <div className="flex-fixed"><Switch onChange={e => this.change('accessProfile.checkJoinProtocol', e)} checked={this.data.accessProfile.checkJoinProtocol ? true : false}></Switch></div>
                     </div>
                     {this.data.accessProfile.checkJoinProtocol &&
-                        <><div className="remark f-12 gap-h-10"><S>加入空间时，用户需要同意以下协议才可以成为成员。</S></div>
+                        <><div className="remark f-12 gap-h-10"><S text='加入空间时用户需要同意以下协议才可以成为成员'>加入空间时，用户需要同意以下协议才可以成为成员。</S></div>
                             <div className="max-w-500">
                                 <Textarea style={{ minHeight: 150 }} value={this.data.accessProfile.joinProtocol} onChange={e => this.change('accessProfile.joinProtocol', e)} placeholder={lst("支持markdown语法")} ></Textarea>
                             </div>

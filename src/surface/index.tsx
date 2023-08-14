@@ -9,6 +9,7 @@ import "../../services/declare";
 import "../assert/shy.less";
 import "../assert/theme.less";
 import "./style.less";
+import "../../org/site.less";
 import "./supervisor/style.less";
 import "./sln/style.less";
 import { App } from './app';

@@ -25,6 +25,7 @@ import { PageContentView } from "rich/extensions/page";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
+import { UrlRoute } from "../../../../history";
 
 @observer
 export class SitePublishView extends React.Component {
@@ -382,7 +383,7 @@ export class SitePublishView extends React.Component {
             </div>
             <div className="flex">
                 <span className="f-14 remark ">
-                    <Sp text={'公开至互联网后发布才有效果'} data={{url:`https://${domain}.shy.live`}}>公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.shy.live`} target="_blank">{`https://${domain}.shy.live`}</a>访问</Sp>
+                    <Sp text={'公开至互联网后发布才有效果'} data={{url:`https://${domain}.`+UrlRoute.getHost()}}>公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.`+UrlRoute.getHost()} target="_blank">{`https://${domain}.`+UrlRoute.getHost()}</a>访问</Sp>
             </span>
             </div>
             {this.data.publishConfig.abled && <div className="r-gap-h-10">

@@ -85,7 +85,7 @@ export function App() {
       </Router>
     }
     else if (window.shyConfig.isPro) {
-      var isOrg = location.hostname == 'shy.live';
+      var isOrg = location.hostname ==UrlRoute.getHost() ;
       if (isOrg) {
         return <Router history={SyHistory}>
           <Switch>

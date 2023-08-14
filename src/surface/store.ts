@@ -133,8 +133,8 @@ export class Surface extends Events {
                     UrlRoute.push(ShyUrl.signIn);
                 }
                 else if (window.shyConfig.isPro) {
-                    if (location.host == 'shy.live') UrlRoute.push(ShyUrl.root);
-                    else location.href = 'https://shy.live';
+                    if (location.host ==UrlRoute.getHost()) UrlRoute.push(ShyUrl.root);
+                    else location.href = UrlRoute.getUrl();
                 }
                 else if (window.shyConfig.isDev)
                     UrlRoute.push(ShyUrl.home);
@@ -179,7 +179,7 @@ export class Surface extends Events {
         }
         if (!sn && !domain) {
             domain = location.host as string;
-            if (domain == 'shy.live' || domain.startsWith('localhost:')) {
+            if (domain ==UrlRoute.getHost() || domain.startsWith('localhost:')) {
                 domain = undefined;
             }
         }
