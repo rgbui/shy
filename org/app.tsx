@@ -2,7 +2,7 @@ import React from "react";
 import { FooterView } from "./common/footer";
 import { HeadView } from "./common/head";
 import { Route, Router, Switch } from "react-router";
-import {  SyHistory } from "../src/history";
+import { SyHistory } from "../src/history";
 import { View404 } from "../src/surface/404";
 import { DownloadView } from "./download";
 import { PriceView } from "./pricing";
@@ -13,11 +13,8 @@ import { ProductDataTable } from "./product/datatable";
 import { ProductDocView } from "./product/doc";
 import { ProductPPT } from "./product/ppt";
 import { ProductWhiteBoard } from "./product/whiteboard";
-import { ls } from "rich/i18n/store";
-import { blockStore } from "rich/extensions/block/store";
-import { Spin } from "rich/component/view/spin";
-import { channel } from "rich/net/channel";
-import { surface } from "../src/surface/store";
+import { ServiceProtocol } from "./common/service";
+import { PrivacyProtocol } from "./common/privacy";
 
 var OrgMaps = {
     '/': ProductView,
@@ -29,17 +26,12 @@ var OrgMaps = {
     '/product/datatable': ProductDataTable,
     '/product/doc': ProductDocView,
     '/product/ppt': ProductPPT,
-    '/product/whiteboard': ProductWhiteBoard
+    '/product/whiteboard': ProductWhiteBoard,
+    '/service_protocol': ServiceProtocol,
+    '/privacy_protocol': PrivacyProtocol
 }
-export function App() {
-    let [isLoad, setLoad] = React.useState(false);
-    async function load() {
-        await ls.import();
-        await blockStore.import();
-        await channel.put('/device/sign');
-        await surface.user.sign();
-        setLoad(true);
-    }
+export function App()
+{
     async function bindEvents() {
         document.body.addEventListener('mousedown', e => {
             var c = (e.target as HTMLElement).closest('.shy-site-tab-items');
@@ -84,7 +76,6 @@ export function App() {
         })
     }
     React.useEffect(() => {
-        load()
         bindEvents()
     }, [])
     function renderSites() {
@@ -96,7 +87,7 @@ export function App() {
                             return <Route key={key} path={key} exact component={OrgMaps[key]}></Route>
                         })
                     }
-                        <Route  component={View404}></Route>
+                        <Route component={View404}></Route>
                     </Switch>
                 </Router>
             </div>
@@ -104,9 +95,6 @@ export function App() {
         </>
     }
     return <div className="shy-site">
-        {!isLoad && <div className='flex-center gap-h-30'>
-            <Spin></Spin>
-        </div>}
-        {isLoad && renderSites()}
+        {renderSites()}
     </div>
 }

@@ -16,15 +16,30 @@ import "./site.less";
 import "rich/src/assert/atom.less";
 
 window.isAuth = false;
-window.isSite=true;
+window.isSite = true;
 import { createAuthIframe } from '../auth/iframe';
 import ReactDOM from "react-dom";
 import React from "react";
 import { App } from "./app";
+import { blockStore } from "rich/extensions/block/store";
+import { ls } from "rich/i18n/store";
+import { channel } from "rich/net/channel";
+import { surface } from "../src/surface/store";
 createAuthIframe();
+var div = document.body.querySelector('div');
+if (!div) div = document.body.appendChild(document.createElement('div'))
 
-ReactDOM.render(
-  <App />,
-  document.body.appendChild(document.createElement('div')),
-)
+async function load() {
+  await ls.import();
+  await blockStore.import();
+  await channel.put('/device/sign');
+  await surface.user.sign();
+  ReactDOM.render(
+    <App />,
+    div,
+  )
+}
+
+load()
+
 

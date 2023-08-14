@@ -354,6 +354,8 @@ if (isDev) {
                 { from: '/org', to: "/org.html" },
                 { from: '/download', to: "/org.html" },
                 { from: '/pricing', to: "/org.html" },
+                { from: '/service_protocol', to: '/org.html' },
+                { from: '/privacy_protocol', to: '/org.html' },
                 { from: /^\/product\/[a-zA-Z\d\/]+$/, to: "/org.html" },
                 { from: /^[a-zA-Z\d\/]+$/, to: '/shy.html' }
             ]
