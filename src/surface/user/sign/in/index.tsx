@@ -21,6 +21,7 @@ import { isMobileOnly } from "react-device-detect";
 import React from "react";
 import { ls, lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
+import { config } from "../../../../../common/config";
 
 export var Login = observer(function () {
     var local = useLocalObservable<{
@@ -95,7 +96,7 @@ export var Login = observer(function () {
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
-                <Button size='larger' block onClick={e => phoneSign()}><S>继续</S></Button >
+                <Button tag='button' size='larger' block onClick={e => phoneSign()}><S>继续</S></Button >
             </div>
         </div>
     }
@@ -168,8 +169,8 @@ export var Login = observer(function () {
                         placeholder={lst('请输入手机短信验证码')}
                         onChange={e => local.verifyPhoneCode = e}
                         onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
-                    {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}><S>获取短信验证码</S></Button>}
-                    {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
+                    {local.expireCount == -1 && <Button  tag='button'  size='medium' onClick={e => genCode()}><S>获取短信验证码</S></Button>}
+                    {local.expireCount > -1 && <Button  tag='button' size='medium' >{local.expireCount}s</Button>}
                 </div>
                 {local.step == 'register' && <div className='shy-login-box-account'>
                     <Input size="larger" name={'account'} value={local.inviteCode} onEnter={e => loginOrRegister()} onChange={e => local.inviteCode = e} placeholder={lst('请输入邀请码')}></Input>
@@ -178,7 +179,7 @@ export var Login = observer(function () {
                     <input type='checkbox' checked={local.agree} onChange={e => local.agree = e.target.checked} /><label><Sp text={'同意诗云服务协议'}>同意诗云<a className="link-red" href='https://shy.live/service_protocol' target='_blank'>《服务协议》</a>及<a className="link-red" href='https://shy.live/privacy_protocol' target='_blank'>《隐私协议》</a></Sp></label>
                 </div>}
                 <div className='shy-login-box-button'>
-                    <Button size='medium' block onClick={e => loginOrRegister()}><S>注册</S></Button >
+                    <Button  tag='button'  size='medium' block onClick={e => loginOrRegister()}><S>注册</S></Button >
                 </div>
                 {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             </div>
@@ -197,11 +198,11 @@ export var Login = observer(function () {
                         placeholder={lst('请输入手机短信验证码')}
                         onChange={e => local.verifyPhoneCode = e}
                         onEnter={e => local.step == 'login' ? loginOrRegister() : undefined} />
-                    {local.expireCount == -1 && <Button size='medium' onClick={e => genCode()}><S>获取短信验证码</S></Button>}
-                    {local.expireCount > -1 && <Button size='medium' >{local.expireCount}s</Button>}
+                    {local.expireCount == -1 && <Button  tag='button' size='medium' onClick={e => genCode()}><S>获取短信验证码</S></Button>}
+                    {local.expireCount > -1 && <Button  tag='button'  size='medium' >{local.expireCount}s</Button>}
                 </div>}
                 <div className='shy-login-box-button'>
-                    <Button size="larger" block onClick={e => loginOrRegister()}><S>登录</S></Button >
+                    <Button  tag='button' size="larger" block onClick={e => loginOrRegister()}><S>登录</S></Button >
                 </div>
                 <div className="shy-login-box-type">
                     <span><S>您也可以使用</S><a onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? lst("密码登录") : lst("手机短信登录")}</a></span>
@@ -294,7 +295,7 @@ export var Login = observer(function () {
     }, []);
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
-        <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? lst("诗云服务端") : lst('诗云')}</span></a></div>
+        <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? lst("诗云服务端") : <img className="h-25" src={UrlRoute.getUrl(config.isUS ? 'static/img/shy.png' : 'static/img/shy.text.png')} />}</span></a></div>
         <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-40" : " w-350")} >
             <div className="text-center gap-b-10 error"><S>需要邀请码才能注册</S></div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
