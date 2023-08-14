@@ -1,5 +1,7 @@
 import { createBrowserHistory } from "history";
+
 import { generatePath, matchPath } from "react-router";
+import { config } from "../common/config";
 export const SyHistory = createBrowserHistory()
 export function currentParams(routePath: string): Record<string, any> {
     var r = matchPath(location.pathname, {
@@ -12,16 +14,27 @@ export function currentParams(routePath: string): Record<string, any> {
     return undefined;
 }
 export var UrlRoute = {
+    getUrl(url?: string) {
+        if (url) {
+            if (!url.startsWith('/')) url = '/' + url;
+            if (config.isDev) return url;
+            else return config.isUS ? 'https://shy.red' + url : 'https://shy.live' + url;
+        }
+        else return config.isUS ? 'https://shy.red' : 'https://shy.live'
+    },
+    getHost() {
+        return config.isUS ? 'shy.red' : 'shy.live'
+    },
     push(url: ShyUrl,
         state?: Record<string, any>,
         isRedict?: boolean
     ) {
         if (url == ShyUrl.workCreate && window.shyConfig.isPro) {
-            if (isRedict) return location.href = 'https://shy.live' + url;
+            if (isRedict) return location.href = UrlRoute.getUrl() + url;
         }
         else if (url == ShyUrl.signIn) {
             if (window.shyConfig.isPro && window.shyConfig.isDomainWs) {
-                return location.href = 'https://shy.live' + url
+                return location.href = UrlRoute.getUrl() + url
             }
         }
         SyHistory.push(url, state);
@@ -34,19 +47,19 @@ export var UrlRoute = {
     },
     pushToPage(wsSn: number | string, pageSn: number) {
         if (window.shyConfig.isPro) {
-            if (location.host == wsSn + '.shy.live') {
+            if (location.host == wsSn + "." + this.getHost()) {
                 return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
             else {
-                if (location.host == 'shy.live') return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
-                else location.href = 'https://shy.live/ws/' + wsSn + '/page/' + pageSn;
+                if (location.host == this.getHost()) return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
+                else location.href = UrlRoute.getUrl() + '/ws/' + wsSn + '/page/' + pageSn;
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
     },
     pushToResource(wsSn: number | string, elementUrl: string) {
         if (window.shyConfig.isPro) {
-            if (location.host == wsSn + '.shy.live') {
+            if (location.host == wsSn + "." + this.getHost()) {
                 return SyHistory.push(this.gen(ShyUrl.resource, {}) + "?url=" + encodeURIComponent(elementUrl));
             }
             else {

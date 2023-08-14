@@ -30,7 +30,7 @@ else if (process.argv.some(s => s == '--mobile')) platform = 'mobile';
 if (argv.some(s => s == '--desktop')) platform = 'desktop';
 else if (argv.some(s => s == '--server-side')) platform = 'server-side';
 else if (argv.some(s => s == '--mobile')) platform = 'mobile';
-
+var isUs = argv.some(s => s == '--us');
 var isDev = mode == 'dev'
 /**
  * webpack url https://webpack.docschina.org/guides/output-management/#cleaning-up-the-dist-folder
@@ -38,26 +38,26 @@ var isDev = mode == 'dev'
 
 let port = 8081;
 let publicPath = `http://127.0.0.1:${port}/`;
-if (mode == 'pro') publicPath = `https://static.shy.live/`;
+if (mode == 'pro') publicPath = `https://static.shy.live/`.replace('shy.live', isUs ? "shy.red" : "shy.live");
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
 if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) publicPath = `shy://shy.live/`;
 
 var API_MASTER_URLS = ['http://127.0.0.1:8888'];
 if (mode == 'beta') API_MASTER_URLS = ['https://beta-b1.shy.live'];
-else if (mode == 'pro') API_MASTER_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'];
+else if (mode == 'pro') API_MASTER_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
 var FILE_URLS = ['http://127.0.0.1:8889']
 if (mode == 'beta') FILE_URLS = ['https://beta-b2.shy.live'];
-else if (mode == 'pro') FILE_URLS = ['https://api-s1.shy.live', 'https://api-s2.shy.live'];
+else if (mode == 'pro') FILE_URLS = ['https://api-s1.shy.live', 'https://api-s2.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
 var API_URLS = ['http://127.0.0.1:9000'];
 if (mode == 'beta') API_URLS = ['https://beta-b3.shy.live'];
-else if (mode == 'pro') API_URLS = ['https://api-s3.shy.live', 'https://api-s4.shy.live'];
+else if (mode == 'pro') API_URLS = isUs ? FILE_URLS : ['https://api-s3.shy.live', 'https://api-s4.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
 var API_VERSION = 'v1';
 var versionPrefix = pkg.version + '/';
 var AUTH_URL = '/auth';
-if (mode == 'pro') AUTH_URL = 'https://auth.shy.live/auth.html';
+if (mode == 'pro') AUTH_URL = 'https://auth.shy.live/auth.html'.replace('shy.live', isUs ? "shy.red" : "shy.live");
 else if (mode == 'beta') AUTH_URL = 'https://beta-auth.shy.live/auth.html';
 
 if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) AUTH_URL = `shy://shy.live/auth.html`;
@@ -133,22 +133,6 @@ if (platform == 'server-side') {
         from: path.join(__dirname, "../src/assert/img/shy.blue.svg"),
         to: versionPrefix + 'assert/img/shy.svg'
     }]
-}
-else if (platform == 'mobile') {
-    Object.assign(viewEntrys, {
-        mobile: "./src/mobile/index.tsx"
-    })
-    htmls = [new HtmlWebpackPlugin({
-        template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
-        filename: 'index.html',
-        showErrors: true,
-        hash: true,
-        chunks: ['mobile', 'shared'],
-        favicon: false,
-        templateParameters: {
-            src: publicPath + versionPrefix
-        }
-    })]
 }
 else {
     Object.assign(viewEntrys, {
@@ -300,7 +284,8 @@ module.exports = {
             VERSION_PREFIX: JSON.stringify(versionPrefix),
             ASSERT_URL: JSON.stringify(publicPath + versionPrefix),
             AMAP_KEY: JSON.stringify(AMAP_KEY),
-            AMAP_PAIR: JSON.stringify(AMAP_PAIR)
+            AMAP_PAIR: JSON.stringify(AMAP_PAIR),
+            REGIN: JSON.stringify(isUs ? "US" : "CN")
         }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
@@ -368,7 +353,8 @@ if (isDev) {
                 { from: '/auth', to: "/auth.html" },
                 { from: '/org', to: "/org.html" },
                 { from: '/download', to: "/org.html" },
-                { from: '/price', to: "/org.html" },
+                { from: '/pricing', to: "/org.html" },
+                { from: /^\/product\/[a-zA-Z\d\/]+$/, to: "/org.html" },
                 { from: /^[a-zA-Z\d\/]+$/, to: '/shy.html' }
             ]
         }
