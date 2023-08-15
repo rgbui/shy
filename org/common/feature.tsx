@@ -7,7 +7,7 @@ export function SiteFeatures(props: { small?: boolean })
 {
     
     return <div>
-        <h3 style={{ fontSize: 36 }} className="shy-site-block-head flex-center gap-b-40"><S text='丰富的功能性助你协作事半功倍'>丰富的功能性，助你协作事半功倍</S></h3>
+        <h3  className="shy-site-block-head flex-center gap-b-40 f-36"><S text='丰富的功能性助你协作事半功倍'>丰富的功能性，助你协作事半功倍</S></h3>
         <div className={"flex  flex-auto-mobile-wrap flex-top r-gap-10 " + (props.small ? "f-14" : "f-18")}>
             <div className="w33">
                 <div className="bold flex r-gap-r-12 l-20 gap-b-5"><img src={UrlRoute.getUrl('static/img/check.svg')} /><S>Markdown语法</S></div>

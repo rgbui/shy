@@ -36,7 +36,8 @@ export class ShyWallet extends React.Component {
     async coupon(e: React.MouseEvent) {
         var g = await useForm({
             title: ls.t('兑换券'),
-            remark: lst('请注意兑换码只能兑换一次','请注意，兑换码只能兑换一次'),
+            head: false,
+            remark: lst('请注意兑换码只能兑换一次', '请注意，兑换码只能兑换一次'),
             fields: [
                 { name: "code", text: lst('兑换码'), type: 'input' }
             ],
@@ -63,7 +64,7 @@ export class ShyWallet extends React.Component {
         }
         function getMeal() {
             if (self.wallet.meal == 'meal-1') {
-                return lst('个人专业版');
+                return lst('专业版');
             }
             else if (self.wallet.meal == 'meal-2') {
                 return lst('社区版');
@@ -91,7 +92,8 @@ export class ShyWallet extends React.Component {
                     <span className="f-16 flex-fixed"><em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal' || this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i className="text-1">[{dayjs(this.wallet.due).format('YYYY.MM.DD')}<S>到期</S>]</i>}</span>
                     <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button ghost onClick={e => openPay('meal-1')}><S>专业版</S></Button>}
                         <Button ghost onClick={e => openPay('meal-2')}><S>社区版</S></Button></span>
-                </div>  <Divider></Divider>
+                </div>
+                <Divider></Divider>
             </div>
 
         </div>

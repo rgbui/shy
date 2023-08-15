@@ -8,8 +8,7 @@ import { getEle, getTypeColor, refShyPage } from "../util";
 import { surface } from "../../src/surface/store";
 import { Avatar } from "rich/component/view/avator/face";
 export function HeadView() {
-    function bindEvents()
-    {
+    function bindEvents() {
         var ele = getEle('.shy-site-head-menu');
         ele.addEventListener('mousedown', e => {
             var nv = getEle('.shy-site-head-navs');
@@ -39,7 +38,7 @@ export function HeadView() {
             <div className="relative visible-hover h-40 flex-center">
                 <div className="shy-site-head-navs-item"><span className="flex"><S>产品</S><span className="gap-l-5"><Icon size={12} icon={ChevronDownSvg}></Icon></span></span></div>
                 <div className="shy-site-head-navs-pop visible pos w-500 max-vw90 flex-top padding-10 " style={{ width: 520, top: 40, left: 10 }}>
-                    <div className="flex-fixed w-300" >
+                    <div className="w60" >
                         <div className="remark f-14 padding-l-10 bold-500"><S>为什么选择诗云</S></div>
                         <div className="gap-h-10 r-item-hover r-padding-h-5 r-gap-h-10 r-padding-w-10 r-round r-cursor">
                             <a className="flex-top" href={UrlRoute.getUrl('product/ai')}>
@@ -69,7 +68,7 @@ export function HeadView() {
                             </a>
                         </div>
                     </div>
-                    <div className="flex-auto ">
+                    <div className="w40">
                         <div className="remark f-14 padding-l-10 gap-b-10 bold-500"><S>一体化知识系统</S></div>
                         <div className="r-padding-h-5 r-gap-h-5 r-padding-l-10     r-round r-cursor r-item-hover r-flex r-text-1 f-14">
 

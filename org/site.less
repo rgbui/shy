@@ -21,8 +21,8 @@
     // `xl` applies to large devices (desktops, less than 1200px)
     @media (max-width: 1199.98px) {
         //平板
-        padding-left : 80px;
-        padding-right: 80px;
+        padding-left : 20px;
+        padding-right: 20px;
     }
 
     // `xxl` applies to x-large devices (large desktops, less than 1400px)
@@ -180,10 +180,6 @@
     }
 }
 
-
-
-
-
 .shy-site-block {
 
     h1,
@@ -236,44 +232,44 @@
 
 
     .shy-site-block-head {
-        font-size    : 36px;
+        font-size    : 3.6rem;
         font-weight  : 500;
-        margin-bottom: 20px;
+        margin-bottom: 2rem;
         color        : #000;
     }
 
     .shy-site-block-remark {
-        font-size: 24px;
+        font-size: 2.4rem;
         color    : rgba(55, 53, 47, 0.5);
     }
 
     .shy-site-block-card {
-        -webkit-backdrop-filter: blur(20px);
-        backdrop-filter        : blur(20px);
+        -webkit-backdrop-filter: blur(2rem);
+        backdrop-filter        : blur(2rem);
         background-color       : rgba(255, 255, 255, .8);
-        border                 : 1px solid rgba(0, 0, 0, .12);
+        border                 : 0.1rem solid rgba(0, 0, 0, .12);
         border-radius          : 0.6rem;
-        box-shadow             : 0 18px 36px -6px rgba(0, 0, 0, .06), 0 6px 12px -6px rgba(0, 0, 0, .06);
+        box-shadow             : 0 1.8rem 3.6rem -0.6rem rgba(0, 0, 0, .06), 0 0.6rem 1.2rem -0.6rem rgba(0, 0, 0, .06);
     }
 
     video {
-        border       : 1px solid rgba(0, 0, 0, .12);
+        border       : 0.1rem solid rgba(0, 0, 0, .12);
         border-radius: 0.6rem;
-        box-shadow   : 0 18px 36px -6px rgba(0, 0, 0, .06), 0 6px 12px -6px rgba(0, 0, 0, .06);
+        box-shadow   : 0 1.8rem 3.6rem -0.6rem rgba(0, 0, 0, .06), 0 0.6rem 1.2rem -0.6rem rgba(0, 0, 0, .06);
     }
 
 }
 
 .shy-site-content {
     min-height: calc(100vh - 450px);
-    margin-top: 60px;
+    margin-top: 6rem;
 }
 
 .site-mobile-pic {
     width : 400px;
     height: 387px;
     right : -30px;
-    top   : 580px;
+    top   : 120px;
 }
 
 
@@ -287,21 +283,6 @@
 @keyframes filter-purple-animate {
     50% {
         transform: translate(60%, 10%) scale(1.2);
-    }
-}
-
-
-.shy-site-price-features {
-    display: block;
-
-    >div {
-        width    : auto;
-        max-width: 500px;
-
-        img {
-            width : 20px;
-            height: 20px;
-        }
     }
 }
 
@@ -381,8 +362,8 @@
     }
 }
 
-/* 当页面宽度小于319px */
-@media screen and (max-width:900px) {
+
+@media (max-width:900px) {
 
     .shy-site-head {
         justify-content: space-between;
@@ -405,7 +386,6 @@
         background-color: hsla(0, 0%, 100%, .9);
 
         .shy-site-head-navs-item {
-
             >a,
             >span {
                 display        : flex;
@@ -416,7 +396,6 @@
                 height         : 40px;
             }
         }
-
     }
 
 
@@ -430,9 +409,9 @@
 
 
     .site-mobile-pic {
-        transform: scale(0.4);
-        top      : 674px;
-        right    : -140px;
+        transform: scale(0.2);
+        top      : -60px;
+        right    : -120px;
     }
 
     .shy-site-download-platforms {
@@ -451,3 +430,4 @@
         }
     }
 }
+

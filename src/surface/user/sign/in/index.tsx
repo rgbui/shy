@@ -296,7 +296,7 @@ export var Login = observer(function () {
 
     return <div className='shy-login-panel' ref={e => local.el = e} >
         <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={window.shyConfig.isServerSide ? LogoBlueSrc : LogoSrc} /><span>{window.shyConfig.isServerSide ? lst("诗云服务端") : <img className="h-25" src={UrlRoute.getUrl(config.isUS ? 'static/img/shy.png' : 'static/img/shy.text.png')} />}</span></a></div>
-        <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-40" : " w-350")} >
+        <div className={'shy-login' + (isMobileOnly ? "  border-box vw100-c40" : " w-350")} >
             <div className="text-center gap-b-10 error"><S>需要邀请码才能注册</S></div>
             {local.step != 'weixin-login' && <div className='shy-login-head'>
                 {!['login', 'register', 'name'].includes(local.step) && <span><S>登录/注册</S>&nbsp;<S>诗云</S></span>}

@@ -7,6 +7,7 @@ import { SiteFeatures } from "./common/feature";
 import { PricingValue } from "./common/pricing";
 import { getTypeColor } from "./util";
 import { isMobileOnly } from "react-device-detect";
+import { UrlRoute } from "../src/history";
 /***
  * 
  * 讲清楚
@@ -39,29 +40,29 @@ export function ProductView() {
     return <div >
         <div className="shy-site-block">
             <div>
-                <div className="padding-t-50 relative">
-                    <h1 className="flex-center " style={{ fontSize: config.isUS ? '6rem' : '7.2rem' }}><S>知识社区协作生产力工具</S></h1>
-                    <p className="flex-center remark text-center" style={{ fontSize: isMobileOnly ? '2rem' : '2.4rem' }}>
+                <div className="padding-t-50">
+                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S>知识社区协作生产力工具</S></h1>
+                    <p className="flex-center remark text-center f-24">
                         <Sp text='知识社区协作生产力工具-description'>以文稿编辑的方式，结合沟通社交和AI机器人，为个人及团队提供<br />一站式社区协作平台，服务好自已的受众群体</Sp>
                     </p>
                     <p className="flex-center gap-h-10">
                         <a href="sign/in"
-                            className="text-white bg-primary bg-primary-hover cursor round-8 padding-h-15 padding-w-30   flex"
-                            style={{ fontSize: '2rem' }}
+                            className="text-white bg-primary bg-primary-hover cursor round-8 padding-h-15 padding-w-30   flex f-20"
                         ><span className="gap-r-10"><S>免费使用</S></span>
                             <Icon icon={ArrowRightSvg}></Icon>
                         </a>
                     </p>
                     <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">积累知识，沉淀关系，做自已的小生意，赚自已的小钱钱</S></p>
-                    <div className="gap-h-30 flex-center">
-                        <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src="static/img/pic.png" />
-                    </div>
-                    <div className="pos site-mobile-pic">
-                        <div className="pos" style={{ borderRadius: 8, width: 170, height: 340, overflow: 'hidden', top: 30, left: 116, zIndex: 3 }}>
-                            <img src='static/img/mobile-content.png' className="w100" />
+                    <div className="gap-h-30 flex-center  relative">
+                        <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src={UrlRoute.getUrl("static/img/pic.png")} />
+                        <div className="pos site-mobile-pic">
+                            <div className="pos" style={{ borderRadius: 8, width: 170, height: 340, overflow: 'hidden', top: 30, left: 116, zIndex: 3 }}>
+                                <img src='static/img/mobile-content.png' className="w100" />
+                            </div>
+                            <img className="w-400 pos" style={{ top: 0, left: 0, zIndex: 2 }} src={UrlRoute.getUrl('static/img/mobile.png')} />
                         </div>
-                        <img className="w-400 pos" style={{ top: 0, left: 0, zIndex: 2 }} src='static/img/mobile.png' />
                     </div>
+
                 </div>
             </div>
         </div>
@@ -69,8 +70,8 @@ export function ProductView() {
         <div className="shy-site-block ">
 
             <div className="padding-h-50">
-                <h2 className="flex-center gap-t-40" style={{ fontSize: 36 }}><span className="bold"><Sp text='文档数据表白板PPT'>文档&nbsp;数据表&nbsp;白板&nbsp;PPT</Sp></span></h2>
-                <div className="flex-center gap-h-20 remark" style={{ fontSize: 24 }}>
+                <h2 className="flex-center gap-t-40 f-36" ><span className="bold"><Sp text='文档数据表白板PPT'>文档&nbsp;数据表&nbsp;白板&nbsp;PPT</Sp></span></h2>
+                <div className="flex-center gap-h-20 remark f-24">
                     <S text='你的一体化知识系统'>你的一体化知识系统，高度融合写作、计划、绘图、表达，释放你的创造力。</S>
                 </div>
 
@@ -133,11 +134,11 @@ export function ProductView() {
         <div className="shy-site-block">
             <div className="padding-h-50">
 
-                <h2 className="flex-center bold  gap-t-40" style={{ fontSize: 36 }}>
+                <h2 className="flex-center bold  gap-t-40 f-36" >
                     <S>实时沟通和互动</S>
                 </h2>
 
-                <div className="flex-center gap-t-10 gap-b-40 remark" style={{ fontSize: 24 }}><S text='输出你的影响力自定义你的社交网络'>输出你的影响力，自定义你的社交网络</S></div>
+                <div className="flex-center gap-t-10 gap-b-40 remark f-24"><S text='输出你的影响力自定义你的社交网络'>输出你的影响力，自定义你的社交网络</S></div>
                 <div className="flex flex-full flex-auto-mobile-wrap">
                     <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('channel')} ><Icon size={48} icon={BoardToolFrameSvg}></Icon><span style={{ fontSize: 40 }}><S>频道</S></span></div>
@@ -228,7 +229,7 @@ export function ProductView() {
 
         <div className="shy-site-block" style={{ display: 'none' }}>
             <div className="padding-h-50">
-                <h3 className="flex-center" style={{ fontSize: '30px' }}><S>他们都在用诗云</S></h3>
+                <h3 className="flex-center f-30" ><S>他们都在用诗云</S></h3>
                 <div className="flex-center remark f-12 gap-h-20"><S text='排名不分先后顺序'>（*排名不分先后顺序）</S></div>
                 <div className="flex r-gap-w-20 r-gap-h-10 r-w-180 flex-center flex-wrap">
                     <img src='static/img/org/tsinghua.png' />
@@ -256,7 +257,7 @@ export function ProductView() {
                     </div>
                 </div>
                 <div className="w65  gap-l-30">
-                    <video className=" w100 obj-center" title="ai gen mp4"  width="100%" height="56.25%"
+                    <video className=" w100 obj-center" title="ai gen mp4" width="100%" height="56.25%"
                         muted={true} loop={true} autoPlay={true} controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
                     ><source
@@ -271,7 +272,7 @@ export function ProductView() {
             <div className="padding-h-50 flex  flex-auto-mobile-wrap">
 
                 <div className="w65 ">
-                    <video  title="ai gen mp4"  className=" w100 obj-center" width="100%" height="56.25%"
+                    <video title="ai gen mp4" className=" w100 obj-center" width="100%" height="56.25%"
                         muted={true} loop={true} autoPlay={true} controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
                     ><source
@@ -296,7 +297,7 @@ export function ProductView() {
             <div className="padding-h-50">
                 <h3 className="flex-center gap-h-20  shy-site-block-head">
                     <span><S>多场景覆盖应用</S></span>
-                    <a className="remark gap-l-10" href={config.isUS ? "https://template.shy.red" : 'https://template.shy.live'} style={{ fontSize: 14, textDecoration: 'underline' }}><S>更多模板</S></a>
+                    <a className="remark gap-l-10 f-14" href={config.isUS ? "https://template.shy.red" : 'https://template.shy.live'} style={{ textDecoration: 'underline' }}><S>更多模板</S></a>
                 </h3>
                 <div className="flex-center f-16 gap-b-10 r-cursor  shy-site-tab-items r-padding-w-10 r-gap-w-5 r-padding-h-5 r-round r-item-hover">
                     <span className="item-hover-focus"><S>私域好帮手</S></span>
@@ -509,7 +510,7 @@ export function ProductView() {
 
         {false && <div style={{ display: 'none' }}>
 
-            <div className="flex-center" style={{ fontSize: '30px' }} >
+            <div className="flex-center f-30"  >
                 社区经济
             </div>
             <div>
@@ -529,7 +530,7 @@ export function ProductView() {
             </div>
             <div className="flex">
                 <div className="flex-fixed">
-                    <div style={{ fontSize: '36px' }}>无限可能、无限创作</div>
+                    <div className="f-36">无限可能、无限创作</div>
                     <div>支持 <span className="bold">文档、数据表、白板、PPT</span> 四大文稿类型</div>
                     <div>万物皆可"模块化"编辑、相互融合、自由组合、随心所欲、灵活搭建，解锁无限无能</div>
                 </div>
