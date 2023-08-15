@@ -6,8 +6,19 @@ import { PricingPackage, PricingValue } from "./common/pricing";
 import { UsedView } from "./common/used";
 import { SiteFeatures } from "./common/feature";
 import { config } from "../common/config";
+import { useSelectPayView } from "../src/component/pay/select";
+import { surface } from "../src/surface/store";
+import { ShyAlert } from "rich/component/lib/alert";
+import { lst } from "rich/i18n/store";
 
 export function PriceView() {
+    async function openPay(kind: "fill" | "meal-1" | "meal-2") {
+        if (!surface.user?.isSign) return ShyAlert(lst('请先登录'))
+        var r = await useSelectPayView(kind);
+        if (r) {
+            ShyAlert(lst('支付成功'))
+        }
+    }
     return <div>
         <div className="shy-site-block">
             <div className="padding-b-50 ">
@@ -19,7 +30,7 @@ export function PriceView() {
         </div>
         <div className="shy-site-block">
             <div className="gap-h-50">
-                <PricingPackage></PricingPackage>
+                <PricingPackage openPay={openPay}></PricingPackage>
             </div></div>
         <div className="shy-site-block">
             <div className="gap-h-30">

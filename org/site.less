@@ -1,50 +1,59 @@
-@padding-gap: {
-    @media (min-width: 1200px) {
-        padding-left : 180px;
-        padding-right: 180px;
+@margin-auto: {
+    // `xs` returns only a ruleset and no media query
+    // ... { ... }
+
+    // `sm` applies to x-small devices (portrait phones, less than 576px)
+    @media (max-width: 575.98px) {
+        padding-left : 10px;
+        padding-right: 10px;
     }
 
-    @media (max-width: 1200px) {
-        padding-left : 80px;
-        padding-right: 80px;
-
-    }
-
-    @media (max-width: 800px) {
+    // `md` applies to small devices (landscape phones, less than 768px)
+    @media (max-width: 767.98px) {
+        //手机
         padding-left : 20px;
         padding-right: 20px;
     }
 
-    /* 当页面宽度小于319px */
-    @media screen and (max-width: 319px) {
-        padding-left : 10px;
-        padding-right: 10px;
+    // `lg` applies to medium devices (tablets, less than 992px)
+    @media (max-width: 991.98px) {}
+
+    // `xl` applies to large devices (desktops, less than 1200px)
+    @media (max-width: 1199.98px) {
+        //平板
+        padding-left : 80px;
+        padding-right: 80px;
+    }
+
+    // `xxl` applies to x-large devices (large desktops, less than 1400px)
+    @media (min-width: 1199.98px) {
+        padding-left : 180px;
+        padding-right: 180px;
     }
 }
 
+.flex-auto-mobile-wrap {
 
-.shy-avatar {
-    img {
-        border-radius: 50%;
-    }
+    // `md` applies to small devices (landscape phones, less than 768px)
+    @media (max-width: 767.98px) {
+        //手机
+        flex-wrap: wrap;
 
-    &-name {
-        display        : inline-flex;
-        justify-content: center;
-        align-items    : center;
-        background     : rgba(55, 53, 47, 0.3);
-        color          : rgba(255, 255, 255, 0.9);
-        font-size      : 14px;
-        border-radius  : 50%;
+        >* {
+            width       : 100%;
+            margin-left : 0px;
+            margin-right: 0px;
+        }
     }
 }
+
 
 .shy-site {
     min-height: 100vh;
     width     : 100vw;
 
     &-head {
-        @padding-gap();
+        @margin-auto();
         align-items     : center;
         box-sizing      : border-box;
         display         : flex;
@@ -59,7 +68,6 @@
         background-color: hsla(0, 0%, 100%, .8);
 
         &-navs {
-
             &-item {
 
                 >a,
@@ -86,17 +94,12 @@
             }
 
             &-pop {
-                // -webkit-backdrop-filter: blur(20px);
-                // backdrop-filter        : blur(20px);
-                background-color       : rgba(255, 255, 255, 1);
-                border                 : 1px solid rgba(0, 0, 0, .12);
-                border-radius          : 4px;
-                box-shadow             : 0 18px 36px -6px rgba(0, 0, 0, .06), 0 6px 12px -6px rgba(0, 0, 0, .06);
+                background-color: rgba(255, 255, 255, 1);
+                border          : 1px solid rgba(0, 0, 0, .12);
+                border-radius   : 4px;
+                box-shadow      : 0 18px 36px -6px rgba(0, 0, 0, .06), 0 6px 12px -6px rgba(0, 0, 0, .06);
             }
-
         }
-
-
     }
 }
 
@@ -141,20 +144,6 @@
     justify-content: flex-start;
     position       : relative;
     width          : 120px;
-
-    .shy-site-head-beta {
-        background-color: fadeout(#e16259, 20%);
-        color           : #fff;
-        font-size       : 12px;
-        display         : inline-block;
-        transform       : scale(0.80.8);
-        padding         : 1px 2px;
-        border-radius   : 4px;
-        font-style      : normal;
-        position        : absolute;
-        top             : 0px;
-        right           : 0px;
-    }
 }
 
 .shy-site-head-navs {
@@ -163,15 +152,17 @@
 }
 
 .shy-site-footer {
-    @padding-gap();
+    @margin-auto();
     align-items    : flex-start;
     display        : flex;
     justify-content: flex-start;
     padding-bottom : 50px;
     padding-top    : 50px;
+
     &>div {
         flex-grow: 1;
     }
+
     h4 {
         color      : rgba(0, 0, 0, .6);
         font-size  : 20px;
@@ -189,6 +180,10 @@
     }
 }
 
+
+
+
+
 .shy-site-block {
 
     h1,
@@ -199,7 +194,7 @@
     }
 
     >* {
-        @padding-gap();
+        @margin-auto();
     }
 
     &.bg-gray-white {
@@ -268,10 +263,20 @@
     }
 
 }
-.shy-site-content{
+
+.shy-site-content {
     min-height: calc(100vh - 450px);
     margin-top: 60px;
 }
+
+.site-mobile-pic {
+    width : 400px;
+    height: 387px;
+    right : -30px;
+    top   : 580px;
+}
+
+
 
 @keyframes filter-green-animate {
     50% {
@@ -284,8 +289,6 @@
         transform: translate(60%, 10%) scale(1.2);
     }
 }
-
-
 
 
 .shy-site-price-features {
@@ -372,8 +375,6 @@
     }
 }
 
-
-
 .shy-site-protocol {
     a {
         color: #0069c2;
@@ -381,7 +382,7 @@
 }
 
 /* 当页面宽度小于319px */
-@media screen and (max-width:1000px) {
+@media screen and (max-width:900px) {
 
     .shy-site-head {
         justify-content: space-between;
@@ -401,20 +402,23 @@
         height          : 100vh;
         padding-top     : 30px;
         backdrop-filter : blur(10px);
-        background-color: hsla(0, 0%, 100%, .85);
+        background-color: hsla(0, 0%, 100%, .9);
 
-        >a {
-            display  : block;
-            margin   : 10px;
-            font-size: 20px;
-            height   : 40px;
+        .shy-site-head-navs-item {
+
+            >a,
+            >span {
+                display        : flex;
+                justify-content: center;
+                align-items    : center;
+                margin         : 10px;
+                font-size      : 20px;
+                height         : 40px;
+            }
         }
+
     }
 
-    .shy-site-head-logo {
-        // flex-grow  : 1;
-        // flex-shrink: 1;
-    }
 
     .shy-site-footer {
         display: block;
@@ -424,36 +428,11 @@
         }
     }
 
-    .shy-site-price-items {
-        display: block !important;
 
-        >div {
-            margin       : 0 auto !important;
-            margin-bottom: 40px !important;
-            ;
-            max-width: 500px;
-            width    : auto !important;
-
-            &:last-child,
-            &:first-child {
-                margin       : 0 auto;
-                margin-bottom: 40px;
-            }
-        }
-    }
-
-    .shy-site-price-features {
-        display: block;
-
-        >div {
-            width    : auto;
-            max-width: 500px;
-
-            img {
-                width : 20px;
-                height: 20px;
-            }
-        }
+    .site-mobile-pic {
+        transform: scale(0.4);
+        top      : 674px;
+        right    : -140px;
     }
 
     .shy-site-download-platforms {
@@ -463,8 +442,7 @@
     .shy-site-download-platform {
         margin       : 0 auto !important;
         margin-bottom: 40px !important;
-        ;
-        max-width: 500px;
+        max-width    : 500px;
 
         &:last-child,
         &:first-child {

@@ -6,6 +6,7 @@ import { config } from "../common/config";
 import { SiteFeatures } from "./common/feature";
 import { PricingValue } from "./common/pricing";
 import { getTypeColor } from "./util";
+import { isMobileOnly } from "react-device-detect";
 /***
  * 
  * 讲清楚
@@ -39,23 +40,23 @@ export function ProductView() {
         <div className="shy-site-block">
             <div>
                 <div className="padding-t-50 relative">
-                    <h1 className="flex-center " style={{ fontSize: config.isUS ? 60 : 72 }}><S>知识社区协作生产力工具</S></h1>
-                    <p className="flex-center remark text-center" style={{ fontSize: '24px' }}>
+                    <h1 className="flex-center " style={{ fontSize: config.isUS ? '6rem' : '7.2rem' }}><S>知识社区协作生产力工具</S></h1>
+                    <p className="flex-center remark text-center" style={{ fontSize: isMobileOnly ? '2rem' : '2.4rem' }}>
                         <Sp text='知识社区协作生产力工具-description'>以文稿编辑的方式，结合沟通社交和AI机器人，为个人及团队提供<br />一站式社区协作平台，服务好自已的受众群体</Sp>
                     </p>
                     <p className="flex-center gap-h-10">
                         <a href="sign/in"
                             className="text-white bg-primary bg-primary-hover cursor round-8 padding-h-15 padding-w-30   flex"
-                            style={{ fontSize: '20px' }}
+                            style={{ fontSize: '2rem' }}
                         ><span className="gap-r-10"><S>免费使用</S></span>
                             <Icon icon={ArrowRightSvg}></Icon>
                         </a>
                     </p>
-                    <p className="flex-center remark" style={{ fontSize: 16 }}><S text="积累知识-沉淀关系">积累知识，沉淀关系，做自已的小生意，赚自已的小钱钱</S></p>
+                    <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">积累知识，沉淀关系，做自已的小生意，赚自已的小钱钱</S></p>
                     <div className="gap-h-30 flex-center">
                         <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src="static/img/pic.png" />
                     </div>
-                    <div className="pos" style={{ width: 400, height: 387, right: -30, top: 580 }}>
+                    <div className="pos site-mobile-pic">
                         <div className="pos" style={{ borderRadius: 8, width: 170, height: 340, overflow: 'hidden', top: 30, left: 116, zIndex: 3 }}>
                             <img src='static/img/mobile-content.png' className="w100" />
                         </div>
@@ -73,9 +74,9 @@ export function ProductView() {
                     <S text='你的一体化知识系统'>你的一体化知识系统，高度融合写作、计划、绘图、表达，释放你的创造力。</S>
                 </div>
 
-                <div className="flex-full r-padding-l-20 r-padding-t-20 r-w50">
+                <div className="flex-full flex-auto-mobile-wrap r-padding-l-20 r-padding-t-20 r-w50">
 
-                    <div className="shy-site-block-card gap-r-10">
+                    <div className="shy-site-block-card gap-r-10  gap-b-20">
 
                         <div className="flex r-gap-r-10" style={getTypeColor('page')} ><Icon size={48} icon={PageSvg}></Icon><span style={{ fontSize: 40 }}><S>文档</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
@@ -88,7 +89,7 @@ export function ProductView() {
 
                     </div>
 
-                    <div className="shy-site-block-card gap-r-10">
+                    <div className="shy-site-block-card gap-l-10  gap-b-20">
                         <div className="flex r-gap-r-10" style={getTypeColor('datatable')}><Icon size={48} icon={CollectTableSvg}></Icon><span style={{ fontSize: 40 }}><S>数据表</S></span></div>
                         <div className="text-1 f-14 l-20  gap-t-10" >
                             <Sp text='database-site-description'>自定义数据流，按需定制你的专属业务系统。<br />丰富组件、灵活搭建<br />管理任何类型的项目，无论团队或规模如何。</Sp>
@@ -100,9 +101,9 @@ export function ProductView() {
 
                 </div>
 
-                <div className="gap-h-20 flex-full  r-padding-l-20 r-padding-t-20  r-w50">
+                <div className="flex-full flex-auto-mobile-wrap  r-padding-l-20 r-padding-t-20  r-w50">
 
-                    <div className="shy-site-block-card gap-r-10">
+                    <div className="shy-site-block-card gap-r-10 gap-b-20">
                         <div className="flex r-gap-r-10" style={getTypeColor('whiteboard')}><Icon size={48} icon={{ name: 'bytedance-icon', code: 'enter-the-keyboard' }}></Icon><span style={{ fontSize: 40 }}><S>白板</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
                             <Sp text='whiteboard-site-description'>无限画布，无限创意<br />
@@ -114,7 +115,7 @@ export function ProductView() {
                         </div>
                     </div>
 
-                    <div className="shy-site-block-card gap-r-10">
+                    <div className="shy-site-block-card gap-l-10 gap-b-20">
                         <div className="flex r-gap-r-10" style={getTypeColor('ppt')}><Icon size={48} icon={DocCardsSvg}></Icon><span className="f-40 text-linear-gradient"><S>宣传页</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" ><Sp text='ppt-site-description'>精美优雅 新一代幻灯片PPT<br />
                             简洁、直观、互动 且品牌化 <br />
@@ -124,6 +125,7 @@ export function ProductView() {
                             <img className="w100  h-300  round obj-center" src='static/img/ppt.png' />
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -136,8 +138,8 @@ export function ProductView() {
                 </h2>
 
                 <div className="flex-center gap-t-10 gap-b-40 remark" style={{ fontSize: 24 }}><S text='输出你的影响力自定义你的社交网络'>输出你的影响力，自定义你的社交网络</S></div>
-                <div className="flex flex-full">
-                    <div className="w50 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
+                <div className="flex flex-full flex-auto-mobile-wrap">
+                    <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('channel')} ><Icon size={48} icon={BoardToolFrameSvg}></Icon><span style={{ fontSize: 40 }}><S>频道</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
                             <S text='使用诗云频道聊天随时随地即时联系并保持互动'>使用 诗云 频道聊天，随时随地即时联系并保持互动</S><br />
@@ -146,7 +148,7 @@ export function ProductView() {
                             <img className="w100 h-300 round obj-center" src='static/img/fr.png' />
                         </div>
                     </div>
-                    <div className="w50 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
+                    <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('friends-circle')} ><Icon size={48} icon={{ name: 'bytedance-icon', code: 'friends-circle' }}></Icon><span style={{ fontSize: 40 }}><S>互动</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" ><S text='讨论、点赞、喜欢、投票、评论'>讨论、点赞、喜欢、投票、评论</S></div>
                         <div className="padding-t-20">
@@ -159,11 +161,11 @@ export function ProductView() {
 
         <div className="shy-site-block">
             <div className="padding-h-50">
-                <div className="flex">
-                    <div className="flex-fixed">
-                        <img className="min-300  max-w-600 obj-center  shy-site-block-card" src='static/img/cat.png' />
+                <div className="flex flex-auto-mobile-wrap">
+                    <div className="w65">
+                        <img className="obj-center  w100  shy-site-block-card" src='static/img/cat.png' />
                     </div>
-                    <div className="flex-auto gap-l-30">
+                    <div className="w35 gap-l-30">
                         <h3 className="shy-site-block-head"><S>强大的模块化构建</S></h3>
                         <div className="remark f-20 l-30">
                             <Sp text='强大的模块化构建-description'>  自由组合、无限表达、无限DIY
@@ -179,8 +181,8 @@ export function ProductView() {
         <div className="shy-site-block">
             <div className="padding-h-50">
 
-                <div className="flex">
-                    <div className="flex-auto">
+                <div className="flex  flex-auto-mobile-wrap">
+                    <div className="w35 gap-b-20">
                         <h3 className="shy-site-block-head"><S>多人协作</S></h3>
                         <div className="remark f-20 l-30">
                             <Sp text='多人协作-description'>
@@ -192,8 +194,8 @@ export function ProductView() {
                             </Sp>
                         </div>
                     </div>
-                    <div className="flex-fixed gap-l-30">
-                        <img className="min-300  max-w-600 obj-center  shy-site-block-card" src='static/img/pic.png' />
+                    <div className="w65 gap-l-30">
+                        <img className="w100 obj-center  shy-site-block-card" src='static/img/pic.png' />
                     </div>
                 </div>
             </div>
@@ -201,11 +203,11 @@ export function ProductView() {
 
         <div className="shy-site-block">
             <div className="padding-h-50">
-                <div className="flex">
-                    <div className="flex-fixed">
-                        <img className="min-300  max-w-600 obj-center  shy-site-block-card" src='static/img/fr.png' />
+                <div className="flex  flex-auto-mobile-wrap">
+                    <div className="w65">
+                        <img className="w100 obj-center  shy-site-block-card" src='static/img/fr.png' />
                     </div>
-                    <div className="flex-auto gap-l-30">
+                    <div className="w35 gap-l-30">
                         <h3 className="shy-site-block-head"><S>社群</S></h3>
                         <div className="remark f-20 l-30">
                             <Sp text={'社群-description'}>可控的权限，成员角色、互动、社交
@@ -243,8 +245,8 @@ export function ProductView() {
         </div>
 
         <div className="shy-site-block">
-            <div className="padding-h-50 flex ">
-                <div className="flex-auto">
+            <div className="padding-h-50 flex  flex-auto-mobile-wrap ">
+                <div className="w35">
                     <h3 className="shy-site-block-head"><S text='AI写作佳文立现'>AI 写作，佳文立现</S></h3>
                     <div className="remark f-20 l-30">
                         <Sp text='AI写作佳文立现-description'>您可以在一分钟内完善和自定义工作文档、演示文稿。
@@ -253,8 +255,8 @@ export function ProductView() {
                             <br />文章一键生成、创作领先一步</Sp>
                     </div>
                 </div>
-                <div className="flex-fixed  gap-l-30">
-                    <video title="ai gen mp4" style={{ maxWidth: 600 }} width="100%" height="56.25%"
+                <div className="w65  gap-l-30">
+                    <video className=" w100 obj-center" title="ai gen mp4"  width="100%" height="56.25%"
                         muted={true} loop={true} autoPlay={true} controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
                     ><source
@@ -266,10 +268,10 @@ export function ProductView() {
         </div>
 
         <div className="shy-site-block">
-            <div className="padding-h-50 flex">
+            <div className="padding-h-50 flex  flex-auto-mobile-wrap">
 
-                <div className="flex-fixed">
-                    <video title="ai gen mp4" style={{ maxWidth: 600 }} width="100%" height="56.25%"
+                <div className="w65 ">
+                    <video  title="ai gen mp4"  className=" w100 obj-center" width="100%" height="56.25%"
                         muted={true} loop={true} autoPlay={true} controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
                     ><source
@@ -278,7 +280,7 @@ export function ProductView() {
                     </video>
                 </div>
 
-                <div className="flex-auto gap-l-30">
+                <div className="w35 gap-l-30">
                     <h3 className="shy-site-block-head"><S text='AI机器人'>AI机器人</S></h3>
                     <div className="remark f-20 l-30">
                         <Sp text='AI机器人-description'>基于知识库，构建自已的AI机器人
@@ -437,10 +439,10 @@ export function ProductView() {
                 <div className="remark gap-h-30 f-24 flex-center text-center">
                     <S text='基于网络进行大规模的社区化协作服务-description'>如何让每个协作者拿到属于自已的那一份利益</S>
                 </div>
-                <div className="shy-site-block-card padding-14">
+                <div className="shy-site-block-card padding-w-14">
                     <div className="r-gap-w-20 gap-h-30 flex">
                         <div className="flex-auto">
-                            <div className="flex f-30  gap-t-10"  >
+                            <div className="flex f-30  gap-h-10"  >
                                 <img style={{ marginLeft: -10 }} className="size-50 obj-center" src='static/img/community.svg' /><S>社区化协作</S>
                             </div>
                             <div className="flex f-14 remark  l-24"><Sp text='社区化协作-descption'>我们电脑、手机上的app都属于信息应用系统，使用各种app就是为了更高效的协作办公。<br />
@@ -449,9 +451,9 @@ export function ProductView() {
                             </div>
                         </div>
                     </div>
-                    <div className="r-gap-w-20 gap-h-30 flex">
-                        <div className="flex-auto">
-                            <div className="flex f-30 gap-t-10 r-gap-r-3">
+                    <div className="r-gap-w-20 gap-h-30 flex  flex-auto-mobile-wrap">
+                        <div className="w40 gap-b-20">
+                            <div className="flex f-30 gap-h-10 r-gap-r-3">
                                 <img className="size-40 obj-center" src='static/img/block-chain.svg' />
                                 <S>区块链</S>
                             </div>
@@ -460,10 +462,9 @@ export function ProductView() {
                                     从数据存储到网络交易，基于区块链，安全看的见，利益有保障<br />
                                     每一个网络参与者所产生的信息及达成的共识，都具有不可篡改，可追溯，可维权，具有法律效力
                                 </Sp>
-
                             </div>
                         </div>
-                        <div className="flex-full flex-fixed w-500 shy-site-block-card padding-14">
+                        <div className="flex-full w60 shy-site-block-card padding-14">
                             <div className="w50 padding-10">
                                 <div className="flex f-18 r-gap-r-10"><img className="size-24 obj-center" src='static/img/store.svg' /><S>小链</S></div>
                                 <div className="flex remark l-30 f-14  ">
@@ -489,7 +490,7 @@ export function ProductView() {
 
             <div className="padding-h-50">
                 <div className="flex-center">
-                    <img className=" w-400 obj-center" src='static/img/read-book.svg' />
+                    <img className="w-400 obj-center" src='static/img/read-book.svg' />
                 </div>
                 <h3 className="shy-site-block-head flex-center">
                     <S text="诗云知识社区协作生产力工具">诗云-知识社区协作生产力工具</S>

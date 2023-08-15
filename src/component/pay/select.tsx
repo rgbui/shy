@@ -90,18 +90,12 @@ export class SelectPayView extends EventsComponent {
             <div className="shy-pay-items flex-top">
                 {this.orderInfo.kind == 'fill' && <div className="r-padding-h-5  round l-20">
                     <div><S text='按量付费适用于轻度知识工作者'>按量付费，适用于轻度知识工作者</S></div>
-                    {/* <div>不限空间、不限人数、不限功能、按量付费</div>
-                    <div>价格低廉，按需付费，充一次用很久</div> */}
                 </div>}
                 {this.orderInfo.kind == 'meal-1' && <div className="r-padding-h-5  round l-20">
                     <div><S>适用于中度知识工作者及小群体</S></div>
-                    {/* <div>不限空间、不限人数、不限功能、超出按量付费</div>
-                    <div>支持自定义二级域名</div> */}
                 </div>}
                 {this.orderInfo.kind == 'meal-2' && <div className="r-padding-h-5  round l-20">
                     <div><S>适用于开放性的社区群体</S></div>
-                    {/* <div>不限空间、不限人数、不限功能、超出按量付费</div>
-                    <div>支持商业独立运营</div> */}
                 </div>}
             </div>
             <h3><S>支付方式</S></h3>

@@ -13,21 +13,21 @@ export class FooterView extends React.Component {
     render(): React.ReactNode {
         return <div className="shy-site-footer padding-gap">
             <div className="max-w-400">
-                {!config.isUS && <><div><img className="w-150" src='https://static.shy.live/static/img/logo.text.png' /></div>
+                {!config.isUS && <><div><img className="w-150" src={UrlRoute.getUrl('static/img/logo.text.png')} /></div>
                     <div className="flex r-gap-r-10 gap-t-10">
                         <a className="relative visible-hover">
                             <img className='visible pos size-200' style={{ top: -200, left: 0 }}
-                                src="static/img/shy-gongzhonghao.png" />
-                            <img className="size-30 obj-center" src='static/img/wechat.svg' />
+                                src={UrlRoute.getUrl("static/img/shy-gongzhonghao.png")} />
+                            <img className="size-30 obj-center" src={UrlRoute.getUrl('static/img/wechat.svg')} />
                         </a>
                         <a href="https://weibo.com/u/2956273930" target="_blank"><img className="size-30 obj-center"
-                            src='static/img/weibo.svg' /></a>
+                            src={UrlRoute.getUrl('static/img/weibo.svg')} /></a>
                         <a href="https://www.zhihu.com/people/hua-mu-lan-71-20-59" target="_blank"><img
-                            className="size-30 obj-center" src='static/img/zhihu.svg' /></a>
+                            className="size-30 obj-center" src={UrlRoute.getUrl('static/img/zhihu.svg')} /></a>
                     </div></>}
                 {config.isUS && <div className="flex  r-gap-r-10">
-                    <img className="w-120" src='https://static.shy.red/static/img/shy.logo.256.png' />
-                    <img className="h-40" src="https://static.shy.red/static/img/Shy.png" />
+                    <img className="w-120" src={UrlRoute.getUrl('static/img/shy.logo.256.png')} />
+                    <img className="h-40" src={UrlRoute.getUrl('static/img/shy.png')} />
                 </div>}
                 <span>Copyright © 2022-{new Date().getFullYear()} {<S>诗云</S>} All rights reserved.</span>
                 <br />
