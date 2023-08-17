@@ -88,7 +88,6 @@ class MessageCenter {
         var r = await surface.workspace.sock.post('/clone/page', {
             wsId: surface.workspace.id,
             sourcePageId: args.pageId,
-            // newPageId: string,
             newPageText: args.text,
             parentId: args.parentId,
             downPageId: args.downPageId
@@ -233,7 +232,7 @@ class MessageCenter {
                 if (surface.workspace.isMember) {
                     var me = surface.workspace.member;
                     if (Array.isArray(item.memberPermissions) && item.memberPermissions.length > 0) {
-                        var rs = (item.memberPermissions || []).filter(g => g.userid && g.userid == me.id || g.userid && g.userid == 'all' || g.roleId && me.roleIds.includes(g.roleId));
+                        var rs = (item.memberPermissions || []).filter(g => g.userid && g.userid == me.id || g.roleId && g.roleId == 'all' || g.roleId && me.roleIds.includes(g.roleId));
                         if (rs.length > 0) {
                             return {
                                 item: item,
@@ -463,7 +462,6 @@ class MessageCenter {
             })
         }
     }
-
     @query('/query/my/wss')
     async queryWss(args: {}) {
         var list = surface.wss.findAll(g => g.owner && g.owner == surface.user.id || !g.owner && g.creater == surface.user.id);
