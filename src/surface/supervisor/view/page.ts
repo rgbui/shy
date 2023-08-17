@@ -27,10 +27,13 @@ export async function createPageContent(store: PageViewStore) {
             var pd = await store.snapStore.querySnap(page.isCanEdit ? false : true);
             if (store.config?.type) store.page.pageLayout = { type: store.config.type }
             if (store.item) {
-                // page.permissons = store.item.getPagePermissions();
                 page.pageInfo = store.item;
                 if (store.item.mime == Mime.table) {
                     page.pageLayout = { type: PageLayoutType.db };
+                    page.requireSelectLayout = false;
+                }
+                else if (store.item.mime == Mime.chatroom) {
+                    page.pageLayout = { type: PageLayoutType.textChannel };
                     page.requireSelectLayout = false;
                 }
             }

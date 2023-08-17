@@ -14,6 +14,7 @@ import { Price } from "../../util/price";
 import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
 import { UrlRoute } from "../../history";
+import { surface } from "../../surface/store";
 
 export class SelectPayView extends EventsComponent {
     orderInfo: {
@@ -51,14 +52,19 @@ export class SelectPayView extends EventsComponent {
             return ShyAlert(lst('请同意诗云服务协议'), 'warn')
         }
         if (this.orderInfo.kind == 'fill') {
-            if (this.orderInfo.price < 99) {
-                return ShyAlert(lst('最低充') + 99 + lst('元'), 'warn')
+            var w = await surface.user.wallet();
+            var low = 99;
+            if (w.meal == 'meal-1' || w.meal == 'meal-2') {
+                low = 10;
+            }
+            if (this.orderInfo.price < low) {
+                return ShyAlert(lst('最低充') + low + lst('元'), 'warn')
             }
         }
         var count = this.orderInfo.kind == 'fill' ? 1 : this.orderInfo.count;
         var subject = '';
         if (this.orderInfo.kind == 'fill') subject = lst('诗云付费充值￥') + this.orderInfo.price;
-        else if (this.orderInfo.kind == 'meal-1') subject = lst('诗云个人专业版');
+        else if (this.orderInfo.kind == 'meal-1') subject = lst('诗云专业版');
         else if (this.orderInfo.kind == 'meal-2') subject = lst('诗云社区版');
         if (this.orderInfo.kind != 'fill' && this.orderInfo.count > 1) {
             subject + this.orderInfo.count + lst('年')
@@ -83,7 +89,7 @@ export class SelectPayView extends EventsComponent {
     }
     render() {
         var text = lst('充值付费');
-        if (this.orderInfo.kind == 'meal-1') text = lst('支付个人专业版');
+        if (this.orderInfo.kind == 'meal-1') text = lst('支付专业版');
         else if (this.orderInfo.kind == 'meal-2') text = lst('支付社区版');
         return <div className="shy-pay-selector">
             <div className="h3 gap-h-10">{text}</div>
@@ -121,7 +127,7 @@ export class SelectPayView extends EventsComponent {
                 </div>
             </div>
             <div className="flex gap-h-10">
-                <CheckBox checked={this.checkAgree} onChange={e => { this.checkAgree = e; this.forceUpdate() }} ><Sp text='同意诗云服务协议'>同意《<a className="text-1 underline" href={UrlRoute.getUrl()+ '/service_protocol'} target='_blank'>诗云用户协议</a>》</Sp></CheckBox>
+                <CheckBox checked={this.checkAgree} onChange={e => { this.checkAgree = e; this.forceUpdate() }} ><Sp text='同意诗云服务协议'>同意《<a className="text-1 underline" href={UrlRoute.getUrl() + '/service_protocol'} target='_blank'>诗云用户协议</a>》</Sp></CheckBox>
             </div>
             <div className="shy-pay-buttons">
                 <div className="flex-end r-gap-r-10">

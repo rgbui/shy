@@ -238,7 +238,7 @@ export var Login = observer(function () {
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
             <div className='shy-login-box-button'>
-                <Button size="larger" block onClick={e => updateName()}><S>保存</S></Button >
+                <Button tag="button" size="larger" block onClick={e => updateName()}><S>保存</S></Button >
             </div>
         </div>
     }

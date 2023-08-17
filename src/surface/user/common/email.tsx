@@ -9,17 +9,16 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
 
-
 class UserUpdateEmail extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'} head={<span><S>设置邮箱</S></span>}>
-            <div className="gap-h-30">
+        return <Dialoug className={'shy-join-friend'}>
+            <div className="gap-b-10">
                 <Row>
-                    <Col><S>邮箱</S></Col>
+                    <Col  style={{marginBottom:5}}><S>邮箱</S></Col>
                     <Col><Input value={this.email} onChange={e => this.email = e}></Input></Col>
                 </Row>
                 <Row style={{ margin: '10px 0px' }}>
-                    <Col><S>验证码</S></Col>
+                    <Col  style={{marginBottom:5}}><S>验证码</S></Col>
                     <Col span={16}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
                     <Col span={6} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ?  lst(`已发送{sendCount}s`,{sendCount:this.sendCount})  : lst(`获取验证码`) }</Button></Col>
                 </Row>

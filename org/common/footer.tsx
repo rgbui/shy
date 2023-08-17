@@ -8,7 +8,6 @@ import { langOptions, ls } from "rich/i18n/store";
 import { GlobalLinkSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 
-
 export class FooterView extends React.Component {
     render(): React.ReactNode {
         return <div className="shy-site-footer padding-gap">
@@ -29,7 +28,7 @@ export class FooterView extends React.Component {
                     <img className="w-120" src={UrlRoute.getUrl('static/img/shy.logo.256.png')} />
                     <img className="h-40" src={UrlRoute.getUrl('static/img/shy.png')} />
                 </div>}
-                <span>Copyright © 2022-{new Date().getFullYear()} {<S>诗云</S>} All rights reserved.</span>
+                <span><S>再小的个体也有自己的舞台</S></span>
                 <br />
                 <div className="max-w-120"><SelectBox prefix={<Icon size={16} className={'gap-r-5'} icon={GlobalLinkSvg}></Icon>} small border
                     options={langOptions.map(c => {
@@ -43,7 +42,7 @@ export class FooterView extends React.Component {
                         await ls.change(e);
                         this.forceUpdate()
                     }}></SelectBox></div>
-                <span><S>再小的个体也有自己的舞台</S></span>
+                <span>Copyright © 2022-{new Date().getFullYear()} {<S>诗云</S>} All rights reserved.</span>
                 {!config.isUS && <><br />
                     <a href="https://beian.miit.gov.cn" target="_blank">沪ICP备19005623号-4</a>
                     <br />
@@ -83,15 +82,16 @@ export class FooterView extends React.Component {
                 <a href={refShyPage(config.isUS ? "community" : "org", config.isUS ? 3 : 4)}><S>问题反馈</S></a>
                 <br />
                 <a href={refShyPage(config.isUS ? "community" : "org", config.isUS ? 3 : 4)}><S>更新日志</S></a>
+                <br />
             </div>
             {!config.isUS && <div>
                 <h4><S>联系我们</S></h4>
                 <img className="size-100" src={UrlRoute.getUrl('static/img/contact.jpeg')} />
-                <br /> <span><S>微信群二维码</S></span>
+                <br /><span><S>微信群二维码</S></span>
                 <br />
                 <br />
                 <img className="size-100" src={UrlRoute.getUrl("static/img/qq-contact.png")} />
-                <br /> <span><S>QQ群二维码</S></span> <br />
+                <br /><span><S>QQ群二维码</S></span>
                 <br />
             </div>}
             <div>
@@ -105,6 +105,8 @@ export class FooterView extends React.Component {
                 <a href={refShyPage('help', config.isUS ? 339 : 339)} target="_blank"><S>社区管理条例</S></a>
                 <br />
                 <a href={refShyPage('help', config.isUS ? 340 : 340)} target="_blank"><S>公开分享服务协议</S></a>
+                <br />
+                {!config.isUS && <a href={'https://shy.red'} target="_blank" ><S>诗云国际版</S></a>}
             </div>
         </div>
     }

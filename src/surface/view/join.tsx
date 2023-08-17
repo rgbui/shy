@@ -25,7 +25,7 @@ export var JoinTip = observer(function () {
         await surface.onLoadWorkspace(surface.workspace.id);
     }
     return <div className='shy-supervisor-join-tip' >
-        <span><S>您当前处于预览模式，加入该空间一起协作吧</S></span>
+        <span><S text='您当前处于预览模式加入该空间一起协作吧'>您当前处于预览模式，加入该空间一起协作吧</S></span>
         <a onMouseDown={e => mousedown(e)}>加入&nbsp;{surface.workspace?.text}</a>
     </div>
 })

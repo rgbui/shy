@@ -43,15 +43,14 @@ export class ShyUserPks extends React.Component {
 
         var self = this;
         async function open(event: React.MouseEvent) {
-            // var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [{ text: '添加私钥', name: 'add', icon: PlusSvg }]);
-            // if (r) {
             var g = await useForm({
                 maskCloseNotSave: true,
                 title: lst('创建个人身份私钥'),
-                remark: lst('私钥名称'),
-                fields: [{ name: 'name', text: lst('名称'), type: 'input' }],
+                head: false,
+                remark: lst('创建个人身份私钥'),
+                fields: [{ name: 'name', text: lst('私钥名称'), type: 'input' }],
                 checkModel: async (model) => {
-                    if (model.name) return lst('名称不能为空')
+                    if (model.name) return lst('私钥名称不能为空')
                     return ''
                 }
             });
@@ -60,7 +59,6 @@ export class ShyUserPks extends React.Component {
                 await self.load()
                 ShyAlert(lst('个人身份私钥添加成功'))
             }
-            // }
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
@@ -84,7 +82,6 @@ export class ShyUserPks extends React.Component {
                 else if (r.item?.name == 'edit') {
                     editProperty(pk, event)
                 }
-
             }
         }
         async function editProperty(pk: UserPks, event: React.MouseEvent) {
@@ -131,7 +128,7 @@ export class ShyUserPks extends React.Component {
                 })}
             </div>}
 
-            <div className="remark gap-h-30 gap-l-10">
+            <div className="remark gap-h-30 gap-l-14">
                 <div><S>个人身份私钥分类</S></div>
                 <div><S text="生活交易私钥说明">1.生活交易 适用于签名交易安全</S></div>
                 <div><S text='日常行为私钥说明'>2.日常行为 适用于在社区活动签名交互行为</S></div>

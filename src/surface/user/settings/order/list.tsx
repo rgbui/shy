@@ -57,7 +57,7 @@ export class ShyPayList extends React.Component {
         function getKind(order) {
             var kind = order.kind;
             if (kind == 'fill') return lst('充值')
-            else if (kind == 'meal-1') return lst('升级团队版')
+            else if (kind == 'meal-1') return lst('升级专业版')
             else if (kind == 'meal-2') return lst('升级社区版')
         }
         function getStatus(order) {

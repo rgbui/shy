@@ -1,4 +1,3 @@
-import { load } from "@fingerprintjs/fingerprintjs";
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";

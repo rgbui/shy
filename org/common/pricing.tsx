@@ -12,8 +12,8 @@ export function PricingValue(props: { small?: boolean }) {
         </h3>
         <div className="flex-center remark f-24" ><S text='简单而美的收费用户是我们的朋友'>简单而美的收费，用户是我们的朋友</S></div>
         <div className="flex-center-full   flex-auto-mobile-wrap  r-padding-30 r-round-8 r-bg-white gap-t-20">
-            <div className="gap-r-20 gap-b-20 w40 r-gap-b-10 shy-site-block-card" >
-                <div className={" shy-site-block-head h-80 overflow  flex r-gap-r-5 " + (props.small ? "f-20" : "f-28")} ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/local.svg')} /><span><S>本地及私有化免费</S></span></div>
+            <div className="gap-r-10 gap-b-20 w40 r-gap-b-10 shy-site-block-card" >
+                <div className={" shy-site-block-head h-80   flex r-gap-r-5 "} ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/local.svg')} /><span className={ "f-28"}><S>本地及私有化免费</S></span></div>
                 <div className="f-14 text-1 l-24 " style={{ height: config.isUS ? 100 : 80 }}><Sp text='适用于本地数据安全敏感的用户'>适用于本地数据安全、敏感的用户。<br />支持自搭服务器，数据自主管理。</Sp></div>
                 <div className={"bold " + (props.small ? "f-16" : "f-20")}><S>信任</S></div>
                 <div className="r-gap-b-10" style={{ height: props.small ? 200 : undefined }}>
@@ -23,8 +23,8 @@ export function PricingValue(props: { small?: boolean }) {
                     <div className=" f-14 l-24 text-1 flex-top"> <span className="flex-center size-24 flex-fixed gap-r-5"><Icon icon={CheckSvg} size={12}></Icon></span><S text='我们想让更多的人用上诗云仅此而已'>我们想让更多的人用上诗云，仅此而已</S></div></div>
                 <div className=" flex gap-t-20"><a className="padding-w-14 padding-h-5 round-8 cursor text-white" style={{ background: '#0BDCC0' }} href={UrlRoute.getUrl('/pricing')}><S>了解详情</S></a></div>
             </div>
-            <div className="gap-l-20 gap-b-20 w40 r-gap-b-10 shy-site-block-card">
-                <div className={" shy-site-block-head flex  h-80 overflow  r-gap-r-5 " + (props.small ? "f-20" : "f-28")}  ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/online.svg')} /><span><S>云端按量计费</S></span></div>
+            <div className="gap-l-10 gap-b-20 w40 r-gap-b-10 shy-site-block-card">
+                <div className={" shy-site-block-head flex  h-80   r-gap-r-5 "}  ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/online.svg')} /><span className={ "f-28"}><S>云端按量计费</S></span></div>
                 <div className="f-14 text-1 l-24 " style={{ height: config.isUS ? 100 : 80 }}><Sp text='适用于云端协作办公'>适用于云端协作办公。<br />为个人及团队的生产效率、社区协作而买单。</Sp></div>
                 <div className={"bold " + (props.small ? "f-16" : "f-20")}><S>承诺</S></div>
                 <div className="r-gap-b-10" style={{ height: props.small ? 200 : undefined }}>
@@ -62,7 +62,7 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
             <div className="remark f-14 l-24"><S text='专业版-features'>云端版中的所有内容，以及：</S></div>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>空间</S><span className="flex-auto flex-end">50G</span></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>流量</S><span className="flex-auto flex-end">250G</span></p>
-            <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>数据</S><span className="flex-auto flex-end"><S text='{count}条' data={{ count: config.isUS ? "300K" : "30万条" }}>30万条</S></span></p>
+            <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>数据</S><span className="flex-auto flex-end"><S text='{count}条' data={{ count: config.isUS ? "300K" : "30万" }}>30万条</S></span></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>支持自定义二级域名</S></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>支持开通付费业务</S></p>
             <div className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>支持SEO优化</S></div>
@@ -78,7 +78,7 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
             <div className="remark f-14 l-24"><S text='社区版-features'>专业版中的所有内容，以及</S>：</div>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>空间</S><span className="flex-auto flex-end">200G</span></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>流量</S><span className="flex-auto flex-end"><S>无限</S></span></p>
-            <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>数据</S><span className="flex-auto flex-end"><S text='{count}条' data={{ count: config.isUS ? "2000K" : "200万条" }}>200万条</S></span></p>
+            <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>数据</S><span className="flex-auto flex-end"><S text='{count}条' data={{ count: config.isUS ? "2000K" : "200万" }}>200万条</S></span></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>支持自定义域名</S></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>支持独立app发布</S></p>
             <p className="text-1 flex-top f-14 l-24"><span className={'gap-r-5 remark flex-fixed size-24  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={16} ></Icon></span><S>支持商业化运营</S></p>

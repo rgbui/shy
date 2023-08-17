@@ -10,9 +10,9 @@ import { S } from "rich/i18n/view";
 
 class UserModifyName extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'} head={<span><S>设置用户名</S></span>}>
-            <Row style={{ marginTop: 30, marginBottom: 30 }}>
-                <Col><S>用户名</S></Col>
+        return <Dialoug className={'shy-join-friend'}>
+            <Row style={{ marginBottom: 10 }}>
+                <Col style={{marginBottom:5}}><S>用户名</S></Col>
                 <Col><Input value={this.name} onChange={e => this.name = e}></Input></Col>
             </Row>
             <Row style={{ marginTop: 10 }}>

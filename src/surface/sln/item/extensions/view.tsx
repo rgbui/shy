@@ -18,10 +18,9 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     var style: Record<string, any> = {};
     style.paddingLeft = gapLeft;
     style['--gap-left'] = (gapLeft + 20) + 'px';
-
     var isInEdit = item.id == surface.sln.editId;
     var isCanEdit = item.isCanEdit;
-    var isCanPlus = [Mime.table, Mime.chatroom, Mime.blog].includes(item.mime) ? false : true;
+    var isCanPlus = [Mime.table, Mime.chatroom].includes(item.mime) ? false : true;
     if (!isCanEdit) isCanPlus = false;
     if (surface.workspace.slnStyle == 'menu') isCanPlus = false;
     var isSelected = surface.sln.selectIds.some(s => s == item.id);

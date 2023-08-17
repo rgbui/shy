@@ -11,14 +11,14 @@ import { channel } from "rich/net/channel";
 
 class UserUpdatePhone extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-join-friend'} head={<span><S>设置手机号</S></span>}>
-            <div className="gap-h-30">
+        return <Dialoug className={'shy-join-friend'}>
+            <div className="gap-b-10">
                 <Row>
-                    <Col><S>手机</S></Col>
+                    <Col style={{marginBottom:5}}><S>手机</S></Col>
                     <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
                 </Row>
                 <Row style={{ margin: '10px 0px' }}>
-                    <Col><S>验证码</S></Col>
+                    <Col style={{marginBottom:5}}><S>验证码</S></Col>
                     <Col span={14}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
                     <Col span={8} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? lst(`已发送{sendCount}s`,{sendCount:this.sendCount})  : lst(`获取短信验证码`)}</Button></Col>
                 </Row>
