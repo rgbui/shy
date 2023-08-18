@@ -81,6 +81,31 @@ if (mode == 'pro') {
     else if (platform == 'server-side') dist = path.resolve(__dirname, "../../desktop/dist/view-server");
     else if (platform == 'mobile') dist = path.resolve(__dirname, "../dist" + (isDev ? "mobile" : '/mobile-' + mode));
 }
+var TrackCode='';
+if(isUs){
+    TrackCode=`
+<link rel="dns-prefetch" href="//shy.red">
+<link rel="dns-prefetch" href="//resources.shy.red">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-45568602-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-45568602-1');
+</script>`
+}
+else{
+TrackCode=`
+<link rel="dns-prefetch" href="//shy.live">
+<link rel="dns-prefetch" href="//resources.shy.live">
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script  src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script>location.host.endsWith('shy.live')&& LA.init({ id: "3EweegziSpUbz8TW", ck: "3EweegziSpUbz8TW", autoTrack: true, hashMode: true })</script>`
+}
+
+
+
 
 var viewEntrys = {
     auth: './auth/view.ts'
@@ -93,7 +118,8 @@ var htmls = [new HtmlWebpackPlugin({
     chunks: ['web', 'shared'],
     favicon: false,
     templateParameters: {
-        src: publicPath + versionPrefix
+        src: publicPath + versionPrefix,
+        TrackCode,
     }
 })]
 var cps = [{
@@ -143,14 +169,15 @@ else {
             org: './org/index.tsx',
         })
         htmls.push(new HtmlWebpackPlugin({
-            template: path.join(__dirname, "org.html"), // 婧愭ā鏉挎枃浠�
+            template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
             filename: 'org.html',
             showErrors: true,
             hash: true,
             chunks: ['org', 'shared'],
             favicon: false,
             templateParameters: {
-                src: publicPath + versionPrefix
+                src: publicPath + versionPrefix,
+                TrackCode
             }
         }))
     }
