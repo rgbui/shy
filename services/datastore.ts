@@ -44,7 +44,8 @@ class DataStoreService {
     }
     @get('/datastore/query/all')
     async queryAll(args) {
-        args.wsId = surface.workspace.id;
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
         return surface.workspace.sock.get('/datastore/query/all', args)
     }
     @get('/datastore/group')
@@ -67,13 +68,15 @@ class DataStoreService {
     }
     @put('/datastore/row/object/update')
     async datastoreRowObjectUpdate(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.put('/datastore/row/object/update', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return sock.put('/datastore/row/object/update', args)
     }
     @del('/datastore/remove/ids')
     async dateStoreDeleteIds(args) {
-        args.wsId = surface.workspace.id;
-        return surface.workspace.sock.delete('/datastore/remove/ids', args)
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return sock.delete('/datastore/remove/ids', args)
     }
     @get('/datastore/exists/user/submit')
     async dataStoreExistsSubmit(args) {

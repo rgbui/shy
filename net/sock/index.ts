@@ -5,7 +5,6 @@ import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
 import { surface } from "../../src/surface/store";
 
-
 export class Sock {
 
     constructor(private type: SockType, private remoteUrl?: string, private headers?: Record<string, any>) { }
