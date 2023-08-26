@@ -181,6 +181,7 @@ push('/datastore/statistics', '{ws:LinkWs,wsId?:string,schemaId:string,page?:num
 push('/datastore/statistics/value', '{ws:LinkWs,wsId?:string,schemaId:string,filter?:Record<string, any>,indicator:string}', '{ok:boolean,data:{value:number},warn:string}', ['get']);
 push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
 push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
+push(`/datastore/row/update`, '{ws:LinkWs,wsId?:string,schemaId: string, filter?:Record<string, any>, data: Record<string, any>}', 'SockResponse<void>', ['patch']);
 push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
 push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{exists:boolean}>', ['get']);
 push('/device/sign', '', 'void', ['put']);
@@ -285,6 +286,8 @@ push('/ws/channel/abled/send', '{ws:LinkWs,wsId?:string,roomId:string,pageId:str
 push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
+push('/ws/flow','{ws:LinkWs,wsId?:string,flow:Record<string,any>}','SockResponse<{flow:Record<string,any>}>',['put']);
+push('/ws/flow/get','{flowId:string,ws:LinkWs,wsId?:string}','SockResponse<{flow:Record<string,any>}>',['get']);
 
 push('/ws/member/exit', '{wsId:string,sock:any}', 'SockResponse<void>', ['del']);
 push('/ws/member/word/query', '{ws:LinkWs,wsId?:string,word?:string,size?:number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);

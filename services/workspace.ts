@@ -379,9 +379,24 @@ class WorkspaceService extends BaseService {
     async searchWorkspaceTemplate(args) {
         return masterSock.get('/search/workspace/template', args);
     }
+
     @post('/workspace/template/useCount')
     async workspaceTemplateUseCount(args) {
         return masterSock.post('/workspace/template/useCount', args);
+    }
+
+    @put('/ws/flow')
+    async wsFlowPut(args) {
+        if (typeof args == 'undefined') args = {}
+        var sock = await this.getArgsSock(args);
+        return await sock.put('/ws/flow', args);
+    }
+
+    @get('/ws/flow/get')
+    async wsFlowGet(args) {
+        if (typeof args == 'undefined') args = {}
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/flow/get', args);
     }
 }
 

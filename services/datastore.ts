@@ -24,6 +24,12 @@ class DataStoreService {
         args.wsId = surface.workspace.id;
         return surface.workspace.sock.patch('/datastore/update', args)
     }
+    @patch('/datastore/row/update')
+    async patchRow(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return surface.workspace.sock.patch('/datastore/row/update', args)
+    }
     @get('/datastore/query')
     async query(args) {
         if (!args) args = {}
