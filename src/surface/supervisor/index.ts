@@ -84,7 +84,7 @@ export class Supervisor extends Events {
      */
     async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl && elementUrl == this.dialog?.elementUrl) return;
-        //console.log('open dialog', elementUrl);
+        console.log('open dialog', elementUrl, config);
         if (!elementUrl) this.dialog = null;
         else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog', config);
         if (this.dialog) {

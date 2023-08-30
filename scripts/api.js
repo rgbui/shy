@@ -183,6 +183,7 @@ push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,
 push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
 push(`/datastore/row/update`, '{ws:LinkWs,wsId?:string,schemaId: string, filter?:Record<string, any>, data: Record<string, any>}', 'SockResponse<void>', ['patch']);
 push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
+push('/datastore/remove/filter','{schemaId:string,filter:Record<string,any>}','SockResponse<void>', ['del']);
 push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{exists:boolean}>', ['get']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
