@@ -104,7 +104,12 @@ export async function createPageContent(store: PageViewStore) {
                 if (store.source == 'slide') store.emit('close');
             });
             page.on(PageDirective.close, async () => {
-                store.emit('close');
+                if (page.openSource == 'slide')
+                    surface.supervisor.emit('closeSlide')
+                else if (page.openSource == 'page')
+                    surface.supervisor.emit('closePage')
+                else if (page.openSource == 'dialog')
+                    surface.supervisor.emit('closeDialog')
             });
             page.on(PageDirective.spreadSln, async () => {
                 if (isMobileOnly) surface.mobileSlnSpread = true;

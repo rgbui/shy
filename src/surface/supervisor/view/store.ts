@@ -9,7 +9,6 @@ import lodash from "lodash";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageSupervisorDialog } from "./dialoug";
 import { PageItem } from "../../sln/item";
-import { channel } from "rich/net/channel";
 import { PageDirective } from "rich/src/page/directive";
 
 export class PageViewStore extends Events {
@@ -25,7 +24,8 @@ export class PageViewStore extends Events {
         isTemplate?: boolean,
         blockId?: string,
         initData?: Record<string, any>,
-        isCanEdit?: boolean
+        isCanEdit?: boolean,
+        wait?: boolean
     } = {};
     constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();
@@ -77,21 +77,21 @@ export class PageViewStore extends Events {
         }
         return null;
     }
-    onOpenFieldProperty(e: React.MouseEvent) {
-        if (this.page) this.page.onOpenFieldProperty(e);
-    }
+    // onOpenFieldProperty(e: React.MouseEvent) {
+    //     if (this.page) this.page.onOpenFieldProperty(e);
+    // }
     async loadConfig(config?: PageViewStore['config']) {
         if (config) this.config = lodash.cloneDeep(config);
         else this.config = {}
     }
-    async onFullDisplay() {
-        await surface.supervisor.onOpenDialog(null)
-        surface.supervisor.onOpen(this.elementUrl);
-    }
-    async onOpen(elementUrl: string) {
-        surface.supervisor.closeDialogOrSlide()
-        await channel.air('/page/open', { elementUrl })
-    }
+    // async onFullDisplay() {
+    //     await surface.supervisor.onOpenDialog(null)
+    //     surface.supervisor.onOpen(this.elementUrl);
+    // }
+    // async onOpen(elementUrl: string) {
+    //     surface.supervisor.closeDialogOrSlide()
+    //     await channel.air('/page/open', { elementUrl })
+    // }
     updateElementUrl(elementUrl: string) {
         if (elementUrl != this.elementUrl) {
             var pvs = PageViewStores.stores.get(this.elementUrl);

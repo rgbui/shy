@@ -76,6 +76,6 @@ export class PageSupervisorView extends React.Component<{
         </div>
     }
     onClose() {
-        this.props.store.emit('close');
+        this.props.store.page.onSubmitForm({ isClose: true, isFormMargin: true });
     }
 }

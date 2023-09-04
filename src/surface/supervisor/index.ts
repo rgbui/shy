@@ -40,7 +40,7 @@ export class Supervisor extends Events {
             console.trace(elementUrl);
             return;
         }
-        if (elementUrl == this.page?.elementUrl) return;
+        if (elementUrl == this.page?.elementUrl && config?.force !== true) return;
         this.elementUrls.push({ date: new Date(), elementUrl, source: 'page' })
         if (this.elementUrls.length > 20) this.elementUrls = this.elementUrls.slice(-20)
         this.opening = true;
@@ -67,13 +67,15 @@ export class Supervisor extends Events {
         }
     }
     async onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
-        if (elementUrl == this.slide?.elementUrl) return;
+        if (elementUrl == this.slide?.elementUrl && config?.force !== true) return;
         if (!elementUrl) this.slide = null;
         else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide', config)
         if (this.slide) {
+            if (config?.wait === false) return;
             return new Promise((resolve, reject) => {
-                this.slide.only('close', () => {
-                    resolve(this.slide.page);
+                this.only('closeSlide', () => {
+                    this.slide = null;
+                    resolve(true)
                 })
             })
         }
@@ -83,14 +85,15 @@ export class Supervisor extends Events {
      * @param elementUrl 
      */
     async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
-        if (elementUrl && elementUrl == this.dialog?.elementUrl) return;
-        console.log('open dialog', elementUrl, config);
+        if (elementUrl && elementUrl == this.dialog?.elementUrl && config?.force !== true) return;
         if (!elementUrl) this.dialog = null;
         else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog', config);
         if (this.dialog) {
+            if (config?.wait === false) return;
             return new Promise((resolve, reject) => {
-                this.dialog.only('close', () => {
-                    resolve(this.dialog.page);
+                this.only('closeDialog', () => {
+                    this.dialog = null;
+                    resolve(true)
                 })
             })
         }

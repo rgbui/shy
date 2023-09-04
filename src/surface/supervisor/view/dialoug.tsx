@@ -20,6 +20,14 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
     componentDidMount(): void {
         this.load()
     }
+    componentDidUpdate(prevProps: Readonly<{ store: PageViewStore; }>, prevState: Readonly<{}>, snapshot?: any): void {
+        if (prevProps.store !== this.props.store) {
+            if (this.props.store.page)
+                this.props.store.page.cacheFragment()
+            this.pageEl.innerHTML = '';
+            this.load()
+        }
+    }
     async load() {
         this.props.store.view = this;
         this.loading = true;
@@ -43,7 +51,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
         }
     }
     onClose() {
-        this.props.store.emit('close');
+        this.props.store.page.onSubmitForm({ isClose: true, isFormMargin: true });
     }
     pageEl: HTMLElement;
     render() {
