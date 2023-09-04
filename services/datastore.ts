@@ -36,6 +36,12 @@ class DataStoreService {
         var sock = await wss.getArgsSock(args);
         return await sock.get('/datastore/query', args)
     }
+    @get('/datastore/query/pre_next')
+    async queryPre(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/query/pre_next', args)
+    }
     @get('/datastore/query/list')
     async queryList(args) {
         if (!args) args = {}
