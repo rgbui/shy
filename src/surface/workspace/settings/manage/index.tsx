@@ -4,17 +4,18 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Divider } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
-import { Switch } from "rich/component/view/switch";
+import { Switch, SwitchText } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
 import { Workspace } from "../..";
 import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { useSelectWorkspacePage } from "rich/extensions/link/select"
-import { Point, Rect } from "rich/src/common/vector/point";
+import { Rect } from "rich/src/common/vector/point";
 import { SelectBox } from "rich/component/view/select/box";
 import { MenuFolderSvg, TreeListSvg } from "rich/component/svgs";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { MenuItemType } from "rich/component/view/menu/declare";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -25,7 +26,7 @@ export class WorkspaceManage extends React.Component {
             error: observable
         })
     }
-    data: { createPageConfig: Workspace['createPageConfig'] } & { defaultPageId?: string, defaultPageTitle?: string, allowSlnIcon?: boolean, slnStyle?: Workspace['slnStyle'] } = {
+    data: { createPageConfig: Workspace['createPageConfig'], aiConfig: Workspace['aiConfig'] } & { defaultPageId?: string, defaultPageTitle?: string, allowSlnIcon?: boolean, slnStyle?: Workspace['slnStyle'] } = {
         createPageConfig: {
             isFullWidth: true,
             smallFont: false,
@@ -36,7 +37,12 @@ export class WorkspaceManage extends React.Component {
         defaultPageId: null,
         defaultPageTitle: '',
         allowSlnIcon: false,
-        slnStyle: 'note'
+        slnStyle: 'note',
+        aiConfig: {
+            text: '',
+            image: '',
+            embedding: ''
+        }
     };
     error: Record<string, any> = {};
     tip: SaveTip;
@@ -49,7 +55,7 @@ export class WorkspaceManage extends React.Component {
     }
     checkChange() {
         if (this.tip) {
-            if (lodash.isEqual(this.data, lodash.pick(surface.workspace, ['allowSlnIcon', 'slnStyle', 'createPageConfig', 'defaultPageId'])))
+            if (lodash.isEqual(this.data, lodash.pick(surface.workspace, ['allowSlnIcon', 'aiConfig', 'slnStyle', 'createPageConfig', 'defaultPageId'])))
                 this.tip.close()
             else this.tip.open();
         }
@@ -60,7 +66,8 @@ export class WorkspaceManage extends React.Component {
                 createPageConfig: lodash.cloneDeep(this.data.createPageConfig),
                 defaultPageId: lodash.cloneDeep(this.data.defaultPageId),
                 allowSlnIcon: this.data.allowSlnIcon,
-                slnStyle: this.data.slnStyle
+                slnStyle: this.data.slnStyle,
+                aiConfig: lodash.cloneDeep(this.data.aiConfig)
             }
         });
         if (r.ok) {
@@ -69,13 +76,17 @@ export class WorkspaceManage extends React.Component {
                 surface.workspace.defaultPageId = lodash.cloneDeep(this.data.defaultPageId);
                 surface.workspace.allowSlnIcon = this.data.allowSlnIcon;
                 surface.workspace.slnStyle = this.data.slnStyle;
+                surface.workspace.aiConfig = lodash.cloneDeep(this.data.aiConfig);
                 this.tip.close();
             })
         }
     }
     async reset() {
         this.data.defaultPageTitle = '';
-        this.data = { createPageConfig: lodash.cloneDeep(surface.workspace.createPageConfig) };
+        this.data = {
+            aiConfig: lodash.cloneDeep(surface.workspace.aiConfig),
+            createPageConfig: lodash.cloneDeep(surface.workspace.createPageConfig)
+        };
         this.data.defaultPageId = surface.workspace.defaultPageId;
         this.data.slnStyle = surface.workspace.slnStyle;
         this.data.allowSlnIcon = surface.workspace.allowSlnIcon;
@@ -86,8 +97,7 @@ export class WorkspaceManage extends React.Component {
             }
         }
         this.error = {};
-        if (this.tip)
-            this.tip.close();
+        if (this.tip) this.tip.close();
     }
     async open(e: React.MouseEvent) {
         var g = await useSelectWorkspacePage({ roundArea: Rect.fromEle(e.currentTarget as HTMLElement) });
@@ -102,7 +112,7 @@ export class WorkspaceManage extends React.Component {
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip>
             <div className="h2"><S>空间管理</S></div>
             <Divider></Divider>
-            <div className="gap-h-10">
+            <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>新页面默认选项</S></div>
                 <div className="remark f-12 gap-h-10"><S text='创建新页面时默认开启以下配置'>在创建新页面时，默认开启以下配置</S></div>
                 <div className="flex gap-h-10">
@@ -127,15 +137,16 @@ export class WorkspaceManage extends React.Component {
                 </div>
             </div>
             <Divider></Divider>
-            <div className="gap-h-10">
+            <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>空间默认首页</S></div>
                 <div className="remark f-12 gap-h-10"><S text={'通过自定义域名打开时'}>通过自定义域名打开时，默认显示初始页面</S></div>
                 <div className="max-w-500">
                     <Input onMousedown={e => this.open(e)} value={this.data.defaultPageTitle} readonly></Input>
                 </div>
             </div>
+
             <Divider></Divider>
-            <div className="gap-h-10">
+            <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>左边侧边栏设置</S></div>
                 <div className="remark f-12 gap-h-10"><S>左边侧边栏风格显示设置</S></div>
                 <div className="flex gap-h-10">
@@ -158,6 +169,110 @@ export class WorkspaceManage extends React.Component {
                     </div>
                 </div>
             </div>
+
+            <Divider></Divider>
+            <div className="gap-t-10 gap-b-20">
+                <div className="bold f-14"><S>AI写作</S></div>
+                <div className="f-12 gap-h-10 flex">
+                    <span className="remark flex-auto">{window.shyConfig.isUS ? <S text={'设置AI写作US'}>设置AI写作引用的大模型</S> : <S text={'设置AI写作'}>设置AI写作引用的大模型</S>}</span>
+                    <span className="flex-fixed flex">
+                        <SwitchText
+                            align="right"
+                            onChange={e => this.change('aiConfig.disabled', e ? false : true)}
+                            checked={this.data.aiConfig.disabled ? false : true}><span
+                            ><S>开启AI写作</S></span>
+                        </SwitchText>
+                    </span>
+                </div>
+                {!(this.data.aiConfig.disabled == true) && <>
+                    {!window.shyConfig.isUS && <div className="flex f-12 remark">
+                        <S text="OpenAI涉及数据安全">OpenAI涉及数据安全，不建立使用，仅限体验，由此引发的数据安全，自行承担责任。</S>
+                    </div>}
+                    <div className="flex gap-h-10">
+                        <div className="flex-auto  f-14 text-1"><S>文本生成</S></div>
+                        <div className="flex-fixed">
+                            <SelectBox
+                                small
+                                dropWidth={250}
+                                border
+                                dropAlign="right"
+                                options={
+                                    window.shyConfig.isUS ? [
+                                        { text: 'OpenAI', type: MenuItemType.text },
+                                        { text: 'GPT-3.5', value: 'gpt-3.5-turbo' },
+                                        { text: 'GPT-4', value: 'gpt-4' },
+                                    ] : [
+                                        { text: lst('百度千帆'), type: MenuItemType.text, label: '文言一心' },
+                                        { text: 'ERNIE-Bot', value: 'ERNIE-Bot' },
+                                        { text: 'ERNIE-Bot-turbo', value: 'ERNIE-Bot-turbo' },
+
+                                        { text: 'Llama', type: MenuItemType.text },
+                                        { text: 'Llama-2-7b-chat', value: 'Llama-2-7b-chat' },
+                                        { text: 'Llama-2-13b-chat', value: 'Llama-2-13b-chat' },
+                                        { text: 'Llama-2-70B-Chat', value: 'Llama-2-70B-Chat' },
+
+                                        { text: lst('智谱'), type: MenuItemType.text },
+                                        // { text: 'ChatGLM2-6B', value: 'ChatGLM2-6B' },
+                                        { text: 'ChatGLM2-6B-32K', value: 'ChatGLM2-6B-32K' },
+                                        // { text: 'ChatGLM2-6B-INT4', value: 'ChatGLM2-6B-INT4' },
+
+                                        { text: 'OpenAI', type: MenuItemType.text, label: '仅用于体验' },
+                                        { text: 'GPT-3.5', value: 'gpt-3.5-turbo', label: '仅用于体验' },
+                                        { text: 'GPT-4', value: 'gpt-4', label: '仅用于体验' },
+                                    ]
+                                }
+                                value={this.data.aiConfig?.text || (window.shyConfig.isUS ? "gpt-3.5-turbo" : "ERNIE-Bot-turbo")}
+                                onChange={e => { this.change('aiConfig.text', e) }}
+                            ></SelectBox>
+                        </div>
+                    </div>
+                    <div className="flex gap-h-10">
+                        <div className="flex-auto  f-14 text-1"><S>图像生成</S></div>
+                        <div className="flex-fixed">
+                            <SelectBox
+                                small
+                                border
+                                dropWidth={250}
+                                dropAlign="right"
+                                options={
+                                    window.shyConfig.isUS ? [
+                                        { text: 'OpenAI DALLE2', value: 'gpt' },
+                                        { text: 'Stability', value: 'Stability' }
+                                    ] :
+                                        [
+                                            { text: '6pen', value: '6pen' },
+                                            { text: 'Stability', value: 'Stability' },
+                                            { text: 'OpenAI DALLE2', value: 'gpt', label: '仅用于体验' },
+                                        ]
+                                }
+                                value={this.data.aiConfig.image || (window.shyConfig.isUS ? "gpt" : "6pen")}
+                                onChange={e => { this.change('aiConfig.image', e) }}
+                            ></SelectBox>
+                        </div>
+                    </div>
+                    <div className="flex gap-h-10">
+                        <div className="flex-auto  f-14 text-1"><S>向量存储</S></div>
+                        <div className="flex-fixed">
+                            <SelectBox
+                                small
+                                border
+                                dropAlign="right"
+                                dropWidth={300}
+                                options={window.shyConfig.isUS ? [
+                                    { text: 'OpenAI Embeddings', value: 'gpt' },
+                                ] : [
+                                    { text: lst('百度文心向量Embeddings'), value: 'Baidu-Embedding-V1' },
+                                    { text: 'OpenAI Embeddings', value: 'gpt', label: '仅用于体验' },
+                                ]}
+                                value={this.data.aiConfig.embedding || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
+                                onChange={e => { this.change('aiConfig.embedding', e) }}
+                            ></SelectBox>
+                        </div>
+                    </div>
+                </>}
+            </div>
+
+            <div className="gap-h-200"></div>
         </div>
     }
 }

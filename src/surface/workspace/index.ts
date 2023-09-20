@@ -167,6 +167,18 @@ export class Workspace {
             autoRefPages: false,
             autoRefSubPages: true
         };
+
+    public aiConfig: {
+        text?: string,
+        image?: string,
+        embedding?: string,
+        disabled?: boolean
+    } = {
+            text: '',
+            image: '',
+            embedding: '',
+            disabled: false
+        }
     /**
      * 空间的初始默认页面
      */
