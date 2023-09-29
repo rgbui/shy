@@ -79,10 +79,10 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
         this.onSave(this.button, true);
     }, 1000)
     button: Button;
-    render() {
+    renderEdit() {
         var robot = this.props.robot;
-        return <div>
-            {this.isEdit && <div className="gap-b-200">
+        if (robot.scene == 'wiki') {
+            return <div className="gap-b-200">
                 <div className="flex gap-h-10">
                     <div className="flex-auto remark f-12"></div>
                     <div className="flex-fixed flex  r-gap-l-10">
@@ -248,8 +248,121 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                         </>}
                     </div>
                 </div>
+            </div>
+        }
+        else {
+            return <div className="gap-b-200">
+                <div className="flex gap-h-10">
+                    <div className="flex-auto remark f-12"></div>
+                    <div className="flex-fixed flex  r-gap-l-10">
+                        <Button ref={e => this.button = e} onClick={(e, b) => this.onSave(b)}><S>保存</S></Button>
+                        <Button onClick={e => this.isEdit = false} ghost><S>退出编辑</S></Button>
+                    </div>
+                </div>
+                <div className="flex flex-top">
+                    <div className="flex-auto  border round  padding-14">
+                        <div className="remark  gap-t-10 gap-b-5 f-12" >
+                            <S>机器人名称</S>
+                        </div>
+                        <div className="">
+                            <Input value={this.localRobotInfo.name} onChange={e => {
+                                this.localRobotInfo.name = e;
+                                this.onLayzeSave()
+                            }} ></Input>
+                        </div>
 
-            </div>}
+                        <div className="remark  gap-t-10 gap-b-5  f-12">
+                            <S>介绍一下机器人</S>
+                        </div>
+                        <Textarea
+                            style={{ height: 500 }}
+                            placeholder={lst("介绍一下机器人", "介绍一下机器人,如何使用它，支持markdown语法")}
+                            value={this.localRobotInfo.remark}
+                            onChange={e => {
+                                this.localRobotInfo.remark = e;
+                                this.onLayzeSave()
+                            }}
+                        ></Textarea></div>
+                    <div className="flex-fixed w-200 gap-l-10 border round padding-14">
+                        <div className="remark  gap-t-10 gap-b-5">
+                            <SwitchText
+                                checked={this.localRobotInfo.abledCommandModel == true ? true : false}
+                                onChange={e => { this.localRobotInfo.abledCommandModel = e; this.onLayzeSave() }}
+                                align="right"
+                            ><S>开启大模型</S></SwitchText>
+                        </div>
+                        {this.localRobotInfo.disabledWiki != true && <>
+                            <div className="remark gap-t-10 gap-b-5 f-12" >
+                                <S>文本生成</S>
+                            </div>
+                            <div className="">
+                                <SelectBox
+                                    small
+                                    dropWidth={250}
+                                    border
+                                    dropAlign="right"
+                                    options={
+                                        window.shyConfig.isUS ? [
+                                            { text: 'OpenAI', type: MenuItemType.text },
+                                            { text: 'GPT-3.5', value: 'gpt-3.5-turbo' },
+                                            { text: 'GPT-4', value: 'gpt-4' },
+                                        ] : [
+                                            { text: lst('百度千帆'), type: MenuItemType.text, label: '文言一心' },
+                                            { text: 'ERNIE-Bot', value: 'ERNIE-Bot' },
+                                            { text: 'ERNIE-Bot-turbo', value: 'ERNIE-Bot-turbo' },
+
+                                            { text: 'Llama', type: MenuItemType.text },
+                                            { text: 'Llama-2-7b-chat', value: 'Llama-2-7b-chat' },
+                                            { text: 'Llama-2-13b-chat', value: 'Llama-2-13b-chat' },
+                                            { text: 'Llama-2-70B-Chat', value: 'Llama-2-70B-Chat' },
+
+                                            { text: lst('智谱'), type: MenuItemType.text },
+                                            // { text: 'ChatGLM2-6B', value: 'ChatGLM2-6B' },
+                                            { text: 'ChatGLM2-6B-32K', value: 'ChatGLM2-6B-32K' },
+                                            // { text: 'ChatGLM2-6B-INT4', value: 'ChatGLM2-6B-INT4' },
+
+                                            { text: 'OpenAI', type: MenuItemType.text, label: lst('仅用于体验') },
+                                            { text: 'GPT-3.5', value: 'gpt-3.5-turbo', label: lst('仅用于体验') },
+                                            { text: 'GPT-4', value: 'gpt-4', label: lst('仅用于体验') },
+                                        ]
+                                    }
+                                    value={this.localRobotInfo.model || (window.shyConfig.isUS ? "gpt-3.5-turbo" : "ERNIE-Bot-turbo")}
+                                    onChange={e => {
+                                        this.localRobotInfo.model = e;
+                                        this.onLayzeSave()
+                                    }}
+                                ></SelectBox>
+                            </div>
+                            <div className="remark  gap-t-10 gap-b-5  f-12"><S>向量存储</S></div>
+                            <div>
+                                <SelectBox
+                                    small
+                                    border
+                                    dropAlign="right"
+                                    dropWidth={300}
+                                    options={window.shyConfig.isUS ? [
+                                        { text: 'OpenAI Embeddings', value: 'gpt' },
+                                    ] : [
+                                        { text: lst('百度文心向量Embeddings'), value: 'Baidu-Embedding-V1' },
+                                        { text: 'OpenAI Embeddings', value: 'gpt', label: '仅用于体验' },
+                                    ]}
+                                    value={this.localRobotInfo.embeddingModel || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
+                                    onChange={e => {
+                                        this.localRobotInfo.embeddingModel = e;
+                                        this.onLayzeSave()
+                                    }}
+                                ></SelectBox>
+                            </div>
+                        </>}
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    render() {
+        var robot = this.props.robot;
+        return <div>
+            {this.isEdit && this.renderEdit()}
             {!this.isEdit && <div className="visible-hover">
                 <div className="visible flex h-30">
                     <span className="flex-auto"></span>
