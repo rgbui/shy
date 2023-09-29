@@ -15,12 +15,16 @@ export function currentParams(routePath: string): Record<string, any> {
 }
 export var UrlRoute = {
     getUrl(url?: string) {
+
         if (url) {
             if (!url.startsWith('/')) url = '/' + url;
             if (config.isDev) return url;
             else return config.isUS ? 'https://shy.red' + url : 'https://shy.live' + url;
         }
-        else return config.isUS ? 'https://shy.red' : 'https://shy.live'
+        else {
+            if (config.isDev) return '/';
+            return config.isUS ? 'https://shy.red' : 'https://shy.live'
+        }
     },
     getHost() {
         return config.isUS ? 'shy.red' : 'shy.live'
