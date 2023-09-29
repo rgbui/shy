@@ -197,19 +197,27 @@ export class Sock {
         }
         return url;
     }
-    async fetchStream(options: { url: string, data?: Record<string, any>, method: string }, callback: (chunk: any, done?: boolean) => void) {
+    async fetchStream(options: {
+        url: string,
+        data?: Record<string, any>,
+        method: string
+    },
+        callback: (chunk: any, done?: boolean, controller?:AbortController) => void) {
         var resolveUrl = await this.getUrlData(options.url, options.data || {}, options?.method?.toLowerCase() == 'get');
         var headers = await this.config() as any;
         headers = {
             "Content-Type": "application/json",
             ...headers.headers
         }
+        let controller = new AbortController();
         const res = await fetch(resolveUrl, {
+            signal: controller.signal,
             method: (options.method || "POST").toUpperCase(),
             body: options.data ? JSON.stringify(options.data) : undefined,
             mode: 'cors',
             headers: headers
         })
+        if (callback) callback(undefined, undefined, controller)
         // Create a reader for the response body
         const reader = res.body.getReader();
         // Create a decoder for UTF-8 encoded text
