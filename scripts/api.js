@@ -79,7 +79,7 @@ import { LinkPageItem,LinkWs} from "../src/page/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
-import { UserBasic, UserStatus } from "../types/user";
+import { RobotInfo, UserBasic, UserStatus } from "../types/user";
 import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { PayFeatureCheck } from "../component/pay";
 import { AtomPermission } from "../src/page/permission";
@@ -220,7 +220,7 @@ push('/user/onlines', '{users:Set<string>}', 'void', ['air']);
 push('/user/view/onlines', '{viewUrl:string,users:Set<string>}', 'void', ['air']);
 push('/get/view/onlines', '{viewUrl:string}', '{users:Set<string>}', ['query']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
-
+push('/robot/open','{robot:RobotInfo}','Promise<void>',['air']);
 push('/sync/wiki/doc', '{wsId?:string,elementUrl:string,pageText:string,robotId:string,contents:{id:string,content:string}[]}', 'SockResponse<{doc:{id:string}}>', ['put']);
 push('/robot/doc/embedding', '{id:string}', 'SockResponse<{totalCount:number}>', ['post'])
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
@@ -248,9 +248,9 @@ push('/user/order/list', '{page?: number, size?: number, word?: string, status?:
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
 push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 push('/check/feature', '{type:PayFeatureCheck,config?:{fileSize?:number}}', 'SockResponse<{warn:boolean,limit:boolean,wallet:{due:Date,oveDue:boolean,meal:string,money:number},free:Record<string,any>,consume:Record<string,any>}>', ['get']);
-push('/query/wiki/answer', '{ask: string, robotId: string}', 'SockResponse<{contents:{ id: string, content: string, rank: number, max: number }[]}>', ['get']);
+push('/query/wiki/answer', '{ask: string,model:string, robotId: string,size?:number,contextSize?:number}', 'SockResponse<{docs:{contentId:string,docId:string,ps:{at:number,content:string,contentId:string,rank:number}[]}[]}>', ['get']);
 push('/text/ai', '{input: string, model?: string, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
-push('/text/ai/stream', '{question: string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean)=>void}', 'SockResponse<void>', ['post'])
+push('/text/ai/stream', '{question: string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController)=>void}', 'SockResponse<void>', ['post'])
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
 push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);

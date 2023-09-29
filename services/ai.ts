@@ -38,7 +38,7 @@ export class AiService {
         args.wsId = surface.workspace?.id;
         var callback = args.callback;
         delete args.callback;
-        var d = masterSock.fetchStream({
+        var d = await masterSock.fetchStream({
             url: '/text/ai/stream',
             data: args,
             method: 'POST'

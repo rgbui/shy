@@ -20,6 +20,8 @@ import { AtomPermission } from "rich/src/page/permission";
 import { Workspace } from "./workspace";
 import { wss } from "../../services/workspace";
 import { lst } from "rich/i18n/store";
+import { RobotInfo } from "rich/types/user";
+import { useOpenRobotSettings } from "./workspace/robot/view";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -44,6 +46,10 @@ class MessageCenter {
             if (ub) return { users: ub.users };
         }
         return { users: new Set() }
+    }
+    @air('/robot/open')
+    async robotOpen(args: { robot: RobotInfo }) {
+        await useOpenRobotSettings(args.robot);
     }
     @air('/page/open')
     async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, blockId?: string, force?: boolean } }) {

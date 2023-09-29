@@ -346,17 +346,6 @@ class WorkspaceService extends BaseService {
         var sock = await this.getArgsSock(args);
         return await sock.get('/ws/view/online/users', args);
     }
-    @get('/ws/robots')
-    async wsRobots(args) {
-        if (typeof args == 'undefined') args = {}
-        var sock = await this.getArgsSock(args);
-        return await sock.get('/ws/robots', args);
-    }
-    @get('/robots/info')
-    async robotsInfo(args) {
-        args.wsId = surface.workspace.id;
-        return await masterSock.get('/robots/info', args);
-    }
     @get('/view/browse')
     async viewBrowse(args) {
         var sock = await this.getArgsSock(args);
