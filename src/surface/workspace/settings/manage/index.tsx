@@ -16,6 +16,7 @@ import { MenuFolderSvg, TreeListSvg } from "rich/component/svgs";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { MenuItemType } from "rich/component/view/menu/declare";
+import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -196,6 +197,9 @@ export class WorkspaceManage extends React.Component {
                                 dropWidth={250}
                                 border
                                 dropAlign="right"
+                                checkChange={async e => {
+                                    return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
+                                }}
                                 options={
                                     window.shyConfig.isUS ? [
                                         { text: 'OpenAI', type: MenuItemType.text },
@@ -234,6 +238,9 @@ export class WorkspaceManage extends React.Component {
                                 border
                                 dropWidth={250}
                                 dropAlign="right"
+                                checkChange={async e => {
+                                    return CanSupportFeature(PayFeatureCheck.aiImage, surface.workspace)
+                                }}
                                 options={
                                     window.shyConfig.isUS ? [
                                         { text: 'OpenAI DALLE2', value: 'gpt' },
@@ -264,6 +271,9 @@ export class WorkspaceManage extends React.Component {
                                     { text: lst('百度文心向量Embeddings'), value: 'Baidu-Embedding-V1' },
                                     { text: 'OpenAI Embeddings', value: 'gpt', label: '仅用于体验' },
                                 ]}
+                                checkChange={async e => {
+                                    return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
+                                }}
                                 value={this.data.aiConfig.embedding || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
                                 onChange={e => { this.change('aiConfig.embedding', e) }}
                             ></SelectBox>

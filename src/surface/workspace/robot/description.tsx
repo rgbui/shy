@@ -17,6 +17,8 @@ import { Input } from "rich/component/view/input";
 import { SwitchText } from "rich/component/view/switch";
 import { MeasureView } from "rich/component/view/progress";
 import lodash from "lodash";
+import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
+import { surface } from "../../store";
 
 @observer
 export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo }>{
@@ -135,6 +137,9 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                                         { text: 'GPT-4', value: 'gpt-4', label: lst('仅用于体验') },
                                     ]
                                 }
+                                checkChange={async e => {
+                                    return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
+                                }}
                                 value={this.localRobotInfo.model || (window.shyConfig.isUS ? "gpt-3.5-turbo" : "ERNIE-Bot-turbo")}
                                 onChange={e => {
                                     this.localRobotInfo.model = e;
@@ -149,6 +154,9 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                                 border
                                 dropWidth={250}
                                 dropAlign="right"
+                                checkChange={async e => {
+                                    return CanSupportFeature(PayFeatureCheck.aiImage, surface.workspace)
+                                }}
                                 options={
                                     window.shyConfig.isUS ? [
                                         { text: 'OpenAI DALLE2', value: 'gpt' },
@@ -201,6 +209,9 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                                         { text: lst('百度文心向量Embeddings'), value: 'Baidu-Embedding-V1' },
                                         { text: 'OpenAI Embeddings', value: 'gpt', label: '仅用于体验' },
                                     ]}
+                                    checkChange={async e => {
+                                        return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
+                                    }}
                                     value={this.localRobotInfo.embeddingModel || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
                                     onChange={e => {
                                         this.localRobotInfo.embeddingModel = e;
