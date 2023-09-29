@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { CheckSvg, DebugSvg, DotsSvg, Edit1Svg, EditSvg, NoneSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
+import { DebugSvg, DotsSvg, Edit1Svg, EditSvg, NoneSvg, PlusAreaSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { RobotApply, RobotApplyOptions, RobotInfo } from "rich/types/user";
+import { GetRobotApplyOptions, RobotApply, RobotInfo } from "rich/types/user";
 import { useRobotInfoPromputForm } from "./dialoug";
 import { util } from "rich/util/util";
 import { useSelectMenuItem } from "rich/component/view/menu";
@@ -14,22 +14,45 @@ import { useIconPicker } from "rich/extensions/icon";
 import { useRobotDebug } from "../debug";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { usePropTemplates } from "./template";
 
 @observer
 export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
     constructor(props) {
         super(props);
     }
-    async addPrompt() {
-        var g = await useRobotInfoPromputForm();
-        if (g) {
-            g.id = util.guid()
-            g.createDate = new Date()
-            if (Array.isArray(this.props.robot.prompts)) this.props.robot.prompts.push(g);
-            else {
-                this.props.robot.prompts = [g];
+    async addPrompt(event: React.MouseEvent) {
+        var rg = await useSelectMenuItem({ roundPoint: Point.from(event) }, [
+            { name: 'custom', text: lst('添加prompt'), icon: PlusSvg },
+            { name: 'template', text: lst('选择模板promp'), icon: PlusAreaSvg }
+        ])
+        if (rg?.item.name == 'custom') {
+            var g = await useRobotInfoPromputForm();
+            if (g) {
+                g.id = util.guid()
+                g.createDate = new Date()
+                if (Array.isArray(this.props.robot.prompts)) this.props.robot.prompts.push(g);
+                else {
+                    this.props.robot.prompts = [g];
+                }
+                await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
             }
-            await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+        }
+        else {
+            var rc = await usePropTemplates();
+            if (rc) {
+                var gc: ArrayOf<RobotInfo['prompts']> = {} as any;
+                gc.id = util.guid()
+                gc.createDate = new Date()
+                gc.text = rc.text;
+                gc.apply = rc.apply;
+                gc.prompt = rc.prompt;
+                if (Array.isArray(this.props.robot.prompts)) this.props.robot.prompts.push(gc);
+                else {
+                    this.props.robot.prompts = [gc];
+                }
+                await masterSock.patch('/robotInfo/set', { id: this.props.robot.id, data: { prompts: this.props.robot.prompts } })
+            }
         }
     }
     async onProperty(event: React.MouseEvent, pro: RobotInfo['prompts'][0]) {
@@ -37,7 +60,7 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
             [
                 { text: lst('编辑'), icon: EditSvg, name: 'edit' },
                 { text: lst('调试'), icon: DebugSvg, name: 'debug' },
-                { text: pro.abled == false ? lst("启用") : lst("禁用"), icon: pro.abled == false ? NoneSvg : CheckSvg, name: 'abled' },
+                { text: lst("禁用"), icon: { name: "bytedance-icon", code: 'invalid-files' }, checkLabel: pro.abled ? false : true, name: 'abled' },
                 { type: MenuItemType.divide },
                 { text: lst('删除'), icon: TrashSvg, name: 'delete' }
             ]
@@ -76,20 +99,23 @@ export class RobotInfoPromptView extends React.Component<{ robot: RobotInfo }>{
     render() {
         var robot = this.props.robot;
         return <div>
-            <div className="h4 flex"><span className="flex-auto"><S>Prompt模板</S></span><span onClick={e => this.addPrompt()} className=" flex-fixed size-24 item-hover round cursor flex-center"><Icon icon={PlusSvg}></Icon></span></div>
+            <div className="h4 flex"><span className="flex-auto"><S>Prompt模板</S></span><span onClick={e => {
+                e.stopPropagation();
+                this.addPrompt(e);
+            }} className=" flex-fixed size-24 item-hover round cursor flex-center"><Icon icon={PlusSvg}></Icon></span></div>
             <div className="flex flex-wrap r-gap-r-10 r-gap-b-10">
                 {(robot.prompts || []).map(pro => {
-                    var ra = RobotApplyOptions.find(g => g.value == pro.apply);
+                    var ra = GetRobotApplyOptions().find(g => g.value == pro.apply);
                     if (ra?.value == RobotApply.none) ra = null;
                     return <div className={"border flex-fixed w-250 h-180 round padding-10 " + (pro.abled == false ? " op-4" : "")} key={pro.id}>
                         <div className="flex h-30">
-                            <span className="flex-fixed size-24 round item-hover cursor flex-center" onClick={e => this.changeIcon(e, pro)}><Icon size={16} icon={pro.icon || Edit1Svg}></Icon></span>
-                            <span className="flex-auto bold flex"><span>{pro.text}</span>{ra && <em className="gap-l-10 bg-primary padding-w-3 padding-h-1 text-white round cursor">{ra.text}</em>}</span>
+                            <span className="flex-fixed size-24 round item-hover cursor flex-center gap-r-5" onClick={e => this.changeIcon(e, pro)}><Icon size={16} icon={pro.icon || Edit1Svg}></Icon></span>
+                            <span className="flex-auto bold flex text-overflow"><span>{pro.text}</span>{ra && <em className="gap-l-10 remark padding-w-3 padding-h-1  round cursor f-12">{ra.text}</em>}</span>
                             <span onClick={e => this.onProperty(e, pro)} className="flex-fixed flex-center size-24 item-hover round cursor">
                                 <Icon size={20} icon={DotsSvg}></Icon>
                             </span>
                         </div>
-                        <div className="text-1 h-150 overflow-y pre" dangerouslySetInnerHTML={{ __html: pro.prompt }}>
+                        <div className="text-1 h-150 overflow-y pre gap-t-10" dangerouslySetInnerHTML={{ __html: pro.prompt }}>
                         </div>
                     </div>
                 })}
