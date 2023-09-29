@@ -16,6 +16,7 @@ import { channel } from "rich/net/channel";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
 import { Icon } from "rich/component/view/icon";
 import { S } from "rich/i18n/view";
+import { lst } from "rich/i18n/store";
 
 @observer
 export class ContentViewer extends React.Component {
@@ -38,9 +39,14 @@ export class ContentViewer extends React.Component {
     }
     robot: RobotInfo = null;
     async load(doc: WikiDoc, robot: RobotInfo) {
-        this.robot = robot;
-        this.doc = doc;
-        var local = this.local;
+        var local = {
+            saveLoading: false,
+            embedding: false,
+            input: this.local.input,
+            error: '',
+            relevanceData: null,
+            pe: null
+        };
         if (!Array.isArray(doc.contents)) {
             var g = await masterSock.get('/robot/doc/content', { id: doc.id });
             if (g?.ok) {
@@ -50,8 +56,8 @@ export class ContentViewer extends React.Component {
                 }
             }
         }
-        if (this.doc.elementUrl) {
-            var pe = parseElementUrl(this.doc.elementUrl);
+        if (doc.elementUrl) {
+            var pe = parseElementUrl(doc.elementUrl);
             if (pe?.type == ElementType.PageItem) {
                 var item = (await channel.get('/page/item', { id: pe.id })).data.item;
                 if (item) {
@@ -60,7 +66,10 @@ export class ContentViewer extends React.Component {
                 }
             }
         }
+        this.robot = robot;
+        this.doc = doc;
         if (local.input) local.input.updateValue(doc.text || '');
+        this.local = local;
         this.forceUpdate()
     }
     render(): React.ReactNode {
@@ -72,7 +81,14 @@ export class ContentViewer extends React.Component {
                 local.embedding = true;
                 local.error = '';
                 try {
-                    await masterSock.fetchStream({ url: '/robot/doc/embedding/stream', data: { id: doc.id }, method: 'post' }, (str, done) => {
+                    await masterSock.fetchStream({
+                        url: '/robot/doc/embedding/stream',
+                        data: {
+                            id: doc.id,
+                            model: self.robot.embeddingModel || (window.shyConfig.isUS ? "gpt" : "ERNIE-Bot-turbo")
+                        },
+                        method: 'post'
+                    }, (str, done) => {
                         doc.embeddingTip = str;
                         if (done) {
                             doc.embedding = true;
@@ -83,7 +99,7 @@ export class ContentViewer extends React.Component {
                 }
                 catch (ex) {
                     console.error(ex);
-                    local.error = '训练出错'
+                    local.error = lst('训练出错')
                 }
                 finally {
                     // local.embedding = false;
@@ -95,7 +111,8 @@ export class ContentViewer extends React.Component {
             local.saveLoading = true;
             try {
                 await masterSock.put('/robot/save/doc/content', {
-                    robotId: self.robot.id, data: {
+                    robotId: self.robot.id,
+                    data: {
                         id: doc.id,
                         contents: doc.contents,
                         embeddding: false
@@ -109,8 +126,9 @@ export class ContentViewer extends React.Component {
                 local.saveLoading = false;
             }
         }
+
         var autoSave = lodash.debounce(async () => {
-            save()
+            await save()
         }, 1000)
 
         var input = lodash.debounce(async (e) => {
@@ -131,8 +149,8 @@ export class ContentViewer extends React.Component {
             </div>}
             <div className="remark gap-h-10"><label><S>标题</S>:</label></div>
             <div className="gap-h-10"><Input ref={e => local.input = e} value={doc.text || ''} onChange={e => input(e)} ></Input></div>
-            {local.pe?.type == ElementType.PageItem && <>
-                <div className="remark gap-h-10"><label><S>关联</S>:</label></div>
+            {local.pe?.type == ElementType.PageItem && local.relevanceData && <>
+                <div className="remark gap-h-10"><label><S>引用</S>:</label></div>
                 <div className="gap-h-10 flex">
                     <span className="item-hover round cursor padding-w-5 padding-h-2 flex">
                         <Icon size={18} icon={getPageIcon(local.relevanceData.icon)}></Icon>
@@ -144,12 +162,16 @@ export class ContentViewer extends React.Component {
             <div className="gap-h-10">
                 {doc.contents?.map((c, i) => {
                     return <div key={c.id}>
-                        <Textarea maxLength={4000 * 4} style={{ minHeight: 400 }} value={c.content} onChange={e => {
-                            c.content = e;
-                            doc.embedding = false;
-                            autoSave();
-                        }}></Textarea>
-                        <div className="remark f-12 gap-h-5"><S text='支持markdown语法少于16000字'>支持markdown语法，限16000字内</S></div>
+                        <Textarea
+                            maxLength={4000 * 4}
+                            style={{ minHeight: 400 }}
+                            value={c.content}
+                            onChange={e => {
+                                c.content = e;
+                                doc.embedding = false;
+                                autoSave();
+                            }}></Textarea>
+                        <div className="remark f-12 gap-h-5"><S text='支持markdown语法'>支持markdown语法</S></div>
                     </div>
                 })}
             </div>

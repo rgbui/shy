@@ -21,7 +21,7 @@ import { RobotInfoDescriptionView } from "../description";
 import { ToolTip } from "rich/component/view/tooltip";
 import { RobotInfoPromptView } from "./prompt";
 import "./style.less";
-import { useRobotDebug } from "./debug";
+import { closeRobotDebug, useRobotDebug } from "./debug";
 import { lst } from "rich/i18n/store";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { S } from "rich/i18n/view";
@@ -118,8 +118,22 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                 }
             }
             else if (r.item?.name == 'fine') {
-                if (doc.embedding == true && await Confirm(lst('已训练，是否仍然训练')))
-                    await masterSock.post('/robot/doc/embedding', { id: doc.id })
+                if (doc.embedding !== true || doc.embedding == true && await Confirm(lst('已训练-tip', '已训练，是否仍然训练')))
+                    await masterSock.fetchStream({
+                        url: '/robot/doc/embedding/stream',
+                        data: {
+                            id: doc.id,
+                            model: props.robot.model || (window.shyConfig.isUS ? "gpt" : "ERNIE-Bot-turbo")
+                        },
+                        method: 'post'
+                    }, (str, done) => {
+                        doc.embeddingTip = str;
+                        if (done) {
+                            doc.embedding = true;
+                            doc.embeddingTip = '';
+                            // local.embedding = false;
+                        }
+                    })
             }
             else if (r.item?.name == 'delete') {
                 if (await Confirm(lst('确认删除吗'))) {
@@ -171,7 +185,6 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
             el: null,
             drop: null
         };
-
         MouseDragger({
             event: e.nativeEvent,
             dis: 5,
@@ -302,13 +315,13 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
         })
     }
     async function dragPos(doc: WikiDoc, dropDoc: WikiDoc, arrow: 'bottom' | 'bottom-sub' | 'top') {
-        var parentId = arrow == 'bottom-sub' ? dropDoc.id : dropDoc.parentId;
+        var parentId = arrow == 'bottom-sub' ? dropDoc.id : null;
         var g = await masterSock.post('/doc/move', {
             id: doc.id,
             pos: {
                 parentId,
-                id: arrow == 'bottom-sub' ? (dropDoc.childs || [])[0]?.id : dropDoc.id,
-                arrow: arrow == 'bottom' ? 'down' : 'up'
+                id: arrow == 'bottom-sub' ? null : dropDoc.id,
+                arrow: arrow == 'top' ? "up" : 'down'
             }
         })
         if (g.ok) {
@@ -318,6 +331,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                     if (!Array.isArray(dropDoc.childs)) dropDoc.childs = [];
                     dropDoc.childs.push(doc);
                     doc.parentId = dropDoc.id;
+                    doc.at = (dropDoc.childs.last()?.at || -1) + 1;
                 }
                 else if (arrow == 'bottom') {
                     var docs = (dropDoc.parentId ? local.docs.arrayJsonFind('childs', g => g.id == dropDoc.parentId).childs : local.docs)
@@ -360,7 +374,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                             }}
                         >
                             <div className={"visible-hover cursor flex h-30 gap-h-5 item-hover round" + (local.editDoc?.id == doc.id ? " item-hover-focus" : "")} style={{ paddingLeft: level * 20 }}>
-                                {local.renameDoc !== doc && <><span className={"flex-fixed size-20 flex-center item-hover round ts" + (doc.spread ? '' : ' rotate-90-')}
+                                {local.renameDoc !== doc && <><span className={"flex-fixed gap-l-5 size-20 flex-center item-hover round ts" + (doc.spread ? '' : ' rotate-90-')}
                                     onMouseDown={e => { doc.spread = doc.spread ? false : true; e.stopPropagation() }}>
                                     {doc.childs?.length > 0 && <Icon size={16} icon={ChevronDownSvg}></Icon>}
                                     {!(Array.isArray(doc.childs) && doc.childs.length > 0) && <Icon size={16} icon={DotSvg}></Icon>}
@@ -371,7 +385,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                                     <span className="flex-auto text-overflow">{doc.text || lst('知识')}</span>
                                     <span className="flex-fixed flex">
                                         {doc.embedding && <Tip text={'已微调'}><span className="flex-center text-1 size-20 item-hover  round" ><Icon size={16} icon={CheckSvg}></Icon></span></Tip>}
-                                        <span className="flex-center size-20 item-hover visible round" onClick={e => contextmenuItem(e, doc, parentDoc)}><Icon size={20} icon={DotsSvg}></Icon></span>
+                                        <span className="flex-center size-20 gap-r-5 item-hover visible round" onClick={e => contextmenuItem(e, doc, parentDoc)}><Icon size={20} icon={DotsSvg}></Icon></span>
                                     </span></>}
                                 {local.renameDoc == doc && <>
                                     <input className="no-border"
@@ -398,6 +412,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
         else return <></>
     }
     function back() {
+        closeRobotDebug();
         if (typeof props.close == 'function') props.close()
     }
     async function openDebug(e: React.MouseEvent) {
@@ -418,7 +433,7 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
         <div className="flex border-bottom gap-h-10 gap-b-20  r-h-30 r-cursor">
             <span onClick={e => local.tab = '1'} className={"flex-fixed padding-w-15 " + (local.tab == '1' ? "border-b-p" : "")}><S>常规</S></span>
             <span onClick={e => local.tab = '3'} className={"flex-fixed padding-w-15 " + (local.tab == '3' ? "border-b-p" : "")}>prompt</span>
-            <span onClick={e => local.tab = '2'} className={"flex-fixed padding-w-15 " + (local.tab == '2' ? "border-b-p" : "")}><S>知识库</S></span>
+            {props.robot.disabledWiki !== true && <span onClick={e => local.tab = '2'} className={"flex-fixed padding-w-15 " + (local.tab == '2' ? "border-b-p" : "")}><S>知识库</S></span>}
             <span className="flex-auto flex-end">
                 <ToolTip overlay={lst('调试')}><span onMouseDown={e => openDebug(e)} className="flex-center size-24 round item-hover cursor"><Icon size={18} icon={DebugSvg}></Icon></span></ToolTip>
             </span>

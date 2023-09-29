@@ -6,16 +6,19 @@ import React from "react";
 import { RobotInfo } from "rich/types/user";
 import { RobotWikiList } from "./wiki";
 import { RobotTasksList } from "./task/view";
+import lodash from "lodash";
 
 @observer
 export class RobotSettings extends EventsComponent {
     mode: string = 'settings';
     visible: boolean = false;
+    robot: RobotInfo = null;
     constructor(props) {
         super(props);
         makeObservable(this, {
             visible: observable,
-            mode: observable
+            mode: observable,
+            robot: observable,
         });
     }
     close() {
@@ -26,10 +29,10 @@ export class RobotSettings extends EventsComponent {
     open(robot: RobotInfo) {
         runInAction(() => {
             this.visible = true;
-            this.robot = robot;
+            this.robot = lodash.cloneDeep(robot);
         })
     }
-    robot: RobotInfo
+
     el: HTMLElement;
     render() {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
