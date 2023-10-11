@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Row, Col, Divider, Space } from 'rich/component/view/grid';
+import {  Divider } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { observer } from 'mobx-react';
-import { makeObservable, observable, runInAction } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { surface } from '../../../store';
 import { Select } from 'rich/component/view/select';
 import { channel } from 'rich/net/channel';
@@ -46,7 +46,7 @@ export class WorkspaceMembers extends React.Component {
                 size: this.searchList.size,
                 word: this.searchList.word || undefined,
                 roleId: this.searchList.roleId || undefined,
-                ws:undefined
+                ws: undefined
             });
             if (r.ok) {
                 Object.assign(this.searchList, r.data);

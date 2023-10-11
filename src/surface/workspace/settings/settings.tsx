@@ -18,6 +18,7 @@ import { useForm } from 'rich/component/view/form/dialoug';
 import { ShyUrl, UrlRoute } from '../../../history';
 import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
+import { config } from '../../../../common/config';
 
 @observer
 export class WorkspaceSettingsView extends React.Component {
@@ -55,7 +56,7 @@ export class WorkspaceSettingsView extends React.Component {
     }
     async openDomain(event: React.MouseEvent) {
         var us = await surface.user.wallet();
-        if (!us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+        if (config.isDev || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
             var r = await useSetWsDomain(surface.workspace.id, '');
             if (r) {
                 surface.workspace.siteDomain = r;
@@ -108,14 +109,14 @@ export class WorkspaceSettingsView extends React.Component {
         if (typeof data.text != 'undefined' && data.text) {
             this.error.text = '';
             if (data.text.length > 30) {
-                this.error.text =lst('呢称过长') ;
+                this.error.text = lst('呢称过长');
                 return;
             }
         }
         if (typeof data.slogan != 'undefined' && data.slogan) {
             this.error.slogan = '';
             if (data.slogan.length > 140) {
-                this.error.slogan =lst('介绍过长,不能超过140个字符') ;
+                this.error.slogan = lst('介绍过长,不能超过140个字符');
                 return;
             }
         }
@@ -204,10 +205,10 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'><S>空间域名</S></div>
-                <div className='remark f-12 gap-h-10 flex'><S>需要公开至互联网才能访问</S><a className='link-remark underline gap-r-5' href={'https://' + domain + '.'+UrlRoute.getHost()}>{'https://' + domain + '.'+UrlRoute.getHost()}</a></div>
-                <div className='remark f-12 gap-h-10 flex'><S>任何时候都能访问</S><a className='link-remark underline gap-r-5' href={UrlRoute.getUrl()+ '/ws/' + domain}>{UrlRoute.getUrl()+'/ws/' + domain}</a></div>
+                <div className='remark f-12 gap-h-10 flex'><S>需要公开至互联网才能访问</S><a className='link-remark underline gap-r-5' href={'https://' + domain + '.' + UrlRoute.getHost()}>{'https://' + domain + '.' + UrlRoute.getHost()}</a></div>
+                <div className='remark f-12 gap-h-10 flex'><S>站内访问</S><a className='link-remark underline gap-r-5' href={UrlRoute.getUrl() + '/ws/' + domain}>{UrlRoute.getUrl() + '/ws/' + domain}</a></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + domain + '.'+UrlRoute.getHost()}>https://{domain}.{UrlRoute.getHost()}</a>
+                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} href={'https://' + domain + '.' + UrlRoute.getHost()}>https://{domain}.{UrlRoute.getHost()}</a>
                 </div>
                 {!surface.workspace.siteDomain && <div className='flex'>
                     <Button onClick={e => this.openDomain(e)} ghost><S>自定义空间二级域名</S></Button>

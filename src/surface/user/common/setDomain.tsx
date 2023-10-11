@@ -15,8 +15,8 @@ class WsDomain extends EventsComponent {
             <div className="remark f-12">
                 <S text={'空间域名设置提示'}>空间域名设置后不可更改，域名不能为纯数字，仅限数字和字母组合</S>
             </div>
-            <div className="gap-h-20">
-                https://<Input className={'w-120 gap-w-10'} placeholder={lst('输入域名')} value={this.name} onChange={e => this.name = e}></Input>.{UrlRoute.getHost()}
+            <div className="gap-h-20 flex">
+                https://<Input style={{ width: 120 }} className={'w-120 gap-w-10'} placeholder={lst('输入域名')} value={this.name} onChange={e => this.name = e}></Input>.{UrlRoute.getHost()}
             </div>
             <div>
                 <Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button>
@@ -32,20 +32,24 @@ class WsDomain extends EventsComponent {
     button: Button;
     async save() {
         this.error = '';
+        this.name = (this.name || '').toLowerCase();
         this.forceUpdate();
         this.button.loading = true;
         try {
-            var r = await channel.patch('/ws/set/domain', { wsId: this.wsId, domain: this.name });
-            if (r?.data?.exists) {
-                this.error = lst('域名被占用')
+            if (this.name) {
+                var r = await channel.patch('/ws/set/domain', { wsId: this.wsId, domain: this.name });
+                if (r?.data?.exists) {
+                    this.error = lst('域名被占用')
+                }
+                if (r?.data.illegal) {
+                    this.error = lst('域名输入不合法')
+                }
+                if (r.ok && !r.data?.exists && !r.data?.illegal) {
+                    this.emit('close', this.name);
+                    return;
+                }
             }
-            if (r?.data.illegal) {
-                this.error = lst('域名输入不合法')
-            }
-            if (r.ok && !r.data?.exists && !r.data?.illegal) {
-                this.emit('close', this.name);
-                return;
-            }
+            else this.error = lst('域名不能为空')
         }
         catch (ex) {
 
