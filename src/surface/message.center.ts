@@ -6,7 +6,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { LinkWs, PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
-import { ShyUrl, UrlRoute } from "../history";
+import { ShyUrl, SyHistory, UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
@@ -22,6 +22,8 @@ import { wss } from "../../services/workspace";
 import { lst } from "rich/i18n/store";
 import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "./workspace/robot/view";
+import { useOpenWorkspaceSettings } from "./workspace/settings";
+import { useOpenUserSettings } from "./user/settings";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -473,5 +475,17 @@ class MessageCenter {
         var list = surface.wss.findAll(g => g.owner && g.owner == surface.user.id || !g.owner && g.creater == surface.user.id);
         lodash.remove(list, g => g.id == surface.workspace.id)
         return { wss: list };
+    }
+    @act('/open/user/settings')
+    async openUser() {
+        await useOpenUserSettings();
+    }
+    @act('/open/workspace/settings')
+    async openWorkspace() {
+        await useOpenWorkspaceSettings();
+    }
+    @act('/user/logout')
+    async openLogout() {
+        if (surface?.user) surface.user.logout()
     }
 }
