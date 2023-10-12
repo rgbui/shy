@@ -4,7 +4,7 @@ import { surface } from "../../store";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
-import { ChevronDownSvg, EditSvg, MenuSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, FolderPlusSvg, FolderCloseSvg, } from "rich/component/svgs";
+import { ChevronDownSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, FolderPlusSvg, FolderCloseSvg, } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
@@ -96,7 +96,7 @@ export var WorkspaceProfile = observer(function () {
     return <div className={'shy-ws-profile' + (surface.workspace?.cover?.url ? " cover" : "")} onMouseDown={e => mousedown(e)}>
         <div className={'shy-ws-profile-info flex'}>
             {isMobileOnly && <span className="flex-fixed flex-center size-24 round cursor item-hover">
-                <Icon size={16} icon={MenuSvg}></Icon>
+                <Icon size={16} icon={{name:"bytedance-icon",code:'hamburger-button'}}></Icon>
             </span>}
             <span className="flex-auto bold f-16 text-overflow gap-r-5">{surface.workspace.text}</span>
             {surface.workspace.isMember && <Icon icon={ChevronDownSvg} size={16} className={'padding-r-10 remark flex-fixed'}></Icon>}

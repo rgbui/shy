@@ -24,7 +24,6 @@ import { config } from "../../../../common/config";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 
-
 @observer
 export class WsSettings extends EventsComponent {
     mode: string = 'settings';
@@ -79,7 +78,7 @@ export class WsSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('members')} className={this.mode == 'members' ? "hover" : ""} ><S>成员</S></a>
                         <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}><S>邀请</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
-                        {config.isTestBeta && <><h4><S>发布管理</S></h4>
+                        {config.isTestBeta && <><h4><S>应用管理</S></h4>
                             <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} ><S>发布</S></a>
                             <Divider style={{ margin: '0px 15px' }}></Divider></>}
                         <h4><S>机器人</S></h4>

@@ -21,7 +21,7 @@ import { ShyAlert } from "rich/component/lib/alert";
 import { PageViewStores } from "../supervisor/view/store";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { pageItemStore } from "../sln/item/store/sync";
-import { PageLayoutType } from "rich/src/page/declare";
+import { PageLayoutType, WorkspaceNavMenuItem } from "rich/src/page/declare";
 import { SockType } from "../../../net/sock/type";
 import { Pid, PidType } from "./declare";
 import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
@@ -67,22 +67,6 @@ export type LinkWorkspaceOnline = {
     loadingOnlineUsers: boolean,
     unreadChats: { id: string, roomId: string, seq: number }[]
 } & Partial<Workspace>
-
-export type WorkspaceNavMenuItem = {
-    id: string,
-    date?: number,
-    userid?: string,
-    text: string,
-    type: 'logo' | 'text' | 'link',
-    pic?: ResourceArguments,
-    icon?: IconArguments,
-    childs?: WorkspaceNavMenuItem[],
-    urlType?: 'page' | 'url',
-    url?: string,
-    pageId?: string,
-    pageText?: string,
-    spread?: boolean
-}
 
 
 export class Workspace {
@@ -189,6 +173,7 @@ export class Workspace {
     public publishConfig: {
         abled: boolean,
         defineNavMenu: boolean,
+        allowSearch: boolean,
         navMenus: WorkspaceNavMenuItem[],
         defineContent: boolean,
         isFullWidth: boolean,
@@ -203,7 +188,8 @@ export class Workspace {
             isFullWidth: true,
             smallFont: true,
             contentTheme: 'default',
-            defineBottom: false
+            defineBottom: false,
+            allowSearch: false
         }
     constructor() {
         makeObservable(this, {
@@ -277,6 +263,9 @@ export class Workspace {
     get isOwner() {
         var ow = this.owner ? this.owner : this.creater;
         return surface.user?.id == ow ? true : false;
+    }
+    get isManager() {
+        return this.isAllow(AtomPermission.all);
     }
     isAllow(...permissions: AtomPermission[]) {
         if (this.isOwner) return true;

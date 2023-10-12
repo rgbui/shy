@@ -21,6 +21,7 @@ import { SaveTip } from '../../../component/tip/save.tip';
 import { ShyUserPks } from './content/keys';
 import { InviteList } from './task/invite';
 import { S } from 'rich/i18n/view';
+import { surface } from '../../store';
 
 @observer
 class UserSettings extends EventsComponent {
@@ -46,19 +47,8 @@ class UserSettings extends EventsComponent {
         this.emit('close');
     }
     singout() {
-        if (window.shyConfig.isPro) {
-            if (location.hostname ==UrlRoute.getHost() || window.shyConfig.isPc) {
-                SyHistory.push(ShyUrl.signOut);
-                this.close()
-            }
-            else {
-                location.href =UrlRoute.getUrl()+ '/sign/out'
-            }
-        }
-        else {
-            SyHistory.push(ShyUrl.signOut);
-            this.close()
-        }
+        var r = surface.user.logout()
+        if (r == 1) this.close()
     }
     el: HTMLElement;
     render() {

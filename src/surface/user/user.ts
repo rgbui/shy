@@ -9,7 +9,7 @@ import { HttpMethod } from "../../../net/primus/http";
 import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { masterSock } from "../../../net/sock";
 import { userTimNotify } from "../../../services/tim";
-import { UrlRoute, ShyUrl } from "../../history";
+import { UrlRoute, ShyUrl, SyHistory } from "../../history";
 import { useOpenUserSettings } from "./settings";
 import { surface } from "../store";
 
@@ -154,6 +154,25 @@ export class User {
         var r = await channel.get('/user/wallet');
         if (r?.ok) {
             return r.data as any;
+        }
+    }
+    /**
+     * 
+     * @returns 返回值 为1  表示通过路由跳转，而不是直接网址跳转
+     */
+    logout() {
+        if (window.shyConfig.isPro) {
+            if (location.hostname == UrlRoute.getHost() || window.shyConfig.isPc) {
+                SyHistory.push(ShyUrl.signOut);
+                return 1;
+            }
+            else {
+                location.href = UrlRoute.getUrl() + '/sign/out'
+            }
+        }
+        else {
+            SyHistory.push(ShyUrl.signOut);
+            return 1;
         }
     }
 }

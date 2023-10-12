@@ -2,7 +2,7 @@ import React from "react";
 import { UrlRoute } from "../../src/history";
 import { config } from "../../common/config";
 import { S, Sp } from "rich/i18n/view";
-import { AiStartSvg, BoardToolFrameSvg, ChevronDownSvg, CollectTableSvg, DocCardsSvg, MenuSvg, PageSvg } from "rich/component/svgs";
+import { AiStartSvg, BoardToolFrameSvg, ChevronDownSvg, CollectTableSvg, DocCardsSvg, PageSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { getEle, getTypeColor, refShyPage } from "../util";
 import { surface } from "../../src/surface/store";
@@ -96,7 +96,7 @@ export function HeadView() {
             {!surface.user?.id && <a className="shy-site-head-user-sign" href={UrlRoute.getUrl('/sign/in')}><S>登录/注册</S></a>}
             {surface.user?.id && <a href={UrlRoute.getUrl('/home')}><Avatar hideStatus user={surface.user} size={36}></Avatar></a>}
             <a className="shy-site-head-menu">
-                <Icon icon={MenuSvg} size={24} />
+                <Icon icon={{ name: 'bytedance-icon', code: 'hamburger-button' }} size={24} />
             </a>
         </div>
     </div>

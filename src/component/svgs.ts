@@ -14,7 +14,6 @@ import ImportSvg from "../assert/svg/import.svg";
 import LinkSvg from "../assert/svg/link.svg";
 import LockSvg from "../assert/svg/lock.svg";
 import MemberSvg from "../assert/svg/member.svg";
-import MenuSvg from "../assert/svg/menu.svg";
 import PageSvg from "../assert/svg/page.svg";
 import PubWorkspaceSvg from "../assert/svg/pubWorkspace.svg";
 import RenameSvg from "../assert/svg/rename.svg";
@@ -42,7 +41,6 @@ ImportSvg,
 LinkSvg,
 LockSvg,
 MemberSvg,
-MenuSvg,
 PageSvg,
 PubWorkspaceSvg,
 RenameSvg,

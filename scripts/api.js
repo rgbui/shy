@@ -260,6 +260,9 @@ push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])
 push('/open/weixin/unbind', '{id:string}', 'SockResponse<void>', ['del'])
 push('/open/list', '', 'SockResponse<{list:any[]}>', ['get'])
 push('/open/sign', '{}', 'SockResponse<{user:Record<string,any>,guid:string,token:string}>', ['put'])
+push('/open/user/settings', '{}', 'Promise<void>', ['act'])
+push('/open/workspace/settings', '{}', 'Promise<void>', ['act'])
+push('/user/logout', '{}', 'Promise<number>', ['act'])
 
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
