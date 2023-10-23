@@ -56,6 +56,7 @@ export class Sln extends Events {
                     ghostView.load(data.item, { point: Point.from(ev) })
                 },
                 moving(ev, data, isend) {
+                    if(isend)return;
                     ghostView.move(Point.from(ev));
                 },
                 moveEnd(ev, isMove, data) {

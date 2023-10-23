@@ -12,9 +12,6 @@ export function getPageItemElementUrl(item: PageItem) {
     else if (item.pageType == PageLayoutType.dbView) {
         return getElementUrl(ElementType.SchemaView, item.parentId, item.id);
     }
-    else if (item.pageType == PageLayoutType.formView) {
-        return getElementUrl(ElementType.SchemaRecordView, item.parentId, item.id);
-    }
     else if (item.pageType == PageLayoutType.textChannel) {
         return getElementUrl(ElementType.Room, item.id);
     }

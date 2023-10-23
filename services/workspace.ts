@@ -48,7 +48,7 @@ class WorkspaceService extends BaseService {
         }
         if (surface.workspace) {
             args.wsId = surface.workspace.id;
-            args.sockId = surface.workspace.tim.id;
+            args.sockId = surface.workspace?.tim?.id;
         }
         return surface.workspace?.sock;
     }
