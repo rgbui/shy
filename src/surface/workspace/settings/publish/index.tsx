@@ -98,6 +98,7 @@ export class SitePublishView extends React.Component {
     editItemDeep: number = 0;
     refInput: Input;
     refTextArea: Textarea;
+    refPageText: Input;
     renderDefineTop() {
         var self = this;
         var h = 60;
@@ -118,6 +119,7 @@ export class SitePublishView extends React.Component {
                 self.editItemDeep = deep;
                 if (self.refInput) self.refInput.updateValue(e.text || lst('菜单项'))
                 if (self.refTextArea) self.refTextArea.updateValue(e.remark || '')
+                if (self.refPageText) self.refPageText.updateValue(e.pageText || '')
                 e.spread = e.spread === true ? false : true;
                 self.forceUpdate();
             }
@@ -165,6 +167,7 @@ export class SitePublishView extends React.Component {
                 item.pageId = g.id;
                 item.pageText = g.text;
                 item.icon = g.icon;
+                if (self.refPageText) self.refPageText.updateValue(g.text);
                 if (!item.text || item.text == lst('菜单项')) item.text = g.text;
                 self.checkChange();
             }
@@ -238,7 +241,7 @@ export class SitePublishView extends React.Component {
                     {item.urlType == 'page' && <div className="flex">
                         <label className="flex-fixed w-40 flex-end gap-r-5"><S>页面</S>:</label>
                         <div className="flex-auto">
-                            <Input onMousedown={e => openSelectPage(e, item)} value={item.pageText} readonly></Input>
+                            <Input ref={e => self.refPageText = e} onMousedown={e => openSelectPage(e, item)} value={item.pageText} readonly></Input>
                         </div>
                     </div>}
                 </div>
@@ -361,6 +364,7 @@ export class SitePublishView extends React.Component {
             }
         </div>
     }
+
     renderContent() {
         return <div>
             <Divider></Divider>

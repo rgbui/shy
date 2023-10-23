@@ -192,7 +192,8 @@ export var RobotWikiList = observer((props: { robot: RobotInfo, close?: () => vo
                 var pe = (e.target as HTMLElement).closest('[data-wiki-id]') as HTMLElement;
                 ghostView.load(pe, { point: Point.from(e) })
             },
-            moving: (e) => {
+            moving: (e, d, isend) => {
+                if (isend) return;
                 ghostView.move(e);
                 if (local.docPanel && local.docPanel.contains(e.target as HTMLElement)) {
                     var c = (e.target as HTMLElement).closest('[data-wiki-id]') as HTMLElement;

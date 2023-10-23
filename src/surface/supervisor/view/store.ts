@@ -77,21 +77,10 @@ export class PageViewStore extends Events {
         }
         return null;
     }
-    // onOpenFieldProperty(e: React.MouseEvent) {
-    //     if (this.page) this.page.onOpenFieldProperty(e);
-    // }
     async loadConfig(config?: PageViewStore['config']) {
         if (config) this.config = lodash.cloneDeep(config);
         else this.config = {}
     }
-    // async onFullDisplay() {
-    //     await surface.supervisor.onOpenDialog(null)
-    //     surface.supervisor.onOpen(this.elementUrl);
-    // }
-    // async onOpen(elementUrl: string) {
-    //     surface.supervisor.closeDialogOrSlide()
-    //     await channel.air('/page/open', { elementUrl })
-    // }
     updateElementUrl(elementUrl: string) {
         if (elementUrl != this.elementUrl) {
             var pvs = PageViewStores.stores.get(this.elementUrl);
