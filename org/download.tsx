@@ -20,7 +20,7 @@ export function DownloadView() {
                         </div>
                         <p><span><S>Mac OS 客户端</S></span></p>
                         <p style={{ paddingTop: 20 }}><a className="item-primary-hover" data-download-mac href="https://resources.shy.live/app/download/shy-0.8.23.dmg"
-                            download={config.isUS ? "Shy" : "诗云"}><S>下载</S></a></p>
+                            download={config.isUS ? "Shy" : "诗云"}><S>开发中...</S></a></p>
                     </div>
                     <div style={{ backgroundColor: 'rgb(239, 246, 255)' }} className="shy-site-download-platform shy-site-block-card">
                         <div className="shy-site-download-platform-icon">
@@ -28,7 +28,7 @@ export function DownloadView() {
                         </div>
                         <p><span><S>Windows 客户端</S></span></p>
                         <p style={{ paddingTop: 20 }}><a className="item-primary-hover" data-download-win href="https://resources.shy.live/app/download/shy-0.8.23.zip"
-                            download={config.isUS ? "Shy" : "诗云"}><S>下载</S></a></p>
+                            download={config.isUS ? "Shy" : "诗云"}><S>开发中...</S></a></p>
                     </div>
                     <div style={{ backgroundClip: 'rgb(240, 253, 244)' }} className="shy-site-download-platform shy-site-block-card">
                         <div className="shy-site-download-platform-icon">
