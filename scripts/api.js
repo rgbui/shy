@@ -325,7 +325,7 @@ push('/page/items', '{ws:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResp
 push('/page/item/subs', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/parent/ids', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ parentIds:string[],exists:boolean }>', ['get'])
 push('/page/parent/subs', '{ws:LinkWs,wsId?:string,parentIds:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
-push('/page/item', '{id:string}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
+push('/page/item', '{ws?:LinkWs,id?:string,sn?:number}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
 push('/page/item/create', '{wsId?:string,data:Record<string,any>}', 'SockResponse<{ item:Record<string,any> }>', ['put'])
 push('/page/word/query', '{ws:LinkWs,wsId?:string,word?:string,size?:number}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get']);
 push('/page/deleted/query', '{ws?:LinkWs,wsId?:string,word?:string,size?:number}', 'SockResponse<{list:LinkPageItem[],total:number,page:number,size:number}>', ['get'])
