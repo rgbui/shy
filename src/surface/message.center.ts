@@ -79,6 +79,7 @@ class MessageCenter {
             )
         }
         await surface.supervisor.onOpen(elementUrl, args.config);
+
         if (surface.supervisor.page?.item) {
             var it = surface.supervisor.page?.item;
             var willPageId = UrlRoute.isMatch(ShyUrl.root) ? surface.workspace.defaultPageId : undefined;
@@ -88,6 +89,12 @@ class MessageCenter {
             surface.sln.onFocusItem(it);
             if (!(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn.toString())) {
                 UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
+            }
+        }
+        else {
+            var pe = parseElementUrl(elementUrl);
+            if (pe.type == ElementType.SchemaRecordView || pe.type == ElementType.SchemaRecordViewData || pe.type == ElementType.SchemaData) {
+                UrlRoute.pushToResource(surface.workspace.siteDomain || surface.workspace.sn, elementUrl);
             }
         }
     }
