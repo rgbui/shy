@@ -149,8 +149,8 @@ class MessageCenter {
         }
     }
     @get('/page/query/info')
-    async pageQueryInfo(args: { ws?: LinkWs, id: string }) {
-        var item = surface?.workspace?.find(g => g.id == args.id);
+    async pageQueryInfo(args: { ws?: LinkWs, id: string, sn?: number }) {
+        var item = surface?.workspace?.find(g => args.id && g.id == args.id || g.sn == args.sn);
         if (item) {
             return {
                 ok: true,
@@ -177,7 +177,7 @@ class MessageCenter {
         else {
             var sock = args.ws && args.ws?.id != surface?.workspace?.id ? await wss.getWsSock(args.ws?.id) : surface.workspace.sock;
             var ws = args.ws || surface.workspace;
-            var r = await sock.get('/page/item', { id: args.id });
+            var r = await sock.get('/page/item', { id: args.id || undefined, sn: args.sn || undefined });
             if (r.ok && r.data.item) return {
                 ok: true,
                 data: Object.assign({
