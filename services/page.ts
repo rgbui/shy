@@ -9,7 +9,6 @@ import { wss } from "./workspace";
 import { LinkWs } from "rich/src/page/declare";
 
 class PageService extends BaseService {
-
     @get('/page/deleted/query')
     async pageDeletedQuery(args) {
         if (!args) args = {}
@@ -81,7 +80,6 @@ class PageService extends BaseService {
     }
     @get('/view/snap/query')
     async getPageSyncBlock(args: { ws: LinkWs, elementUrl: string }) {
-        console.log('args', args);
         if (args.ws?.id == surface.workspace?.id || !args.ws) {
             var snapStore = SnapStore.createSnap(args.elementUrl);
             return { ok: true, data: await snapStore.querySnap() }

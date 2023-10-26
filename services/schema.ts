@@ -43,7 +43,6 @@ class SchemaService {
     async getSchemasByIds(args: Record<string, any>) {
         if (!args) args = {}
         var sock = await wss.getArgsSock(args);
-        console.log(args, sock);
         return await sock.get('/schema/ids/list', args)
     }
     @del('/schema/delete')
