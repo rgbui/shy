@@ -71,6 +71,9 @@ export class PageItem {
     speakDate?: Date = null;
     textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
     unreadChats: { id: string, roomId: string, seq: number }[] = [];
+    public browse: { count: number, users: string[] }
+    public edit: { count?: number, users: string[] }
+    public like: { count?: number, users?: string[] }
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -183,23 +186,6 @@ export class PageItem {
             pageType: this.pageType,
             createDate: this.createDate,
             editDate: this.editDate
-        }
-    }
-    getItem() {
-        return {
-            id: this.id,
-            text: this.text,
-            sn: this.sn,
-            icon: this.icon,
-            pageType: this.pageType,
-            parentId: this.parent?.id || null,
-            workspaceId: this.workspace.id,
-            mime: this.mime,
-            share: this.share,
-            netPermissions: lodash.cloneDeep(this.netPermissions),
-            inviteUsersPermissions: lodash.cloneDeep(this.inviteUsersPermissions),
-            memberPermissions: lodash.cloneDeep(this.memberPermissions),
-            description: this.description
         }
     }
     closest(predict: (item: PageItem) => boolean, ignoreSelf?: boolean) {

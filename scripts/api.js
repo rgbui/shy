@@ -360,7 +360,7 @@ push(`/tag/word/query`, '{word?:string,ws:LinkWs,wsId?:string,size?:number}', 'S
 push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:string,workspaceId:string,rootId:string,creater:string,createDate:Date}>', ['put']);
 push('/tag/query', '{ws:LinkWs,wsId?:string,id?:string,ids?:string[]}', 'SockResponse<{list:any[],tag:any}>', ['get']);
 push('/open/pay', '{}', '{}', ['act'])
-push('/shy/share', '{type: "weibo"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}', '{}', ['act'])
+push('/shy/share', '{type: "weibo"|"weixin"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}', '{}', ['act'])
 push('/search/workspace/template', '{ classify: string,tags: string[],mime: string,page: number,word: string,size: number}', 'SockResponse<{page:number,list:any[],total:number,size:number}>', ['get']);
 push('/workspace/template/useCount', '{id:string}', 'SockResponse<void>', ['post']);
 push('/import/page', '{text?: string,templateUrl?: string,wsId?:string,parentId?:string,pageId?:string,}', 'SockResponse<void>', ['post'])
