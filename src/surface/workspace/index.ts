@@ -169,7 +169,6 @@ export class Workspace {
     public defaultPageId: string = null;
     public viewOnlineUsers: Map<string, { users: Set<string>, load: boolean }> = new Map();
     public onLineUsers: Set<string> = new Set();
-
     public publishConfig: {
         abled: boolean,
         defineNavMenu: boolean,
@@ -248,6 +247,17 @@ export class Workspace {
             return `https://${host}.` + UrlRoute.getHost()
         }
         else return 'http://' + location.host + "/ws/" + this.sn + "";
+    }
+    isWsUrl(url: string) {
+        if (window.shyConfig?.isPro || window.shyConfig.isPc) {
+            if (this.customSiteDomain) {
+                return url.startsWith((this.customSiteDomainProtocol ? "https://" : "http") + this.customSiteDomain);
+            }
+            return url.startsWith(`https://${this.siteDomain}.` + UrlRoute.getHost()) || url.startsWith(`http://${this.sn}.` + UrlRoute.getHost())
+        }
+        else {
+            return url.startsWith(this.url);
+        }
     }
     resolve(url: string | { pageId?: string | number, elementUrl?: string }) {
         if (typeof url == 'string')
