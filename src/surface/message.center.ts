@@ -6,7 +6,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { LinkWs, PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
-import { ShyUrl, SyHistory, UrlRoute } from "../history";
+import { ShyUrl,  UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";

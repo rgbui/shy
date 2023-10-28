@@ -146,7 +146,7 @@ push('/gallery/query', `{type: GalleryType, word: string}`, `{ok:boolean,data:Ou
 push('/download/file', '{url:string}', 'SockResponse<{file:ResourceArguments }>', ['post']);
 push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['act']);
 push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageItem}`, `void`, ['air']);
-push('/page/query/info', `{ ws?: LinkWs, id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
+push('/page/query/info', `{ ws?: LinkWs,sn?:number, id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
 push(`/page/query/elementUrl`, `{ws?: LinkWs,elementUrl?:string}`, `LinkPageItem`, ['get']);
 push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}`, `void`, ['air']);
 push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['air']);
@@ -287,7 +287,7 @@ push('/ws/channel/notify', '{id:string,workspaceId:string,roomId:string}', 'void
 push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: string,file: any,isEdited:boolean}', 'void', ['air']);
 push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/emoji/notify', '{workspaceId: string,id: string,roomId: string,emoji:{ emojiId: string, code?: string }}', 'void', ['air']);
-push('/ws/channel/abled/send', '{ws:LinkWs,wsId?:string,roomId:string,pageId:string}', 'SockResponse<{abled:boolean}>', ['get']);
+push('/ws/channel/abled/send', '{ws:LinkWs,wsId?:string,roomId:string}', 'SockResponse<{abled:boolean}>', ['get']);
 push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
