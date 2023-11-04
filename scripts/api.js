@@ -315,7 +315,7 @@ push('/ws/search', '{ws:LinkWs,wsId?:string,page?:number,size?:number,mime?:stri
 push('/ws/comment/list', '{ws:LinkWs,wsId?:string,elementUrl: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string}', 'SockResponse<{data:any}>', ['put']);
 push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
-push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number}>', ['put']);
+push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number,exists?:boolean}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);

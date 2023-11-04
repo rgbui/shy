@@ -11,7 +11,6 @@ import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { PageLayoutType, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
-import lodash from "lodash";
 import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
@@ -319,7 +318,6 @@ export class PageItem {
     async onMove(el: HTMLElement) {
         var r = await useWsPicker({ roundArea: Rect.fromEle(el) });
         if (r) {
-            console.log('ggg', r, surface.workspace);
             var g = await channel.post('/create/template', { config: { pageId: this.id } })
             if (g.ok) {
                 var rr = await channel.post('/import/page', {
