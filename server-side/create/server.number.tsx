@@ -5,13 +5,13 @@ import { Input } from "rich/component/view/input";
 import { Divider } from "rich/component/view/grid";
 import { Button } from "rich/component/view/button";
 import lodash from "lodash";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { InputNumber } from "rich/component/view/input/number";
 import { serverSlideStore } from "../store";
 import { masterSock } from "../../net/sock";
 import { Spin } from "rich/component/view/spin";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { PopoverSingleton } from "rich/component/popover/popover";
 export class ServerNumberView extends EventsComponent {
     sn: ServiceNumber = {
         mongodb: { ip: '127.0.0.1', port: 27017, account: '', paw: '' },

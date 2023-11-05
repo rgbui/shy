@@ -1,10 +1,10 @@
 import { EventsComponent } from "rich/component/lib/events.component";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import React from "react";
 import LogoSrc from "../../src/assert/img/shy.blue.svg";
 import { serverSlideStore } from "../store";
 import { Switch } from "rich/component/view/switch";
 import { S } from "rich/i18n/view";
+import { PopoverSingleton } from "rich/component/popover/popover";
 export class ServerSlideConfig extends EventsComponent {
     config: {
         version: string,

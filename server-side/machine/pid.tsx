@@ -1,6 +1,6 @@
 import lodash from "lodash";
 import { EventsComponent } from "rich/component/lib/events.component";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
+
 import { Pid, PidTypeOptions } from "../declare";
 import React from "react";
 import { Button } from "rich/component/view/button";
@@ -12,6 +12,7 @@ import { serverSlideStore } from "../store";
 import { Textarea } from "rich/component/view/input/textarea";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { PopoverSingleton } from "rich/component/popover/popover";
 
 export class PidView extends EventsComponent {
     pid: Partial<Pid> = {};
