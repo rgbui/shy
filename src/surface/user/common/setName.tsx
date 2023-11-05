@@ -4,7 +4,7 @@ import { Button } from "rich/component/view/button";
 import { Dialoug, Row, Col } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
+import { PopoverSingleton } from "rich/component/popover/popover";
 import { surface } from "../../store";
 import { S } from "rich/i18n/view";
 

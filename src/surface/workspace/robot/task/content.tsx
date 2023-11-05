@@ -4,7 +4,6 @@ import React from "react";
 import { Input } from "rich/component/view/input";
 import { Textarea } from "rich/component/view/input/textarea";
 import { SelectBox } from "rich/component/view/select/box";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { observer } from "mobx-react";
 import { util } from "rich/util/util";
 import { PlusSvg, TrashSvg } from "rich/component/svgs";
@@ -13,6 +12,7 @@ import lodash from "lodash";
 import { RobotTask } from "rich/types/user";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { PopoverSingleton } from "rich/component/popover/popover";
 
 @observer
 export class TaskContent extends EventsComponent {

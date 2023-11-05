@@ -1,8 +1,6 @@
 import { EventsComponent } from "rich/component/lib/events.component";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
-import { PopoverPosition } from "rich/extensions/popover/position";
 import { channel } from "rich/net/channel";
 import React from "react";
 import { Dialoug, Divider } from "rich/component/view/grid";
@@ -16,6 +14,8 @@ import { PlusSvg } from "rich/component/svgs";
 import { ToolTip } from "rich/component/view/tooltip";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { PopoverSingleton } from "rich/component/popover/popover";
+import { PopoverPosition } from "rich/component/popover/position";
 
 class JoinFriend extends EventsComponent {
     render() {

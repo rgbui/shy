@@ -3,7 +3,7 @@ import { EventsComponent } from "rich/component/lib/events.component";
 import { Button } from "rich/component/view/button";
 import { Dialoug, Row, Col } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
+import { PopoverSingleton } from "rich/component/popover/popover";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";

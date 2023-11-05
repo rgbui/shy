@@ -1,8 +1,7 @@
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { Dialoug } from "rich/component/view/grid";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
-import { PopoverPosition } from "rich/extensions/popover/position";
+
 import { Workspace } from "..";
 import { Markdown } from "rich/component/view/markdown";
 import { Button } from "rich/component/view/button";
@@ -10,6 +9,8 @@ import { CheckBox } from "rich/component/view/checkbox";
 import { ShyAlert } from "rich/component/lib/alert";
 import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
+import { PopoverSingleton } from "rich/component/popover/popover";
+import { PopoverPosition } from "rich/component/popover/position";
 
 class JoinWorkspaceProtocol extends EventsComponent {
     render() {

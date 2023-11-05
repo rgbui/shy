@@ -4,13 +4,14 @@ import React from 'react';
 import { ShyAlert } from 'rich/component/lib/alert';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { Icon } from 'rich/component/view/icon';
-import { PopoverSingleton } from 'rich/extensions/popover/popover';
+
 import { channel } from 'rich/net/channel';
 import { WeixinPaySvg, AlipaySvg } from '../svgs';
 import "./style.less";
 import { Spin } from 'rich/component/view/spin';
 import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
+import { PopoverSingleton } from 'rich/component/popover/popover';
 
 export class PayView extends EventsComponent {
     async predictCreateOrder() {

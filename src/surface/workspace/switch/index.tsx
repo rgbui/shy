@@ -1,17 +1,17 @@
 import { EventsComponent } from "rich/component/lib/events.component";
 import React from 'react';
-import { PopoverPosition } from "rich/extensions/popover/position";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { Icon } from "rich/component/view/icon";
 import { Loading } from "rich/component/view/loading";
 import { Workspace } from "..";
 import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../../store";
-import "./style.less";
 import DragHandle from "rich/src/assert/svg/dragHandle.svg";
 import PlusSvg from "rich/src/assert/svg/plus.svg";
 import CheckSvg from 'rich/src/assert/svg/check.svg';
 import { channel } from "rich/net/channel";
+import { PopoverSingleton } from "rich/component/popover/popover";
+import { PopoverPosition } from "rich/component/popover/position";
+import "./style.less";
 
 class SwitchWorkspace extends EventsComponent {
     list: Partial<Workspace>[] = [];

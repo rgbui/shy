@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { RobotApply, RobotInfo } from "rich/types/user";
 import { ShyPromptTemplates } from "./temps";
 import { AiStartSvg, DuplicateSvg } from "rich/component/svgs";
@@ -12,6 +11,7 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { Button } from "rich/component/view/button";
 import { Tip } from "rich/component/view/tooltip/tip";
+import { PopoverSingleton } from "rich/component/popover/popover";
 
 @observer
 export class PropTemplates extends EventsComponent {

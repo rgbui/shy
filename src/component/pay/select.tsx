@@ -3,7 +3,6 @@ import { EventsComponent } from "rich/component/lib/events.component";
 import { Button } from "rich/component/view/button";
 import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { CheckBox } from "rich/component/view/checkbox/index";
 import { AlipaySvg, WeixinPaySvg } from "../svgs";
 import "./style.less";
@@ -15,6 +14,7 @@ import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
 import { UrlRoute } from "../../history";
 import { surface } from "../../surface/store";
+import { PopoverSingleton } from "rich/component/popover/popover";
 
 export class SelectPayView extends EventsComponent {
     orderInfo: {

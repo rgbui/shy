@@ -1,10 +1,10 @@
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
+import { PopoverSingleton } from "rich/component/popover/popover";
 import { Button } from "rich/component/view/button";
 import { Col, Dialoug, Row } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { ErrorText } from "rich/component/view/text";
-import { PopoverSingleton } from "rich/extensions/popover/popover";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
