@@ -4,11 +4,13 @@ import { S } from "rich/i18n/view";
 import { UrlRoute } from "../../src/history";
 import { refShyPage } from "../util";
 import { SelectBox } from "rich/component/view/select/box";
-import { langOptions, ls } from "rich/i18n/store";
+import { langOptions, ls, lst } from "rich/i18n/store";
 import { GlobalLinkSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 
 export class FooterView extends React.Component {
+    componentDidMount(): void {
+    }
     render(): React.ReactNode {
         return <div className="shy-site-footer padding-gap">
             <div className="max-w-400">

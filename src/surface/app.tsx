@@ -16,6 +16,7 @@ import { Spin } from 'rich/component/view/spin';
 import { PageContentView } from './supervisor/content';
 import { ls } from 'rich/i18n/store';
 import { blockStore } from 'rich/extensions/block/store';
+import { RedictUrl } from './view/RedictUrl';
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
@@ -56,6 +57,7 @@ export function App() {
     if (window.shyConfig.isDev || window.shyConfig.isBeta) {
       return <Router history={SyHistory}>
         <Switch>
+          <Route path={ShyUrl.redict} exact component={RedictUrl}></Route>
           <Route path={ShyUrl.root} exact component={SurfaceView}></Route>
           <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
           <Route path={ShyUrl.signIn} exact component={Login}></Route>
@@ -71,6 +73,7 @@ export function App() {
     } else if (window.shyConfig.isPc) {
       return <Router history={SyHistory}>
         <Switch>
+          <Route path={ShyUrl.redict} exact component={RedictUrl}></Route>
           <Route path={ShyUrl.root} exact component={SurfaceView}></Route>
           <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
           <Route path={ShyUrl.signIn} exact component={Login}></Route>
@@ -85,10 +88,11 @@ export function App() {
       </Router>
     }
     else if (window.shyConfig.isPro) {
-      var isOrg = location.hostname ==UrlRoute.getHost() ;
+      var isOrg = location.hostname == UrlRoute.getHost();
       if (isOrg) {
         return <Router history={SyHistory}>
           <Switch>
+            <Route path={ShyUrl.redict} exact component={RedictUrl}></Route>
             <Route path={ShyUrl.signOut} exact component={LogOut}></Route>
             <Route path={ShyUrl.signIn} exact component={Login}></Route>
             <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
@@ -104,6 +108,7 @@ export function App() {
       else {
         return <Router history={SyHistory}>
           <Switch>
+            <Route path={ShyUrl.redict} exact component={RedictUrl}></Route>
             <Route path={ShyUrl.workCreate} exact component={WorkspaceCreateView}></Route>
             <Route path={ShyUrl.home} exact component={MyWorkSpace}></Route>
             <Route path={ShyUrl.invite} exact component={InviteView}></Route>

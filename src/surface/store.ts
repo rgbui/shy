@@ -12,6 +12,7 @@ import "./message.center";
 import { PageItem } from "./sln/item";
 import { PageViewStores } from "./supervisor/view/store";
 import { config } from "../../common/config";
+import { masterSock } from "../../net/sock";
 
 export class Surface extends Events {
     constructor() {
@@ -133,7 +134,7 @@ export class Surface extends Events {
                     UrlRoute.push(ShyUrl.signIn);
                 }
                 else if (window.shyConfig.isPro) {
-                    if (location.host ==UrlRoute.getHost()) UrlRoute.push(ShyUrl.root);
+                    if (location.host == UrlRoute.getHost()) UrlRoute.push(ShyUrl.root);
                     else location.href = UrlRoute.getUrl();
                 }
                 else if (window.shyConfig.isDev)
@@ -179,7 +180,7 @@ export class Surface extends Events {
         }
         if (!sn && !domain) {
             domain = location.host as string;
-            if (domain ==UrlRoute.getHost() || domain.startsWith('localhost:')) {
+            if (domain == UrlRoute.getHost() || domain.startsWith('localhost:')) {
                 domain = undefined;
             }
         }
@@ -272,6 +273,46 @@ export class Surface extends Events {
     }
     get isPubSite() {
         return (config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled
+    }
+    async loadWx() {
+        var url = window.location.href;
+        var r = await masterSock.get('/wx/share', { url: url });
+        console.log(JSON.stringify(r.data));
+        //**配置微信信息**
+        (window as any).wx.config(r.data);
+        (window as any).wx.error(function (res) {
+            console.log(JSON.stringify(res));
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        });
+        (window as any).wx.ready(function () {
+            var url = window.location.href;
+            // 微信分享的数据
+            var shareData = {
+                "imgUrl": "https://static.shy.live/0.9.251-pro/assert/img/shy.svg",
+                "link": url,
+                "desc": document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+                "title": document.title,
+                success: function () {
+                    // 分享成功可以做相应的数据处理
+                    //ShyAlert(JSON.stringify(arguments))
+                    console.log(JSON.stringify(arguments))
+                },
+                fail(e) {
+                    //ShyAlert('fal' + JSON.stringify(arguments))
+                    console.log(JSON.stringify(arguments))
+                },
+                complete() {
+                    // ShyAlert(lst('complete') + JSON.stringify(arguments))
+                    console.log(JSON.stringify(arguments))
+                },
+                cancel() {
+                    //ShyAlert(lst('cancel') + JSON.stringify(arguments))
+                    console.log(JSON.stringify(arguments))
+                }
+            };
+            //分享给朋友
+            (window as any).wx.updateAppMessageShareData(shareData);
+        });
     }
 }
 export var surface = new Surface();

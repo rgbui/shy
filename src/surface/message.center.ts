@@ -6,7 +6,7 @@ import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { LinkWs, PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
 import { yCache, CacheKey } from "../../net/cache";
-import { ShyUrl,  UrlRoute } from "../history";
+import { ShyUrl, UrlRoute } from "../history";
 import { Mime } from "./sln/declare";
 import { PageItem } from "./sln/item";
 import { pageItemStore } from "./sln/item/store/sync";
@@ -452,28 +452,33 @@ class MessageCenter {
 
         }
         else {
-            var r = await masterSock.get('/wx/share', { url: args.url });
+            var url = 'https://shy.live/redict?url=' + encodeURIComponent(args.url);
+            // var url = args.url;
+            var r = await masterSock.get('/wx/share', { url: url });
+            JSON.stringify(r.data);
             //**配置微信信息**
             (window as any).wx.config(r.data);
             (window as any).wx.ready(function () {
                 // 微信分享的数据
                 var shareData = {
-                    "imgUrl": args.pic,
-                    "link": args.url,
+                    "imgUrl": args.pic ?? "https://static.shy.live/0.9.251-pro/assert/img/shy.svg",
+                    "link": url,
                     "desc": args.description,
                     "title": args.title,
                     success: function () {
                         // 分享成功可以做相应的数据处理
+                        ShyAlert(lst('分享成功'))
                     }
                 };
-                if (args.type == 'updateTimelineShareData') {
-                    //分享微信朋友圈
-                    (window as any).wx.updateTimelineShareData(shareData);
-                }
-                else {
-                    //分享给朋友
-                    (window as any).wx.updateAppMessageShareData(shareData);
-                }
+                // alert(JSON.stringify(shareData))
+                // if (args.type == 'updateTimelineShareData') {
+                //分享微信朋友圈
+                (window as any).wx.updateTimelineShareData(shareData);
+                // }
+                // else {
+                //分享给朋友
+                (window as any).wx.updateAppMessageShareData(shareData);
+                //}
             })
         }
     }

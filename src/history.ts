@@ -84,6 +84,7 @@ export var UrlRoute = {
 }
 export enum ShyUrl {
     root = '/',
+    redict='/redict',
     signOut = '/sign/out',
     signIn = '/sign/in',
     ws = '/ws/:wsId',
