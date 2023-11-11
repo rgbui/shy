@@ -23,7 +23,6 @@ import { Sp } from "rich/i18n/view";
 
 export var SideBar = observer(function () {
     if (!surface.showSlideBar) return <></>
-    if (surface.isPubSite) return <></>
     function renderWs(workspace: LinkWorkspaceOnline) {
         if (workspace.icon) return <a className="shy-sidebar-ws-icon relative">
             <img src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />
@@ -55,13 +54,13 @@ export var SideBar = observer(function () {
         if (!workspace.overlayDate) return <div>
             <div>
                 <span>{workspace.text}</span>
-                {workspace.memberCount > 20 && <span className="gap-l-10"><Sp text={'{count}成员'} data={{count:workspace.memberCount}}>{workspace.memberCount}成员</Sp></span>}
+                {workspace.memberCount > 20 && <span className="gap-l-10"><Sp text={'{count}成员'} data={{ count: workspace.memberCount }}>{workspace.memberCount}成员</Sp></span>}
             </div>
         </div>
         else return <div>
             <div><span>{workspace.text}</span>
-                {workspace.memberOnlineCount > 0 && <span className="gap-l-10"><Sp text='{count}人在线' data={{count:workspace.memberOnlineCount}}>{workspace.memberOnlineCount}人在线</Sp></span>}
-                {!workspace.memberOnlineCount && workspace.memberCount > 20 && <span className="gap-l-10"><Sp text={'{count}成员'} data={{count:workspace.memberCount}}>{workspace.memberCount}成员</Sp></span>}
+                {workspace.memberOnlineCount > 0 && <span className="gap-l-10"><Sp text='{count}人在线' data={{ count: workspace.memberOnlineCount }}>{workspace.memberOnlineCount}人在线</Sp></span>}
+                {!workspace.memberOnlineCount && workspace.memberCount > 20 && <span className="gap-l-10"><Sp text={'{count}成员'} data={{ count: workspace.memberCount }}>{workspace.memberCount}成员</Sp></span>}
             </div>
             {workspace.randomOnlineUsers.size > 0 && !(workspace.randomOnlineUsers.size == 1 && surface.user && workspace.randomOnlineUsers.has(surface.user?.id)) && <div><UserAvatars users={workspace.randomOnlineUsers}></UserAvatars></div>}
         </div>

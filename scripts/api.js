@@ -319,7 +319,7 @@ push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);
-push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, templateUrl: string, text?: string, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
+push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, elementUrl:string, templateUrl: string, text?: string,icon?:any, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
 push('/get/workspace/template', '{wsId: string, pageId?: string}', 'SockResponse<{template:Record<string,any>}>', ['get'])
 push('/page/items', '{ws:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[],favs:any[]}>', ['get'])
 push('/page/item/subs', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ list:any[] }>', ['get'])
@@ -361,7 +361,7 @@ push(`/tag/create`, '{tag:string,wsId?:string}', 'SockResponse<{id:string,tag:st
 push('/tag/query', '{ws:LinkWs,wsId?:string,id?:string,ids?:string[]}', 'SockResponse<{list:any[],tag:any}>', ['get']);
 push('/open/pay', '{}', '{}', ['act'])
 push('/shy/share', '{type: "weibo"|"weixin"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}', '{}', ['act'])
-push('/search/workspace/template', '{ classify: string,tags: string[],mime: string,page: number,word: string,size: number}', 'SockResponse<{page:number,list:any[],total:number,size:number}>', ['get']);
+push('/search/workspace/template', '{ classify?: string,tags?: string[],mime?: string,page: number,word?: string,size: number}', 'SockResponse<{page:number,list:any[],total:number,size:number}>', ['get']);
 push('/workspace/template/useCount', '{id:string}', 'SockResponse<void>', ['post']);
 push('/import/page', '{text?: string,templateUrl?: string,wsId?:string,parentId?:string,pageId?:string,}', 'SockResponse<void>', ['post'])
 push('/query/my/wss','{}','{wss:any[]}',['query'])

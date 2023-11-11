@@ -9,29 +9,16 @@ import { View404 } from './404';
 import { InviteView } from './workspace/create/invite';
 import { surface } from './store';
 import { MyWorkSpace } from './view/my';
-import { channel } from "rich/net/channel";
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 import { isMobileOnly } from 'react-device-detect';
 import { Spin } from 'rich/component/view/spin';
 import { PageContentView } from './supervisor/content';
-import { ls } from 'rich/i18n/store';
-import { blockStore } from 'rich/extensions/block/store';
+
 import { RedictUrl } from './view/RedictUrl';
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
-    await ls.import();
-    await blockStore.import();
-    await channel.put('/device/sign');
-    await surface.user.sign();
-    if (surface.user.isSign) {
-      await surface.user.createTim()
-    }
-    else {
-      if (window.shyConfig.isPc) {
-        UrlRoute.push(ShyUrl.signIn);
-      }
-    }
+    await surface.load()
     setLoad(true);
   }
   React.useEffect(() => {

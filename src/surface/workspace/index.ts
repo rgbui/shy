@@ -120,7 +120,9 @@ export class Workspace {
     public member: WorkspaceMember = null;
     public slnStyle: 'menu' | 'note' = 'note';
     public allowSlnIcon: boolean = false;
-
+    get accessWorkspace() {
+        return surface.accessWorkspace;
+    }
     /**
      * 0:不公开 
      * 1:公开

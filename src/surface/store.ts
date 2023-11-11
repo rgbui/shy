@@ -8,11 +8,14 @@ import { LinkWorkspaceOnline, Workspace } from "./workspace";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { CacheKey, sCache } from "../../net/cache";
 import { channel } from "rich/net/channel";
-import "./message.center";
 import { PageItem } from "./sln/item";
 import { PageViewStores } from "./supervisor/view/store";
 import { config } from "../../common/config";
-import { masterSock } from "../../net/sock";
+import "./message.center";
+import { blockStore } from "rich/extensions/block/store";
+import { ls } from "rich/i18n/store";
+import { PageTemplateType } from "rich/extensions/template";
+import { ElementType, getElementUrl } from "rich/net/element.type";
 
 export class Surface extends Events {
     constructor() {
@@ -41,6 +44,12 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: LinkWorkspaceOnline[] = [];
     temporaryWs: LinkWorkspaceOnline = null;
+    /**
+     * 空间的访问方式
+     * none: 无权限
+     * embed: 基于嵌入的方式访问调用
+     */
+    accessWorkspace: 'none' | 'embed' = 'none';
     /**
      * 当前页面的访问权限
      * none: 无权限
@@ -234,6 +243,8 @@ export class Surface extends Events {
         else return false;
     }
     get showSlideBar() {
+        if (this.accessWorkspace == 'embed') return false;
+        if (this.isPubSite) return false;
         if (!this.user.isSign) return false;
         if (this.workspace) {
             if (!this.workspace.member) {
@@ -245,6 +256,7 @@ export class Surface extends Events {
         return true;
     }
     get showSln() {
+        if (this.accessWorkspace == 'embed') return false;
         if (this.workspace) {
             if (!this.workspace.member) {
                 if (this.workspace.access == 0) {
@@ -261,58 +273,57 @@ export class Surface extends Events {
     /**
      * 是否自定义workspace头部菜单
      */
-    get isDefineWorkspaceMenu() {
-        if ((config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled && surface.workspace?.publishConfig?.defineContent && (surface.workspace?.publishConfig?.contentTheme == 'wiki' || surface.workspace?.publishConfig?.contentTheme == 'none')) return true;
-        return false;
-    }
     get isPubSiteDefineBarMenu() {
         return this.isPubSite && surface.workspace?.publishConfig?.navMenus?.length > 0 && surface.workspace?.publishConfig?.defineNavMenu
     }
+    /**
+     * 是否隐藏默认的导航菜单
+     */
     get isPubSiteHideMenu() {
         return this.isPubSite && surface.workspace?.publishConfig?.defineContent && (surface.workspace?.publishConfig?.contentTheme == 'wiki' || surface.workspace?.publishConfig?.contentTheme == 'none')
     }
+    /**
+     * 空间是否处于应用模式
+     */
     get isPubSite() {
         return (config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled
     }
-    async loadWx() {
-        var url = window.location.href;
-        var r = await masterSock.get('/wx/share', { url: url });
-        console.log(JSON.stringify(r.data));
-        //**配置微信信息**
-        (window as any).wx.config(r.data);
-        (window as any).wx.error(function (res) {
-            console.log(JSON.stringify(res));
-            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        });
-        (window as any).wx.ready(function () {
-            var url = window.location.href;
-            // 微信分享的数据
-            var shareData = {
-                "imgUrl": "https://static.shy.live/0.9.251-pro/assert/img/shy.svg",
-                "link": url,
-                "desc": document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
-                "title": document.title,
-                success: function () {
-                    // 分享成功可以做相应的数据处理
-                    //ShyAlert(JSON.stringify(arguments))
-                    console.log(JSON.stringify(arguments))
-                },
-                fail(e) {
-                    //ShyAlert('fal' + JSON.stringify(arguments))
-                    console.log(JSON.stringify(arguments))
-                },
-                complete() {
-                    // ShyAlert(lst('complete') + JSON.stringify(arguments))
-                    console.log(JSON.stringify(arguments))
-                },
-                cancel() {
-                    //ShyAlert(lst('cancel') + JSON.stringify(arguments))
-                    console.log(JSON.stringify(arguments))
+    async load() {
+        await ls.import();
+        await blockStore.import();
+        await channel.put('/device/sign');
+        await surface.user.sign();
+        if (surface.user.isSign) {
+            await surface.user.createTim()
+        }
+        else {
+            if (window.shyConfig.isPc) {
+                UrlRoute.push(ShyUrl.signIn);
+            }
+        }
+        var ul = new URL(location.href);
+        var accessWorkspace = ul.searchParams.get('accessWorkspace');
+        if (typeof accessWorkspace != 'undefined') {
+            surface.accessWorkspace = accessWorkspace as any;
+        }
+        window.addEventListener('message', event => {
+            if (!event.data) return;
+            if (!(typeof event.data == 'string' && event.data.startsWith('{'))) return;
+            try {
+                var json = JSON.parse(event.data);
+                if (json.name) {
+                    if (json.name == 'openPageByTemplate') {
+                        var data: PageTemplateType = json.data;
+                        channel.air('/page/open', { elementUrl: getElementUrl(ElementType.PageItem, data.sourcePageId) })
+                    }
                 }
-            };
-            //分享给朋友
-            (window as any).wx.updateAppMessageShareData(shareData);
-        });
+            }
+            catch (ex) {
+
+            }
+        }
+        )
+
     }
 }
 export var surface = new Surface();

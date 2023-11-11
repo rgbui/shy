@@ -31,15 +31,15 @@ window.addEventListener('message', async function (event) {
             switch (json.url) {
                 case 'dbStore':
                     var data = await dbStore(json.args);
-                    top.postMessage(JSON.stringify({ id: json.id, data: data }), '*')
+                    window.parent.postMessage(JSON.stringify({ id: json.id, data: data }), '*')
                     break;
                 case 'localStorage.setItem':
                     localStorage.setItem.apply(localStorage, json.args);
-                    top.postMessage(JSON.stringify({ id: json.id, data: null }), '*')
+                    window.parent.postMessage(JSON.stringify({ id: json.id, data: null }), '*')
                     break;
                 case 'localStorage.getItem':
                     var result = localStorage.getItem.apply(localStorage, json.args);
-                    top.postMessage(JSON.stringify({ id: json.id, data: result }), '*')
+                    window.parent.postMessage(JSON.stringify({ id: json.id, data: result }), '*')
                     break;
             }
         }
