@@ -3,7 +3,7 @@ import { surface } from "../../store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer, useLocalObservable } from "mobx-react";
 import { UserProfile } from "../../user/profile";
-import { ChevronDownSvg, CubesSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
+import { ChevronDownSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useTemplateView } from "rich/extensions/template";
 import { config } from "../../../../common/config";
@@ -72,7 +72,7 @@ export var SlnView = observer(function () {
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-b-20">
                 <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={CubesSvg}></Icon></span>
+                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
                     <span><S>模板</S></span>
                 </div>
                 <div onMouseDown={e => openTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
