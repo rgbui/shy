@@ -45,7 +45,7 @@ export var SlnView = observer(function () {
             */
             var pageItem = surface.workspace.childs.last()
             var rr = await channel.post('/import/page', {
-                text: '',
+                text: ut.text,
                 templateUrl: ut.file?.url,
                 wsId: surface.workspace.id,
                 parentId: pageItem.id
