@@ -27,7 +27,7 @@ export class WorkspaceManage extends React.Component {
             error: observable
         })
     }
-    data: { createPageConfig: Workspace['createPageConfig'], aiConfig: Workspace['aiConfig'] } & { defaultPageId?: string, defaultPageTitle?: string, allowSlnIcon?: boolean, slnStyle?: Workspace['slnStyle'] } = {
+    data: { createPageConfig: Workspace['createPageConfig'], aiConfig: Workspace['aiConfig'] } & { defaultPageId?: string, defaultPageTitle?: string, allowSlnIcon?: boolean } = {
         createPageConfig: {
             isFullWidth: true,
             smallFont: false,
@@ -38,7 +38,6 @@ export class WorkspaceManage extends React.Component {
         defaultPageId: null,
         defaultPageTitle: '',
         allowSlnIcon: false,
-        slnStyle: 'note',
         aiConfig: {
             text: '',
             image: '',
@@ -67,7 +66,6 @@ export class WorkspaceManage extends React.Component {
                 createPageConfig: lodash.cloneDeep(this.data.createPageConfig),
                 defaultPageId: lodash.cloneDeep(this.data.defaultPageId),
                 allowSlnIcon: this.data.allowSlnIcon,
-                slnStyle: this.data.slnStyle,
                 aiConfig: lodash.cloneDeep(this.data.aiConfig)
             }
         });
@@ -76,7 +74,6 @@ export class WorkspaceManage extends React.Component {
                 surface.workspace.createPageConfig = lodash.cloneDeep(this.data.createPageConfig);
                 surface.workspace.defaultPageId = lodash.cloneDeep(this.data.defaultPageId);
                 surface.workspace.allowSlnIcon = this.data.allowSlnIcon;
-                surface.workspace.slnStyle = this.data.slnStyle;
                 surface.workspace.aiConfig = lodash.cloneDeep(this.data.aiConfig);
                 this.tip.close();
             })
@@ -89,7 +86,6 @@ export class WorkspaceManage extends React.Component {
             createPageConfig: lodash.cloneDeep(surface.workspace.createPageConfig)
         };
         this.data.defaultPageId = surface.workspace.defaultPageId;
-        this.data.slnStyle = surface.workspace.slnStyle;
         this.data.allowSlnIcon = surface.workspace.allowSlnIcon;
         if (this.data.defaultPageId) {
             var page = await channel.get('/page/query/info', { id: this.data.defaultPageId });
@@ -153,21 +149,6 @@ export class WorkspaceManage extends React.Component {
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1"><S>自定义图标</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon ? false : true}></Switch></div>
-                </div>
-                <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1"><S>布局风格</S></div>
-                    <div className="flex-fixed">
-                        <SelectBox
-                            small
-                            border
-                            options={[
-                                { text: lst('目录'), value: 'note', icon: TreeListSvg },
-                                { text: lst('菜单'), value: 'menu', icon: MenuFolderSvg },
-                            ]}
-                            value={this.data.slnStyle}
-                            onChange={e => { this.change('slnStyle', e) }}
-                        ></SelectBox>
-                    </div>
                 </div>
             </div>
 

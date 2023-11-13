@@ -37,13 +37,7 @@ export enum ItemOperator {
      */
     moveAppend = 5,
     moveAfter = 6,
-    sync = 7,
-    /***
-     * favourite处理
-     */
-    addFavourite = 10,
-    removeFavourite = 11,
-    moveFavourite = 12,
+    sync = 7
 }
 
 export type PageItemAction = {
@@ -322,38 +316,6 @@ class PageItemStore {
             extra: { parentId: oldParentId }
         })
         await this.save(pageItem.workspace.id, { operate: ItemOperator.moveAfter, actions })
-    }
-    public async addFav(item: PageItem) {
-        var actions: PageItemAction[] = [];
-        actions.push({ directive: ItemOperatorDirective.favouriteInsert, pageId: item.id, data: {} });
-        var r = await this.save(item.workspace.id, { operate: ItemOperator.addFavourite, actions });
-        if (r.ok && Array.isArray(r.data.actions)) {
-            var re = r.data.actions.find(g => g && g.id == item.id);
-            if (re) {
-                item.load(re);
-                var newItemData = await channel.get('/page/item', { id: item.id });
-                if (newItemData.ok) {
-                    var np = new PageItem();
-                    np.load(newItemData.data.item);
-                    item.workspace.favs.push(np);
-                }
-            }
-        }
-    }
-    public async removeFav(item: PageItem) {
-        var actions: PageItemAction[] = [];
-        actions.push({ directive: ItemOperatorDirective.favouriteRemove, pageId: item.id, data: {} });
-        var r = await this.save(item.workspace.id, { operate: ItemOperator.removeFavourite, actions });
-        if (r.ok && Array.isArray(r.data.actions)) {
-            var re = r.data.actions.find(g => g && g.id == item.id);
-            if (re) {
-                lodash.remove(item.workspace.favs, g => g.id == item.id);
-                var pitem = item.workspace.find(g => g.id == item.id);
-                if (pitem) {
-                    pitem.load(re)
-                }
-            }
-        }
     }
     public async sync(item: PageItem) {
         var actions: PageItemAction[] = [];

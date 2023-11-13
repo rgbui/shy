@@ -8,8 +8,7 @@ import { Spin } from "rich/component/view/spin";
 import { surface } from "../../../store";
 import { lst } from "rich/i18n/store";
 
-export var PagesView = observer(function (props: { item: PageItem, deep?: number })
-{
+export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
     var isCanEdit = item.isCanEdit;
     function renderHead() {
@@ -27,27 +26,18 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
             style={{ '--gap-left': gap + 'px' } as any}
             className={"shy-ws-pages flex padding-w-10 padding-b-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
             <div className={'shy-ws-pages-head flex-auto flex '}>
-                {surface.workspace.slnStyle == 'menu' && <span
-                    onMouseDown={e => {
-                        e.stopPropagation();
-                        if (e.nativeEvent.button == 2) return;
-                        item.onSpread()
-                    }}
-                    className={"size-12 cursor flex-center ts " + (item.spread ? " " : " angle-90-")}>
-                    {item.willLoadSubs && <Spin></Spin>}
-                    {!item.willLoadSubs && <Icon size={14} icon={ChevronDownSvg}></Icon>}
-                </span>}
+
                 <span onMouseDown={e => {
                     // e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
                 }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor flex">
-                    <span>{item.text || lst("我的页面") }</span>
-                    {surface.workspace.slnStyle != 'menu' && <span
+                    <span>{item.text || lst("我的页面")}</span>
+                    <span
                         className={"size-20 cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
                         {item.willLoadSubs && <Spin></Spin>}
                         {!item.willLoadSubs && <Icon size={16} icon={ChevronDownSvg}></Icon>}
-                    </span>}
+                    </span>
                 </span>
             </div>
             {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>

@@ -113,12 +113,9 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
-    public favs: PageItem[] = [];
-    public favSpread: boolean = true;
     public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
-    public slnStyle: 'menu' | 'note' = 'note';
     public allowSlnIcon: boolean = false;
     get accessWorkspace() {
         return surface.accessWorkspace;
@@ -216,12 +213,9 @@ export class Workspace {
             viewOnlineUsers: observable,
             onLineUsers: observable,
             invite: observable,
-            slnStyle: observable,
             isOwner: computed,
             isMember: computed,
             publishConfig: observable,
-            favSpread: observable,
-            favs: observable,
         })
     }
     private _sock: Sock;
@@ -322,13 +316,6 @@ export class Workspace {
                     this.childs.push(pt);
                 })
             }
-            else if (n == 'favs') {
-                data[n].each(it => {
-                    var pt = new PageItem();
-                    pt.load(it);
-                    this.favs.push(pt);
-                })
-            }
             else {
                 this[n] = data[n];
             }
@@ -402,10 +389,7 @@ export class Workspace {
                 var pages = rr.data.list;
                 pages.sort(this.pageSort)
                 pages = ShyUtil.flatArrayConvertTree(pages);
-                var favs = rr.data.favs;
-                favs.sort(this.pageFSort);
-                favs = ShyUtil.flatArrayConvertTree(favs);
-                this.load({ childs: pages, favs });
+                this.load({ childs: pages });
             }
         }
     }

@@ -24,8 +24,6 @@ import { useWsPicker } from "rich/extensions/ws/index";
 export class PageItem {
     id: string = null;
     sn?: number = null;
-    fav?: boolean = false;
-    fat?: number;
     icon?: IconArguments = null;
     childs?: PageItem[] = [];
     text: string = ''
@@ -311,10 +309,6 @@ export class PageItem {
             nextItem.onOpenItem();
         }
     }
-    async onFav(fav: boolean) {
-        if (fav) await pageItemStore.addFav(this);
-        else await pageItemStore.removeFav(this);
-    }
     async onMove(el: HTMLElement) {
         var r = await useWsPicker({ roundArea: Rect.fromEle(el) });
         if (r) {
@@ -493,9 +487,6 @@ export class PageItem {
                 if (page) {
                     await channel.air('/page/slide', { elementUrl: null });
                 }
-                break;
-            case 'fav':
-                this.onFav(this.fav ? false : true);
                 break;
             case 'move':
                 this.onMove(sourceEl)

@@ -22,8 +22,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
     }
     componentDidUpdate(prevProps: Readonly<{ store: PageViewStore; }>, prevState: Readonly<{}>, snapshot?: any): void {
         if (prevProps.store !== this.props.store) {
-            if (this.props.store.page)
-                this.props.store.page.cacheFragment()
+            if (this.props.store.page) this.props.store.page.cacheFragment()
             this.pageEl.innerHTML = '';
             this.load()
         }

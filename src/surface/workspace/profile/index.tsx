@@ -13,22 +13,21 @@ import { isMobileOnly } from "react-device-detect";
 import { useForm } from "rich/component/view/form/dialoug";
 import { lst } from "rich/i18n/store";
 
-export var WorkspaceProfile = observer(function () {
-    async function mousedown(event: React.MouseEvent) {
+export var WorkspaceProfile = observer(function ()
+{
+    async function mousedown(event: React.MouseEvent)
+    {
         if (!surface.workspace.isMember) return;
         if (isMobileOnly) return;
         var ele = event.currentTarget as HTMLElement;
         ele = ele.querySelector('.shy-ws-profile-info') as HTMLElement;
         var rect = Rect.from(ele.getBoundingClientRect());
-        var menus: MenuItem<string>[] = [];
-        if (surface.workspace.isOwner) {
+        var menus: MenuItem<string>[]=[];
+        if (surface.workspace.isOwner)
+        {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
                 { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建类别') },
-                { type: MenuItemType.divide },
-                { text: lst('风格'), type: MenuItemType.text },
-                { name: 'showMenu', icon: MenuFolderSvg, text: lst('菜单'), checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
-                { name: 'showNote', icon: TreeListSvg, text: lst('目录'), checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: lst('邀请其ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
@@ -38,10 +37,6 @@ export var WorkspaceProfile = observer(function () {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
                 { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建类别') },
-                { type: MenuItemType.divide },
-                { text: lst('风格'), type: MenuItemType.text },
-                { name: 'showMenu', icon: MenuFolderSvg, text: lst('菜单'), checkLabel: surface.workspace.slnStyle == 'menu' ? true : false },
-                { name: 'showNote', icon: TreeListSvg, text: lst('目录'), checkLabel: !surface.workspace.slnStyle || surface.workspace.slnStyle == 'note' ? true : false },
                 { type: MenuItemType.divide },
                 { name: 'invite', text: lst('邀请其ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
@@ -88,15 +83,12 @@ export var WorkspaceProfile = observer(function () {
                     surface.sln.onCreateFolder(r.text)
                 }
             }
-            else if (se.item.name == 'showMenu' || se.item.name == 'showNote') {
-                surface.workspace.onUpdateInfo({ slnStyle: se.item.name == "showMenu" ? "menu" : 'note' })
-            }
         }
     }
     return <div className={'shy-ws-profile' + (surface.workspace?.cover?.url ? " cover" : "")} onMouseDown={e => mousedown(e)}>
         <div className={'shy-ws-profile-info flex'}>
             {isMobileOnly && <span className="flex-fixed flex-center size-24 round cursor item-hover">
-                <Icon size={16} icon={{name:"bytedance-icon",code:'hamburger-button'}}></Icon>
+                <Icon size={16} icon={{ name: "bytedance-icon", code: 'hamburger-button' }}></Icon>
             </span>}
             <span className="flex-auto bold f-16 text-overflow gap-r-5">{surface.workspace.text}</span>
             {surface.workspace.isMember && <Icon icon={ChevronDownSvg} size={16} className={'padding-r-10 remark flex-fixed'}></Icon>}
