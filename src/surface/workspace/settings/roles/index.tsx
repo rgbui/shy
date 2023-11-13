@@ -221,13 +221,13 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='flex gap-b-10'>
                     <div className='flex-auto cursor flex'>
-                        <span className='item-hover round flex padding-w-10 padding-h-2 '>
-                            <Icon size={14} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
-                            <span className='gap-l-5' onMouseDown={e => this.editRole = null}><S>后退</S></span>
+                        <span className='item-hover round flex padding-r-5 padding-h-2 '>
+                            <Icon size={18} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
+                            <span onMouseDown={e => this.editRole = null}><S>后退</S></span>
                         </span>
                     </div>
                     <div className='flex-fixed'>
-                        <Tip text={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={16} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></Tip>
+                        <Tip text={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={18} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></Tip>
                     </div>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {
@@ -430,7 +430,9 @@ export class WorkspaceRoles extends React.Component {
                             border
                             options={[
                                 { text: lst('管理空间'), value: AtomPermission.wsEdit },
+                                { type: MenuItemType.divide },
                                 { text: lst('管理成员'), value: AtomPermission.wsMemeberPermissions },
+                                { type: MenuItemType.divide },
                                 { text: lst('无权限'), value: AtomPermission.wsNotAllow }
                             ]}
                             multiple
