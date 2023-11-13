@@ -7,7 +7,6 @@ import { ChevronDownSvg, DownloadSvg, SearchSvg, TrashSvg } from "rich/component
 import { Icon } from "rich/component/view/icon";
 import { useTemplateView } from "rich/extensions/template";
 import { useImportFile } from "rich/extensions/import-file";
-import { config } from "../../../../common/config";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
 import { useTrashBox } from "rich/extensions/trash";
@@ -16,6 +15,8 @@ import { Input } from "rich/component/view/input";
 import { lst } from "rich/i18n/store";
 import { Mime } from "../declare";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
+import { getPageItemElementUrl } from "../item/util";
+import { buildPage } from "rich/src/page/common/create";
 
 export var SlnView = observer(function () {
     var local = useLocalObservable<{ word: string, input: Input }>(() => {
@@ -54,6 +55,7 @@ export var SlnView = observer(function () {
             if (rr.ok) {
                 await pageItem.onSync(true)
                 console.log('rd', rr.data);
+                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rr.data.item) })
             }
         }
     }
@@ -70,7 +72,20 @@ export var SlnView = observer(function () {
     async function openImport(e: React.MouseEvent) {
         var r = await useImportFile();
         if (r) {
-
+            var pageItem = surface.workspace.childs.last();
+            var npa = await buildPage(r.blocks, { isTitle: true }, surface.workspace);
+            var rc = await channel.put('/import/page/data', {
+                text: r.text,
+                pageData: await npa.getString(),
+                parentId: pageItem.id,
+                plain: await npa.getPlain(),
+                mime: Mime.page,
+                wsId: surface.workspace.id
+            });
+            if (rc) {
+                await pageItem.onSync(true);
+                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rc.data.item) })
+            }
         }
     }
     function renderBottoms() {
@@ -91,28 +106,6 @@ export var SlnView = observer(function () {
                 </div>
             </div>
         else return <></>
-    }
-    function renderFavs() {
-        if (surface.workspace?.favs?.length > 0) {
-            return <div className="shy-ws-pages-item visible-hover padding-b-10">
-                <div className="shy-ws-pages flex padding-w-10 padding-b-3">
-                    <span onMouseDown={e => {
-                        e.stopPropagation();
-                        surface.workspace.favSpread = !surface.workspace.favSpread;
-                    }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor flex"><S>星标收藏</S>
-                        <span className={"size-20 cursor visible  flex-center ts " + (surface.workspace.favSpread ? " " : " angle-90-")}>
-                            <Icon size={16} icon={ChevronDownSvg}></Icon>
-                        </span>
-                    </span>
-                </div>
-                {surface.workspace.favSpread && <div>
-                    {surface.workspace?.favs.map(ws => {
-                        var View = surface.sln.getMimeViewComponent(ws.mime);
-                        return <View key={ws.id} item={ws} deep={1} ></View>
-                    })}
-                </div>}
-            </div>
-        }
     }
     function renderPublishSiteSearch() {
         return <> {surface.isPubSite && !surface.isPubSiteHideMenu && <div className="gap-10">
@@ -142,7 +135,7 @@ export var SlnView = observer(function () {
         </>
     }
     return <div className='shy-wss h100' onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
-        {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + (surface.workspace.slnStyle || 'note')}>
+        {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + ('note')}>
             {!(surface.isPubSite && surface.isPubSiteDefineBarMenu) && <WorkspaceProfile ></WorkspaceProfile>}
             {renderPublishSiteSearch()}
             {!local.word && <div className='shy-ws-items' ref={e => surface.sln.el = e}>

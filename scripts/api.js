@@ -363,7 +363,8 @@ push('/open/pay', '{}', '{}', ['act'])
 push('/shy/share', '{type: "weibo"|"weixin"|"updateTimelineShareData"|"updateAppMessageShareData", title: string, description?: string, pic?: string, url: string}', '{}', ['act'])
 push('/search/workspace/template', '{ classify?: string,tags?: string[],mime?: string,page: number,word?: string,size: number}', 'SockResponse<{page:number,list:any[],total:number,size:number}>', ['get']);
 push('/workspace/template/useCount', '{id:string}', 'SockResponse<void>', ['post']);
-push('/import/page', '{text?: string,templateUrl?: string,wsId?:string,parentId?:string,pageId?:string,}', 'SockResponse<void>', ['post'])
+push('/import/page', '{text?: string,templateUrl?: string,wsId?:string,parentId?:string,pageId?:string,}', 'SockResponse<{item:any,items:any[]}>', ['post'])
+push('/import/page/data','{text?:string,wsId?:string,parentId?:string,mime:number,pageData:Record<string,any>|string,plain?:string}', 'SockResponse<{item:any}>', ['put'])
 push('/query/my/wss','{}','{wss:any[]}',['query'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

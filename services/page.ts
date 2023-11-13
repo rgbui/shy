@@ -154,4 +154,10 @@ class PageService extends BaseService {
         var sock = await wss.getArgsSock(args);
         return sock.post('/import/page', { ...args });
     }
+    @put('/import/page/data')
+    async importPageData(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return sock.put('/import/page/data', { ...args });
+    }
 }
