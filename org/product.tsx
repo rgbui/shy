@@ -6,8 +6,8 @@ import { config } from "../common/config";
 import { SiteFeatures } from "./common/feature";
 import { PricingValue } from "./common/pricing";
 import { getTypeColor } from "./util";
-import { isMobileOnly } from "react-device-detect";
 import { UrlRoute } from "../src/history";
+
 /***
  * 
  * 讲清楚
@@ -41,9 +41,9 @@ export function ProductView() {
         <div className="shy-site-block">
             <div>
                 <div className="padding-t-50">
-                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S>知识社区协作生产力工具</S></h1>
+                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S text='知识社区协作生产力工具'>知识社区协作生产力工具</S></h1>
                     <p className="flex-center remark text-center f-24">
-                        <Sp text='知识社区协作生产力工具-description'>以文稿编辑的方式，结合沟通社交和AI机器人，为个人及团队提供<br />一站式社区协作平台，服务好自已的受众群体</Sp>
+                        <Sp text='知识社区协作生产力工具-description'>以办公协作，结合沟通社交和Agent，为个人及团队提供<br />一站式社区协作平台，服务好自已的受众群体</Sp>
                     </p>
                     <p className="flex-center gap-h-10">
                         <a href="sign/in"
@@ -56,13 +56,16 @@ export function ProductView() {
                     <div className="gap-h-30 flex-center  relative">
                         <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src={UrlRoute.getUrl("static/img/pic.png")} />
                         <div className="pos site-mobile-pic">
-                            <div className="pos" style={{ borderRadius: 8, width: 170, height: 340, overflow: 'hidden', top: 30, left: 116, zIndex: 3 }}>
-                                <img src='static/img/mobile-content.png' className="w100" />
-                            </div>
-                            <img className="w-400 pos" style={{ top: 0, left: 0, zIndex: 2 }} src={UrlRoute.getUrl('static/img/mobile.png')} />
+                            <img style={{ width: 220 }} src={UrlRoute.getUrl('static/img/mobile-1.png')} />
+                            <img src='static/img/mobile-content.png' className="pos" style={{
+                                top: 33,
+                                left: 15,
+                                width: 192,
+                                height: 398,
+                                borderRadius: 10
+                            }} />
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
