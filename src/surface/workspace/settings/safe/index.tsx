@@ -10,7 +10,6 @@ import { surface } from "../../../store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { Workspace } from "../..";
 import { ShyAlert } from "rich/component/lib/alert";
-import { config } from "../../../../../common/config";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 
@@ -73,14 +72,7 @@ export class SafeSetting extends React.Component {
     }
     async openAccess(access: number) {
         if (access == 1) {
-            var us = await surface.user.wallet();
-            if (config.isTestBeta || us.money > 5 || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
-
-            }
-            else {
-                ShyAlert(lst('需要充值才能公开至互联网'))
-                return;
-            }
+            if (!await surface.user.isFillPay(lst('需要充值才能公开至互联网'))) return
         }
         this.change('access', access);
     }

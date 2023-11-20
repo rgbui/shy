@@ -12,6 +12,8 @@ import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl, SyHistory } from "../../history";
 import { useOpenUserSettings } from "./settings";
 import { surface } from "../store";
+import { config } from "../../../common/config";
+import { ShyAlert } from "rich/component/lib/alert";
 
 export class User {
     public id: string = null;
@@ -154,6 +156,16 @@ export class User {
         var r = await channel.get('/user/wallet');
         if (r?.ok) {
             return r.data as any;
+        }
+    }
+    async isFillPay(alert: string) {
+        var us = await surface.user.wallet();
+        if (config.isTestBeta || us.money > 5 || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+            return true;
+        }
+        else {
+            ShyAlert(alert)
+            return false;
         }
     }
     /**

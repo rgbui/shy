@@ -383,14 +383,15 @@ export class SitePublishView extends React.Component {
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip><div className="h2">发布应用</div>
             <Divider></Divider>
             <div className="flex gap-t-20">
-                <span className="flex-auto"><S>发布应用站点</S></span>
-                <Switch checked={this.data.publishConfig.abled} onChange={e => {
-                    this.change('publishConfig.abled', e)
+                <span className="flex-auto"><S>发布应用</S></span>
+                <Switch checked={this.data.publishConfig.abled} onChange={async e => {
+                    if (await surface.user.isFillPay(lst('需要充值才能发布应用')))
+                        this.change('publishConfig.abled', e)
                 }}></Switch>
             </div>
             <div className="flex">
                 <span className="f-12 remark ">
-                    <Sp text={'公开至互联网后发布才有效果'} data={{ url: `https://${domain}.` + UrlRoute.getHost() }}>公开至互联网后发布才有效果，发布后通过<a className={'underline link-remark'} href={`https://${domain}.` + UrlRoute.getHost()} target="_blank">{`https://${domain}.` + UrlRoute.getHost()}</a>访问</Sp>
+                    <Sp text={'公开至互联网后发布才有效果'} data={{ url: `https://${domain}.` + UrlRoute.getHost() }}>发布后通过<a className={'underline link-remark'} href={`https://${domain}.` + UrlRoute.getHost()} target="_blank">{`https://${domain}.` + UrlRoute.getHost()}</a>访问</Sp>
                 </span>
             </div>
             {this.data.publishConfig.abled && <div className="r-gap-h-10">
