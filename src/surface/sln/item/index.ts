@@ -11,7 +11,7 @@ import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { PageLayoutType, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
-import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
+import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, PlusAreaSvg, PlusSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Confirm } from "rich/component/lib/confirm";
@@ -325,30 +325,49 @@ export class PageItem {
             }
         }
     }
-    async getPageItemMenus() {
+    async getPageItemMenus()
+    {
         var items: MenuItem<string>[] = [];
         if (this.mime == Mime.pages) {
             items = [
                 {
                     name: 'rename',
                     icon: RenameSvg,
-                    text: lst('编辑分类')
+                    text: lst('重命名')
+                },
+                { type: MenuItemType.divide },
+                {
+                    name: 'addNewPage',
+                    text: lst('添加新页面'),
+                    icon: PlusAreaSvg,
                 },
                 {
                     name: 'createFolder',
                     icon: FolderPlusSvg,
-                    text: lst('创建分类')
+                    text: lst('创建新分栏')
+                },
+                { type: MenuItemType.divide },
+                {
+                    name: 'copy',
+                    icon: DuplicateSvg,
+                    text: lst('拷贝副本')
+                },
+                {
+                    name: 'move',
+                    iconSize: 18,
+                    icon: { name: 'bytedance-icon', code: 'corner-up-right' },
+                    text: lst('移动')
                 },
                 { type: MenuItemType.divide },
                 {
                     name: 'toggleFolder',
                     icon: this.spread ? FolderCloseSvg : FolderOpenSvg,
-                    text: this.spread ? lst("折叠分类") : lst('展开分类')
+                    text: this.spread ? lst("折叠分栏") : lst('展开分栏')
                 },
                 {
                     name: 'unAllFolders',
                     icon: SeoFolderSvg,
-                    text: lst('折叠所有分类')
+                    text: lst('折叠所有')
                 },
                 { type: MenuItemType.divide },
                 {
@@ -357,6 +376,20 @@ export class PageItem {
                     text: lst('删除')
                 }
             ]
+            if (this.editor) {
+                items.push({
+                    type: MenuItemType.divide,
+                });
+                if (this.editDate) items.push({
+                    type: MenuItemType.text,
+                    text: lst('编辑于 ') + util.showTime(this.editDate)
+                });
+                var r = await channel.get('/user/basic', { userid: this.editor });
+                if (r?.data?.user) items.push({
+                    type: MenuItemType.text,
+                    text: lst('编辑人 ') + r.data.user.name
+                });
+            }
         }
         else {
             items.push({
@@ -364,11 +397,6 @@ export class PageItem {
                 icon: LogoutSvg,
                 text: lst('在右侧边栏打开')
             });
-            // items.push({
-            //     name: 'fav',
-            //     icon: { name: 'bytedance-icon', code: 'star' },
-            //     text: this.fav ? lst('取消收藏') : lst('收藏'),
-            // });
             items.push({
                 type: MenuItemType.divide,
             });
@@ -386,13 +414,11 @@ export class PageItem {
             items.push({
                 type: MenuItemType.divide,
             })
-            if (this.pageType == PageLayoutType.doc) {
-                items.push({
-                    name: 'copy',
-                    icon: DuplicateSvg,
-                    text: lst('拷贝副本')
-                });
-            }
+            items.push({
+                name: 'copy',
+                icon: DuplicateSvg,
+                text: lst('拷贝副本')
+            });
             items.push({
                 name: 'rename',
                 icon: RenameSvg,
@@ -425,6 +451,9 @@ export class PageItem {
     }
     async onContextmenuClickItem(menuItem: MenuItem<string>, event: MouseEvent, sourceEl: HTMLElement) {
         switch (menuItem.name) {
+            case 'addNewPage':
+                this.onAdd();
+                break;
             case 'copy':
                 this.onCopy();
                 break;
@@ -434,15 +463,15 @@ export class PageItem {
             case 'rename':
                 if (this.mime == Mime.pages) {
                     var r = await useForm({
-                        title: lst('修改分类名称'),
+                        title: lst('修改分栏名称'),
                         head: false,
                         fields: [
-                            { name: 'title', type: 'input', text: lst('分类名称') }
+                            { name: 'title', type: 'input', text: lst('分栏名称') }
                         ],
                         model: { title: this.text },
                         async checkModel(model) {
-                            if (!model.text) return lst('分类名称不能为空')
-                            if (model.text.length > 30) return lst('分类名称过长')
+                            if (!model.text) return lst('分栏名称不能为空')
+                            if (model.text.length > 30) return lst('分栏名称过长')
                             return '';
                         }
                     });

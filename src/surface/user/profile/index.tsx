@@ -52,7 +52,7 @@ export var UserProfile = observer(function () {
         })
     }, [])
     return <div className="shy-user-profile">
-        {surface.user && <div className="flex round item-hover-1 cursor padding-5 padding-r-20" onMouseDown={e => setUserStatus(e)}>
+        {surface.user && <div className="flex round item-hover cursor padding-5 padding-r-20" onMouseDown={e => setUserStatus(e)}>
             <Avatar ref={e => local.avatar = e} size={32} user={surface.user}></Avatar>
             <div className="gap-l-5">
                 <div className="bold text f-14 l-14 text-overflow w-80" title={surface.user.name}>{surface.user.name}</div>
@@ -60,7 +60,7 @@ export var UserProfile = observer(function () {
             </div>
         </div>}
         <div className="shy-user-profile-operators">
-            {!isMobileOnly && <span className="size-32 round flex-center cursor item-hover-1" onMouseDown={e => Mousedown(e)}>
+            {!isMobileOnly && <span className="size-24 round flex-center cursor item-hover" onMouseDown={e => Mousedown(e)}>
                 <Icon size={16} icon={SettingsSvg}></Icon>
             </span>}
         </div>

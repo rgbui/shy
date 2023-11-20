@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ChevronDownSvg, PlusSvg } from "rich/component/svgs";
+import { ChevronDownSvg, DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { PageItem } from "..";
 import { PageItemBox } from "../view/box";
@@ -31,7 +31,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     // e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
-                }} className="item-hover f-12 remark padding-w-2 padding-h-2 round cursor flex">
+                }} className="item-hover f-12 remark padding-l-4 round cursor flex">
                     <span>{item.text || lst("我的页面")}</span>
                     <span
                         className={"cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
@@ -41,7 +41,10 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 </span>
             </div>
             {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>
-                <span className="size-20 flex-center cursor item-hover round">
+                <span className="size-18 flex-center cursor item-hover round">
+                    <Icon icon={DotsSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onContextmenu(e.nativeEvent) }}></Icon>
+                </span>
+                <span className="size-18 flex-center cursor item-hover round">
                     <Icon icon={PlusSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onAdd() }}></Icon>
                 </span>
             </div>}

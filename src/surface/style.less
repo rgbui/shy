@@ -81,7 +81,7 @@
 
                 &:hover,
                 &.hover {
-                    color                 : rgb(59, 165, 93);
+                    color: rgb(59, 165, 93);
                 }
             }
         }
@@ -145,14 +145,16 @@
     }
 
     .shy-slide {
-        overflow-y      : auto;
-        height          : 100%;
-        width           : 240px;
-        box-sizing      : border-box;
-        flex-shrink     : 0;
-        background-color: var(--background-secondary);
-        position        : relative;
-        border-right    : 1px solid var(--background-modifier-accent);
+        overflow-y         : auto;
+        height             : 100%;
+        width              : 240px;
+        box-sizing         : border-box;
+        flex-shrink        : 0;
+        // background-color: var(--background-secondary);
+        background-color   : #fff;
+        position           : relative;
+        border-right       : 1px solid var(--background-modifier-accent);
+        // border-right       : 1px solid var(--background-secondary);
 
         &-resize {
             position  : absolute;
@@ -293,6 +295,3 @@
         }
     }
 }
-
-
-

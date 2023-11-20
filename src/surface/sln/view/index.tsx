@@ -3,7 +3,7 @@ import { surface } from "../../store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer, useLocalObservable } from "mobx-react";
 import { UserProfile } from "../../user/profile";
-import { ChevronDownSvg, DownloadSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
+import {  DownloadSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useTemplateView } from "rich/extensions/template";
 import { useImportFile } from "rich/extensions/import-file";
@@ -17,6 +17,7 @@ import { Mime } from "../declare";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
 import { getPageItemElementUrl } from "../item/util";
 import { buildPage } from "rich/src/page/common/create";
+
 
 export var SlnView = observer(function () {
     var local = useLocalObservable<{ word: string, input: Input }>(() => {
@@ -91,17 +92,17 @@ export var SlnView = observer(function () {
     function renderBottoms() {
         if (surface.isPubSite) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
-            return <div className="gap-b-20">
+            return <div className="gap-t-20">
                 <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={16} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
+                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
                     <span><S>模板</S></span>
                 </div>
                 <div onMouseDown={e => openImport(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={16} icon={DownloadSvg}></Icon></span>
+                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={DownloadSvg}></Icon></span>
                     <span><S>导入</S></span>
                 </div>
                 <div onMouseDown={e => openTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={16} icon={TrashSvg}></Icon></span>
+                    <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={TrashSvg}></Icon></span>
                     <span><S>垃圾桶</S></span>
                 </div>
             </div>
