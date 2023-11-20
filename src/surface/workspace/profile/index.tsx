@@ -4,7 +4,7 @@ import { surface } from "../../store";
 import { observer } from "mobx-react";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
-import { ChevronDownSvg, SettingsSvg, LogoutSvg, AddUserSvg, MenuFolderSvg, TreeListSvg, FolderPlusSvg, FolderCloseSvg, MemberSvg, UploadSvg, } from "rich/component/svgs";
+import { ChevronDownSvg, SettingsSvg, LogoutSvg, AddUserSvg, FolderPlusSvg, MemberSvg, UploadSvg, } from "rich/component/svgs";
 import { useOpenWorkspaceSettings } from "../settings";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
@@ -46,6 +46,7 @@ export var WorkspaceProfile = observer(function () {
             menus = [
                 { name: 'userSetting', icon: SettingsSvg, text: lst('个人设置') },
                 { type: MenuItemType.divide },
+                { name: 'userPay', icon: { name: 'bytedance-icon', code: 'flash-payment' }, text: lst('付费升级') },
                 { name: 'invite', text: lst('邀请ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
