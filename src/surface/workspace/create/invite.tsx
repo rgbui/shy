@@ -93,13 +93,11 @@ export var InviteView = observer(function () {
             <div className="flex-center f-16 bold gap-h-20">
                 <S>邀请您加入</S>{local.ws.text}
             </div>
-
             <div >
                 <WsAvatar wsId={local.ws.id}></WsAvatar>
             </div>
-
-            <div className="gap-h-10 r-gap-w-10">
-                <Button block onClick={e => join()}><S>接受邀请</S></Button>
+            <div className="gap-h-10">
+                <Button size="larger" block onClick={e => join()}><S>接受邀请</S></Button>
             </div>
 
         </div>}
