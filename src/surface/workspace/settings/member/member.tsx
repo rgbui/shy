@@ -152,8 +152,8 @@ export class WorkspaceMembers extends React.Component {
                         </div>
                         <div className='flex-auto flex-end'>
                             <span style={{ fontSize: 14 }}><S>显示角色</S>:</span>
-                            <Select style={{ fontSize: 14 }} value={this.searchList.roleId} dropStyle={{ width: 120 }} onChange={e => { this.searchList.roleId = e; this.loadMembers() }} options={this.getRoleOptions()}></Select>
-                            <Input style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder={lst('搜索用户...')}></Input>
+                            <Select style={{ fontSize: 14 }}  value={this.searchList.roleId} dropStyle={{ width: 120 }} onChange={e => { this.searchList.roleId = e; this.loadMembers() }} options={this.getRoleOptions()}></Select>
+                            <Input className={'gap-l-10'} size='small' style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder={lst('搜索用户...')}></Input>
                         </div>
                     </div>
                 </div>
