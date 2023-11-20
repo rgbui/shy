@@ -364,6 +364,10 @@ class WorkspaceService extends BaseService {
     async getWorkspaceTemplate(args) {
         return await masterSock.get('/get/workspace/template', args);
     }
+    @del('/del/workspace/template')
+    async deleteWorkspaceTemplate(args) {
+        return await masterSock.delete('/del/workspace/template', args);
+    }
     @get('/search/workspace/template')
     async searchWorkspaceTemplate(args) {
         return masterSock.get('/search/workspace/template', args);
