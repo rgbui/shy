@@ -2,7 +2,6 @@ import React from 'react';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { UserSettingsView } from './content/settings';
 import "./style.less";
-import { ShyUrl, SyHistory, UrlRoute } from '../../../history';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
 import { Singleton } from 'rich/component/lib/Singleton';
@@ -34,7 +33,9 @@ class UserSettings extends EventsComponent {
     }
     visible: boolean = false;
     mode: string = 'user-settings';
-    open() {
+    open(mode) {
+        if (mode) this.mode = mode;
+        else this.mode = 'user-settings';
         this.visible = true;
     }
     setMode(mode) {
@@ -119,7 +120,7 @@ class UserSettings extends EventsComponent {
     }
 }
 
-export async function useOpenUserSettings() {
+export async function useOpenUserSettings(mode?: 'update'|'price') {
     var us = await Singleton(UserSettings);
-    us.open();
+    us.open(mode);
 }

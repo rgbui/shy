@@ -3,20 +3,15 @@ import { surface } from "../../store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer, useLocalObservable } from "mobx-react";
 import { UserProfile } from "../../user/profile";
-import {  DownloadSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
+import { DownloadSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { useTemplateView } from "rich/extensions/template";
-import { useImportFile } from "rich/extensions/import-file";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
-import { useTrashBox } from "rich/extensions/trash";
 import { S } from "rich/i18n/view";
 import { Input } from "rich/component/view/input";
 import { lst } from "rich/i18n/store";
 import { Mime } from "../declare";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
-import { getPageItemElementUrl } from "../item/util";
-import { buildPage } from "rich/src/page/common/create";
 
 
 export var SlnView = observer(function () {
@@ -40,68 +35,21 @@ export var SlnView = observer(function () {
             document.removeEventListener('mousemove', move);
         }
     }, [])
-    async function openTemplate(e: React.MouseEvent) {
-        var ut = await useTemplateView();
-        if (ut) {
-            /**
-            * 自动创建空间
-            */
-            var pageItem = surface.workspace.childs.last()
-            var rr = await channel.post('/import/page', {
-                text: ut.text,
-                templateUrl: ut.file?.url,
-                wsId: surface.workspace.id,
-                parentId: pageItem.id
-            });
-            if (rr.ok) {
-                await pageItem.onSync(true)
-                console.log('rd', rr.data);
-                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rr.data.item) })
-            }
-        }
-    }
-    async function openTrash(e: React.MouseEvent) {
-        var item = surface.workspace.childs.last();
-        var rg = await useTrashBox({
-            ws: surface.workspace,
-            parentId: item.id
-        });
-        if (rg) {
-            await item.onSync(true);
-        }
-    }
-    async function openImport(e: React.MouseEvent) {
-        var r = await useImportFile();
-        if (r) {
-            var pageItem = surface.workspace.childs.last();
-            var npa = await buildPage(r.blocks, { isTitle: true }, surface.workspace);
-            var rc = await channel.put('/import/page/data', {
-                text: r.text,
-                pageData: await npa.getString(),
-                parentId: pageItem.id,
-                plain: await npa.getPlain(),
-                mime: Mime.page,
-                wsId: surface.workspace.id
-            });
-            if (rc) {
-                await pageItem.onSync(true);
-                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rc.data.item) })
-            }
-        }
-    }
+
+
     function renderBottoms() {
         if (surface.isPubSite) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-t-20">
-                <div onMouseDown={e => openTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
+                <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
                     <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
                     <span><S>模板</S></span>
                 </div>
-                <div onMouseDown={e => openImport(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
+                <div onMouseDown={e => surface.workspace.onImportFiles()} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
                     <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={DownloadSvg}></Icon></span>
                     <span><S>导入</S></span>
                 </div>
-                <div onMouseDown={e => openTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
+                <div onMouseDown={e => surface.workspace.onOpenTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
                     <span className="gap-l-5 item-hover round size-20 flex-center gap-r-5"><Icon size={18} icon={TrashSvg}></Icon></span>
                     <span><S>垃圾桶</S></span>
                 </div>

@@ -48,8 +48,11 @@ export class WsSettings extends EventsComponent {
         this.visible = false;
         this.emit('close');
     }
-    open() {
+    open(mode?: string) {
+        if (mode) this.mode = mode;
+        else this.mode = 'settings';
         this.visible = true;
+        this.forceUpdate();
     }
     deleteSpace() {
         ShyAlert(lst('暂时不支持删除空间'))
@@ -118,7 +121,8 @@ export class WsSettings extends EventsComponent {
         </div>
     }
 }
-export async function useOpenWorkspaceSettings() {
+
+export async function useOpenWorkspaceSettings(mode?: WsSettings['mode']) {
     var popover = await Singleton(WsSettings);
-    popover.open();
+    popover.open(mode);
 }

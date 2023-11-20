@@ -27,6 +27,11 @@ import { Pid, PidType } from "./declare";
 import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { workspaceNotifys } from "../../../services/tim";
 import { HttpMethod } from "../../../net/primus/http";
+import { useImportFile } from "rich/extensions/import-file";
+import { buildPage } from "rich/src/page/common/create";
+import { getPageItemElementUrl } from "../sln/item/util";
+import { useTemplateView } from "rich/extensions/template";
+import { useTrashBox } from "rich/extensions/trash";
 
 export type WorkspaceUser = {
     userid: string;
@@ -562,5 +567,54 @@ export class Workspace {
             token,
             lang
         } as any
+    }
+    async onImportFiles(){
+        var r = await useImportFile();
+        if (r) {
+            var pageItem = surface.workspace.childs.last();
+            var npa = await buildPage(r.blocks, { isTitle: true }, surface.workspace);
+            var rc = await channel.put('/import/page/data', {
+                text: r.text,
+                pageData: await npa.getString(),
+                parentId: pageItem.id,
+                plain: await npa.getPlain(),
+                mime: Mime.page,
+                wsId: surface.workspace.id
+            });
+            if (rc) {
+                await pageItem.onSync(true);
+                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rc.data.item) })
+            }
+        }
+    }
+    async  onOpenTemplate(e: React.MouseEvent) {
+        var ut = await useTemplateView();
+        if (ut) {
+            /**
+            * 自动创建空间
+            */
+            var pageItem = surface.workspace.childs.last()
+            var rr = await channel.post('/import/page', {
+                text: ut.text,
+                templateUrl: ut.file?.url,
+                wsId: surface.workspace.id,
+                parentId: pageItem.id
+            });
+            if (rr.ok) {
+                await pageItem.onSync(true)
+                console.log('rd', rr.data);
+                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rr.data.item) })
+            }
+        }
+    }
+    async onOpenTrash(e: React.MouseEvent) {
+        var item = surface.workspace.childs.last();
+        var rg = await useTrashBox({
+            ws: surface.workspace,
+            parentId: item.id
+        });
+        if (rg) {
+            await item.onSync(true);
+        }
     }
 }
