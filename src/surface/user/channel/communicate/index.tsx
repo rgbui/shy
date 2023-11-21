@@ -92,9 +92,9 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
                         <span>@{user?.name}</span>
                     </div>
                         <div className="shy-user-channel-communicate-content" ref={e => this.scrollEl = e}>
-                            <div className="gap-w-20">
+                            <div className="gap-20">
                                 <Avatar user={user} size={80}></Avatar>
-                                <div className="h3">{user.name}</div>
+                                <div className="h2">{user.name}</div>
                                 <div className="remark f-12"><Sp text="这是您与{name}私信记录的开头" data={{ name: user.name }}>这是您与<span className="bold text-1">@{user.name}</span>私信记录的开头。</Sp></div>
                             </div>
                             {props.userChannel.room.isLoadChat && <RenderChatsView userChannel={props.userChannel} reditChat={this.reditChat} replyChat={this.replyChat}></RenderChatsView>}

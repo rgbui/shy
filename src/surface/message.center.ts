@@ -24,6 +24,7 @@ import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "./workspace/robot/view";
 import { useOpenWorkspaceSettings } from "./workspace/settings";
 import { useOpenUserSettings } from "./user/settings";
+import { userChannelStore } from "./user/channel/store";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -499,5 +500,26 @@ class MessageCenter {
     @act('/user/logout')
     async openLogout() {
         if (surface?.user) surface.user.logout()
+    }
+    @act('/user/exit/current/workspace')
+    async userExitWorkspace() {
+        await surface.exitWorkspace();
+    }
+    @act('/current/ws/remove/member')
+    async wsRemoveMember(args: { userid: string }) {
+        await channel.del('/ws/member/delete', {
+            userid: args.userid
+        })
+        await masterSock.delete('/user/del/join/ws', {
+            wsId: surface.workspace.id,
+            userid: args.userid
+        })
+    }
+    @act('/open/user/private/channel')
+    async currentUserSend(args: { userid: string }) {
+        console.log(args.userid);
+        UrlRoute.push(ShyUrl.me);
+        await surface.workspace.exitWorkspace();
+        await userChannelStore.openUserChannel(args.userid);
     }
 }

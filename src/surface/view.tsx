@@ -58,9 +58,12 @@ export var SurfaceView = observer(function () {
         local.loading = true;
         try {
             await surface.loadWorkspaceList();
+            if (UrlRoute.isMatch(ShyUrl.me)) { UrlRoute.redict(ShyUrl.me); return }
             var willWs = await Surface.getWsName();
             if (willWs) await surface.onLoadWorkspace(willWs)
-            else UrlRoute.redict(ShyUrl.home)
+            else {
+                UrlRoute.redict(ShyUrl.home)
+            }
         }
         catch (ex) {
         }
