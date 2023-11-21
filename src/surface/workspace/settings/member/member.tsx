@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {  Divider } from 'rich/component/view/grid';
+import { Divider } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
@@ -19,7 +19,6 @@ import { Spin } from 'rich/component/view/spin';
 import { Pagination } from 'rich/component/view/pagination';
 import { Confirm } from 'rich/component/lib/confirm';
 import { ToolTip } from 'rich/component/view/tooltip';
-import { masterSock } from '../../../../../net/sock';
 import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
 
@@ -119,13 +118,7 @@ export class WorkspaceMembers extends React.Component {
     }
     async removeUser(member) {
         if (await Confirm(lst(`确认要移除成员吗`))) {
-            await channel.del('/ws/member/delete', {
-                userid: member.userid
-            })
-            await masterSock.delete('/user/del/join/ws', {
-                wsId: surface.workspace.id,
-                userid: member.userid
-            })
+            await channel.act('/current/ws/remove/member', { userid: member.userid })
             this.loadMembers();
         }
     }
@@ -152,7 +145,7 @@ export class WorkspaceMembers extends React.Component {
                         </div>
                         <div className='flex-auto flex-end'>
                             <span style={{ fontSize: 14 }}><S>显示角色</S>:</span>
-                            <Select style={{ fontSize: 14 }}  value={this.searchList.roleId} dropStyle={{ width: 120 }} onChange={e => { this.searchList.roleId = e; this.loadMembers() }} options={this.getRoleOptions()}></Select>
+                            <Select style={{ fontSize: 14 }} value={this.searchList.roleId} dropStyle={{ width: 120 }} onChange={e => { this.searchList.roleId = e; this.loadMembers() }} options={this.getRoleOptions()}></Select>
                             <Input className={'gap-l-10'} size='small' style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder={lst('搜索用户...')}></Input>
                         </div>
                     </div>

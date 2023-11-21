@@ -167,7 +167,7 @@ export class Surface extends Events {
     }
     async exitWorkspace() {
         await channel.del('/user/exit/ws', { wsId: surface.workspace.id });
-        await channel.del('/ws/member/exit', { wsId: surface.workspace.id, sock: surface.workspace.sock });
+        await channel.del('/ws/member/exit', { wsId: surface.workspace.id });
         var list = surface.wss.map(w => w);
         list.remove(g => g.id == surface.workspace.id);
         surface.wss = list;

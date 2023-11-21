@@ -184,7 +184,7 @@ push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,
 push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
 push(`/datastore/row/update`, '{ws:LinkWs,wsId?:string,schemaId: string, filter?:Record<string, any>, data: Record<string, any>}', 'SockResponse<void>', ['patch']);
 push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
-push('/datastore/remove/filter','{schemaId:string,filter:Record<string,any>}','SockResponse<void>', ['del']);
+push('/datastore/remove/filter', '{schemaId:string,filter:Record<string,any>}', 'SockResponse<void>', ['del']);
 push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{exists:boolean}>', ['get']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
@@ -220,7 +220,7 @@ push('/user/onlines', '{users:Set<string>}', 'void', ['air']);
 push('/user/view/onlines', '{viewUrl:string,users:Set<string>}', 'void', ['air']);
 push('/get/view/onlines', '{viewUrl:string}', '{users:Set<string>}', ['query']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
-push('/robot/open','{robot:RobotInfo}','Promise<void>',['air']);
+push('/robot/open', '{robot:RobotInfo}', 'Promise<void>', ['air']);
 push('/sync/wiki/doc', '{wsId?:string,elementUrl:string,pageText:string,robotId:string,contents:{id:string,content:string}[]}', 'SockResponse<{doc:{id:string}}>', ['put']);
 push('/robot/doc/embedding', '{id:string}', 'SockResponse<{totalCount:number}>', ['post'])
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
@@ -263,7 +263,7 @@ push('/open/sign', '{}', 'SockResponse<{user:Record<string,any>,guid:string,toke
 push('/open/user/settings', '{}', 'Promise<void>', ['act'])
 push('/open/workspace/settings', '{}', 'Promise<void>', ['act'])
 push('/user/logout', '{}', 'Promise<number>', ['act'])
-
+push('/user/report','{report:{userid:string,tags:string[],reason:string,reportElementUrl?:string,wsId?:string,reportContent?:string}}', 'SockResponse<void>', ['put'])
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/info', '{ws?:LinkWs,name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
@@ -291,10 +291,10 @@ push('/ws/channel/abled/send', '{ws:LinkWs,wsId?:string,roomId:string}', 'SockRe
 push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
-push('/ws/flow','{ws:LinkWs,wsId?:string,flow:Record<string,any>}','SockResponse<{flow:Record<string,any>}>',['put']);
-push('/ws/flow/get','{flowId:string,ws:LinkWs,wsId?:string}','SockResponse<{flow:Record<string,any>}>',['get']);
+push('/ws/flow', '{ws:LinkWs,wsId?:string,flow:Record<string,any>}', 'SockResponse<{flow:Record<string,any>}>', ['put']);
+push('/ws/flow/get', '{flowId:string,ws:LinkWs,wsId?:string}', 'SockResponse<{flow:Record<string,any>}>', ['get']);
 
-push('/ws/member/exit', '{wsId:string,sock:any}', 'SockResponse<void>', ['del']);
+push('/ws/member/exit', '{wsId?:string}', 'SockResponse<void>', ['del']);
 push('/ws/member/word/query', '{ws:LinkWs,wsId?:string,word?:string,size?:number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/members', '{ws:LinkWs,wsId?:string,page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/member/delete', '{userid:string}', 'SockResponse<void>', ['del']);
@@ -321,7 +321,7 @@ push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);
 push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, elementUrl:string, templateUrl: string, text?: string,icon?:any, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
 push('/get/workspace/template', '{wsId: string, pageId?: string,elementUrl?:string}', 'SockResponse<{template:Record<string,any>}>', ['get'])
-push('/del/workspace/template','{id:string}','SockResponse<void>',['del']);
+push('/del/workspace/template', '{id:string}', 'SockResponse<void>', ['del']);
 push('/page/items', '{ws:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[],favs:any[]}>', ['get'])
 push('/page/item/subs', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/parent/ids', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ parentIds:string[],exists:boolean }>', ['get'])
@@ -365,7 +365,10 @@ push('/shy/share', '{type: "weibo"|"weixin"|"updateTimelineShareData"|"updateApp
 push('/search/workspace/template', '{ classify?: string,tags?: string[],mime?: string,page: number,word?: string,size: number}', 'SockResponse<{page:number,list:any[],total:number,size:number}>', ['get']);
 push('/workspace/template/useCount', '{id:string}', 'SockResponse<void>', ['post']);
 push('/import/page', '{text?: string,templateUrl?: string,wsId?:string,parentId?:string,pageId?:string,}', 'SockResponse<{item:any,items:any[]}>', ['post'])
-push('/import/page/data','{text?:string,wsId?:string,parentId?:string,mime:number,pageData:Record<string,any>|string,plain?:string}', 'SockResponse<{item:any}>', ['put'])
-push('/query/my/wss','{}','{wss:any[]}',['query'])
+push('/import/page/data', '{text?:string,wsId?:string,parentId?:string,mime:number,pageData:Record<string,any>|string,plain?:string}', 'SockResponse<{item:any}>', ['put'])
+push('/query/my/wss', '{}', '{wss:any[]}', ['query'])
+push('/user/exit/current/workspace', '{}', 'SockResponse<void>', ['act'])
+push('/current/ws/remove/member', '{userid:string}', 'SockResponse<void>', ['act'])
+push('/open/user/private/channel','{userid:string}', 'SockResponse<void>', ['act'])
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');
