@@ -370,5 +370,8 @@ push('/query/my/wss', '{}', '{wss:any[]}', ['query'])
 push('/user/exit/current/workspace', '{}', 'SockResponse<void>', ['act'])
 push('/current/ws/remove/member', '{userid:string}', 'SockResponse<void>', ['act'])
 push('/open/user/private/channel','{userid:string}', 'SockResponse<void>', ['act'])
+push('/current/page/copy','{}', 'SockResponse<void>', ['act'])
+push('/current/page/move','{}', 'SockResponse<void>', ['act'])
+
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

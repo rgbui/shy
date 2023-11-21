@@ -522,4 +522,18 @@ class MessageCenter {
         await surface.workspace.exitWorkspace();
         await userChannelStore.openUserChannel(args.userid);
     }
+    @act('/current/page/copy')
+    async currentPageCopy() {
+        var item = surface.supervisor.page?.item;
+        if (item) {
+            await item.onCopy();
+        }
+    }
+    @act('/current/page/move')
+    async currentPageMove(args: { event: React.MouseEvent }) {
+        var item = surface.supervisor.page?.item;
+        if (item) {
+            await item.onMove(args.event.target as HTMLElement);
+        }
+    }
 }
