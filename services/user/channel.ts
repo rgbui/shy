@@ -95,4 +95,8 @@ class UserService extends BaseService {
     async userChatEmoji(args) {
         return await masterSock.put('/user/chat/emoji', args);
     }
+    @put('/user/report')
+    async userReport(args) {
+        return await masterSock.put('/user/report', args);
+    }
 }
