@@ -156,8 +156,7 @@ export class UserSettingProfile extends React.Component {
                             {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
                         </div>
                         <div className="shy-user-settings-profile-box-card-content">
-                            <h2>{surface.user.name}#{surface.user.sn}</h2>
-                            <Divider></Divider>
+                            <div className="h2">{surface.user.name}#{surface.user.sn}</div>
                             <Remark>{this.inputSlogan || surface.user.slogan}</Remark>
                         </div>
                     </div>
