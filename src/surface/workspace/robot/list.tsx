@@ -2,12 +2,10 @@
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { AiSvg, PageSvg, PlusSvg } from "rich/component/svgs";
+import { PlusSvg } from "rich/component/svgs";
 import { Avatar } from "rich/component/view/avator/face";
 import { useForm } from "rich/component/view/form/dialoug";
 import { Icon } from "rich/component/view/icon";
-import { useSelectMenuItem } from "rich/component/view/menu";
-import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Divider } from "rich/component/view/grid";
@@ -47,46 +45,16 @@ export class RobotList extends React.Component {
         }
     }
     async add(event: React.MouseEvent) {
-        var r = await useSelectMenuItem(
-            { roundPoint: Point.from(event) },
-            [
-                { name: 'addWiki', text:lst('创建知识专家机器人') , icon: PageSvg },
-                {
-                    name: 'addCommand',
-                    text: lst('创建命令机器人'),
-                    icon: AiSvg,
-                    disabled: surface.workspace.sn == 25 || window.shyConfig.isDev ? false : true
-                }
-            ]
-        );
-        if (r) {
-            if (r.item.name == 'addWiki') {
-                var g = await useForm({ maskCloseNotSave: true, title: lst('创建知识专家机器人'), fields: [{ name: 'text', type: 'input', text: lst('机器人名称') }, { name: 'slogan', type: 'textarea', text:lst('描述' ) }] })
-                if (g) {
-                    var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
-                    if (s.ok) {
-                        await surface.workspace.sock.put('/ws/member/add/robot', {
-                            wsId: surface.workspace.id,
-                            robotInfo: s.data.robot
-                        });
-                        this.robots.push(s.data.robot);
-                        this.open(s.data.robot)
-                    }
-                }
-            }
-            else if (r.item.name == 'addCommand') {
-                var g = await useForm({ maskCloseNotSave: true, title: lst('创建命令机器人'), fields: [{ name: 'text', type: 'input', text: lst('机器人名称') }, { name: 'slogan', type: 'textarea', text: lst('描述') }] })
-                if (g) {
-                    var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'command', name: g.text, slogan: g.slogan } });
-                    if (s.ok) {
-                        await surface.workspace.sock.put('/ws/member/add/robot', {
-                            wsId: surface.workspace.id,
-                            robotInfo: s.data.robot
-                        });
-                        this.robots.push(s.data.robot);
-                        this.open(s.data.robot)
-                    }
-                }
+        var g = await useForm({ maskCloseNotSave: true, title: lst('创建GPT机器人'), fields: [{ name: 'text', type: 'input', text: lst('机器人名称') }, { name: 'slogan', type: 'textarea', text: lst('描述') }] })
+        if (g) {
+            var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
+            if (s.ok) {
+                await surface.workspace.sock.put('/ws/member/add/robot', {
+                    wsId: surface.workspace.id,
+                    robotInfo: s.data.robot
+                });
+                this.robots.push(s.data.robot);
+                this.open(s.data.robot)
             }
         }
     }
@@ -101,11 +69,13 @@ export class RobotList extends React.Component {
                 <span className="flex-auto"><S>机器人列表</S></span>
             </div>
             <Divider></Divider>
-            <div className="flex gap-h-10">
-                <span className="remark"><S text='创建专属于自已的机器人'>创建专属于自已的知识专家、指令执行机器人</S></span>
-                <span className="size-20 cursor item-hover round flex-center flex-fixed pointer" onMouseDown={e => this.add(e)}><Icon size={18} icon={PlusSvg}></Icon></span>
+            <div className="flex gap-h-10 padding-10">
+                <div onMouseDown={e => this.add(e)} className="cursor flex-fixed circle flex-center item-hover gap-r-5" style={{ width: 30, height: 30, border: '1px dashed #ddd' }}>
+                    <Icon icon={PlusSvg} size={20}></Icon>
+                </div>
+                <span onMouseDown={e => this.add(e)} className="remark"><S text='创建专属于自已的机器人'>创建专属于自已的GPT机器人</S></span>
             </div>
-            <div className="">
+            <div>
                 {this.robots.map(robot => {
                     return <div key={robot.id} className="gap-h-10 cursor item-hover round padding-10" onMouseDown={e => this.open(robot)}>
                         <div className="flex-top">

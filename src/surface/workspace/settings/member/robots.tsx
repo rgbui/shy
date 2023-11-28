@@ -34,10 +34,10 @@ export class RecommendRobots extends React.Component {
         }
         return <div>
             <div className="h2">
-                <span><S>推荐服务机器人</S></span>
+                <span><S>机器人商店</S></span>
             </div>
             <Divider></Divider>
-            <div className="remark f-12 gap-h-10"><S>添加服务机器人至空间</S></div>
+            <div className="remark f-12 gap-h-10"><S>选择机器人</S></div>
             <div>
                 {this.search.loading && <SpinBox></SpinBox>}
                 {this.search.list.map(l => {

@@ -85,8 +85,8 @@ export class WsSettings extends EventsComponent {
                             <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} ><S>发布</S></a>
                             <Divider style={{ margin: '0px 15px' }}></Divider></>}
                         <h4><S>机器人</S></h4>
-                        <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} ><S>推荐机器人</S></a>
-                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>自定义机器人</S></a>
+                        <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} ><S>商店</S></a>
+                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>我的机器人</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <a className="warn" onMouseDown={e => this.deleteSpace()}><S>删除空间</S></a>
                     </div>

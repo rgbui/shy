@@ -4,9 +4,9 @@ import { EventsComponent } from "rich/component/lib/events.component";
 import { Singleton } from "rich/component/lib/Singleton";
 import React from "react";
 import { RobotInfo } from "rich/types/user";
-import { RobotWikiList } from "./wiki";
-import { RobotTasksList } from "./task/view";
+import { RobotWikiList } from "./src";
 import lodash from "lodash";
+import { channel } from "rich/net/channel";
 
 @observer
 export class RobotSettings extends EventsComponent {
@@ -26,7 +26,13 @@ export class RobotSettings extends EventsComponent {
         this.forceUpdate();
         this.emit('close');
     }
-    open(robot: RobotInfo) {
+    async open(robot: RobotInfo) {
+        if (!this.robot?.robotId) {
+            var r = await channel.get('/get/robot', { id: this.robot.id });
+            if (r.ok) {
+                this.robot = r.data.robot;
+            }
+        }
         runInAction(() => {
             this.visible = true;
             this.robot = lodash.cloneDeep(robot);
@@ -41,8 +47,8 @@ export class RobotSettings extends EventsComponent {
         }
         return <div ref={e => this.el = e} style={{ zIndex: '10001', overflowY: 'scroll' }} className='shy-ws-settings fixed-full'>
             <div className='screen-content-1000   relative padding-t-50'>
-                <div>{this.robot.scene == 'wiki' && <RobotWikiList close={close} robot={this.robot}></RobotWikiList>}
-                    {this.robot.scene !== 'wiki' && <RobotTasksList close={close} robot={this.robot}></RobotTasksList>}
+                <div>
+                    <RobotWikiList close={close} robot={this.robot}></RobotWikiList>
                 </div>
             </div>
         </div>

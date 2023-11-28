@@ -30,13 +30,16 @@ export class TaskContent extends EventsComponent {
         return <div className="w-800 h-400 overflow-y padding-14 round r-gap-h-10">
             <div><Input placeholder={lst("指令名称")} value={this.task.name} onChange={e => this.task.name = e}></Input></div>
             <div className="flex">
-                <div className="flex-fixed w-80"><SelectBox value={this.task.method} onChange={e => this.task.method = e as string} options={[
-                    { value: 'GET', text: 'GET' },
-                    { value: 'POST', text: 'POST' },
-                    { value: 'PUT', text: 'PUT' },
-                    { value: 'PATCH', text: 'PAT' },
-                    { value: 'DELETE', text: 'DEL' },
-                ]}></SelectBox></div>
+                <div className="flex-fixed  gap-r-10"><SelectBox
+                    value={this.task.method}
+                    onChange={e => this.task.method = e as string}
+                    options={[
+                        { value: 'GET', text: 'GET' },
+                        { value: 'POST', text: 'POST' },
+                        { value: 'PUT', text: 'PUT' },
+                        { value: 'PATCH', text: 'PAT' },
+                        { value: 'DELETE', text: 'DEL' },
+                    ]}></SelectBox></div>
                 <div className="flex-auto gap-l-10"><Input placeholder={lst("请求网址")} value={this.task.url} onChange={e => this.task.url = e}></Input></div>
             </div>
             <div className="flex">
@@ -68,7 +71,7 @@ export class TaskContent extends EventsComponent {
                     <span onClick={e => this.requestTab = 'head'} className={this.requestTab == 'head' ? "border-b-p" : ""}><S>请求头</S></span>
                 </div>
                 {this.requestTab == 'args' && <div>
-                    <div className="flex bg-light h-30 round r-gap-r-10">
+                    <div className="flex bg-light  padding-h-3 round r-gap-r-10">
                         <div className="flex-fixed w-150 gap-l-10 flex-center"><S>参数名</S></div>
                         <div className="flex-fixed w-80 flex-center"><S>类型</S></div>
                         <div className="flex-fixed w-150 flex-center"><S>名称</S></div>
@@ -76,7 +79,7 @@ export class TaskContent extends EventsComponent {
                         <div className="flex-fixed w-80 flex-center"><span onClick={e => this.task.args.push({ id: util.guid(), name: '', text: '', type: 'string' })} className="flex-center size-20 round cursor item-hover"><Icon icon={PlusSvg}></Icon></span></div>
                     </div>
                     {this.task.args.map(arg => {
-                        return <div key={arg.id} className='flex item-hover round visible-hover h-min-40 gap-h-10 r-gap-r-10'>
+                        return <div key={arg.id} className='flex item-hover round visible-hover padding-h-3 gap-h-10 r-gap-r-10'>
                             <div className="flex-fixed w-150 gap-l-10"><Input size="small" placeholder={lst("输入参数英文")} value={arg.name} onChange={e => arg.name = e}></Input></div>
                             <div className="flex-fixed w-80"><SelectBox value={arg.type} onChange={e => arg.type = e as any} options={[{ text: 'string', value: 'string' }]}></SelectBox></div>
                             <div className="flex-fixed w-150"><Input size="small" placeholder={lst("输入中文名称")} value={arg.text} onChange={e => arg.text = e}></Input></div>
@@ -95,7 +98,7 @@ export class TaskContent extends EventsComponent {
                         <div className="flex-fixed w-80 flex-center"><span onClick={e => this.task.headers.push({ id: util.guid(), name: "", value: '' })} className="flex-center size-20 round cursor item-hover"><Icon icon={PlusSvg}></Icon></span></div>
                     </div>
                     {this.task.headers.map(head => {
-                        return <div key={head.id} className='flex  item-hover round  visible-hover h-min-40 gap-h-10  r-gap-r-10'>
+                        return <div key={head.id} className='flex  item-hover round  visible-hover padding-h-3 gap-h-10  r-gap-r-10'>
                             <div className="flex-fixed w-150 gap-l-10"><Input size="small" value={head.name} onChange={e => head.name = e}></Input></div>
                             <div className="flex-fixed w-150"><Input size="small" value={head.value} onChange={e => head.value = e}></Input></div>
                             <div className="flex-fixed w-80  flex-center">
@@ -107,48 +110,11 @@ export class TaskContent extends EventsComponent {
                     })}
                 </div>}
             </div>
-            <div>
-                <div className="h4 gap-h-10 gap-t-30"><S>响应</S></div>
-                <div>
-                    <div className="flex bg-light h-30 round r-gap-r-10 visible-hover">
-                        <div className="flex-fixed w-80 gap-l-10 flex-center"><S>类型</S></div>
-                        <div className="flex-fixed w-80 flex-center"><S>编号</S></div>
-                        <div className="flex-fixed w-150 flex-center"><S>模板</S></div>
-                        <div className="flex-fixed w-80 flex-center">
-                            <span className="flex-center size-20 round visible cursor item-hover disabled"><Icon size={16} icon={PlusSvg}></Icon></span>
-                        </div>
-                    </div>
-                    {this.task.replys.map(reply => {
-                        return <div key={reply.id} className='flex h-min-40  gap-h-10  r-gap-r-10'>
-                            <div className="flex-fixed w-80 gap-l-10"><SelectBox value={reply.mime} onChange={e => reply.mime = e as any} options={[
-                                { text: 'markdown', value: 'markdown' },
-                                { text: 'json', value: 'json' },
-                                { text: 'error', value: 'error' },
-                                { text: 'image', value: 'image' },
-                            ]}></SelectBox></div>
-                            <div className="flex-fixed w-80"><Input size="small" value={reply.code} onChange={e => reply.code = e}></Input></div>
-                            <div className="flex-fixed w-150"><Input size="small" value={reply.template} onChange={e => reply.template = e}></Input></div>
-                            <div className="flex-fixed w-80 flex-center">
-                                <span
-                                    // onClick={e => lodash.remove(this.task.replys, c => c == reply)}
-                                    className="cursor  size-20 flex-center item-hover round disabled">
-                                    <Icon size={16} icon={TrashSvg}></Icon>
-                                </span>
-                            </div>
-                        </div>
-                    })}
-                </div>
-            </div>
-            <div >
-                <div className="h4 gap-h-10 gap-t-30"><S>显示</S></div>
-                <div><Textarea placeholder={lst("显示模板")} value={this.task.template} onChange={e => this.task.template = e}></Textarea></div>
-            </div>
         </div>
     }
     open(task: RobotTask) {
-        console.log('open', task);
         if (!task) this.task = {
-            nextActions: [],
+            id: util.guid(),
             name: '',
             method: 'GET',
             url: '',
@@ -156,18 +122,13 @@ export class TaskContent extends EventsComponent {
             flag: 'write',
             description: '',
             args: [],
-            headers: [],
-            replys: [{ id: util.guid(), mime: 'markdown', content: '', template: '' }],
-            template: ''
+            headers: []
         }
         else this.task = task;
-        if (this.task.replys.length == 0) {
-            this.task.replys = [{ id: util.guid(), mime: 'markdown', content: '', template: '' }]
-        }
         if (!this.task.handle) this.task.handle = 'sync';
 
         if (!this.task.flag) this.task.flag = 'write';
-        console.log('currentTask', this.task)
+
     }
 }
 

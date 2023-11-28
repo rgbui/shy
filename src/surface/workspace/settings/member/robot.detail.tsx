@@ -6,6 +6,7 @@ import { Markdown } from "rich/component/view/markdown";
 import { S } from "rich/i18n/view";
 import { autoImageUrl } from "rich/net/element.type";
 import { RobotInfo } from "rich/types/user";
+import { RobotChat } from "../../robot/src/chat";
 
 @observer
 export class RobotDetail extends React.Component<{ back: () => void, robot: RobotInfo }>{
@@ -20,7 +21,7 @@ export class RobotDetail extends React.Component<{ back: () => void, robot: Robo
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
                 <div className="bg">
                     {!robot.cover?.url && <div style={{ height: 100, backgroundColor: robot?.cover?.color ? robot?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                    {robot.cover?.url && <img style={{ height: 180 }} src={autoImageUrl(robot.cover?.url, 900)} />}
+                    {robot.cover?.url && <img style={{ display: 'block', height: 180 }} src={autoImageUrl(robot.cover?.url, 900)} />}
                 </div>
                 <div className='shy-settings-user-avatar' style={{ top: robot.cover?.url ? 180 : 100 }}>
                     {robot?.avatar && <img src={autoImageUrl(robot.avatar.url, 120)} />}
@@ -29,12 +30,17 @@ export class RobotDetail extends React.Component<{ back: () => void, robot: Robo
                 <div className="shy-user-settings-profile-box-card-operators">
                     <h2>{robot.name}#{robot.sn}</h2>
                 </div>
+                <div className="padding-w-20 f-14 remark">
+                    {this.renderDetail()}
+                </div>
             </div>
-            {this.renderDetail()}
+            <div>
+                <RobotChat robot={this.props.robot}></RobotChat>
+            </div>
         </div>
     }
     renderDetail() {
         var robot = this.props.robot;
-        return <Markdown md={robot.remark}></Markdown>
+        return <Markdown md={robot.slogan}></Markdown>
     }
 }

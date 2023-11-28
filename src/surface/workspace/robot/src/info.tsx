@@ -1,7 +1,7 @@
 import lodash from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { EditSvg, PicSvg } from "rich/component/svgs";
+import { DotsSvg, EditSvg, GlobalLinkSvg, PicSvg } from "rich/component/svgs";
 import { Button } from "rich/component/view/button";
 import { useForm } from "rich/component/view/form/dialoug";
 import { useSelectMenuItem } from "rich/component/view/menu";
@@ -9,12 +9,13 @@ import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { autoImageUrl } from "rich/net/element.type";
 import { Rect } from "rich/src/common/vector/point";
 import { RobotInfo } from "rich/types/user";
-import { masterSock } from "../../../../net/sock";
+import { masterSock } from "../../../../../net/sock";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
 
-import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
+import { Icon } from "rich/component/view/icon";
+import { ShyAlert } from "rich/component/lib/alert";
 
 @observer
 export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
@@ -24,7 +25,8 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
             { text: lst('上传头像'), icon: PicSvg, name: 'avatar' },
             { type: MenuItemType.divide },
             { text: lst('上传封面'), icon: PicSvg, name: 'cover' },
-            // { type: MenuItemType.divide },
+            { type: MenuItemType.divide },
+            { name: 'share', icon: GlobalLinkSvg, checkLabel: this.props.robot.share == 'public', text: lst('公开') }
             // { text: '移除头像', icon: EditSvg, name: 'delete' },
             // { text: '移除封面', icon: EditSvg, name: 'delete' },
         ]
@@ -40,7 +42,7 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
                     footer: false,
                     model: lodash.cloneDeep(model),
                     checkModel: async (model) => {
-                        if (!model.text) return lst('机器人名称不能为空') ;
+                        if (!model.text) return lst('机器人名称不能为空');
                     }
                 });
                 if (f && !lodash.isEqual(f, model)) {
@@ -82,6 +84,16 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
                     }
                 }
             }
+            else if (r.item.name == 'share') {
+                await masterSock.patch('/robot/set', {
+                    id: this.props.robot.id,
+                    data: {
+                        share: this.props.robot.share == 'public' ? 'private' : 'public'
+                    }
+                })
+                this.props.robot.share = this.props.robot.share == 'public' ? 'private' : 'public'
+                ShyAlert(lst('已公开'))
+            }
         }
     }
     render() {
@@ -89,15 +101,19 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
         return <div className="shy-user-settings-profile-box-card settings w100" style={{ margin: '20px 0px' }}>
             <div className="bg">
                 {!robot.cover?.url && <div style={{ height: 100, backgroundColor: robot?.cover?.color ? robot?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                {robot.cover?.url && <img style={{ height: 180 }} src={autoImageUrl(robot.cover?.url, 900)} />}
+                {robot.cover?.url && <img style={{ height: 180, display: 'block' }} src={autoImageUrl(robot.cover?.url, 900)} />}
             </div>
             <div className='shy-settings-user-avatar' style={{ top: robot.cover?.url ? 180 : 100 }}>
                 {robot?.avatar && <img src={autoImageUrl(robot.avatar.url, 120)} />}
-                {!robot?.avatar && <span>{(robot.name||'').slice(0, 1)}</span>}
+                {!robot?.avatar && <span>{(robot.name || '').slice(0, 1)}</span>}
             </div>
             <div className="shy-user-settings-profile-box-card-operators">
                 <h2>{robot.name}#{robot.sn}</h2>
-                <Button onClick={e => this.onEdit(e)}><S>编辑机器人资料</S></Button>
+                <div className="flex-fixed">
+                    <span onMouseDown={e => this.onEdit(e)} className="item-hover flex-center size-24 round cursor">
+                        <Icon icon={DotsSvg}></Icon>
+                    </span>
+                </div>
             </div>
         </div>
     }

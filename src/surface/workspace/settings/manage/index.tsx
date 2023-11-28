@@ -12,7 +12,6 @@ import { SaveTip } from "../../../../component/tip/save.tip";
 import { useSelectWorkspacePage } from "rich/extensions/link/select"
 import { Rect } from "rich/src/common/vector/point";
 import { SelectBox } from "rich/component/view/select/box";
-import { MenuFolderSvg, TreeListSvg } from "rich/component/svgs";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { MenuItemType } from "rich/component/view/menu/declare";
@@ -41,7 +40,9 @@ export class WorkspaceManage extends React.Component {
         aiConfig: {
             text: '',
             image: '',
-            embedding: ''
+            embedding: '',
+            aiSearch: false,
+            disabled: false
         }
     };
     error: Record<string, any> = {};
@@ -75,6 +76,7 @@ export class WorkspaceManage extends React.Component {
                 surface.workspace.defaultPageId = lodash.cloneDeep(this.data.defaultPageId);
                 surface.workspace.allowSlnIcon = this.data.allowSlnIcon;
                 surface.workspace.aiConfig = lodash.cloneDeep(this.data.aiConfig);
+
                 this.tip.close();
             })
         }
@@ -144,20 +146,55 @@ export class WorkspaceManage extends React.Component {
 
             <Divider></Divider>
             <div className="gap-t-10 gap-b-20">
-                <div className="bold f-14"><S>左边侧边栏设置</S></div>
-                <div className="remark f-12 gap-h-10"><S>左边侧边栏风格显示设置</S></div>
-                <div className="flex gap-h-10">
-                    <div className="flex-auto  f-14 text-1"><S>自定义图标</S></div>
-                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon ? false : true}></Switch></div>
+
+                <div className="bold f-14"><S>空间搜索</S></div>
+
+                <div className="flex gap-t-10">
+                    <div className="flex-auto  f-14 text-1"><S>站内搜索</S></div>
+                    <div className="flex-fixed">
+                        <Switch onChange={e => this.change('aiConfig.esSearch', e)} checked={this.data.aiConfig.esSearch}></Switch>
+                    </div>
                 </div>
+                <div className="gap-b-10 f-12 remark"><S>基于Elasticsearch空间内搜索</S></div>
+
+                <div className="flex gap-t-10">
+                    <div className="flex-auto  f-14 text-1"><S>智能搜索</S></div>
+                    <div className="flex-fixed"><SwitchText
+                        onChange={e => this.change('aiConfig.aiSearch', e)}
+                        checked={this.data.aiConfig.aiSearch}>
+                    </SwitchText></div>
+                </div>
+                <div className="gap-b-10 f-12 remark"><S>基于AI大模型QA问答搜索</S></div>
+
+                <div className="flex gap-t-10">
+                    <div className="flex-auto  f-14 text-1"><S>SEO优化</S></div>
+                    <div className="flex-fixed"><SwitchText
+                        onChange={e => this.change('aiConfig.seoSearch', e)}
+                        checked={this.data.aiConfig.seoSearch}>
+                    </SwitchText></div>
+                </div>
+                <div className="gap-b-10 f-12 remark"><S>支持百度、Google收录搜索</S></div>
+
+            </div>
+
+            <Divider></Divider>
+            <div className="gap-t-10 gap-b-20">
+                <div className="bold f-14"><S>空间侧边栏设置</S></div>
+
+                <div className="flex gap-t-10">
+                    <div className="flex-auto  f-14 text-1"><S>关闭自定义图标</S></div>
+                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e?false:true )} checked={this.data.allowSlnIcon===false ? false : true}></Switch></div>
+                </div>
+                <div className="remark f-12 gap-b-10"><S>关闭侧边栏页面图标自定义显示</S></div>
+
             </div>
 
             <Divider></Divider>
             <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>AI写作</S></div>
                 <div className="f-12 gap-h-10 flex">
-                    <span className="remark flex-auto">{window.shyConfig.isUS ? <S text={'设置AI写作US'}>设置AI写作引用的大模型</S> : <S text={'设置AI写作'}>设置AI写作引用的大模型</S>}</span>
-                    <span className="flex-fixed flex">
+
+                    <span className="flex-auto flex">
                         <SwitchText
                             align="right"
                             onChange={e => this.change('aiConfig.disabled', e ? false : true)}
@@ -201,9 +238,9 @@ export class WorkspaceManage extends React.Component {
                                         { text: 'ChatGLM2-6B-32K', value: 'ChatGLM2-6B-32K' },
                                         // { text: 'ChatGLM2-6B-INT4', value: 'ChatGLM2-6B-INT4' },
 
-                                        { text: 'OpenAI', type: MenuItemType.text, label: '仅用于体验' },
-                                        { text: 'GPT-3.5', value: 'gpt-3.5-turbo', label: '仅用于体验' },
-                                        { text: 'GPT-4', value: 'gpt-4', label: '仅用于体验' },
+                                        { text: 'OpenAI', type: MenuItemType.text, label: '仅限体验' },
+                                        { text: 'GPT-3.5', value: 'gpt-3.5-turbo', label: '仅限体验' },
+                                        { text: 'GPT-4', value: 'gpt-4', label: '仅限体验' },
                                     ]
                                 }
                                 value={this.data.aiConfig?.text || (window.shyConfig.isUS ? "gpt-3.5-turbo" : "ERNIE-Bot-turbo")}
@@ -249,8 +286,8 @@ export class WorkspaceManage extends React.Component {
                                 options={window.shyConfig.isUS ? [
                                     { text: 'OpenAI Embeddings', value: 'gpt' },
                                 ] : [
-                                    { text: lst('百度文心向量Embeddings'), value: 'Baidu-Embedding-V1' },
-                                    { text: 'OpenAI Embeddings', value: 'gpt', label: '仅用于体验' },
+                                    { text: lst('文言一心'), value: 'Baidu-Embedding-V1' },
+                                    { text: 'GPT', value: 'gpt', label: '仅用于体验' },
                                 ]}
                                 checkChange={async e => {
                                     return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
@@ -262,6 +299,7 @@ export class WorkspaceManage extends React.Component {
                     </div>
                 </>}
             </div>
+
 
             <div className="gap-h-200"></div>
         </div>

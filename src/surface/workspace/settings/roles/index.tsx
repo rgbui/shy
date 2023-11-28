@@ -355,7 +355,7 @@ export class WorkspaceRoles extends React.Component {
         return <div className="shy-ws-role-permission">
             <div className='f-12 flex'>
                 <span className='flex-auto'><S>通用的空间权限</S></span>
-                <span className='flex-fixed '><Button style={{ padding: 0, margin: 0 }} link size={'small'} ><S>清除权限</S></Button></span>
+                <span className='flex-fixed '><Button style={{ padding: 0, margin: 0,fontSize:12 }} link size={'small'} ><S>清除权限</S></Button></span>
             </div>
 
             <div className='r-gap-h-10'>
@@ -450,7 +450,7 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     async onAddRoleMember(e: React.MouseEvent) {
-        var r = await useUserPicker({ center: true, centerTop: 100 }, undefined);
+        var r = await useUserPicker({ center: true, centerTop: 100 },surface.workspace,{ignoreUserAll:true});
         if (r) {
             var g = await surface.workspace.sock.put('/ws/user/put/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: r.id });
             await this.loadRoleMemebers(this.editRole)
