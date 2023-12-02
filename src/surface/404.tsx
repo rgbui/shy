@@ -11,7 +11,7 @@ import { lst } from "rich/i18n/store";
 export var View404 = observer(function () {
     function back(event: React.MouseEvent) {
         event.preventDefault();
-        if (window.shyConfig.isPc || window.shyConfig.isDev) {
+        if (window.shyConfig.isDesk || window.shyConfig.isDev) {
             UrlRoute.push(ShyUrl.root)
         }
         else if (window.shyConfig.isPro) {

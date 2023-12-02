@@ -42,7 +42,7 @@ class Config {
     get isWeb() {
         return PLATFORM == 'web'
     }
-    get isPc() {
+    get isDesk() {
         return PLATFORM == 'desktop'
     }
     get isMobile() {

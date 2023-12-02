@@ -38,7 +38,12 @@ var isDev = mode == 'dev'
 
 let port = 8081;
 let publicPath = `http://127.0.0.1:${port}/`;
-if (mode == 'pro') publicPath = `https://static.shy.live/`.replace('shy.live', isUs ? "shy.red" : "shy.live");
+if (mode == 'pro') {
+    publicPath = `https://static.shy.live/`.replace('shy.live', isUs ? "shy.red" : "shy.live");
+    if (!isUs) {
+        publicPath = publicPath.replace('static.shy', 'cdn.shy')
+    }
+}
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
 if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) publicPath = `shy://shy.live/`;
 
@@ -81,9 +86,9 @@ if (mode == 'pro') {
     else if (platform == 'server-side') dist = path.resolve(__dirname, "../../desktop/dist/view-server");
     else if (platform == 'mobile') dist = path.resolve(__dirname, "../dist" + (isDev ? "mobile" : '/mobile-' + mode));
 }
-var TrackCode='';
-if(isUs){
-    TrackCode=`
+var TrackCode = '';
+if (isUs) {
+    TrackCode = `
 <link rel="dns-prefetch" href="//shy.red">
 <link rel="dns-prefetch" href="//resources.shy.red">
 <!-- Google tag (gtag.js) -->
@@ -95,17 +100,14 @@ if(isUs){
     gtag('config', 'UA-45568602-1');
 </script>`
 }
-else{
-TrackCode=`
+else {
+    TrackCode = `
 <link rel="dns-prefetch" href="//shy.live">
 <link rel="dns-prefetch" href="//resources.shy.live">
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script  src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 <script>location.host.endsWith('shy.live')&& LA.init({ id: "3EweegziSpUbz8TW", ck: "3EweegziSpUbz8TW", autoTrack: true, hashMode: true })</script>`
 }
-
-
-
 
 var viewEntrys = {
     auth: './auth/view.ts'
@@ -152,7 +154,8 @@ if (platform == 'server-side') {
         chunks: ['server', 'shared'],
         favicon: false,
         templateParameters: {
-            src: publicPath + versionPrefix
+            src: publicPath + versionPrefix,
+            TrackCode
         }
     })]
     cps = [{

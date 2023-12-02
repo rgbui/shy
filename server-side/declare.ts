@@ -43,18 +43,11 @@ export class ServiceNumber {
 
     public serviceProvider: string;
 
-
-
     public serviceNumber: string;
-
 
     public verifyCode: string;
 
-
-
     public workspaceCount: number
-
-
 
     public mongodb: Record<string, any>
 
@@ -74,6 +67,7 @@ export class ServiceNumber {
 export function buildServiceNumberAddress(sn: ServiceNumber) {
     return `shy-server://${sn.serviceNumber}/invite/${sn.verifyCode}`
 }
+
 export class ServiceMachine {
 
     public id: string;

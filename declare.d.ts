@@ -74,10 +74,10 @@ interface Window {
     isDomainWs: boolean,
     isBeta: boolean,
     isDev: boolean,
+    isDesk: boolean,
     isUS?:boolean,
     version: string,
     isWeb: boolean,
-    isPc: boolean,
     isMobile: boolean,
     isServerSide: boolean,
     platform: 'web' | 'desktop' | 'mobile' | "server-side",
@@ -100,6 +100,3 @@ interface HTMLElement {
 
 
 
-declare interface ShyDesktop {
-  openUrl(url: string): void;
-}

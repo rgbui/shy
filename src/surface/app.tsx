@@ -6,7 +6,7 @@ import { LogOut } from './user/sign/out';
 import { WorkspaceCreateView } from './workspace/create';
 import { SurfaceView } from './view';
 import { View404 } from './404';
-import { InviteView } from './workspace/create/invite';
+import { InviteView } from './workspace/access/invite';
 import { surface } from './store';
 import { MyWorkSpace } from './view/my';
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
@@ -57,7 +57,7 @@ export function App() {
           <Route component={View404}></Route>
         </Switch>
       </Router>
-    } else if (window.shyConfig.isPc) {
+    } else if (window.shyConfig.isDesk) {
       return <Router history={SyHistory}>
         <Switch>
           <Route path={ShyUrl.redict} exact component={RedictUrl}></Route>

@@ -248,9 +248,9 @@ push('/user/order/list', '{page?: number, size?: number, word?: string, status?:
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
 push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 push('/check/feature', '{type:PayFeatureCheck,config?:{fileSize?:number}}', 'SockResponse<{warn:boolean,limit:boolean,wallet:{due:Date,oveDue:boolean,meal:string,money:number},free:Record<string,any>,consume:Record<string,any>}>', ['get']);
-push('/query/wiki/answer', '{ask: string,model:string, robotId: string,size?:number,contextSize?:number}', 'SockResponse<{docs:{contentId:string,docId:string,ps:{at:number,content:string,contentId:string,rank:number}[]}[]}>', ['get']);
+push('/query/wiki/answer', '{ask: string,minRank?:number,model:string, robotId: string,size?:number,contextSize?:number}', 'SockResponse<{docs:{contentId:string,docId:string,ps:{at:number,content:string,contentId:string,rank:number}[]}[]}>', ['get']);
 push('/text/ai', '{input: string, model?: string, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
-push('/text/ai/stream', '{question: string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController)=>void}', 'SockResponse<void>', ['post'])
+push('/text/ai/stream', '{question: string,role?:string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController)=>void}', 'SockResponse<void>', ['post'])
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
 push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
@@ -270,7 +270,7 @@ push('/ws/info', '{ws?:LinkWs,name?:string|number,wsId?:string}', 'SockResponse<
 push('/ws/access/info', '{wsId:string,pageId?:string,sock?:any}', 'SockResponse<{roles:any[],member:Record<string,any>,page:any,onlineUsers:string[]}>', ['get'])
 push('/ws/query', '{ws?:LinkWs,wsId?:string,name?:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get'])
 push('/ws/latest', '', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get'])
-push('/ws/create', '{text:string,dataServiceAddress?:string,searchServiceAddress?:string,fileServiceAddress?:string,templateUrl?:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['put'])
+push('/ws/create', '{text:string,dataServiceAddress?:string,datasource?: "private-clound" | "public-clound" | "private-local",templateUrl?:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['put'])
 push('/ws/invite/create', '', 'SockResponse<{code:string}>', ['put']);
 push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<string,any>,pids:any[]}>', ['get']);
 push('/ws/invite/join', '{wsId:string,sock?:any,agree?:boolean,username:string}', 'SockResponse<void>', ['put']);
@@ -312,17 +312,19 @@ push('/ws/online/users', '{wsId?:string}', 'SockResponse<{users:string[]}>', ['g
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
 push('/ws/create/object', '{wsId:string}', 'LinkWs', ['get']);
 push('/ws/search', '{ws:LinkWs,wsId?:string,page?:number,size?:number,mime?:string,word:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{pages:LinkPageItem[],list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
+push('/ws/ai/search','{ask:string,wsId?:string,minRank?:number,size?:number,contextSize?:number}','SockResponse<{docs:{ ps: ({content:string} & { rank: number })[], elementUrl: string, blockId: string }[]}>',['get'])
 push('/ws/comment/list', '{ws:LinkWs,wsId?:string,elementUrl: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string}', 'SockResponse<{data:any}>', ['put']);
 push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number,exists?:boolean}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
+push('/get/robot','{id:string}','SockResponse<{robot:RobotInfo}>',['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);
 push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, elementUrl:string, templateUrl: string, text?: string,icon?:any, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
 push('/get/workspace/template', '{wsId: string, pageId?: string,elementUrl?:string}', 'SockResponse<{template:Record<string,any>}>', ['get'])
 push('/del/workspace/template', '{id:string}', 'SockResponse<void>', ['del']);
-push('/page/items', '{ws:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[],favs:any[]}>', ['get'])
+push('/page/items', '{ws?:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[],favs:any[]}>', ['get'])
 push('/page/item/subs', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/parent/ids', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ parentIds:string[],exists:boolean }>', ['get'])
 push('/page/parent/subs', '{ws:LinkWs,wsId?:string,parentIds:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
