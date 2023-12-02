@@ -1,5 +1,5 @@
 
-import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
+import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
 import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
@@ -32,6 +32,8 @@ import { buildPage } from "rich/src/page/common/create";
 import { getPageItemElementUrl } from "../sln/item/util";
 import { useTemplateView } from "rich/extensions/template";
 import { useTrashBox } from "rich/extensions/trash";
+import { RobotInfo } from "rich/types/user";
+import { lst } from "rich/i18n/store";
 
 export type WorkspaceUser = {
     userid: string;
@@ -81,6 +83,11 @@ export class Workspace {
     public creater: string = null;
     public owner: string = null;
 
+    /**
+     * 空间存储的源存在那里
+     */
+    public datasource: 'private-clound' | 'public-clound' | 'private-local' = 'public-clound';
+
     public pids: Pid[] = [];
     /**
      * 
@@ -88,22 +95,10 @@ export class Workspace {
      * 
      */
     public dataServiceNumber: string;
-    // public dataServicePids: Pid[];
-    // public timServicePids: Pid[];
     /**
      * 数据存储空间访问时进入的区块链编号
      */
     public chainBlockId: string = '';
-    /**
-     * 大文件存储服务商ID
-     */
-    // public fileServiceNumber: string
-    // public fileServicePids: Pid[];
-    /**
-     * 服务搜索服务商ID
-     */
-    // public searchServiceNumber: string
-    // public searchServicePids: Pid[];
 
     public text: string = null;
     public icon: IconArguments = null;
@@ -113,7 +108,12 @@ export class Workspace {
     public siteDomain: string = null;
     public siteDomainDuration: Date = null;
     public customSiteDomain: string = null;
-    public customSiteDomainProtocol: string = null;
+    public customSiteDomainProtocol: boolean = null;
+    public customSiteDomainData: { type?: 'self-build' | 'trust', publicKey?: string, privateKey?: string } = {
+        type: 'self-build',
+        publicKey: '',
+        privateKey: ''
+    };
     public invite: string = null;
     public memberCount: number = null;
     public memberOnlineCount: number = null;
@@ -160,12 +160,18 @@ export class Workspace {
         text?: string,
         image?: string,
         embedding?: string,
-        disabled?: boolean
+        disabled?: boolean,
+        aiSearch?: boolean,
+        esSearch?: boolean,
+        seoSearch?: boolean,
     } = {
             text: '',
             image: '',
             embedding: '',
-            disabled: false
+            disabled: false,
+            esSearch: true,
+            aiSearch: false,
+            seoSearch: false
         }
     /**
      * 空间的初始默认页面
@@ -240,7 +246,7 @@ export class Workspace {
         });
     }
     get url() {
-        if (window.shyConfig.isPro || window.shyConfig.isPc) {
+        if (window.shyConfig.isPro || window.shyConfig.isDesk) {
             if (this.customSiteDomain) {
                 return (this.customSiteDomainProtocol ? "https://" : "http") + this.customSiteDomain;
             }
@@ -250,7 +256,7 @@ export class Workspace {
         else return 'http://' + location.host + "/ws/" + this.sn + "";
     }
     isWsUrl(url: string) {
-        if (window.shyConfig?.isPro || window.shyConfig.isPc) {
+        if (window.shyConfig?.isPro || window.shyConfig.isDesk) {
             if (this.customSiteDomain) {
                 return url.startsWith((this.customSiteDomainProtocol ? "https://" : "http") + this.customSiteDomain);
             }
@@ -568,7 +574,7 @@ export class Workspace {
             lang
         } as any
     }
-    async onImportFiles(){
+    async onImportFiles() {
         var r = await useImportFile();
         if (r) {
             var pageItem = surface.workspace.childs.last();
@@ -587,7 +593,7 @@ export class Workspace {
             }
         }
     }
-    async  onOpenTemplate(e: React.MouseEvent) {
+    async onOpenTemplate(e: React.MouseEvent) {
         var ut = await useTemplateView();
         if (ut) {
             /**
@@ -615,6 +621,40 @@ export class Workspace {
         });
         if (rg) {
             await item.onSync(true);
+        }
+    }
+    robots: RobotInfo[];
+    async getWsRobots() {
+        try {
+            var gs = await channel.get('/ws/robots');
+            if (gs.ok) {
+                var rs = await channel.get('/robots/info', { ids: gs.data.list.map(g => g.userid) });
+                if (rs.ok) {
+                    this.robots = rs.data.list;
+                    this.robots.forEach(robot => {
+                        if (robot.abledCommandModel !== true)
+                            robot.tasks = [
+                                {
+                                    id: util.guid(),
+                                    name: '问题',
+                                    args: [
+                                        {
+                                            id: util.guid(),
+                                            text: lst("问题"),
+                                            name: 'ask', type: 'string'
+                                        }
+                                    ]
+                                }
+                            ]
+                    })
+                }
+            }
+        }
+        catch (ex) {
+            console.error(ex);
+        }
+        finally {
+            return this.robots || [];
         }
     }
 }

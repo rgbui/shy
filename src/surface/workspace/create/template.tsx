@@ -20,14 +20,14 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                     text: text || (surface.user.name + '的空间'),
                     templateUrl: templateUrl
                 });
-                var robotId = '9096421bfe01464fafcd10a7dc93b038';
-                if (window.shyConfig.isDev) robotId = '3703b4ee85694df89aa76b39aac6ba7f';
-                var ms = Workspace.getWsSock(rr.data.pids, 'ws');
-                var d = await masterSock.get<{ robot: UserBasic }>('/get/robot', { id: robotId });
-                await ms.put('/ws/member/add/robot', {
-                    wsId: rr.data.workspace.id,
-                    robotInfo: d.data.robot
-                });
+                // var robotId = '9096421bfe01464fafcd10a7dc93b038';
+                // if (window.shyConfig.isDev) robotId = '3703b4ee85694df89aa76b39aac6ba7f';
+                // var ms = Workspace.getWsSock(rr.data.pids, 'ws');
+                // var d = await masterSock.get<{ robot: UserBasic }>('/get/robot', { id: robotId });
+                // await ms.put('/ws/member/add/robot', {
+                //     wsId: rr.data.workspace.id,
+                //     robotInfo: d.data.robot
+                // });
                 /**
                  * 自动加到诗云的云云社区
                  */

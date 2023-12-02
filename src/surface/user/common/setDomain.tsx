@@ -11,7 +11,7 @@ import { UrlRoute } from "../../../history";
 
 class WsDomain extends EventsComponent {
     render() {
-        return <Dialoug className={'shy-ws-set-domain'}>
+        return <Dialoug style={{width:300}} className={'shy-ws-set-domain'}>
             <div className="remark f-12">
                 <S text={'空间域名设置提示'}>空间域名设置后不可更改，域名不能为纯数字，仅限数字和字母组合</S>
             </div>

@@ -8,6 +8,7 @@ import "./style.less";
 import { observer } from 'mobx-react';
 import { channel } from 'rich/net/channel';
 import { useSetWsDomain } from '../../user/common/setDomain';
+import { useSetCustomDomain } from "../../user/common/setCustomDomain";
 import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
@@ -64,6 +65,16 @@ export class WorkspaceSettingsView extends React.Component {
         }
         else {
             ShyAlert(lst('需要开通专业版才能自定义空间二级域名'))
+            return;
+        }
+    }
+    async openCustomDomain(event: React.MouseEvent) {
+        var us = await surface.user.wallet();
+        if (config.isDev || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+            await useSetCustomDomain(surface.workspace);
+        }
+        else {
+            ShyAlert(lst('需要开通专业版才能支持自定义域名'))
             return;
         }
     }
@@ -205,16 +216,25 @@ export class WorkspaceSettingsView extends React.Component {
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'><S>空间域名</S></div>
-                <div className='remark f-12 gap-h-10 flex'><S>需要公开至互联网才能访问</S><a className='link-remark underline gap-r-5' target='_blank' href={'https://' + domain + '.' + UrlRoute.getHost()}>{'https://' + domain + '.' + UrlRoute.getHost()}</a></div>
-                <div className='remark f-12 gap-h-10 flex'><S>站内访问</S><a className='link-remark underline gap-r-5' href={UrlRoute.getUrl() + '/ws/' + domain}>{UrlRoute.getUrl() + '/ws/' + domain}</a></div>
-                <div className='shy-ws-settings-view-domain'>
+                <div className='remark f-12 gap-h-10 flex'><S>默认</S>:<a className='link-remark underline gap-r-5' target='_blank' href={'https://' + surface.workspace.sn + '.' + UrlRoute.getHost()}>{'https://' + surface.workspace.sn + '.' + UrlRoute.getHost()}</a></div>
+                {surface.workspace.siteDomain && <div className='shy-ws-settings-view-domain'>
+                    <S>二级域名:</S>
                     <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} target='_blank' href={'https://' + domain + '.' + UrlRoute.getHost()}>https://{domain}.{UrlRoute.getHost()}</a>
-                </div>
-                {!surface.workspace.siteDomain && <div className='flex'>
-                    <Button onClick={e => this.openDomain(e)} ghost><S>自定义空间二级域名</S></Button>
-                    <div className='remark f-12 gap-h-10 flex gap-l-10'><S>自定义二级域名如</S>https://mysite.{UrlRoute.getHost()}</div>
-                </div>
-                }
+                </div>}
+                {!surface.workspace.siteDomain && <div className='gap-t-20'>
+                    <Button onClick={e => this.openDomain(e)} ghost><S>自定义二级域名</S></Button>
+                    <div className='remark f-12 gap-h-10 flex'><S>示例</S>:https://mysite.{UrlRoute.getHost()}</div>
+                </div>}
+
+                {surface.workspace.customSiteDomain && <div style={{ marginTop: 20 }} className='shy-ws-settings-view-domain'>
+                    <S>自定义域名:</S>
+                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} target='_blank' href={`http${surface.workspace.customSiteDomainProtocol ? "s" : ""}://` + surface.workspace.customSiteDomain}>http{surface.workspace.customSiteDomainProtocol ? "s" : ""}://{surface.workspace.customSiteDomain}</a>
+                </div>}
+                {!surface.workspace.customSiteDomain && <div className='gap-t-20'>
+                    <Button onClick={e => this.openCustomDomain(e)} ghost><S>自定义域名</S></Button>
+                    <div className='remark f-12 gap-h-10 flex'><S>示例</S>:https://yousite.com</div>
+                </div>}
+
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
