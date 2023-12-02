@@ -391,6 +391,12 @@ class WorkspaceService extends BaseService {
         var sock = await this.getArgsSock(args);
         return await sock.get('/ws/flow/get', args);
     }
+    @get('/ws/ai/search')
+    async wsAiSearch(args){
+        if (typeof args == 'undefined') args = {}
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/ai/search', args);
+    }
 }
 
 
