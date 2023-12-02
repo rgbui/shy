@@ -51,12 +51,12 @@ export var WorkspaceCreateView = observer(function () {
         else return UrlRoute.push(ShyUrl.home)
     }
 
-    return <div>
+    return <div className="desk-drag">
         <div className="pos" style={{ top: 20, right: 20 }}>
-            <Button onClick={e => back()} ghost><S>返回</S></Button>
+            <Button className="desk-no-drag" onClick={e => back()} ghost><S>返回</S></Button>
         </div>
-        <div style={{ width: isMobileOnly ? "calc(100vw - 40px)" : 400 }} className={'shy-ws-create'}>
-            <div className="h2 flex-center"><S>创建您的社区空间</S></div>
+        <div style={{ width: isMobileOnly ? "calc(100vw - 40px)" : 400 }} className={'shy-ws-create desk-no-drag'}>
+            <div className="h2 flex-center"><S text='您希望如何使用诗云'>您希望如何使用诗云?</S></div>
             <div className="remark flex-center gap-b-20">
                 {/* 创造、记录、管理、经营、沟通、协作无限 */}
                 <S text={'创建社区空间提示'}>沉淀知识、积累朋友、共同进步</S>
@@ -64,13 +64,14 @@ export var WorkspaceCreateView = observer(function () {
             <div className="gap-h-10">
                 <Input placeholder={lst("空间名称")} value={local.text} onChange={e => local.text = e} />
             </div>
+            
 
-            {/* <div className="flex  gap-h-10">
+            <div className="flex  gap-h-10">
                 <input style={{ margin: 0, marginRight: 3 }} type='checkbox' checked={local.store == 'local' ? true : false}
                     onChange={e => { local.store = e.target.checked ? 'local' : 'net' }}
                 ></input>
-                <span className="text-1">开启去中心化协作</span>
-            </div> */}
+                <span className="text-1">选择本地或私有化存储</span>
+            </div>
 
             {local.store == 'local' && <div>
                 <div className="gap-h-10 flex">
