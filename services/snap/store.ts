@@ -53,7 +53,7 @@ export class SnapStore extends Events {
             /**
             * 本地先存起来
             */
-            if (window.shyConfig.isPc) {
+            if (window.shyConfig.isDesk) {
                 await yCache.set(this.localId, {
                     id: this.localId,
                     content: snap.content,
@@ -142,7 +142,7 @@ export class SnapStore extends Events {
     async querySnap(readonly?: boolean) {
         var seq: number;
         var local: view_snap;
-        if (window.shyConfig.isPc) local = await yCache.get(this.localId);
+        if (window.shyConfig.isDesk) local = await yCache.get(this.localId);
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
         //console.log('query seq', seq);

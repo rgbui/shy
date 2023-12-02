@@ -183,7 +183,7 @@ export class WorkspaceManage extends React.Component {
 
                 <div className="flex gap-t-10">
                     <div className="flex-auto  f-14 text-1"><S>关闭自定义图标</S></div>
-                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e?false:true )} checked={this.data.allowSlnIcon===false ? false : true}></Switch></div>
+                    <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon === false ? false : true}></Switch></div>
                 </div>
                 <div className="remark f-12 gap-b-10"><S>关闭侧边栏页面图标自定义显示</S></div>
 
@@ -275,7 +275,7 @@ export class WorkspaceManage extends React.Component {
                             ></SelectBox>
                         </div>
                     </div>
-                    <div className="flex gap-h-10">
+                    {/* <div className="flex gap-h-10">
                         <div className="flex-auto  f-14 text-1"><S>向量存储</S></div>
                         <div className="flex-fixed">
                             <SelectBox
@@ -296,7 +296,7 @@ export class WorkspaceManage extends React.Component {
                                 onChange={e => { this.change('aiConfig.embedding', e) }}
                             ></SelectBox>
                         </div>
-                    </div>
+                    </div> */}
                 </>}
             </div>
 

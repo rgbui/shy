@@ -174,7 +174,7 @@ export class User {
      */
     logout() {
         if (window.shyConfig.isPro) {
-            if (location.hostname == UrlRoute.getHost() || window.shyConfig.isPc) {
+            if (location.hostname == UrlRoute.getHost() || window.shyConfig.isDesk) {
                 SyHistory.push(ShyUrl.signOut);
                 return 1;
             }

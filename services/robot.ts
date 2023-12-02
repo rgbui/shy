@@ -24,4 +24,9 @@ export class RobotService {
         args.wsId = surface.workspace.id;
         return await masterSock.get('/robots/info', args);
     }
+    @get('/get/robot')
+    async getRobot(args) {
+        args.wsId = surface.workspace.id;
+        return await masterSock.get('/get/robot', args);
+    }
 }
