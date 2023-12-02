@@ -5,6 +5,8 @@ import { serverSlideStore } from "../store";
 import { Switch } from "rich/component/view/switch";
 import { S } from "rich/i18n/view";
 import { PopoverSingleton } from "rich/component/popover/popover";
+import { SelectBox } from "rich/component/view/select/box";
+import { langOptions, ls } from "rich/i18n/store";
 export class ServerSlideConfig extends EventsComponent {
     config: {
         version: string,
@@ -43,6 +45,23 @@ export class ServerSlideConfig extends EventsComponent {
                     serverSlideStore.shyServiceSlideElectron.setTray(this.config.closeTray)
                     this.forceUpdate()
                 }} checked={this.config.closeTray}></Switch></span>
+            </div>
+            <div className="flex gap-h-10">
+                <span className="flex-fixed w-120 flex-end gap-r-5"><S>语言</S>:</span>
+                <span className="flex-auto">
+                    <SelectBox
+                        options={langOptions.map(c => {
+                            return {
+                                text: c.text,
+                                value: c.lang
+                            }
+                        })}
+                        value={ls.lang}
+                        onChange={async e => {
+                            await ls.change(e);
+                            this.forceUpdate()
+                        }}></SelectBox>
+                </span>
             </div>
         </div>
     }
