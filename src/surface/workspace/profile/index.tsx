@@ -101,12 +101,12 @@ export var WorkspaceProfile = observer(function () {
         }
     }
     return <div className={'shy-ws-profile' + (surface.workspace?.cover?.url ? " cover" : "")} onMouseDown={e => mousedown(e)}>
-        <div className={'shy-ws-profile-info flex'}>
-            {isMobileOnly && <span className="flex-fixed flex-center size-24 round cursor item-hover">
+        <div className={'shy-ws-profile-info flex desk-drag'}>
+            {isMobileOnly && <span className="flex-fixed flex-center size-24 round cursor item-hover desk-no-drag">
                 <Icon size={16} icon={{ name: "bytedance-icon", code: 'hamburger-button' }}></Icon>
             </span>}
-            <span className="flex-auto bold f-16 text-overflow gap-r-5">{surface.workspace.text}</span>
-            {surface.workspace.isMember && <span className="size-20 item-hover flex-center remark flex-fixed gap-r-10"><Icon icon={ChevronDownSvg} size={16} ></Icon></span>}
+            <span className="flex-auto bold f-16 text-overflow gap-r-5 "><span className="desk-no-drag">{surface.workspace.text}</span></span>
+            {surface.workspace.isMember && <span className=" desk-no-drag size-20 item-hover flex-center remark flex-fixed gap-r-10"><Icon icon={ChevronDownSvg} size={16} ></Icon></span>}
         </div>
         {surface.workspace.cover && <div className="shy-ws-profile-cover">
             <img src={autoImageUrl(surface.workspace.cover.url, 500)} />

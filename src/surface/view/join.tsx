@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
-import { useJoinWorkspaceProtocol } from "../workspace/create/protocol";
+import { useJoinWorkspaceProtocol } from "../workspace/access/protocol";
 import { S } from "rich/i18n/view";
 export var JoinTip = observer(function () {
     async function mousedown(event: React.MouseEvent) {

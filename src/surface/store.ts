@@ -13,9 +13,13 @@ import { PageViewStores } from "./supervisor/view/store";
 import { config } from "../../common/config";
 import "./message.center";
 import { blockStore } from "rich/extensions/block/store";
-import { ls } from "rich/i18n/store";
+import { ls, lst } from "rich/i18n/store";
 import { PageTemplateType } from "rich/extensions/template";
 import { ElementType, getElementUrl } from "rich/net/element.type";
+import { masterSock } from "../../net/sock";
+import { ShyDesk } from "../../type";
+import { Confirm } from "rich/component/lib/confirm";
+import { useCreateWorkspace } from "./workspace/create/box";
 
 export class Surface extends Events {
     constructor() {
@@ -139,7 +143,7 @@ export class Surface extends Events {
                     await this.workspace.exitWorkspace()
                 }
                 this.workspace = null;
-                if (window.shyConfig.isPc) {
+                if (window.shyConfig.isDesk) {
                     UrlRoute.push(ShyUrl.signIn);
                 }
                 else if (window.shyConfig.isPro) {
@@ -187,9 +191,12 @@ export class Surface extends Events {
         if (!sn && location.host && /[\da-z\-]+\.shy\.live/.test(location.host)) {
             domain = location.host.replace(/\.shy\.live$/g, '');
         }
+        if (!sn && location.host && /[\da-z\-]+\.shy\.red/.test(location.host)) {
+            domain = location.host.replace(/\.shy\.red$/g, '');
+        }
         if (!sn && !domain) {
             domain = location.host as string;
-            if (domain == UrlRoute.getHost() || domain.startsWith('localhost:')) {
+            if (domain == UrlRoute.getHost() || domain.startsWith('localhost:') || domain.startsWith('127.0.0.1')) {
                 domain = undefined;
             }
         }
@@ -229,8 +236,9 @@ export class Surface extends Events {
             }
         }
     }
-    onCreateWorkspace() {
-        UrlRoute.push(ShyUrl.workCreate);
+    async onCreateWorkspace() {
+        await useCreateWorkspace();
+        //UrlRoute.push(ShyUrl.workCreate);
     }
     /**
      * 
@@ -297,7 +305,7 @@ export class Surface extends Events {
             await surface.user.createTim()
         }
         else {
-            if (window.shyConfig.isPc) {
+            if (window.shyConfig.isDesk) {
                 UrlRoute.push(ShyUrl.signIn);
             }
         }
@@ -323,7 +331,53 @@ export class Surface extends Events {
             }
         }
         )
+        if (config.isDesk) {
+            if (await this.checkDeskVersionUpdate()) {
+                if (await Confirm(lst('发现新补丁', '发现新补丁，是否更新？'))) {
+                    await this.shyDesk.downloadServerPack(this.willUpdatePack.url, this.willUpdatePack.version)
 
+                }
+            }
+            await this.shyDesk.ready();
+        }
+    }
+    get shyDesk() {
+        return (window as any).ShyDesk as ShyDesk
+    }
+
+    //更新
+    willUpdatePack: {
+        version: string,
+        url: string,
+    } = { url: '', version: '' };
+    async checkDeskVersionUpdate() {
+        try {
+            var rd = await this.shyDesk.readLocalStore();
+            if (rd?.abled) {
+                var config = (await this.shyDesk.getConfig());
+                var r = await masterSock.get('/pub/server/check/version', { version: config.version });
+                if (r.ok) {
+                    if (r.data?.pub_version) {
+                        var g: {
+                            windowPackUrl: string,
+                            macPackUrl: string,
+                            linuxPackUrl: string,
+                            version: string,
+                        } = r.data.pub_version;
+                        var url = g.windowPackUrl;
+                        if (config.platform == 'darwin') url = g.macPackUrl;
+                        if (config.platform == 'linux') url = g.linuxPackUrl;
+                        this.willUpdatePack.version = g.version;
+                        this.willUpdatePack.url = url;
+                        return true;
+                    }
+                }
+            }
+        }
+        catch (ex) {
+
+        }
+        return false;
     }
 }
 export var surface = new Surface();
