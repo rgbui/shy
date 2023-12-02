@@ -149,7 +149,7 @@ export class UserSettingProfile extends React.Component {
                     <div className="shy-user-settings-profile-box-card">
                         <div className="bg">
                             {!surface.user.cover?.url && <div style={{ height: 60, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                            {surface.user.cover?.url && <img style={{ height: 120 }} src={autoImageUrl(surface.user.cover?.url, 500)} />}
+                            {surface.user.cover?.url && <img style={{ height: 120 ,display:'block'}} src={autoImageUrl(surface.user.cover?.url, 500)} />}
                         </div>
                         <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 120 : 60 }}>
                             {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 50)} />}

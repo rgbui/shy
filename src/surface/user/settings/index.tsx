@@ -1,7 +1,6 @@
 import React from 'react';
 import { EventsComponent } from 'rich/component/lib/events.component';
 import { UserSettingsView } from './content/settings';
-import "./style.less";
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
 import { Singleton } from 'rich/component/lib/Singleton';
@@ -21,6 +20,10 @@ import { ShyUserPks } from './content/keys';
 import { InviteList } from './task/invite';
 import { S } from 'rich/i18n/view';
 import { surface } from '../../store';
+import { LocalDataSource } from './app/local';
+import { PrivateClound } from './app/private';
+import { config } from '../../../../common/config';
+import "./style.less";
 
 @observer
 class UserSettings extends EventsComponent {
@@ -56,8 +59,8 @@ class UserSettings extends EventsComponent {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
         return <div ref={e => this.el = e} className='shy-user-settings fixed-full'>
             <div className='screen-content-1000 flex-full h100 relative'>
-                <div className='flex-fixed w-200 shy-user-settings-slide h100 box-border overflow-y'>
-                    <div className='padding-h-60'>
+                <div style={{ marginTop: config.isDesk ? 30 : undefined }} className='flex-fixed w-200 shy-user-settings-slide h100 box-border overflow-y'>
+                    <div className={config.isDesk ? "padding-t-30 padding-b-60" : 'padding-h-60'}>
                         <h4><S>用户设置</S></h4>
                         <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} ><S>我的帐号</S></a>
                         <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} ><S>个人资料</S></a>
@@ -72,11 +75,14 @@ class UserSettings extends EventsComponent {
                         <h4><S>活动中心</S></h4>
                         <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}><S>邀请好友</S></a>
 
-
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4><S>安全设置</S></h4>
                         <a onMouseDown={e => this.setMode('user-pks')} className={this.mode == 'user-pks' ? "hover" : ""} ><S>个人私钥</S></a>
                         <a onMouseDown={e => this.setMode('user-safe')} className={this.mode == 'user-safe' ? "hover" : ""} ><S>隐私与安全</S></a>
+                        <Divider style={{ margin: '0px 15px' }}></Divider>
+                        <h4><S>本地及私有云</S></h4>
+                        <a onMouseDown={e => this.setMode('local-store')} className={this.mode == 'local-store' ? "hover" : ""} ><S>本地存储</S></a>
+                        <a onMouseDown={e => this.setMode('PrivateClound')} className={this.mode == 'PrivateClound' ? "hover" : ""} ><S>私有云</S></a>
 
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4><S>APP设置</S></h4>
@@ -103,6 +109,8 @@ class UserSettings extends EventsComponent {
                         {this.mode == 'user-safe' && <ShySafe></ShySafe>}
                         {this.mode == 'appear' && <ShyAppear></ShyAppear>}
                         {this.mode == 'invite' && <InviteList></InviteList>}
+                        {this.mode == 'local-store' && <LocalDataSource></LocalDataSource>}
+                        {this.mode == 'PrivateClound' && <PrivateClound></PrivateClound>}
                     </div>
                 </div>
                 <div className='shy-user-settings-operators'>
@@ -120,7 +128,7 @@ class UserSettings extends EventsComponent {
     }
 }
 
-export async function useOpenUserSettings(mode?: 'update'|'price') {
+export async function useOpenUserSettings(mode?: 'update' | 'price') {
     var us = await Singleton(UserSettings);
     us.open(mode);
 }
