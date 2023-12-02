@@ -51,9 +51,9 @@ export class PidView extends EventsComponent {
                         <div className="flex-auto">
                             <Input value={this.pid.storeDir} readonly></Input>
                         </div>
-                        <Button onMouseDown={e => this.selectDir()} className="flex-fixed"><S>选择文件夹</S></Button>
+                        <Button onMouseDown={e => this.selectDir()} className="flex-fixed gap-l-10"><S>选择文件夹</S></Button>
                     </div></>}
-                <div><label><S>其它</S>:</label></div>
+                <div><label><S>备注</S>:</label></div>
                 <div className="flex gap-t-5 gap-b-10"><Textarea value={this.pid.config ? JSON.stringify(this.pid.config) : ""} onChange={e => {
                     try {
                         this.pid.config = window.eval("(" + e + ")");
@@ -73,7 +73,7 @@ export class PidView extends EventsComponent {
         </div>
     }
     open(pid: Partial<Pid>) {
-        this.pid = Object.assign({ types: ['ws'] }, pid || {}) as any;
+        this.pid = Object.assign({ types: ['ws', 'tim', 'file'], port: 28000 }, pid || {}) as any;
         this.forceUpdate()
     }
     error: string = '';

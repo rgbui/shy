@@ -118,6 +118,7 @@ export class ServerSlideStore {
             if (g.ok) {
                 serverSlideStore.pids.push(g.data.pid);
                 await this.savePid(serverSlideStore.pids.find(c => c.id == g.data.pid.id))
+                
             }
         }
     }

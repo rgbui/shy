@@ -7,7 +7,7 @@ import { ServiceMachine, ServiceNumber } from "../declare";
 import { serverSlideStore } from "../store";
 import { useServerNumberView } from "./server.number";
 
-import { FlashlampSvg, PlusSvg, ServerSvg } from "rich/component/svgs";
+import { PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { surface } from "../../src/surface/store";
 import { S } from "rich/i18n/view";
@@ -74,15 +74,15 @@ export var ServerConfigCreate = observer(function () {
         }
         else ShyAlert(lst('你还没有创建过服务号'))
     }
-    return <div className=" gap-t-100 flex-center vw100 vh100">
+    return <div className="flex-center vw100 vh100 pos" style={{ top: 0, left: 0 }}>
         <div className="flex-center r-round r-gap-w-10  r-padding-14 r-cursor text-1 r-border r-shadow">
-            <div className="item-hover flex flex-top w-180 " onMouseDown={e => create(e)}>
+            {/* <div className="item-hover flex flex-top w-180 " onMouseDown={e => create(e)}>
                 <Icon className='flxe-fixed' size={40} icon={FlashlampSvg}></Icon>
                 <div className="flex-auto gap-l-5">
                     <span><S>快捷</S></span>
                     <div className="remark f-12"><S>一键安装创建服务号</S></div>
                 </div>
-            </div>
+            </div> */}
             <div className="item-hover flex flex-top w-180" onMouseDown={e => create(e)}>
                 <Icon className='flxe-fixed' size={40} icon={PlusSvg}></Icon>
                 <div className="flex-auto gap-l-5">
@@ -90,13 +90,13 @@ export var ServerConfigCreate = observer(function () {
                     <div className="remark f-12"><S>创建新的服务号</S></div>
                 </div>
             </div>
-            <div className="item-hover  flex flex-top   w-180" onMouseDown={e => bind(e)}>
+            {/* <div className="item-hover  flex flex-top   w-180" onMouseDown={e => bind(e)}>
                 <Icon className='flxe-fixed' size={34} icon={ServerSvg}></Icon>
                 <div className="flex-auto gap-l-5">
                     <span><S>选择</S></span>
                     <div className="remark f-12"><S>选择已有的服务号</S></div>
                 </div>
-            </div>
+            </div> */}
         </div>
     </div>
 })
