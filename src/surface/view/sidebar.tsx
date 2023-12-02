@@ -67,7 +67,7 @@ export var SideBar = observer(function () {
     }
     return <div className='shy-sidebar'>
         <a className="shy-sidebar-operator"
-            style={{ position: 'relative', marginTop: window.shyConfig.isPc && UA.isMacOs ? 30 : 20 }}
+            style={{ position: 'relative', marginTop: window.shyConfig.isDesk && UA.isMacOs ? 30 : 20 }}
             onMouseDown={e => {
                 if (isMobileOnly) return;
                 UrlRoute.push(ShyUrl.me);
@@ -84,7 +84,7 @@ export var SideBar = observer(function () {
                 return <ToolTip key={ws.id} placement="right" mouseenter={(e, t) => loadWsOnline(ws, t)} overlay={renderWsOverlay(ws)}><div onMouseDown={e => surface.onChangeWorkspace(ws)} className={'shy-sidebar-ws' + (surface.workspace?.id == ws.id ? " hover" : "")}>{renderWs(ws)}</div></ToolTip>
             })}
             <a className="shy-sidebar-operator" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-            <a className="shy-sidebar-operator" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a>
+            <a className="shy-sidebar-operator" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a>
             {/*<div className="shy-sidebar-divider"></div><a className="shy-sidebar-operator"><Icon size={24} icon={DownloadSvg}></Icon></a> */}
         </div>
     </div>

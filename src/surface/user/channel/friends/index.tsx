@@ -27,16 +27,16 @@ export var FriendsView = observer(function () {
         }
     }
     return <div className="shy-user-channel-friends">
-        <div className="shy-user-channel-friends-head flex">
+        <div className="shy-user-channel-friends-head flex desk-drag">
             <div className="shy-user-channel-friends-head-tabs flex-auto">
-                <Icon icon={FriendSvg}></Icon>
-                <span><S>好友</S></span>
-                <div className="line"></div>
-                <a onMouseDown={e => setMode('online')} className={userChannelStore.mode == 'online' ? "hover" : ""}><S>在线</S></a>
-                <a onMouseDown={e => setMode('all')} className={userChannelStore.mode == 'all' ? "hover" : ""}><S>全部</S></a>
-                <a onMouseDown={e => setMode('pending')} className={userChannelStore.mode == 'pending' ? "hover" : ""}><S>待定</S></a>
-                <a onMouseDown={e => setMode('shield')} className={userChannelStore.mode == "shield" ? "hover" : ""}><S>屏蔽</S></a>
-                <Button tag="button" size="small" className="gap-l-10" onClick={e => joinFriend(e)}><S>添加好友</S></Button>
+                <Icon className={'desk-no-drag'} icon={FriendSvg}></Icon>
+                <span className="desk-no-drag"><S>好友</S></span>
+                <div className="line desk-no-drag"></div>
+                <a onMouseDown={e => setMode('online')} className={' desk-no-drag '+(userChannelStore.mode == 'online' ? "hover" : "")}><S>在线</S></a>
+                <a onMouseDown={e => setMode('all')} className={' desk-no-drag '+(userChannelStore.mode == 'all' ? "hover" : "")}><S>全部</S></a>
+                <a onMouseDown={e => setMode('pending')} className={' desk-no-drag '+(userChannelStore.mode == 'pending' ? "hover" : "")}><S>待定</S></a>
+                <a onMouseDown={e => setMode('shield')} className={' desk-no-drag '+(userChannelStore.mode == "shield" ? "hover" : "")}><S>屏蔽</S></a>
+                <Button tag="button" size="small" className="gap-l-10 desk-no-drag" onClick={e => joinFriend(e)}><S>添加好友</S></Button>
             </div>
             <div className="shy-user-channel-friends-head-btns flex-fixed flex-end gap-r-10" style={{ width: 80 }}>
                 <span className='round item-hover cursor size-24 flex-center'> <Icon size={18} icon={"help:sy"}></Icon></span>

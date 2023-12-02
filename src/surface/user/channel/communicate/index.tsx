@@ -11,8 +11,12 @@ import { Avatar } from "rich/component/view/avator/face";
 import { InputChatBox } from "rich/component/view/input.chat/box";
 import { ResourceArguments } from "rich/extensions/icon/declare";
 import { lst } from "rich/i18n/store";
-import { Sp } from "rich/i18n/view";
+import { S, Sp } from "rich/i18n/view";
+import { Icon } from "rich/component/view/icon";
+import { CheckSvg } from "rich/component/svgs";
+import { observer } from "mobx-react";
 
+@observer
 export class CommunicateView extends React.Component<{ userChannel: UserChannel }>{
     componentDidMount(): void {
         this.props.userChannel.communicateView = this;
@@ -88,13 +92,15 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
         if (userChannelStore.currentChannelId == this.props.userChannel.id) {
             return <div className="shy-user-channel-communicate">
                 {<UserBox userid={surface.user.id == props.userChannel.room.creater ? props.userChannel.room.other : props.userChannel.room.creater}>{(user) => {
-                    return <><div className="shy-user-channel-communicate-head">
+                    return <><div className="shy-user-channel-communicate-head desk-drag">
                         <span>@{user?.name}</span>
                     </div>
                         <div className="shy-user-channel-communicate-content" ref={e => this.scrollEl = e}>
                             <div className="gap-20">
                                 <Avatar user={user} size={80}></Avatar>
-                                <div className="h2">{user.name}</div>
+                                <div className="h2 flex"><span>{user.name}</span>{user.role == 'robot' && <span className='bg-p-1 text-white round flex-center flex-inline padding-w-3  h-16 gap-w-2' style={{ color: '#fff', backgroundColor: 'rgb(88,101,242)' }}>
+                                    <Icon icon={CheckSvg} size={12}></Icon><span className='gap-l-2 f-12' style={{ color: '#fff' }}><S>机器人</S></span>
+                                </span>}</div>
                                 <div className="remark f-12"><Sp text="这是您与{name}私信记录的开头" data={{ name: user.name }}>这是您与<span className="bold text-1">@{user.name}</span>私信记录的开头。</Sp></div>
                             </div>
                             {props.userChannel.room.isLoadChat && <RenderChatsView userChannel={props.userChannel} reditChat={this.reditChat} replyChat={this.replyChat}></RenderChatsView>}

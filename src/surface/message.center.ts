@@ -519,6 +519,7 @@ class MessageCenter {
     async currentUserSend(args: { userid: string }) {
         console.log(args.userid);
         UrlRoute.push(ShyUrl.me);
+        if(surface.workspace)
         await surface.workspace.exitWorkspace();
         await userChannelStore.openUserChannel(args.userid);
     }
