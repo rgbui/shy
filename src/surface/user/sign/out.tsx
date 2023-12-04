@@ -4,6 +4,7 @@ import { surface } from "../../store";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
 import { S } from "rich/i18n/view";
+import { config } from "../../../../common/config";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;
@@ -14,7 +15,17 @@ export class LogOut extends React.Component {
                 surface.user?.removeTim();
                 surface.user = new User();
                 surface.workspace?.removeTim()
-                if (window.shyConfig.isPro) location.href = 'https://shy.live'
+                if (window.shyConfig.isPro) {
+                    if (config.isServerSide) {
+                        surface.user.toSign();
+                    }
+                    else if (config.isDesk) {
+                        surface.user.toSign();
+                    }
+                    else {
+                        location.href = UrlRoute.getUrl();
+                    }
+                }
                 else UrlRoute.push(ShyUrl.root);
             }
         }
