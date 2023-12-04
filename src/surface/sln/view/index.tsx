@@ -38,7 +38,7 @@ export var SlnView = observer(function () {
 
 
     function renderBottoms() {
-        if (surface.isPubSite) return <></>
+        if (surface?.workspace?.isPubSite) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-t-20">
                 <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
@@ -57,7 +57,7 @@ export var SlnView = observer(function () {
         else return <></>
     }
     function renderPublishSiteSearch() {
-        return <> {surface.isPubSite && !surface.isPubSiteHideMenu && <div className="gap-10">
+        return <> {surface?.workspace?.isPubSite && !surface?.workspace?.isPubSiteHideMenu && <div className="gap-10">
             <Input ref={e => local.input = e} value={local.word} onChange={e => { local.word = e }} clear onClear={() => { local.word = '' }} prefix={<span className="flex-center size-24 remark " placeholder={lst('搜索...')}>
                 <Icon size={16} icon={SearchSvg}></Icon>
             </span>}></Input>
@@ -85,7 +85,7 @@ export var SlnView = observer(function () {
     }
     return <div className='shy-wss h100' onKeyDownCapture={e => surface.sln.keyboardPlate.keydown(e.nativeEvent)} tabIndex={1}>
         {surface.workspace && <div className={'shy-ws relative h100 flex flex-col flex-full shy-ws-' + ('note')}>
-            {!(surface.isPubSite && surface.isPubSiteDefineBarMenu) && <WorkspaceProfile ></WorkspaceProfile>}
+            {!(surface?.workspace?.isPubSite && surface?.workspace?.isPubSiteDefineBarMenu) && <WorkspaceProfile ></WorkspaceProfile>}
             {renderPublishSiteSearch()}
             {!local.word && <div className='shy-ws-items' ref={e => surface.sln.el = e}>
                 {surface.workspace.childs.map(ws => {
@@ -94,7 +94,7 @@ export var SlnView = observer(function () {
                 })}
                 {renderBottoms()}
             </div>}
-            {!surface.isPubSite && <UserProfile></UserProfile>}
+            {!surface?.workspace?.isPubSite && <UserProfile></UserProfile>}
         </div>}
     </div>
 })

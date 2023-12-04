@@ -383,7 +383,7 @@ export class SitePublishView extends React.Component {
             <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip><div className="h2">发布应用</div>
             <Divider></Divider>
             <div className="flex gap-t-20">
-                <span className="flex-auto"><S>发布应用</S></span>
+                <span className="flex-auto"><S>将空间发布成应用</S></span>
                 <Switch checked={this.data.publishConfig.abled} onChange={async e => {
                     if (await surface.user.isFillPay(lst('需要充值才能发布应用')))
                         this.change('publishConfig.abled', e)

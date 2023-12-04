@@ -20,6 +20,7 @@ export enum CacheKey {
      * 预览模式
      */
     itemMode = '/{itemId}/mode',
+    workspaceMode='/workspace/{wsId}/mode/isApp',
 }
 const FLAG = 'shy.';
 class SyCache {

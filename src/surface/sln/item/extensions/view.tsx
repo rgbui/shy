@@ -92,7 +92,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             <span className={"size-20 round flex-center flex-fixed shy-ws-item-page-spread ts " + (item.spread ? " " : " angle-90-") + (false ? (" visible" + (item.subCount == 0 ? '' : " item-hover")) : " item-hover")}>
                 {item.willLoadSubs && <Spin></Spin>}
                 {!item.willLoadSubs && (item.subCount > 0 || item.childs.length > 0) && <Icon size={18} icon={ChevronDownSvg}></Icon>}
-                {!item.willLoadSubs && !((item.subCount > 0 || item.childs.length > 0)) && !surface.isPubSite && <Icon size={16} icon={DotSvg}></Icon>}
+                {!item.willLoadSubs && !((item.subCount > 0 || item.childs.length > 0)) && !surface?.workspace?.isPubSite && <Icon size={16} icon={DotSvg}></Icon>}
             </span>
             <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover round-3 flex-center gap-r-5 '><Icon size={18} icon={surface.workspace.allowSlnIcon ? getPageIcon({ pageType: item.pageType }) : getPageIcon(item)}></Icon></i>
             {!isInEdit && <span className="text-overflow flex-auto h-20 l-20 padding-r-10">{getPageText(item)}</span>}
