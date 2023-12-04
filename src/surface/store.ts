@@ -252,7 +252,9 @@ export class Surface extends Events {
     }
     get showSlideBar() {
         if (this.accessWorkspace == 'embed') return false;
-        if (this.isPubSite) return false;
+        if (this.workspace?.isPubSite) {
+            if (config.isDomainWs) return false
+        }
         if (!this.user.isSign) return false;
         if (this.workspace) {
             if (!this.workspace.member) {
@@ -278,28 +280,10 @@ export class Surface extends Events {
     get showWorkspace() {
         return surface.workspace ? true : false;
     }
-    /**
-     * 是否自定义workspace头部菜单
-     */
-    get isPubSiteDefineBarMenu() {
-        return this.isPubSite && surface.workspace?.publishConfig?.navMenus?.length > 0 && surface.workspace?.publishConfig?.defineNavMenu
-    }
-    /**
-     * 是否隐藏默认的导航菜单
-     */
-    get isPubSiteHideMenu() {
-        return this.isPubSite && surface.workspace?.publishConfig?.defineContent && (surface.workspace?.publishConfig?.contentTheme == 'wiki' || surface.workspace?.publishConfig?.contentTheme == 'none')
-    }
-    /**
-     * 空间是否处于应用模式
-     */
-    get isPubSite() {
-        return (config.isDomainWs) && surface.workspace.access == 1 && surface.workspace?.publishConfig?.abled
-    }
+
     async load() {
         await ls.import();
         await blockStore.import();
-        await channel.put('/device/sign');
         await surface.user.sign();
         if (surface.user.isSign) {
             await surface.user.createTim()

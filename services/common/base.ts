@@ -14,6 +14,10 @@ var VerifyOptions = () => ({
         nullTip: lst('手机短信验证码输入不能为空')
     }
 });
+
+export const EmailRegex = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+export const PhoneRegex = /^1[3-9]\d{9}|5\d{10}$/;
+
 export class BaseService extends Events {
     /**
      * 
