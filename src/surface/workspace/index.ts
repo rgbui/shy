@@ -34,6 +34,15 @@ import { useTemplateView } from "rich/extensions/template";
 import { useTrashBox } from "rich/extensions/trash";
 import { RobotInfo } from "rich/types/user";
 import { lst } from "rich/i18n/store";
+import { config } from "../../../common/config";
+import { isMobileOnly } from "react-device-detect";
+import { SettingsSvg, Edit1Svg, FolderPlusSvg, UploadSvg, MemberSvg, AddUserSvg, LogoutSvg } from "rich/component/svgs";
+import { useForm } from "rich/component/view/form/dialoug";
+import { useSelectMenuItem } from "rich/component/view/menu";
+import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
+import { useOpenReport } from "rich/extensions/report";
+import { Rect } from "rich/src/common/vector/point";
+import { PopoverPosition } from "rich/component/popover/position";
 
 export type WorkspaceUser = {
     userid: string;
@@ -227,6 +236,11 @@ export class Workspace {
             isOwner: computed,
             isMember: computed,
             publishConfig: observable,
+            isPubSite: computed,
+            isPubSiteDefineBarMenu: computed,
+            isPubSiteHideMenu: computed,
+            _isApp: observable,
+            isApp: computed
         })
     }
     private _sock: Sock;
@@ -402,6 +416,11 @@ export class Workspace {
                 pages = ShyUtil.flatArrayConvertTree(pages);
                 this.load({ childs: pages });
             }
+        }
+        var rc = await yCache.get(yCache.resolve(CacheKey[CacheKey.workspaceMode], this.id));
+        if (typeof rc == 'boolean') {
+            if (this.isOwner || this.isManager)
+                this._isApp = rc;
         }
     }
     pageSort = (x, y) => {
@@ -655,6 +674,151 @@ export class Workspace {
         }
         finally {
             return this.robots || [];
+        }
+    }
+
+    _isApp: boolean = false;
+    get isApp() {
+        if (this.isOwner || this.isManager) {
+            return this._isApp;
+        }
+        else return true;
+    }
+    async setMode(isApp: boolean) {
+        this._isApp = isApp;
+        await yCache.set(yCache.resolve(CacheKey[CacheKey.workspaceMode], this.id), isApp);
+        if (surface.supervisor.page) surface.supervisor.page.view.forceUpdate()
+    }
+    /**
+     * 是否自定义workspace头部菜单
+     */
+    get isPubSiteDefineBarMenu() {
+        return this.isPubSite && this?.publishConfig?.navMenus?.length > 0 && this?.publishConfig?.defineNavMenu
+    }
+    /**
+     * 是否隐藏默认的导航菜单
+     */
+    get isPubSiteHideMenu() {
+        return this.isPubSite && this?.publishConfig?.defineContent && (this?.publishConfig?.contentTheme == 'wiki' || this?.publishConfig?.contentTheme == 'none')
+    }
+    /**
+     * 空间是否处于应用模式
+     */
+    get isPubSite() {
+        if (this.publishConfig?.abled === true) {
+            if (!this.isOwner && !this.isManager) {
+                return true;
+            }
+            else {
+                return this._isApp;
+            }
+        }
+        return false;
+    }
+
+    async openMenu(pos: PopoverPosition, width: number = 200) {
+        if (!this.isMember) return;
+        if (isMobileOnly) return;
+        var menus: MenuItem<string>[] = [];
+        if (this.isOwner || this.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
+            menus = [
+                { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
+                { type: MenuItemType.divide },
+                { name: 'enterApp', text: lst('发布应用'), visible: this.isApp ? false : true, icon: { name: 'byte', code: 'application-one' }, checkLabel: this.isApp ? true : false },
+                { name: 'enterEdit', text: lst('编辑应用'), visible: this.isApp ? true : false, icon: Edit1Svg, checkLabel: this.isApp ? false : true },
+                { type: MenuItemType.divide },
+                { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建分栏') },
+                { name: 'importFiles', icon: UploadSvg, text: lst('导入文件') },
+                { type: MenuItemType.divide },
+                { name: 'wsUsers', icon: MemberSvg, text: lst('空间成员') },
+                { name: 'userPay', icon: { name: 'bytedance-icon', code: 'flash-payment' }, text: lst('付费升级') },
+                { type: MenuItemType.divide },
+                { name: 'invite', text: lst('邀请ta人'), icon: AddUserSvg },
+                { name: 'report', text: lst('举报'), visible: this.isOwner ? false : true, icon: { name: 'bytedance-icon', code: 'harm' } }
+                // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+            ]
+            if (!this.isOwner) {
+                menus.push(...[
+                    { type: MenuItemType.divide },
+                    { name: 'exit', text: lst('退出空间'), icon: LogoutSvg }
+                ])
+            }
+        }
+        else {
+            menus = [
+                { name: 'userSetting', icon: SettingsSvg, text: lst('个人设置') },
+                { type: MenuItemType.divide },
+                { name: 'userPay', icon: { name: 'bytedance-icon', code: 'flash-payment' }, text: lst('付费升级') },
+                { name: 'invite', text: lst('邀请ta人'), icon: AddUserSvg },
+                // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+                { type: MenuItemType.divide },
+                { name: 'report', text: lst('举报'), visible: this.isOwner ? false : true, icon: { name: 'bytedance-icon', code: 'harm' } },
+                { name: 'exit', text: lst('退出空间'), icon: LogoutSvg }
+            ]
+        }
+        var se = await useSelectMenuItem(
+            pos,
+            menus,
+            {
+                width: width
+            }
+        );
+        if (se) {
+            if (se.item.name == 'exit') {
+                surface.exitWorkspace();
+            }
+            else if (se.item.name == 'invite') {
+                this.onCreateInvite(true);
+            }
+            else if (se.item.name == 'userSetting') {
+                useOpenUserSettings()
+            }
+            else if (se.item.name == 'userPay') {
+                useOpenUserSettings('price')
+            }
+            else if (se.item.name == 'wsUsers') {
+                useOpenWorkspaceSettings('members')
+            }
+            else if (se.item.name == 'importFiles') {
+                this.onImportFiles();
+            }
+            else if (se.item.name == 'edit') {
+
+            }
+            else if (se.item.name == 'setting') {
+                useOpenWorkspaceSettings()
+            }
+            else if (se.item.name == 'createFolder') {
+                var r = await useForm({
+                    title: lst('创建分栏'),
+                    fields: [{ name: 'text', text: lst('分栏名称'), type: 'input' }],
+                    async checkModel(model) {
+                        if (!model.text) return lst('分栏名称不能为空')
+                        if (model.text.length > 30) return lst('分栏名称过长')
+                        return '';
+                    }
+                });
+                if (r?.text) {
+                    surface.sln.onCreateFolder(r.text)
+                }
+            }
+            else if (se.item.name == 'report') {
+                await useOpenReport({
+                    workspaceId: this.id,
+                    userid: surface?.user?.id,
+                    reportContent: lst('举报空间'),
+                })
+            }
+            else if (se.item.name == 'enterApp') {
+                if (this.publishConfig?.abled !== true) {
+                    await useOpenWorkspaceSettings('publish');
+                    return;
+                }
+                await this.setMode(true);
+            }
+            else if (se.item.name == 'enterEdit') {
+                await this.setMode(false);
+            }
         }
     }
 }

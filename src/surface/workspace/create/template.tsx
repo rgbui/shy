@@ -3,7 +3,6 @@ import { channel } from "rich/net/channel";
 import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Workspace } from "..";
-import { UserBasic } from "rich/types/user";
 import { lst } from "rich/i18n/store";
 
 export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
