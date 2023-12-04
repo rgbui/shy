@@ -1,8 +1,6 @@
 import React from "react";
 import { Route, Router, Switch } from "react-router";
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
-import { channel } from "rich/net/channel";
-
 import { SyHistory, ShyUrl } from "../src/history";
 import { surface } from "../src/surface/store";
 import { View404 } from "../src/surface/404";
@@ -15,7 +13,6 @@ export function App() {
     let [isLoad, setLoad] = React.useState(false);
     async function load() {
         await ls.import();
-        await channel.put('/device/sign');
         await surface.user.sign()
         if (!surface.user.isSign) surface.user.toSign()
         setLoad(true);
