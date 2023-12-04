@@ -6,6 +6,7 @@ import { ChevronDownSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
 import { isMobileOnly } from "react-device-detect";
+
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
         var ele = event.currentTarget as HTMLElement;
@@ -19,7 +20,7 @@ export var WorkspaceProfile = observer(function () {
                 <Icon size={16} icon={{ name: "bytedance-icon", code: 'hamburger-button' }}></Icon>
             </span>}
             <span className="flex-auto bold f-16 text-overflow gap-r-5 "><span className="desk-no-drag">{surface.workspace.text}</span></span>
-            {surface.workspace.isMember && <span className=" desk-no-drag size-20 item-hover flex-center remark flex-fixed gap-r-10"><Icon icon={ChevronDownSvg} size={16} ></Icon></span>}
+            {surface.workspace.isMember && <span className=" desk-no-drag size-24 round item-hover flex-center remark flex-fixed gap-r-10"><Icon icon={ChevronDownSvg} size={16} ></Icon></span>}
         </div>
         {surface.workspace.cover && <div className="shy-ws-profile-cover">
             <img src={autoImageUrl(surface.workspace.cover.url, 500)} />
