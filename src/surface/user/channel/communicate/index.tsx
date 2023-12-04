@@ -2,7 +2,6 @@ import React from "react";
 import { channel } from "rich/net/channel";
 import { surface } from "../../../store";
 import { userChannelStore } from "../store";
-import "./style.less";
 import { UserBox } from "rich/component/view/avator/user";
 import { RenderChatsView } from "./render";
 import { ChannelTextType } from "rich/extensions/chats/declare";
@@ -15,6 +14,8 @@ import { S, Sp } from "rich/i18n/view";
 import { Icon } from "rich/component/view/icon";
 import { CheckSvg } from "rich/component/svgs";
 import { observer } from "mobx-react";
+import "./style.less";
+
 
 @observer
 export class CommunicateView extends React.Component<{ userChannel: UserChannel }>{
@@ -47,6 +48,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
                 content: data.content,
                 roomId: room.id,
                 seq: re.data.seq,
+                files: data.files,
                 replyId: data?.replyId || undefined
             };
             if (chat.replyId) {
@@ -106,7 +108,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
                             {props.userChannel.room.isLoadChat && <RenderChatsView userChannel={props.userChannel} reditChat={this.reditChat} replyChat={this.replyChat}></RenderChatsView>}
                         </div>
                         <div className="shy-user-channel-communicate-input">
-                            <InputChatBox placeholder={'@' + user?.name} ref={e => this.richInput = e} onChange={this.onInput}></InputChatBox>
+                            <InputChatBox  placeholder={'@' + user?.name} ref={e => this.richInput = e} onChange={this.onInput}></InputChatBox>
                         </div></>
                 }}</UserBox>}
             </div>
