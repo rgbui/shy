@@ -7,33 +7,56 @@ import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/component/popover/popover";
 import { surface } from "../../store";
 import { S } from "rich/i18n/view";
+import { observer } from "mobx-react";
+import { makeObservable, observable } from "mobx";
 
+@observer
 class UserModifyName extends EventsComponent {
+    constructor(props) {
+        super(props);
+        makeObservable(this, {
+            name: observable,
+            error: observable
+        })
+    }
     render() {
-        return <Dialoug className={'shy-join-friend'}>
+        return <Dialoug style={{ width: 400 }} className={'shy-join-friend'}>
             <Row style={{ marginBottom: 10 }}>
-                <Col style={{marginBottom:5}}><S>用户名</S></Col>
+                <Col style={{ marginBottom: 5 }}><S>用户名</S></Col>
                 <Col><Input value={this.name} onChange={e => this.name = e}></Input></Col>
             </Row>
             <Row style={{ marginTop: 10 }}>
                 <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
             </Row>
-            <div>
-                {this.error && <ErrorText >{this.error}</ErrorText>}
-            </div>
+            {this.error&& <div className="error gap-h-10">
+                {this.error}
+            </div>}
         </Dialoug>
     }
     name: string = '';
     error: string = '';
     button: Button;
     async save() {
-        this.error = '';
-        this.forceUpdate();
-        this.button.loading = true;
-        await surface.user.onUpdateUserInfo({ name: this.name });
-        this.button.loading = false;
-        this.forceUpdate();
-        this.emit('close');
+        try {
+            this.button.loading = true;
+            this.error = '';
+            if (!this.name) {
+                this.error = '用户名不能为空';
+                return;
+            }
+            if (this.name.length > 20) {
+                this.error = '用户名不能超过20个字符';
+                return;
+            }
+            await surface.user.onUpdateUserInfo({ name: this.name });
+            this.emit('close');
+        }
+        catch (ex) {
+
+        }
+        finally {
+            this.button.loading = false;
+        }
     }
     open() {
         this.name = surface.user.name;

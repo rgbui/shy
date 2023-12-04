@@ -3,16 +3,28 @@ import { EventsComponent } from "rich/component/lib/events.component";
 import { Button } from "rich/component/view/button";
 import { Dialoug, Row, Col } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
-import { ErrorText } from "rich/component/view/text";
 import { PopoverSingleton } from "rich/component/popover/popover";
 import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
+import { makeObservable, observable } from "mobx";
+import { observer } from "mobx-react";
 
+@observer
 class UserUpdatePaw extends EventsComponent {
+    constructor(props) {
+        super(props);
+        makeObservable(this, {
+            oldPaw: observable,
+            newPaw: observable,
+            confirmPaw: observable,
+            error: observable,
+            checkPaw: observable
+        })
+    }
     render() {
-        return <Dialoug className={'shy-join-friend'}
-        >
-            <div className="gap-h-30"> {this.checkPaw && <Row>
+        return <Dialoug style={{ width: 400 }} className={'shy-join-friend'}>
+
+            <div className="gap-h-10">{this.checkPaw && <Row>
                 <Col style={{ marginBottom: 5 }}><S>老密码</S></Col>
                 <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
             </Row>}
@@ -28,9 +40,9 @@ class UserUpdatePaw extends EventsComponent {
             <Row>
                 <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
             </Row>
-            <div>
-                {this.error && <ErrorText >{this.error}</ErrorText>}
-            </div>
+            {this.error && <div className="error gap-h-10">
+                {this.error}
+            </div>}
         </Dialoug>
     }
     oldPaw: string = '';
@@ -39,14 +51,52 @@ class UserUpdatePaw extends EventsComponent {
     error: string = '';
     button: Button;
     async save() {
-        this.error = '';
-        this.forceUpdate();
         this.button.loading = true;
-        var re = await channel.patch('/user/set/paw', { oldPaw: this.oldPaw, newPaw: this.newPaw, confirmPaw: this.confirmPaw });
-        this.button.loading = false;
-        if (re.ok) this.emit('save', true)
-        else this.error = re.warn;
-        this.forceUpdate();
+        this.error = '';
+        try {
+            if (this.checkPaw) {
+                if (!this.oldPaw) {
+                    this.error = '老密码不能为空';
+                    return;
+                }
+                if (this.oldPaw.length < 6) {
+                    this.error = '老密码不能少于6个字符';
+                    return;
+                }
+                if (this.oldPaw.length > 20) {
+                    this.error = '老密码不能超过20个字符';
+                    return;
+                }
+            }
+            if (!this.newPaw) {
+                this.error = '新密码不能为空';
+                return;
+            }
+            if (this.newPaw.length < 6) {
+                this.error = '新密码不能少于6个字符';
+                return;
+            }
+            if (this.newPaw.length > 20) {
+                this.error = '新密码不能超过20个字符';
+                return;
+            }
+            if (this.newPaw != this.confirmPaw) {
+                this.error = '两次密码输入不一致';
+                return;
+            }
+            var re = await channel.patch('/user/set/paw', { oldPaw: this.oldPaw, newPaw: this.newPaw, confirmPaw: this.confirmPaw });
+            if (re.ok) {
+                this.emit('save', true);
+                return;
+            }
+            else this.error = re.warn;
+        }
+        catch (ex) {
+
+        }
+        finally {
+            this.button.loading = false;
+        }
     }
     checkPaw: boolean = false;
     open(options: { checkPaw: boolean }) {

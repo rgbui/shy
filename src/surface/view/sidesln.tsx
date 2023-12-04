@@ -45,9 +45,9 @@ export var SideSln = observer(function () {
             }
         })
     }
-    if (surface.isPubSiteHideMenu) return <></>
+    if (surface?.workspace?.isPubSiteHideMenu) return <></>
     var classList: string[] = ['shy-slide'];
-    if (surface.isPubSiteDefineBarMenu) {
+    if (surface?.workspace?.isPubSiteDefineBarMenu) {
         classList.push('shy-slide-define-default')
     }
     return surface.showSln && <><div className={classList.join(" ")}

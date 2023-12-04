@@ -153,7 +153,7 @@ export class UserSettingProfile extends React.Component {
                         </div>
                         <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 120 : 60 }}>
                             {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 50)} />}
-                            {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
+                            {!surface.user?.avatar && <span>{(surface.user.name||"").slice(0, 1)}</span>}
                         </div>
                         <div className="shy-user-settings-profile-box-card-content">
                             <div className="h2">{surface.user.name}#{surface.user.sn}</div>

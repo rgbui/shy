@@ -67,11 +67,11 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
             <div className="shy-user-settings-profile-box-card settings" style={{ margin: '20px 0px' }}>
                 <div className="bg">
                     {!surface.user.cover?.url && <div style={{ height: 100, backgroundColor: surface.user?.cover?.color ? surface.user?.cover?.color : 'rgb(192,157,156)' }}></div>}
-                    {surface.user.cover?.url && <img style={{ height: 180,display:'block' }} src={autoImageUrl(surface.user.cover?.url, 900)} />}
+                    {surface.user.cover?.url && <img style={{ height: 180, display: 'block' }} src={autoImageUrl(surface.user.cover?.url, 900)} />}
                 </div>
                 <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 180 : 100 }}>
                     {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 120)} />}
-                    {!surface.user?.avatar && <span>{surface.user.name.slice(0, 1)}</span>}
+                    {!surface.user?.avatar && <span>{(surface.user?.name || "").slice(0, 1)}</span>}
                 </div>
                 <div className="shy-user-settings-profile-box-card-operators">
                     <h2>{surface.user.name}#{surface.user.sn}</h2>

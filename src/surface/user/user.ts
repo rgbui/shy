@@ -100,6 +100,7 @@ export class User {
         UrlRoute.push(ShyUrl.signIn);
     }
     async sign() {
+        await channel.put('/device/sign');
         var r = await channel.get('/sign')
         if (r.ok) {
             r.data.user.online = true;
