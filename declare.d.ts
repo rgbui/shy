@@ -14,6 +14,7 @@ declare var API_URLS: string[];
 declare var API_VERSION: string;
 declare var AUTH_URL: string;
 declare var ASSERT_URL: string;
+declare var STATIC_URL:string;
 
 declare var REGIN: 'US' | 'CN';
 

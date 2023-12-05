@@ -462,7 +462,7 @@ class MessageCenter {
             (window as any).wx.ready(function () {
                 // 微信分享的数据
                 var shareData = {
-                    "imgUrl": args.pic ?? "https://static.shy.live/0.9.251-pro/assert/img/shy.svg",
+                    "imgUrl": args.pic ?? "https://static.shy.live/assert/img/shy.svg",
                     "link": url,
                     "desc": args.description,
                     "title": args.title,

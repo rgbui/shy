@@ -41,7 +41,7 @@ let publicPath = `http://127.0.0.1:${port}/`;
 if (mode == 'pro') {
     publicPath = `https://static.shy.live/`.replace('shy.live', isUs ? "shy.red" : "shy.live");
     if (!isUs) {
-        publicPath = publicPath.replace('static.shy', 'cdn.shy')
+        // publicPath = publicPath.replace('static.shy', 'cdn.shy')
     }
 }
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
@@ -112,21 +112,54 @@ else {
 var viewEntrys = {
     auth: './auth/view.ts'
 }
-var htmls = [new HtmlWebpackPlugin({
-    template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
-    filename: 'shy.html',
-    showErrors: true,
-    hash: true,
-    chunks: ['web', 'shared'],
-    favicon: false,
-    templateParameters: {
-        src: publicPath + versionPrefix,
-        TrackCode,
-    }
-})]
+var htmls = [
+    new HtmlWebpackPlugin({
+        template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
+        filename: 'shy.html',
+        showErrors: true,
+        hash: true,
+        chunks: ['web', 'shared'],
+        favicon: false,
+        templateParameters: {
+            src: publicPath + versionPrefix,
+            static: publicPath,
+            TrackCode,
+        }
+    })
+]
+if (isUs) {
+    htmls.push(new HtmlWebpackPlugin({
+        template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
+        filename: 'shy.red.html',
+        showErrors: true,
+        hash: true,
+        chunks: ['web', 'shared'],
+        favicon: false,
+        templateParameters: {
+            src: publicPath + 'pro',
+            static: publicPath,
+            TrackCode: JSON.stringify('')
+        }
+    }))
+}
+else {
+    htmls.push(new HtmlWebpackPlugin({
+        template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
+        filename: 'shy.live.html',
+        showErrors: true,
+        hash: true,
+        chunks: ['web', 'shared'],
+        favicon: false,
+        templateParameters: {
+            src: publicPath + 'pro',
+            static: publicPath,
+            TrackCode: JSON.stringify('')
+        }
+    }))
+}
 var cps = [{
     from: path.join(__dirname, "../src/assert/img/shy.svg"),
-    to: versionPrefix + 'assert/img/shy.svg'
+    to: 'static/img/shy.svg'
 },
 {
     from: path.join(__dirname, "shared.js"),
@@ -134,13 +167,12 @@ var cps = [{
 },
 {
     from: path.join(__dirname, "../../rich/extensions/data-grid/formula/docs"),
-    to: versionPrefix + 'assert/data-grid/formula/docs'
+    to: 'static/data-grid/formula/docs'
 },
 {
     from: path.join(__dirname, "../src/assert/resource"),
     to: 'static/img'
-}
-];
+}];
 
 if (platform == 'server-side') {
     Object.assign(viewEntrys, {
@@ -155,6 +187,7 @@ if (platform == 'server-side') {
         favicon: false,
         templateParameters: {
             src: publicPath + versionPrefix,
+            static: publicPath,
             TrackCode
         }
     })]
@@ -180,6 +213,7 @@ else {
             favicon: false,
             templateParameters: {
                 src: publicPath + versionPrefix,
+                static: publicPath,
                 TrackCode
             }
         }))
@@ -298,8 +332,9 @@ module.exports = {
             chunks: ['auth'],
             favicon: false,
             templateParameters: {
-                src: publicPath + versionPrefix
-            },
+                src: publicPath + versionPrefix,
+                static: publicPath
+            }
         }),
         ...htmls,
         new webpack.DefinePlugin({
@@ -313,6 +348,7 @@ module.exports = {
             AUTH_URL: JSON.stringify(AUTH_URL),
             VERSION_PREFIX: JSON.stringify(versionPrefix),
             ASSERT_URL: JSON.stringify(publicPath + versionPrefix),
+            STATIC_URL: JSON.stringify(publicPath),
             AMAP_KEY: JSON.stringify(AMAP_KEY),
             AMAP_PAIR: JSON.stringify(AMAP_PAIR),
             REGIN: JSON.stringify(isUs ? "US" : "CN")
