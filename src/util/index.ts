@@ -80,5 +80,8 @@ export var ShyUtil = {
             arr.splice(tindex + 1, 0, arr[index]);
             arr.splice(index, 1)
         }
+    },
+    replaceAll(str:string, search:string, replacement:string) {
+        return str.split(search).join(replacement);
     }
 }
