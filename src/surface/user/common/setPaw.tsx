@@ -8,6 +8,7 @@ import { S } from "rich/i18n/view";
 import { channel } from "rich/net/channel";
 import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
+import { lst } from "rich/i18n/store";
 
 @observer
 class UserUpdatePaw extends EventsComponent {
@@ -56,32 +57,32 @@ class UserUpdatePaw extends EventsComponent {
         try {
             if (this.checkPaw) {
                 if (!this.oldPaw) {
-                    this.error = '老密码不能为空';
+                    this.error = lst('老密码不能为空');
                     return;
                 }
                 if (this.oldPaw.length < 6) {
-                    this.error = '老密码不能少于6个字符';
+                    this.error = lst('老密码不能少于6个字符');
                     return;
                 }
                 if (this.oldPaw.length > 20) {
-                    this.error = '老密码不能超过20个字符';
+                    this.error = lst('老密码不能超过20个字符');
                     return;
                 }
             }
             if (!this.newPaw) {
-                this.error = '新密码不能为空';
+                this.error = lst('新密码不能为空');
                 return;
             }
             if (this.newPaw.length < 6) {
-                this.error = '新密码不能少于6个字符';
+                this.error = lst('新密码不能少于6个字符');
                 return;
             }
             if (this.newPaw.length > 20) {
-                this.error = '新密码不能超过20个字符';
+                this.error = lst('新密码不能超过20个字符');
                 return;
             }
             if (this.newPaw != this.confirmPaw) {
-                this.error = '两次密码输入不一致';
+                this.error = lst('两次密码输入不一致');
                 return;
             }
             var re = await channel.patch('/user/set/paw', { oldPaw: this.oldPaw, newPaw: this.newPaw, confirmPaw: this.confirmPaw });
@@ -95,7 +96,8 @@ class UserUpdatePaw extends EventsComponent {
 
         }
         finally {
-            this.button.loading = false;
+            if (this.button)
+                this.button.loading = false;
         }
     }
     checkPaw: boolean = false;
