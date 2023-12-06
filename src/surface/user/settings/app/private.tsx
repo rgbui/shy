@@ -50,11 +50,11 @@ export class PrivateClound extends React.Component {
         return <div>
             <div className="h2"><S>私有云</S></div>
             <Divider></Divider>
-            {this.list.length == 0 && <div className="flex-center remark gap-h-20"><S>还没有自已的私有云</S><a className="link gap-l-10" href={UrlRoute.getUrl('/download')}>创建私有数据存储</a></div>}
+            {this.list.length == 0 && <div className="flex-center remark gap-h-20"><S>还没有自已的私有云</S><a className="link gap-l-10" href={UrlRoute.getUrl('/download')}><S>创建私有数据存储</S></a></div>}
             {this.list.map(l => {
                 return <div key={l.id} className="round item-hover-light-focus item-hover gap-b-10 padding-10">
                     <div className="flex">
-                        <span className="remark">服务号:</span><span>{l.serviceNumber}</span>
+                        <span className="remark"><S>服务号</S>:</span><span>{l.serviceNumber}</span>
                     </div>
                     <div className="remark f-12">{l.remark}</div>
                     <div className="flex">

@@ -380,7 +380,7 @@ export class SitePublishView extends React.Component {
     render() {
         var domain = surface.workspace.siteDomain || surface.workspace.sn;
         return <div>
-            <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip><div className="h2">发布应用</div>
+            <SaveTip ref={e => this.tip = e} save={e => this.save()} reset={e => this.reset()}></SaveTip><div className="h2"><S>发布应用</S></div>
             <Divider></Divider>
             <div className="flex gap-t-20">
                 <span className="flex-auto"><S>将空间发布成应用</S></span>

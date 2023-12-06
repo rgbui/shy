@@ -9,6 +9,7 @@ import { channel } from "rich/net/channel";
 import { useWeixinOpen } from "../../../../component/winxin/open";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { config } from "../../../../../common/config";
 export class ShyOpen extends React.Component {
     async load() {
         var r = await channel.get('/open/list');
@@ -42,7 +43,7 @@ export class ShyOpen extends React.Component {
             <h2 className="h2"><S>第三方帐户</S></h2>
             <Divider></Divider>
             <div className="gap-p-10">
-                <div className="gap-p-20">
+                {!config.isUS && <div className="gap-p-20">
                     <div className="h4"><S>微信</S></div>
                     <div className="flex gap-b-10">
                         {this.list.some(s => s.platform == 'weixin' && s.disabled != true) && <span className="green f-14 flex-auto flex">
@@ -57,10 +58,8 @@ export class ShyOpen extends React.Component {
                         </span>
                     </div>
                     <Divider></Divider>
-                </div>
+                </div>}
             </div>
-
-
         </div>
     }
 }

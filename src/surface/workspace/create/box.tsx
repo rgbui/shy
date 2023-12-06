@@ -70,7 +70,7 @@ export class CreateWorkspaceView extends EventsComponent {
             <div className="remark flex-center"><S text={'创建空间描述语'}>创建在线的生活工作空间，和您的朋友一起协作成长吧。</S></div>
             <div className="padding-b-10">
                 <div onMouseDown={e => { this.local.template = null; this.local.step = 2 }} className="flex   cursor  border round padding-w-10 padding-h-5 item-hover  text-1 gap-h-5 "><span className="flex-auto"><S>亲自创建</S></span><span className="flex-fixed"><Icon size={20} icon={ChevronRightSvg}></Icon></span></div>
-                <div className="remark f-12">选择模板</div>
+                <div className="remark f-12"><S>选择模板</S></div>
                 <div>
                     {this.getTemplates().map((temp, index) => {
                         return <div onMouseDown={e => { this.local.template = null; this.local.step = 2 }} key={index} className="flex cursor border round padding-w-10 padding-h-5 item-hover gap-h-5 text-1">
