@@ -243,7 +243,7 @@ export class UsLogin extends React.Component<{ call?: () => void }> {
                 }
                 var r = await masterSock.post('/account/reg', {
                     account: local.email,
-                    password: local.paw,
+                    paw: local.paw,
                     name: local.name,
                     inviteCode: local.inviteCode,
                 })
