@@ -27,10 +27,10 @@ export class RobotSettings extends EventsComponent {
         this.emit('close');
     }
     async open(robot: RobotInfo) {
-        if (!this.robot?.robotId) {
-            var r = await channel.get('/get/robot', { id: this.robot.id });
+        if (!robot?.robotId) {
+            var r = await channel.get('/get/robot', { id: robot.id });
             if (r.ok) {
-                this.robot = r.data.robot;
+                robot = r.data.robot;
             }
         }
         runInAction(() => {
