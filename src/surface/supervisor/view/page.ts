@@ -45,7 +45,8 @@ export async function createPageContent(store: PageViewStore) {
                         var r = await snap.viewOperator(action.get() as any);
                         await snap.viewSnap({
                             seq: r.seq,
-                            content: await syncBlock.getSyncString()
+                            content: await syncBlock.getSyncString(),
+                            force: action.immediate ? true : false
                         });
                     }
                 if (action.syncPage) {
@@ -57,9 +58,9 @@ export async function createPageContent(store: PageViewStore) {
                     await store.snapStore.viewSnap({
                         seq: r.seq,
                         content: await page.getString(),
-                        plain: await page.getPlain(),
                         text: store.item?.text,
                         thumb: await page.getThumb(),
+                        force: action.immediate ? true : false
                     });
                 }
             });
@@ -71,7 +72,7 @@ export async function createPageContent(store: PageViewStore) {
                 }
                 await store.snapStore.viewSnap({
                     content: await page.getString(),
-                    plain: await page.getPlain(),
+                    // plain: await page.getPlain(),
                     text: store.item?.text,
                     thumb: await page.getThumb(),
                     ...data,
