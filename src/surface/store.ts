@@ -137,6 +137,7 @@ export class Surface extends Events {
                 if (autoLoadPage) {
                     await this.onLoadPage();
                 }
+                await this.workspace.getWsRobots();
             }
             else {
                 if (this.workspace) {

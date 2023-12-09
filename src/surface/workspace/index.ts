@@ -643,8 +643,9 @@ export class Workspace {
         }
     }
     robots: RobotInfo[];
-    async getWsRobots() {
+    async getWsRobots(force?: boolean) {
         try {
+            if (Array.isArray(this.robots) && force !== true) return this.robots;
             var gs = await channel.get('/ws/robots');
             if (gs.ok) {
                 var rs = await channel.get('/robots/info', { ids: gs.data.list.map(g => g.userid) });
@@ -655,12 +656,13 @@ export class Workspace {
                             robot.tasks = [
                                 {
                                     id: util.guid(),
-                                    name: '问题',
+                                    name: lst("问题"),
                                     args: [
                                         {
                                             id: util.guid(),
                                             text: lst("问题"),
-                                            name: 'ask', type: 'string'
+                                            name: 'ask',
+                                            type: 'string'
                                         }
                                     ]
                                 }
