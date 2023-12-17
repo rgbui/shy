@@ -56,7 +56,7 @@ export var UrlRoute = {
             }
             else {
                 if (location.host == this.getHost()) return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
-                else location.href = UrlRoute.getUrl() + '/ws/' + wsSn + '/page/' + pageSn;
+                else return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
@@ -67,7 +67,9 @@ export var UrlRoute = {
                 return SyHistory.push(this.gen(ShyUrl.resource, {}) + "?url=" + encodeURIComponent(elementUrl));
             }
             else {
-                return SyHistory.push(this.gen(ShyUrl.wsResource, { wsId: wsSn }) + "?url=" + encodeURIComponent(elementUrl))
+                if (location.host == this.getHost())
+                    return SyHistory.push(this.gen(ShyUrl.wsResource, { wsId: wsSn }) + "?url=" + encodeURIComponent(elementUrl))
+                else SyHistory.push(this.gen(ShyUrl.resource, {}) + "?url=" + encodeURIComponent(elementUrl));
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.wsResource, { wsId: wsSn }) + "?url=" + encodeURIComponent(elementUrl))
@@ -84,7 +86,7 @@ export var UrlRoute = {
 }
 export enum ShyUrl {
     root = '/',
-    redict='/redict',
+    redict = '/redict',
     signOut = '/sign/out',
     signIn = '/sign/in',
     ws = '/ws/:wsId',

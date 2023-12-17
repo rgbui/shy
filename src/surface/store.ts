@@ -20,6 +20,7 @@ import { masterSock } from "../../net/sock";
 import { ShyDesk } from "../../type";
 import { Confirm } from "rich/component/lib/confirm";
 import { useCreateWorkspace } from "./workspace/create/box";
+import { wss } from "../../services/workspace";
 
 export class Surface extends Events {
     constructor() {
@@ -96,6 +97,7 @@ export class Surface extends Events {
                 if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
+                wss.setWsPids(ws.id,ws.pids);
                 var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
                 if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
                 else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
@@ -110,6 +112,7 @@ export class Surface extends Events {
                 if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
                 ws.roles = g.data.roles || [];
                 ws.member = g.data.member || null;
+                var robotIds = (g.data.robotIds || []) as string[];
                 var willPageItem = g.data.page as PageItem;
                 if (ws.access == 0
                     &&
@@ -135,9 +138,9 @@ export class Surface extends Events {
                     this.workspace = ws;
                 })
                 if (autoLoadPage) {
-                    await this.onLoadPage();
+                    await this.willOpenPage();
                 }
-                await this.workspace.getWsRobots();
+                this.workspace.loadWsRobots(robotIds);
             }
             else {
                 if (this.workspace) {
@@ -159,7 +162,7 @@ export class Surface extends Events {
             console.error(ex)
         }
     }
-    async onLoadPage() {
+    async willOpenPage() {
         if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
             var ul = new URL(location.href);
             var url = ul.searchParams.get('url');
@@ -239,7 +242,6 @@ export class Surface extends Events {
     }
     async onCreateWorkspace() {
         await useCreateWorkspace();
-        //UrlRoute.push(ShyUrl.workCreate);
     }
     /**
      * 

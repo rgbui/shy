@@ -5,12 +5,15 @@ import { surface } from "../src/surface/store";
 import { del, get, patch, post, put } from "rich/net/annotation";
 import { Workspace } from "../src/surface/workspace";
 import { FileMd5 } from "../src/util/file";
-import { channel } from "rich/net/channel";
 import { ShyAlert } from "rich/component/lib/alert";
 import { lst } from "rich/i18n/store";
 
 class WorkspaceService extends BaseService {
     private wsPids: Map<string, any[]> = new Map();
+    setWsPids(wsId: string, pids: any[]) {
+        if (!this.wsPids.has(wsId))
+            this.wsPids.set(wsId, pids);
+    }
     async getWsSock(wsId: string) {
         var sock: Sock;
         var pids = this.wsPids.get(wsId);
@@ -18,10 +21,10 @@ class WorkspaceService extends BaseService {
             sock = Workspace.getWsSock(pids, 'ws')
         }
         else {
-            var g = await channel.get('/ws/query', { name: wsId });
-            if (g.ok) {
-                sock = Workspace.getWsSock(g.data.pids, 'ws')
-                this.wsPids.set(wsId, g.data.pids)
+            var r = await masterSock.get('/ws/pids', { wsId });
+            if (r?.ok) {
+                sock = Workspace.getWsSock(r.data.pids, 'ws')
+                this.wsPids.set(wsId, r.data.pids)
             }
         }
         return sock;
@@ -392,7 +395,7 @@ class WorkspaceService extends BaseService {
         return await sock.get('/ws/flow/get', args);
     }
     @get('/ws/ai/search')
-    async wsAiSearch(args){
+    async wsAiSearch(args) {
         if (typeof args == 'undefined') args = {}
         var sock = await this.getArgsSock(args);
         return await sock.get('/ws/ai/search', args);
