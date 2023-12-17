@@ -12,10 +12,12 @@ import { SaveTip } from "../../../../component/tip/save.tip";
 import { useSelectWorkspacePage } from "rich/extensions/link/select"
 import { Rect } from "rich/src/common/vector/point";
 import { SelectBox } from "rich/component/view/select/box";
-import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
-import { MenuItemType } from "rich/component/view/menu/declare";
+
 import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
+import { getPageText } from "rich/src/page/declare";
+import { WsConsumeType, checkModelPay, getModelOptions } from "rich/net/ai/cost";
+import { config } from "../../../../../common/config";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -38,9 +40,9 @@ export class WorkspaceManage extends React.Component {
         defaultPageTitle: '',
         allowSlnIcon: false,
         aiConfig: {
-            text: '',
-            image: '',
-            embedding: '',
+            text: config.isUS ? WsConsumeType.gpt_35_turbo : WsConsumeType.ERNIE_Bot,
+            image: config.isUS ? WsConsumeType.dall_3 : WsConsumeType.badiu_Stable_Diffusion_XL,
+            embedding: config.isUS ? WsConsumeType.gpt_embedding : WsConsumeType.baidu_embedding,
             aiSearch: false,
             disabled: false
         }
@@ -90,9 +92,9 @@ export class WorkspaceManage extends React.Component {
         this.data.defaultPageId = surface.workspace.defaultPageId;
         this.data.allowSlnIcon = surface.workspace.allowSlnIcon;
         if (this.data.defaultPageId) {
-            var page = await channel.get('/page/query/info', { id: this.data.defaultPageId });
-            if (page.ok) {
-                this.data.defaultPageTitle = page.data.text;
+            var r = await channel.get('/page/query/info', { id: this.data.defaultPageId });
+            if (r.ok) {
+                this.data.defaultPageTitle = getPageText(r.data);
             }
         }
         this.error = {};
@@ -102,7 +104,7 @@ export class WorkspaceManage extends React.Component {
         var g = await useSelectWorkspacePage({ roundArea: Rect.fromEle(e.currentTarget as HTMLElement) });
         if (g) {
             this.data.defaultPageId = g.id;
-            this.data.defaultPageTitle = g.text;
+            this.data.defaultPageTitle = getPageText(g);
             this.checkChange();
         }
     }
@@ -174,26 +176,22 @@ export class WorkspaceManage extends React.Component {
                     </SwitchText></div>
                 </div>
                 <div className="gap-b-10 f-12 remark"><S>支持百度、Google收录搜索</S></div>
-
             </div>
 
             <Divider></Divider>
             <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>空间侧边栏设置</S></div>
-
                 <div className="flex gap-t-10">
                     <div className="flex-auto  f-14 text-1"><S>关闭自定义图标</S></div>
                     <div className="flex-fixed"><Switch onChange={e => this.change('allowSlnIcon', e ? false : true)} checked={this.data.allowSlnIcon === false ? false : true}></Switch></div>
                 </div>
                 <div className="remark f-12 gap-b-10"><S>关闭侧边栏页面图标自定义显示</S></div>
-
             </div>
 
             <Divider></Divider>
             <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>AI写作</S></div>
                 <div className="f-12 gap-h-10 flex">
-
                     <span className="flex-auto flex">
                         <SwitchText
                             align="right"
@@ -216,34 +214,12 @@ export class WorkspaceManage extends React.Component {
                                 border
                                 dropAlign="right"
                                 checkChange={async e => {
-                                    return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
+                                    return await checkModelPay(e, surface.workspace)
                                 }}
                                 options={
-                                    window.shyConfig.isUS ? [
-                                        { text: 'OpenAI', type: MenuItemType.text },
-                                        { text: 'GPT-3.5', value: 'gpt-3.5-turbo' },
-                                        { text: 'GPT-4', value: 'gpt-4' },
-                                    ] : [
-                                        { text: lst('百度千帆'), type: MenuItemType.text, label: '文言一心' },
-                                        { text: 'ERNIE-Bot', value: 'ERNIE-Bot' },
-                                        { text: 'ERNIE-Bot-turbo', value: 'ERNIE-Bot-turbo' },
-
-                                        { text: 'Llama', type: MenuItemType.text },
-                                        { text: 'Llama-2-7b-chat', value: 'Llama-2-7b-chat' },
-                                        { text: 'Llama-2-13b-chat', value: 'Llama-2-13b-chat' },
-                                        { text: 'Llama-2-70B-Chat', value: 'Llama-2-70B-Chat' },
-
-                                        { text: lst('智谱'), type: MenuItemType.text },
-                                        // { text: 'ChatGLM2-6B', value: 'ChatGLM2-6B' },
-                                        { text: 'ChatGLM2-6B-32K', value: 'ChatGLM2-6B-32K' },
-                                        // { text: 'ChatGLM2-6B-INT4', value: 'ChatGLM2-6B-INT4' },
-
-                                        { text: 'OpenAI', type: MenuItemType.text, label: '仅限体验' },
-                                        { text: 'GPT-3.5', value: 'gpt-3.5-turbo', label: '仅限体验' },
-                                        { text: 'GPT-4', value: 'gpt-4', label: '仅限体验' },
-                                    ]
+                                    getModelOptions()
                                 }
-                                value={this.data.aiConfig?.text || (window.shyConfig.isUS ? "gpt-3.5-turbo" : "ERNIE-Bot-turbo")}
+                                value={this.data.aiConfig?.text || (window.shyConfig.isUS ? WsConsumeType.gpt_35_turbo : WsConsumeType.ERNIE_Bot_turbo)}
                                 onChange={e => { this.change('aiConfig.text', e) }}
                             ></SelectBox>
                         </div>
@@ -261,42 +237,22 @@ export class WorkspaceManage extends React.Component {
                                 }}
                                 options={
                                     window.shyConfig.isUS ? [
-                                        { text: 'OpenAI DALLE2', value: 'gpt' },
-                                        { text: 'Stability', value: 'Stability' }
-                                    ] :
-                                        [
-                                            { text: '6pen', value: '6pen' },
-                                            { text: 'Stability', value: 'Stability' },
-                                            { text: 'OpenAI DALLE2', value: 'gpt', label: '仅用于体验' },
-                                        ]
+                                        { text: 'DALLE-2', value: WsConsumeType.dall_2 },
+                                        { text: 'DALLE-3', value: WsConsumeType.dall_3 },
+                                        { text: 'Stability', value: WsConsumeType.stability }
+                                    ] : [
+                                        { text: 'Stable Diffusion XL', value: WsConsumeType.badiu_Stable_Diffusion_XL },
+                                        { text: '6pen', value: WsConsumeType.pen_6 },
+                                        { text: 'Stability', value: WsConsumeType.stability, label: '仅用于体验' },
+                                        { text: 'DALLE-2', value: WsConsumeType.dall_2, label: '仅用于体验' },
+                                        { text: 'DALLE-3', value: WsConsumeType.dall_3, label: '仅用于体验' },
+                                    ]
                                 }
-                                value={this.data.aiConfig.image || (window.shyConfig.isUS ? "gpt" : "6pen")}
+                                value={this.data.aiConfig.image || (window.shyConfig.isUS ? WsConsumeType.dall_3 : WsConsumeType.pen_6)}
                                 onChange={e => { this.change('aiConfig.image', e) }}
                             ></SelectBox>
                         </div>
                     </div>
-                    {/* <div className="flex gap-h-10">
-                        <div className="flex-auto  f-14 text-1"><S>向量存储</S></div>
-                        <div className="flex-fixed">
-                            <SelectBox
-                                small
-                                border
-                                dropAlign="right"
-                                dropWidth={300}
-                                options={window.shyConfig.isUS ? [
-                                    { text: 'OpenAI Embeddings', value: 'gpt' },
-                                ] : [
-                                    { text: lst('文言一心'), value: 'Baidu-Embedding-V1' },
-                                    { text: 'GPT', value: 'gpt', label: '仅用于体验' },
-                                ]}
-                                checkChange={async e => {
-                                    return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
-                                }}
-                                value={this.data.aiConfig.embedding || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
-                                onChange={e => { this.change('aiConfig.embedding', e) }}
-                            ></SelectBox>
-                        </div>
-                    </div> */}
                 </>}
             </div>
 
