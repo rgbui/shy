@@ -362,6 +362,7 @@ class MessageCenter {
                 if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
+                wss.setWsPids(ws.id,ws.pids);
                 var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id });
                 if (g.data.accessForbidden) {
                     return
@@ -517,7 +518,6 @@ class MessageCenter {
     }
     @act('/open/user/private/channel')
     async currentUserSend(args: { userid: string }) {
-        console.log(args.userid);
         UrlRoute.push(ShyUrl.me);
         if (surface.workspace)
             await surface.workspace.exitWorkspace();

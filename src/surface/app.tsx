@@ -11,10 +11,11 @@ import { surface } from './store';
 import { MyWorkSpace } from './view/my';
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 import { isMobileOnly } from 'react-device-detect';
-import { Spin } from 'rich/component/view/spin';
+import { SK} from 'rich/component/view/spin';
 import { PageContentView } from './supervisor/content';
 
 import { RedictUrl } from './view/RedictUrl';
+import { Divider } from 'rich/component/view/grid';
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
@@ -107,13 +108,47 @@ export function App() {
         </Router>
       }
     }
-
   }
   return <div className='shy-app' >
     {renderAvatorStatusSvgMask()}
-    {!isLoad && <div className='flex-center gap-h-30'>
-      <Spin></Spin>
-    </div>}
+    {!isLoad && <SK className={'vw100 vh100 flex flex-full'}>
+      <div className='w-50 flex flex-col  flex-fixed border-right-light'>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+        <div className='size-40 circle sk-bg gap-h-10'></div>
+      </div>
+      <div className='w-250 flex-fixed border-right-light'>
+        <div className='flex'>
+          <div className='h-20 w-120 sk-bg gap-l-10 gap-h-10'></div>
+        </div>
+        <Divider></Divider>
+        <div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+          <div className='h-20 w-200 sk-bg gap-l-10 gap-h-10'></div>
+        </div>
+      </div>
+      <div className='flex-auto flex flex-col flex-full'>
+        <div className='flex'>
+          <div className='h-20 w-300 sk-bg gap-l-30 gap-h-10'></div>
+        </div>
+        <Divider></Divider>
+        <div className='flex-auto'>
+          <div className='gap-30 sk-bg' style={{ height: 'calc(100% - 60px)' }}></div>
+        </div>
+      </div>
+    </SK>}
     {isLoad && renderRoutes()}
   </div>
 }

@@ -46,6 +46,7 @@ export var SurfacePage = observer((props: { pathname: string }) => {
             </div>
         </div>
     }
+    else return <></>
 })
 
 export var SurfaceView = observer(function () {
@@ -75,17 +76,16 @@ export var SurfaceView = observer(function () {
         load();
     }, [])
     if (local.loading) return <div className='shy-surface-loading'><Spin></Spin></div>
-    else {
-        return <div className='shy-surface'>
-            <SideBar></SideBar>
-            <Route path={[ShyUrl.ws, ShyUrl.page, ShyUrl.wsResource, ShyUrl.resource]} render={props => {
-                return <SurfacePage pathname={props.location.pathname}></SurfacePage>
-            }}>
-            </Route>
-            <Route path={ShyUrl.me} exact component={UserChannel}></Route>
-            <Route path={ShyUrl.discovery} exact component={DiscoveryView}></Route>
-        </div >
-    }
-    return <></>;
+    else return <div className='shy-surface'>
+        <SideBar></SideBar>
+        <Route path={[ShyUrl.ws, ShyUrl.root, ShyUrl.page, ShyUrl.wsResource, ShyUrl.resource]} render={props => {
+            return <SurfacePage pathname={props.location.pathname}></SurfacePage>
+        }}>
+        </Route>
+        <Route path={ShyUrl.me} exact component={UserChannel}></Route>
+        <Route path={ShyUrl.discovery} exact component={DiscoveryView}></Route>
+    </div>
+
+
 })
 
