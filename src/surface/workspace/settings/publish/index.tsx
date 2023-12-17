@@ -25,7 +25,7 @@ import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
 import { UrlRoute } from "../../../../history";
 import { Textarea } from "rich/component/view/input/textarea";
-import { WorkspaceNavMenuItem } from "rich/src/page/declare";
+import { WorkspaceNavMenuItem, getPageText } from "rich/src/page/declare";
 
 @observer
 export class SitePublishView extends React.Component {
@@ -165,9 +165,9 @@ export class SitePublishView extends React.Component {
             var g = await useSelectWorkspacePage({ roundArea: Rect.fromEle(e.currentTarget as HTMLElement) });
             if (g) {
                 item.pageId = g.id;
-                item.pageText = g.text;
+                item.pageText = getPageText(g);
                 item.icon = g.icon;
-                if (self.refPageText) self.refPageText.updateValue(g.text);
+                if (self.refPageText) self.refPageText.updateValue( item.pageText);
                 if (!item.text || item.text == lst('菜单项')) item.text = g.text;
                 self.checkChange();
             }
