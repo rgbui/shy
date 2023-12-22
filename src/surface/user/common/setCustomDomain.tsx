@@ -12,6 +12,8 @@ import { SelectButtons } from "rich/component/view/button/select";
 import { Textarea } from "rich/component/view/input/textarea";
 import { masterSock } from "../../../../net/sock";
 import lodash from "lodash";
+import dayjs from "dayjs";
+import { DateInput } from "rich/extensions/date/input";
 
 class CustomDomain extends EventsComponent {
     render() {
@@ -43,16 +45,24 @@ class CustomDomain extends EventsComponent {
             {this.data.customSiteDomainData.type == 'trust' && <div className="gap-h-20 ">
                 {this.data.customSiteDomainProtocol && <div>
                     <div><S>HTTPS证书</S></div>
+                    <div className="f-12 remark"><S text="仅支持nginx_ssl证书">仅支持nginx ssl证书</S></div>
                     <div className="f-12 remark"><S>公钥</S></div>
                     <Textarea value={this.data.customSiteDomainData.publicKey} onChange={e => {
                         this.data.customSiteDomainData.publicKey = e;
+                        this.forceUpdate()
                     }}></Textarea>
                     <div className="f-12 remark"><S>私钥</S></div>
                     <Textarea value={this.data.customSiteDomainData.privateKey}
                         onChange={e => {
                             this.data.customSiteDomainData.privateKey = e;
+                            this.forceUpdate()
                         }}
                     ></Textarea>
+                    <div className="f-12 remark"><S>过期时间</S></div>
+                    <DateInput value={this.data.customSiteDomainData.sslDate || dayjs().add(1, "year").toDate()} onChange={e => {
+                        this.data.customSiteDomainData.sslDate = e;
+                        this.forceUpdate()
+                    }}></DateInput>
                 </div>}
             </div>}
             <div>
@@ -76,9 +86,8 @@ class CustomDomain extends EventsComponent {
                 wsId: this.wsId,
                 customSiteDomain: this.data.customSiteDomain,
                 customSiteDomainProtocol: this.data.customSiteDomainProtocol,
-                customSiteDomainData: this.data.customSiteDomainData
+                customSiteDomainData: this.data.customSiteDomainData,
             })
-            lodash.assign(this.ws, this.data);
             if (r?.data?.exists) {
                 this.error = lst('域名被占用')
             }
@@ -86,6 +95,7 @@ class CustomDomain extends EventsComponent {
                 this.error = lst('域名输入不合法')
             }
             if (r.ok && !r.data?.exists && !r.data?.illegal) {
+                lodash.assign(this.ws, this.data);
                 this.emit('close');
                 return;
             }
@@ -100,13 +110,14 @@ class CustomDomain extends EventsComponent {
     }
     async open(ws: Workspace) {
         this.ws = ws;
+        this.wsId = ws.id;
         await this.load();
         this.forceUpdate()
     }
     async load() {
-        var data = await masterSock.get('/ws/get', { wsId: this.ws.id });
-        if (data.ok) {
-            this.data = data.data;
+        var r = await masterSock.get('/ws/get', { wsId: this.ws.id });
+        if (r?.ok) {
+            this.data = r.data.workspace;
             if (!this.data.customSiteDomainData) {
                 this.data.customSiteDomainData = {
                     type: 'trust',
