@@ -6,7 +6,8 @@ import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../../store";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
-import { Spin, SpinBox } from "rich/component/view/spin";
+import { SK} from "rich/component/view/spin";
+import { Divider } from "rich/component/view/grid";
 
 @observer
 export class PageSupervisorView extends React.Component<{
@@ -39,7 +40,7 @@ export class PageSupervisorView extends React.Component<{
         this.loading = false;
     }
     componentDidUpdate(prevProps: Readonly<{ store: PageViewStore; }>, prevState: Readonly<{}>, snapshot?: any): void {
-        if (this.props?.store?.elementUrl != prevProps?.store?.elementUrl) {
+        if (this.props?.store?.elementUrl !== prevProps?.store?.elementUrl) {
             if (prevProps?.store?.page) prevProps?.store?.page.cacheFragment()
             this.load();
         }
@@ -69,7 +70,15 @@ export class PageSupervisorView extends React.Component<{
     el: HTMLElement;
     render() {
         return <div ref={e => this.el = e} className={"shy-supervisor-view" + (this.props.slide ? " shadow" : "")} style={this.props.style || {}}>
-            {this.loading && <Spin block></Spin>}
+            {this.loading && <SK className='pos-full flex flex-col flex-full' style={{ zIndex: 1 }}>
+                <div className='flex flex-fixed '>
+                    <div className='h-20 w-300 sk-bg gap-l-30 gap-h-10'></div>
+                </div>
+                <Divider></Divider>
+                <div className='flex-auto'>
+                    <div className='gap-30 sk-bg' style={{ height: 'calc(100% - 60px)' }}></div>
+                </div>
+            </SK>}
             <div className="shy-supervisor-view-content" ref={e => this.pageEl = e}></div>
             {this.props.slide && <div onMouseDown={e => this.mousedown(e)} className="cursor-col z-2000 w-10 pos pos-t pos-b pos-l border-left"></div>}
         </div>
