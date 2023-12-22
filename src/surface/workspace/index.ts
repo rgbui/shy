@@ -34,14 +34,14 @@ import { useTemplateView } from "rich/extensions/template";
 import { useTrashBox } from "rich/extensions/trash";
 import { RobotInfo } from "rich/types/user";
 import { lst } from "rich/i18n/store";
-import { config } from "../../../common/config";
 import { isMobileOnly } from "react-device-detect";
 import { SettingsSvg, Edit1Svg, FolderPlusSvg, UploadSvg, MemberSvg, AddUserSvg, LogoutSvg } from "rich/component/svgs";
 import { useForm } from "rich/component/view/form/dialoug";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { useOpenReport } from "rich/extensions/report";
-import { Rect } from "rich/src/common/vector/point";
+import { WsConsumeType } from "rich/net/ai/cost";
+
 import { PopoverPosition } from "rich/component/popover/position";
 
 export type WorkspaceUser = {
@@ -118,10 +118,11 @@ export class Workspace {
     public siteDomainDuration: Date = null;
     public customSiteDomain: string = null;
     public customSiteDomainProtocol: boolean = null;
-    public customSiteDomainData: { type?: 'self-build' | 'trust', publicKey?: string, privateKey?: string } = {
+    public customSiteDomainData: { type?: 'self-build' | 'trust', publicKey?: string, privateKey?: string, sslDate?: Date } = {
         type: 'self-build',
         publicKey: '',
-        privateKey: ''
+        privateKey: '',
+        sslDate: null
     };
     public invite: string = null;
     public memberCount: number = null;
@@ -131,6 +132,20 @@ export class Workspace {
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
     public allowSlnIcon: boolean = false;
+    public stats: {
+        totalFileSize?: number;
+        totalDoc?: number;
+        totalDocCard?: number;
+        totalChannel?: number;
+        totalBoard?: number;
+        totalTable?: number;
+        totalRowCount?: number;
+        totalBookmark?: number;
+        totalComment?: number;
+        totalViewSnap?: number;
+        totalViewBrowse?: number;
+        totalTag?: number;
+    }
     get accessWorkspace() {
         return surface.accessWorkspace;
     }
@@ -166,17 +181,17 @@ export class Workspace {
         };
 
     public aiConfig: {
-        text?: string,
-        image?: string,
-        embedding?: string,
+        text?: WsConsumeType,
+        image?: WsConsumeType,
+        embedding?: WsConsumeType,
         disabled?: boolean,
         aiSearch?: boolean,
         esSearch?: boolean,
         seoSearch?: boolean,
     } = {
-            text: '',
-            image: '',
-            embedding: '',
+            text: WsConsumeType.ERNIE_Bot,
+            image: WsConsumeType.badiu_Stable_Diffusion_XL,
+            embedding: WsConsumeType.baidu_embedding,
             disabled: false,
             esSearch: true,
             aiSearch: false,
@@ -643,32 +658,61 @@ export class Workspace {
         }
     }
     robots: RobotInfo[];
+    async loadWsRobots(robotIds: string[]) {
+        if (robotIds.length > 0) {
+            var rs = await channel.get('/robots/info', { ids: robotIds });
+            if (rs.ok) {
+                this.robots = rs.data.list;
+                this.robots.forEach(robot => {
+                    if (robot.abledCommandModel !== true)
+                        robot.tasks = [
+                            {
+                                id: util.guid(),
+                                name: lst("问题"),
+                                args: [
+                                    {
+                                        id: util.guid(),
+                                        text: lst("问题"),
+                                        name: 'ask',
+                                        type: 'string'
+                                    }
+                                ]
+                            }
+                        ]
+                })
+            }
+        }
+        else this.robots = [];
+    }
     async getWsRobots(force?: boolean) {
         try {
             if (Array.isArray(this.robots) && force !== true) return this.robots;
             var gs = await channel.get('/ws/robots');
             if (gs.ok) {
-                var rs = await channel.get('/robots/info', { ids: gs.data.list.map(g => g.userid) });
-                if (rs.ok) {
-                    this.robots = rs.data.list;
-                    this.robots.forEach(robot => {
-                        if (robot.abledCommandModel !== true)
-                            robot.tasks = [
-                                {
-                                    id: util.guid(),
-                                    name: lst("问题"),
-                                    args: [
-                                        {
-                                            id: util.guid(),
-                                            text: lst("问题"),
-                                            name: 'ask',
-                                            type: 'string'
-                                        }
-                                    ]
-                                }
-                            ]
-                    })
+                if (gs.data.list.length > 0) {
+                    var rs = await channel.get('/robots/info', { ids: gs.data.list.map(g => g.userid) });
+                    if (rs.ok) {
+                        this.robots = rs.data.list;
+                        this.robots.forEach(robot => {
+                            if (robot.abledCommandModel !== true)
+                                robot.tasks = [
+                                    {
+                                        id: util.guid(),
+                                        name: lst("问题"),
+                                        args: [
+                                            {
+                                                id: util.guid(),
+                                                text: lst("问题"),
+                                                name: 'ask',
+                                                type: 'string'
+                                            }
+                                        ]
+                                    }
+                                ]
+                        })
+                    }
                 }
+                else this.robots = [];
             }
         }
         catch (ex) {
