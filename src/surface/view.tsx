@@ -12,6 +12,7 @@ import { SupervisorView } from "./supervisor/view";
 import { ViewNotAllow } from "./404";
 import { channel } from "rich/net/channel";
 import { Spin } from "rich/component/view/spin";
+import { DefinePageNavBar } from "rich/src/page/view/common";
 
 export var SurfacePage = observer((props: { pathname: string }) => {
     async function load() {
@@ -36,9 +37,13 @@ export var SurfacePage = observer((props: { pathname: string }) => {
     if (surface.workspace) {
         var h = 0;
         if (surface.showJoinTip) h += 40;
+        if (surface?.workspace?.isPubSiteDefineBarMenu) h += 48;
         return <div className="shy-surface-content">
             {surface.showJoinTip && <div className="shy-surface-content-head h-40" >
                 <JoinTip></JoinTip>
+            </div>}
+            {surface?.workspace?.isPubSiteDefineBarMenu && <div className="relative" style={{ zIndex: 1000 }}>
+                <DefinePageNavBar user={surface.user} ws={surface.workspace} ></DefinePageNavBar>
             </div>}
             <div className="shy-surface-content-box" style={{ height: h > 0 ? `calc(100vh - ${h}px)` : "100vh" }}>
                 <SideSln></SideSln>
@@ -79,6 +84,9 @@ export var SurfaceView = observer(function () {
     else return <div className='shy-surface'>
         <SideBar></SideBar>
         <Route path={[ShyUrl.ws, ShyUrl.root, ShyUrl.page, ShyUrl.wsResource, ShyUrl.resource]} render={props => {
+            if (UrlRoute.isMatch(ShyUrl.me) || UrlRoute.isMatch(ShyUrl.discovery)) {
+                return <></>
+            }
             return <SurfacePage pathname={props.location.pathname}></SurfacePage>
         }}>
         </Route>
