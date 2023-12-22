@@ -57,7 +57,7 @@ export class WorkspaceSettingsView extends React.Component {
     }
     async openDomain(event: React.MouseEvent) {
         var us = await surface.user.wallet();
-        if (config.isDev || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+        if (config.isDev || config.isBeta || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
             var r = await useSetWsDomain(surface.workspace.id, '');
             if (r) {
                 surface.workspace.siteDomain = r;
@@ -70,7 +70,7 @@ export class WorkspaceSettingsView extends React.Component {
     }
     async openCustomDomain(event: React.MouseEvent) {
         var us = await surface.user.wallet();
-        if (config.isDev || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
+        if (config.isDev || config.isBeta || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
             await useSetCustomDomain(surface.workspace);
         }
         else {

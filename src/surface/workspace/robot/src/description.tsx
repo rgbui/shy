@@ -20,6 +20,7 @@ import { Divider } from "rich/component/view/grid";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
 import { config } from "../../../../../common/config";
+import { WsConsumeType, checkModelPay, getModelOptions } from "rich/net/ai/cost";
 
 @observer
 export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo }>{
@@ -63,7 +64,7 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
             if (!lodash.isEqual(this.props.robot.avatar, this.localRobotInfo.avatar)) {
                 props.avatar = this.localRobotInfo.avatar;
             }
-            await masterSock.patch('/robot/set',{
+            await masterSock.patch('/robot/set', {
                 id: this.props.robot.id,
                 data: {
                     model: this.localRobotInfo.model,
@@ -77,8 +78,8 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                     ...props,
                 }
             })
-          
-           
+
+
 
             b.loading = false;
             Object.assign(this.props.robot, this.localRobotInfo)
@@ -166,35 +167,13 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                             dropWidth={250}
                             border
                             dropAlign="right"
-                            options={
-                                window.shyConfig.isUS ? [
-                                    { text: 'OpenAI', type: MenuItemType.text },
-                                    { text: 'GPT-3.5', value: 'gpt-3.5-turbo' },
-                                    { text: 'GPT-4', value: 'gpt-4' },
-                                ] : [
-                                    { text: lst('百度千帆'), type: MenuItemType.text, label: '文言一心' },
-                                    { text: 'ERNIE-Bot', value: 'ERNIE-Bot' },
-                                    { text: 'ERNIE-Bot-turbo', value: 'ERNIE-Bot-turbo' },
-
-                                    { text: 'Llama', type: MenuItemType.text },
-                                    { text: 'Llama-2-7b-chat', value: 'Llama-2-7b-chat' },
-                                    { text: 'Llama-2-13b-chat', value: 'Llama-2-13b-chat' },
-                                    { text: 'Llama-2-70B-Chat', value: 'Llama-2-70B-Chat' },
-
-                                    { text: lst('智谱'), type: MenuItemType.text },
-                                    // { text: 'ChatGLM2-6B', value: 'ChatGLM2-6B' },
-                                    { text: 'ChatGLM2-6B-32K', value: 'ChatGLM2-6B-32K' },
-                                    // { text: 'ChatGLM2-6B-INT4', value: 'ChatGLM2-6B-INT4' },
-
-                                    { text: 'OpenAI', type: MenuItemType.text, label: lst('仅用于体验') },
-                                    { text: 'GPT-3.5', value: 'gpt-3.5-turbo', label: lst('仅用于体验') },
-                                    { text: 'GPT-4', value: 'gpt-4', label: lst('仅用于体验') },
-                                ]
-                            }
                             checkChange={async e => {
-                                return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
+                                return await checkModelPay(e, surface.workspace)
                             }}
-                            value={this.localRobotInfo.model || (window.shyConfig.isUS ? "gpt-3.5-turbo" : "ERNIE-Bot-turbo")}
+                            options={
+                                getModelOptions()
+                            }
+                            value={this.localRobotInfo.model || (window.shyConfig.isUS ? WsConsumeType.gpt_35_turbo : WsConsumeType.ERNIE_Bot_turbo)}
                             onChange={e => {
                                 this.localRobotInfo.model = e;
                                 this.onLayzeSave()
@@ -231,9 +210,6 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                                     { text: lst('文言一心'), value: 'Baidu-Embedding-V1' },
                                     { text: 'GPT Embeddings', value: 'gpt', label: '仅限体验' },
                                 ]}
-                                checkChange={async e => {
-                                    return CanSupportFeature(e == 'gpt-4' ? PayFeatureCheck.aiGPT4 : PayFeatureCheck.aiGPT, surface.workspace)
-                                }}
                                 value={this.localRobotInfo.embeddingModel || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
                                 onChange={e => {
                                     this.localRobotInfo.embeddingModel = e;

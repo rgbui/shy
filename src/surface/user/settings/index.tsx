@@ -65,12 +65,11 @@ class UserSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('user-settings')} className={this.mode == 'user-settings' ? "hover" : ""} ><S>我的帐号</S></a>
                         <a onMouseDown={e => this.setMode('user-profile')} className={this.mode == 'user-profile' ? "hover" : ""} ><S>个人资料</S></a>
                         <a onMouseDown={e => this.setMode('open')} className={this.mode == 'open' ? "hover" : ""} ><S>第三方帐户</S></a>
-
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4><S>帐单设置</S></h4>
-                        <a onMouseDown={e => this.setMode('price')} className={this.mode == 'price' ? "hover" : ""}><S>定价</S></a>
                         <a onMouseDown={e => this.setMode('wallet')} className={this.mode == 'wallet' ? "hover" : ""}><S>钱包</S></a>
                         <a onMouseDown={e => this.setMode('orderList')} className={this.mode == 'orderList' ? "hover" : ""}><S>帐单</S></a>
+                        <a onMouseDown={e => this.setMode('price')} className={this.mode == 'price' ? "hover" : ""}><S>定价</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4><S>活动中心</S></h4>
                         <a onMouseDown={e => this.setMode('invite')} className={this.mode == 'invite' ? "hover" : ""}><S>邀请好友</S></a>

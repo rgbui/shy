@@ -4,6 +4,7 @@ import { masterSock } from "../../../../net/sock";
 import { surface } from "../../store";
 import { Workspace } from "..";
 import { lst } from "rich/i18n/store";
+import { wss } from "../../../../services/workspace";
 
 export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
     ShyAlert(lst('正在初始化创建空间'), 'success', 1000 * 60 * 5);
@@ -33,6 +34,7 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                 var wsName = '1'
                 if (window.shyConfig.isDev) wsName = '34';
                 var ws = await channel.get('/ws/query', { name: wsName });
+                wss.setWsPids(ws.data.workspace.id,ws.data.pids);
                 var sock = Workspace.getWsSock(ws.data.pids, 'ws')
                 await channel.put('/user/join/ws', { wsId: ws.data.workspace.id });
                 await channel.put('/ws/invite/join', { wsId: ws.data.workspace.id, username: surface.user.name, sock, agree: false });
