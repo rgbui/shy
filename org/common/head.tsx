@@ -88,7 +88,7 @@ export function HeadView() {
             </div>
             <div className="shy-site-head-navs-item"><a href={UrlRoute.getUrl('download')}><S>下载</S></a> </div>
             <div className="shy-site-head-navs-item"><a href={UrlRoute.getUrl('pricing')}><S>定价</S></a> </div>
-            <div className="shy-site-head-navs-item"><a href={refShyPage(config.isUS ? "community" : "org")}><S>社区</S></a> </div>
+            <div className="shy-site-head-navs-item"><a href={refShyPage("community")}><S>社区</S></a> </div>
             <div className="shy-site-head-navs-item"><a href={refShyPage('template')}><S>模板中心</S></a> </div>
             <div className="shy-site-head-navs-item"><a href={refShyPage('help')}><S>帮助中心</S></a> </div>
         </div>

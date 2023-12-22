@@ -1,7 +1,6 @@
 import { EventsComponent } from "rich/component/lib/events.component";
 import React from 'react';
 import { Icon } from "rich/component/view/icon";
-import { Loading } from "rich/component/view/loading";
 import { Workspace } from "..";
 import { Avatar } from "rich/component/view/avator/face";
 import { surface } from "../../store";
@@ -12,6 +11,7 @@ import { channel } from "rich/net/channel";
 import { PopoverSingleton } from "rich/component/popover/popover";
 import { PopoverPosition } from "rich/component/popover/position";
 import "./style.less";
+import { Spin } from "rich/component/view/spin";
 
 class SwitchWorkspace extends EventsComponent {
     list: Partial<Workspace>[] = [];
@@ -58,7 +58,7 @@ class SwitchWorkspace extends EventsComponent {
     }
     render() {
         return <div className='shy-ws-switch-box'>
-            {this.loading && <Loading></Loading>}
+            {this.loading && <Spin block></Spin>}
             {!this.loading && <div className='shy-ws-groups'>
                 {this.renderMyWorkspaces()}
             </div>}

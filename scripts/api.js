@@ -83,6 +83,7 @@ import { RobotInfo, UserBasic, UserStatus } from "../types/user";
 import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
 import { PayFeatureCheck } from "../component/pay";
 import { AtomPermission } from "../src/page/permission";
+import { WsConsumeType } from "./ai/cost";
 export type SockResponse<T, U = string> = {
         /**
          * 返回状态码
@@ -248,12 +249,12 @@ push('/user/order/list', '{page?: number, size?: number, word?: string, status?:
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);
 push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 push('/check/feature', '{type:PayFeatureCheck,config?:{fileSize?:number}}', 'SockResponse<{warn:boolean,limit:boolean,wallet:{due:Date,oveDue:boolean,meal:string,money:number},free:Record<string,any>,consume:Record<string,any>}>', ['get']);
-push('/query/wiki/answer', '{ask: string,minRank?:number,model:string, robotId: string,size?:number,contextSize?:number}', 'SockResponse<{docs:{contentId:string,docId:string,ps:{at:number,content:string,contentId:string,rank:number}[]}[]}>', ['get']);
-push('/text/ai', '{input: string, model?: string, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
-push('/text/ai/stream', '{question: string,role?:string, model?: string, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController)=>void}', 'SockResponse<void>', ['post'])
+push('/query/wiki/answer', '{ask: string,minRank?:number,model?:WsConsumeType, robotId: string,size?:number,contextSize?:number}', 'SockResponse<{docs:{contentId:string,docId:string,ps:{at:number,content:string,contentId:string,rank:number}[]}[]}>', ['get']);
+push('/text/ai', '{input: string, model?: WsConsumeType, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
+push('/text/ai/stream', '{question: string,role?:string, model?: WsConsumeType, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController)=>void}', 'SockResponse<void>', ['post'])
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
-push('/text/to/image', '{prompt:string,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
+push('/text/to/image', '{prompt:string,model?:WsConsumeType,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
 push('/fetch', '{url: string,data?: Record<string, any>,method: string,callback: (chunk: any, done?: boolean) => void}', '', ['post']);
 push('/http', '{url: string;data?: Record<string, any>;method: string;}', 'SockResponse<any>', ['post']);
 push('/open/weixin/bind', '{weixinOpen:any}', 'SockResponse<void>', ['put'])

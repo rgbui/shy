@@ -24,7 +24,8 @@ class Config {
     }
     get isDomainWs() {
         if (this.isPro) {
-            if (location.host == 'shy.live') return false;
+            if (this.isUS && location.host == 'shy.red') return false;
+            else if (!this.isUS && location.host == 'shy.live') return false;
             else return true;
         }
         // if (this.isDev) return true;

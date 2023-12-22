@@ -56,7 +56,7 @@ if (mode == 'beta') FILE_URLS = ['https://beta-b2.shy.live'];
 else if (mode == 'pro') FILE_URLS = ['https://api-s1.shy.live', 'https://api-s2.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
 var API_URLS = ['http://127.0.0.1:9000'];
-if (mode == 'beta') API_URLS = ['https://beta-b3.shy.live'];
+if (mode == 'beta') API_URLS = ['https://beta-b2.shy.live'];
 else if (mode == 'pro') API_URLS = isUs ? FILE_URLS : ['https://api-s3.shy.live', 'https://api-s4.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
 var API_VERSION = 'v1';
@@ -87,27 +87,30 @@ if (mode == 'pro') {
     else if (platform == 'mobile') dist = path.resolve(__dirname, "../dist" + (isDev ? "mobile" : '/mobile-' + mode));
 }
 var TrackCode = '';
-if (isUs) {
-    TrackCode = `
-<link rel="dns-prefetch" href="//shy.red">
-<link rel="dns-prefetch" href="//resources.shy.red">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-45568602-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'UA-45568602-1');
-</script>`
+if (mode == 'pro') {
+    if (isUs) {
+        TrackCode = `
+    <link rel="dns-prefetch" href="//shy.red">
+    <link rel="dns-prefetch" href="//resources.shy.red">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-45568602-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-45568602-1');
+    </script>`
+    }
+    else {
+        TrackCode = `
+    <link rel="dns-prefetch" href="//shy.live">
+    <link rel="dns-prefetch" href="//resources.shy.live">
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script  src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script>location.host.endsWith('shy.live')&& LA.init({ id: "3EweegziSpUbz8TW", ck: "3EweegziSpUbz8TW", autoTrack: true, hashMode: true })</script>`
+    }
 }
-else {
-    TrackCode = `
-<link rel="dns-prefetch" href="//shy.live">
-<link rel="dns-prefetch" href="//resources.shy.live">
-<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-<script  src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
-<script>location.host.endsWith('shy.live')&& LA.init({ id: "3EweegziSpUbz8TW", ck: "3EweegziSpUbz8TW", autoTrack: true, hashMode: true })</script>`
-}
+
 
 var viewEntrys = {
     auth: './auth/view.ts'
@@ -138,7 +141,7 @@ if (isUs) {
         templateParameters: {
             src: publicPath + 'pro',
             static: publicPath,
-            TrackCode: JSON.stringify('')
+            TrackCode: ''
         }
     }))
 }
@@ -153,7 +156,7 @@ else {
         templateParameters: {
             src: publicPath + 'pro',
             static: publicPath,
-            TrackCode: JSON.stringify('')
+            TrackCode: ''
         }
     }))
 }

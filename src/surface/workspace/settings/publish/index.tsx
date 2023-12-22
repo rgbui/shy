@@ -23,7 +23,6 @@ import { useIconPicker } from "rich/extensions/icon";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
-import { UrlRoute } from "../../../../history";
 import { Textarea } from "rich/component/view/input/textarea";
 import { WorkspaceNavMenuItem, getPageText } from "rich/src/page/declare";
 
@@ -167,7 +166,7 @@ export class SitePublishView extends React.Component {
                 item.pageId = g.id;
                 item.pageText = getPageText(g);
                 item.icon = g.icon;
-                if (self.refPageText) self.refPageText.updateValue( item.pageText);
+                if (self.refPageText) self.refPageText.updateValue(item.pageText);
                 if (!item.text || item.text == lst('菜单项')) item.text = g.text;
                 self.checkChange();
             }
@@ -391,7 +390,7 @@ export class SitePublishView extends React.Component {
             </div>
             <div className="flex">
                 <span className="f-12 remark ">
-                    <Sp text={'公开至互联网后发布才有效果'} data={{ url: `https://${domain}.` + UrlRoute.getHost() }}>发布后通过<a className={'underline link-remark'} href={`https://${domain}.` + UrlRoute.getHost()} target="_blank">{`https://${domain}.` + UrlRoute.getHost()}</a>访问</Sp>
+                    <Sp text={'公开至互联网后发布才有效果'} data={{ url: surface.workspace.url }}>发布后通过<a className={'underline link-remark'} href={surface.workspace.url} target="_blank">{surface.workspace.url}</a>访问</Sp>
                 </span>
             </div>
             {this.data.publishConfig.abled && <div className="r-gap-h-10">
