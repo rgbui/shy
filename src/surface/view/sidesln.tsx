@@ -21,6 +21,10 @@ export var SideSln = observer(function () {
     }
     React.useEffect(() => {
         load();
+        document.addEventListener('mousemove', mousemove);
+        return () => {
+            document.removeEventListener('mousemove', mousemove);
+        }
     }, [])
     function mousedown(event: React.MouseEvent) {
         MouseDragger<{ event: React.MouseEvent, width: number }>({
@@ -45,19 +49,39 @@ export var SideSln = observer(function () {
             }
         })
     }
+    function mousemove(e: MouseEvent) {
+        var ele = local.slideEl;
+        if (ele) {
+            var bound = ele.getBoundingClientRect();
+            if (e.clientX > bound.right - 10 && e.clientX < bound.right + 10) {
+                var r = ele.querySelector('.shy-slide-resize') as HTMLElement;
+                if (r) {
+                    r.style.opacity = '1';
+                }
+            }
+            else {
+                var r = ele.querySelector('.shy-slide-resize') as HTMLElement;
+                if (r) {
+                    r.style.opacity = '0';
+                }
+            }
+        }
+    }
     if (surface?.workspace?.isPubSiteHideMenu) return <></>
     var classList: string[] = ['shy-slide'];
     if (surface?.workspace?.isPubSiteDefineBarMenu) {
         classList.push('shy-slide-define-default')
     }
-    return surface.showSln && <><div className={classList.join(" ")}
-        ref={e => local.slideEl = e}
-        style={{
-            width: isMobileOnly && surface.mobileSlnSpread === true ? '100%' : local.slideWidth,
-            display: surface.supervisor.page && (isMobileOnly && surface.mobileSlnSpread !== true || surface.slnSpread === false) ? "none" : undefined
-        }}>
-        <SlnView></SlnView>
-        {<div className='shy-slide-resize' onMouseDown={mousedown}></div>}
-    </div>
+    return surface.showSln && <>
+        <div className={classList.join(" ")}
+            ref={e => local.slideEl = e}
+            style={{
+                marginTop: surface?.workspace?.isPubSiteDefineBarMenu?48:undefined,
+                width: isMobileOnly && surface.mobileSlnSpread === true ? '100%' : local.slideWidth,
+                display: surface.supervisor.page && (isMobileOnly && surface.mobileSlnSpread !== true || surface.slnSpread === false) ? "none" : undefined
+            }}>
+            <SlnView></SlnView>
+            {<div className='shy-slide-resize' onMouseDown={mousedown}></div>}
+        </div>
     </>
 })
