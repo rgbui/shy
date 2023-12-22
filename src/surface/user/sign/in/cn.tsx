@@ -17,12 +17,16 @@ import { Divider } from "rich/component/view/grid";
 import { Icon } from "rich/component/view/icon";
 import { WechatSvg } from "../../../../component/svgs";
 import { EmailRegex, PhoneRegex } from "../../../../../services/common/base";
+import { config } from "../../../../../common/config";
 
 
 @observer
 export class CnLogin extends React.Component<{ call?: () => void }> {
     constructor(props) {
         super(props);
+        if (config.isPro) {
+            this.local.step = 'wixin';
+        }
         makeObservable(this, {
             local: observable
         })
@@ -97,7 +101,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                     name={'email'}
                     onEnter={e => checkInputEmail()}
                     onChange={e => local.account = e}
-                    placeholder={lst('请输入您的邮箱')}></Input>
+                    placeholder={lst('请输入您的邮箱或手机号')}></Input>
             </div>
             <div className='shy-login-box-button'>
                 <Button tag='button' ref={e => local.button = e} size='larger' block onClick={(e, b) => checkInputEmail()}><S>继续</S></Button >
