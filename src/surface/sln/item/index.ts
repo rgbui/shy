@@ -66,11 +66,18 @@ export class PageItem {
     public editor: string = null;
     speak?: 'more' | 'only' = 'more';
     speakDate?: Date = null;
-    textChannelMode?: 'chat' | 'weibo' | 'ask' | 'tieba' = 'chat';
     unreadChats: { id: string, roomId: string, seq: number }[] = [];
     public browse: { count: number, users: string[] }
     public edit: { count?: number, users: string[] }
     public like: { count?: number, users?: string[] }
+    public denyPublicAccess: boolean
+    public review: {
+        approved: boolean,
+        approvedDate: Date,
+        suggestion: string,
+        approvedResult: Record<string, any>,
+        seq: number
+    }
     constructor() {
         makeObservable(this, {
             id: observable,
@@ -271,6 +278,7 @@ export class PageItem {
             pageType: PageLayoutType.doc,
             spread: false,
         })
+        await this.onSpread(true);
         var item = await pageItemStore.appendPageItem(this, data);
         item.onOpenItem();
         return item;
@@ -325,8 +333,7 @@ export class PageItem {
             }
         }
     }
-    async getPageItemMenus()
-    {
+    async getPageItemMenus() {
         var items: MenuItem<string>[] = [];
         if (this.mime == Mime.pages) {
             items = [
@@ -591,6 +598,7 @@ export class PageItem {
     isAllow(...ps: AtomPermission[]) {
         if (!this.workspace) return false;
         if (this.workspace.isOwner) return true;
+        if (this.denyPublicAccess) return false;
         if (this.workspace?.access == 1) {
             //表示是公开的
             return getCommonPerssions().some(s => ps.includes(s))
