@@ -4,8 +4,6 @@ import { PageItem } from "..";
 import { surface } from "../../../store";
 import { Workspace } from "../../../workspace";
 import { Mime } from "../../declare";
-import { channel } from "rich/net/channel";
-import { Item } from "paper/dist/paper-core";
 
 export enum ItemOperatorDirective {
     update = 1,
@@ -84,33 +82,33 @@ class PageItemStore {
         })
     }
     public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
-        if (pageItem.mime == Mime.pages || pageItem.checkedHasChilds && pageItem.spread == true) {
-            if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
-            var actions: PageItemAction[] = [];
-            if (typeof data.id == 'undefined')
-                data.id = window.shyConfig.guid();
-            data.workspaceId = pageItem.workspaceId;
-            data.parentId = pageItem.id;
-            data.at = pageItem.childs.last() ? (pageItem.childs.last().at + 1) : 0;
-            var newItem = new PageItem();
-            newItem.checkedHasChilds = true;
-            newItem.load(data);
-            runInAction(() => {
-                pageItem.spread = true;
-                pageItem.childs.push(newItem);
-                pageItem.subCount = pageItem.childs.length;
-            })
-            actions.push({ directive: ItemOperatorDirective.insert, data });
-            var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.append, actions });
-            if (r.ok && Array.isArray(r.data.actions)) {
-                var re = r.data.actions.find(g => g && g.id == newItem.id);
-                if (re) {
-                    newItem.load(re);
-                }
+        if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
+        var actions: PageItemAction[] = [];
+        if (typeof data.id == 'undefined') data.id = window.shyConfig.guid();
+        data.workspaceId = pageItem.workspaceId;
+        data.parentId = pageItem.id;
+        if (pageItem.mime == Mime.pages) data.at = 0;
+        else data.at = pageItem.childs.last() ? (pageItem.childs.last().at + 1) : 0;
+        var newItem = new PageItem();
+        newItem.checkedHasChilds = true;
+        newItem.load(data);
+        runInAction(() => {
+            pageItem.spread = true;
+            if (pageItem.mime == Mime.pages) pageItem.childs.splice(0, 0, newItem)
+            else pageItem.childs.push(newItem);
+            pageItem.subCount = pageItem.childs.length;
+        })
+        actions.push({ directive: ItemOperatorDirective.insert, data });
+        var r = await this.save(pageItem.workspace.id, { operate: ItemOperator.append, actions });
+        if (r.ok && Array.isArray(r.data.actions)) {
+            var re = r.data.actions.find(g => g && g.id == newItem.id);
+            if (re) {
+                newItem.load(re);
             }
-            return newItem;
         }
-        else return await this.insertAfterPageItem(pageItem, data);
+        return newItem;
+        // }
+        // else return await this.insertAfterPageItem(pageItem, data);
     }
     /**
      * 
