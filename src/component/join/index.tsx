@@ -6,7 +6,6 @@ import React from "react";
 import { Dialoug, Divider } from "rich/component/view/grid";
 import "./style.less";
 import { ShyAlert } from "rich/component/lib/alert";
-import { Loading } from "rich/component/view/loading";
 import { Avatar } from "rich/component/view/avator/face";
 import lodash from "lodash";
 import { Icon } from "rich/component/view/icon";
@@ -16,6 +15,7 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { PopoverSingleton } from "rich/component/popover/popover";
 import { PopoverPosition } from "rich/component/popover/position";
+import { Spin } from "rich/component/view/spin";
 
 class JoinFriend extends EventsComponent {
     render() {
@@ -30,7 +30,7 @@ class JoinFriend extends EventsComponent {
             </div>
             <Divider></Divider>
             <div className="padding-b-10 min-h-50">
-                {this.loading && <Loading></Loading>}
+                {this.loading && <Spin block></Spin>}
                 {this.list.length == 0 && <div className="remark flex-center h-40 f-12"><S>没有搜到任何用户</S></div>}
                 {this.list.map(l => {
                     return <div className="flex item-hover padding-10 round" key={l.id}>

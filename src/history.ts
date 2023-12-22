@@ -18,15 +18,16 @@ export var UrlRoute = {
 
         if (url) {
             if (!url.startsWith('/')) url = '/' + url;
-            if (config.isDev) return url;
+            if (config.isDev || config.isBeta) return url;
             else return config.isUS ? 'https://shy.red' + url : 'https://shy.live' + url;
         }
         else {
-            if (config.isDev) return '/';
+            if (config.isDev || config.isBeta) return '/';
             return config.isUS ? 'https://shy.red' : 'https://shy.live'
         }
     },
     getHost() {
+        if (config.isBeta) return 'beta.shy.red'
         return config.isUS ? 'shy.red' : 'shy.live'
     },
     push(url: ShyUrl,
