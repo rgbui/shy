@@ -13,7 +13,8 @@ import { PageDirective } from "rich/src/page/directive";
 
 export class PageViewStore extends Events {
     source: 'page' | 'slide' | 'dialog' | 'popup';
-    date: number = Date.now();
+    createDate: number = Date.now();
+    openDate: number = Date.now();
     elementUrl: string = '';
     page: Page = null;
     view: PageSupervisorView | PageSupervisorDialog = null;
@@ -50,7 +51,6 @@ export class PageViewStore extends Events {
                 this.item.onChange({ editDate: new Date(), editor: surface.user.id }, undefined, true)
             }
         });
-
     }
     get snapStore() {
         return SnapStore.createSnap(this.elementUrl);
@@ -94,6 +94,9 @@ export class PageViewStore extends Events {
     async clear() {
 
     }
+    onDestroy() {
+
+    }
 }
 
 export class PageViewStores {
@@ -102,10 +105,20 @@ export class PageViewStores {
         var s = this.stores.get(elementUrl);
         if (Array.isArray(s) && s.length > 0) {
             if (config?.force == true) {
-                lodash.remove(s, g => g.source == source);
+                var c = s.find(g => g.source == source);
+                if (c) {
+                    c.onDestroy();
+                    lodash.remove(s, g => g.source == source);
+                }
             }
             else {
-                var r = s.find(g => g.source == source)
+                var r = s.find(g => g.source == source);
+                if (r.openDate < Date.now() - 1000 * 60 * 5) {
+                    r.onDestroy();
+                    lodash.remove(s, g => g === r);
+                    r = null;
+                }
+                else r.openDate = Date.now();
                 if (r) {
                     r.loadConfig(config);
                     return r;

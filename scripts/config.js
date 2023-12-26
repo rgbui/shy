@@ -4,7 +4,7 @@ var pkg = require('../package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+// const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 
 //console.log(process.env.NODE_ENV, process.argv, 'process.env.NODE_ENV');
@@ -356,9 +356,9 @@ module.exports = {
             AMAP_PAIR: JSON.stringify(AMAP_PAIR),
             REGIN: JSON.stringify(isUs ? "US" : "CN")
         }),
-        new OptimizeCssAssetsPlugin({
-            assetNameRegExp: /\.css$/g,
-        }),
+        // new OptimizeCssAssetsPlugin({
+        //     assetNameRegExp: /\.css$/g,
+        // }),
         new MiniCssExtractPlugin({
             filename: versionPrefix + "assert/css/shy.[contenthash:8].css"
         }),

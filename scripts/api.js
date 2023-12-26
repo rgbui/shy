@@ -175,7 +175,8 @@ push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:s
 push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', 'SockResponse<void>', ['patch']);
 push('/datastore/query', '{ws:LinkWs,wsId?:string,schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['get']);
 push('/datastore/query/pre_next', '{ws:LinkWs,wsId?:string,schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>,prev:Record<string, any>,next:Record<string, any>},warn:string}', ['get']);
-push('/datastore/query/list', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
+push('/datastore/query/list', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[],isIgnoreCount?: boolean}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
+push('/datastore/query/distinct','{ws:LinkWs,wsId?:string,schemaId:string,field:string,filter?:Record<string, any>}','SockResponse<{list:any[]}>',['get'])
 push('/datastore/query/ids', '{ws:LinkWs,wsId?:string,schemaId:string,ids:string[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['get']);
 push('/datastore/query/all', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/group', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,group:string}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);

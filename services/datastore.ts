@@ -48,6 +48,12 @@ class DataStoreService {
         var sock = await wss.getArgsSock(args);
         return await sock.get('/datastore/query/list', args)
     }
+    @get('/datastore/query/distinct')
+    async queryDistinct(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/query/distinct', args)
+    }
     @get('/datastore/query/ids')
     async queryIds(args) {
         if (!args) args = {}

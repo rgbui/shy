@@ -46,7 +46,7 @@ export var InviteView = observer(function () {
     }
     async function join() {
         if (!surface.user.isSign) {
-            if (await Confirm(lst('您还未登录，是否登录后加入？'))) {
+            if (await Confirm(lst('您还未登录是否登录后加入','您还未登录，是否登录后加入？'))) {
                 var inviteCode = UrlRoute.match(ShyUrl.invite)?.id;
                 var url = '/invite/' + inviteCode;
                 UrlRoute.push(ShyUrl.signIn, { back: url });

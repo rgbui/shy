@@ -1,33 +1,13 @@
-.shy-ws-pages {
-    position: relative;
-
-    &-head {
-        color: rgba(55, 53, 47, 0.4);
-    }
-
-    .shy-icon {
-        color: rgba(55, 53, 47, 0.45);
-    }
-}
-
 .shy-wss {
     user-select: none;
 }
 
-
-
 .shy-ws-item {
     &-page {
-        color        : rgba(25, 23, 17, 0.6);
         color        : rgba(25, 23, 17, 0.65);
         font-size    : 14px;
         border-top   : 2px solid transparent;
         border-bottom: 2px solid transparent;
-
-        // .shy-icon {
-        //     color: rgba(55, 53, 47, 0.45);
-        //     color: rgba(25, 23, 17, 0.6);
-        // }
 
         &-input {
             flex-grow: 1.0;
@@ -74,20 +54,14 @@
             }
         }
 
-        &:hover {
+        &-selected {
+            color     : rgb(55, 53, 47, 0.8);
             background: rgba(55, 53, 47, 0.04);
+        }
+        &:hover {
+            background: rgba(55, 53, 47, 0.08);
             .shy-ws-item-page-operators {
                 visibility: visible;
-            }
-        }
-
-        &-selected,
-        &-selected:hover {
-            color     : rgb(55, 53, 47);
-            background: rgba(55, 53, 47, 0.08);
-
-            >span {
-                // font-weight: bold;
             }
         }
     }
@@ -145,45 +119,6 @@
             z-index       : 1;
             pointer-events: none;
             border-bottom : 2px solid #e16259;
-        }
-    }
-}
-
-.shy-ws-menu {
-    font-weight: 500;
-
-    .shy-ws-pages-head {
-        span {
-            color           : rgba(92, 94, 102, 1);
-            background-color: transparent !important;
-
-            &:hover {
-                background-color: transparent !important;
-            }
-        }
-    }
-
-    .shy-icon {
-        color: rgba(25, 23, 17, 0.8)
-    }
-
-    .shy-ws-item {
-        &-page {
-            color    : rgba(92, 94, 102, 1);
-            font-size: 16px;
-
-            &:hover {
-                background: rgba(128, 132, 142, 0.14);
-            }
-
-            &-selected,
-            &-selected:hover {
-                background: rgba(128, 132, 142, 0.20);
-
-                >span {
-                    font-weight: 500;
-                }
-            }
         }
     }
 }

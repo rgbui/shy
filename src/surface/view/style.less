@@ -1,10 +1,6 @@
 .shy-slide-define-default {
     background-color: #fff !important;
 
-    .shy-ws>.shy-ws-items {
-        // margin-top: 25px;
-    }
-
     .shy-ws-pages-head {
         >.item-hover {
             font-size  : 16px;
@@ -31,14 +27,17 @@
 
 
 .shy-slide {
-    overflow-y         : auto;
-    height             : 100%;
-    width              : 240px;
-    box-sizing         : border-box;
-    flex-shrink        : 0;
-    background-color   : #fff;
-    position           : relative;
-    border-right       : 1px solid var(--background-modifier-accent);
+    overflow-y      : auto;
+    overflow-y      : overlay;
+    overflow-x      : hidden;
+    height          : 100%;
+    width           : 240px;
+    box-sizing      : border-box;
+    flex-shrink     : 0;
+    background-color: #fff;
+    position        : relative;
+    border-right    : 1px solid var(--background-modifier-accent);
+
     &-resize {
         position  : absolute;
         top       : 0px;
@@ -49,14 +48,13 @@
         box-shadow: rgba(0, 0, 0, 0.1) -2px 0px 0px 0px inset;
         cursor    : col-resize;
     }
+
     &:hover {
         .shy-ws-profile-operators {
             visibility: visible;
         }
-        // .shy-slide-resize {
-        //     opacity: 1;
-        // }
     }
+
     &.dragging {
         .shy-slide-resize {
             opacity: 1;

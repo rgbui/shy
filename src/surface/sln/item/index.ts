@@ -20,6 +20,7 @@ import { getPageItemElementUrl } from "./util";
 import { Page } from "rich/src/page";
 import { lst } from "rich/i18n/store";
 import { useWsPicker } from "rich/extensions/ws/index";
+import { useInputIconAndText } from "rich/component/view/input/iconAndText";
 
 export class PageItem {
     id: string = null;
@@ -469,21 +470,13 @@ export class PageItem {
                 break;
             case 'rename':
                 if (this.mime == Mime.pages) {
-                    var r = await useForm({
-                        title: lst('修改分栏名称'),
-                        head: false,
-                        fields: [
-                            { name: 'title', type: 'input', text: lst('分栏名称') }
-                        ],
-                        model: { title: this.text },
-                        async checkModel(model) {
-                            if (!model.text) return lst('分栏名称不能为空')
-                            if (model.text.length > 30) return lst('分栏名称过长')
-                            return '';
+                    var rc = await useInputIconAndText({ roundArea: Rect.fromEle(sourceEl) }, { ignoreIcon: true, text: this.text });
+                    if (rc) {
+                        if (rc.text)
+                            rc.text = rc.text.trim();
+                        if (rc.text !== this.text) {
+                            this.onChange({ text: rc.text }, true);
                         }
-                    });
-                    if (r) {
-                        this.onChange({ text: r.title }, true);
                     }
                 }
                 else {

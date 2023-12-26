@@ -24,19 +24,18 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 item.onMousedownItem(e.nativeEvent)
             }}
             style={{ '--gap-left': gap + 'px' } as any}
-            className={"shy-ws-pages flex padding-w-10 padding-b-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
-            <div className={'shy-ws-pages-head flex-auto flex '}>
-
+            className={"relative flex padding-w-10 padding-b-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
+            <div className={'flex-auto flex '}>
                 <span onMouseDown={e => {
                     // e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
-                }} className="item-hover f-12 remark padding-l-4 round cursor flex">
+                }} className="f-12 remark padding-l-4 round cursor flex">
                     <span>{item.text || lst("我的页面")}</span>
                     <span
                         className={"cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
                         {item.willLoadSubs && <Spin></Spin>}
-                        {!item.willLoadSubs && <Icon size={16} icon={ChevronDownSvg}></Icon>}
+                        {!item.willLoadSubs && <Icon size={14} icon={ChevronDownSvg}></Icon>}
                     </span>
                 </span>
             </div>
