@@ -770,10 +770,9 @@ export class Workspace {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
                 { type: MenuItemType.divide },
-                { name: 'enterApp', text: lst('发布应用'), visible: this.isApp ? false : true, icon: { name: 'byte', code: 'application-one' }, checkLabel: this.isApp ? true : false },
-                { name: 'enterEdit', text: lst('编辑应用'), visible: this.isApp ? true : false, icon: Edit1Svg, checkLabel: this.isApp ? false : true },
-                { type: MenuItemType.divide },
                 { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建分栏') },
+                { type: MenuItemType.divide },
+                { name: 'enterApp', text: lst('发布应用'), visible: this.isApp ? false : true, icon: { name: 'byte', code: 'application-one' }, checkLabel: this.isApp ? true : false },
                 { name: 'importFiles', icon: UploadSvg, text: lst('导入文件') },
                 { type: MenuItemType.divide },
                 { name: 'wsUsers', icon: MemberSvg, text: lst('空间成员') },

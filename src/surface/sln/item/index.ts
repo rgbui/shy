@@ -298,7 +298,7 @@ export class PageItem {
     }
     async onRemove() {
         if (this.mime == Mime.pages) {
-            if (await Confirm(lst('确定要删除吗，该操作不可撤消')))
+            if (await Confirm(lst('确定要删除吗该操作不可撤消','确定要删除吗，该操作不可撤消')))
                 pageItemStore.deletePageItem(this);
         }
         else pageItemStore.deletePageItem(this);
@@ -343,16 +343,16 @@ export class PageItem {
                     icon: RenameSvg,
                     text: lst('重命名')
                 },
+                {
+                    name: 'createFolder',
+                    icon: FolderPlusSvg,
+                    text: lst('创建新分栏')
+                },
                 { type: MenuItemType.divide },
                 {
                     name: 'addNewPage',
                     text: lst('添加新页面'),
                     icon: PlusAreaSvg,
-                },
-                {
-                    name: 'createFolder',
-                    icon: FolderPlusSvg,
-                    text: lst('创建新分栏')
                 },
                 { type: MenuItemType.divide },
                 {

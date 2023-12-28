@@ -30,12 +30,12 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     // e.stopPropagation();
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
-                }} className="f-12 remark padding-l-4 round cursor flex">
+                }} className="f-12 item-color-hover remark padding-w-5 round cursor flex">
                     <span>{item.text || lst("我的页面")}</span>
                     <span
                         className={"cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
-                        {item.willLoadSubs && <Spin></Spin>}
-                        {!item.willLoadSubs && <Icon size={14} icon={ChevronDownSvg}></Icon>}
+                        {item.willLoadSubs && <Spin size={16} ></Spin>}
+                        {/* {!item.willLoadSubs && <Icon size={14} icon={ChevronDownSvg}></Icon>} */}
                     </span>
                 </span>
             </div>
