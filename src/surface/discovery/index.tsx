@@ -1,7 +1,8 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import "./style.less";
-import pic from "../../assert/img/pic-3.jpg";
+// import pic from "../../assert/img/pic-3.jpg";
+import discover from "../../assert/img/discove.jpeg";
 import { channel } from "rich/net/channel";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Workspace } from "../workspace";
@@ -44,8 +45,8 @@ export var DiscoveryView = observer(function () {
     }, [])
     return <div className='shy-discovery' >
         <div className="shy-discovery-wrapper">
-            <div className={"shy-discovery-cover flex-center flex-col" + (isMobileOnly ? " " : " gap-w-100 round-16 gap-t-20 ")} style={{
-                backgroundImage: 'url(' + pic + ')',
+            <div className={"shy-discovery-cover flex-center flex-col" + (isMobileOnly ? " " : " round-16 gap-t-20 ")} style={{
+                backgroundImage: 'url(' + discover + ')',
                 backgroundSize: 'cover',
                 // backgroundAttachment: 'fixed',
                 height: isMobileOnly ? 120 : 240
