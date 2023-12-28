@@ -228,8 +228,8 @@ class PageItemStore {
         var actions: PageItemAction[] = [];
         var next = toPageItem.next;
         var oldParentId = pageItem.parentId;
-        var oldPs = oldParentId ? pageItem.parent.childs : surface.workspace.childs;
-        var toPs = toPageItem.parentId ? toPageItem.parent.childs : surface.workspace.childs;
+        var oldPs = oldParentId && pageItem.parent ? pageItem.parent.childs : surface.workspace.childs;
+        var toPs = toPageItem.parentId && toPageItem.parent ? toPageItem.parent.childs : surface.workspace.childs;
         runInAction(() => {
             lodash.remove(oldPs, g => g.id == pageItem.id);
             if (pageItem.parent)
