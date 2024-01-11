@@ -45,7 +45,7 @@ export class CreateWorkspaceView extends EventsComponent {
         },
         dataServiceAddress?: string
     } = {
-            step: 1,
+            step: 2,
             name: '',
             avatar: null,
             datasource: 'public-clound',
@@ -94,7 +94,7 @@ export class CreateWorkspaceView extends EventsComponent {
         }
     }
     renderStep2() {
-        
+
         return <div>
             <div className="h2 flex-center"><S>自定义您的空间</S></div>
             <div>
@@ -110,7 +110,7 @@ export class CreateWorkspaceView extends EventsComponent {
             </div>
             <div className="remark f-12 gap-t-10 gap-b-5"><S>空间名称</S></div>
             <div>
-                <Input value={this.local.name} onChange={e => this.local.name = e} placeholder={lst("{name}的空间", { name: surface.user?.name||"" })}></Input>
+                <Input value={this.local.name} onChange={e => this.local.name = e} placeholder={lst("{name}的空间", { name: surface.user?.name || "" })}></Input>
             </div>
             <div className="remark f-12 gap-t-10 gap-b-5"><S>存储源</S></div>
             <div>
@@ -132,7 +132,7 @@ export class CreateWorkspaceView extends EventsComponent {
                 </div>
             }
             <div className="gap-h-10 flex">
-                <span className="flex-fixed item-hover round padding-w-5 padding-h-3 item-hover-light cursor" onMouseDown={e => { this.local.step = 1 }}><S>上一步</S></span>
+                {/* <span className="flex-fixed item-hover round padding-w-5 padding-h-3 item-hover-light cursor" onMouseDown={e => { this.local.step = 1 }}><S>上一步</S></span> */}
                 <span className="flex-auto flex-end"><Button onMouseDown={(e, b) => this.onCreate(b)} ><S>创建</S></Button></span>
             </div>
             {this.local.error && <div className="error padding-w-10 gap-h-10">{this.local.error}</div>}
