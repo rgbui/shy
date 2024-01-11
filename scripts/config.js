@@ -173,6 +173,10 @@ var cps = [{
     to: 'static/data-grid/formula/docs'
 },
 {
+    from: path.join(__dirname, "../../rich/blocks/data-grid/template/card/views/data"),
+    to: 'static/data-grid/template/datas'
+},
+{
     from: path.join(__dirname, "../src/assert/resource"),
     to: 'static/img'
 }];
