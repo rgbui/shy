@@ -360,7 +360,9 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 }
                 var url = new URL(window.location.href);
                 var back = url.searchParams.get('back');
-                if (back) UrlRoute.redict(back);
+                if (back) {
+                    location.href = back;
+                }
                 else UrlRoute.push(ShyUrl.home);
             }
         }
@@ -369,7 +371,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
         var self = this;
         async function weixinOnChange(e: { exists: boolean, open: { openId: string, platform: string, nickname: string } }) {
             if (e.exists) {
-                var r = await masterSock.put('/account/sign', { wx: open });
+                var r = await masterSock.post('/account/sign', { wx: e.open });
                 if (r.ok) {
                     var rd = r.data;
                     self.success(rd.token, rd.user);
