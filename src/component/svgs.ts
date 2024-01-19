@@ -1,3 +1,4 @@
+import AgeRunSvg from "../assert/svg/age.run.svg";
 import AlipaySvg from "../assert/svg/alipay.svg";
 import ArrowDownSvg from "../assert/svg/arrow.down.svg";
 import BillingSvg from "../assert/svg/billing.svg";
@@ -25,6 +26,7 @@ import WeixinPaySvg from "../assert/svg/weixinPay.svg";
 import WsSettingsSvg from "../assert/svg/wsSettings.svg";
 
 export  {
+AgeRunSvg,
 AlipaySvg,
 ArrowDownSvg,
 BillingSvg,
