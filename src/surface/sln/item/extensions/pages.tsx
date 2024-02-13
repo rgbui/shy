@@ -35,13 +35,21 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                     <span
                         className={"cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
                         {item.willLoadSubs && <Spin size={16} ></Spin>}
-                        {/* {!item.willLoadSubs && <Icon size={14} icon={ChevronDownSvg}></Icon>} */}
                     </span>
                 </span>
             </div>
             {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>
-                <span className="size-18 flex-center cursor item-hover round">
-                    <Icon icon={DotsSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onContextmenu(e.nativeEvent) }}></Icon>
+                <span className="size-18  flex-center cursor item-hover round">
+                    <Icon icon={DotsSvg} size={18} onMousedown={e => {
+                        e.stopPropagation();
+                        var el = e.currentTarget.parentNode.parentNode as HTMLElement;
+                        el.classList.remove('visible');
+                        item.onContextmenu(e.nativeEvent).then(() => {
+                            el.classList.add('visible');
+                        }).catch(() => {
+                            el.classList.add('visible');
+                        })
+                    }}></Icon>
                 </span>
                 <span className="size-18 flex-center cursor item-hover round">
                     <Icon icon={PlusSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onAdd() }}></Icon>

@@ -37,11 +37,22 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             item.onSpread();
         }
         else if (target.closest('.shy-ws-item-page-add')) {
-            item.onAdd();
+            var te = target.closest('.visible') as HTMLElement
+            te.classList.remove('visible');
+            try { await item.onAdd(); }
+            catch (e) { }
+            finally {
+                te.classList.add('visible');
+            }
         }
         else if (target.closest('.shy-ws-item-page-property')) {
-            item.onContextmenu(event);
-            return;
+            var te = target.closest('.visible') as HTMLElement
+            te.classList.remove('visible');
+            try { await item.onContextmenu(event); }
+            catch (e) { }
+            finally {
+                te.classList.add('visible');
+            }
         }
         else if (target.closest('.shy-ws-item-page-icon')) {
             await item.onChangeIcon(event);
@@ -78,7 +89,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         }
     }, [isInEdit])
     function renderItem() {
-        return <div className={'shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor  ' + (isSelected ? " shy-ws-item-page-selected" : "") + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}
+        return <div className={'shy-ws-item-page visible-hover flex gap-w-10 min-h-28 round relative cursor  ' + (isSelected ? " shy-ws-item-page-selected" : "") + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}
             style={style}
             onContextMenu={e => {
                 e.preventDefault()
@@ -102,9 +113,9 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 defaultValue={item.text}
                 onKeyDown={e => keydown(e.nativeEvent)}
                 onInput={e => inputting(e.nativeEvent)} /></div>}
-            {!isInEdit && <div className='shy-ws-item-page-operators'>
-                {isCanEdit && <><Icon className='shy-ws-item-page-property' size={18} icon={DotsSvg}></Icon>
-                    {isCanPlus && <Icon className='shy-ws-item-page-add' size={18} icon={PlusSvg}></Icon>}</>}
+            {!isInEdit && <div className='shy-ws-item-page-operators  visible'>
+                {isCanEdit && <><Icon className='shy-ws-item-page-property ' size={18} icon={DotsSvg}></Icon>
+                    {isCanPlus && <Icon className='shy-ws-item-page-add ' size={18} icon={PlusSvg}></Icon>}</>}
                 {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber arrow="none" count={item.unreadChats.length}></DotNumber></span>}
             </div>}
         </div>

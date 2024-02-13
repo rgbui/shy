@@ -298,7 +298,7 @@ export class PageItem {
     }
     async onRemove() {
         if (this.mime == Mime.pages) {
-            if (await Confirm(lst('确定要删除吗该操作不可撤消','确定要删除吗，该操作不可撤消')))
+            if (await Confirm(lst('确定要删除吗该操作不可撤消', '确定要删除吗，该操作不可撤消')))
                 pageItemStore.deletePageItem(this);
         }
         else pageItemStore.deletePageItem(this);
@@ -528,8 +528,8 @@ export class PageItem {
     onMousedownItem(event: MouseEvent) {
         this.sln.onMousedownItem(this, event);
     }
-    onContextmenu(event: MouseEvent) {
-        this.sln.onOpenItemMenu(this, event);
+    async onContextmenu(event: MouseEvent) {
+        await this.sln.onOpenItemMenu(this, event);
     }
     async onChangeIcon(event: MouseEvent) {
         var icon = await useIconPicker({ roundArea: Rect.fromEvent(event) });
