@@ -9,7 +9,6 @@ import { masterSock } from "../../../../../net/sock";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { SelectBox } from "rich/component/view/select/box";
-import { MenuItemType } from "rich/component/view/menu/declare";
 import { Input } from "rich/component/view/input";
 import { SwitchText } from "rich/component/view/switch";
 import { MeasureView } from "rich/component/view/progress";
@@ -20,7 +19,7 @@ import { Divider } from "rich/component/view/grid";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
 import { config } from "../../../../../common/config";
-import { WsConsumeType, checkModelPay, getModelOptions } from "rich/net/ai/cost";
+import {  checkModelPay, getAiDefaultModel, getAiModelOptions } from "rich/net/ai/cost";
 
 @observer
 export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo }>{
@@ -171,9 +170,9 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                                 return await checkModelPay(e, surface.workspace)
                             }}
                             options={
-                                getModelOptions()
+                                getAiModelOptions()
                             }
-                            value={this.localRobotInfo.model || (window.shyConfig.isUS ? WsConsumeType.gpt_35_turbo : WsConsumeType.ERNIE_Bot_turbo)}
+                            value={getAiDefaultModel(this.localRobotInfo.model)}
                             onChange={e => {
                                 this.localRobotInfo.model = e;
                                 this.onLayzeSave()
@@ -210,7 +209,7 @@ export class RobotInfoDescriptionView extends React.Component<{ robot: RobotInfo
                                     { text: lst('文言一心'), value: 'Baidu-Embedding-V1' },
                                     { text: 'GPT Embeddings', value: 'gpt', label: '仅限体验' },
                                 ]}
-                                value={this.localRobotInfo.embeddingModel || (window.shyConfig.isUS ? "gpt" : "Baidu-Embedding-V1")}
+                                value={getAiDefaultModel(this.localRobotInfo.embeddingModel, 'embedding')}
                                 onChange={e => {
                                     this.localRobotInfo.embeddingModel = e;
                                     this.onLayzeSave()

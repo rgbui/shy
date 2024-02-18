@@ -16,8 +16,7 @@ import { S } from "rich/i18n/view";
 
 import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
 import { getPageText } from "rich/src/page/declare";
-import { WsConsumeType, checkModelPay, getModelOptions } from "rich/net/ai/cost";
-import { config } from "../../../../../common/config";
+import { checkModelPay, getAiDefaultModel, getAiImageModelOptions, getAiModelOptions } from "rich/net/ai/cost";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -40,9 +39,9 @@ export class WorkspaceManage extends React.Component {
         defaultPageTitle: '',
         allowSlnIcon: false,
         aiConfig: {
-            text: config.isUS ? WsConsumeType.gpt_35_turbo : WsConsumeType.ERNIE_Bot,
-            image: config.isUS ? WsConsumeType.dall_3 : WsConsumeType.badiu_Stable_Diffusion_XL,
-            embedding: config.isUS ? WsConsumeType.gpt_embedding : WsConsumeType.baidu_embedding,
+            text: getAiDefaultModel(undefined, 'text'),
+            image: getAiDefaultModel(undefined, 'image'),
+            embedding: getAiDefaultModel(undefined, 'embedding'),
             aiSearch: false,
             disabled: false
         }
@@ -217,9 +216,9 @@ export class WorkspaceManage extends React.Component {
                                     return await checkModelPay(e, surface.workspace)
                                 }}
                                 options={
-                                    getModelOptions()
+                                    getAiModelOptions()
                                 }
-                                value={this.data.aiConfig?.text || (window.shyConfig.isUS ? WsConsumeType.gpt_35_turbo : WsConsumeType.ERNIE_Bot_turbo)}
+                                value={getAiDefaultModel(this.data.aiConfig?.text)}
                                 onChange={e => { this.change('aiConfig.text', e) }}
                             ></SelectBox>
                         </div>
@@ -236,19 +235,9 @@ export class WorkspaceManage extends React.Component {
                                     return CanSupportFeature(PayFeatureCheck.aiImage, surface.workspace)
                                 }}
                                 options={
-                                    window.shyConfig.isUS ? [
-                                        { text: 'DALLE-2', value: WsConsumeType.dall_2 },
-                                        { text: 'DALLE-3', value: WsConsumeType.dall_3 },
-                                        { text: 'Stability', value: WsConsumeType.stability }
-                                    ] : [
-                                        { text: 'Stable Diffusion XL', value: WsConsumeType.badiu_Stable_Diffusion_XL },
-                                        { text: '6pen', value: WsConsumeType.pen_6 },
-                                        { text: 'Stability', value: WsConsumeType.stability, label: '仅用于体验' },
-                                        { text: 'DALLE-2', value: WsConsumeType.dall_2, label: '仅用于体验' },
-                                        { text: 'DALLE-3', value: WsConsumeType.dall_3, label: '仅用于体验' },
-                                    ]
+                                    getAiImageModelOptions()
                                 }
-                                value={this.data.aiConfig.image || (window.shyConfig.isUS ? WsConsumeType.dall_3 : WsConsumeType.pen_6)}
+                                value={getAiDefaultModel(this.data.aiConfig.image, 'image')}
                                 onChange={e => { this.change('aiConfig.image', e) }}
                             ></SelectBox>
                         </div>

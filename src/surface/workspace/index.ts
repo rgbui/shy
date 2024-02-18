@@ -40,7 +40,7 @@ import { useForm } from "rich/component/view/form/dialoug";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
 import { useOpenReport } from "rich/extensions/report";
-import { WsConsumeType } from "rich/net/ai/cost";
+import { WsConsumeType, getAiDefaultModel } from "rich/net/ai/cost";
 
 import { PopoverPosition } from "rich/component/popover/position";
 
@@ -189,9 +189,9 @@ export class Workspace {
         esSearch?: boolean,
         seoSearch?: boolean,
     } = {
-            text: WsConsumeType.ERNIE_Bot,
-            image: WsConsumeType.badiu_Stable_Diffusion_XL,
-            embedding: WsConsumeType.baidu_embedding,
+            text:getAiDefaultModel(undefined,'text'),
+            image:getAiDefaultModel(undefined, 'image') ,
+            embedding:getAiDefaultModel(undefined,'embedding'),
             disabled: false,
             esSearch: true,
             aiSearch: false,
