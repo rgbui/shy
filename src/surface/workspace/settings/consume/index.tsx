@@ -362,7 +362,7 @@ export class ConsumeView extends React.Component {
                 <div className="h2"><S>资源消耗</S></div>
                 <Divider></Divider>
 
-                <div className="flex-center h-30 r-padding-w-10 r-round r-cursor">
+                <div className="flex-center h-30  r-round r-cursor">
                     <SelectButtons onChange={e => this.setTab(e)} value={this.tab} options={[
                         { text: '统计', value: 'day' },
                         { text: '服务', value: 'service' },
