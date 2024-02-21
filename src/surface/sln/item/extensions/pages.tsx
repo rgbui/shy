@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ChevronDownSvg, DotsSvg, PlusSvg } from "rich/component/svgs";
+import { DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { PageItem } from "..";
 import { PageItemBox } from "../view/box";

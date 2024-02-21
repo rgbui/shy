@@ -271,16 +271,17 @@ export class PageItem {
             })
         }
     }
-    async onAdd(data?: Record<string, any>) {
+    async onAdd(data?: Record<string, any>)
+    {
         if (typeof data == 'undefined') data = {};
-        Object.assign(data, {
+        Object.assign(data,{
             text: '',
             mime: Mime.page,
             pageType: PageLayoutType.doc,
             spread: false,
         })
         await this.onSpread(true);
-        var item = await pageItemStore.appendPageItem(this, data);
+        var item = await pageItemStore.appendPageItem(this, data, this.mime == Mime.pages ? 'pre' : 'last');
         item.onOpenItem();
         return item;
     }

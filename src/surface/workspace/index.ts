@@ -509,9 +509,11 @@ export class Workspace {
                 if (pa.ok) {
                     if (pa.data.exists == false && pe.type == ElementType.Schema) {
                         var viewItem = this.find(g => g.mime == Mime.pages);
-                        if (viewItem) {
+                        if (viewItem)
+                        {
                             var sch = await TableSchema.loadTableSchema(id, undefined);
-                            if (sch) {
+                            if (sch)
+                            {
                                 item = await pageItemStore.appendPageItem(viewItem, {
                                     id: sch.id,
                                     text: sch.text,

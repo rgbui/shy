@@ -81,20 +81,29 @@ class PageItemStore {
             Object.assign(pageItem, cloneData);
         })
     }
-    public async appendPageItem(pageItem: PageItem, data: Record<string, any>) {
+    public async appendPageItem(pageItem: PageItem, data: Record<string, any>, pos: 'last' | 'pre' = 'last') {
         if (!Array.isArray(pageItem.childs)) pageItem.childs = [];
+        if (pageItem.childs.length == 0 && pos == 'pre') {
+            pos = 'last';
+        }
         var actions: PageItemAction[] = [];
         if (typeof data.id == 'undefined') data.id = window.shyConfig.guid();
         data.workspaceId = pageItem.workspaceId;
         data.parentId = pageItem.id;
-        if (pageItem.mime == Mime.pages) data.at = 0;
+        if (pos == 'pre') data.at = 0;
         else data.at = pageItem.childs.last() ? (pageItem.childs.last().at + 1) : 0;
         var newItem = new PageItem();
         newItem.checkedHasChilds = true;
         newItem.load(data);
         runInAction(() => {
             pageItem.spread = true;
-            if (pageItem.mime == Mime.pages) pageItem.childs.splice(0, 0, newItem)
+            if (pos == 'pre') {
+                pageItem.childs.forEach(c => {
+                    c.at += 1;
+                })
+                actions.push({ directive: ItemOperatorDirective.inc, filter: { parentId: pageItem.id, at: { $gte: 0 } } });
+                pageItem.childs.splice(0, 0, newItem)
+            }
             else pageItem.childs.push(newItem);
             pageItem.subCount = pageItem.childs.length;
         })
@@ -107,8 +116,6 @@ class PageItemStore {
             }
         }
         return newItem;
-        // }
-        // else return await this.insertAfterPageItem(pageItem, data);
     }
     /**
      * 
