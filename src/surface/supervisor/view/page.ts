@@ -20,7 +20,7 @@ export async function createPageContent(store: PageViewStore) {
             page.edit = store.config.isCanEdit;
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
-            page.schemaInitRecordData = store.config.initData;
+            page.openPageData = store.config.initData;
             page.customElementUrl = store.elementUrl;
             store.page = page;
             await page.cachCurrentPermissions();
