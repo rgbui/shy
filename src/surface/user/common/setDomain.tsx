@@ -1,7 +1,7 @@
 import React from "react";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { Button } from "rich/component/view/button";
-import { Dialoug, Row, Col } from "rich/component/view/grid";
+import { Dialoug } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
 import { PopoverSingleton } from "rich/component/popover/popover";
 import { lst } from "rich/i18n/store";
@@ -11,19 +11,21 @@ import { UrlRoute } from "../../../history";
 
 class WsDomain extends EventsComponent {
     render() {
-        return <Dialoug style={{width:300}} className={'shy-ws-set-domain'}>
-            <div className="remark f-12">
-                <S text={'空间域名设置提示'}>空间域名设置后不可更改，域名不能为纯数字，仅限数字和字母组合</S>
+        return <Dialoug style={{ width: 300 }} className={'shy-ws-set-domain'}>
+            <div className="gap-h-10">
+                <div className="remark f-12">
+                    <S text={'空间域名设置提示'}>空间域名设置后不可更改，域名不能为纯数字，仅限数字和字母组合</S>
+                </div>
+                <div className="gap-h-20 flex">
+                    https://<Input style={{ width: 120 }} className={'w-120 gap-w-10'} placeholder={lst('输入域名')} value={this.name} onChange={e => this.name = e}></Input>.{UrlRoute.getHost()}
+                </div>
+                <div>
+                    <Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button>
+                </div>
+                {this.error && <div className="error">
+                    {this.error}
+                </div>}
             </div>
-            <div className="gap-h-20 flex">
-                https://<Input style={{ width: 120 }} className={'w-120 gap-w-10'} placeholder={lst('输入域名')} value={this.name} onChange={e => this.name = e}></Input>.{UrlRoute.getHost()}
-            </div>
-            <div>
-                <Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button>
-            </div>
-            {this.error && <div className="error">
-                {this.error}
-            </div>}
         </Dialoug>
     }
     wsId: string;

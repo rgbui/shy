@@ -23,27 +23,30 @@ class UserUpdatePaw extends EventsComponent {
         })
     }
     render() {
-        return <Dialoug style={{ width: 400 }} className={'shy-join-friend'}>
+        return <Dialoug style={{ width: 300 }} className={'shy-join-friend'}>
 
-            <div className="gap-h-10">{this.checkPaw && <Row>
-                <Col style={{ marginBottom: 5 }}><S>老密码</S></Col>
-                <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
-            </Row>}
-                <Row style={{ margin: '10px 0px' }}>
-                    <Col style={{ marginBottom: 5 }}><S>新密码</S></Col>
-                    <Col><Input type="password" value={this.newPaw} onChange={e => this.newPaw = e}></Input></Col>
+            <div className="gap-h-10">
+                <div className="gap-h-10">{this.checkPaw && <Row>
+                    <Col style={{ marginBottom: 5 }}><S>老密码</S></Col>
+                    <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
+                </Row>}
+                    <Row style={{ margin: '10px 0px' }}>
+                        <Col style={{ marginBottom: 5 }}><S>新密码</S></Col>
+                        <Col><Input type="password" value={this.newPaw} onChange={e => this.newPaw = e}></Input></Col>
+                    </Row>
+                    <Row style={{ margin: '10px 0px' }}>
+                        <Col style={{ marginBottom: 5 }}><S>确认新密码</S></Col>
+                        <Col><Input type="password" value={this.confirmPaw} onChange={e => this.confirmPaw = e}></Input></Col>
+                    </Row>
+                </div>
+                <Row>
+                    <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
                 </Row>
-                <Row style={{ margin: '10px 0px' }}>
-                    <Col style={{ marginBottom: 5 }}><S>确认新密码</S></Col>
-                    <Col><Input type="password" value={this.confirmPaw} onChange={e => this.confirmPaw = e}></Input></Col>
-                </Row>
+                {this.error && <div className="error gap-h-10">
+                    {this.error}
+                </div>}
             </div>
-            <Row>
-                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
-            </Row>
-            {this.error && <div className="error gap-h-10">
-                {this.error}
-            </div>}
+
         </Dialoug>
     }
     oldPaw: string = '';

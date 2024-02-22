@@ -20,7 +20,8 @@ class UserModifyName extends EventsComponent {
         })
     }
     render() {
-        return <Dialoug style={{ width: 400 }} className={'shy-join-friend'}>
+        return <Dialoug style={{ width: 300 }} className={'shy-join-friend'}>
+            <div className="gap-h-10">
             <Row style={{ marginBottom: 10 }}>
                 <Col style={{ marginBottom: 5 }}><S>用户名</S></Col>
                 <Col><Input value={this.name} onChange={e => this.name = e}></Input></Col>
@@ -31,6 +32,8 @@ class UserModifyName extends EventsComponent {
             {this.error&& <div className="error gap-h-10">
                 {this.error}
             </div>}
+            </div>
+          
         </Dialoug>
     }
     name: string = '';

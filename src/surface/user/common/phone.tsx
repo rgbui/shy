@@ -23,24 +23,26 @@ class UserUpdatePhone extends EventsComponent {
         })
     }
     render() {
-        return <Dialoug style={{ width: 400 }} className={'shy-join-friend'}>
-            <div className="gap-b-10">
+        return <Dialoug style={{ width: 300 }} className={'shy-join-friend'}>
+            <div className="gap-h-10">
+                <div className="gap-b-10">
+                    <Row>
+                        <Col style={{ marginBottom: 5 }}><S>手机</S></Col>
+                        <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
+                    </Row>
+                    <Row style={{ margin: '10px 0px' }}>
+                        <Col style={{ marginBottom: 5 }}><S>验证码</S></Col>
+                        <Col span={12}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
+                        <Col span={10} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? lst(`已发送{sendCount}s`, { sendCount: this.sendCount }) : lst(`获取短信验证码`)}</Button></Col>
+                    </Row>
+                </div>
                 <Row>
-                    <Col style={{ marginBottom: 5 }}><S>手机</S></Col>
-                    <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
+                    <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
                 </Row>
-                <Row style={{ margin: '10px 0px' }}>
-                    <Col style={{ marginBottom: 5 }}><S>验证码</S></Col>
-                    <Col span={14}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
-                    <Col span={8} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? lst(`已发送{sendCount}s`, { sendCount: this.sendCount }) : lst(`获取短信验证码`)}</Button></Col>
-                </Row>
+                {this.error && <div className="error gap-h-10">
+                    {this.error}
+                </div>}
             </div>
-            <Row>
-                <Col><Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button></Col>
-            </Row>
-           {this.error&& <div className="error gap-h-10">
-                {this.error}
-            </div>}
         </Dialoug>
     }
     sendCount: number = -1;
