@@ -10,7 +10,6 @@ import { sCache, CacheKey } from "../../../../../net/cache";
 import { masterSock } from "../../../../../net/sock";
 import { UrlRoute, ShyUrl } from "../../../../history";
 import { surface } from "../../../store";
-import { phoneRegex } from "../../../../../common/verify";
 import { channel } from "rich/net/channel";
 import { WeixinOpen } from "../../../../component/winxin/open";
 import { Divider } from "rich/component/view/grid";
@@ -124,7 +123,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                     local.failMsg = lst('请输入您的手机号或邮箱');
                     return;
                 }
-                if (!(phoneRegex.test(local.account) || EmailRegex.test(local.account))) {
+                if (!(PhoneRegex.test(local.account) || EmailRegex.test(local.account))) {
                     local.failMsg = lst('帐号格式不正确');
                     return
                 }
@@ -156,10 +155,10 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 if (r?.ok) {
                     if (r.data.sign === false) {
                         if (local.loginType == 'paw')
-                            if (phoneRegex.test(local.account)) local.failMsg = lst('手机号或密码错误');
+                            if (PhoneRegex.test(local.account)) local.failMsg = lst('手机号或密码错误');
                             else local.failMsg = lst('邮箱或密码错误');
                         else {
-                            if (phoneRegex.test(local.account)) local.failMsg = lst('手机号或验证码错误');
+                            if (PhoneRegex.test(local.account)) local.failMsg = lst('手机号或验证码错误');
                             else local.failMsg = lst('邮箱或验证码错误');
                         }
                     }
@@ -271,11 +270,11 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                     local.failMsg = lst('请输入您的手机号或邮箱');
                     return;
                 }
-                if (!(phoneRegex.test(local.account) || EmailRegex.test(local.account))) {
+                if (!(PhoneRegex.test(local.account) || EmailRegex.test(local.account))) {
                     local.failMsg = lst('帐号格式不正确');
                     return;
                 }
-                if (phoneRegex.test(local.account)) {
+                if (PhoneRegex.test(local.account)) {
                     if (!local.code) {
                         local.failMsg = lst('请输入验证码');
                         return;

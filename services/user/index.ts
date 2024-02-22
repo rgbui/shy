@@ -31,18 +31,12 @@ class UserService extends BaseService {
     @put('/phone/sign')
     async phoneSign(data) {
         var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string>
-        if (!(data.phone.startsWith('5') && data.phone.length == '13524169334'.length)) {
-            result = this.createResponse({ $phone: data.phone, $code: data.code });
-            if (result.ok == false) return result;
-        }
-
         result = await masterSock.put('/phone/sign', data);
         return result;
     }
     @put('/paw/sign')
     async pawSign(data) {
-        var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string> = this.createResponse({ $phone: data.phone });
-        if (result.ok == false) return result;
+        var result: SockResponse<{ sign: boolean, token: string, user: Partial<User> }, string>
         result = await masterSock.put('/paw/sign', data);
         return result;
     }
@@ -59,10 +53,6 @@ class UserService extends BaseService {
     async generatePhoneCode(data: { phone: string }) {
         var phone = data.phone;
         var result: SockResponse<{ code?: string }, string>;
-        if (!(data.phone.startsWith('5') && data.phone.length == '13524169334'.length)) {
-            result = this.createResponse({ $phone: phone });
-            if (result.ok == false) return result;
-        }
         result = await masterSock.post('/phone/sms/code', { phone });
         return result;
     }
@@ -72,7 +62,7 @@ class UserService extends BaseService {
     }
     @get('/sign')
     async ping() {
-        var result: SockResponse<{ token: string, guid: string, user: Partial<User> }> = this.createResponse();
+        var result: SockResponse<{ token: string, guid: string, user: Partial<User> }>
         if (await sCache.get(CacheKey.token)) {
             result = await masterSock.get('/sign');
             if (result.ok) {

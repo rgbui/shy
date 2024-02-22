@@ -8,8 +8,8 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { masterSock } from "../../../../net/sock";
 import { makeObservable, observable } from "mobx";
-import { phoneRegex } from "../../../../common/verify";
 import { observer } from "mobx-react";
+import { PhoneRegex } from "../../../../services/common/base";
 
 @observer
 class UserUpdatePhone extends EventsComponent {
@@ -51,7 +51,7 @@ class UserUpdatePhone extends EventsComponent {
             this.error = lst('手机号不能为空');
             return;
         }
-        if (!phoneRegex.test(this.phone)) {
+        if (!PhoneRegex.test(this.phone)) {
             this.error = lst('手机号格式不正确');
             return;
         }
@@ -102,7 +102,7 @@ class UserUpdatePhone extends EventsComponent {
 
                 return;
             }
-            if (!phoneRegex.test(this.phone)) {
+            if (!PhoneRegex.test(this.phone)) {
                 this.error = lst('手机号格式不正确');
                 return;
             }
