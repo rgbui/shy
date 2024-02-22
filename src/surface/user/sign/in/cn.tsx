@@ -362,7 +362,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 if (back) {
                     location.href = back;
                 }
-                else UrlRoute.push(ShyUrl.home);
+                else return UrlRoute.push(ShyUrl.home);
             }
         }
     }
@@ -381,7 +381,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 var rc = await masterSock.post('/account/reg', {
                     wx: e.open
                 })
-                if (r?.ok) {
+                if (rc?.ok) {
                     if (rc.data.reg == false) {
                         self.local.failMsg = lst('注册失败');
                         return;
@@ -391,6 +391,9 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                         // self.local.step = 'setName';
                         self.success(rc.data.token, rc.data.user);
                     }
+                }
+                else {
+                    self.local.failMsg = lst('注册失败');
                 }
             }
         }
