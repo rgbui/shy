@@ -62,7 +62,7 @@ class UserService extends BaseService {
     }
     @get('/sign')
     async ping() {
-        var result: SockResponse<{ token: string, guid: string, user: Partial<User> }>
+        var result: SockResponse<{ token: string, guid: string, user: Partial<User> }> = {}
         if (await sCache.get(CacheKey.token)) {
             result = await masterSock.get('/sign');
             if (result.ok) {

@@ -102,7 +102,7 @@ export class User {
     async sign() {
         await channel.put('/device/sign');
         var r = await channel.get('/sign')
-        if (r.ok) {
+        if (r?.ok) {
             r.data.user.online = true;
             r.data.user.rk = r.data.rk;
             r.data.user.uk = r.data.uk;
