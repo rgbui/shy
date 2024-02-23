@@ -68,7 +68,7 @@ export class CreateWorkspaceView extends EventsComponent {
         return <div>
             <div className="h2 flex-center"><S>创建空间</S></div>
             <div className="remark flex-center"><S text={'创建空间描述语'}>创建在线的生活工作空间，和您的朋友一起协作成长吧。</S></div>
-            <div className="padding-b-10">
+            <div className="padding-h-10">
                 <div onMouseDown={e => { this.local.template = null; this.local.step = 2 }} className="flex   cursor  border round padding-w-10 padding-h-5 item-hover  text-1 gap-h-5 "><span className="flex-auto"><S>亲自创建</S></span><span className="flex-fixed"><Icon size={20} icon={ChevronRightSvg}></Icon></span></div>
                 <div className="remark f-12"><S>选择模板</S></div>
                 <div>
@@ -117,7 +117,12 @@ export class CreateWorkspaceView extends EventsComponent {
                 <SelectBox border value={this.local.datasource} onChange={e => { this.local.datasource = e; this.local.error = ''; }} options={[
                     { text: lst('诗云'), value: 'public-clound' },
                     { text: lst('私有云'), value: 'private-clound' },
-                    { text: lst('本地'), visible: config?.isDesk ? true : false, value: 'private-local' }
+                    {
+                        text: lst('本地'),
+                        disabled: config?.isDesk ? false : true,
+                        value: 'private-local',
+                        label: config?.isDesk ? undefined : lst('安装桌面客户端')
+                    }
                 ]}></SelectBox>
             </div>
             {this.local.datasource == 'private-clound' && <>
@@ -152,7 +157,7 @@ export class CreateWorkspaceView extends EventsComponent {
                 return;
             }
             var rr = await channel.put('/ws/create', {
-                text: this.local.name,
+                text: this.local.name || lst("{name}的空间", { name: surface.user?.name || "" }),
                 datasource: this.local.datasource,
                 templateUrl: this.local.template || undefined,
                 dataServiceAddress: this.local.datasource == 'private-clound' ? this.local.dataServiceAddress : undefined
@@ -187,7 +192,7 @@ export class CreateWorkspaceView extends EventsComponent {
     }
     async open() {
         this.local = {
-            step: 1,
+            step: 2,
             name: '',
             error: '',
             avatar: null,
