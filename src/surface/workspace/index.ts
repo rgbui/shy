@@ -1,7 +1,6 @@
 
 import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
-import "./style.less";
 import { useOpenUserSettings } from "../user/settings";
 import { ShyUrl, UrlRoute } from "../../history";
 import { CacheKey, sCache, yCache } from "../../../net/cache";
@@ -251,6 +250,7 @@ export class Workspace {
             viewOnlineUsers: observable,
             onLineUsers: observable,
             invite: observable,
+            slnSpread: computed,
             isOwner: computed,
             isMember: computed,
             publishConfig: observable,
@@ -260,6 +260,9 @@ export class Workspace {
             _isApp: observable,
             isApp: computed
         })
+    }
+    get slnSpread() {
+        return surface.slnSpread;
     }
     private _sock: Sock;
     get sock() {

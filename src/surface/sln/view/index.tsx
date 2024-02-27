@@ -40,16 +40,16 @@ export var SlnView = observer(function () {
         if (surface?.workspace?.isPubSite) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-t-20">
-                <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
+                <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
+                    <span className="gap-l-10  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
                     <span><S>模板</S></span>
                 </div>
-                <div onMouseDown={e => surface.workspace.onImportFiles()} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={DownloadSvg}></Icon></span>
+                <div onMouseDown={e => surface.workspace.onImportFiles()} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
+                    <span className="gap-l-10  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={DownloadSvg}></Icon></span>
                     <span><S>导入</S></span>
                 </div>
-                <div onMouseDown={e => surface.workspace.onOpenTrash(e)} className="shy-ws-item-page flex gap-w-10 min-h-28 round relative cursor ">
-                    <span className="gap-l-5  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={TrashSvg}></Icon></span>
+                <div onMouseDown={e => surface.workspace.onOpenTrash(e)} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
+                    <span className="gap-l-10  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={TrashSvg}></Icon></span>
                     <span><S>垃圾桶</S></span>
                 </div>
             </div>

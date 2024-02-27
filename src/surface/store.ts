@@ -21,6 +21,7 @@ import { ShyDesk } from "../../type";
 import { Confirm } from "rich/component/lib/confirm";
 import { useCreateWorkspace } from "./workspace/create/box";
 import { wss } from "../../services/workspace";
+import { isMobileOnly } from "react-device-detect";
 
 export class Surface extends Events {
     constructor() {
@@ -97,7 +98,7 @@ export class Surface extends Events {
                 if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
-                wss.setWsPids(ws.id,ws.pids);
+                wss.setWsPids(ws.id, ws.pids);
                 var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
                 if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
                 else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
@@ -267,6 +268,12 @@ export class Surface extends Events {
             }
         }
         return true;
+    }
+    onToggleSln() {
+        if (isMobileOnly) surface.mobileSlnSpread = true;
+        else surface.slnSpread = surface.slnSpread === false ? true : false;
+        if (surface.supervisor.page)
+            surface.supervisor.page?.page?.view?.pageBar?.forceUpdate();
     }
     get showSln() {
         if (this.accessWorkspace == 'embed') return false;

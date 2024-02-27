@@ -1,22 +1,22 @@
 .shy-ws-profile {
-    display        : flex;
-    justify-content: flex-start;
-    align-items    : center;
-    cursor         : pointer;
-    position       : relative;
-    min-height     : 48px;
-    box-shadow     : var(--elevation-low);
+    display           : flex;
+    justify-content   : flex-start;
+    align-items       : center;
+    cursor            : pointer;
+    position          : relative;
+    min-height        : 48px;
+    // box-shadow     : var(--elevation-low);
+    box-shadow        : rgba(55, 53, 47, 0.09) 0px 1px 0px;
 
     &-info {
-        padding-left        : 10px;
-        min-height          : 48px;
-        position            : absolute;
-        z-index             : 22;
-        top                 : 0px;
-        left                : 0px;
-        right               : 0px;
-        color               : var(--header-primary);
-       
+        padding-left: 10px;
+        min-height  : 48px;
+        position    : absolute;
+        z-index     : 22;
+        top         : 0px;
+        left        : 0px;
+        right       : 0px;
+        color       : var(--header-primary);
     }
 
     &.cover {
@@ -33,9 +33,10 @@
     }
 
     &-cover {
-        max-height      : 120px;
-        display         : block;
-        width           : 100%;
+        max-height: 120px;
+        display   : block;
+        width     : 100%;
+
         &::after {
             z-index   : 1;
             content   : "";
@@ -54,8 +55,16 @@
             object-position: center;
         }
     }
+}
+
+.shy-ws {
+    .shy-ws-double-left {
+        visibility: hidden;
+    }
 
     &:hover {
-        // background-color: rgba(55, 53, 47, 0.08);
+        .shy-ws-double-left {
+            visibility: visible;
+        }
     }
 }

@@ -113,8 +113,7 @@ export async function createPageContent(store: PageViewStore) {
                     surface.supervisor.emit('closeDialog')
             });
             page.on(PageDirective.spreadSln, async () => {
-                if (isMobileOnly) surface.mobileSlnSpread = true;
-                else surface.slnSpread = surface.slnSpread === false ? true : false;
+                surface.onToggleSln();
             });
             page.on(PageDirective.rollup, async (id) => {
                 var pd = await store.snapStore.rollupSnap(id);
