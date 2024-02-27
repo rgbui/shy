@@ -202,7 +202,7 @@ export class Sock {
         data?: Record<string, any>,
         method: string
     },
-        callback: (chunk: any, done?: boolean, controller?:AbortController) => void) {
+        callback: (chunk: any, done?: boolean, controller?: AbortController) => void) {
         var resolveUrl = await this.getUrlData(options.url, options.data || {}, options?.method?.toLowerCase() == 'get');
         var headers = await this.config() as any;
         headers = {

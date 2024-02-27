@@ -53,7 +53,12 @@ else if (mode == 'pro') API_MASTER_URLS = ['https://api-m1.shy.live', 'https://a
 
 var FILE_URLS = ['http://127.0.0.1:8889']
 if (mode == 'beta') FILE_URLS = ['https://beta-b2.shy.live'];
-else if (mode == 'pro') FILE_URLS = ['https://api-s1.shy.live', 'https://api-s2.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
+else if (mode == 'pro') FILE_URLS = [
+    // 'https://api-s1.shy.live', 
+    // 'https://api-s2.shy.live'
+    'https://api-m1.shy.live',
+    'https://api-m2.shy.live'
+].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
 var API_URLS = ['http://127.0.0.1:9000'];
 if (mode == 'beta') API_URLS = ['https://beta-b2.shy.live'];

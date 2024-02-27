@@ -1,6 +1,6 @@
 
 import { User } from "../../src/surface/user/user";
-import { fileSock, masterSock } from "../../net/sock";
+import { masterSock } from "../../net/sock";
 import { BaseService } from "../common/base";
 import { CacheKey, sCache } from "../../net/cache";
 import { FileMd5 } from "../../src/util/file";
@@ -136,7 +136,7 @@ class UserService extends BaseService {
                 return { ok: false, warn: lst('文件大小不能超过50M') }
             }
             if (!file.md5) file.md5 = await FileMd5(file);
-            var d = await fileSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
+            var d = await masterSock.upload<FileType, string>(file, { uploadProgress: uploadProgress });
             if (d.ok) {
                 return { ok: true, data: d.data }
             }

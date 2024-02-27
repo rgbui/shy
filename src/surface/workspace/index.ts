@@ -35,7 +35,7 @@ import { useTrashBox } from "rich/extensions/trash";
 import { RobotInfo } from "rich/types/user";
 import { lst } from "rich/i18n/store";
 import { isMobileOnly } from "react-device-detect";
-import { SettingsSvg, Edit1Svg, FolderPlusSvg, UploadSvg, MemberSvg, AddUserSvg, LogoutSvg } from "rich/component/svgs";
+import { SettingsSvg, FolderPlusSvg, UploadSvg, MemberSvg, AddUserSvg, LogoutSvg } from "rich/component/svgs";
 import { useForm } from "rich/component/view/form/dialoug";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
@@ -94,6 +94,9 @@ export class Workspace {
 
     /**
      * 空间存储的源存在那里
+     * private-clound: 私有云
+     * public-clound: 公有云
+     * private-local: 本地存储
      */
     public datasource: 'private-clound' | 'public-clound' | 'private-local' = 'public-clound';
 
@@ -189,9 +192,9 @@ export class Workspace {
         esSearch?: boolean,
         seoSearch?: boolean,
     } = {
-            text:getAiDefaultModel(undefined,'text'),
-            image:getAiDefaultModel(undefined, 'image') ,
-            embedding:getAiDefaultModel(undefined,'embedding'),
+            text: getAiDefaultModel(undefined, 'text'),
+            image: getAiDefaultModel(undefined, 'image'),
+            embedding: getAiDefaultModel(undefined, 'embedding'),
             disabled: false,
             esSearch: true,
             aiSearch: false,
@@ -269,7 +272,7 @@ export class Workspace {
     private _filesock: Sock;
     get fileSock() {
         if (this._filesock) return this._filesock;
-        return this._filesock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'file'), {
+        return this._filesock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'ws'), {
             'shy-sockId': this.tim.id,
             'shy-wsId': this.id
         });
@@ -509,11 +512,9 @@ export class Workspace {
                 if (pa.ok) {
                     if (pa.data.exists == false && pe.type == ElementType.Schema) {
                         var viewItem = this.find(g => g.mime == Mime.pages);
-                        if (viewItem)
-                        {
+                        if (viewItem) {
                             var sch = await TableSchema.loadTableSchema(id, undefined);
-                            if (sch)
-                            {
+                            if (sch) {
                                 item = await pageItemStore.appendPageItem(viewItem, {
                                     id: sch.id,
                                     text: sch.text,

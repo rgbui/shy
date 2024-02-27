@@ -1,7 +1,7 @@
 import { get, post, put } from "rich/net/annotation";
 import { BaseService } from "./common/base";
 import { surface } from "../src/surface/store";
-import { fileSock } from "../net/sock";
+import {  masterSock } from "../net/sock";
 import { wss } from "./workspace";
 
 class PageService extends BaseService {
@@ -43,6 +43,6 @@ class PageService extends BaseService {
     }
     @post('/download/file')
     async downloadFile(args) {
-        return fileSock.post('/download/file', { ...args });
+        return masterSock.post('/download/file', { ...args });
     }
 }

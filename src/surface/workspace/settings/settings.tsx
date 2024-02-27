@@ -14,7 +14,7 @@ import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
 import { Textarea } from 'rich/component/view/input/textarea';
 import { ShyAlert } from 'rich/component/lib/alert';
-import { fileSock, masterSock } from '../../../../net/sock';
+import { masterSock } from '../../../../net/sock';
 import { useForm } from 'rich/component/view/form/dialoug';
 import { ShyUrl, UrlRoute } from '../../../history';
 import { lst } from 'rich/i18n/store';
@@ -82,9 +82,9 @@ export class WorkspaceSettingsView extends React.Component {
         if (surface.workspace.sn == 24 || window.shyConfig.isDev) {
             var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
             if (g.ok) {
-                var r = await fileSock.post('/download/file', { url: g.data.file.url });
+                var r = await surface.workspace.fileSock.post('/download/file', { url: g.data.file.url });
                 if (r.ok) {
-                    await masterSock.post('/create/workspace/template', {
+                    await masterSock.post('/create/workspace/template',{
                         wsId: surface.workspace.id,
                         templateUrl: r.data.file.url,
                         text: surface.workspace.text,
