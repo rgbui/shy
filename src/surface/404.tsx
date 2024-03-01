@@ -6,7 +6,7 @@ import { surface } from "./store";
 import { Button } from "rich/component/view/button";
 import { S } from "rich/i18n/view";
 import { config } from "../../common/config";
-import { lst } from "rich/i18n/store";
+import { lst } from "rich/i18n/store"; 
 
 export var View404 = observer(function () {
     function back(event: React.MouseEvent) {
