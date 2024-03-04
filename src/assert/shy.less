@@ -1,15 +1,16 @@
 html,
 body {
-    font-family            : 'gg sans', 'Microsoft YaHei New', 'Microsoft Yahei', 'Microsoft JhengHei', SimSun, Arial, sans-serif;
-    font-variant-numeric   : tabular-nums;
+    font-family         : 'gg sans', 'Microsoft YaHei New', 'Microsoft Yahei', 'Microsoft JhengHei', SimSun, Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
 }
 
 html {
     margin   : 0px;
     padding  : 0px;
     font-size: 62.5%;
-    overflow: hidden;
+    overflow : hidden;
 }
+
 @media (max-width: 991.98px) {
     html {
         font-size: 56.25%; //缩放至0.9
@@ -18,7 +19,7 @@ html {
 
 @media (max-width: 767.98px) {
     html {
-        font-size: 50%;//缩放至0.8
+        font-size: 50%; //缩放至0.8
     }
 }
 
@@ -94,10 +95,11 @@ input {
     border          : 2px solid var(--scrollbar-thin-track);
 }
 
- input,textarea{
+input,
+textarea {
     &::placeholder {
-         font-size: 14px;
-         font-weight: normal;
-            color: #999;
+        font-size  : 14px;
+        font-weight: normal;
+        color      : #999;
     }
- }
+}
