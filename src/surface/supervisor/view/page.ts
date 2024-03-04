@@ -10,7 +10,6 @@ import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
 import { channel } from "rich/net/channel";
-import { isMobileOnly } from "react-device-detect";
 
 export async function createPageContent(store: PageViewStore) {
     try {
@@ -145,11 +144,17 @@ export async function createPageContent(store: PageViewStore) {
                 store.page.onHighlightBlock(store.config.blockId, true);
             })
             await page.load(pd.content, pd.operates);
-            var bound = Rect.fromEle(store.view.pageEl);
-            page.render(store.view.pageEl, {
-                width: bound.width,
-                height: bound.height
-            });
+            if(store.view.pageEl){
+                var bound = Rect.fromEle(store.view.pageEl);
+                page.render(store.view.pageEl, {
+                    width: bound.width,
+                    height: bound.height
+                });
+            }
+            else{
+                console.error('store.view.pageEl is null')
+            }
+           
         }
         else {
             var bound = Rect.fromEle(store.view.pageEl);
