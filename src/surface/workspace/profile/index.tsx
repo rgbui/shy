@@ -22,7 +22,7 @@ export var WorkspaceProfile = observer(function () {
             </span>}
             <span className="flex flex-auto  gap-r-5 ">
                 <span className="desk-no-drag flex-fixed bold f-16 text-overflow max-w-100">{surface.workspace.text}</span>
-                {surface.workspace.isMember && <span className=" desk-no-drag size-24 round  flex-center remark flex-fixed "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
+                {surface.workspace.isMember && <span className="shy-ws-arrow-drop desk-no-drag size-24 round  flex-center remark flex-fixed "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
             </span>
             <div className="flex-fixed">
                 <span onMouseDown={e => {
