@@ -114,7 +114,7 @@ export class CreateWorkspaceView extends EventsComponent {
             </div>
             <div className="remark f-12 gap-t-10 gap-b-5"><S>存储源</S></div>
             <div>
-                <SelectBox border value={this.local.datasource} onChange={e => { this.local.datasource = e; this.local.error = ''; }} options={[
+                <SelectBox dropAlign='full' border value={this.local.datasource} onChange={e => { this.local.datasource = e; this.local.error = ''; }} options={[
                     { text: lst('诗云'), value: 'public-clound' },
                     { text: lst('私有云'), value: 'private-clound' },
                     {
