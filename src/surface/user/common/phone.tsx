@@ -27,11 +27,11 @@ class UserUpdatePhone extends EventsComponent {
             <div className="gap-h-10">
                 <div className="gap-b-10">
                     <Row>
-                        <Col style={{ marginBottom: 5 }}><S>手机</S></Col>
+                        <Col className="remark f-12" style={{ marginBottom: 5 }}><S>手机</S></Col>
                         <Col><Input value={this.phone} onChange={e => this.phone = e}></Input></Col>
                     </Row>
                     <Row style={{ margin: '10px 0px' }}>
-                        <Col style={{ marginBottom: 5 }}><S>验证码</S></Col>
+                        <Col className="remark f-12" style={{ marginBottom: 5 }}><S>验证码</S></Col>
                         <Col span={12}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
                         <Col span={10} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? lst(`已发送{sendCount}s`, { sendCount: this.sendCount }) : lst(`获取短信验证码`)}</Button></Col>
                     </Row>

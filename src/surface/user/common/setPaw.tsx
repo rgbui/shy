@@ -27,15 +27,15 @@ class UserUpdatePaw extends EventsComponent {
 
             <div className="gap-h-10">
                 <div className="gap-h-10">{this.checkPaw && <Row>
-                    <Col style={{ marginBottom: 5 }}><S>老密码</S></Col>
+                    <Col className="remark f-12" style={{ marginBottom: 5 }}><S>老密码</S></Col>
                     <Col><Input type="password" value={this.oldPaw} onChange={e => this.oldPaw = e}></Input></Col>
                 </Row>}
                     <Row style={{ margin: '10px 0px' }}>
-                        <Col style={{ marginBottom: 5 }}><S>新密码</S></Col>
+                        <Col className="remark f-12" style={{ marginBottom: 5 }}><S>新密码</S></Col>
                         <Col><Input type="password" value={this.newPaw} onChange={e => this.newPaw = e}></Input></Col>
                     </Row>
                     <Row style={{ margin: '10px 0px' }}>
-                        <Col style={{ marginBottom: 5 }}><S>确认新密码</S></Col>
+                        <Col className="remark f-12" style={{ marginBottom: 5 }}><S>确认新密码</S></Col>
                         <Col><Input type="password" value={this.confirmPaw} onChange={e => this.confirmPaw = e}></Input></Col>
                     </Row>
                 </div>

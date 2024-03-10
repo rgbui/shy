@@ -27,11 +27,11 @@ class UserUpdateEmail extends EventsComponent {
             <div className="gap-h-10">
                 <div className="gap-b-10">
                     <Row>
-                        <Col style={{ marginBottom: 5 }}><S>邮箱</S></Col>
+                        <Col  className="remark f-12" style={{ marginBottom: 5 }}><S>邮箱</S></Col>
                         <Col><Input value={this.email} onChange={e => this.email = e}></Input></Col>
                     </Row>
                     <Row style={{ margin: '10px 0px' }}>
-                        <Col style={{ marginBottom: 5 }}><S>验证码</S></Col>
+                        <Col  className="remark f-12" style={{ marginBottom: 5 }}><S>验证码</S></Col>
                         <Col span={14}><Input value={this.code} onChange={e => this.code = e}></Input></Col>
                         <Col span={8} style={{ marginLeft: 20 }}><Button block ref={e => this.sendButton = e} onClick={e => this.sendCode()}>{this.sendCount > -1 ? lst(`已发送{sendCount}s`, { sendCount: this.sendCount }) : lst(`获取验证码`)}</Button></Col>
                     </Row>
