@@ -14,6 +14,7 @@ import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { Mime } from "./declare";
 import { log } from "../../../common/log";
+import { Page } from "rich/src/page";
 
 export class Sln extends Events {
     constructor() {
@@ -41,6 +42,13 @@ export class Sln extends Events {
         }
     }
     async onMousedownItem(item: PageItem, event: MouseEvent) {
+        if (surface.sln.keyboardPlate.isAlt()) {
+            var page: Page = await channel.air('/page/slide', { elementUrl: item.elementUrl })
+            if (page) {
+                await channel.air('/page/slide', { elementUrl: null });
+            }
+            return;
+        }
         var self = this;
         if (item.isCanEdit) {
             MouseDragger<{ item: HTMLElement }>({
@@ -56,7 +64,7 @@ export class Sln extends Events {
                     ghostView.load(data.item, { point: Point.from(ev) })
                 },
                 moving(ev, data, isend) {
-                    if(isend)return;
+                    if (isend) return;
                     ghostView.move(Point.from(ev));
                 },
                 moveEnd(ev, isMove, data) {

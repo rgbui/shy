@@ -7,6 +7,9 @@ import { Icon } from "rich/component/view/icon";
 import { autoImageUrl } from "rich/net/element.type";
 import { isMobileOnly } from "react-device-detect";
 import "./style.less";
+import { Tip } from "rich/component/view/tooltip/tip";
+import { S } from "rich/i18n/view";
+import { UA } from "rich/util/ua";
 
 export var WorkspaceProfile = observer(function () {
     async function mousedown(event: React.MouseEvent) {
@@ -22,15 +25,23 @@ export var WorkspaceProfile = observer(function () {
             </span>}
             <span className="flex flex-auto  gap-r-5 ">
                 <span className="desk-no-drag flex-fixed bold f-16 text-overflow max-w-100">{surface.workspace.text}</span>
-                {surface.workspace.isMember && <span className="shy-ws-arrow-drop desk-no-drag size-24 round  flex-center remark flex-fixed "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
+                {surface.workspace.isMember && <span className="shy-ws-arrow-drop desk-no-drag size-24 round  flex-center remark flex-fixed item-hover "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
             </span>
             <div className="flex-fixed">
-                <span onMouseDown={e => {
-                    e.stopPropagation();
-                    surface.onToggleSln();
-                }} className="shy-ws-double-left size-24 round item-hover cursor flex-center gap-r-10 remark">
-                    <Icon size={18} icon={DoubleLeftSvg}></Icon>
-                </span>
+                <Tip overlay={<div>
+                    <span><S>关闭侧边栏</S></span>
+                    <span style={{ color: '#aaa' }}>
+                        {UA.isMacOs ? "⌘+\\" : "Ctrl+\\"}
+                    </span>
+                </div>}>
+                    <span onMouseDown={e => {
+                        e.stopPropagation();
+                        surface.onToggleSln();
+                    }} className="shy-ws-double-left size-24 round item-hover cursor flex-center gap-r-10 remark">
+                        <Icon size={18} icon={DoubleLeftSvg}></Icon>
+                    </span>
+                </Tip>
+
             </div>
         </div>
         {surface.workspace.cover && <div className="shy-ws-profile-cover">

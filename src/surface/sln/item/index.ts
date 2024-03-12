@@ -21,6 +21,7 @@ import { Page } from "rich/src/page";
 import { lst } from "rich/i18n/store";
 import { useWsPicker } from "rich/extensions/ws/index";
 import { useInputIconAndText } from "rich/component/view/input/iconAndText";
+import { UA } from "rich/util/ua";
 
 export class PageItem {
     id: string = null;
@@ -32,10 +33,10 @@ export class PageItem {
     public plain: string;
     public thumb: ResourceArguments;
     spread: boolean = false;
-    
+
     description: string = '';
     createDate: Date = null;
-    creater:string=null;
+    creater: string = null;
     mime: Mime = Mime.none;
     pageType: PageLayoutType = PageLayoutType.doc;
     workspaceId: string;
@@ -272,10 +273,9 @@ export class PageItem {
             })
         }
     }
-    async onAdd(data?: Record<string, any>)
-    {
+    async onAdd(data?: Record<string, any>) {
         if (typeof data == 'undefined') data = {};
-        Object.assign(data,{
+        Object.assign(data, {
             text: '',
             mime: Mime.page,
             pageType: PageLayoutType.doc,
@@ -343,7 +343,8 @@ export class PageItem {
                 {
                     name: 'rename',
                     icon: RenameSvg,
-                    text: lst('重命名')
+                    text: lst('重命名'),
+                    label: UA.isMacOs ? "⌘+Shift+R" : "Ctrl+Shift+R"
                 },
                 {
                     name: 'createFolder',
@@ -360,13 +361,15 @@ export class PageItem {
                 {
                     name: 'copy',
                     icon: DuplicateSvg,
-                    text: lst('拷贝副本')
+                    text: lst('拷贝副本'),
+                    label: UA.isMacOs ? "⌘+D" : "Ctrl+D"
                 },
                 {
                     name: 'move',
                     iconSize: 18,
                     icon: { name: 'bytedance-icon', code: 'corner-up-right' },
-                    text: lst('移动')
+                    text: lst('移动'),
+                    label: UA.isMacOs ? "⌘+Shift+P" : "Ctrl+Shift+P"
                 },
                 { type: MenuItemType.divide },
                 {
@@ -383,7 +386,8 @@ export class PageItem {
                 {
                     name: 'remove',
                     icon: TrashSvg,
-                    text: lst('删除')
+                    text: lst('删除'),
+                    label: 'Del'
                 }
             ]
             if (this.editor) {
@@ -405,7 +409,8 @@ export class PageItem {
             items.push({
                 name: 'openRight',
                 icon: LogoutSvg,
-                text: lst('在右侧边栏打开')
+                text: lst('在右侧边栏打开'),
+                label:UA.isMacOs?"⌥+Click":"Alt+Click"
             });
             items.push({
                 type: MenuItemType.divide,
@@ -413,13 +418,15 @@ export class PageItem {
             items.push({
                 name: 'link',
                 icon: LinkSvg,
-                text: lst('复制访问链接')
+                text: lst('复制访问链接'),
+                label: UA.isMacOs ? "⌥+Shift+L" : "Alt+Shift+L"
             });
             items.push({
                 name: 'move',
                 iconSize: 18,
                 icon: { name: 'bytedance-icon', code: 'corner-up-right' },
-                text: lst('移动')
+                text: lst('移动'),
+                label: UA.isMacOs ? "⌘+Shift+P" : "Ctrl+Shift+P"
             });
             items.push({
                 type: MenuItemType.divide,
@@ -427,12 +434,14 @@ export class PageItem {
             items.push({
                 name: 'copy',
                 icon: DuplicateSvg,
-                text: lst('拷贝副本')
+                text: lst('拷贝副本'),
+                label: UA.isMacOs ? "⌘+D" : "Ctrl+D"
             });
             items.push({
                 name: 'rename',
                 icon: RenameSvg,
-                text: lst('重命名')
+                text: lst('重命名'),
+                label: UA.isMacOs ? "⌘+Shift+R" : "Ctrl+Shift+R"
             });
             items.push({
                 type: MenuItemType.divide,
@@ -440,7 +449,8 @@ export class PageItem {
             items.push({
                 name: 'remove',
                 icon: TrashSvg,
-                text: lst('删除')
+                text: lst('删除'),
+                label: "Del"
             });
             if (this.editor) {
                 items.push({
