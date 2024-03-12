@@ -32,9 +32,10 @@ export class PageItem {
     public plain: string;
     public thumb: ResourceArguments;
     spread: boolean = false;
-    creater: string = '';
+    
     description: string = '';
     createDate: Date = null;
+    creater:string=null;
     mime: Mime = Mime.none;
     pageType: PageLayoutType = PageLayoutType.doc;
     workspaceId: string;

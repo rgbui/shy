@@ -14,10 +14,10 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
     let refInput = React.useRef<HTMLInputElement>(null);
     let refEditText = React.useRef<string>(null);
     var item = props.item;
-    var gapLeft = 0 + (props.deep || 0) * 15
+    var paddingLeft =5 + (props.deep || 0) * 15
     var style: Record<string, any> = {};
-    style.paddingLeft = gapLeft;
-    style['--gap-left'] = (gapLeft + 20) + 'px';
+    style.paddingLeft = paddingLeft;
+    style['--gap-left'] = (paddingLeft + 20) + 'px';
     var isInEdit = item.id == surface.sln.editId;
     var isCanEdit = item.isCanEdit;
     var isCanPlus = [Mime.table, Mime.chatroom].includes(item.mime) ? false : true;
@@ -89,7 +89,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
         }
     }, [isInEdit])
     function renderItem() {
-        return <div className={'shy-ws-item-page visible-hover flex gap-w-10 min-h-28 round relative cursor  ' + (isSelected ? " shy-ws-item-page-selected" : "") + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}
+        return <div className={'shy-ws-item-page visible-hover flex gap-w-5 padding-r-5 min-h-28 round relative cursor  ' + (isSelected ? " shy-ws-item-page-selected" : "") + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}
             style={style}
             onContextMenu={e => {
                 e.preventDefault()
@@ -100,7 +100,7 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 mousedown(e.nativeEvent)
             }}
         >
-            <span className={"size-20 round flex-center flex-fixed shy-ws-item-page-spread ts " + (item.spread ? " " : " angle-90-") + (false ? (" visible" + (item.subCount == 0 ? '' : " ")) : " ")}>
+            <span className={"size-20 round flex-center item-hover flex-fixed shy-ws-item-page-spread ts " + (item.spread ? " " : " angle-90-") + (false ? (" visible" + (item.subCount == 0 ? '' : " ")) : " ")}>
                 {item.willLoadSubs && <Spin></Spin>}
                 {!item.willLoadSubs && (item.subCount > 0 || item.childs.length > 0) && <Icon className={'text-1'} size={16} icon={ChevronDownSvg}></Icon>}
                 {!item.willLoadSubs && !((item.subCount > 0 || item.childs.length > 0)) && !surface?.workspace?.isPubSite && <Icon className={'text-1'} size={16} icon={DotSvg}></Icon>}
