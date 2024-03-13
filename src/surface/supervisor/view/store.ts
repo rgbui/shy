@@ -113,15 +113,17 @@ export class PageViewStores {
             }
             else {
                 var r = s.find(g => g.source == source);
-                if (r.openDate < Date.now() - 1000 * 60 * 5) {
-                    r.onDestroy();
-                    lodash.remove(s, g => g === r);
-                    r = null;
-                }
-                else r.openDate = Date.now();
                 if (r) {
-                    r.loadConfig(config);
-                    return r;
+                    if (r.openDate < Date.now() - 1000 * 60 * 5) {
+                        r.onDestroy();
+                        lodash.remove(s, g => g === r);
+                        r = null;
+                    }
+                    else r.openDate = Date.now();
+                    if (r) {
+                        r.loadConfig(config);
+                        return r;
+                    }
                 }
             }
         }
