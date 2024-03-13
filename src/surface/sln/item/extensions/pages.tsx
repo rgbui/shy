@@ -24,14 +24,14 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 item.onMousedownItem(e.nativeEvent)
             }}
             style={{ '--gap-left': gap + 'px' } as any}
-            className={"relative flex gap-w-5 round padding-w-5 item-hover padding-h-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
+            className={"relative flex gap-w-5 round padding-r-5 item-hover padding-h-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
             <div className={'flex-auto flex '}>
-                <span onMouseDown={e => {
+                <span onMouseDown={e =>{
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
-                }} className="f-12   round cursor flex">
-                    <span className={"flex-fixed item-hover round remark size-12 flex-center ts " + (item.spread ? "angle-180" : "angle-90")}><Icon size={6} icon={TriangleSvg}></Icon></span>
-                    <span className="flex-fixed  text-1 text-overflow bold">{item.text || lst("我的页面")}</span>
+                }} className="f-12 round cursor flex">
+                    <span className={" flex-fixed item-hover round text-1 size-12 flex-center ts " + (item.spread ? "angle-180 " : "angle-90 ")}><Icon size={6} icon={TriangleSvg}></Icon></span>
+                    <span className="flex-fixed   text-overflow ">{item.text || lst("我的页面")}</span>
                     <span
                         className={"cursor visible  flex-center ts " + (item.spread ? " " : " angle-90-")}>
                         {item.willLoadSubs && <Spin size={16} ></Spin>}

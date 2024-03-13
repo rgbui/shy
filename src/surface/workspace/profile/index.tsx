@@ -25,7 +25,7 @@ export var WorkspaceProfile = observer(function () {
             </span>}
             <span className="flex flex-auto  gap-r-5 ">
                 <span className="desk-no-drag flex-fixed bold f-16 text-overflow max-w-100">{surface.workspace.text}</span>
-                {surface.workspace.isMember && <span className="shy-ws-arrow-drop desk-no-drag size-24 round  flex-center remark flex-fixed item-hover "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
+                {surface.workspace.isMember && <span className="shy-ws-arrow-drop desk-no-drag size-20 round  flex-center text-1 flex-fixed item-hover "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
             </span>
             <div className="flex-fixed">
                 <Tip overlay={<div>
@@ -37,7 +37,7 @@ export var WorkspaceProfile = observer(function () {
                     <span onMouseDown={e => {
                         e.stopPropagation();
                         surface.onToggleSln();
-                    }} className="shy-ws-double-left size-24 round item-hover cursor flex-center gap-r-10 remark">
+                    }} className="shy-ws-double-left size-24 round item-hover cursor flex-center gap-r-10 text-1">
                         <Icon size={18} icon={DoubleLeftSvg}></Icon>
                     </span>
                 </Tip>
