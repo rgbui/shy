@@ -1,5 +1,4 @@
 import { Events } from "rich/util/events";
-import { KeyboardPlate } from "rich/src/common/keys";
 import { PageItem } from "./item";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Point, Rect } from "rich/src/common/vector/point";
@@ -33,7 +32,6 @@ export class Sln extends Events {
     dragIds: string[] = [];
     hover: { item: PageItem, direction: 'none' | 'top' | 'bottom' | 'bottom-sub' } = { item: null, direction: 'none' }
     isDrag: boolean = false;
-    keyboardPlate = new KeyboardPlate();
     async onOpenItemMenu(item: PageItem, event: MouseEvent) {
         var el = event.target as HTMLElement;
         var menuItem = await useSelectMenuItem({ roundPoint: Point.from(event) }, await item.getPageItemMenus());
@@ -42,11 +40,15 @@ export class Sln extends Events {
         }
     }
     async onMousedownItem(item: PageItem, event: MouseEvent) {
-        if (surface.sln.keyboardPlate.isAlt()) {
+        if (surface.keyboardPlate.isAlt()) {
             var page: Page = await channel.air('/page/slide', { elementUrl: item.elementUrl })
             if (page) {
                 await channel.air('/page/slide', { elementUrl: null });
             }
+            return;
+        }
+        else if (surface.keyboardPlate.isMetaOrCtrl()) {
+            window.open(item.url)
             return;
         }
         var self = this;
@@ -105,7 +107,10 @@ export class Sln extends Events {
             })
         }
         else {
-            if ([Mime.page, Mime.table].includes(item.mime)) channel.air('/page/open', { item });
+            if ([
+                Mime.page,
+                Mime.table
+            ].includes(item.mime)) channel.air('/page/open', { item });
         }
     }
     async onOpenItem(item: PageItem) {
@@ -127,6 +132,14 @@ export class Sln extends Events {
             var r = surface.workspace.childs.arrayJsonFindMax('childs', x => x.selectedDate || 0);
             if (r) {
                 channel.air('/page/open', { item: r });
+            }
+        }
+    }
+    async onNewPage() {
+        if (this.selectIds.length > 0) {
+            var item = surface.workspace.childs.arrayJsonFind('childs', x => this.selectIds.includes(x.id));
+            if (item) {
+                await item.onAdd()
             }
         }
     }
