@@ -123,4 +123,22 @@ export class Supervisor extends Events {
         if (this.dialog) this.dialog = null;
         if (this.slide) this.slide = null;
     }
+    openDialogOrSlideToPage() {
+        var ele = this.dialog ? this.dialog.elementUrl : undefined;
+        if (!ele && this.slide) ele = this.slide.elementUrl;
+        if (ele) {
+            this.closeDialogOrSlide();
+            this.onOpen(ele);
+        }
+    }
+    async changeSlideOrDialogToPage() {
+        var ele = this.dialog ? this.dialog.elementUrl : undefined;
+        if (!ele && this.slide) ele = this.slide.elementUrl;
+        var pe = this.page?.elementUrl;
+        if (ele && pe) {
+            await this.onOpen(ele);
+            if (this.dialog) await this.onOpenDialog(pe)
+            else if (this.slide) await this.onOpenSlide(pe)
+        }
+    }
 }
