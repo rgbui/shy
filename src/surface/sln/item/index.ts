@@ -33,7 +33,6 @@ export class PageItem {
     public plain: string;
     public thumb: ResourceArguments;
     spread: boolean = false;
-
     description: string = '';
     createDate: Date = null;
     creater: string = null;
