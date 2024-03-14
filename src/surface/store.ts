@@ -11,7 +11,6 @@ import { channel } from "rich/net/channel";
 import { PageItem } from "./sln/item";
 import { PageViewStores } from "./supervisor/view/store";
 import { config } from "../../common/config";
-import "./message.center";
 import { blockStore } from "rich/extensions/block/store";
 import { ls, lst } from "rich/i18n/store";
 import { PageTemplateType } from "rich/extensions/template";
@@ -22,6 +21,9 @@ import { Confirm } from "rich/component/lib/confirm";
 import { useCreateWorkspace } from "./workspace/create/box";
 import { wss } from "../../services/workspace";
 import { isMobileOnly } from "react-device-detect";
+import { KeyboardPlate } from "rich/src/common/keys";
+import "./service";
+import { GlobalKeyboard } from "./service";
 
 export class Surface extends Events {
     constructor() {
@@ -50,6 +52,7 @@ export class Surface extends Events {
     workspace: Workspace = null;
     wss: LinkWorkspaceOnline[] = [];
     temporaryWs: LinkWorkspaceOnline = null;
+    keyboardPlate = new KeyboardPlate();
     /**
      * 空间的访问方式
      * none: 无权限
@@ -272,7 +275,7 @@ export class Surface extends Events {
     onToggleSln() {
         if (isMobileOnly) surface.mobileSlnSpread = true;
         else surface.slnSpread = surface.slnSpread === false ? true : false;
-        if (surface.supervisor.page)
+        if (surface.supervisor.page?.page)
             surface.supervisor.page?.page?.view?.pageBar?.forceUpdate();
     }
     get showSln() {
@@ -293,16 +296,17 @@ export class Surface extends Events {
 
     async load() {
         await ls.import();
-        await blockStore.import();
         await surface.user.sign();
         if (surface.user.isSign) {
             await surface.user.createTim()
         }
         else {
             if (window.shyConfig.isDesk) {
-                UrlRoute.push(ShyUrl.signIn);
+                return UrlRoute.push(ShyUrl.signIn);
             }
         }
+        GlobalKeyboard()
+        await blockStore.import();
         var ul = new URL(location.href);
         var accessWorkspace = ul.searchParams.get('accessWorkspace');
         if (typeof accessWorkspace != 'undefined') {
@@ -335,6 +339,7 @@ export class Surface extends Events {
             await this.shyDesk.ready();
         }
     }
+    
     get shyDesk() {
         return (window as any).ShyDesk as ShyDesk
     }

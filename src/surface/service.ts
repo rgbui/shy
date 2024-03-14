@@ -25,6 +25,8 @@ import { useOpenRobotSettings } from "./workspace/robot/view";
 import { useOpenWorkspaceSettings } from "./workspace/settings";
 import { useOpenUserSettings } from "./user/settings";
 import { userChannelStore } from "./user/channel/store";
+import { KeyboardCode } from "rich/src/common/keys";
+import { useSearchBox } from "rich/extensions/search/keyword";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -362,7 +364,7 @@ class MessageCenter {
                 if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
-                wss.setWsPids(ws.id,ws.pids);
+                wss.setWsPids(ws.id, ws.pids);
                 var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id });
                 if (g.data.accessForbidden) {
                     return
@@ -542,3 +544,80 @@ class MessageCenter {
         await surface.workspace.setMode(args.isApp)
     }
 }
+
+export function GlobalKeyboard() {
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode.P),
+        (ev) => {
+            ev.preventDefault()
+            useSearchBox({ ws: surface.workspace })
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode.S),
+        (event, kt) => {
+            event.preventDefault()
+            if (surface.supervisor?.page?.page)
+                surface.supervisor?.page?.page.onPageSave();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode["\\"]),
+        (event, kt) => {
+            event.preventDefault();
+            surface.onToggleSln();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrlAndShift(KeyboardCode.N),
+        (event, kt) => {
+            event.preventDefault();
+            surface.sln.onNewPage();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode["["]),
+        (event, kt) => {
+            event.preventDefault();
+            history.back();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode["]"]),
+        (event, kt) => {
+            event.preventDefault();
+            history.forward();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode.R),
+        (event, kt) => {
+            event.preventDefault();
+            location.reload();
+        }
+    )
+
+
+    surface.keyboardPlate.listener(kb => kb.isAlt(KeyboardCode['`']),
+        (ev, kt) => {
+            ev.preventDefault();
+            surface.supervisor.changeSlideOrDialogToPage();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isAlt(KeyboardCode.Q),
+        (ev, kt) => {
+            ev.preventDefault();
+            surface.supervisor.closeDialogOrSlide();
+        }
+    )
+
+    surface.keyboardPlate.listener(kb => kb.isAlt(KeyboardCode.F),
+        (ev, kt) => {
+            ev.preventDefault();
+            surface.supervisor.openDialogOrSlideToPage();
+        }
+    )
+
+}
+
+
