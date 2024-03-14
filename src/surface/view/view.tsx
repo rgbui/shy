@@ -1,14 +1,14 @@
 import { observer, useLocalObservable } from "mobx-react";
 import React from 'react';
-import { Surface, surface } from "./store";
-import { SideBar } from "./view/sidebar";
-import { UserChannel } from "./user/channel/view";
+import { Surface, surface } from "../store";
+import { SideBar } from "./sidebar";
+import { UserChannel } from "../user/channel/view";
 import { Route } from "react-router";
-import { ShyUrl, SyHistory, UrlRoute } from "../history";
-import { DiscoveryView } from "./discovery";
-import { JoinTip } from "./view/join";
-import { SideSln } from "./view/sidesln";
-import { SupervisorView } from "./supervisor/view";
+import { ShyUrl, SyHistory, UrlRoute } from "../../history";
+import { DiscoveryView } from "../discovery";
+import { JoinTip } from "./join";
+import { SideSln } from "./sidesln";
+import { SupervisorView } from "../supervisor/view";
 import { ViewNotAllow } from "./404";
 import { channel } from "rich/net/channel";
 import { Spin } from "rich/component/view/spin";
@@ -79,6 +79,18 @@ export var SurfaceView = observer(function () {
     }
     React.useEffect(() => {
         load();
+        var keydown = (e: KeyboardEvent) => {
+            surface.keyboardPlate.keydown(e);
+        }
+        var keyup = (e: KeyboardEvent) => {
+            surface.keyboardPlate.keyup(e);
+        }
+        document.addEventListener('keydown', keydown, true);
+        document.addEventListener('keyup', keyup, true);
+        return () => {
+            document.removeEventListener('keydown', keydown, true);
+            document.removeEventListener('keyup', keyup, true);
+        }
     }, [])
     if (local.loading) return <div className='shy-surface-loading'><Spin></Spin></div>
     else return <div className='shy-surface'>

@@ -9,7 +9,7 @@
 import "../common/config";
 import "rich";
 import "../services/declare";
-import "../src/surface/message.center";
+import "../src/surface/service";
 import "../src/assert/theme.less";
 import "./style.less";
 import "./site.less";

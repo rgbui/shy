@@ -1,11 +1,11 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ShyUrl, UrlRoute } from "../history";
+import { ShyUrl, UrlRoute } from "../../history";
 import { Divider } from "rich/component/view/grid";
-import { surface } from "./store";
+import { surface } from "../store";
 import { Button } from "rich/component/view/button";
 import { S } from "rich/i18n/view";
-import { config } from "../../common/config";
+import { config } from "../../../common/config";
 import { lst } from "rich/i18n/store"; 
 
 export var View404 = observer(function () {
