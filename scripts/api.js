@@ -148,6 +148,7 @@ push('/download/file', '{url:string}', 'SockResponse<{file:ResourceArguments }>'
 push('/page/create/by_text', '{word:string}', 'SockResponse<LinkPageItem>', ['act']);
 push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageItem}`, `void`, ['air']);
 push('/page/query/info', `{ ws?: LinkWs,sn?:number, id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
+push('/page/query/parents', `{ ws?: LinkWs, id?: string,sn?:number}`, `SockResponse<{items:LinkPageItem[]}>`, ['get']);
 push(`/page/query/elementUrl`, `{ws?: LinkWs,elementUrl?:string}`, `LinkPageItem`, ['get']);
 push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}`, `void`, ['air']);
 push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['air']);

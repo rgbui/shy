@@ -393,14 +393,14 @@ export class PageItem {
                 items.push({
                     type: MenuItemType.divide,
                 });
-                if (this.editDate) items.push({
-                    type: MenuItemType.text,
-                    text: lst('编辑于 ') + util.showTime(this.editDate)
-                });
                 var r = await channel.get('/user/basic', { userid: this.editor });
                 if (r?.data?.user) items.push({
                     type: MenuItemType.text,
                     text: lst('编辑人 ') + r.data.user.name
+                });
+                if (this.editDate) items.push({
+                    type: MenuItemType.text,
+                    text: lst('编辑于 ') + util.showTime(this.editDate)
                 });
             }
         }
@@ -455,14 +455,14 @@ export class PageItem {
                 items.push({
                     type: MenuItemType.divide,
                 });
-                if (this.editDate) items.push({
-                    type: MenuItemType.text,
-                    text: lst('编辑于 ') + util.showTime(this.editDate)
-                });
                 var r = await channel.get('/user/basic', { userid: this.editor });
                 if (r?.data?.user) items.push({
                     type: MenuItemType.text,
                     text: lst('编辑人 ') + r.data.user.name
+                });
+                if (this.editDate) items.push({
+                    type: MenuItemType.text,
+                    text: lst('编辑于 ') + util.showTime(this.editDate)
                 });
             }
         }

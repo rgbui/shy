@@ -15,4 +15,5 @@ export function getPageItemElementUrl(item: PageItem) {
     else if (item.pageType == PageLayoutType.textChannel) {
         return getElementUrl(ElementType.Room, item.id);
     }
+    else  return getElementUrl(ElementType.PageItem, item.id);
 }
