@@ -208,6 +208,61 @@ class MessageCenter {
             else return { ok: false, warn: r.warn };
         }
     }
+    @get('/page/query/parents')
+    async pageQueryPages(args: { ws?: LinkWs, id: string, sn?: number }) {
+        var item = surface?.workspace?.find(g => args.id && g.id == args.id || g.sn == args.sn);
+        if (item) {
+            var items: PageItem[] = [];
+            var r = item;
+            var count = 0;
+            while (true) {
+                count += 1;
+                if (count > 100) break;
+                if (r) {
+                    items.push(r);
+                    r = r.parent
+                }
+                else break;
+            }
+            return { ok: true, data: { items } };
+        }
+        else {
+            var sock = args.ws && args.ws?.id != surface?.workspace?.id ? await wss.getWsSock(args.ws?.id) : surface.workspace.sock;
+            var ws = args.ws || surface.workspace;
+            var rc = await sock.get('/page/parent/items', { id: args.id || undefined, sn: args.sn || undefined });
+            if (rc.ok && rc.data.items)
+                return {
+                    ok: true,
+                    data: {
+                        items: rc.data.items.map(item => {
+                            return Object.assign({
+                                url: ws.url + '/page/' + item.sn,
+                                elementUrl: getPageItemElementUrl(item as any)
+                            }, lodash.pick(item,
+                                [
+                                    'id',
+                                    'icon',
+                                    'locker',
+                                    'sn',
+                                    'text',
+                                    'pageType',
+                                    'cover',
+                                    'plain',
+                                    'thumb',
+                                    'share',
+                                    'netPermissions',
+                                    'memberPermissions',
+                                    'inviteUsersPermissions',
+                                    'parentId',
+                                    'mime'
+                                ]))
+
+                        })
+                    }
+                }
+            else return { ok: false, warn: rc.warn };
+        }
+    }
     @get('/page/query/elementUrl')
     async pageQueryElementUrl(args: { ws?: LinkWs, elementUrl: string }) {
         var pe = parseElementUrl(args.elementUrl);
