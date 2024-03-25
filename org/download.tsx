@@ -9,7 +9,7 @@ export function DownloadView() {
             <div className="flex gap-h-20 gap-t-100 flex-center error h-40"><S text='更新频繁暂时不支持下载请使用Web版'>更新频繁，暂时不支持下载，请使用Web版</S></div>
             <div className="shy-site-download" style={{ paddingTop: 0 }}>
                 <div className="flex-center">
-                    <img className="w-300" src='static/img/person-read.svg' />
+                    <img className="w-300" src={config.isUS||true?"static/img/read-book.svg": 'static/img/s1.png'} />
                 </div>
                 <h2 className="shy-site-block-head flex-center "><S text='诗云客户端-title'>适用于 Mac 和 Windows的诗云客户端</S></h2>
                 <div className="flex-center gap-b-20 shy-site-block-remark"><S text='诗云客户端-description'>独自或与团队一起工作，不受干扰，享受生活美好时光</S></div>
@@ -50,7 +50,7 @@ export function DownloadView() {
             <div className="shy-site-download">
 
                 <div className="flex-center">
-                    <img className="w-400" src='static/img/user-leaf.svg' />
+                    <img className="w-400" src={config.isUS||true? 'static/img/user-leaf.svg':"static/img/s2.png"} />
                 </div>
                 <h2 className="shy-site-block-head flex-center"><S>免费的本地及私有化数据存储诗云服务端</S></h2>
                 <div className="flex-center gap-b-20  shy-site-block-remark "><S text='安装在那里数据存那里'>安装在那里，数据存那里</S></div>
