@@ -6,7 +6,7 @@ import { surface } from "../store";
 import { Button } from "rich/component/view/button";
 import { S } from "rich/i18n/view";
 import { config } from "../../../common/config";
-import { lst } from "rich/i18n/store"; 
+import { lst } from "rich/i18n/store";
 
 export var View404 = observer(function () {
     function back(event: React.MouseEvent) {
@@ -18,11 +18,13 @@ export var View404 = observer(function () {
             location.href = config.isUS ? "https://shy.red" : 'https://shy.live'
         }
     }
-    return <div className='shy-404' style={{ marginTop: window.isSite ? 60 : 0 }}>
-        <div className='shy-404-content'>
-            <div className="flex-center link-red f-120" >404</div>
+    return <div className='vw100 vh100 relative' style={{
+        marginTop: window.isSite ? 60 : 0,
+    }}>
+        <img className="obj-center pos pos-center " style={{ maxWidth: '100%' }} src={UrlRoute.getUrl('static/img/404.png')} />
+        <div className=' pos ' style={{ left: 0, right: 0, top: 20 }}>
             <div className="flex-center f-16">
-                <span className="remark"><S>当前的页面不存在,返回至</S><a className="gap-l-10" onClick={e => back(e)} href={config.isUS ? "https://shy.red" : 'https://shy.live'}><S>诗云</S></a></span>
+                <span ><S>当前页面不存在,返回至</S><a className="gap-l-10" onClick={e => back(e)} href={config.isUS ? "https://shy.red" : 'https://shy.live'}><S>诗云</S></a></span>
             </div>
         </div>
     </div>
