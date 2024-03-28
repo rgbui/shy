@@ -133,7 +133,7 @@ export class UsLogin extends React.Component<{ call?: () => void }> {
                         return;
                     }
                 }
-                var r = await masterSock.post('/account/login', {
+                var r = await masterSock.post('/account/sign', {
                     account: local.email,
                     paw: local.loginType == 'paw' ? local.paw : undefined,
                     code: local.loginType == 'code' ? local.code : undefined
