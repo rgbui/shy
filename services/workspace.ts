@@ -149,6 +149,7 @@ class WorkspaceService extends BaseService {
         args.sockId = surface.workspace.tim.id;
         return await surface.workspace.sock.put('/ws/channel/emoji', args);
     }
+    
     @get('/ws/channel/abled/send')
     async getChannelAbledSend(args) {
         var sock = await this.getArgsSock(args);
@@ -160,16 +161,29 @@ class WorkspaceService extends BaseService {
     * @returns 
     */
     @post('/ws/upload/file')
-    async uploadFile(data: { file: File, uploadProgress }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
+    async uploadFile(data: {
+        file: File,
+        mime: 'image' | 'file',
+        uploadProgress,
+        data?: { fileClassify: 'cover' | 'file' | 'image' }
+    }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
         try {
-            if (data.file.size > 1024 * 1024 * 50) {
-                ShyAlert(lst('暂时不支持上传超过50M的文件'))
-                return { ok: false, warn: lst('文件大小不能超过50M') }
+            if (data?.mime == 'image' && data.file.size > 1024 * 1024 * 30) {
+                ShyAlert(lst('暂时不支持上传超过30M的图片'))
+                return { ok: false, warn: lst('图片大小不能超过30M') }
+            }
+            else if (data.file.size > 1024 * 1024 * 1024 * 2) {
+                ShyAlert(lst('暂时不支持上传超过2G的文件'))
+                return { ok: false, warn: lst('文件大小不能超过2G') }
             }
             var masterFile;
             var { file, uploadProgress } = data;
             if (!file.md5) file.md5 = await FileMd5(file);
-            var d = await surface.workspace.fileSock.upload(file, { url: '/ws/file/upload', uploadProgress: uploadProgress });
+            var d = await surface.workspace.fileSock.upload(file, {
+                url: '/ws/file/upload',
+                data: data?.data || undefined,
+                uploadProgress: uploadProgress
+            });
             if (d.ok) {
                 masterFile = d.data;
             }
@@ -179,6 +193,11 @@ class WorkspaceService extends BaseService {
             console.error(lst('上传文件失败'), ex)
             return { ok: false, warn: lst('上传文件失败') }
         }
+    }
+    @get('/ws/files')
+    async getWsFiles(args) {
+        var sock = await this.getArgsSock(args);
+        return await sock.get('/ws/files', args);
     }
     @post('/ws/download/url')
     async uploadUrl(data: { url: string }): Promise<{ ok: boolean, data?: { url: string, size: number }, warn?: string }> {
