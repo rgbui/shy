@@ -22,6 +22,7 @@ import { lst } from "rich/i18n/store";
 import { useWsPicker } from "rich/extensions/ws/index";
 import { useInputIconAndText } from "rich/component/view/input/iconAndText";
 import { UA } from "rich/util/ua";
+import { PopoverPosition } from "rich/component/popover/position";
 
 export class PageItem {
     id: string = null;
@@ -320,7 +321,10 @@ export class PageItem {
         }
     }
     async onMove(el: HTMLElement) {
-        var r = await useWsPicker({ roundArea: Rect.fromEle(el) });
+        var pos: PopoverPosition;
+        if (el) pos = { roundArea: Rect.fromEle(el) }
+        else pos = { center: true, centerTop: 100 };
+        var r = await useWsPicker(pos);
         if (r) {
             var g = await channel.post('/create/template', { config: { pageId: this.id } })
             if (g.ok) {
@@ -409,7 +413,7 @@ export class PageItem {
                 name: 'openRight',
                 icon: LogoutSvg,
                 text: lst('在右侧边栏打开'),
-                label:UA.isMacOs?"⌥+Click":"Alt+Click"
+                label: UA.isMacOs ? "⌥+Click" : "Alt+Click"
             });
             items.push({
                 type: MenuItemType.divide,

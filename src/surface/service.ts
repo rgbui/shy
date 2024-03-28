@@ -576,8 +576,7 @@ class MessageCenter {
     @act('/open/user/private/channel')
     async currentUserSend(args: { userid: string }) {
         UrlRoute.push(ShyUrl.me);
-        if (surface.workspace)
-            await surface.workspace.exitWorkspace();
+        if (surface.workspace) await surface.workspace.exitWorkspace();
         await userChannelStore.openUserChannel(args.userid);
     }
     @act('/current/page/copy')
@@ -591,7 +590,7 @@ class MessageCenter {
     async currentPageMove(args: { event: React.MouseEvent }) {
         var item = surface.supervisor.page?.item;
         if (item) {
-            await item.onMove(args.event.target as HTMLElement);
+            await item.onMove(args?.event?.target as HTMLElement);
         }
     }
     @act('/workspace/mode')
