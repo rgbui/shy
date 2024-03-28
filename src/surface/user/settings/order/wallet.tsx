@@ -258,11 +258,11 @@ export class ShyWallet extends React.Component {
                 </div>
                 <div className="flex-fixed w-120  item-hover-focus ">
                     <div><S>数据记录数</S></div>
-                    <div>{this.consume?.rowCount || 0}/{(this.free?.rowCount||0)}</div>
+                    <div>{this.consume?.rowCount || 0}/{(this.free?.rowCount || 0)}</div>
                 </div>
                 <div className="flex-fixed w-120   item-hover-focus ">
                     <div><S>AI额度</S></div>
-                    <div>{this.consume?.cheapAI || 0 + (this.consume?.expensiveAI || 0)}/{this.free?.cheapAI + this.free?.expensiveAI}</div>
+                    <div>{(this.consume?.cheapAI || 0 + (this.consume?.expensiveAI || 0)).toFixed(2)}/{this.free?.cheapAI + this.free?.expensiveAI}</div>
                 </div>
             </div>
             <Divider></Divider>
