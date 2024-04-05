@@ -379,6 +379,7 @@ push('/open/user/private/channel','{userid:string}', 'SockResponse<void>', ['act
 push('/current/page/copy','{}', 'SockResponse<void>', ['act'])
 push('/current/page/move','{}', 'SockResponse<void>', ['act'])
 push('/workspace/mode','{isApp:boolean}','SockResponse<void>',['act']);
+push('/current/page/preOrNext','{pageId:string}','SockResponse<{pre:LinkPageItem,next:LinkPageItem}>', ['get']);
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

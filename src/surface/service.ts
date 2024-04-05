@@ -597,6 +597,22 @@ class MessageCenter {
     async workspaceMode(args: { isApp: boolean }) {
         await surface.workspace.setMode(args.isApp)
     }
+    @get('/current/page/preOrNext')
+    async curentPagePreOrNext(args: { pageId: string }) {
+        if (surface.workspace) {
+            var item = surface.workspace.find(c => c.id == args.pageId);
+            if (item) {
+                var pre = surface.workspace.find(c => c.parentId == item.parentId && c.at < item.at);
+                var next = surface.workspace.find(c => c.parentId == item.parentId && c.at > item.at);
+                return { ok: true, data: { pre, next } }
+            }
+            else {
+                var r = await surface.workspace.sock.get('/page/preOrNext', { wsId: surface.workspace.id, pageId: args.pageId });
+                return r;
+            }
+        }
+        else return {ok:false}
+    }
 }
 
 export function GlobalKeyboard() {
