@@ -6,7 +6,7 @@ export function getPageItemElementUrl(item: PageItem) {
     if (item.pageType == PageLayoutType.db) {
         return getElementUrl(ElementType.Schema, item.id);
     }
-    else if (item.pageType == PageLayoutType.doc || item.pageType == PageLayoutType.board || item.pageType == PageLayoutType.docCard) {
+    else if (item.pageType == PageLayoutType.doc || item.pageType == PageLayoutType.board || item.pageType == PageLayoutType.ppt) {
         return getElementUrl(ElementType.PageItem, item.id);
     }
     else if (item.pageType == PageLayoutType.dbView) {
