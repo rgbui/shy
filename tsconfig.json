@@ -9,7 +9,8 @@
         "sourceMap": true,
         "moduleResolution": "node", // 允许从没有设置默认导出的模块中默认导入
         "allowSyntheticDefaultImports": true,
-        "resolveJsonModule": true,"esModuleInterop": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
         // "declaration": false, //Generates corresponding d.ts files.
         // "declarationDir": "./types",
         // 启用装饰器
@@ -22,6 +23,8 @@
             "es2017",
             "es2018",
             "es2019",
+            "ES2020",
+            "es2021",
             "dom",
             "es6"
         ],
