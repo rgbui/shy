@@ -19,6 +19,7 @@ export enum MessageUrl {
     userFriendRequestNotify = '/user/friend/request/notify',
     pageItemOperate = '/ws/page/item/operate/notify',
     viewOperate = '/ws/view/operate/notify',
+    viewOperates = '/ws/view/operates/notify',
     dateGridOperator = '/ws/datagrid/schema/operate/notify',
     workspaceSync = '/ws/sync',
     channelNotify = '/ws/channel/notify',
@@ -96,6 +97,16 @@ export function workspaceNotifys(tim: Tim) {
         if (surface.workspace?.id == e.workspaceId) {
             window.shyLog('notify view operate', e);
             surface.workspace.onNotifyViewOperater(e);
+        }
+    });
+    tim.only(MessageUrl.viewOperates, async e => {
+        if (surface.workspace?.id == e.workspaceId) {
+            window.shyLog('notify view operate', e);
+            if (Array.isArray(e.operates)) {
+                await e.operates.eachAsync(async e => {
+                    await surface.workspace.onNotifyViewOperater(e);
+                })
+            }
         }
     });
 
