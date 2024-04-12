@@ -345,7 +345,7 @@ export class PageItem {
             items = [
                 {
                     name: 'rename',
-                    icon: RenameSvg,
+                    icon: { name: "byte", code: 'write' },
                     text: lst('重命名'),
                     label: UA.isMacOs ? "⌘+Shift+R" : "Ctrl+Shift+R"
                 },
@@ -442,7 +442,7 @@ export class PageItem {
             });
             items.push({
                 name: 'rename',
-                icon: RenameSvg,
+                icon: { name: "byte", code: 'write' },
                 text: lst('重命名'),
                 label: UA.isMacOs ? "⌘+Shift+R" : "Ctrl+Shift+R"
             });

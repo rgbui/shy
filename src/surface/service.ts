@@ -90,7 +90,7 @@ class MessageCenter {
             else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
             it.onUpdateDocument();
             surface.sln.onFocusItem(it);
-            if (!(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn.toString())) {
+            if (!(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn?.toString())) {
                 UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
             }
         }
@@ -500,9 +500,9 @@ class MessageCenter {
                 seq: args.seq,
                 content: args.content,
                 plain: args.plain,
-                text: args.text,
-                force: true
-            });
+                text: args.text
+               
+            },{force:true});
         }
     }
     @act('/shy/share')
