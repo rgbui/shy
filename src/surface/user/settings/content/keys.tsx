@@ -11,6 +11,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../net/sock";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { HelpText } from "rich/component/view/text";
 
 export interface UserPks {
     id: string;
@@ -48,7 +49,7 @@ export class ShyUserPks extends React.Component {
                 title: lst('创建个人身份私钥'),
                 head: false,
                 remark: lst('创建个人身份私钥'),
-                fields: [{ name: 'name', text: lst('私钥名称'), type: 'input' }],
+                fields: [{ name: 'name', placeholder: lst('私钥名称'), type: 'input' }],
                 checkModel: async (model) => {
                     if (model.name) return lst('私钥名称不能为空')
                     return ''
@@ -62,7 +63,7 @@ export class ShyUserPks extends React.Component {
         }
         async function openPkProperty(pk: UserPks, event: React.MouseEvent) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-                { name: 'edit', text: lst("编辑名称"), icon: EditSvg },
+                { name: 'edit', text: lst("编辑名称"), icon: { name: 'byte', code: 'write' } },
                 ...(self.pks.length > 2 && pk.mode == 'active' ? [
                     { name: 'check', text: lst("启用"), checkLabel: pk.check },
                     { name: 'uncheck', text: lst("禁用"), checkLabel: !pk.check }
@@ -90,7 +91,7 @@ export class ShyUserPks extends React.Component {
                 title: lst('编辑私钥名称'),
                 remark: lst('私钥名称'),
                 model: { name: pk.name },
-                fields: [{ name: 'name', text: lst('名称'), type: 'input' }],
+                fields: [{ name: 'name', placeholder: lst('名称'), type: 'input' }],
                 checkModel: async (model) => {
                     if (model.name) return lst('名称不能为空')
                     return ''
@@ -104,7 +105,10 @@ export class ShyUserPks extends React.Component {
         }
         return <div className="visible-hover">
             <div className="flex">
-                <span className="flex-fixed h2"><S>个人身份私钥</S></span>
+                <span className="flex-fixed h2 flex">
+                    <S>个人身份私钥</S>
+                    <HelpText style={{ marginLeft: 3, fontWeight: 'normal' }} url={window.shyConfig.isUS ? "https://help.shy.red/page/67#sLqLc9ULWuCkzsxJMYMuwx" : "https://help.shy.live/page/1899#aWRNmfYpBemnAqZRqriqga"}><S>了解个人身份私钥</S></HelpText>
+                </span>
                 <span className="flex-auto flex-end visible">
                     <span onMouseDown={e => open(e)} className="flex-center size-24 cursor item-hover round"><Icon size={20} icon={PlusSvg}></Icon></span>
                 </span>
@@ -130,8 +134,8 @@ export class ShyUserPks extends React.Component {
 
             <div className="remark gap-h-30 gap-l-14">
                 <div><S>个人身份私钥分类</S></div>
-                <div><S text="生活交易私钥说明">1.生活交易 适用于签名交易安全</S></div>
-                <div><S text='日常行为私钥说明'>2.日常行为 适用于在社区活动签名交互行为</S></div>
+                <div><S text="支付私钥">1.支付私钥 适用于交易签名</S></div>
+                <div><S text='活动私钥'>2.活动私钥 适用于社区活动互动签名</S></div>
             </div>
         </div>
     }

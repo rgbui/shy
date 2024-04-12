@@ -70,45 +70,65 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
                     {surface.user.cover?.url && <img style={{ height: 180, display: 'block' }} src={autoImageUrl(surface.user.cover?.url, 900)} />}
                 </div>
                 <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 180 : 100 }}>
-                    {surface.user?.avatar && <img src={autoImageUrl(surface.user.avatar.url, 120)} />}
+                    {surface.user?.avatar && <img className='obj-center' src={autoImageUrl(surface.user.avatar.url, 120)} />}
                     {!surface.user?.avatar && <span>{(surface.user?.name || "").slice(0, 1)}</span>}
                 </div>
                 <div className="shy-user-settings-profile-box-card-operators">
                     <h2>{surface.user.name}#{surface.user.sn}</h2>
-                    <Button onClick={e => this.props.setMode()}><S>编辑个人资料</S></Button>
+                    <div className='flex-fixed'>
+                        <Button size='small' onClick={e => this.props.setMode()}><S>编辑个人资料</S></Button>
+                    </div>
                 </div>
                 <div className="shy-user-settings-profile-box-card-options">
-                    <Row>
-                        <Col span={24}><span><S>用户名</S></span></Col>
-                        <Col span={12}>{surface.user?.name}#{surface.user?.sn}</Col><Col span={12} align={'end'}><Button onClick={e => this.modifyUserName(e)}><S>编辑</S></Button></Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}><span><S>电子邮箱</S></span></Col>
-                        <Col span={12}><span>{this.dataUser?.email || lst('您还没有添加邮箱')}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? lst('更换') : lst('新增')}</Button></Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}><span><S>手机号</S></span></Col>
-                        <Col span={12}><span>{this.dataUser?.phone || lst('您还没有添加手机号')}</span></Col><Col span={12} align={'end'}><Button onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? lst('更换') : lst('新增')}</Button></Col>
-                    </Row>
+                    <div className='flex gap-h-10'>
+                        <div className='flex-fixed'>
+                            <span className='f-12 remark'><S>用户名</S></span>
+                            <div>{surface.user?.name}#{surface.user?.sn}</div>
+                        </div>
+                        <div className='flex-auto flex-end'>
+                            <Button size='small' onClick={e => this.modifyUserName(e)}><S>编辑</S></Button>
+                        </div>
+                    </div>
+
+                    <div className='flex  gap-h-10'>
+                        <div className='flex-fixed'>
+                            <span className='f-12 remark'><S>电子邮箱</S></span>
+                            <div className={this.dataUser?.email ? "" : "remark f-12"}>{this.dataUser?.email || lst('您还没有添加邮箱')}</div>
+                        </div>
+                        <div className='flex-auto flex-end'>
+                            <Button size='small' onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? lst('更换') : lst('新增')}</Button>
+                        </div>
+                    </div>
+
+                    <div className='flex gap-h-10'>
+                        <div className='flex-fixed'>
+                            <span className='f-12 remark'><S>手机号</S></span>
+                            <div className={this.dataUser?.phone ? "" : "remark f-12"}>{this.dataUser?.phone || lst('您还没有添加手机号')}</div>
+                        </div>
+                        <div className='flex-auto flex-end'>
+                            <Button size='small' onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? lst('更换') : lst('新增')}</Button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <Divider></Divider>
             <div className='gap-h-30 gap-t-40'>
-                <div className='h4'><S>邀请好友</S></div>
+                <div className='f-16 bold'><S>邀请好友</S></div>
                 <InviteCode></InviteCode>
             </div>
             <div className='gap-h-30'>
-                <div className='h4'><S>密码</S></div>
-                <div className='remark f-12'><S>设置帐号的登录密码</S></div>
+                <div className='f-16 bold'><S>密码</S></div>
+                <div className='remark f-12 gap-t-5'><S>设置帐号的登录密码</S></div>
                 <div className='gap-h-10'>
-                    <Button onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? lst("修改密码") : lst("设置密码")}</Button>
+                    <Button ghost size='small' onClick={e => this.modifyPwd(e)}>{this.dataUser?.checkPaw ? lst("修改密码") : lst("设置密码")}</Button>
                 </div>
             </div>
             <div className='gap-h-30'>
-                <div className='h4'><S>注销帐号</S></div>
-                <div className='remark f-12'><S>注销帐号将清理帐号相关的信息</S></div>
+                <div className='f-16 bold'><S>注销帐号</S></div>
+                <div className='remark f-12  gap-t-5'><S>注销帐号将清理帐号相关的信息</S></div>
                 <div className='gap-h-10'>
-                    <Button onClick={e => ShyAlert(lst('暂时不支持注销帐号'))} ghost><S>注销帐号</S></Button>
+                    <Button size='small' onClick={e => ShyAlert(lst('暂时不支持注销帐号'))} ghost><S>注销帐号</S></Button>
                 </div>
             </div>
         </div>

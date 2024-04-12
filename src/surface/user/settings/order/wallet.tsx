@@ -17,7 +17,7 @@ import { ls, lst } from "rich/i18n/store";
 import { loadEchart } from "rich/blocks/data-grid/view/statistic/load";
 import { util } from "rich/util/util";
 import { Icon } from "rich/component/view/icon";
-import { ChevronLeftSvg, ChevronRightSvg } from "rich/component/svgs";
+import { AiStartSvg, ChevronLeftSvg, ChevronRightSvg } from "rich/component/svgs";
 import { MenuItem } from "rich/component/view/menu/declare";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { Rect } from "rich/src/common/vector/point";
@@ -229,8 +229,8 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>余额</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed">{Price.toFixed(this.wallet.money)}<S>元</S></span>
-                    <span className="flex-auto flex-end r-gap-l-10"><Button onClick={e => openPay('fill')}><S>充值</S></Button>
-                        <Button ghost onClick={e => this.coupon(e)}><S>兑换码</S></Button></span>
+                    <span className="flex-auto flex-end r-gap-l-10"><Button size="small" onClick={e => openPay('fill')}><S>充值</S></Button>
+                        <Button size="small" ghost onClick={e => this.coupon(e)}><S>兑换码</S></Button></span>
                 </div>
                 <Divider></Divider>
             </div>
@@ -238,8 +238,8 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>套餐</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed"><em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal' || this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i className="text-1">[{dayjs(this.wallet.due).format('YYYY.MM.DD')}<S>到期</S>]</i>}</span>
-                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button ghost onClick={e => openPay('meal-1')}><S>专业版</S></Button>}
-                        <Button ghost onClick={e => openPay('meal-2')}><S>社区版</S></Button></span>
+                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button size="small" ghost onClick={e => openPay('meal-1')}><S>专业版</S></Button>}
+                        <Button size="small" ghost onClick={e => openPay('meal-2')}><S>社区版</S></Button></span>
                 </div>
                 <Divider></Divider>
             </div>
@@ -251,18 +251,18 @@ export class ShyWallet extends React.Component {
 
         return <div>
             <div className="h4"><S>资源额度</S></div>
-            <div className="flex r-round r-gap-r-10 r-padding-5 gap-b-10">
-                <div className="flex-fixed w-120 item-hover-focus ">
-                    <div><S>空间</S></div>
-                    <div>{util.byteToString(this.consume?.diskSpace || 0)}/{util.byteToString(this.free?.diskSpace || 0)}</div>
+            <div className="flex r-round r-gap-r-10 r-padding-15 gap-b-10">
+                <div className="flex-fixed min-w-120 item-hover-focus ">
+                    <div className="flex remark  "><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'file-cabinet' }}></Icon></span><S>空间</S></div>
+                    <div className="f-24 gap-t-10 flex-center">{util.byteToString(this.consume?.diskSpace || 0)}/{util.byteToString(this.free?.diskSpace || 0)}</div>
                 </div>
-                <div className="flex-fixed w-120  item-hover-focus ">
-                    <div><S>数据记录数</S></div>
-                    <div>{this.consume?.rowCount || 0}/{(this.free?.rowCount || 0)}</div>
+                <div className="flex-fixed min-w-120  item-hover-focus ">
+                    <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'table' }}></Icon></span><S>数据记录数</S></div>
+                    <div className="f-24 gap-t-10 flex-center">{this.consume?.rowCount || 0}/{(this.free?.rowCount || 0)}</div>
                 </div>
-                <div className="flex-fixed w-120   item-hover-focus ">
-                    <div><S>AI额度</S></div>
-                    <div>{(this.consume?.cheapAI || 0 + (this.consume?.expensiveAI || 0)).toFixed(2)}/{this.free?.cheapAI + this.free?.expensiveAI}</div>
+                <div className="flex-fixed min-w-120   item-hover-focus ">
+                    <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={AiStartSvg}></Icon></span><S>AI额度</S></div>
+                    <div className="f-24 gap-t-10 flex-center">{(this.consume?.cheapAI || 0 + (this.consume?.expensiveAI || 0)).toFixed(2)}/{this.free?.cheapAI + this.free?.expensiveAI}</div>
                 </div>
             </div>
             <Divider></Divider>
@@ -292,25 +292,24 @@ export class ShyWallet extends React.Component {
     renderUserStat() {
         return <div>
             <div className="h4"><S>消费记录</S></div>
-
             <div>
                 <div className="flex gap-t-30 gap-l-30">
-                    <span className="size-20 flex-center cursor item-hover round" onMouseDown={e => {
-                        this.statDayList.month--;
-                        this.loadUserStat();
-                    }}><Icon icon={ChevronLeftSvg}></Icon></span>
-                    <span className="flex-center gap-w-5" onMouseDown={e => this.onSelectDate(e)}>{this.statDayList.year}-{this.statDayList.month}</span>
-                    <span className="size-20 flex-center  item-hover round" onMouseDown={e => {
+                    <span className="size-20 flex-center cursor item-hover round"
+                        onMouseDown={e => {
+                            this.statDayList.month--;
+                            this.loadUserStat();
+                        }}><Icon icon={ChevronLeftSvg}></Icon></span>
+                    <span className="flex-center gap-w-5"
+                        onMouseDown={e => this.onSelectDate(e)}>{this.statDayList.year}-{this.statDayList.month}</span>
+                    <span className="size-20 flex-center   cursor item-hover round" onMouseDown={e => {
                         this.statDayList.month++;
                         this.loadUserStat();
                     }}><Icon icon={ChevronRightSvg}></Icon></span>
                 </div>
-                <div >
+                <div className="gap-l-30">
                     <div className="w80 h-300" ref={e => this.chartEl = e}></div>
                 </div>
-
             </div>
-            <Divider></Divider>
         </div>
     }
 

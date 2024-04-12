@@ -10,6 +10,8 @@ import { useWeixinOpen } from "../../../../component/winxin/open";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { config } from "../../../../../common/config";
+import { HelpText } from "rich/component/view/text";
+
 export class ShyOpen extends React.Component {
     async load() {
         var r = await channel.get('/open/list');
@@ -40,7 +42,10 @@ export class ShyOpen extends React.Component {
     list: { platform: string, id: string, disabled: boolean }[] = [];
     render() {
         return <div className="shy-open">
-            <h2 className="h2"><S>第三方帐户</S></h2>
+            <h2 className="h2 flex">
+                <S>第三方帐户</S>
+                <HelpText style={{ fontWeight: 'normal', marginLeft: 3 }} url={window.shyConfig?.isUS ? "https://help.shy.red/page/66#7cBsxuorRroyR63s7TfkLu" : 'https://help.shy.live/page/1898#r4xa5y6t4bN4qpgLhp1yyJ'}>了解如何绑定第三方帐号</HelpText>
+            </h2>
             <Divider></Divider>
             <div className="gap-p-10">
                 {!config.isUS && <div className="gap-p-20">
@@ -54,7 +59,7 @@ export class ShyOpen extends React.Component {
                             <span><S>未绑定微信</S></span>
                         </span>}
                         <span className="flex-fixed w-100 inline-block text-right">
-                            <Button onClick={e => this.onMouseDownPlatform(e, 'weixin')} ghost>{this.list.some(s => s.platform == 'weixin') ? lst("解绑微信") : lst("绑定微信")}</Button>
+                            <Button size="small" onClick={e => this.onMouseDownPlatform(e, 'weixin')} ghost>{this.list.some(s => s.platform == 'weixin') ? lst("解绑微信") : lst("绑定微信")}</Button>
                         </span>
                     </div>
                     <Divider></Divider>

@@ -35,13 +35,15 @@ export class InviteList extends React.Component {
             <div className="gap-h-20">
                 {this.search.list.length == 0 && <div className="flex-center gap-h-20 remark"><S>还没有邀请好友</S></div>}
                 {this.search.loading && <SpinBox ></SpinBox>}
-                {this.search.list.length > 0 && <div className="flex"><span className="item-hover padding-w-5 padding-h-2 round remark "><Sp text='共邀请{total}人' data={{total:this.search.total}}>共邀请{this.search.total}人</Sp></span></div>}
+                {this.search.list.length > 0 && <div className="flex"><span className="item-hover padding-w-5 padding-h-2 round remark "><Sp text='共邀请{total}人' data={{ total: this.search.total }}>共邀请{this.search.total}人</Sp></span></div>}
                 {this.search.list.map(r => {
                     return <div className="gap-h-10 item-hover round padding-10" key={r.id}>
                         <Avatar size={40} userid={r.id}></Avatar>
                     </div>
                 })}
-                <Pagination size={this.search.size} index={this.search.page} total={this.search.total} onChange={e => { this.search.page = e; this.load() }}></Pagination>
+                <div className="gap-h-20">
+                    <Pagination size={this.search.size} index={this.search.page} total={this.search.total} onChange={e => { this.search.page = e; this.load() }}></Pagination>
+                </div>
             </div>
         </div>
     }

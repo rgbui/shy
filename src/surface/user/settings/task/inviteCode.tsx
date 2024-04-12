@@ -44,10 +44,10 @@ export var InviteCode = observer(function () {
                         <span>{local.user?.inviteCode}</span>
                         <i className="size-20 flex-center inline-flex item-hover round "><Icon size={16} icon={DuplicateSvg}></Icon></i>
                     </div>
-                    <div className="flex-fixed"><Button onClick={e => { CopyAlert(UrlRoute.getUrl()+`/sign/in?code=` + local.user?.inviteCode, ls.t('邀请地址已复制') ); }}><S>复制邀请地址</S></Button></div>
+                    <div className="flex-fixed"><Button size="small" onClick={e => { CopyAlert(UrlRoute.getUrl()+`/sign/in?code=` + local.user?.inviteCode, ls.t('邀请地址已复制') ); }}><S>复制邀请地址</S></Button></div>
                 </div>
             </div>
-                <div className="remark gap-w-10 gap-b-10">
+                <div className="remark gap-w-10 gap-b-10 f-12">
                     <S text={'邀请成功福利说明'}>邀请成功后，可享受被邀请者消费的5%返利。可提现，福利终身有效。</S>
                 </div>
             </>
