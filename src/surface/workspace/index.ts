@@ -133,7 +133,7 @@ export class Workspace {
     public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
-    public allowSlnIcon: boolean = false;
+    public allowSlnIcon: boolean = true;
     public stats: {
         totalFileSize?: number;
         totalDoc?: number;
@@ -457,7 +457,7 @@ export class Workspace {
     async onNotifyViewOperater(data: UserAction) {
         var pv = PageViewStores.getPageViewStore(data.elementUrl);
         if (pv?.page) {
-            pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
+            await pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
         }
     }
     async onCreateInvite(isCopy?: boolean, force?: boolean) {
@@ -872,5 +872,5 @@ export class Workspace {
             }
         }
     }
-   
+
 }

@@ -19,7 +19,7 @@ import lodash from 'lodash';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
-import { ChevronLeftSvg, ChevronRightSvg, CloseSvg, DotsSvg, EditSvg, MemberSvg, PlusSvg, TrashSvg, TypesPersonSvg } from "rich/component/svgs";
+import { ChevronLeftSvg, ChevronRightSvg, CloseSvg, DotsSvg, MemberSvg, PlusSvg, TrashSvg, TypesPersonSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
 import { useColorPicker } from 'rich/component/view/color/picker';
@@ -27,13 +27,12 @@ import { Row, Col, Divider } from 'rich/component/view/grid';
 import { Icon } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
 import { useSelectMenuItem } from 'rich/component/view/menu';
-import { Remark } from "rich/component/view/text";
+import { HelpText, Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
 import { Rect } from 'rich/src/common/vector/point';
 import { util } from 'rich/util/util';
 import { surface } from '../../../store';
 import { SaveTip } from '../../../../component/tip/save.tip';
-import "./style.less";
 import { AtomPermission, getCommonPerssions, getAtomPermissionComputedChanges, getAtomPermissionOptions } from "rich/src/page/permission";
 import { WorkspaceRole } from '../..';
 import { ToolTip } from 'rich/component/view/tooltip';
@@ -48,6 +47,7 @@ import { PageLayoutType } from 'rich/src/page/declare';
 import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
 import { Tip } from 'rich/component/view/tooltip/tip';
+import "./style.less";
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',
@@ -81,7 +81,6 @@ export class WorkspaceRoles extends React.Component {
             mode: observable,
             editRole: observable,
             roleUserSearch: observable,
-
         })
     }
     editRole: Record<string, any> = null;
@@ -95,7 +94,6 @@ export class WorkspaceRoles extends React.Component {
         total: -1,
         loading: false
     }
-
     async openEditRole(role) {
         this.editRole = role;
         if (!role.id) {
@@ -121,29 +119,38 @@ export class WorkspaceRoles extends React.Component {
         finally {
             this.roleUserSearch.loading = false;
         }
-
     }
     componentDidMount() {
         this.loadRoles();
     }
     async operatorRole(role, event: React.MouseEvent) {
         event.stopPropagation();
-        var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-            { name: 'edit', icon: EditSvg, text: lst('编辑') },
-            { type: MenuItemType.divide },
-            { name: 'delete', icon: TrashSvg, text: lst('删除') }
-        ]);
-        if (r && r.item.name == 'delete') {
-            var re = await channel.del('/ws/role/delete', { roleId: role.id });
-            var rs = this.roles.map(r => r);
-            rs.remove(g => g.id == role.id);
-            this.roles = rs;
-            surface.workspace.roles.remove(g => g.id == role.id);
-            surface.workspace.roles = surface.workspace.roles;
-            this.bakeRoles.remove(g => g.id == role.id);
+        var ele = event.currentTarget as HTMLElement;
+        try {
+            ele.classList.remove('visible');
+            var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
+                { name: 'edit', icon: { name: 'byte', code: 'write' }, text: lst('编辑') },
+                { type: MenuItemType.divide },
+                { name: 'delete', icon: TrashSvg, text: lst('删除') }
+            ]);
+            if (r && r.item.name == 'delete') {
+                await channel.del('/ws/role/delete', { roleId: role.id });
+                var rs = this.roles.map(r => r);
+                rs.remove(g => g.id == role.id);
+                this.roles = rs;
+                surface.workspace.roles.remove(g => g.id == role.id);
+                surface.workspace.roles = surface.workspace.roles;
+                this.bakeRoles.remove(g => g.id == role.id);
+            }
+            else if (r?.item.name == 'edit') {
+                this.openEditRole(role);
+            }
         }
-        else if (r?.item.name == 'edit') {
-            this.openEditRole(role);
+        catch (e) {
+
+        }
+        finally {
+            ele.classList.add('visible');
         }
     }
     async loadRoles() {
@@ -163,6 +170,19 @@ export class WorkspaceRoles extends React.Component {
             this.roles.push(r.data.role);
             surface.workspace.roles.push(lodash.cloneDeep(r.data.role as WorkspaceRole));
             this.bakeRoles.push(lodash.cloneDeep(r.data.role as WorkspaceRole))
+        }
+    }
+    async removeRole(id) {
+        if (await Confirm(lst('确认删除角色?'))) {
+            await channel.del('/ws/role/delete', { roleId: id });
+            var rs = this.roles.map(r => r);
+            rs.remove(g => g.id == id);
+            this.roles = rs;
+            surface.workspace.roles.remove(g => g.id == id);
+            surface.workspace.roles = surface.workspace.roles;
+            this.bakeRoles.remove(g => g.id == id);
+            if (id == this.editRole?.id)
+                this.editRole = null;
         }
     }
     get allRole() {
@@ -190,12 +210,12 @@ export class WorkspaceRoles extends React.Component {
             <div className='shy-ws-roles-list-box'>
                 <div className='shy-ws-roles-list-box-head flex'>
                     <div className='flex-auto'><span><S>角色</S></span></div>
-                    <div className='flex-fixed'><Button style={{ fontSize: '12px' }} size='small' onClick={e => this.addRole()}><S>添加角色</S></Button></div>
+                    <div className='flex-fixed'><Button size='small' onClick={e => this.addRole()}><S>添加角色</S></Button></div>
                 </div>
                 {this.roles.length == 1 && <div className='remark flex-center gap-h-20'><S>还没有创建任何角色</S></div>}
                 {this.roles.filter(g => g.id ? true : false).map(r => {
-                    return <div key={r.id} className='shy-ws-roles-list-role-info' onMouseDown={e => this.openEditRole(r)} >
-                        <div className='flex-fixed flex'>
+                    return <div key={r.id} className='shy-ws-roles-list-role-info visible-hover padding-10' onMouseDown={e => this.openEditRole(r)} >
+                        <div className='flex-auto flex'>
                             <svg
                                 width="20"
                                 height="23"
@@ -210,7 +230,7 @@ export class WorkspaceRoles extends React.Component {
                             </svg>
                             <span>{r.text}</span>
                         </div>
-                        <div className='flex-fixed size-24 round cursor flex-center ' onMouseDown={e => this.operatorRole(r, e)} > <Icon size={16} icon={DotsSvg}></Icon></div>
+                        <div className='flex-fixed size-24 visible item-hover round cursor flex-center ' onMouseDown={e => this.operatorRole(r, e)} > <Icon size={16} icon={DotsSvg}></Icon></div>
                     </div>
                 })}
             </div>
@@ -221,24 +241,31 @@ export class WorkspaceRoles extends React.Component {
             <div className="shy-ws-roles-edit-roles">
                 <div className='flex gap-b-10'>
                     <div className='flex-auto cursor flex'>
-                        <span className='item-hover round flex padding-r-5 padding-h-2 '>
-                            <Icon size={18} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
+                        <span className='item-hover round flex padding-r-8 padding-h-2 '>
+                            <span className='size-20 flex-center'>
+                                <Icon size={16} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
+                            </span>
                             <span onMouseDown={e => this.editRole = null}><S>后退</S></span>
                         </span>
                     </div>
                     <div className='flex-fixed'>
-                        <Tip text={'添加角色'}><span className='cursor round item-hover flex-center'><Icon size={18} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></Tip>
+                        <Tip text={'添加角色'}><span className='cursor round item-hover flex-center size-20'><Icon size={16} onClick={e => this.addRole()} icon={PlusSvg}></Icon></span></Tip>
                     </div>
                 </div>
                 {this.roles.filter(f => f.id ? true : false).map(r => {
-                    return <a className={this.editRole?.id == r.id ? "hover" : ""} onMouseDown={e => this.openEditRole(r)} key={r.id}><span style={{ backgroundColor: r.color }}></span><span>{r.text}</span></a>
+                    return <a className={'flex visible-hover ' + (this.editRole?.id == r.id ? "hover" : "")} onMouseDown={e => this.openEditRole(r)} key={r.id}>
+                        <span className='flex-fixed size-14 circle' style={{ backgroundColor: r.color }}></span>
+                        <span className='flex-auto gap-l-5 text-overflow'>{r.text}</span>
+                        <span className='flex-fixed flex-center text-1 visible item-hover round cursor size-20' onMouseDown={e => {
+                            this.removeRole(r.id);
+                        }}><Icon size={12} icon={CloseSvg}></Icon></span>
+                    </a>
                 })}
-                <a className={this.editRole?.text == lst('所有人') && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole(this.allRole)}><span style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span><S>@所有人</S></span></a>
+                <a className={this.editRole?.text == lst('所有人') && !this.editRole?.id ? "hover" : ""} onMouseDown={e => this.openEditRole(this.allRole)}><span className=' size-14 circle' style={{ backgroundColor: 'rgb(153, 170, 181)' }}></span><span className='flex-auto gap-l-5 text-overflow'><S>所有人</S></span></a>
             </div>
             <div className="shy-ws-roles-edit-tab">
                 <div className='shy-ws-roles-edit-tab-title'><Row>
                     <Col span={12}><span><S>编辑角色</S>-{this.editRole.text}</span></Col>
-                    {/*<Col span={12} align={'end'}><Icon icon='elipsis:sy'></Icon></Col> */}
                 </Row></div>
                 <div className="shy-ws-roles-edit-tab-head">
                     <a onMouseDown={e => (e.target as HTMLElement).classList.contains('disabled') ? undefined : this.mode = 'info'} className={(this.editRole?.text == lst('所有人') && !this.editRole?.id ? "disabled " : "") + (this.mode == 'info' ? "hover" : "")}><S>显示</S></a>
@@ -247,7 +274,7 @@ export class WorkspaceRoles extends React.Component {
                 </div>
                 <div className="shy-ws-roles-edit-tab-page">
                     {this.mode == 'info' && this.renderRoleInfo()}
-                    {this.mode == 'permission' && this.renderPerssions()}
+                    {this.mode == 'permission' && this.renderPermissions()}
                     {this.mode == 'user' && this.renderRoleUsers()}
                 </div>
             </div>
@@ -265,7 +292,7 @@ export class WorkspaceRoles extends React.Component {
             }
         );
         if (r) {
-            this.editRole.color = r;
+            this.editSave({ color: r })
         }
     }
     editSave(data: Record<string, any>) {
@@ -310,15 +337,13 @@ export class WorkspaceRoles extends React.Component {
     }
     renderRoleInfo() {
         return <div className="shy-ws-role-info">
-            <Row>
-                <Col><label><S>角色名称</S><i>*</i></label></Col>
-                <Col><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></Col>
-            </Row>
-            <Divider></Divider>
-            <Row>
-                <Col><label><S>角色颜色</S><i>*</i></label></Col>
-                <Col><Remark><S text='成员将使用角色列表中最靠前的角色的颜色'>成员将使用角色列表中最靠前的角色的颜色。</S></Remark></Col>
-                <Col><div className='shy-ws-role-info-color-box'>
+            <div className='gap-t-10 gap-b-5 flex f-12'><label><S>角色名称</S></label><i className='text-p gap-l-3'>*</i></div>
+            <div><Input value={this.editRole.text} onChange={e => this.editSave({ text: e })}></Input></div>
+
+            <div className='gap-t-10  flex f-12'><label><S>角色颜色</S></label><i className='text-p gap-l-3'>*</i></div>
+            <div className='gap-b-5 remark f-12'><S text='成员将使用角色列表中最靠前的角色的颜色'>成员将使用角色列表中最靠前的角色的颜色。</S></div>
+            <div>
+                <div className='shy-ws-role-info-color-box'>
                     <div className='shy-ws-role-info-color' style={{
                         backgroundColor: this.editRole.color
                     }}></div>
@@ -334,11 +359,11 @@ export class WorkspaceRoles extends React.Component {
                             </a>
                         })}
                     </div>
-                </div></Col>
-            </Row>
+                </div>
+            </div>
         </div>
     }
-    renderPerssions() {
+    renderPermissions() {
         var self = this;
         function save(ps: AtomPermission[]) {
             var first = ps[0];
@@ -353,11 +378,13 @@ export class WorkspaceRoles extends React.Component {
             self.tip.open();
         }
         return <div className="shy-ws-role-permission">
-            <div className='f-12 flex'>
-                <span className='flex-auto'><S>通用的空间权限</S></span>
-                <span className='flex-fixed '><Button style={{ padding: 0, margin: 0,fontSize:12 }} link size={'small'} ><S>清除权限</S></Button></span>
+            <div className='flex'>
+                <span className='flex-auto flex'>
+                    <span className='gap-r-3 f-12'><S>通用的页面访问权限</S></span>
+                    <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/56" : "https://help.shy.live/page/348"} ><S>了解页面访问权限</S></HelpText>
+                </span>
+                <span className='f-12 flex-fixed '><Button link size={'small'} ><S>清除权限</S></Button></span>
             </div>
-
             <div className='r-gap-h-10'>
                 <div className='flex'>
                     <div className='flex-auto'>
@@ -450,7 +477,7 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     async onAddRoleMember(e: React.MouseEvent) {
-        var r = await useUserPicker({ center: true, centerTop: 100 },surface.workspace,{ignoreUserAll:true});
+        var r = await useUserPicker({ center: true, centerTop: 100 }, surface.workspace, { ignoreUserAll: true });
         if (r) {
             var g = await surface.workspace.sock.put('/ws/user/put/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: r.id });
             await this.loadRoleMemebers(this.editRole)
@@ -465,10 +492,10 @@ export class WorkspaceRoles extends React.Component {
     renderRoleUsers() {
         return <div className="shy-ws-role-users">
             <div className='flex'>
-                <span className='flex-auto remark f-12'><S>成员列表</S>{this.roleUserSearch.total ? `(${this.roleUserSearch.total})` : ''}</span>
-                <span onClick={e => this.onAddRoleMember(e)} className='flex-fixed flex-center size-24 round item-hover round cursor'>
-                    <Icon size={20} icon={PlusSvg}></Icon>
-                </span>
+                <span className='flex-auto  f-14'><S>成员列表</S>{this.roleUserSearch.total ? `(${this.roleUserSearch.total})` : ''}</span>
+                <ToolTip overlay={<S>添加成员</S>}><span onClick={e => this.onAddRoleMember(e)} className='flex-fixed flex-center size-24 round item-hover round cursor'>
+                    <Icon size={18} icon={PlusSvg}></Icon>
+                </span></ToolTip>
             </div>
             {this.roleUserSearch.loading && <div className='remark flex-center gap-h-30'><Spin></Spin></div>}
             {this.roleUserSearch.list.map(ru => {
@@ -481,15 +508,18 @@ export class WorkspaceRoles extends React.Component {
                     </ToolTip>
                 </div>
             })}
-            <Pagination
-                size={this.roleUserSearch.size}
-                index={this.roleUserSearch.page}
-                total={this.roleUserSearch.total}
-                onChange={e => {
-                    this.roleUserSearch.page = e;
-                    this.loadRoleMemebers(e);
-                }}
-            ></Pagination>
+            {this.roleUserSearch.loading == false && this.roleUserSearch.list.length == 0 && <div className='remark f-12 flex-center gap-h-30'><S>还没有成员</S></div>}
+            <div className='flex-center'>
+                <Pagination
+                    size={this.roleUserSearch.size}
+                    index={this.roleUserSearch.page}
+                    total={this.roleUserSearch.total}
+                    onChange={e => {
+                        this.roleUserSearch.page = e;
+                        this.loadRoleMemebers(e);
+                    }}
+                ></Pagination>
+            </div>
         </div>
     }
     render() {

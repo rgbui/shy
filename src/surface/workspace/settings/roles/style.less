@@ -2,6 +2,7 @@
     &-everyone {
         background-color: var(--background-secondary);
         color           : var(--interactive-normal);
+
         .shy-icon {
             color: var(--interactive-hover);
         }
@@ -33,26 +34,12 @@
         }
 
         .shy-ws-roles-list-role-info {
-            display        : flex;
-            justify-content: flex-start;
-            align-items    : center;
-            border-bottom  : 1px solid var(--background-modifier-accent);
-            padding        : 10px 0px;
-            cursor         : pointer;
-
-            >div {
-                padding: 0px 10px;
-
-                &:first-child {
-                    flex-grow  : 1;
-                    flex-shrink: 1;
-                }
-
-                &:last-child {
-                    flex-grow  : 0;
-                    flex-shrink: 0;
-                }
-            }
+            display           : flex;
+            justify-content   : flex-start;
+            align-items       : center;
+            border-bottom     : 1px solid var(--background-modifier-accent);
+            // padding        : 10px 0px;
+            cursor            : pointer;
 
             &:hover {
                 background-color: var(--background-modifier-hover);
@@ -67,15 +54,16 @@
     align-items    : flex-start;
 
     .shy-ws-roles-edit-roles {
-        flex-grow  : 0;
-        flex-shrink: 0;
-        width      : 200px;
+        flex-grow   : 0;
+        flex-shrink : 0;
+        width       : 200px;
         margin-right: 20px;
 
         &-head {}
 
-        >a{
-            padding        : 6px 10px;
+        >a {
+            padding        : 5px 10px;
+            margin         : 3px 0px;
             display        : flex;
             justify-content: flex-start;
             align-items    : center;
@@ -95,23 +83,23 @@
                 color           : var(--interactive-active);
             }
 
-            span {
-                font-size: 14px;
+            // span {
+            //     font-size: 14px;
 
-                &:first-child {
-                    display      : inline-block;
-                    width        : 14px;
-                    height       : 14px;
-                    border-radius: 50%;
-                }
+            //     &:first-child {
+            //         display      : inline-block;
+            //         width        : 14px;
+            //         height       : 14px;
+            //         border-radius: 50%;
+            //     }
 
-                &:last-child {
-                    margin-left  : 8px;
-                    overflow     : hidden;
-                    text-overflow: ellipsis;
-                    white-space  : nowrap;
-                }
-            }
+            //     &:last-child {
+            //         margin-left  : 8px;
+            //         overflow     : hidden;
+            //         text-overflow: ellipsis;
+            //         white-space  : nowrap;
+            //     }
+            // }
         }
     }
 
@@ -120,7 +108,7 @@
         flex-shrink: 1;
 
         &-title {
-            color      : var(--header-primary);
+            color      : var(--text-color);
             font-size  : 16px;
             line-height: 20px;
             font-weight: 500;
@@ -137,14 +125,14 @@
                 border-bottom : 2px solid transparent;
                 font-size     : 16px;
                 line-height   : 20px;
-                padding-bottom: 16px;
+                padding-bottom: 10px;
                 position      : relative;
-                color         : var(--interactive-active);
+                color         : var(--text-color);
                 margin-right  : 32px;
                 cursor        : pointer;
 
                 &.hover {
-                    border-bottom-color: var(--control-brand-foreground);
+                    border-bottom-color: var(--text-p-color);
                 }
 
                 &.disabled {
@@ -161,18 +149,7 @@
 }
 
 .shy-ws-role-info {
-    padding-top: 20px;
-
-    label {
-        font-size     : 12px;
-        padding-bottom: 5px;
-
-        i {
-            color      : #e16259;
-            display    : inline-block;
-            margin-left: 5px;
-        }
-    }
+   
 
     .shy-ws-role-info-color-box {
         margin-top     : 10px;
@@ -222,9 +199,11 @@
 
 .shy-ws-role-permission {
     padding-top: 20px;
+
     h4 {
         margin: 0px 0px 10px 0px;
     }
+
     .shy-row {
         margin-top: 10px
     }

@@ -6,6 +6,8 @@ import { Input } from "rich/component/view/input";
 import { surface } from "../../../store";
 import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
+import { HelpText } from "rich/component/view/text";
+
 @observer
 export class WorkspaceInvite extends React.Component {
     async createInvite(force?: boolean) {
@@ -16,7 +18,10 @@ export class WorkspaceInvite extends React.Component {
     render() {
 
         return <div className='shy-ws-invites'>
-            <div className="h2"><S>邀请</S></div>
+            <div className="h2 flex">
+                <span className="flex-fixed"><S>邀请成员</S></span>
+                <span className="flex-fixed"><HelpText style={{ fontWeight: 'normal' }} url={window.shyConfig?.isUS ? "https://help.shy.red/page/63" : "https://help.shy.live/page/1896"}>了解如何邀请成员加入空间</HelpText></span>
+            </div>
             <Divider></Divider>
             <div className="bold f-14 gap-t-10"><S>通用的邀请链接</S></div>
             <div className="remark f-12 gap-h-10">

@@ -23,6 +23,7 @@ import { Spin } from "rich/component/view/spin";
 import { getConstValue, getWsConsumeType } from "rich/net/ai/cost";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { SelectButtons } from "rich/component/view/button/select";
+import { HelpText } from "rich/component/view/text";
 
 @observer
 export class ConsumeView extends React.Component {
@@ -220,18 +221,18 @@ export class ConsumeView extends React.Component {
                     this.searchWorkspaceEveryDayCost();
                 }}><Icon icon={ChevronLeftSvg}></Icon></span>
                 <span className="flex-center gap-w-5" onMouseDown={e => this.onSelectDate(e)}>{this.statDayList.year}-{this.statDayList.month}</span>
-                <span className="size-20 flex-center  item-hover round" onMouseDown={e => {
+                <span className="size-20 flex-center cursor  item-hover round" onMouseDown={e => {
                     this.statDayList.month++;
                     this.searchWorkspaceEveryDayCost();
                 }}><Icon icon={ChevronRightSvg}></Icon></span>
             </div>
-            <div >
+            <div className="gap-l-30" >
                 <div className="w80 h-300" ref={e => this.chartEl = e}></div>
             </div>
         </div>
     }
     renderMasterCost() {
-        return <div>
+        return <div className="min-h-200">
             {this.masterCostList.loading && <Spin block></Spin>}
             <div className="shy-page-order-list">
                 <table>
@@ -259,16 +260,17 @@ export class ConsumeView extends React.Component {
                         })}
                     </tbody>
                 </table>
-                <Pagination size={this.masterCostList.size} index={this.masterCostList.page} total={this.masterCostList.total} onChange={e => {
+                <div className="gap-h-20"> <Pagination size={this.masterCostList.size} index={this.masterCostList.page} total={this.masterCostList.total} onChange={e => {
                     this.masterCostList.page = e;
                     this.searchMasterCost()
-                }}></Pagination>
+                }}></Pagination></div>
+
             </div>
             {!this.masterCostList.loading && !(this.masterCostList.list?.length > 0) && <div className="remark f-12 flex-center gap-h-20"><S>没有消费记录</S></div>}
         </div>
     }
     renderWorkspaceCost() {
-        return <div>
+        return <div className="min-h-200">
             {this.workspaceCostList.loading && <Spin block></Spin>}
             <div className="shy-page-order-list">
                 <table>
@@ -296,78 +298,86 @@ export class ConsumeView extends React.Component {
                         })}
                     </tbody>
                 </table>
-                <Pagination size={this.workspaceCostList.size} index={this.workspaceCostList.page} total={this.workspaceCostList.total} onChange={e => { this.workspaceCostList.page = e; this.searchWorkspaceCost() }}></Pagination>
+                <div className="gap-h-20">
+                    <Pagination size={this.workspaceCostList.size} index={this.workspaceCostList.page} total={this.workspaceCostList.total} onChange={e => { this.workspaceCostList.page = e; this.searchWorkspaceCost() }}></Pagination>
+                </div>
             </div>
             {!this.workspaceCostList.loading && !(this.workspaceCostList.list?.length > 0) && <div className="remark f-12 flex-center gap-h-20"><S>没有消费记录</S></div>}
         </div>
     }
     render() {
         return <div className='shy-ws-manage'>
-            <div className="h2">空间资源消耗</div>
-            <div className="remark f-12">消耗的越多诗云提供的生产力就越多</div>
+            <div className="flex h2">
+                <span ><S>空间资源消耗</S></span>
+                <HelpText style={{ fontWeight: 'normal' }} url={window.shyConfig?.isUS ? "https://help.shy.red/page/64#h4ukD5HdcxURNopJA2ri4p" : "https://help.shy.live/page/1897"}><S>了解如何计算空间资源消耗</S></HelpText>
+            </div>
+            <div className="remark f-12"><S text='消耗越多诗云提供的生产力就越多'>消耗越多,诗云提供的生产力就越多</S></div>
             <Divider></Divider>
             <div>
-                <div className="flex flex-wrap r-flex-fixed r-padding-10 r-gap-r-10 r-gap-b-10 r-round r-cursor r-item-hover-focus">
+                <div className="flex-center f-14 flex-wrap r-flex-fixed r-padding-15 r-gap-r-10 r-gap-b-10 r-round r-cursor r-item-hover-focus ">
                     <div>
-                        <div className="f-12"><S>空间成员</S></div>
-                        <div className="f-12">{surface.workspace?.memberCount}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'every-user' }}></Icon></span><span><S>空间成员</S></span></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace?.memberCount}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>空间容量</S></div>
-                        <div className="f-12">{util.byteToString(surface.workspace?.stats?.totalFileSize || 0)}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'file-cabinet' }}></Icon></span><S>空间容量</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{util.byteToString(surface.workspace?.stats?.totalFileSize || 0)}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>评论数</S></div>
-                        <div className="f-12">{surface.workspace?.stats?.totalComment || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'message' }}></Icon></span><S>评论数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace?.stats?.totalComment || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>访问量</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalViewBrowse || 0}</div>
+                        <div className=" flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'chart-line' }}></Icon></span><S>访问量</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalViewBrowse || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>文档数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalDoc || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'align-text-center-one' }}></Icon></span><S>文档数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalDoc || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>白板数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalBoard || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'chopping-board' }}></Icon></span><S>白板数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalBoard || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>宣传页数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalDocCard || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'powerpoint' }}></Icon></span><S>PPT数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalDocCard || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>频道数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalChannel || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'pound' }}></Icon></span><S>频道数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalChannel || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>数据表数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalTable || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'table-file' }}></Icon></span><S>数据表数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalTable || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>数据记录数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalRowCount || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'table' }}></Icon></span><S>数据记录数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalRowCount || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>书签数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalBookmark || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'bookmark-one' }}></Icon></span><S>书签数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalBookmark || 0}</div>
                     </div>
                     <div>
-                        <div className="f-12"><S>标签数</S></div>
-                        <div className="f-12">{surface.workspace.stats?.totalTag || 0}</div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'hashtag-key' }}></Icon></span><S>标签数</S></div>
+                        <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalTag || 0}</div>
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="gap-t-20">
                 <div className="h2"><S>资源消耗</S></div>
                 <Divider></Divider>
-
                 <div className="flex-center h-30  r-round r-cursor">
-                    <SelectButtons onChange={e => this.setTab(e)} value={this.tab} options={[
-                        { text: '统计', value: 'day' },
-                        { text: '服务', value: 'service' },
-                        { text: '存储', value: 'storage' }
-                    ]}></SelectButtons>
+                    <SelectButtons
+                        theme="ghost"
+                        onChange={e => this.setTab(e)}
+                        value={this.tab}
+                        options={[
+                            { text: '统计', value: 'day' },
+                            { text: '服务', value: 'service' },
+                            { text: '存储', value: 'storage' }
+                        ]}></SelectButtons>
                 </div>
                 <div>
                     {this.renderEveryDayCost()}
