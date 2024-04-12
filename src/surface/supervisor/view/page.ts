@@ -41,26 +41,20 @@ export async function createPageContent(store: PageViewStore) {
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
                         var snap = SnapStore.createSnap(syncBlock.elementUrl)
-                        var r = await snap.viewOperator(action.get() as any);
-                        await snap.viewSnap({
-                            seq: r.seq,
-                            content: await syncBlock.getSyncString(),
-                            force: action.immediate ? true : false
-                        });
+                        snap.viewOperatorAndSnap(action.get() as any, {
+                            content: await syncBlock.getSyncString()
+                        }, { force: action.immediate ? true : false, notSave: action.isCursorOperator() })
                     }
                 if (action.syncPage) {
                     if (page.views.length == 0) {
                         console.error('page views.lenght happend save');
                         return;
                     }
-                    var r = await store.snapStore.viewOperator(action.get() as any);
-                    await store.snapStore.viewSnap({
-                        seq: r.seq,
+                    await store.snapStore.viewOperatorAndSnap(action.get() as any, {
                         content: await page.getString(),
                         text: store.item?.text,
-                        thumb: await page.getThumb(),
-                        force: action.immediate ? true : false
-                    });
+                        thumb: await page.getThumb()
+                    }, { force: action.immediate ? true : false, notSave: action.isCursorOperator() })
                 }
             });
             page.on(PageDirective.syncHistory, async (data) => {
@@ -71,7 +65,6 @@ export async function createPageContent(store: PageViewStore) {
                 }
                 await store.snapStore.viewSnap({
                     content: await page.getString(),
-                    // plain: await page.getPlain(),
                     text: store.item?.text,
                     thumb: await page.getThumb(),
                     ...data,
@@ -144,17 +137,17 @@ export async function createPageContent(store: PageViewStore) {
                 store.page.onHighlightBlock(store.config.blockId, true);
             })
             await page.load(pd.content, pd.operates);
-            if(store.view.pageEl){
+            if (store.view.pageEl) {
                 var bound = Rect.fromEle(store.view.pageEl);
                 page.render(store.view.pageEl, {
                     width: bound.width,
                     height: bound.height
                 });
             }
-            else{
+            else {
                 console.error('store.view.pageEl is null')
             }
-           
+
         }
         else {
             var bound = Rect.fromEle(store.view.pageEl);

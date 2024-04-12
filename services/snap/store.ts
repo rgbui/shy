@@ -9,9 +9,21 @@ import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
 import { log } from "../../common/log";
 import { surface } from "../../src/surface/store";
+import { MergeSock } from "rich/component/lib/merge.sock";
 const DELAY_TIME = 1000 * 60 * 3;
-const MAX_OPERATE_COUNT = 50;
+const MAX_OPERATE_COUNT = 100;
 var snapSyncMaps: Map<string, SnapStore> = new Map();
+
+export type SnapDataType = {
+    seq?: number,
+    creater?: string,
+    content: string,
+    date?: Date,
+    plain?: string,
+    text?: string,
+    thumb?: ResourceArguments[]
+}
+
 
 export class SnapStore extends Events {
     elementUrl: string;
@@ -22,9 +34,48 @@ export class SnapStore extends Events {
     get localId() {
         return '/' + surface.workspace.id + (this.elementUrl.startsWith('/') ? this.elementUrl : '/' + this.elementUrl)
     }
-    async viewOperator(operate: Partial<UserAction>) {
+    /**
+     * 50ms内的请求合并为一次请求
+     * 尝试将多个操作合并成一个请求，然后快照只保存一次
+     */
+    batchViewOperators = new MergeSock(async (batchs) => {
+        var rs = await this.viewOperator(batchs.map(c => c.args[0]));
+        if (!Array.isArray(rs)) {
+            if (rs) rs = [rs]
+            else rs = [];
+        }
+        var lb = batchs.last();
+        if (lb) {
+            var snap = lb.args[1];
+            snap.seq = rs[0].seq;
+            if (!batchs.every(c => c.args[2] && c.args[2]?.notSave == true))
+                this.viewSnap(snap)
+        }
+        return (rs as any[]).map(c => {
+            return {
+                id: c.id,
+                data: c
+            }
+        })
+    },50)
+    async viewOperatorAndSnap(operate: Partial<UserAction>, snap: SnapDataType, options?: { force?: boolean, notSave?: boolean }) {
+        if (options.force) {
+            var rc = await this.viewOperator(operate);
+            if (rc) {
+                var rg = Array.isArray(rc) ? rc[0] : rc;
+                snap.seq = rg.seq;
+                if (options?.notSave !== true)
+                    await this.viewSnap(snap, { force: true });
+            }
+        }
+        else {
+            await this.batchViewOperators.get(operate.id, [operate, snap, options]);
+        }
+    }
+    async viewOperator(operate: Partial<UserAction> | (Partial<UserAction>[])) {
+        if (Array.isArray(operate) && operate.length == 1) operate = operate[0];
         var ops = JSON.stringify(operate);
-        var r = ops.length > 1024 * 1024 ? await surface.workspace.sock.put<{
+        var r = ops.length > 1024 * 200 ? await surface.workspace.sock.put<{
             seq: number,
             id: string
         }>('/view/operate', {
@@ -39,63 +90,87 @@ export class SnapStore extends Events {
             operate: operate
         })
         if (r.ok) {
-            Object.assign(operate, r.data);
-            return r.data;
+            if (Array.isArray(r.data.operates) && Array.isArray(operate)) {
+                r.data.operates.forEach(d => {
+                    var op = (operate as UserAction[]).find(o => o.id == d.id);
+                    if (op) {
+                        for (let n in d) op[n] = d[n];
+                    }
+                });
+                return operate;
+            }
+            else {
+                var op = Array.isArray(operate) ? operate[0] : operate;
+                for (let n in r.data) op[n] = r.data[n];
+                return op;
+            }
         }
     }
-    private localViewSnap: { seq: number, content: string, date: Date, plain: string, text: string, thumb?: ResourceArguments[] };
-    private localTime;
-    private viewSnapQueue: QueueHandle;
-    async storeLocal(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments[], force?: boolean }) {
-        if (typeof this.viewSnapQueue == 'undefined') this.viewSnapQueue = new QueueHandle();
-        await this.viewSnapQueue.create(async () => {
-            //console.log('snap', snap);
-            /**
-            * 本地先存起来
-            */
-            if (window.shyConfig.isDesk) {
-                await yCache.set(this.localId, {
-                    id: this.localId,
-                    content: snap.content,
-                    seq: snap.seq,
-                    creater: snap.creater || surface?.user?.id,
-                    createDate: new Date()
-                })
-            }
-            else await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
+    private localViewSnap: SnapDataType;
+    private localTimer;
+    private async storeLocal() {
+        console.log('local store...');
+        /**
+              * 本地先存起来
+              */
+        if (window.shyConfig.isDesk) {
+            await yCache.set(this.localId, {
                 id: this.localId,
-                content: snap.content,
-                seq: snap.seq,
-                creater: snap.creater || surface?.user?.id,
+                content: this.localViewSnap.content,
+                seq: this.localViewSnap.seq,
+                creater: this.localViewSnap.creater || surface?.user?.id,
                 createDate: new Date()
-            });
-        })
+            })
+        }
+        else await new DbService<view_snap>('view_snap').save({ id: this.localId }, {
+            id: this.localId,
+            content: this.localViewSnap.content,
+            seq: this.localViewSnap.seq,
+            creater: this.localViewSnap.creater,
+            createDate: new Date()
+        });
+    }
+    /**
+     * 本地请求，如果数据量比较大，请求频次比较高，容易卡死
+     * 浏览器容易崩溃
+     * 本地的快照，将时间频率降低至1秒一次
+     * @param snap 
+     * @param options 
+     */
+    private async lazyStoreLocal(snap: SnapDataType, options?: { force?: boolean }) {
+        if (this.localTimer) clearTimeout(this.localTimer);
         this.localViewSnap = {
             seq: snap.seq,
             content: snap.content,
             date: new Date(),
             plain: (snap.plain || ''),
             text: snap.text,
-            thumb: snap.thumb
+            thumb: snap.thumb,
+            creater: snap.creater || surface?.user?.id,
         };
+        if (options?.force) await this.storeLocal();
+        else this.localTimer = setTimeout(() => {
+            this.storeLocal();
+        }, 1000 * 1);
     }
-    async viewSnap(snap: { seq: number, content: string, creater?: string, plain?: string, text?: string, thumb?: ResourceArguments[], force?: boolean }) {
-        await this.storeLocal(snap);
+    async viewSnap(snap: SnapDataType, options?: { force?: boolean }) {
+        await this.lazyStoreLocal(snap);
         this.operateCount += 1;
-        if (this.localTime) clearTimeout(this.localTime);
-        if (snap.force) this.saveToService()
+        if (this.serviceStoreTime) clearTimeout(this.serviceStoreTime);
+        if (options?.force) this.saveToService()
         else if (this.lastServiceViewSnap && (this.operateCount > MAX_OPERATE_COUNT || this.lastServiceViewSnap.date.getTime() - Date.now() > DELAY_TIME))
             this.saveToService();
-        else this.localTime = setTimeout(() => {
+        else this.serviceStoreTime = setTimeout(() => {
             this.saveToService();
         }, DELAY_TIME);
     }
+    private serviceStoreTime;
     private lastServiceViewSnap: { seq: number, date: Date };
     private operateCount = 0;
     private async saveToService() {
         this.emit('willSave');
         try {
-            if (this.localTime) { clearTimeout(this.localTime); this.localTime = undefined; }
+            if (this.serviceStoreTime) { clearTimeout(this.serviceStoreTime); this.serviceStoreTime = undefined; }
             if (this.localViewSnap) {
                 if (this.lastServiceViewSnap && this.lastServiceViewSnap.seq >= this.localViewSnap.seq) return;
                 var tryLocker = await surface.workspace.sock.get<{ lock: boolean, lockSockId: string }>('/view/snap/lock', {
@@ -145,7 +220,6 @@ export class SnapStore extends Events {
         if (window.shyConfig.isDesk) local = await yCache.get(this.localId);
         else local = await new DbService<view_snap>('view_snap').findOne({ id: this.localId });
         if (local) seq = local.seq;
-        //console.log('query seq', seq);
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
             file: IconArguments,
@@ -169,9 +243,9 @@ export class SnapStore extends Events {
             id: snapId
         });
         if (r.ok) {
-            await this.storeLocal(r.data);
+            await this.lazyStoreLocal(r.data as any, { force: true });
             this.operateCount = 0;
-            if (this.localTime) clearTimeout(this.localTime);
+            if (this.serviceStoreTime) clearTimeout(this.serviceStoreTime);
             if (typeof this.lastServiceViewSnap == 'undefined') {
                 this.lastServiceViewSnap = {} as any;
             }
