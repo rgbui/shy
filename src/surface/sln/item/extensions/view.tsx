@@ -11,14 +11,11 @@ import { Spin } from "rich/component/view/spin";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
 
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
-    let refInput = React.useRef<HTMLInputElement>(null);
-    let refEditText = React.useRef<string>(null);
     var item = props.item;
-    var paddingLeft =5 + (props.deep || 0) * 15
+    var paddingLeft = 5 + (props.deep || 0) * 15
     var style: Record<string, any> = {};
     style.paddingLeft = paddingLeft;
     style['--gap-left'] = (paddingLeft + 20) + 'px';
-    var isInEdit = item.id == surface.sln.editId;
     var isCanEdit = item.isCanEdit;
     var isCanPlus = [Mime.table, Mime.chatroom].includes(item.mime) ? false : true;
     if (!isCanEdit) isCanPlus = false;
@@ -62,32 +59,12 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             item.onMousedownItem(event);
         }
     }
-    function inputting(event: Event) {
-        var input = event.target as HTMLInputElement;
-        item.text = input.value.trim();
-    }
     function contextmenu(event: MouseEvent) {
         event.preventDefault();
         if (isCanEdit) {
             item.onContextmenu(event);
         }
     }
-    async function keydown(event: KeyboardEvent) {
-        if (event.code == 'Enter') {
-            await blur()
-        }
-    }
-    function blur() {
-        item.onExitEditAndSave(item.text, refEditText.current);
-    }
-    React.useEffect(() => {
-        if (isInEdit) {
-            refEditText.current = item.text;
-        }
-        if (refInput.current && isInEdit) {
-            refInput.current.focus();
-        }
-    }, [isInEdit])
     function renderItem() {
         return <div className={'shy-ws-item-page visible-hover flex gap-w-5 padding-r-5 min-h-28 round relative cursor  ' + (isSelected ? " shy-ws-item-page-selected" : "") + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}
             style={style}
@@ -105,15 +82,9 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
                 {!item.willLoadSubs && (item.subCount > 0 || item.childs.length > 0) && <Icon className={'text-1'} size={16} icon={ChevronDownSvg}></Icon>}
                 {!item.willLoadSubs && !((item.subCount > 0 || item.childs.length > 0)) && !surface?.workspace?.isPubSite && <Icon className={'text-1'} size={16} icon={DotSvg}></Icon>}
             </span>
-            <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover  round-3 flex-center gap-r-5 '><Icon size={18} icon={surface.workspace.allowSlnIcon ? getPageIcon(item) :getPageIcon({ pageType: item.pageType }) }></Icon></i>
-            {!isInEdit && <span className="text-overflow flex-auto h-20 l-20 padding-r-10">{getPageText(item)}</span>}
-            {isInEdit && isCanEdit && <div className='shy-ws-item-page-input'><input type='text'
-                onBlur={blur}
-                ref={e => refInput.current = e}
-                defaultValue={item.text}
-                onKeyDown={e => keydown(e.nativeEvent)}
-                onInput={e => inputting(e.nativeEvent)} /></div>}
-            {!isInEdit && <div className='shy-ws-item-page-operators  visible'>
+            <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover  round-3 flex-center gap-r-5 '><Icon size={18} icon={surface.workspace.allowSlnIcon ? getPageIcon(item) : getPageIcon({ pageType: item.pageType })}></Icon></i>
+            {<span className="text-overflow flex-auto h-20 l-20 padding-r-10">{getPageText(item)}</span>}
+            {<div className='shy-ws-item-page-operators  visible'>
                 {isCanEdit && <><Icon className='shy-ws-item-page-property ' size={18} icon={DotsSvg}></Icon>
                     {isCanPlus && <Icon className='shy-ws-item-page-add ' size={18} icon={PlusSvg}></Icon>}</>}
                 {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber arrow="none" count={item.unreadChats.length}></DotNumber></span>}

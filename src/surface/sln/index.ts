@@ -20,7 +20,6 @@ export class Sln extends Events {
         super();
         makeObservable(this, {
             selectIds: observable,
-            editId: observable,
             hover: observable,
             dragIds: observable,
             isDrag: observable
@@ -28,7 +27,6 @@ export class Sln extends Events {
     }
     el: HTMLElement;
     selectIds: string[] = [];
-    editId: string = '';
     dragIds: string[] = [];
     hover: { item: PageItem, direction: 'none' | 'top' | 'bottom' | 'bottom-sub' } = { item: null, direction: 'none' }
     isDrag: boolean = false;
@@ -142,9 +140,6 @@ export class Sln extends Events {
                 await item.onAdd()
             }
         }
-    }
-    onEditItem(item: PageItem) {
-        this.editId = item?.id || '';
     }
     getMimeViewComponent(mime: Mime): (props: {
         item: PageItem;
@@ -278,10 +273,16 @@ export class Sln extends Events {
                 }
             }
             if (pageItem && direction && pageItem !== dragItem) {
-                if (pageItem.mime == Mime.table && direction == 'bottom-sub') {
-                    direction = 'bottom';
+                var f = dragItem.find(c => c.id == pageItem?.id);
+                if (f) {
+                    this.hover = { item: null, direction: 'none' };
                 }
-                this.hover = { item: pageItem, direction };
+                else {
+                    if (pageItem.mime == Mime.table && direction == 'bottom-sub') {
+                        direction = 'bottom';
+                    }
+                    this.hover = { item: pageItem, direction };
+                }
             }
             else this.hover = { item: null, direction: 'none' };
         }
