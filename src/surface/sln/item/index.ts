@@ -9,7 +9,7 @@ import { Mime } from "../declare";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
-import { PageLayoutType, getPageText } from "rich/src/page/declare";
+import { PageLayoutType, getPageIcon, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, PlusAreaSvg, PlusSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
@@ -23,6 +23,7 @@ import { useWsPicker } from "rich/extensions/ws/index";
 import { useInputIconAndText } from "rich/component/view/input/iconAndText";
 import { UA } from "rich/util/ua";
 import { PopoverPosition } from "rich/component/popover/position";
+import lodash from "lodash";
 
 export class PageItem {
     id: string = null;
@@ -286,24 +287,12 @@ export class PageItem {
         item.onOpenItem();
         return item;
     }
-    onExitEditAndSave(newText: string, oldText: string) {
-        this.sln.editId = '';
-        if (newText != oldText) {
-            var text = newText ? newText : oldText;
-            if (newText) {
-                this.onChange({ text: text }, true);
-            }
-        }
-    }
-    onEdit() {
-        this.sln.onEditItem(this);
-    }
     async onRemove() {
         if (this.mime == Mime.pages) {
             if (await Confirm(lst('确定要删除吗该操作不可撤消', '确定要删除吗，该操作不可撤消')))
-                pageItemStore.deletePageItem(this);
+              await  pageItemStore.deletePageItem(this);
         }
-        else pageItemStore.deletePageItem(this);
+        else await  pageItemStore.deletePageItem(this);
     }
     async onCopy() {
         await channel.post('/clone/page', {
@@ -495,7 +484,17 @@ export class PageItem {
                     }
                 }
                 else {
-                    this.onEdit();
+                    var rc = await useInputIconAndText({ roundArea: Rect.fromEle(sourceEl) }, { icon: this.icon, text: this.text });
+                    if (rc) {
+                        if (rc.text)
+                            rc.text = rc.text.trim();
+                        var data: Record<string, any> = {};
+                        if (rc.text !== this.text) data.text = rc.text;
+                        if (!lodash.isEqual(rc.icon, this.icon)) data.icon = lodash.cloneDeep(rc.icon);
+                        if (Object.keys(data).length > 0) {
+                            this.onChange(data, true);
+                        }
+                    }
                 }
                 break;
             case 'createFolder':
