@@ -4,14 +4,7 @@ var pkg = require('../package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-// const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-
-//console.log(process.env.NODE_ENV, process.argv, 'process.env.NODE_ENV');
-
-
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -66,6 +59,7 @@ else if (mode == 'pro') API_URLS = isUs ? FILE_URLS : ['https://api-s3.shy.live'
 
 var API_VERSION = 'v1';
 var versionPrefix = pkg.version + '/';
+var staticPrefix = 'static/';
 var AUTH_URL = '/auth';
 if (mode == 'pro') AUTH_URL = 'https://auth.shy.live/auth.html'.replace('shy.live', isUs ? "shy.red" : "shy.live");
 else if (mode == 'beta') AUTH_URL = 'https://beta-auth.shy.live/auth.html';
@@ -118,7 +112,7 @@ if (mode == 'pro') {
 
 
 var viewEntrys = {
-    auth: './auth/view.ts'
+    auth: './auth/view.ts',
 }
 var htmls = [
     new HtmlWebpackPlugin({
@@ -126,7 +120,7 @@ var htmls = [
         filename: 'shy.html',
         showErrors: true,
         hash: true,
-        chunks: ['web', 'shared'],
+        chunks: ['web'],
         favicon: false,
         templateParameters: {
             src: publicPath + versionPrefix,
@@ -141,7 +135,7 @@ if (isUs) {
         filename: 'shy.red.html',
         showErrors: true,
         hash: true,
-        chunks: ['web', 'shared'],
+        chunks: ['web'],
         favicon: false,
         templateParameters: {
             src: publicPath + 'pro',
@@ -156,7 +150,7 @@ else {
         filename: 'shy.live.html',
         showErrors: true,
         hash: true,
-        chunks: ['web', 'shared'],
+        chunks: ['web'],
         favicon: false,
         templateParameters: {
             src: publicPath + 'pro',
@@ -167,7 +161,7 @@ else {
 }
 var cps = [{
     from: path.join(__dirname, "../src/assert/img/shy.svg"),
-    to: 'static/img/shy.svg'
+    to: staticPrefix + 'img/shy.svg'
 },
 {
     from: path.join(__dirname, "shared.js"),
@@ -175,27 +169,27 @@ var cps = [{
 },
 {
     from: path.join(__dirname, "../../rich/extensions/data-grid/formula/docs"),
-    to: 'static/data-grid/formula/docs'
+    to: staticPrefix + 'data-grid/formula/docs'
 },
 {
     from: path.join(__dirname, "../../rich/blocks/data-grid/template/card/views/data"),
-    to: 'static/data-grid/template/datas'
+    to: staticPrefix + 'data-grid/template/datas'
 },
 {
     from: path.join(__dirname, "../src/assert/resource"),
-    to: 'static/img'
+    to: staticPrefix + 'img'
 }];
 
 if (platform == 'server-side') {
     Object.assign(viewEntrys, {
-        server: './server-side/index.tsx',
+        server: { import: './server-side/index.tsx' },
     })
     htmls = [new HtmlWebpackPlugin({
         template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
         filename: 'index.html',
         showErrors: true,
         hash: true,
-        chunks: ['server', 'shared'],
+        chunks: ['server'],
         favicon: false,
         templateParameters: {
             src: publicPath + versionPrefix,
@@ -210,18 +204,18 @@ if (platform == 'server-side') {
 }
 else {
     Object.assign(viewEntrys, {
-        web: './src/surface/index.tsx',
+        web: { import: './src/surface/index.tsx' },
     })
     if (platform == 'web') {
         Object.assign(viewEntrys, {
-            org: './org/index.tsx',
+            org: { import: './org/index.tsx' },
         })
         htmls.push(new HtmlWebpackPlugin({
             template: path.join(__dirname, "index.html"), // 婧愭ā鏉挎枃浠�
             filename: 'org.html',
             showErrors: true,
             hash: true,
-            chunks: ['org', 'shared'],
+            chunks: ['org'],
             favicon: false,
             templateParameters: {
                 src: publicPath + versionPrefix,
@@ -240,9 +234,7 @@ module.exports = {
     output: {
         path: dist,
         filename: versionPrefix + "assert/js/shy.[name].[contenthash:8].js",
-        chunkFilename: versionPrefix + 'assert/js/shy.[name].[contenthash:8].js',
-        publicPath,
-        // clean:true
+        publicPath
     },
     resolve: {
         extensions: ['.tsx', ".ts", ".js", ".less", ".css"],
@@ -300,7 +292,7 @@ module.exports = {
             test: /\.(jpe?g|png|gif|bmp|webp|ico)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/img/[name]-[contenthash:8][ext]',
+                filename: staticPrefix + 'img/[name]-[contenthash:8][ext]',
             },
             // 是parser，不是parse
             parser: {
@@ -314,14 +306,14 @@ module.exports = {
             test: /\.(json|md)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'data/[name]-[contenthash:8][ext]',
+                filename: staticPrefix + 'data/[name]-[contenthash:8][ext]',
             }
         },
         {
             test: /\.(woff2?|eot|ttf)$/,
             type: 'asset/resource',
             generator: {
-                filename: versionPrefix + 'assert/font/[name]-[contenthash:8][ext]'
+                filename: staticPrefix + 'font/[name]-[contenthash:8][ext]'
             },
             // 是parser，不是parse
             parser: {
@@ -395,13 +387,13 @@ module.exports = {
             // 最小尺寸: 单位是字节，如果拆分出来一个, 那么拆分出来的这个包的大小最小为minSize
             minSize: 250000,
             // 将大于maxSize的包, 拆分成不小于minSize的包
-            maxSize: 250000,
+            maxSize: 250000 * 3,
             // minChunks表示引入的包, 至少被导入了几次 【才拆分】
             minChunks: 1,
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    filename: versionPrefix + "assert/js/shy.[id].[contenthash:8].js",
+                    filename:staticPrefix + "js/shy.nm.[id].[contenthash:8].js",
                     chunks: 'all',
                 },
                 default: {
