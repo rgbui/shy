@@ -25,7 +25,7 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 
 @observer
-export class WsSettings extends EventsComponent {
+export default  class WsSettings extends EventsComponent {
     mode: string = 'settings';
     visible: boolean = false;
     constructor(props) {
@@ -122,7 +122,7 @@ export class WsSettings extends EventsComponent {
     }
 }
 
-export async function useOpenWorkspaceSettings(mode?: WsSettings['mode']) {
-    var popover = await Singleton(WsSettings);
-    popover.open(mode);
-}
+// export async function useOpenWorkspaceSettings(mode?: WsSettings['mode']) {
+//     var popover = await Singleton(WsSettings);
+//     popover.open(mode);
+// }

@@ -26,7 +26,7 @@ import { config } from '../../../../common/config';
 import "./style.less";
 
 @observer
-class UserSettings extends EventsComponent {
+export default class UserSettings extends EventsComponent {
     constructor(props) {
         super(props);
         makeObservable(this, {
@@ -127,7 +127,3 @@ class UserSettings extends EventsComponent {
     }
 }
 
-export async function useOpenUserSettings(mode?: 'update' | 'price') {
-    var us = await Singleton(UserSettings);
-    us.open(mode);
-}

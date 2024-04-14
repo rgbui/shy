@@ -11,10 +11,10 @@ import { Rect } from "rich/src/common/vector/point";
 import { UserStatus } from "rich/types/user";
 import { surface } from "../../store";
 import { userNativeStore } from "../../../../native/store/user";
-import { useOpenUserSettings } from "../settings";
 import './style.less';
 import { isMobileOnly } from "react-device-detect";
 import { lst } from "rich/i18n/store";
+import { useOpenUserSettings } from "../settings/lazy";
 
 export var UserProfile = observer(function () {
     if (!surface.user.isSign) return <></>

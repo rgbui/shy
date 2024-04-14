@@ -1,6 +1,6 @@
 import React from "react";
 import { Divider } from "rich/component/view/grid";
-import { Markdown } from "rich/component/view/markdown";
+import { LazyMarkdown } from "rich/component/view/markdown/lazy";
 import { Spin } from "rich/component/view/spin";
 import { S } from "rich/i18n/view";
 import { util } from "rich/util/util";
@@ -24,7 +24,7 @@ export class ShyAppUpdate extends React.Component {
             <div className="remark"><S text='记录着我们成长的脚步'>记录着我们成长的脚步，也记录着大家对我们的期望</S></div>
             <div className="shy-app-update-content">
                 {this.loading && <Spin block></Spin>}
-                <Markdown md={this.md}></Markdown>
+                <LazyMarkdown md={this.md}></LazyMarkdown>
             </div>
         </div>
     }

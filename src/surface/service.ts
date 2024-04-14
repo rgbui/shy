@@ -22,11 +22,12 @@ import { wss } from "../../services/workspace";
 import { lst } from "rich/i18n/store";
 import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "./workspace/robot/view";
-import { useOpenWorkspaceSettings } from "./workspace/settings";
-import { useOpenUserSettings } from "./user/settings";
+
 import { userChannelStore } from "./user/channel/store";
 import { KeyboardCode } from "rich/src/common/keys";
 import { useSearchBox } from "rich/extensions/search/keyword";
+import { useLazyOpenWorkspaceSettings } from "./workspace/settings/lazy";
+import { useOpenUserSettings } from "./user/settings/lazy";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -553,7 +554,7 @@ class MessageCenter {
     }
     @act('/open/workspace/settings')
     async openWorkspace() {
-        await useOpenWorkspaceSettings();
+        await useLazyOpenWorkspaceSettings();
     }
     @act('/user/logout')
     async openLogout() {

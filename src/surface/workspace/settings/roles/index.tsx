@@ -22,7 +22,6 @@ import React from "react";
 import { ChevronLeftSvg, ChevronRightSvg, CloseSvg, DotsSvg, MemberSvg, PlusSvg, TrashSvg, TypesPersonSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
-import { useColorPicker } from 'rich/component/view/color/picker';
 import { Row, Col, Divider } from 'rich/component/view/grid';
 import { Icon } from "rich/component/view/icon";
 import { Input } from 'rich/component/view/input';
@@ -48,6 +47,7 @@ import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
 import { Tip } from 'rich/component/view/tooltip/tip';
 import "./style.less";
+import { useColorPicker } from 'rich/component/view/color/lazy';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',

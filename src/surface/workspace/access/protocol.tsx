@@ -3,7 +3,6 @@ import { EventsComponent } from "rich/component/lib/events.component";
 import { Dialoug } from "rich/component/view/grid";
 
 import { Workspace } from "..";
-import { Markdown } from "rich/component/view/markdown";
 import { Button } from "rich/component/view/button";
 import { CheckBox } from "rich/component/view/checkbox";
 import { ShyAlert } from "rich/component/lib/alert";
@@ -11,6 +10,7 @@ import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
 import { PopoverSingleton } from "rich/component/popover/popover";
 import { PopoverPosition } from "rich/component/popover/position";
+import { LazyMarkdown } from "rich/component/view/markdown/lazy";
 
 class JoinWorkspaceProtocol extends EventsComponent {
     render() {
@@ -21,7 +21,7 @@ class JoinWorkspaceProtocol extends EventsComponent {
                 <S>您需要同意以下协议才能加入空间</S>
             </div>
             <div className="border gap-h-10 round  padding-10 overlay-y  max-h-300 ">
-                <Markdown md={this.ws?.accessProfile?.joinProtocol}></Markdown>
+                <LazyMarkdown md={this.ws?.accessProfile?.joinProtocol}></LazyMarkdown>
             </div>
             <div className="flex">
                 <CheckBox checked={this.checked} onChange={e => this.checked = e}><S>我已阅读并同意</S></CheckBox>

@@ -6,11 +6,11 @@ import { Divider } from "rich/component/view/grid";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../../../store";
-import { useColorPicker } from "rich/component/view/color/picker";
 import { makeObservable, observable } from "mobx";
 import { autoImageUrl } from "rich/net/element.type";
 import { Textarea } from "rich/component/view/input/textarea";
 import { S } from "rich/i18n/view";
+import { useColorPicker } from "rich/component/view/color/lazy";
 const DEFAULT_COLOR = 'rgb(192,157,156)';
 
 @observer

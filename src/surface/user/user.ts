@@ -10,10 +10,10 @@ import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { masterSock } from "../../../net/sock";
 import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl, SyHistory } from "../../history";
-import { useOpenUserSettings } from "./settings";
 import { surface } from "../store";
 import { config } from "../../../common/config";
 import { ShyAlert } from "rich/component/lib/alert";
+import { useOpenUserSettings } from "./settings/lazy";
 
 export class User {
     public id: string = null;

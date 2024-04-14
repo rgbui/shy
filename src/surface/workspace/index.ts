@@ -1,14 +1,13 @@
 
 import { IconArguments } from "rich/extensions/icon/declare";
 import { PageItem } from "../sln/item";
-import { useOpenUserSettings } from "../user/settings";
+
 import { ShyUrl, UrlRoute } from "../../history";
 import { CacheKey, sCache, yCache } from "../../../net/cache";
 import { Mime } from "../sln/declare";
 import { ShyUtil } from "../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
-import { useOpenWorkspaceSettings } from "./settings";
 import { computed, makeObservable, observable } from "mobx";
 import { channel } from "rich/net/channel";
 import { surface } from "../store";
@@ -26,7 +25,6 @@ import { Pid, PidType } from "./declare";
 import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { workspaceNotifys } from "../../../services/tim";
 import { HttpMethod } from "../../../net/primus/http";
-import { useImportFile } from "rich/extensions/import-file";
 import { buildPage } from "rich/src/page/common/create";
 import { getPageItemElementUrl } from "../sln/item/util";
 import { useTemplateView } from "rich/extensions/template";
@@ -42,6 +40,9 @@ import { useOpenReport } from "rich/extensions/report";
 import { WsConsumeType, getAiDefaultModel } from "rich/net/ai/cost";
 
 import { PopoverPosition } from "rich/component/popover/position";
+import { useLazyOpenWorkspaceSettings } from "./settings/lazy";
+import { useOpenUserSettings } from "../user/settings/lazy";
+import { useImportFile } from "rich/extensions/Import-export/import-file/lazy";
 
 export type WorkspaceUser = {
     userid: string;
@@ -382,7 +383,7 @@ export class Workspace {
         return ids;
     }
     async onOpenWorkspaceSettings(event: React.MouseEvent) {
-        await useOpenWorkspaceSettings();
+        await useLazyOpenWorkspaceSettings();
     }
     async onOpenUserSettings(event: React.MouseEvent) {
         await useOpenUserSettings();
@@ -828,7 +829,7 @@ export class Workspace {
                 useOpenUserSettings('price')
             }
             else if (se.item.name == 'wsUsers') {
-                useOpenWorkspaceSettings('members')
+                useLazyOpenWorkspaceSettings('members')
             }
             else if (se.item.name == 'importFiles') {
                 this.onImportFiles();
@@ -837,7 +838,7 @@ export class Workspace {
 
             }
             else if (se.item.name == 'setting') {
-                useOpenWorkspaceSettings()
+                useLazyOpenWorkspaceSettings();
             }
             else if (se.item.name == 'createFolder') {
                 var r = await useForm({
@@ -862,7 +863,7 @@ export class Workspace {
             }
             else if (se.item.name == 'enterApp') {
                 if (this.publishConfig?.abled !== true) {
-                    await useOpenWorkspaceSettings('publish');
+                    await useLazyOpenWorkspaceSettings('publish');
                     return;
                 }
                 await this.setMode(true);

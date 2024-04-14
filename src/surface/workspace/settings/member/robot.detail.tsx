@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 import React from "react";
 import { ArrowLeftSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { Markdown } from "rich/component/view/markdown";
 import { S } from "rich/i18n/view";
 import { autoImageUrl } from "rich/net/element.type";
 import { RobotInfo } from "rich/types/user";
 import { RobotChat } from "../../robot/src/chat";
+import { LazyMarkdown } from "rich/component/view/markdown/lazy";
 
 @observer
 export class RobotDetail extends React.Component<{ back: () => void, robot: RobotInfo }>{
@@ -41,6 +41,6 @@ export class RobotDetail extends React.Component<{ back: () => void, robot: Robo
     }
     renderDetail() {
         var robot = this.props.robot;
-        return <Markdown md={robot.slogan}></Markdown>
+        return <LazyMarkdown md={robot.slogan}></LazyMarkdown>
     }
 }
