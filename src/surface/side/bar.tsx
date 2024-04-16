@@ -29,7 +29,6 @@ import { util } from "rich/util/util";
 import { masterSock } from "../../../net/sock";
 import { yCache } from "../../../net/cache";
 
-
 const SIDE_FOLDER_SPREAD_KEY = 'shy-side-folder-spread';
 
 @observer
@@ -323,7 +322,7 @@ export class SideBar extends React.Component {
     renderWs(workspace: UserWorkspaceItem, size?: 48 | 20, isFolderIn?: boolean) {
         if (size == 20) {
             if (workspace.icon) return <a className="shy-sidebar-ws-icon cursor  size-16 flex-center   relative">
-                <img src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 16, height: 16 }} />
+                <img draggable={false} src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 16, height: 16 }} />
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
             else return <a className="shy-sidebar-ws-name  cursor  size-16 flex-center   relative">
@@ -333,7 +332,7 @@ export class SideBar extends React.Component {
         }
         else {
             if (workspace.icon) return <a className={"shy-sidebar-ws-icon cursor  size-48 flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
-                <img src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />
+                <img draggable={false} src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
             else return <a className={"shy-sidebar-ws-name  cursor  size-48 flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
@@ -433,15 +432,15 @@ export class SideBar extends React.Component {
                 <ToolTip placement="right" overlay={lst('私信')}><Icon icon={ShyLog} size={48}></Icon></ToolTip>
                 <DotNumber count={userChannelStore.unReadChatCount} ></DotNumber>
             </a>
-            <div className="shy-sidebar-divider flex-fixed "></div>
-            <div className="shy-sidebar-body flex-fixed flex flex-col  " style={{ maxHeight: 'calc(100% - 250px)' }}>
+            <div className="shy-sidebar-divider flex-fixed gap-b-6 "></div>
+            <div className="shy-sidebar-body flex-fixed flex flex-col  " style={{ maxHeight:window.shyConfig?.isWeb? 'calc(100% - 260px)':'calc(100% - 200px)' }}>
                 {surface.temporaryWs && <ToolTip key={surface.temporaryWs.id} placement="right" overlay={surface.temporaryWs.text}><div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws size-48 flex-center gap-12 ' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{this.renderWs(surface.temporaryWs)}</div></ToolTip>}
                 {this.renderWss()}
             </div>
-            <div className="flex-fixed flex flex-col flex-center">
-                <a className="shy-sidebar-operator size-48 flex-center gap-12" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-                <a className="shy-sidebar-operator size-48 flex-center gap-12" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a>
-                {window.shyConfig?.isWeb && <><div className="shy-sidebar-divider"></div><a target="_blank" href={window.shyConfig?.isUS ? "https://shy.red/download" : "https://shy.live/download"} className="shy-sidebar-operator size-48 flex-center gap-12"><Icon size={24} icon={{ name: 'byte', code: 'to-bottom' }}></Icon></a></>}
+            <div className="flex-fixed flex flex-col flex-center padding-t-6">
+                <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
+                <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a>
+                {window.shyConfig?.isWeb && <><div className="shy-sidebar-divider"></div><a target="_blank" href={window.shyConfig?.isUS ? "https://shy.red/download" : "https://shy.live/download"} className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-h-6"><Icon size={24} icon={{ name: 'byte', code: 'to-bottom' }}></Icon></a></>}
             </div>
         </div>
     }
