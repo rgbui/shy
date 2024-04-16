@@ -3,7 +3,7 @@ import { surface } from "../../app/store";
 import { WorkspaceProfile } from "../../workspace/profile";
 import { observer, useLocalObservable } from "mobx-react";
 import { UserProfile } from "../../user/profile";
-import { DownloadSvg, SearchSvg, TrashSvg } from "rich/component/svgs";
+import { SearchSvg, TrashSvg, UploadSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { channel } from "rich/net/channel";
 import { AtomPermission } from "rich/src/page/permission";
@@ -12,9 +12,7 @@ import { Input } from "rich/component/view/input";
 import { lst } from "rich/i18n/store";
 import { Mime } from "../declare";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
-
-export var SlnView = observer(function ()
-{
+export var SlnView = observer(function () {
     var local = useLocalObservable<{ word: string, input: Input }>(() => {
         return {
             word: '',
@@ -37,11 +35,11 @@ export var SlnView = observer(function ()
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-t-20">
                 <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
-                    <span className="gap-l-5 round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
+                    <span className="gap-l-5 round size-20 flex-center gap-r-5 remark"><Icon size={15} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
                     <span><S>模板</S></span>
                 </div>
                 <div onMouseDown={e => surface.workspace.onImportFiles()} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
-                    <span className="gap-l-5  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={DownloadSvg}></Icon></span>
+                    <span className="gap-l-5  round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={UploadSvg}></Icon></span>
                     <span><S>导入</S></span>
                 </div>
                 <div onMouseDown={e => surface.workspace.onOpenTrash(e)} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
