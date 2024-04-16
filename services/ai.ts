@@ -1,6 +1,6 @@
 import { get, post } from "rich/net/annotation";
 import { masterSock } from "../net/sock";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 
 export class AiService {
     @get('/query/wiki/answer')

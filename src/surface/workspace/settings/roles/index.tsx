@@ -30,10 +30,9 @@ import { HelpText, Remark } from "rich/component/view/text";
 import { channel } from 'rich/net/channel';
 import { Rect } from 'rich/src/common/vector/point';
 import { util } from 'rich/util/util';
-import { surface } from '../../../store';
+import { surface } from '../../../app/store';
 import { SaveTip } from '../../../../component/tip/save.tip';
 import { AtomPermission, getCommonPerssions, getAtomPermissionComputedChanges, getAtomPermissionOptions } from "rich/src/page/permission";
-import { WorkspaceRole } from '../..';
 import { ToolTip } from 'rich/component/view/tooltip';
 import { SelectBox } from 'rich/component/view/select/box';
 import { MenuItemType } from 'rich/component/view/menu/declare';
@@ -48,6 +47,7 @@ import { S } from 'rich/i18n/view';
 import { Tip } from 'rich/component/view/tooltip/tip';
 import "./style.less";
 import { useColorPicker } from 'rich/component/view/color/lazy';
+import { WorkspaceRole } from '../../declare';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',

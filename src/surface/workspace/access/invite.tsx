@@ -5,7 +5,7 @@ import React from "react";
 import { Button } from "rich/component/view/button";
 import { channel } from "rich/net/channel";
 import { Workspace } from "..";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { ShyUrl, UrlRoute } from "../../../history";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Sock } from "../../../../net/sock";

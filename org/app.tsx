@@ -3,7 +3,7 @@ import { FooterView } from "./common/footer";
 import { HeadView } from "./common/head";
 import { Route, Router, Switch } from "react-router";
 import { SyHistory } from "../src/history";
-import { View404 } from "../src/surface/view/404";
+import { View404 } from "../src/surface/app/view/404";
 import { DownloadView } from "./download";
 import { PriceView } from "./pricing";
 import { ProductView } from "./product";

@@ -1,7 +1,7 @@
 import lodash from "lodash";
 import { runInAction } from "mobx";
 import { PageItem } from "..";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { Workspace } from "../../../workspace";
 import { Mime } from "../../declare";
 

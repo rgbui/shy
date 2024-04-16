@@ -5,7 +5,7 @@ import { S, Sp } from "rich/i18n/view";
 import { AiStartSvg, BoardToolFrameSvg, ChevronDownSvg, CollectTableSvg, DocCardsSvg, PageSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { getEle, getTypeColor, refShyPage } from "../util";
-import { surface } from "../../src/surface/store";
+import { surface } from "../../src/surface/app/store";
 import { Avatar } from "rich/component/view/avator/face";
 export function HeadView() {
     function bindEvents() {

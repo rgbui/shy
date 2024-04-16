@@ -1,7 +1,7 @@
 
 import { act, del, get, patch, post, put } from "rich/net/annotation";
 import { UserAction } from "rich/src/history/action";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 import { BaseService } from "./common/base";
 import { SnapStore } from "./snap/store";
 import { IconArguments } from "rich/extensions/icon/declare";

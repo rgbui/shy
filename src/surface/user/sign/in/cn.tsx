@@ -9,7 +9,7 @@ import { S, Sp } from "rich/i18n/view";
 import { sCache, CacheKey } from "../../../../../net/cache";
 import { masterSock } from "../../../../../net/sock";
 import { UrlRoute, ShyUrl } from "../../../../history";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { channel } from "rich/net/channel";
 import { WeixinOpen } from "../../../../component/winxin/open";
 import { Divider } from "rich/component/view/grid";

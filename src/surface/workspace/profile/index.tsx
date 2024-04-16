@@ -1,6 +1,6 @@
 import React from "react";
 import { Rect } from "rich/src/common/vector/point";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { observer } from "mobx-react";
 import { ChevronDownSvg, DoubleLeftSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";

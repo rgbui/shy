@@ -6,7 +6,7 @@ import { UserBox } from "rich/component/view/avator/user";
 import { Button } from "rich/component/view/button";
 import { RobotInfo } from "rich/types/user";
 import { util } from "rich/util/util";
-import { surface } from "../../../../store";
+import { surface } from "../../../../app/store";
 import { Divider } from "rich/component/view/grid";
 import { S } from "rich/i18n/view";
 import { AgentRequest } from "rich/net/ai/robot";

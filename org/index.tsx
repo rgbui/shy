@@ -9,7 +9,7 @@
 import "../common/config";
 import "rich";
 import "../services/declare";
-import "../src/surface/service";
+import "../src/surface/app/service";
 import "../src/assert/theme.less";
 import "./style.less";
 import "./site.less";
@@ -23,7 +23,7 @@ import React from "react";
 import { App } from "./app";
 import { blockStore } from "rich/extensions/block/store";
 import { ls } from "rich/i18n/store";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 createAuthIframe();
 var div = document.body.querySelector('div');
 if (!div) div = document.body.appendChild(document.createElement('div'))

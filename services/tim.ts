@@ -2,7 +2,7 @@
 import { channel } from "rich/net/channel";
 import { userNativeStore } from "../native/store/user";
 import { Tim } from "../net/primus/tim";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
 

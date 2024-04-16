@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import React, { CSSProperties } from "react";
 import { MouseDragger } from "rich/src/common/dragger";
 import { Rect } from "rich/src/common/vector/point";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
 import { SK} from "rich/component/view/spin";

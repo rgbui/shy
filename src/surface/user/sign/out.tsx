@@ -1,6 +1,6 @@
 import React from "react";
 import { ShyUrl, UrlRoute } from "../../../history";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { User } from "../user";
 import { channel } from "rich/net/channel";
 import { S } from "rich/i18n/view";

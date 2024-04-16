@@ -6,7 +6,7 @@ import { Icon } from "rich/component/view/icon";
 import { Input } from "rich/component/view/input";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { ResourceArguments } from "rich/extensions/icon/declare";
 import { Button } from "rich/component/view/button";
 import { Workspace } from "..";

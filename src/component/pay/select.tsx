@@ -13,7 +13,7 @@ import { Price } from "../../util/price";
 import { lst } from "rich/i18n/store";
 import { S, Sp } from "rich/i18n/view";
 import { UrlRoute } from "../../history";
-import { surface } from "../../surface/store";
+import { surface } from "../../surface/app/store";
 import { PopoverSingleton } from "rich/component/popover/popover";
 
 export class SelectPayView extends EventsComponent {

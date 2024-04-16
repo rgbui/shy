@@ -4,7 +4,7 @@ import { Divider } from 'rich/component/view/grid';
 import { Input } from 'rich/component/view/input';
 import { observer } from 'mobx-react';
 import { makeObservable, observable } from 'mobx';
-import { surface } from '../../../store';
+import { surface } from '../../../app/store';
 import { channel } from 'rich/net/channel';
 import { Avatar } from 'rich/component/view/avator/face';
 import { CheckSvg, CloseSvg, PlusSvg } from 'rich/component/svgs';

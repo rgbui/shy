@@ -1,7 +1,7 @@
 import { ShyAlert, CloseShyAlert } from "rich/component/lib/alert";
 import { channel } from "rich/net/channel";
 import { masterSock } from "../../../../net/sock";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { Workspace } from "..";
 import { lst } from "rich/i18n/store";
 import { wss } from "../../../../services/workspace";

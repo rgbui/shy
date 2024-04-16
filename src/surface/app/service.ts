@@ -5,29 +5,29 @@ import { channel } from "rich/net/channel";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { LinkWs, PageLayoutType } from "rich/src/page/declare";
 import { surface } from "./store";
-import { yCache, CacheKey } from "../../net/cache";
-import { ShyUrl, UrlRoute } from "../history";
-import { Mime } from "./sln/declare";
-import { PageItem } from "./sln/item";
-import { pageItemStore } from "./sln/item/store/sync";
-import { getPageItemElementUrl } from "./sln/item/util";
+import { yCache, CacheKey } from "../../../net/cache";
+import { ShyUrl, UrlRoute } from "../../history";
+import { Mime } from "../sln/declare";
+import { PageItem } from "../sln/item";
+import { pageItemStore } from "../sln/item/store/sync";
+import { getPageItemElementUrl } from "../sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
-import { useSelectPayView } from "../component/pay/select";
-import { SnapStore } from "../../services/snap/store";
-import { masterSock } from "../../net/sock";
+import { useSelectPayView } from "../../component/pay/select";
+import { SnapStore } from "../../../services/snap/store";
+import { masterSock } from "../../../net/sock";
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { AtomPermission } from "rich/src/page/permission";
-import { Workspace } from "./workspace";
-import { wss } from "../../services/workspace";
+import { Workspace } from "../workspace";
+import { wss } from "../../../services/workspace";
 import { lst } from "rich/i18n/store";
 import { RobotInfo } from "rich/types/user";
-import { useOpenRobotSettings } from "./workspace/robot/view";
+import { useOpenRobotSettings } from "../workspace/robot/view";
 
-import { userChannelStore } from "./user/channel/store";
+import { userChannelStore } from "../user/channel/store";
 import { KeyboardCode } from "rich/src/common/keys";
 import { useSearchBox } from "rich/extensions/search/keyword";
-import { useLazyOpenWorkspaceSettings } from "./workspace/settings/lazy";
-import { useOpenUserSettings } from "./user/settings/lazy";
+import { useLazyOpenWorkspaceSettings } from "../workspace/settings/lazy";
+import { useOpenUserSettings } from "../user/settings/lazy";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -502,8 +502,8 @@ class MessageCenter {
                 content: args.content,
                 plain: args.plain,
                 text: args.text
-               
-            },{force:true});
+
+            }, { force: true });
         }
     }
     @act('/shy/share')
@@ -612,7 +612,7 @@ class MessageCenter {
                 return r;
             }
         }
-        else return {ok:false}
+        else return { ok: false }
     }
 }
 

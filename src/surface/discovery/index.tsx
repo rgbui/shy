@@ -6,7 +6,7 @@ import discover from "../../assert/img/discove.jpeg";
 import { channel } from "rich/net/channel";
 import { WsAvatar } from "rich/component/view/avator/ws";
 import { Workspace } from "../workspace";
-import { surface } from "../store";
+import { surface } from "../app/store";
 import { isMobileOnly } from "react-device-detect";
 import { S } from "rich/i18n/view";
 

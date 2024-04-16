@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "rich/component/view/button";
 import { Divider } from "rich/component/view/grid";
 import { Input } from "rich/component/view/input";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
 import { HelpText } from "rich/component/view/text";

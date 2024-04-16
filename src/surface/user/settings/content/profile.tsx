@@ -5,7 +5,7 @@ import { Button } from "rich/component/view/button";
 import { Divider } from "rich/component/view/grid";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { makeObservable, observable } from "mobx";
 import { autoImageUrl } from "rich/net/element.type";
 import { Textarea } from "rich/component/view/input/textarea";

@@ -4,7 +4,7 @@ import React from "react";
 import { Divider } from "rich/component/view/grid";
 import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { S, Sp } from "rich/i18n/view";
 

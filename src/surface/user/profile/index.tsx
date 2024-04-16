@@ -9,7 +9,7 @@ import { MenuItemType } from "rich/component/view/menu/declare";
 import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { UserStatus } from "rich/types/user";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { userNativeStore } from "../../../../native/store/user";
 import './style.less';
 import { isMobileOnly } from "react-device-detect";

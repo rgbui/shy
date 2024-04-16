@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'rich/component/view/button';
 import { Row, Col, Divider } from 'rich/component/view/grid';
-import { surface } from '../../../store';
+import { surface } from '../../../app/store';
 import { observer } from 'mobx-react';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { User } from '../../user';

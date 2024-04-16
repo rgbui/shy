@@ -9,7 +9,7 @@ import { useServerNumberView } from "./server.number";
 
 import { PlusSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { surface } from "../../src/surface/store";
+import { surface } from "../../src/surface/app/store";
 import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
 

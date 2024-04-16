@@ -3,7 +3,7 @@ import React from 'react';
 import { Icon } from "rich/component/view/icon";
 import { Workspace } from "..";
 import { Avatar } from "rich/component/view/avator/face";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import DragHandle from "rich/src/assert/svg/dragHandle.svg";
 import PlusSvg from "rich/src/assert/svg/plus.svg";
 import CheckSvg from 'rich/src/assert/svg/check.svg';

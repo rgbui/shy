@@ -6,7 +6,7 @@ import { Divider } from "rich/component/view/grid";
 import { Textarea } from "rich/component/view/input/textarea";
 import { Switch } from "rich/component/view/switch";
 import { channel } from "rich/net/channel";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { Workspace } from "../..";
 import { ShyAlert } from "rich/component/lib/alert";

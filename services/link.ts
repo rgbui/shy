@@ -1,6 +1,6 @@
 import { get, post, put } from "rich/net/annotation";
 import { BaseService } from "./common/base";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 import {  masterSock } from "../net/sock";
 import { wss } from "./workspace";
 

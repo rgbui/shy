@@ -8,7 +8,7 @@ import { yCache } from "../../net/cache";
 import { view_snap } from "../../net/db";
 import { DbService } from "../../net/db/service";
 import { log } from "../../common/log";
-import { surface } from "../../src/surface/store";
+import { surface } from "../../src/surface/app/store";
 import { MergeSock } from "rich/component/lib/merge.sock";
 const DELAY_TIME = 1000 * 60 * 3;
 const MAX_OPERATE_COUNT = 100;

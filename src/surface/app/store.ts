@@ -1,29 +1,50 @@
 
-import { User } from "./user/user";
-import { Sln } from "./sln";
+import { User } from "../user/user";
+import { Sln } from "../sln";
 import { Events } from "rich/util/events";
-import { Supervisor } from "./supervisor";
-import { ShyUrl, UrlRoute } from "../history";
-import { LinkWorkspaceOnline, Workspace } from "./workspace";
+import { Supervisor } from "../supervisor";
+import { ShyUrl, UrlRoute } from "../../history";
+import { Workspace } from "../workspace";
 import { computed, makeObservable, observable, runInAction } from "mobx";
-import { CacheKey, sCache } from "../../net/cache";
+import { CacheKey, sCache } from "../../../net/cache";
 import { channel } from "rich/net/channel";
-import { PageItem } from "./sln/item";
-import { PageViewStores } from "./supervisor/view/store";
-import { config } from "../../common/config";
+import { PageItem } from "../sln/item";
+import { PageViewStores } from "../supervisor/view/store";
+import { config } from "../../../common/config";
 import { blockStore } from "rich/extensions/block/store";
 import { ls, lst } from "rich/i18n/store";
 import { PageTemplateType } from "rich/extensions/template";
 import { ElementType, getElementUrl } from "rich/net/element.type";
-import { masterSock } from "../../net/sock";
-import { ShyDesk } from "../../type";
+import { masterSock } from "../../../net/sock";
+import { ShyDesk } from "../../../type";
 import { Confirm } from "rich/component/lib/confirm";
-import { useCreateWorkspace } from "./workspace/create/box";
-import { wss } from "../../services/workspace";
+import { useCreateWorkspace } from "../workspace/create/box";
+import { wss } from "../../../services/workspace";
 import { isMobileOnly } from "react-device-detect";
 import { KeyboardPlate } from "rich/src/common/keys";
 import "./service";
 import { GlobalKeyboard } from "./service";
+import { IconArguments } from "rich/extensions/icon/declare";
+
+export type UserWorkspaceItem = {
+    id: string,
+    sn: number,
+    text: string,
+    icon: IconArguments,
+    cover: IconArguments,
+    overlayDate: Date,
+    randomOnlineUsers: Set<string>,
+    loadingOnlineUsers: boolean,
+    unreadChats: { id: string, roomId: string, seq: number }[],
+
+    memberOnlineCount: number,
+    memberCount: number,
+
+    folderId: string,
+    at: number,
+    owner: string,
+    creater: string
+}
 
 export class Surface extends Events {
     constructor() {
@@ -41,7 +62,8 @@ export class Surface extends Events {
             mobileSlnSpread: observable,
             slnSpread: observable,
             showWorkspace: computed,
-            accessPage: observable
+            accessPage: observable,
+            // wssFolderSpreads: observable
         });
     }
     mobileSlnSpread: boolean = null;
@@ -50,8 +72,9 @@ export class Surface extends Events {
     user: User = new User();
     sln: Sln = new Sln();
     workspace: Workspace = null;
-    wss: LinkWorkspaceOnline[] = [];
-    temporaryWs: LinkWorkspaceOnline = null;
+    wss: UserWorkspaceItem[] = [];
+    temporaryWs: UserWorkspaceItem = null;
+    // wssFolderSpreads: Map<string, boolean> = new Map();
     keyboardPlate = new KeyboardPlate();
     /**
      * 空间的访问方式
@@ -71,7 +94,11 @@ export class Surface extends Events {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
             if (r?.ok) {
-                var list: LinkWorkspaceOnline[] = r.data.list;
+                var list: UserWorkspaceItem[] = r.data.list;
+                list = list.sort((x, y) => {
+                    if (typeof x.at == 'number' && typeof y.at == 'number' && x?.at < y?.at) return -1;
+                    else return 1;
+                })
                 list.forEach(l => {
                     l.overlayDate = null;
                     l.randomOnlineUsers = new Set();
@@ -253,7 +280,7 @@ export class Surface extends Events {
     get showJoinTip() {
         if (this.user.isSign) {
             if (!this.showSlideBar) return false;
-            return this.temporaryWs && this.temporaryWs?.accessProfile.disabledJoin !== true
+            return this.temporaryWs && this.temporaryWs.id == surface.workspace.id && surface.workspace?.accessProfile.disabledJoin !== true
         }
         else return false;
     }
@@ -339,7 +366,7 @@ export class Surface extends Events {
             await this.shyDesk.ready();
         }
     }
-    
+
     get shyDesk() {
         return (window as any).ShyDesk as ShyDesk
     }

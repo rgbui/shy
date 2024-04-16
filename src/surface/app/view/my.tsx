@@ -1,12 +1,12 @@
 
 import { observer } from "mobx-react";
 import React from 'react';
-import { sCache, CacheKey } from "../../../net/cache";
-import { UrlRoute, ShyUrl } from "../../history";
+import { sCache, CacheKey } from "../../../../net/cache";
+import { UrlRoute, ShyUrl } from "../../../history";
 import { channel } from "rich/net/channel";
-import { Workspace } from "../workspace";
+import { Workspace } from "../../workspace";
 import { surface } from "../store";
-import { autoCreateWorkspaceAndJoinWorkspace } from "../workspace/create/template";
+import { autoCreateWorkspaceAndJoinWorkspace } from "../../workspace/create/template";
 import { Spin } from "rich/component/view/spin";
 export var MyWorkSpace = observer(function () {
     async function load() {

@@ -10,7 +10,7 @@ import { ethers } from "ethers";
 import { util } from "rich/util/util.js";
 import { CacheKey, sCache } from "../net/cache/index.js";
 import "../src/assert/js/jsrsasign-all-min.js"
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store.js";
 import { stringify } from "json-stable-stringify"
 
 

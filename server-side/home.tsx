@@ -4,7 +4,7 @@ import { ServerConfigView } from "./machine";
 import { ServerConfigCreate } from "./create";
 import { serverSlideStore } from "./store";
 import LogoSrc from "../src/assert/img/shy.blue.svg";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 import { Avatar } from "rich/component/view/avator/face";
 import { ShyUrl, UrlRoute } from "../src/history";
 import { Spin } from "rich/component/view/spin";

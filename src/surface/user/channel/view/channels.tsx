@@ -3,7 +3,7 @@ import React from "react";
 import { Avatar } from "rich/component/view/avator/face";
 import { UserBox } from "rich/component/view/avator/user";
 import { DotNumber } from "rich/component/view/dot";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { userChannelStore } from "../store";
 import { S } from "rich/i18n/view";
 

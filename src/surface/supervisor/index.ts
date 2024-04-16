@@ -4,7 +4,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
 import { ElementType } from "rich/net/element.type";
-import { surface } from "../store";
+import { surface } from "../app/store";
 import { isMobileOnly } from "react-device-detect";
 
 export class Supervisor extends Events {

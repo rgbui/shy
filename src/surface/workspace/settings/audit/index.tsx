@@ -5,7 +5,7 @@ import React from "react";
 import { Divider } from "rich/component/view/grid";
 
 import { channel } from "rich/net/channel";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 
 @observer

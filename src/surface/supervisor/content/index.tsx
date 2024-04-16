@@ -4,7 +4,7 @@ import { Page } from "rich/src/page";
 import { Rect } from "rich/src/common/vector/point";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { ViewOperate } from "rich/src/history/action";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { PageDirective } from "rich/src/page/directive";
 import { channel } from "rich/net/channel";
 

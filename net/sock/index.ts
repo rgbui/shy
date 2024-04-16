@@ -3,7 +3,7 @@ import { CacheKey, sCache } from "../cache";
 import { SockResponse, SockType } from "./type";
 import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
-import { surface } from "../../src/surface/store";
+import { surface } from "../../src/surface/app/store";
 
 export class Sock {
 

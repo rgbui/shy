@@ -4,7 +4,7 @@ import { Rect } from "rich/src/common/vector/point";
 import { Page } from "rich/src/page";
 import { PageLayoutType } from "rich/src/page/declare";
 import { PageDirective } from "rich/src/page/directive";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { SnapStore } from "../../../../services/snap/store";
 import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";

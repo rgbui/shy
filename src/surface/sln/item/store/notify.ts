@@ -1,7 +1,7 @@
 import lodash from "lodash";
 import { runInAction } from "mobx";
 import { PageItem } from "..";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { ItemOperator, ItemOperatorDirective, PageItemAction } from "./sync";
 
 export function PageItemOperateNotify(e: {

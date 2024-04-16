@@ -2,7 +2,7 @@ import { makeObservable, observable } from "mobx";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { Page } from "rich/src/page";
 import { PageSupervisorView } from "./index";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { SnapStore } from "../../../../services/snap/store";
 import { Events } from "rich/util/events";
 import lodash from "lodash";

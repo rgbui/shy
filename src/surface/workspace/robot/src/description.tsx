@@ -14,7 +14,7 @@ import { SwitchText } from "rich/component/view/switch";
 import { MeasureView } from "rich/component/view/progress";
 import lodash from "lodash";
 import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { Divider } from "rich/component/view/grid";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";

@@ -7,7 +7,7 @@ import { Avatar } from "rich/component/view/avator/face";
 import { useForm } from "rich/component/view/form/dialoug";
 import { Icon } from "rich/component/view/icon";
 import { masterSock } from "../../../../net/sock";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { Divider } from "rich/component/view/grid";
 import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "./view";

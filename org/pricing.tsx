@@ -7,7 +7,7 @@ import { UsedView } from "./common/used";
 import { SiteFeatures } from "./common/feature";
 import { config } from "../common/config";
 import { useSelectPayView } from "../src/component/pay/select";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 import { ShyAlert } from "rich/component/lib/alert";
 import { lst } from "rich/i18n/store";
 

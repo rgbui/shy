@@ -6,7 +6,7 @@ import { PagesView } from "./item/extensions/pages";
 import { PageItemView } from "./item/extensions/view";
 import { makeObservable, observable } from "mobx";
 import { CacheKey, yCache } from "../../../net/cache";
-import { surface } from "../store";
+import { surface } from "../app/store";
 import { MouseDragger } from "rich/src/common/dragger";
 import { ghostView } from "rich/src/common/ghost";
 import { pageItemStore } from "./item/store/sync";

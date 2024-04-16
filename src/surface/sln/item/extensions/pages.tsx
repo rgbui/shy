@@ -5,7 +5,7 @@ import { Icon } from "rich/component/view/icon";
 import { PageItem } from "..";
 import { PageItemBox } from "../view/box";
 import { Spin } from "rich/component/view/spin";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { lst } from "rich/i18n/store";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {

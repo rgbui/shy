@@ -15,7 +15,7 @@ import { S, Sp } from "rich/i18n/view";
 import { ShyUrl, UrlRoute } from "../../../../history";
 import { masterSock } from "../../../../../net/sock";
 import { CacheKey, sCache } from "../../../../../net/cache";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { EmailRegex } from "../../../../../services/common/base";
 
 @observer

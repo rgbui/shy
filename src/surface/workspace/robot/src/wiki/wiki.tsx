@@ -15,7 +15,7 @@ import { ghostView } from "rich/src/common/ghost";
 import { Point, Rect } from "rich/src/common/vector/point";
 import { util } from "rich/util/util";
 import { masterSock } from "../../../../../../net/sock";
-import { surface } from "../../../../store";
+import { surface } from "../../../../app/store";
 import { WikiDoc } from "../../declare";
 import { ContentViewer } from "./content";
 import { RobotInfo } from "rich/types/user";

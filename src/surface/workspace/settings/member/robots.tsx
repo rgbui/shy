@@ -7,7 +7,7 @@ import { Button } from "rich/component/view/button";
 import { SpinBox } from "rich/component/view/spin";
 import { observer } from "mobx-react";
 import { RobotInfo } from "rich/types/user";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Pagination } from "rich/component/view/pagination";
 import { channel } from "rich/net/channel";

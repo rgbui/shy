@@ -3,7 +3,7 @@ import { Icon } from "rich/component/view/icon";
 import { PageItemBox } from "../view/box";
 import { observer } from "mobx-react";
 import { PageItem } from "..";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { DotNumber } from "rich/component/view/dot";
 import { ChevronDownSvg, DotSvg, DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Mime } from "../../declare";

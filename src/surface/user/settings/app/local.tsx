@@ -7,7 +7,7 @@ import { Input } from "rich/component/view/input";
 import { InputNumber } from "rich/component/view/input/number";
 import { Icon } from "rich/component/view/icon";
 import { UrlRoute } from "../../../../history";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { observer } from "mobx-react";
 import { makeObservable, observable } from "mobx";
 import { Divider } from "rich/component/view/grid";

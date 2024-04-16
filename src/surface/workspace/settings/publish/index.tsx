@@ -1,7 +1,7 @@
 import React from "react";
 import { Divider } from "rich/component/view/grid";
 import { Switch } from "rich/component/view/switch";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { observer } from "mobx-react";
 import { channel } from "rich/net/channel";
 import lodash from "lodash";

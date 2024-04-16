@@ -2,7 +2,7 @@ import lodash from "lodash";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { CacheKey, yCache } from "../../../../net/cache";
 import { UserChannel, UserRoom } from "./declare";
 

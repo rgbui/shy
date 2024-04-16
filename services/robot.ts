@@ -1,6 +1,6 @@
 import { get, post, put } from "rich/net/annotation";
 import { masterSock } from "../net/sock";
-import { surface } from "../src/surface/store";
+import { surface } from "../src/surface/app/store";
 import { wss } from "./workspace";
 
 export class RobotService {

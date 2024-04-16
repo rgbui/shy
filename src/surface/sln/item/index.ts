@@ -1,6 +1,6 @@
 
 import { util } from "rich/util/util";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
 import { useIconPicker } from 'rich/extensions/icon/index';
 import { Rect } from "rich/src/common/vector/point";

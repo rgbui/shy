@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Divider } from "rich/component/view/grid";
 
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { SaveTip } from "../../../../component/tip/save.tip";
 import { S } from "rich/i18n/view";
 import { util } from "rich/util/util";

@@ -10,7 +10,7 @@ import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { masterSock } from "../../../net/sock";
 import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl, SyHistory } from "../../history";
-import { surface } from "../store";
+import { surface } from "../app/store";
 import { config } from "../../../common/config";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useOpenUserSettings } from "./settings/lazy";

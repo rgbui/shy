@@ -3,7 +3,7 @@ import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
 import { ShyUrl, UrlRoute } from "../../../history";
 import { observer, useLocalObservable } from "mobx-react";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { channel } from "rich/net/channel";
 import { isMobileOnly } from "react-device-detect";
 import { lst } from "rich/i18n/store";

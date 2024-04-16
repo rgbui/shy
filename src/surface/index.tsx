@@ -8,11 +8,10 @@ import "rich";
 import "../../services/declare";
 import "../assert/shy.less";
 import "../assert/theme.less";
-import "./style.less";
 import "../../org/site.less";
 import "./supervisor/style.less";
 import "./sln/style.less";
-import { App } from './app';
+import { App } from './app/app';
 import { configure } from 'mobx';
 configure({ enforceActions: 'never' })
 document.body.classList.add('theme-light');

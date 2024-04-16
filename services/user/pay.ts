@@ -1,7 +1,7 @@
 import { del, get, put } from "rich/net/annotation";
 import { masterSock } from "../../net/sock";
 import { BaseService } from "../common/base";
-import { surface } from "../../src/surface/store";
+import { surface } from "../../src/surface/app/store";
 
 
 

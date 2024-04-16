@@ -10,7 +10,7 @@ import { Point } from "rich/src/common/vector/point";
 import { masterSock } from "../../../../../../net/sock";
 import { useTaskContent } from "./content";
 import { MenuItemType } from "rich/component/view/menu/declare";
-import { surface } from "../../../../store";
+import { surface } from "../../../../app/store";
 import { Confirm } from "rich/component/lib/confirm";
 import { RobotInfo, RobotTask } from "rich/types/user";
 import { lst } from "rich/i18n/store";

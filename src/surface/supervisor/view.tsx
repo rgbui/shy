@@ -1,5 +1,5 @@
 import React from "react";
-import { surface } from "../store";
+import { surface } from "../app/store";
 import { observer } from "mobx-react";
 import lodash from "lodash";
 import { PageSupervisorView } from "./view/index";

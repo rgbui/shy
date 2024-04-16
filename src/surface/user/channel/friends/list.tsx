@@ -10,7 +10,7 @@ import { useSelectMenuItem } from "rich/component/view/menu";
 import { Rect } from "rich/src/common/vector/point";
 import { channel } from "rich/net/channel";
 import { UserBasic, UserStatus } from "rich/types/user";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";

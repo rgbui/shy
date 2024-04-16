@@ -1,21 +1,22 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
-import { ShyUrl, SyHistory, UrlRoute } from '../history';
-import { Login } from './user/sign/in';
-import { LogOut } from './user/sign/out';
-import { WorkspaceCreateView } from './workspace/create';
+import { ShyUrl, SyHistory, UrlRoute } from '../../history';
+import { Login } from '../user/sign/in';
+import { LogOut } from '../user/sign/out';
+import { WorkspaceCreateView } from '../workspace/create';
 import { SurfaceView } from './view/view';
 import { View404 } from './view/404';
-import { InviteView } from './workspace/access/invite';
+import { InviteView } from '../workspace/access/invite';
 import { surface } from './store';
 import { MyWorkSpace } from './view/my';
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 import { isMobileOnly } from 'react-device-detect';
 import { SK} from 'rich/component/view/spin';
-import { PageContentView } from './supervisor/content';
-
+import { PageContentView } from '../supervisor/content';
+import "./style.less";
 import { RedictUrl } from './view/RedictUrl';
 import { Divider } from 'rich/component/view/grid';
+
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {

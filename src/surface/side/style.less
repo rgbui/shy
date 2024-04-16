@@ -1,0 +1,184 @@
+.shy-sidebar {
+    background-color  : #e3e5e8;
+    -webkit-app-region: drag;
+
+    &-body {
+        overflow-y: overlay;
+        overflow-x: hidden;
+
+        &::-webkit-scrollbar {
+            width : 2px;
+            height: 2px;
+        }
+    }
+
+    .shy-sidebar-operator,
+    .shy-sidebar-ws-name,
+    .shy-sidebar-ws-icon {
+        -webkit-app-region: no-drag;
+        transition        : color .15s ease-out, background-color .35s ease-out, border-radius .4s;
+        background-color  : #fff;
+        border-radius     : 50%;
+        color             : rgb(59, 165, 93);
+
+        &:hover {
+            border-radius: 16px;
+        }
+
+        .shy-icon {
+            fill: currentColor
+        }
+    }
+
+    .shy-sidebar-ws-name {
+        &:hover {
+            background-color: rgb(88, 101, 242);
+            color           : #fff;
+        }
+    }
+
+    .shy-sidebar-ws-icon {
+        img {
+            border-radius: 50%;
+        }
+    }
+
+    .shy-sidebar-operator {
+        border-radius: 50%;
+        cursor       : pointer;
+
+        &:hover,
+        &.hover {
+            background-color: rgb(59, 165, 93);
+            color           : #fff;
+            border-radius   : 16px;
+        }
+
+        &.no-hover {
+            background-color: #fff;
+            color           : rgb(59, 165, 93);
+        }
+    }
+
+    .shy-sidebar-ws {
+
+        &.hover {
+
+            .shy-sidebar-ws-name,
+            .shy-sidebar-ws-icon {
+                border-radius: 16px;
+
+                img {
+                    border-radius: 16px;
+                }
+            }
+
+            .shy-sidebar-ws-name {
+                background-color: rgb(88, 101, 242);
+                color           : #fff;
+            }
+        }
+
+        &:hover {
+            .shy-sidebar-ws-icon {
+                img {
+                    border-radius: 16px;
+                }
+            }
+        }
+    }
+
+    .shy-sidebar-ws,
+    .shy-sidebar-ws-folder,.shy-sidebar-ws-folder-spread {
+        -webkit-app-region: drag;
+
+        &.drag-top,
+        &.drag-center,
+        &.drag-bottom {
+            position: relative;
+            &::after {
+                content         : '';
+                position        : absolute;
+                left            : 12px;
+                right           : 12px;
+                height          : 4px;
+                background-color: rgb(59, 165, 93);
+                border-radius   : 2px;
+            }
+            &.no-gap{
+                &::after {
+                     left:2px;
+                     right:2px;
+                }
+            }
+        }
+
+        &.drag-top {
+            &::after {
+                top: 0px
+            }
+        }
+
+        &.drag-bottom {
+            &::after {
+                bottom: 0px;
+            }
+        }
+
+        &.drag-center {
+            &::after {
+                top          : 50%;
+                transform    : translateY(-50%);
+                right        : auto;
+                left         : 4px;
+                width        : 10px;
+                height       : 10px;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .shy-sidebar-ws-folder {
+        .shy-sidebar-ws-folder-close {
+            background-color: rgba(88, 101, 242, 0.4);
+            border-radius   : 16px;
+            display         : grid;
+            grid-template   : 1fr 1fr/1fr 1fr;
+            justify-items   : center;
+            align-items     : center;
+            padding         : 4px;
+            box-sizing      : border-box;
+        }
+    }
+
+    .shy-sidebar-ws-folder-spread {
+        width           : 48px;
+        background-color: #f2f3f5;
+        border-radius   : 16px;
+
+        .foder-btn {
+            color        : rgb(88, 101, 242);
+            border-radius: 16px;
+
+            &:hover {
+                background-color: #fefefe;
+            }
+        }
+
+        &-wss {
+            >div:last-child {
+                >a {
+                    margin-bottom: 0px !important;
+                }
+            }
+        }
+    }
+
+    &-divider {
+        margin          : 0px 20px;
+        height          : 2px;
+        width           : 32px;
+        border-radius   : 1px;
+        background-color: rgba(6, 6, 7, 0.08);
+    }
+}

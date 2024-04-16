@@ -10,7 +10,7 @@ import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
 import { computed, makeObservable, observable } from "mobx";
 import { channel } from "rich/net/channel";
-import { surface } from "../store";
+import { surface } from "../app/store";
 import { AtomPermission, getCommonPerssions, getEditOwnPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { UserAction } from "rich/src/history/action";
@@ -21,7 +21,7 @@ import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { pageItemStore } from "../sln/item/store/sync";
 import { PageLayoutType, WorkspaceNavMenuItem } from "rich/src/page/declare";
 import { SockType } from "../../../net/sock/type";
-import { Pid, PidType } from "./declare";
+import { Pid, PidType, WorkspaceMember, WorkspaceRole } from "./declare";
 import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
 import { workspaceNotifys } from "../../../services/tim";
 import { HttpMethod } from "../../../net/primus/http";
@@ -43,47 +43,6 @@ import { PopoverPosition } from "rich/component/popover/position";
 import { useLazyOpenWorkspaceSettings } from "./settings/lazy";
 import { useOpenUserSettings } from "../user/settings/lazy";
 import { useImportFile } from "rich/extensions/Import-export/import-file/lazy";
-
-export type WorkspaceUser = {
-    userid: string;
-    role: string;
-    nick: string;
-}
-
-export type WorkspaceRole = {
-    id: string,
-    text: string,
-    color: string,
-    permissions: number[],
-    icon?: IconArguments
-}
-
-export type WorkspaceMember = {
-    id: string;
-    createDate: number;
-    creater: string;
-    userid: string;
-    /**
-     * 当前空间内用户的呢称
-     */
-    name: string;
-    /**
-     * 当前用户的角色
-     */
-    roleIds: string[];
-    workspaceId: string;
-    avatar: IconArguments;
-    cover: IconArguments;
-    totalScore: number;
-}
-
-export type LinkWorkspaceOnline = {
-    overlayDate: Date,
-    randomOnlineUsers: Set<string>,
-    loadingOnlineUsers: boolean,
-    unreadChats: { id: string, roomId: string, seq: number }[]
-} & Partial<Workspace>
-
 
 export class Workspace {
     public id: string = null;
@@ -135,6 +94,7 @@ export class Workspace {
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
     public allowSlnIcon: boolean = true;
+
     public stats: {
         totalFileSize?: number;
         totalDoc?: number;
@@ -259,7 +219,9 @@ export class Workspace {
             isPubSiteDefineBarMenu: computed,
             isPubSiteHideMenu: computed,
             _isApp: observable,
-            isApp: computed
+            isApp: computed,
+            // folderId: observable,
+            // at: observable
         })
     }
     get slnSpread() {

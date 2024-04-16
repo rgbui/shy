@@ -6,7 +6,7 @@ import { ShyAlert } from "rich/component/lib/alert";
 import { EventsComponent } from "rich/component/lib/events.component";
 import { Singleton } from "rich/component/lib/Singleton";
 import { Divider } from "rich/component/view/grid";
-import { surface } from "../../store";
+import { surface } from "../../app/store";
 import { SaveTip } from "../../../component/tip/save.tip";
 import { ShyFeature } from "../../user/settings/order/feature";
 import { AuditView } from "./audit";

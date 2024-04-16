@@ -1,6 +1,6 @@
 import React from "react";
 import { channel } from "rich/net/channel";
-import { surface } from "../../../store";
+import { surface } from "../../../app/store";
 import { userChannelStore } from "../store";
 import { UserBox } from "rich/component/view/avator/user";
 import { RenderChatsView } from "./render";
