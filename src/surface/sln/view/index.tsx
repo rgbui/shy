@@ -12,6 +12,7 @@ import { Input } from "rich/component/view/input";
 import { lst } from "rich/i18n/store";
 import { Mime } from "../declare";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
+
 export var SlnView = observer(function () {
     var local = useLocalObservable<{ word: string, input: Input }>(() => {
         return {
@@ -28,14 +29,12 @@ export var SlnView = observer(function () {
             document.removeEventListener('mousemove', move);
         }
     }, [])
-
-
     function renderBottoms() {
         if (surface?.workspace?.isPubSite) return <></>
         if (surface.workspace.isAllow(AtomPermission.wsEdit))
             return <div className="gap-t-20">
                 <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
-                    <span className="gap-l-5 round size-20 flex-center gap-r-5 remark"><Icon size={15} icon={{ name: 'bytedance-icon', code: 'oval-love' }}></Icon></span>
+                    <span className="gap-l-5 round size-20 flex-center gap-r-5 remark"><Icon size={16} icon={{ name: 'bytedance-icon', code: 'page-template' }}></Icon></span>
                     <span><S>模板</S></span>
                 </div>
                 <div onMouseDown={e => surface.workspace.onImportFiles()} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">

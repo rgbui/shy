@@ -94,7 +94,7 @@ export function ProductView() {
                     </div>
 
                     <div className="shy-site-block-card gap-l-10  gap-b-20">
-                        <div className="flex r-gap-r-10" style={getTypeColor('datatable')}><Icon size={48} icon={CollectTableSvg}></Icon><span style={{ fontSize: 40 }}><S>数据表</S></span></div>
+                        <div className="flex r-gap-r-10" style={getTypeColor('datatable')}><Icon size={48} icon={{ name: 'byte', code: 'table' }}></Icon><span style={{ fontSize: 40 }}><S>数据表</S></span></div>
                         <div className="text-1 f-14 l-20  gap-t-10" >
                             <Sp text='database-site-description'>自定义数据流，按需定制你的专属业务系统。<br />丰富组件、灵活搭建<br />管理任何类型的项目，无论团队或规模如何。</Sp>
                         </div>
