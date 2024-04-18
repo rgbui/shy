@@ -57,7 +57,7 @@ export class SnapStore extends Events {
                 data: c
             }
         })
-    },50)
+    }, 50)
     async viewOperatorAndSnap(operate: Partial<UserAction>, snap: SnapDataType, options?: { force?: boolean, notSave?: boolean }) {
         if (options.force) {
             var rc = await this.viewOperator(operate);
@@ -109,7 +109,7 @@ export class SnapStore extends Events {
     private localViewSnap: SnapDataType;
     private localTimer;
     private async storeLocal() {
-        console.log('local store...');
+        //  console.log('local store...');
         /**
               * 本地先存起来
               */
