@@ -1,5 +1,4 @@
 
-import { QueueHandle } from "rich/component/lib/queue";
 import { IconArguments, ResourceArguments } from "rich/extensions/icon/declare";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { UserAction, ViewOperate } from "rich/src/history/action";
@@ -40,7 +39,7 @@ export class SnapStore extends Events {
      */
     batchViewOperators = new MergeSock(async (batchs) => {
         var rs = await this.viewOperator(batchs.map(c => c.args[0]));
-        if (!Array.isArray(rs)) {
+       if (!Array.isArray(rs)) {
             if (rs) rs = [rs]
             else rs = [];
         }
@@ -48,6 +47,7 @@ export class SnapStore extends Events {
         if (lb) {
             var snap = lb.args[1];
             snap.seq = rs[0].seq;
+          
             if (!batchs.every(c => c.args[2] && c.args[2]?.notSave == true))
                 this.viewSnap(snap)
         }
@@ -61,6 +61,7 @@ export class SnapStore extends Events {
     async viewOperatorAndSnap(operate: Partial<UserAction>, snap: SnapDataType, options?: { force?: boolean, notSave?: boolean }) {
         if (options.force) {
             var rc = await this.viewOperator(operate);
+          
             if (rc) {
                 var rg = Array.isArray(rc) ? rc[0] : rc;
                 snap.seq = rg.seq;
@@ -90,6 +91,7 @@ export class SnapStore extends Events {
             operate: operate
         })
         if (r.ok) {
+          
             if (Array.isArray(r.data.operates) && Array.isArray(operate)) {
                 r.data.operates.forEach(d => {
                     var op = (operate as UserAction[]).find(o => o.id == d.id);
