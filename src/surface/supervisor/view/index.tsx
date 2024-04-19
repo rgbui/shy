@@ -69,7 +69,7 @@ export class PageSupervisorView extends React.Component<{
     pageEl: HTMLElement;
     el: HTMLElement;
     render() {
-        return <div ref={e => this.el = e} className={"shy-supervisor-view" + (this.props.slide ? " shadow" : "")} style={this.props.style || {}}>
+        return <div ref={e => this.el = e} className={"shy-supervisor-view" + (this.props.slide ? " shadow-s" : "")} style={this.props.style || {}}>
             {this.loading && <SK className='pos-full flex flex-col flex-full' style={{ zIndex: 1 }}>
                 <div className='flex flex-fixed '>
                     <div className='h-20 w-300 sk-bg gap-l-30 gap-h-10'></div>
@@ -80,7 +80,7 @@ export class PageSupervisorView extends React.Component<{
                 </div>
             </SK>}
             <div className="shy-supervisor-view-content" ref={e => this.pageEl = e}></div>
-            {this.props.slide && <div onMouseDown={e => this.mousedown(e)} className="cursor-col z-2000 w-10 pos pos-t pos-b pos-l border-left"></div>}
+            {this.props.slide && <div onMouseDown={e => this.mousedown(e)} className="cursor-col z-2000 w-10 pos pos-t pos-b pos-l border-left-light"></div>}
         </div>
     }
     onClose() {
