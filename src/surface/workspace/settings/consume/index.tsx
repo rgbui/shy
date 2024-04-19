@@ -320,7 +320,7 @@ export class ConsumeView extends React.Component {
                         <div className="f-24 gap-t-10 flex-center">{surface.workspace?.memberCount}</div>
                     </div>
                     <div>
-                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'file-cabinet' }}></Icon></span><S>空间容量</S></div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'hard-disk' }}></Icon></span><S>空间容量</S></div>
                         <div className="f-24 gap-t-10 flex-center">{util.byteToString(surface.workspace?.stats?.totalFileSize || 0)}</div>
                     </div>
                     <div>
@@ -336,7 +336,7 @@ export class ConsumeView extends React.Component {
                         <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalDoc || 0}</div>
                     </div>
                     <div>
-                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'chopping-board' }}></Icon></span><S>白板数</S></div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'enter-the-keyboard' }}></Icon></span><S>白板数</S></div>
                         <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalBoard || 0}</div>
                     </div>
                     <div>
@@ -352,7 +352,7 @@ export class ConsumeView extends React.Component {
                         <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalTable || 0}</div>
                     </div>
                     <div>
-                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'table' }}></Icon></span><S>数据记录数</S></div>
+                        <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'data-sheet' }}></Icon></span><S>数据记录数</S></div>
                         <div className="f-24 gap-t-10 flex-center">{surface.workspace.stats?.totalRowCount || 0}</div>
                     </div>
                     <div>
