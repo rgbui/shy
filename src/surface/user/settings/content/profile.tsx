@@ -77,16 +77,16 @@ export class UserSettingProfile extends React.Component {
         return <div className="shy-user-settings-profile">
             <h2 className="h2"><S>用户个人资料</S></h2>
             <Divider></Divider>
-            <div className="shy-user-settings-profile-box">
-                <div className="shy-user-settings-profile-box-left">
+            <div className="shy-user-settings-profile-box  flex flex-top">
+                <div className="shy-user-settings-profile-box-left flex-auto">
 
-                    <div className="gap-b-30">
+                    <div className="gap-b-20">
                         <div className="f-16 bold   gap-b-5"><S>头像</S></div>
                         <div className="flex r-gap-r-10">          <Button size="small" onClick={e => this.onUploadFace()}><S>上传头像</S></Button>
                             {surface.user.avatar?.url && <Button size="small" ghost onClick={e => this.removeFace()}><S>移除头像</S></Button>}</div>
                     </div>
 
-                    <div className="gap-b-30">
+                    <div className="gap-b-20">
                         <div className="f-16 bold"><S>个人资料颜色</S></div>
                         <div className="flex">
                             <div className="shy-user-settings-color">
@@ -110,7 +110,7 @@ export class UserSettingProfile extends React.Component {
                         </div>
                     </div>
 
-                    <div className="gap-b-30" >
+                    <div className="gap-b-20" >
                         <div className="f-16 bold  gap-b-5"><S>个人资料横幅</S></div>
                         <div className="remark f-12"><S text={'上传横幅图片要求'}>我们建议使用至少 600x240 大小的图片。您可上传小于 5 MB 的 PNG、JPG 或动态 GIF。</S></div>
                         <div className="flex  r-gap-r-10 gap-t-10">
@@ -119,7 +119,7 @@ export class UserSettingProfile extends React.Component {
                         </div>
                     </div>
 
-                    <div className="gap-b-30">
+                    <div className="gap-b-20">
                         <div className="f-16 bold gap-b-5"><S>自我介绍</S></div>
                         <div>
                             <Textarea
@@ -132,7 +132,7 @@ export class UserSettingProfile extends React.Component {
                     </div>
 
                 </div>
-                <div className="shy-user-settings-profile-box-right">
+                <div className="shy-user-settings-profile-box-right flex-fixed gap-l-20">
                     <div className="f-16 bold "><S>预览</S></div>
                     <div className="shy-user-settings-profile-box-card">
                         <div className="bg">

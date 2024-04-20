@@ -82,8 +82,8 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
                 <div className="shy-user-settings-profile-box-card-options">
                     <div className='flex gap-h-10'>
                         <div className='flex-fixed'>
-                            <span className='f-12 remark'><S>用户名</S></span>
-                            <div>{surface.user?.name}#{surface.user?.sn}</div>
+                            <span className='f-12 text '><S>用户名</S></span>
+                            <div className='bold'>{surface.user?.name}#{surface.user?.sn}</div>
                         </div>
                         <div className='flex-auto flex-end'>
                             <Button size='small' onClick={e => this.modifyUserName(e)}><S>编辑</S></Button>
@@ -92,8 +92,8 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
 
                     <div className='flex  gap-h-10'>
                         <div className='flex-fixed'>
-                            <span className='f-12 remark'><S>电子邮箱</S></span>
-                            <div className={this.dataUser?.email ? "" : "remark f-12"}>{this.dataUser?.email || lst('您还没有添加邮箱')}</div>
+                            <span className='f-12 text '><S>电子邮箱</S></span>
+                            <div className={this.dataUser?.email ? "bold" : "remark f-12"}>{this.dataUser?.email || lst('您还没有添加邮箱')}</div>
                         </div>
                         <div className='flex-auto flex-end'>
                             <Button size='small' onClick={e => this.modifyEmail(e)}>{this.dataUser?.checkEmail ? lst('更换') : lst('新增')}</Button>
@@ -102,8 +102,8 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
 
                     <div className='flex gap-h-10'>
                         <div className='flex-fixed'>
-                            <span className='f-12 remark'><S>手机号</S></span>
-                            <div className={this.dataUser?.phone ? "" : "remark f-12"}>{this.dataUser?.phone || lst('您还没有添加手机号')}</div>
+                            <span className='f-12 text '><S>手机号</S></span>
+                            <div className={this.dataUser?.phone ? "bold" : "remark f-12"}>{this.dataUser?.phone || lst('您还没有添加手机号')}</div>
                         </div>
                         <div className='flex-auto flex-end'>
                             <Button size='small' onClick={e => this.modifyPhone(e)}>{this.dataUser?.checkPhone ? lst('更换') : lst('新增')}</Button>
@@ -128,7 +128,7 @@ export class UserSettingsView extends React.Component<{ close?: () => void, setM
                 <div className='f-16 bold'><S>注销帐号</S></div>
                 <div className='remark f-12  gap-t-5'><S>注销帐号将清理帐号相关的信息</S></div>
                 <div className='gap-h-10'>
-                    <Button size='small' onClick={e => ShyAlert(lst('暂时不支持注销帐号'))} ghost><S>注销帐号</S></Button>
+                    <Button size='small' danger onClick={e => ShyAlert(lst('暂时不支持注销帐号'))} ghost><S>注销帐号</S></Button>
                 </div>
             </div>
         </div>

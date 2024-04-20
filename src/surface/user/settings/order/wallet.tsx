@@ -253,15 +253,15 @@ export class ShyWallet extends React.Component {
             <div className="h4"><S>资源额度</S></div>
             <div className="flex r-round r-gap-r-10 r-padding-15 gap-b-10">
                 <div className="flex-fixed min-w-120 item-hover-focus ">
-                    <div className="flex remark  "><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'file-cabinet' }}></Icon></span><S>空间</S></div>
+                    <div className="flex remark  flex-center "><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'hard-disk' }}></Icon></span><S>空间</S></div>
                     <div className="f-24 gap-t-10 flex-center">{util.byteToString(this.consume?.diskSpace || 0)}/{util.byteToString(this.free?.diskSpace || 0)}</div>
                 </div>
                 <div className="flex-fixed min-w-120  item-hover-focus ">
-                    <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'table' }}></Icon></span><S>数据记录数</S></div>
+                    <div className="flex remark flex-center"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'table' }}></Icon></span><S>数据记录数</S></div>
                     <div className="f-24 gap-t-10 flex-center">{this.consume?.rowCount || 0}/{(this.free?.rowCount || 0)}</div>
                 </div>
                 <div className="flex-fixed min-w-120   item-hover-focus ">
-                    <div className="flex remark"><span className="size-20 flex-center"><Icon size={16} icon={AiStartSvg}></Icon></span><S>AI额度</S></div>
+                    <div className="flex remark flex-center"><span className="size-20 flex-center"><Icon size={16} icon={AiStartSvg}></Icon></span><S>AI额度</S></div>
                     <div className="f-24 gap-t-10 flex-center">{(this.consume?.cheapAI || 0 + (this.consume?.expensiveAI || 0)).toFixed(2)}/{this.free?.cheapAI + this.free?.expensiveAI}</div>
                 </div>
             </div>
