@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRightSvg, BoardToolFrameSvg, CheckSvg, CollectTableSvg, DocCardsSvg, PageSvg } from "rich/component/svgs";
+import { ArrowRightSvg, BoardToolFrameSvg, DocCardsSvg, PageSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { S, Sp } from "rich/i18n/view";
 import { config } from "../common/config";
@@ -75,7 +75,7 @@ export function ProductView() {
             <div className="padding-h-50">
                 <h2 className="flex-center gap-t-40 f-36" ><span className="bold"><Sp text='文档数据表白板PPT'>文档&nbsp;数据表&nbsp;白板&nbsp;PPT</Sp></span></h2>
                 <div className="flex-center gap-h-20 remark f-24">
-                    <S text='你的一体化知识系统'>你的一体化知识系统，高度融合写作、计划、绘图、表达，释放你的创造力。</S>
+                    <S text='你的一体化知识系统'>你的一体化知识系统，高度融合写作、计划、创作、表达，释放你的创造力。</S>
                 </div>
 
                 <div className="flex-full flex-auto-mobile-wrap r-padding-l-20 r-padding-t-20 r-w50">
