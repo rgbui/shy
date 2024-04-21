@@ -688,7 +688,16 @@ export function GlobalKeyboard() {
             surface.supervisor.openDialogOrSlideToPage();
         }
     )
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrlAndShift(KeyboardCode.H),
+        (ev, kt) => {
+            ev.preventDefault();
 
+        }
+    )
+    
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrlAndAlt(KeyboardCode.M), (ev, kt) => {
+        ev.preventDefault();
+    })
 }
 
 
