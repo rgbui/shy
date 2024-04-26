@@ -58,8 +58,7 @@ export class WorkspaceManage extends React.Component {
     }
     checkChange() {
         if (this.tip) {
-            if (lodash.isEqual(this.data, lodash.pick(surface.workspace, ['allowSlnIcon', 'aiConfig', 'slnStyle', 'createPageConfig', 'defaultPageId'])))
-                this.tip.close()
+            if (lodash.isEqual(this.data, lodash.pick(surface.workspace, ['allowSlnIcon', 'aiConfig', 'slnStyle', 'createPageConfig', 'defaultPageId']))) this.tip.close()
             else this.tip.open();
         }
     }
@@ -78,7 +77,6 @@ export class WorkspaceManage extends React.Component {
                 surface.workspace.defaultPageId = lodash.cloneDeep(this.data.defaultPageId);
                 surface.workspace.allowSlnIcon = this.data.allowSlnIcon;
                 surface.workspace.aiConfig = lodash.cloneDeep(this.data.aiConfig);
-
                 this.tip.close();
             })
         }
@@ -118,29 +116,29 @@ export class WorkspaceManage extends React.Component {
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text='创建新页面时默认开启以下配置'>在创建新页面时，默认开启以下配置</S></div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1"><S>页面宽版</S></div>
-                    <div className="flex-fixed"><Switch  size="small"onChange={e => this.change('createPageConfig.isFullWidth', e)} checked={this.data.createPageConfig.isFullWidth}></Switch></div>
+                    <div className="flex-fixed"><Switch size="small" onChange={e => this.change('createPageConfig.isFullWidth', e)} checked={this.data.createPageConfig.isFullWidth}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1"><S>小字体</S></div>
-                    <div className="flex-fixed"><Switch  size="small"onChange={e => this.change('createPageConfig.smallFont', e)} checked={this.data.createPageConfig.smallFont}></Switch></div>
+                    <div className="flex-fixed"><Switch size="small" onChange={e => this.change('createPageConfig.smallFont', e)} checked={this.data.createPageConfig.smallFont}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1"><S>目录大纲</S></div>
-                    <div className="flex-fixed"><Switch  size="small"onChange={e => this.change('createPageConfig.nav', e)} checked={this.data.createPageConfig.nav}></Switch></div>
+                    <div className="flex-fixed"><Switch size="small" onChange={e => this.change('createPageConfig.nav', e)} checked={this.data.createPageConfig.nav}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1 flex">
                         <span className="gap-r-3"><S text='显示页面引用'>显示页面引用</S></span>
                         <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/57" : "https://help.shy.live/page/1894"}><S>了解页面引用</S></HelpText>
                     </div>
-                    <div className="flex-fixed"><Switch  size="small"onChange={e => this.change('createPageConfig.autoRefPages', e)} checked={this.data.createPageConfig.autoRefPages}></Switch></div>
+                    <div className="flex-fixed"><Switch size="small" onChange={e => this.change('createPageConfig.autoRefPages', e)} checked={this.data.createPageConfig.autoRefPages}></Switch></div>
                 </div>
                 <div className="flex gap-h-10">
                     <div className="flex-auto  f-14 text-1 flex">
                         <span className="gap-r-3"> <S>父页面自动引用子页面</S></span>
                         <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/58#6j3epcxrGGxhoK2QbYjqfR" : "https://help.shy.live/page/1895#4F8weVwLrAVNjh2qwJDWqg"}><S>了解父页面引用</S></HelpText>
                     </div>
-                    <div className="flex-fixed"><Switch  size="small"onChange={e => this.change('createPageConfig.autoRefSubPages', e)} checked={this.data.createPageConfig.autoRefSubPages}></Switch></div>
+                    <div className="flex-fixed"><Switch size="small" onChange={e => this.change('createPageConfig.autoRefSubPages', e)} checked={this.data.createPageConfig.autoRefSubPages}></Switch></div>
                 </div>
             </div>
             <Divider></Divider>
@@ -160,7 +158,7 @@ export class WorkspaceManage extends React.Component {
                 <div className="flex gap-t-10">
                     <div className="flex-auto  f-14 text-1"><S>空间搜索</S></div>
                     <div className="flex-fixed">
-                        <Switch  size="small" onChange={e => this.change('aiConfig.esSearch', e)} checked={this.data.aiConfig.esSearch}></Switch>
+                        <Switch size="small" onChange={e => this.change('aiConfig.esSearch', e)} checked={this.data.aiConfig.esSearch}></Switch>
                     </div>
                 </div>
                 <div className="gap-b-10 f-12 remark"><S>基于Elasticsearch空间内搜索</S></div>
@@ -168,9 +166,9 @@ export class WorkspaceManage extends React.Component {
                 <div className="flex gap-t-10">
                     <div className="flex-auto  f-14 text-1 flex">
                         <span className="gap-r-3"><S>智能搜索</S></span>
-                        <span><HelpText url={window.shyConfig.isUS ? "https://help.shy.red/page/61#36astuDyScJiKa7xgSMFwq" : "https://help.shy.live/page/1553#5btvRFFL217adGAnGsT74D"}><S>了解诗云AI的智能搜索</S></HelpText></span>
+                        <span><HelpText url={window.shyConfig.isUS ? "https://help.shy.red/page/61#36astuDyScJiKa7xgSMFwq" : "https://help.shy.live/page/1553#5btvRFFL217adGAnGsT74D"}><S>了解诗云AI智能搜索</S></HelpText></span>
                     </div>
-                    <div className="flex-fixed"><SwitchText  size="small"
+                    <div className="flex-fixed"><SwitchText size="small"
                         onChange={e => this.change('aiConfig.aiSearch', e)}
                         checked={this.data.aiConfig.aiSearch}>
                     </SwitchText></div>
@@ -192,7 +190,7 @@ export class WorkspaceManage extends React.Component {
                 <div className="bold f-14"><S>空间侧边栏设置</S></div>
                 <div className="flex gap-t-10">
                     <div className="flex-auto  f-14 text-1"><S>允许自定义图标</S></div>
-                    <div className="flex-fixed"><Switch  size="small"onChange={e => this.change('allowSlnIcon', e)} checked={this.data.allowSlnIcon}></Switch></div>
+                    <div className="flex-fixed"><Switch size="small" onChange={e => this.change('allowSlnIcon', e)} checked={this.data.allowSlnIcon}></Switch></div>
                 </div>
                 <div className="remark f-12 gap-b-10"><S>允许侧边栏页面图标自定义显示</S></div>
             </div>
@@ -201,11 +199,11 @@ export class WorkspaceManage extends React.Component {
             <div className="gap-t-10 gap-b-20">
                 <div className="flex">
                     <span className="bold f-14"><S>AI写作</S></span>
-                    <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/60#ayTcRfRYxzeBSZ1H7DNzTF" : "https://help.shy.live/page/1552"}><S>了解诗云的AI写作</S></HelpText>
+                    <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/60#ayTcRfRYxzeBSZ1H7DNzTF" : "https://help.shy.live/page/1552"}><S>了解诗云AI写作</S></HelpText>
                 </div>
                 <div className="f-12 gap-h-10 flex">
                     <span className="flex-auto flex">
-                        <SwitchText  size="small"
+                        <SwitchText size="small"
                             align="right"
                             onChange={e => this.change('aiConfig.disabled', e ? false : true)}
                             checked={this.data.aiConfig.disabled ? false : true}><span
