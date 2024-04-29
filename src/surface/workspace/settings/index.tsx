@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import React from "react";
 import { ShyAlert } from "rich/component/lib/alert";
 import { EventsComponent } from "rich/component/lib/events.component";
-import { Singleton } from "rich/component/lib/Singleton";
 import { Divider } from "rich/component/view/grid";
 import { surface } from "../../app/store";
 import { SaveTip } from "../../../component/tip/save.tip";
@@ -84,9 +83,9 @@ export default  class WsSettings extends EventsComponent {
                         {config.isTestBeta && <><h4><S>应用管理</S></h4>
                             <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} ><S>发布</S></a>
                             <Divider style={{ margin: '0px 15px' }}></Divider></>}
-                        <h4><S>机器人</S></h4>
+                        {/* <h4><S>机器人</S></h4>
                         <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} ><S>商店</S></a>
-                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>我的机器人</S></a>
+                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>我的机器人</S></a> */}
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <a className="warn" onMouseDown={e => this.deleteSpace()}><S>删除空间</S></a>
                     </div>
