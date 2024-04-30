@@ -107,7 +107,7 @@ export class CommunicateView extends React.Component<{ userChannel: UserChannel 
                             </div>
                             {props.userChannel.room.isLoadChat && <RenderChatsView userChannel={props.userChannel} reditChat={this.reditChat} replyChat={this.replyChat}></RenderChatsView>}
                         </div>
-                        <div className="shy-user-channel-communicate-input">
+                        <div className="shy-user-channel-communicate-input item-hover-focus">
                             <InputChatBox  placeholder={'@' + user?.name} ref={e => this.richInput = e} onChange={this.onInput}></InputChatBox>
                         </div></>
                 }}</UserBox>}
