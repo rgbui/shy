@@ -8,6 +8,7 @@ import { ToolTip } from "rich/component/view/tooltip";
 import { channel } from "rich/net/channel";
 import { userChannelStore } from "../store";
 import { S } from "rich/i18n/view";
+import Cat from "../../../../assert/img/a-cat.png";
 export var BlackListView = observer(function () {
     var refInput = React.useRef<Input>(null);
     React.useEffect(() => {
@@ -21,7 +22,7 @@ export var BlackListView = observer(function () {
     }
     return <div className="shy-friends">
         {/* <div className="shy-friends-search"><Input ref={e => refInput.current = e} placeholder="搜索" clear /></div> */}
-        <div className="shy-friends-head"><span className="f-12"><S>屏蔽</S>-{userChannelStore.blacklist.total}</span></div>
+        {userChannelStore.blacklist.list.length > 0 && <div className="shy-friends-head"><span className="f-12"><S>屏蔽</S>-{userChannelStore.blacklist.total}</span></div>}
         <div className="shy-friends-list">{
             userChannelStore.blacklist.list.map(r => {
                 return <div className='shy-friends-user' key={r.id}>
@@ -32,5 +33,8 @@ export var BlackListView = observer(function () {
                 </div>
             })
         }</div>
+        {userChannelStore.blacklist.list.length == 0 && <div className="flex-center"  style={{marginTop:60}}>
+            <img style={{ maxWidth: '80%' }} className="object-center" src={Cat} />
+        </div>}
     </div>
 });

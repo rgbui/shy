@@ -5,12 +5,12 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { Avatar } from "rich/component/view/avator/face";
 import { Input } from "rich/component/view/input";
-import { Remark } from "rich/component/view/text";
 import { channel } from "rich/net/channel";
 import { UserBasic } from "rich/types/user";
 import { userChannelStore } from "../store";
 import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
+import { Spin } from "rich/component/view/spin";
 
 export var UserChannelSearch = observer(function () {
     var refInput = React.useRef<Input>(null);
@@ -23,47 +23,73 @@ export var UserChannelSearch = observer(function () {
     }, []);
     function onClear() {
         runInAction(() => {
-            local.start = false;
-            local.name = '';
+            local.load = false;
+            local.word = '';
             local.users = [];
         })
     }
-    var local = useLocalObservable<{ start: boolean, name: string, users: UserBasic[] }>(() => {
+    var local = useLocalObservable<{ load: boolean, word: string, users: UserBasic[] }>(() => {
         return {
-            start: false,
-            name: '',
+            word: '',
+            load: false,
             users: []
         }
     })
-    var change = lodash.debounce(async function (value) {
-        if (!value) return;
-        local.name = value;
-        var rs = await channel.get('/search/friends', { name: value });
+    var change = lodash.debounce(async function () {
+        runInAction(() => {
+            local.load = true;
+            local.users = [];
+        })
+        var rs = await channel.get('/search/friends', { name: local.word });
         if (rs.ok) {
-            local.users = rs.data.list;
+            runInAction(() => {
+                local.load = false;
+                local.users = rs.data.list;
+                if (!Array.isArray(local.users)) local.users = [];
+            })
         }
-    }, 1200);
+        else {
+            runInAction(() => {
+                local.load = false;
+                local.users = [];
+            })
+        }
+    }, 700);
     async function select(user: UserBasic) {
         onClear();
         refInput.current.onClear();
-        if (user.id)
-            userChannelStore.openUserChannel(user.id);
+        if (user.id) userChannelStore.openUserChannel(user.id);
     }
     return <div className="shy-user-channel-slide-head-search">
-        <Input size='small'
+        <Input theme="focus" value={local.word}
             ref={e => refInput.current = e}
             placeholder={lst("搜索")}
-            onChange={e => { local.start = true; change(e) }}
-            clear onClear={onClear}
+            onChange={e => {
+                if (!e) local.word = '';
+                else local.word = e;
+                change()
+            }}
+            onEnter={() => {
+                local.word = '';
+                change.flush()
+            }}
+            clear
+            onClear={onClear}
         />
-        {createPortal(local.start && <div className="shy-user-channel-search-drops">
+        {createPortal(local.word && <div className="shy-user-channel-search-drops shadow-s border-light round bg-white padding-10">
             {
-                local.users.map(user => {
-                    return <div onMouseDown={e => select(user)} key={user.id} className="shy-user-channel-search-drops-user" ><Avatar size={32} showName userid={user.id}></Avatar></div>
+                Array.isArray(local.users) && local.users.map(user => {
+                    return <div
+                        onMouseDown={e => select(user)}
+                        key={user.id}
+                        className="shy-user-channel-search-drops-user" ><Avatar size={32} showName userid={user.id}></Avatar></div>
                 })
             }
-            {local.users.length == 0 && <div className="shy-user-channel-search-result">
-                <Remark><S>没有搜索</S></Remark>
+            {local.load && <div className="flex-center">
+                <Spin></Spin>
+            </div>}
+            {Array.isArray(local.users) && local.users.length == 0 && <div className="shy-user-channel-search-result">
+                <div className="remark f-12"><S>没有搜到</S></div>
             </div>}
         </div>, ele.current)}
     </div>

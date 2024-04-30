@@ -13,6 +13,7 @@ import { ShyAlert } from "rich/component/lib/alert";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { HelpText } from "rich/component/view/text";
+import Pic from "../../../../assert/img/workspace-access.png";
 
 @observer
 export class SafeSetting extends React.Component {
@@ -113,6 +114,9 @@ export class SafeSetting extends React.Component {
                         </>
                     }
                 </div>
+            </div>
+            <div className="flex-center gap-t-80">
+                <img src={Pic} style={{ maxWidth: 300 }} className="object-center" />
             </div>
         </div>
     }

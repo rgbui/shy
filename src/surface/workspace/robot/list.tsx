@@ -13,6 +13,7 @@ import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "./view";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import Pic from "../../../assert/img/robots.png";
 
 @observer
 export class RobotList extends React.Component {
@@ -89,6 +90,10 @@ export class RobotList extends React.Component {
                         </div>
                     </div>
                 })}
+            </div>
+
+            <div className="flex-center gap-t-50">
+                <img src={Pic} style={{ maxWidth: 400 }} className="object-center" />
             </div>
         </div>
     }

@@ -13,6 +13,8 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { HelpText } from "rich/component/view/text";
 
+import KeyPic from "../../../../assert/img/user-clound-key.png";
+
 export interface UserPks {
     id: string;
     createDate: Date;
@@ -133,10 +135,18 @@ export class ShyUserPks extends React.Component {
             </div>}
 
             <div className="remark gap-h-30 gap-l-14">
-                <div><S>个人身份私钥分类</S></div>
-                <div><S text="支付私钥">1.支付私钥 适用于交易签名</S></div>
-                <div><S text='活动私钥'>2.活动私钥 适用于社区活动身份签名</S></div>
+                <div className="flex flex-top">
+                    <div className="flex-fixed">
+                        <div><S>个人身份私钥分类</S></div>
+                        <div><S text="支付私钥">1.支付私钥 适用于交易签名</S></div>
+                        <div><S text='活动私钥'>2.活动私钥 适用于社区活动身份签名</S></div>
+                    </div>
+                    <div className="flex-auto flex-center">
+                        <img src={KeyPic} className="object-center" style={{ maxWidth: '50%' }} />
+                    </div>
+                </div>
             </div>
+           
         </div>
     }
 }

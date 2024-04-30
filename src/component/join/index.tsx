@@ -29,9 +29,9 @@ class JoinFriend extends EventsComponent {
                 </Input>
             </div>
             <Divider></Divider>
-            <div className="padding-b-10 min-h-50">
+            <div className="padding-b-10 ">
                 {this.loading && <Spin block></Spin>}
-                {this.list.length == 0 && <div className="remark flex-center h-40 f-12"><S>没有搜到任何用户</S></div>}
+                {this.list.length == 0 && <div className="remark flex-center h-40 f-14"><S>没有搜到任何用户</S></div>}
                 {this.list.map(l => {
                     return <div className="flex item-hover padding-10 round" key={l.id}>
                         <Avatar showName showSn className="flex-fixed" userid={l.id} size={30}></Avatar>

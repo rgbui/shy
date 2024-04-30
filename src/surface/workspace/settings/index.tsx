@@ -24,7 +24,7 @@ import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 
 @observer
-export default  class WsSettings extends EventsComponent {
+export default class WsSettings extends EventsComponent {
     mode: string = 'settings';
     visible: boolean = false;
     constructor(props) {
@@ -69,7 +69,7 @@ export default  class WsSettings extends EventsComponent {
                         <a onMouseDown={e => this.setMode('manage')} className={this.mode == 'manage' ? "hover" : ""}><S>空间设置</S> </a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4><S>安全管理</S></h4>
-                        <a onMouseDown={e => this.setMode('safe')} className={this.mode == 'safe' ? "hover" : ""}><S>安全设置</S></a>
+                        <a onMouseDown={e => this.setMode('safe')} className={this.mode == 'safe' ? "hover" : ""}><S>安全访问</S></a>
                         {/*<a onMouseDown={e => this.setMode('audit')} className={this.mode == 'audit' ? "hover" : ""}>内容过滤</a> */}
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <h4><S>帐单</S></h4>
@@ -83,9 +83,9 @@ export default  class WsSettings extends EventsComponent {
                         {config.isTestBeta && <><h4><S>应用管理</S></h4>
                             <a onMouseDown={e => this.setMode('publish')} className={this.mode == 'publish' ? "hover" : ""} ><S>发布</S></a>
                             <Divider style={{ margin: '0px 15px' }}></Divider></>}
-                        {/* <h4><S>机器人</S></h4>
+                        <h4><S>机器人</S></h4>
                         <a onMouseDown={e => this.setMode('robotMember')} className={this.mode == 'robotMember' ? "hover" : ""} ><S>商店</S></a>
-                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>我的机器人</S></a> */}
+                        <a onMouseDown={e => this.setMode('robots')} className={this.mode == 'robots' ? "hover" : ""} ><S>我的机器人</S></a>
                         <Divider style={{ margin: '0px 15px' }}></Divider>
                         <a className="warn" onMouseDown={e => this.deleteSpace()}><S>删除空间</S></a>
                     </div>

@@ -10,7 +10,7 @@ import { userChannelStore } from "../store";
 import lodash from "lodash";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { S } from "rich/i18n/view";
-
+import Cat from "../../../../assert/img/a-cat.png";
 export var PendListView = observer(function () {
     var refInput = React.useRef<Input>(null);
     async function removeSend(row) {
@@ -32,7 +32,7 @@ export var PendListView = observer(function () {
     }, [])
     return <div className="shy-friends">
         {/* <div className="shy-friends-search"><Input ref={e => refInput.current = e} placeholder="搜索" clear /></div> */}
-        <div className="shy-friends-head"><span className="f-12"><S>待处理数</S>-{userChannelStore.pends.total}</span></div>
+        {userChannelStore.pends.total > 0 && <div className="shy-friends-head"><span className="f-12"><S>待处理数</S>-{userChannelStore.pends.total}</span></div>}
         <div className="shy-friends-list">
             {userChannelStore.pends.list.map(r => {
                 return <div key={r.id} className='shy-friends-user'>
@@ -55,5 +55,8 @@ export var PendListView = observer(function () {
                 </div>
             })}
         </div>
+        {userChannelStore.pends.list.length == 0 && <div className="flex-center" style={{marginTop:60}}>
+            <img style={{maxWidth:'80%'}} className="object-center" src={Cat} />
+        </div>}
     </div>
 });

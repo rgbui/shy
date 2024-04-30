@@ -1,8 +1,9 @@
 .shy-user-channel-friends {
     &-head {
-        color     : var(--text-normal);
+        // color     : var(--text-normal);
         height    : 48px;
-        background: var(--background-primary);
+        // background: var(--background-primary);
+        box-shadow     : var(--shadow-b);
         &-tabs {
             padding-left   : 20px;
             display        : flex;
@@ -60,19 +61,18 @@
 
     &-content {
         position: relative;
-
-        &::after {
-            position      : absolute;
-            display       : block;
-            top           : -1px;
-            left          : 0;
-            right         : 0;
-            height        : 1px;
-            z-index       : 1;
-            pointer-events: none;
-            content       : '\20';
-            box-shadow    : var(--elevation-low);
-        }
+        // &::after {
+        //     position      : absolute;
+        //     display       : block;
+        //     top           : -1px;
+        //     left          : 0;
+        //     right         : 0;
+        //     height        : 1px;
+        //     z-index       : 1;
+        //     pointer-events: none;
+        //     content       : '\20';
+        //     box-shadow    : var(--shadow-b);
+        // }
     }
 }
 
@@ -97,7 +97,7 @@
 
         span {
             display: flex;
-            color  : var(--header-secondary);
+            // color  : var(--header-secondary);
         }
     }
 

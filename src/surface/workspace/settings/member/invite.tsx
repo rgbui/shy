@@ -7,6 +7,7 @@ import { surface } from "../../../app/store";
 import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
 import { HelpText } from "rich/component/view/text";
+import Pic from "../../../../assert/img/invite-user.png";
 
 @observer
 export class WorkspaceInvite extends React.Component {
@@ -27,6 +28,7 @@ export class WorkspaceInvite extends React.Component {
             <div className="remark f-12 gap-h-10">
                 <S text='得到此链接的人均可以加入这个空间'>任何得到此链接的人均可以加入这个空间(空间没有人数上限的限制)，你也可以</S><a className="link undeline cursor" onMouseDown={e => this.createInvite(true)}><S>重置链接</S></a>
             </div>
+            
             <div className="flex max-w-500">
                 <Input ref={e => this.input = e}
                     readonly={true}
@@ -35,6 +37,12 @@ export class WorkspaceInvite extends React.Component {
                     onClick={e => this.createInvite()}
                     ghost>{surface.workspace.invite ? lst('复制链接') : lst('创建链接')}</Button>
             </div>
+
+            <div className="flex-center gap-t-50">
+
+                    <img src={Pic} style={{ maxWidth: 400 }} className="object-center" />
+
+                </div>
 
         </div>
     }

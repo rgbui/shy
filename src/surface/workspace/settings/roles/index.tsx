@@ -48,6 +48,7 @@ import { Tip } from 'rich/component/view/tooltip/tip';
 import "./style.less";
 import { useColorPicker } from 'rich/component/view/color/lazy';
 import { WorkspaceRole } from '../../declare';
+import Pic from "../../../../assert/img/four-hand.png";
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',
@@ -233,6 +234,9 @@ export class WorkspaceRoles extends React.Component {
                         <div className='flex-fixed size-24 visible item-hover round cursor flex-center ' onMouseDown={e => this.operatorRole(r, e)} > <Icon size={16} icon={DotsSvg}></Icon></div>
                     </div>
                 })}
+            </div>
+            <div className='flex-center gap-t-80'>
+                <img src={Pic} className='object-center' style={{ maxWidth: 300 }} />
             </div>
         </div>
     }

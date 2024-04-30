@@ -23,6 +23,7 @@ import { S } from 'rich/i18n/view';
 import { SelectBox } from 'rich/component/view/select/box';
 import { MenuItem, MenuItemType } from 'rich/component/view/menu/declare';
 import { HelpText } from 'rich/component/view/text';
+import Pic from "../../../../assert/img/four-users.png";
 
 @observer
 export class WorkspaceMembers extends React.Component {
@@ -148,7 +149,7 @@ export class WorkspaceMembers extends React.Component {
         return <div className='shy-ws-members'>
             <div className="h2">
                 <span><S>空间成员</S></span>
-                <span className="flex-fixed"><HelpText style={{ fontWeight: 'normal' }} url={window.shyConfig?.isUS ? "https://help.shy.red/page/63#iWy7Gc5ZV47nRLgvzgUsem" : "https://help.shy.live/page/249#qTpYYwfVS37nVbjCebo1mV"}>了解成员角色权限设置</HelpText></span>
+                <span className="flex-fixed"><HelpText style={{ fontWeight: 'normal' }} url={window.shyConfig?.isUS ? "https://help.shy.red/page/63#iWy7Gc5ZV47nRLgvzgUsem" : "https://help.shy.live/page/249#qTpYYwfVS37nVbjCebo1mV"}>了解成员管理</HelpText></span>
             </div>
             <Divider></Divider>
             <div className='shy-ws-members-list'>
@@ -198,6 +199,9 @@ export class WorkspaceMembers extends React.Component {
                             this.loadMembers();
                         }}></Pagination>
                 </div>
+                {this.searchList.total < 10 && <div className='flex-center gap-t-80'>
+                    <img src={Pic} className='object-center' style={{ maxWidth: 500 }} />
+                </div>}
             </div>
         </div>
     }

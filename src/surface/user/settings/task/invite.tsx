@@ -8,6 +8,7 @@ import { Pagination } from "rich/component/view/pagination";
 import { SpinBox } from "rich/component/view/spin";
 import { InviteCode } from "./inviteCode";
 import { S, Sp } from "rich/i18n/view";
+import Pic from "../../../../assert/img/invite-user.png";
 
 @observer
 export class InviteList extends React.Component {
@@ -33,7 +34,9 @@ export class InviteList extends React.Component {
             <Divider></Divider>
             <InviteCode></InviteCode>
             <div className="gap-h-20">
-                {this.search.list.length == 0 && <div className="flex-center gap-h-20 remark"><S>还没有邀请好友</S></div>}
+                {this.search.list.length == 0 && <div className="flex-center gap-h-20 remark">
+                    {/* <S>还没有邀请好友</S> */}
+                </div>}
                 {this.search.loading && <SpinBox ></SpinBox>}
                 {this.search.list.length > 0 && <div className="flex"><span className="item-hover padding-w-5 padding-h-2 round remark "><Sp text='共邀请{total}人' data={{ total: this.search.total }}>共邀请{this.search.total}人</Sp></span></div>}
                 {this.search.list.map(r => {
@@ -41,9 +44,15 @@ export class InviteList extends React.Component {
                         <Avatar size={40} userid={r.id}></Avatar>
                     </div>
                 })}
+                {this.search.total < 10 && <div className="flex-center">
+
+                    <img src={Pic} style={{ maxWidth: 500 }} className="object-center" />
+
+                </div>}
                 <div className="gap-h-20">
                     <Pagination size={this.search.size} index={this.search.page} total={this.search.total} onChange={e => { this.search.page = e; this.load() }}></Pagination>
                 </div>
+
             </div>
         </div>
     }

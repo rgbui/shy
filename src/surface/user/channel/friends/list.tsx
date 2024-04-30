@@ -14,7 +14,7 @@ import { surface } from "../../../app/store";
 import { Tip } from "rich/component/view/tooltip/tip";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
-
+import Cat from "../../../../assert/img/a-cat.png";
 export var FrendListView = observer(function () {
     var refInput = React.useRef<Input>(null);
     async function joinChannel(user: UserBasic) {
@@ -28,7 +28,7 @@ export var FrendListView = observer(function () {
         })
         if (row) {
             var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
-                { name: 'delete', text: lst('解除好友关系' )}
+                { name: 'delete', text: lst('解除好友关系') }
             ]);
             if (r) {
                 if (r.item.name == 'delete') {
@@ -43,9 +43,10 @@ export var FrendListView = observer(function () {
     }, [])
     var users = userChannelStore.mode == 'online' ? userChannelStore.friends?.users?.findAll(g => g.online == true && g.status != UserStatus.hidden) : userChannelStore.friends?.users;
     if (!users) users = []
+    var total = userChannelStore.mode == 'online' ? users.length : userChannelStore.friends.total;
     return <div className="shy-friends">
-        <div className="shy-friends-search"><Input ref={e => refInput.current = e} placeholder={lst("搜索")} clear /></div>
-        <div className="shy-friends-head"><span className="f-12"><S>好友</S>-{userChannelStore.mode == 'online' ? users.length : userChannelStore.friends.total}</span></div>
+        <div className="shy-friends-search"><Input theme="focus" ref={e => refInput.current = e} placeholder={lst("搜索")} clear /></div>
+        {users.length > 0 && <div className="shy-friends-head"><span className="f-12"><S>好友</S>-{total}</span></div>}
         <div className="shy-friends-list">{users.map(r => {
             return <div key={r.id} className='shy-friends-user' onMouseDown={e => joinChannel(r)}>
                 <div className="flex-fixed w-200 flex"><Avatar size={32} showName user={r}></Avatar></div>
@@ -55,6 +56,9 @@ export var FrendListView = observer(function () {
                 </div>
             </div>
         })}</div>
+        {users.length == 0 && <div className="flex-center">
+            <img style={{maxWidth:'80%'}} className="object-center" src={Cat} />
+        </div>}
 
     </div>
 });
