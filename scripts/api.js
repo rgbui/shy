@@ -282,7 +282,7 @@ push('/ws/upload/file', '{file:File,data?:{fileClassify:"cover"}, uploadProgress
 push('/ws/files','{ws?:LinkWs,wsId?:string,page?:number,size?:number,word?:string,mime?:"image"|"audio"|"video"|"unknow",fileClassify?:\'cover\'|undefined}','SockResponse<{list:ResourceArguments[],page:number,size:number,total:number}>',['get'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/channel/list', '{ws:LinkWs,wsId?:string,roomId:string,seq?:number,page?:number,size?:number}', 'SockResponse<{list:any[],unreadCount?:number}>', ['get'])
-push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, files?:any[],mentions?:string[],robotId?:string,isRobotSend?: boolean,newLine?: boolean}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
+push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, files?:any[],refs?:any[],mentions?:string[],robotId?:string,isRobotSend?: boolean,newLine?: boolean}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
 push('/ws/channel/cancel', '{roomId: string, id: string, wsId?: string, sockId?: string}', 'SockResponse<void>', ['del']);
 push('/ws/channel/patch', `{id: string,sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string,files?:any[],isEdited?:boolean}`, 'SockResponse<void>', ['patch'])
 push('/ws/channel/emoji', `{elementUrl: string,sockId?: string, wsId?: string, emoji: { emojiId: string, code?: string }}`, `SockResponse<{emoji:{emojiId:string,code?:string,count:number}}>`, ['put']);
