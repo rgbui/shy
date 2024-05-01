@@ -21,7 +21,7 @@ export var View404 = observer(function () {
     return <div className='vw100 vh100 relative' style={{
         marginTop: window.isSite ? 60 : 0,
     }}>
-        <img className="obj-center pos pos-center " style={{ maxWidth: '100%' }} src={UrlRoute.getUrl('static/img/404.png')} />
+        <img className="obj-center pos pos-center " style={{ maxWidth: '100%' }} src={UrlRoute.getUrl('static/img/404-s.png')} />
         <div className=' pos ' style={{ left: 0, right: 0, top: 20 }}>
             <div className="flex-center f-16">
                 <span ><S>当前页面不存在,返回至</S><a className="gap-l-10" onClick={e => back(e)} href={config.isUS ? "https://shy.red" : 'https://shy.live'}><S>诗云</S></a></span>
