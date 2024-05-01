@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import React from "react";
 import { ReactNode } from "react";
 import { Avatar } from "rich/component/view/avator/face";
@@ -11,22 +10,28 @@ import { Divider } from "rich/component/view/grid";
 import { S } from "rich/i18n/view";
 import { AgentRequest } from "rich/net/ai/robot";
 import { Point } from "rich/src/common/vector/point";
-import { Input } from "rich/component/view/input";
-import { LinkPageItem } from "rich/src/page/declare";
+import { LinkPageItem, getPageIcon, getPageText } from "rich/src/page/declare";
+import { DivInput } from "rich/component/view/input/div";
+import { lst } from "rich/i18n/store";
+import { PublishSvg } from "rich/component/svgs";
+import { Icon } from "rich/component/view/icon";
+import { ToolTip } from "rich/component/view/tooltip";
+import { channel } from "rich/net/channel";
 
 var messages: {
     id: string,
     userid: string,
     date: Date, refs: { elementUrl: string, page: LinkPageItem, blockIds: string[] }[], content: string
 }[] = [];
-export class RobotChat extends React.Component<{ robot: RobotInfo }> {
+
+export class RobotChat extends React.Component<{ robot: RobotInfo, close: () => void }> {
     constructor(props) {
         super(props);
     }
     pos: Point = new Point(0, 0);
     renderMessages() {
         return messages.map(msg => {
-            return <div key={msg.id} >
+            return <div key={msg.id} className="gap-w-20 gap-b-10" >
                 <UserBox userid={msg.userid}>{(user) => {
                     return <div className="flex flex-top gap-h-10">
                         <div className="flex-fixed gap-r-10">
@@ -35,18 +40,39 @@ export class RobotChat extends React.Component<{ robot: RobotInfo }> {
                         <div className="flex-atuo">
                             <div className="flex">
                                 <span className="flex-fixed">{user.name}</span>
-                                <span className="flex-auto gap-l-10 remark">{dayjs(msg.date).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                <span className="flex-auto gap-l-10 remark f-12">{util.showTime(msg.date
+                                )}</span>
                             </div>
-                            <div dangerouslySetInnerHTML={{ __html: msg.content }}>
+                            <div className="f-14 text-1 md">
+                                <div dangerouslySetInnerHTML={{ __html: msg.content }}>
+                                </div>
                             </div>
+                            {msg.refs && msg.refs.length > 0 && <div className="f-12 remark gap-b-3"><S>引用页面</S></div>}
+                            {msg.refs?.map(rf => {
+                                return <div className="flex gap-b-5" key={rf.page?.id}>
+                                    <span onMouseDown={e => this.openPage(rf)} className="flex item-hover round gap-r-5 padding-w-3 l-20 "><Icon size={16} icon={getPageIcon(rf.page)}></Icon><span className="gap-l-5">{getPageText(rf.page)}</span></span>
+                                    {rf.blockIds.length > 1 && <span className="flex flex-fixed ">{rf.blockIds.map((b, i) => {
+                                        return <em onMouseDown={e => this.openPage(rf, b)} className="bg-hover bg-p-light text-p  padding-w-3 round gap-w-5 cursor" key={b}>{i}</em>
+                                    })}</span>}
+                                </div>
+                            })}
                         </div>
                     </div>
                 }}</UserBox>
             </div>
         })
     }
+    openPage(page: {
+        blockIds: string[];
+        page: LinkPageItem<{}>;
+        elementUrl: string;
+    }, blockId?: string) {
+        if (!blockId) blockId = page.blockIds[0];
+        channel.air('/page/open', { elementUrl: page.elementUrl, config: { force: true, blockId: blockId } })
+        // this.emit('close');
+        if (this.props.close) this.props.close();
+    }
     async send(event?: React.MouseEvent, b?: Button) {
-
         var message = this.message;
         messages.push({
             userid: surface.user.id,
@@ -56,8 +82,7 @@ export class RobotChat extends React.Component<{ robot: RobotInfo }> {
             date: new Date()
         })
         this.message = '';
-        if (this.input)
-            this.input.updateValue('');
+        if (this.input) this.input.innerHTML = '';
         var cb = { userid: this.props.robot.robotId, id: util.guid(), content: '', refs: [], date: new Date() };
         messages.push(cb);
         this.forceUpdate(() => {
@@ -77,34 +102,35 @@ export class RobotChat extends React.Component<{ robot: RobotInfo }> {
     }
     message: string = '';
     renderSend() {
-        return <div className="gap-b-10">
-            <Input ref={e => this.input = e} value={this.message}
-                onChange={e => {
-                    this.message = e;
-                }}
-                onEnter={e => {
-                    this.message = e;
-                    this.send();
-                }}
-            ></Input>
+        return <div className="flex gap-w-20 padding-w-10    border shadow-s round-16 gap-t-10 gap-b-10" style={{ minHeight: 36 }}>
+            <div className="flex-auto ">
+                <DivInput
+                    value={this.message}
+                    rf={e => this.input == e}
+                    onInput={e => { this.message = e }}
+                    onEnter={e => { this.message = e; this.send() }}
+                    className='min-h-20 l-20'
+                    placeholder={lst("与机器人对话聊天...")} ></DivInput>
+            </div>
+            <ToolTip overlay={<div>
+                <div className="flex"><span style={{ color: '#bbb' }}>Enter</span><span className="gap-l-5"><S>发送</S></span></div>
+                <div className="flex"><span style={{ color: '#bbb' }}>Shift+Enter</span><span className="gap-l-5"><S>换行</S></span></div>
+            </div>}><div onMouseDown={e => this.send()} className="flex-fixed text-1 size-24 flex-center item-hover round">
+                    <Icon size={16} icon={PublishSvg}></Icon>
+                </div>
+            </ToolTip>
         </div>
     }
-    input: Input;
+    input: HTMLElement;
     scrollEl: HTMLElement;
-
     visible: boolean = true;
     render(): ReactNode {
         var classList: string[] = [];
         var style: React.CSSProperties = {};
-
-        return <div style={style} className={"bg-white border shadow   round    flex flex-full flex-col gap-b-100 " + classList.join(" ")}>
-
+        return <div style={style} className={"bg-white border shadow-s   round    flex flex-full flex-col gap-b-100 " + classList.join(" ")}>
             <div>
-                <div ref={e => this.scrollEl = e} className="max-h-400 min-h-120 padding-b-50 overflow-y padding-w-10">
+                <div ref={e => this.scrollEl = e} className="max-h-400 min-h-300 padding-b-50 overflow-y padding-w-10">
                     {this.renderMessages()}
-                    {messages.length == 0 && <div className="remark flex-center gap-h-30">
-                        <S text="与{name}对话聊天" data={{ name: this.props.robot.name }}>与name对话聊天</S>
-                    </div>}
                 </div>
             </div>
             <Divider></Divider>
@@ -113,7 +139,5 @@ export class RobotChat extends React.Component<{ robot: RobotInfo }> {
             </div>
         </div>
     }
-
-
 }
 

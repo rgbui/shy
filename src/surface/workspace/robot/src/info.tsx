@@ -1,8 +1,7 @@
 import lodash from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { DotsSvg, EditSvg, GlobalLinkSvg, PicSvg } from "rich/component/svgs";
-import { Button } from "rich/component/view/button";
+import { DotsSvg, GlobalLinkSvg, PicSvg, SettingsSvg } from "rich/component/svgs";
 import { useForm } from "rich/component/view/form/dialoug";
 import { useSelectMenuItem } from "rich/component/view/menu";
 import { MenuItem, MenuItemType } from "rich/component/view/menu/declare";
@@ -12,23 +11,21 @@ import { RobotInfo } from "rich/types/user";
 import { masterSock } from "../../../../../net/sock";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
-
 import { lst } from "rich/i18n/store";
 import { Icon } from "rich/component/view/icon";
 import { ShyAlert } from "rich/component/lib/alert";
+import { useRobotSettings } from "./settings";
 
 @observer
 export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
     onEdit = async (event: React.MouseEvent) => {
         var menus: MenuItem<string>[] = [
-            { text: lst('重命名'), icon: EditSvg, name: 'rname' },
-            { text: lst('上传头像'), icon: PicSvg, name: 'avatar' },
+            { text: lst('重命名'), icon: { name: 'byte', code: 'write' }, name: 'rname' },
+            { text: lst('上传头像'), icon: { name: 'byte', code: 'me' }, name: 'avatar' },
             { type: MenuItemType.divide },
             { text: lst('上传封面'), icon: PicSvg, name: 'cover' },
             { type: MenuItemType.divide },
             { name: 'share', icon: GlobalLinkSvg, checkLabel: this.props.robot.share == 'public', text: lst('公开') }
-            // { text: '移除头像', icon: EditSvg, name: 'delete' },
-            // { text: '移除封面', icon: EditSvg, name: 'delete' },
         ]
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, menus);
         if (r?.item) {
@@ -96,6 +93,9 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
             }
         }
     }
+    onSettings = async (event: React.MouseEvent) => {
+        useRobotSettings(this.props.robot);
+    }
     render() {
         var robot = this.props.robot;
         return <div className="shy-user-settings-profile-box-card settings w100" style={{ margin: '20px 0px' }}>
@@ -107,11 +107,14 @@ export class RobotInfoView extends React.Component<{ robot: RobotInfo }> {
                 {robot?.avatar && <img src={autoImageUrl(robot.avatar.url, 120)} />}
                 {!robot?.avatar && <span>{(robot.name || '').slice(0, 1)}</span>}
             </div>
-            <div className="shy-user-settings-profile-box-card-operators">
+            <div className="shy-user-settings-profile-box-card-operators flex">
                 <h2>{robot.name}#{robot.sn}</h2>
-                <div className="flex-fixed">
+                <div className="flex-fixed flex">
+                    <span onMouseDown={e => this.onSettings(e)} className="item-hover flex-center size-24 round cursor ">
+                        <Icon size={18} icon={SettingsSvg}></Icon>
+                    </span>
                     <span onMouseDown={e => this.onEdit(e)} className="item-hover flex-center size-24 round cursor">
-                        <Icon icon={DotsSvg}></Icon>
+                        <Icon size={18} icon={DotsSvg}></Icon>
                     </span>
                 </div>
             </div>

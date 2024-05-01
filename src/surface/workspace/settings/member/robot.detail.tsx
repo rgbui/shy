@@ -9,7 +9,7 @@ import { RobotChat } from "../../robot/src/chat";
 import { LazyMarkdown } from "rich/component/view/markdown/lazy";
 
 @observer
-export class RobotDetail extends React.Component<{ back: () => void, robot: RobotInfo }>{
+export class RobotDetail extends React.Component<{ back: () => void, robot: RobotInfo }> {
     render(): React.ReactNode {
         var robot = this.props.robot;
         return <div>
@@ -35,7 +35,7 @@ export class RobotDetail extends React.Component<{ back: () => void, robot: Robo
                 </div>
             </div>
             <div>
-                <RobotChat robot={this.props.robot}></RobotChat>
+                <RobotChat close={() => { this.props.back() }} robot={this.props.robot}></RobotChat>
             </div>
         </div>
     }

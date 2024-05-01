@@ -46,7 +46,17 @@ export class RobotList extends React.Component {
         }
     }
     async add(event: React.MouseEvent) {
-        var g = await useForm({ maskCloseNotSave: true, title: lst('创建GPT机器人'), fields: [{ name: 'text', type: 'input', text: lst('机器人名称') }, { name: 'slogan', type: 'textarea', text: lst('描述') }] })
+        var g = await useForm({
+            maskCloseNotSave: true,
+            title: lst('创建AI机器人'),
+            fields: [
+                { name: 'text', placeholder: lst('机器人名称...'), type: 'input', text: lst('机器人名称') },
+                {
+                    name: 'slogan', type: 'textarea', text: lst('描述')
+
+                }
+            ]
+        })
         if (g) {
             var s = await masterSock.put('/create/robot', { wsId: surface.workspace.id, data: { scene: 'wiki', name: g.text, slogan: g.slogan } });
             if (s.ok) {
@@ -74,7 +84,7 @@ export class RobotList extends React.Component {
                 <div onMouseDown={e => this.add(e)} className="cursor flex-fixed circle flex-center item-hover gap-r-5" style={{ width: 30, height: 30, border: '1px dashed #ddd' }}>
                     <Icon icon={PlusSvg} size={20}></Icon>
                 </div>
-                <span onMouseDown={e => this.add(e)} className="remark"><S text='创建专属于自已的机器人'>创建专属于自已的GPT机器人</S></span>
+                <span onMouseDown={e => this.add(e)} className="remark"><S text='创建专属于自已的AI机器人'>创建专属于自已的AI机器人</S></span>
             </div>
             <div>
                 {this.robots.map(robot => {
@@ -92,9 +102,9 @@ export class RobotList extends React.Component {
                 })}
             </div>
 
-            <div className="flex-center gap-t-50">
+            {this.robots.length == 10 && <div className="flex-center gap-t-50">
                 <img src={Pic} style={{ maxWidth: 400 }} className="object-center" />
-            </div>
+            </div>}
         </div>
     }
 }
