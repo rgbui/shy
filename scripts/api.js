@@ -307,6 +307,7 @@ push('/ws/roles', '{ws:LinkWs,wsId?:string,}', 'SockResponse<{list:any[]}>', ['g
 push('/ws/role/patch', '{roleId:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/role/create', '{data:Record<string,any>}', 'SockResponse<{role:Record<string,any>}>', ['put']);
 push('/ws/role/delete', '{roleId:string}', 'SockResponse<void>', ['del']);
+push('/ws/user/delete/role','{userid:string,roleId:string}', 'SockResponse<void>', ['del']);
 push('/ws/role/members', '{ws:LinkWs,wsId?:string,roleId:string,page:number,size:number,word?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/set/domain', '{wsId?:string,domain:string}', 'SockResponse<{exists?:boolean,illegal?:boolean}>', ['patch'])
 push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 'SockResponse<void>', ['patch'])
@@ -318,8 +319,8 @@ push('/ws/create/object', '{wsId:string}', 'LinkWs', ['get']);
 push('/ws/search', '{ws:LinkWs,wsId?:string,page?:number,size?:number,mime?:string,word:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{pages:LinkPageItem[],list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
 push('/ws/ai/search','{ask:string,wsId?:string,minRank?:number,size?:number,contextSize?:number}','SockResponse<{docs:{ ps: ({content:string} & { rank: number })[], elementUrl: string, blockId: string }[]}>',['get'])
 push('/ws/comment/list', '{ws:LinkWs,wsId?:string,elementUrl: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
-push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string}', 'SockResponse<{data:any}>', ['put']);
-push('/ws/comment/del', '{id:string}', 'SockResponse<void>', ['del']);
+push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string,mentions?:string[],files?:any[]}', 'SockResponse<{data:any}>', ['put']);
+push('/ws/comment/del', '{id?:string,elementUrl?: string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number,exists?:boolean}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);

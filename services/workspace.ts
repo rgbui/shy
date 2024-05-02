@@ -149,7 +149,7 @@ class WorkspaceService extends BaseService {
         args.sockId = surface.workspace.tim.id;
         return await surface.workspace.sock.put('/ws/channel/emoji', args);
     }
-    
+
     @get('/ws/channel/abled/send')
     async getChannelAbledSend(args) {
         var sock = await this.getArgsSock(args);
@@ -263,11 +263,18 @@ class WorkspaceService extends BaseService {
         return await masterSock.patch('/ws/set/domain', args);
     }
     @patch('/ws/patch/member/roles')
-    async wsPatchMemberRoles(args) {
-        if (!args) args = {}
-        if (!args.wsId) args.wsId = surface.workspace.id;
+    async wsPatchMemberRoles(args)
+    {
+        if (!args) args = {};
+        var sock = await this.getArgsSock(args);
+        return await sock.patch('/ws/patch/member/roles', args);
+    }
+    @del('/ws/user/delete/role')
+    async wsDeleteMemberRoles(args) {
+        if (!args) args = {};
+        var sock = await this.getArgsSock(args);
         args.wsId = surface.workspace.id;
-        return await surface.workspace.sock.patch('/ws/patch/member/roles', args);
+        return await sock.delete('/ws/user/delete/role', args);
     }
     @put('/ws/invite/create')
     async createInvite(args) {

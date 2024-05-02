@@ -110,12 +110,12 @@ export class WorkspaceMembers extends React.Component {
     }
     async removeRole(member, roleId: string, event: React.MouseEvent) {
         if (Array.isArray(member.roleIds)) {
-            lodash.remove(member.roleIds, g => g == roleId);
-            var g = await channel.patch('/ws/patch/member/roles', {
-                userid: member.userid, roleIds: member.roleIds
+            var g = await channel.del('/ws/user/delete/role', {
+                userid: member.userid,
+                roleId
             });
             if (g.ok) {
-                ShyAlert(lst('移除成功'))
+                lodash.remove(member.roleIds, g => g == roleId);
             }
         }
     }
@@ -169,16 +169,19 @@ export class WorkspaceMembers extends React.Component {
                 {this.searchList.list.map(me => {
                     return <div key={me.id} className='shy-ws-member flex round padding-10 visible-hover'>
                         <div className='flex-fixed w-240'>
-                            <Avatar showName showSn={false} size={30} userid={me.userid}></Avatar>
+                            <Avatar showName middle showSn={false} size={30} userid={me.userid}></Avatar>
                         </div>
                         <div className='flex-auto'>
                             <div className='shy-ws-member-roles'>
                                 {(me.roleIds || []).map(r => {
                                     var role = surface.workspace.roles.find(g => g.id == r);
-                                    if (role) return <a key={r}><span className='color cursor' onMouseDown={e => this.removeRole(me, r, e)} style={{ backgroundColor: role.color }}></span><span className='text'>{role.text}</span></a>
+                                    if (role) return <a key={r}>
+                                        <span className='color cursor' onMouseDown={e => this.removeRole(me, r, e)} style={{ backgroundColor: role.color }}></span>
+                                        <span className='text'>{role.text}</span>
+                                    </a>
                                     else return <a style={{ display: 'none' }} key={r}></a>
                                 })}
-                                {(me.roleIds || []).length < surface.workspace.roles.length && <a className='cursor size-20 item-hover round'><Icon size={12} icon={PlusSvg} onClick={e => this.selectRole(me, e)}></Icon></a>}
+                                {(me.roleIds || []).length < surface.workspace.roles.length && <ToolTip overlay={<S>添加角色</S>}><span style={{ padding: 0 }} className='cursor size-24 flex-center item-hover item-hover-light-focus round'><Icon size={16} icon={PlusSvg} onClick={e => this.selectRole(me, e)}></Icon></span></ToolTip>}
                             </div>
                         </div>
                         <div className='flex-fixed'>
