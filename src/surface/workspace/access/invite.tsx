@@ -16,17 +16,21 @@ import { Confirm } from "rich/component/lib/confirm";
 import { useJoinWorkspaceProtocol } from "./protocol";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
+import { runInAction } from "mobx";
 
 export var InviteView = observer(function () {
     var local = useLocalObservable<{
         ws: Partial<Workspace>,
         pids: Pid[],
-        loading: boolean
+        loading: boolean,
+        exists: boolean,
+
     }>(() => {
         return {
             ws: null,
             pids: [],
-            loading: true
+            loading: true,
+            exists: false
         }
     })
     async function loadInviteWorkspace() {
@@ -38,15 +42,18 @@ export var InviteView = observer(function () {
                 sock: Sock.createSock(Workspace.getWsSockUrl(w.data.pids, 'ws')),
                 wsId: w.data.workspace.id
             })
-            if (rg?.data?.exists) return UrlRoute.pushToWs(w.data.workspace.siteDomain || w.data.workspace.sn);
-            local.ws = Object.assign({}, w.data.workspace || {}, rg?.data?.workspace || {});
-            local.pids = w.data.pids;
-            local.loading = false;
+            // if (rg?.data?.exists) return UrlRoute.pushToWs(w.data.workspace.siteDomain || w.data.workspace.sn);
+            runInAction(() => {
+                local.exists = rg?.data?.exists;
+                local.ws = Object.assign({}, w.data.workspace || {}, rg?.data?.workspace || {});
+                local.pids = w.data.pids;
+                local.loading = false;
+            })
         }
     }
     async function join() {
         if (!surface.user.isSign) {
-            if (await Confirm(lst('您还未登录是否登录后加入','您还未登录，是否登录后加入？'))) {
+            if (await Confirm(lst('您还未登录是否登录后加入', '您还未登录，是否登录后加入？'))) {
                 var inviteCode = UrlRoute.match(ShyUrl.invite)?.id;
                 var url = '/invite/' + inviteCode;
                 UrlRoute.push(ShyUrl.signIn, { back: url });
@@ -99,8 +106,6 @@ export var InviteView = observer(function () {
             <div className="gap-h-10">
                 <Button size="larger" block onClick={e => join()}><S>接受邀请</S></Button>
             </div>
-
         </div>}
-
     </div>
 })
