@@ -373,6 +373,7 @@ export class ConsumeView extends React.Component {
                         theme="ghost"
                         onChange={e => this.setTab(e)}
                         value={this.tab}
+                        block
                         options={[
                             { text: '统计', value: 'day' },
                             { text: '服务', value: 'service' },

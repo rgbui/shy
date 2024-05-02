@@ -30,6 +30,7 @@ class CustomDomain extends EventsComponent {
                 <div className="remark f-12"><label><S>绑定方式</S></label></div>
                 <div className="gap-t-5 tap-b-10 flex">
                     <SelectButtons
+                        block
                         value={this.data.customSiteDomainData.type}
                         options={[
                             { text: lst('自建'), value: 'self-build' },
