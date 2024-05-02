@@ -32,7 +32,7 @@ export var View404 = observer(function () {
 
 export var ViewNotAllow = observer(function () {
     return <div className='flex-center flex-auto v100'>
-        <div className='gap-t-200 w-500'>
+        <div className='w-500' >
             <div className="h2 flex-center"><S>该页面未开启公开访问</S></div>
             <Divider ></Divider>
             <div className="gap-t-10">
