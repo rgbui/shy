@@ -17,6 +17,7 @@ import { config } from "../../../../common/config";
 import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
 import { UrlRoute } from "../../../history";
+import { HelpText } from "rich/component/view/text";
 
 @observer
 export class CreateWorkspaceView extends EventsComponent {
@@ -105,14 +106,17 @@ export class CreateWorkspaceView extends EventsComponent {
                     {this.local.avatar && <div onMouseDown={e => this.onupload(e)} className="size-50 flex-center cursor">
                         <img className="size-50 circle obj-center" src={this.local.avatar?.url} />
                     </div>}
-                    <div className="flex-center"><S>空间头像</S></div>
+                    <div className="flex-center gap-t-5 f-12 remark"><S>空间头像</S></div>
                 </div>
             </div>
-            <div className="remark f-12 gap-t-10 gap-b-5"><S>空间名称</S></div>
+            <div className="remark f-12 gap-t-10 gap-b-3"><S>空间名称</S></div>
             <div>
                 <Input value={this.local.name} onChange={e => this.local.name = e} placeholder={lst("{name}的空间", { name: surface.user?.name || "" })}></Input>
             </div>
-            <div className="remark f-12 gap-t-10 gap-b-5"><S>存储源</S></div>
+            <div className="remark f-12 gap-t-10 gap-b-3 flex">
+                <span className="flex-auto"><S>存储源</S></span>
+                <span className="flex-fixed"><HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/80#2aEX6xrNuLcu1S7JvH8Xh7" : "https://help.shy.live/page/2043#3T3CRFcWtzTM4TtLDaMij6"}><S>了解存储源</S></HelpText></span>
+            </div>
             <div>
                 <SelectBox dropAlign='full' border value={this.local.datasource} onChange={e => { this.local.datasource = e; this.local.error = ''; }} options={[
                     { text: lst('诗云'), value: 'public-clound' },
@@ -126,7 +130,7 @@ export class CreateWorkspaceView extends EventsComponent {
                 ]}></SelectBox>
             </div>
             {this.local.datasource == 'private-clound' && <>
-                <div className="remark f-12 gap-t-10 gap-b-5"><S>私有云</S></div>
+                <div className="remark f-12 gap-t-10 gap-b-3"><S>私有云</S></div>
                 <div><Input value={this.local.dataServiceAddress} onChange={e => {
                     this.local.dataServiceAddress = e;
                 }} placeholder={lst('私有云服务号')}></Input></div>
@@ -136,11 +140,11 @@ export class CreateWorkspaceView extends EventsComponent {
                     {this.local.privateCloundConfig?.abled !== true && <div className="text-1 item-hover round" onMouseDown={e => this.openLocalServer()}><S>开启本地存储服务</S></div>}
                 </div>
             }
-            <div className="gap-h-10 flex">
+            <div className="gap-t-10 flex">
                 {/* <span className="flex-fixed item-hover round padding-w-5 padding-h-3 item-hover-light cursor" onMouseDown={e => { this.local.step = 1 }}><S>上一步</S></span> */}
                 <span className="flex-auto flex-end"><Button onMouseDown={(e, b) => this.onCreate(b)} ><S>创建</S></Button></span>
             </div>
-            {this.local.error && <div className="error padding-w-10 gap-h-10">{this.local.error}</div>}
+            {this.local.error && <div className="error  gap-t-10">{this.local.error}</div>}
         </div>
     }
     async onCreate(b: Button) {
@@ -179,7 +183,7 @@ export class CreateWorkspaceView extends EventsComponent {
         }
     }
     render() {
-        return <div className="w-300 max-h-400 round padding-14">
+        return <div className="w-300 max-h-400 round padding-10 ">
             {this.local.step == 1 && this.renderStep1()}
             {this.local.step == 2 && this.renderStep2()}
         </div>
