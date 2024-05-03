@@ -7,7 +7,7 @@ import { FileMd5 } from "../../src/util/file";
 import { FileType } from "../../type";
 import { SockResponse } from "../../net/sock/type";
 import { del, get, patch, post, put } from "rich/net/annotation";
-import { userNativeStore } from "../../native/store/user";
+import { userCacheStore } from "../cache/user";
 import { UserBasic } from "rich/types/user";
 import { MergeSock } from "../../net/util/merge.sock";
 import lodash from "lodash";
@@ -92,25 +92,25 @@ class UserService extends BaseService {
     @get('/user/basic')
     async getBasic(data: { userid: string }) {
         if (!data.userid) return { ok: false };
-        var r = await userNativeStore.get(data.userid);
+        var r = await userCacheStore.get(data.userid);
         if (r) return { ok: true, data: { user: r } };
         var g = await batchUserBasic.inject<SockResponse<{
             user: UserBasic
         }, any>>({ args: data.userid });
         if (g.ok) {
-            await userNativeStore.put(g.data.user);
+            await userCacheStore.put(g.data.user);
         }
         return g;
     }
     @get('/users/basic')
     async getBasics(data: { ids: string[] }) {
-        var users = await userNativeStore.getUsers(...data.ids);
+        var users = await userCacheStore.getUsers(...data.ids);
         data.ids.removeAll(g => users.some(u => u.id == g));
         if (data.ids.length > 0) {
             var rs = await masterSock.get<{ list: UserBasic[] }>(`/users/basic`, data)
             if (rs.ok) {
                 await rs.data.list.eachAsync(async c => {
-                    await userNativeStore.put(c);
+                    await userCacheStore.put(c);
                 });
                 rs.data.list.push(...users);
             }

@@ -1,6 +1,6 @@
 
 import { channel } from "rich/net/channel";
-import { userNativeStore } from "../native/store/user";
+import { userCacheStore } from "./cache/user";
 import { Tim } from "../net/primus/tim";
 import { surface } from "../src/surface/app/store";
 import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
@@ -45,25 +45,25 @@ export function userTimNotify(tim: Tim) {
     tim.on(MessageUrl.userOnlineNotify, e => {
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
-            userNativeStore.notifyUpdate(e.userid, e.data)
+            userCacheStore.notifyUpdate(e.userid, e.data)
         }
     });
     tim.on(MessageUrl.userOffLineNotify, e => {
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
-            userNativeStore.notifyUpdate(e.userid, e.data)
+            userCacheStore.notifyUpdate(e.userid, e.data)
         }
     });
     tim.on(MessageUrl.userPatchStatusNotify, e => {
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
-            userNativeStore.notifyUpdate(e.userid, e.data)
+            userCacheStore.notifyUpdate(e.userid, e.data)
         }
     });
     tim.on(MessageUrl.userPatchNotify, e => {
         if (typeof e.data == 'object' && Object.keys(e.data).length > 0) {
             if (e.userid == surface.user.id) surface.user.syncUserInfo(e.data)
-            userNativeStore.notifyUpdate(e.userid, e.data)
+            userCacheStore.notifyUpdate(e.userid, e.data)
         }
     });
     tim.on(MessageUrl.userJoinOrExitWsNotify, async e => {

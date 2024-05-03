@@ -7,6 +7,9 @@ import { Workspace } from "../src/surface/workspace";
 import { FileMd5 } from "../src/util/file";
 import { ShyAlert } from "rich/component/lib/alert";
 import { lst } from "rich/i18n/store";
+import { wsUserCacheStore } from "./cache/user.ws";
+import { WorkspaceMember } from "rich/types/user";
+import lodash from "lodash";
 
 class WorkspaceService extends BaseService {
     private wsPids: Map<string, any[]> = new Map();
@@ -263,8 +266,7 @@ class WorkspaceService extends BaseService {
         return await masterSock.patch('/ws/set/domain', args);
     }
     @patch('/ws/patch/member/roles')
-    async wsPatchMemberRoles(args)
-    {
+    async wsPatchMemberRoles(args) {
         if (!args) args = {};
         var sock = await this.getArgsSock(args);
         return await sock.patch('/ws/patch/member/roles', args);
@@ -425,6 +427,23 @@ class WorkspaceService extends BaseService {
         if (typeof args == 'undefined') args = {}
         var sock = await this.getArgsSock(args);
         return await sock.get('/ws/ai/search', args);
+    }
+    @get('/ws/user/basic')
+    async wsUserBasic(args) {
+        if (typeof args == 'undefined') args = {}
+        var sock = await this.getArgsSock(args);
+        var r = wsUserCacheStore.get(args.wsId, args.userId);
+        var me: WorkspaceMember;
+        if (r) { me = r; return { ok: true, data: { wsMember: r } } }
+        else {
+            var c = await sock.get('/ws/user/basic', args);
+            me = c.data.wsMember;
+            wsUserCacheStore.put(args.wsId, args.userId, me);
+        }
+        if (args.wsId == surface.workspace.id) {
+            me.roles = surface.workspace.roles.filter(x => (me.roleIds || []).includes(x.id)).map(x => lodash.cloneDeep(x));
+        }
+        return { ok: true, data: { wsMember: me } };
     }
 }
 

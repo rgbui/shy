@@ -47,8 +47,8 @@ import { S } from 'rich/i18n/view';
 import { Tip } from 'rich/component/view/tooltip/tip';
 import "./style.less";
 import { useColorPicker } from 'rich/component/view/color/lazy';
-import { WorkspaceRole } from '../../declare';
 import Pic from "../../../../assert/img/four-hand.png";
+import { WorkspaceRole } from 'rich/types/user';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',

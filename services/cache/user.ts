@@ -43,4 +43,4 @@ export interface UserStore {
     emit(name: 'change', user: UserBasic)
 }
 
-export var userNativeStore = new UserStore();
+export var userCacheStore = new UserStore();

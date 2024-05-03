@@ -79,8 +79,8 @@ import { LinkPageItem,LinkWs} from "../src/page/declare";
 import { GalleryType, OuterPic } from "../extensions/image/declare";
 import { StatusCode } from "./status.code";
 import { UserAction } from "../src/history/action";
-import { RobotInfo, UserBasic, UserStatus } from "../types/user";
-import {IconArguments, ResourceArguments } from "../extensions/icon/declare";
+import { RobotInfo, UserBasic, UserStatus, WorkspaceMember } from "../types/user";
+import { ResourceArguments } from "../extensions/icon/declare";
 import { PayFeatureCheck } from "../component/pay";
 import { AtomPermission } from "../src/page/permission";
 import { WsConsumeType } from "./ai/cost";
@@ -177,7 +177,7 @@ push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, an
 push('/datastore/query', '{ws:LinkWs,wsId?:string,schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['get']);
 push('/datastore/query/pre_next', '{ws:LinkWs,wsId?:string,schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>,prev:Record<string, any>,next:Record<string, any>},warn:string}', ['get']);
 push('/datastore/query/list', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[],isIgnoreCount?: boolean}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
-push('/datastore/query/distinct','{ws:LinkWs,wsId?:string,schemaId:string,field:string,filter?:Record<string, any>}','SockResponse<{list:any[]}>',['get'])
+push('/datastore/query/distinct', '{ws:LinkWs,wsId?:string,schemaId:string,field:string,filter?:Record<string, any>}', 'SockResponse<{list:any[]}>', ['get'])
 push('/datastore/query/ids', '{ws:LinkWs,wsId?:string,schemaId:string,ids:string[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['get']);
 push('/datastore/query/all', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/group', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,group:string}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
@@ -266,7 +266,7 @@ push('/open/sign', '{}', 'SockResponse<{user:Record<string,any>,guid:string,toke
 push('/open/user/settings', '{}', 'Promise<void>', ['act'])
 push('/open/workspace/settings', '{}', 'Promise<void>', ['act'])
 push('/user/logout', '{}', 'Promise<number>', ['act'])
-push('/user/report','{report:{userid:string,tags:string[],reason:string,reportElementUrl?:string,wsId?:string,reportContent?:string}}', 'SockResponse<void>', ['put'])
+push('/user/report', '{report:{userid:string,tags:string[],reason:string,reportElementUrl?:string,wsId?:string,reportContent?:string}}', 'SockResponse<void>', ['put'])
 push('/amap/key_pair', '', '{key:string,pair:string}', ['shy', 'query']);
 push('/ws/basic', '{name?:string,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
 push('/ws/info', '{ws?:LinkWs,name?:string|number,wsId?:string}', 'SockResponse<{workspace:Record<string,any>}>', ['get'])
@@ -279,7 +279,7 @@ push('/ws/invite/check', '{invite:string}', 'SockResponse<{workspace:Record<stri
 push('/ws/invite/join', '{wsId:string,sock?:any,agree?:boolean,username:string}', 'SockResponse<void>', ['put']);
 push('/ws/patch', '{wsId?:string,sockId?:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/upload/file', '{file:File,data?:{fileClassify:"cover"}, uploadProgress: (event: ProgressEvent) => void}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
-push('/ws/files','{ws?:LinkWs,wsId?:string,page?:number,size?:number,word?:string,mime?:"image"|"audio"|"video"|"unknow",fileClassify?:\'cover\'|undefined}','SockResponse<{list:ResourceArguments[],page:number,size:number,total:number}>',['get'])
+push('/ws/files', '{ws?:LinkWs,wsId?:string,page?:number,size?:number,word?:string,mime?:"image"|"audio"|"video"|"unknow",fileClassify?:\'cover\'|undefined}', 'SockResponse<{list:ResourceArguments[],page:number,size:number,total:number}>', ['get'])
 push('/ws/download/url', '{url:string}', 'SockResponse<{ file:{url:string,name:string,size:number} }>', ['post'])
 push('/ws/channel/list', '{ws:LinkWs,wsId?:string,roomId:string,seq?:number,page?:number,size?:number}', 'SockResponse<{list:any[],unreadCount?:number}>', ['get'])
 push('/ws/channel/send', '{ sockId?: string,wsId?: string,roomId: string,content?: string,replyId?: string, files?:any[],refs?:any[],mentions?:string[],robotId?:string,isRobotSend?: boolean,newLine?: boolean}', 'SockResponse<{id:string,seq:number,createDate:Date}>', ['put'])
@@ -303,11 +303,12 @@ push('/ws/member/word/query', '{ws:LinkWs,wsId?:string,word?:string,size?:number
 push('/ws/members', '{ws:LinkWs,wsId?:string,page:number,size:number,word?:string,roleId?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/member/delete', '{userid:string}', 'SockResponse<void>', ['del']);
 push('/ws/is/member', '{sock?:any,wsId:string}', 'SockResponse<{exists:boolean,workspace:Record<string,any>}>', ['get']);
+push('/ws/user/basic', '{wsId:string,userid:string}', 'SockResponse<{wsMember:WorkspaceMember}>', ['get']);
 push('/ws/roles', '{ws:LinkWs,wsId?:string,}', 'SockResponse<{list:any[]}>', ['get']);
 push('/ws/role/patch', '{roleId:string,data:Record<string,any>}', 'SockResponse<void>', ['patch']);
 push('/ws/role/create', '{data:Record<string,any>}', 'SockResponse<{role:Record<string,any>}>', ['put']);
 push('/ws/role/delete', '{roleId:string}', 'SockResponse<void>', ['del']);
-push('/ws/user/delete/role','{userid:string,roleId:string}', 'SockResponse<void>', ['del']);
+push('/ws/user/delete/role', '{userid:string,roleId:string}', 'SockResponse<void>', ['del']);
 push('/ws/role/members', '{ws:LinkWs,wsId?:string,roleId:string,page:number,size:number,word?:string}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/set/domain', '{wsId?:string,domain:string}', 'SockResponse<{exists?:boolean,illegal?:boolean}>', ['patch'])
 push('/ws/patch/member/roles', '{wsId?:string,userid:string,roleIds:string[]}', 'SockResponse<void>', ['patch'])
@@ -317,14 +318,14 @@ push('/ws/online/users', '{wsId?:string}', 'SockResponse<{users:string[]}>', ['g
 push('/ws/current/pages', '{}', 'LinkPageItem[]', ['query']);
 push('/ws/create/object', '{wsId:string}', 'LinkWs', ['get']);
 push('/ws/search', '{ws:LinkWs,wsId?:string,page?:number,size?:number,mime?:string,word:string,isOnlySearchTitle?:boolean,createDate?:number,editDate?:number}', 'SockResponse<{pages:LinkPageItem[],list:{id:string,title:string,content:string,score:number}[],total:number }>', ['get'])
-push('/ws/ai/search','{ask:string,wsId?:string,minRank?:number,size?:number,contextSize?:number}','SockResponse<{docs:{ ps: ({content:string} & { rank: number })[], elementUrl: string, blockId: string }[]}>',['get'])
+push('/ws/ai/search', '{ask:string,wsId?:string,minRank?:number,size?:number,contextSize?:number}', 'SockResponse<{docs:{ ps: ({content:string} & { rank: number })[], elementUrl: string, blockId: string }[]}>', ['get'])
 push('/ws/comment/list', '{ws:LinkWs,wsId?:string,elementUrl: string, parentId: string, sort: \'default\' | \'date\', page: number,size: number}', 'SockResponse<{page:number,size:number,total:number,list:any[]}>', ['get']);
 push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, rootId: string,content: string,mentions?:string[],files?:any[]}', 'SockResponse<{data:any}>', ['put']);
 push('/ws/comment/del', '{id?:string,elementUrl?: string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number,exists?:boolean}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
-push('/get/robot','{id:string}','SockResponse<{robot:RobotInfo}>',['get']);
+push('/get/robot', '{id:string}', 'SockResponse<{robot:RobotInfo}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);
 push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, elementUrl:string, templateUrl: string, text?: string,icon?:any, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
 push('/get/workspace/template', '{wsId: string, pageId?: string,elementUrl?:string}', 'SockResponse<{template:Record<string,any>}>', ['get'])
@@ -376,11 +377,11 @@ push('/import/page/data', '{text?:string,wsId?:string,parentId?:string,mime:numb
 push('/query/my/wss', '{}', '{wss:any[]}', ['query'])
 push('/user/exit/current/workspace', '{}', 'SockResponse<void>', ['act'])
 push('/current/ws/remove/member', '{userid:string}', 'SockResponse<void>', ['act'])
-push('/open/user/private/channel','{userid:string}', 'SockResponse<void>', ['act'])
-push('/current/page/copy','{}', 'SockResponse<void>', ['act'])
-push('/current/page/move','{}', 'SockResponse<void>', ['act'])
-push('/workspace/mode','{isApp:boolean}','SockResponse<void>',['act']);
-push('/current/page/preOrNext','{pageId:string}','SockResponse<{pre:LinkPageItem,next:LinkPageItem}>', ['get']);
+push('/open/user/private/channel', '{userid:string}', 'SockResponse<void>', ['act'])
+push('/current/page/copy', '{}', 'SockResponse<void>', ['act'])
+push('/current/page/move', '{}', 'SockResponse<void>', ['act'])
+push('/workspace/mode', '{isApp:boolean}', 'SockResponse<void>', ['act']);
+push('/current/page/preOrNext', '{pageId:string}', 'SockResponse<{pre:LinkPageItem,next:LinkPageItem}>', ['get']);
 
 build(path.join(__dirname, "../../rich/net/declare.ts"), 'rich');
 //build(path.join(__dirname, "../net/declare.ts"), 'shy');

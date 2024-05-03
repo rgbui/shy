@@ -10,7 +10,7 @@ import { channel } from "rich/net/channel";
 import { Rect } from "rich/src/common/vector/point";
 import { UserStatus } from "rich/types/user";
 import { surface } from "../../app/store";
-import { userNativeStore } from "../../../../native/store/user";
+import { userCacheStore } from "../../../../services/cache/user";
 import './style.less';
 import { isMobileOnly } from "react-device-detect";
 import { lst } from "rich/i18n/store";
@@ -36,7 +36,7 @@ export var UserProfile = observer(function () {
             var g = await channel.patch('/user/patch/status', { status });
             if (g.ok) {
                 surface.user.status = status;
-                await userNativeStore.notifyUpdate(surface.user.id, { status })
+                await userCacheStore.notifyUpdate(surface.user.id, { status })
                 if (local.avatar) local.avatar.load(true)
             }
         }
