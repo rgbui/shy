@@ -247,7 +247,7 @@ export class WorkspaceRoles extends React.Component {
                     <div className='flex-auto cursor flex'>
                         <span className='item-hover round flex padding-r-8 padding-h-2 '>
                             <span className='size-20 flex-center'>
-                                <Icon size={16} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
+                                <Icon size={20} onClick={e => this.editRole = null} icon={ChevronLeftSvg}></Icon>
                             </span>
                             <span onMouseDown={e => this.editRole = null}><S>后退</S></span>
                         </span>
@@ -393,7 +393,7 @@ export class WorkspaceRoles extends React.Component {
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>页面权限</S></div>
-                        <div className='remark f-12'><S>设置页面、白板、宣传页的权限</S></div>
+                        <div className='remark f-12'><S>设置文档、白板、PPT的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -413,7 +413,7 @@ export class WorkspaceRoles extends React.Component {
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>频道权限</S></div>
-                        <div className='remark f-12'> <S>设置频道的权限</S></div>
+                        <div className='remark f-12'><S>设置频道的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -432,8 +432,8 @@ export class WorkspaceRoles extends React.Component {
                 <Divider></Divider>
                 <div className='flex'>
                     <div className='flex-auto'>
-                        <div><S>数据表格权限</S></div>
-                        <div className='remark f-12'><S>设置数据表格的权限</S></div>
+                        <div><S>数据表权限</S></div>
+                        <div className='remark f-12'><S>设置数据表的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -453,7 +453,7 @@ export class WorkspaceRoles extends React.Component {
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>空间管理权限</S></div>
-                        <div className='remark f-12'><S>设置管理理员对空间的管理权限</S></div>
+                        <div className='remark f-12'><S>设置管理理员对空间成员管理权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
@@ -504,7 +504,7 @@ export class WorkspaceRoles extends React.Component {
             {this.roleUserSearch.loading && <div className='remark flex-center gap-h-30'><Spin></Spin></div>}
             {this.roleUserSearch.list.map(ru => {
                 return <div className='flex gap-h-10 visible-hover' key={ru.id}>
-                    <span className='flex-auto'><Avatar size={32} showName showSn userid={ru.userid}></Avatar></span>
+                    <span className='flex-auto'><Avatar middle size={32} showName showSn userid={ru.userid}></Avatar></span>
                     <ToolTip overlay={lst('移出成员')}>
                         <span onClick={e => this.removeRoleMember(ru.userid)} className='flex-fixed size-24 flex-center round item-hover cursor visible'>
                             <Icon size={14} icon={CloseSvg}></Icon>

@@ -135,14 +135,14 @@ export class WorkspaceMembers extends React.Component {
                 type: MenuItemType.custom,
                 render(item, view) {
                     return <div className='gap-w-5 h-28 flex item-hover cursor padding-w-5 round'>
-                        <span className='flex-fixed size-14 circle' style={{ background: r.color }}></span>
-                        <span className='flex-fixed gap-l-3'>{r.text}</span>
+                        <span className='flex-fixed size-12 gap-l-4 circle' style={{ background: r.color }}></span>
+                        <span className='flex-fixed gap-l-5'>{r.text}</span>
                         {self.searchList.roleId == r.id && <label className='flex-auto flex-end'><Icon className={'gap-r-8'} size={16} icon={CheckSvg}></Icon></label>}
                     </div>
-                },
+                }
             }
         });
-        options.splice(0, 0, { text: lst('@所有人'), value: '' })
+        options.splice(0, 0, { text: lst('@所有人', '@  所有人'), value: '' })
         return options as any;
     }
     render() {
@@ -176,7 +176,7 @@ export class WorkspaceMembers extends React.Component {
                                 {(me.roleIds || []).map(r => {
                                     var role = surface.workspace.roles.find(g => g.id == r);
                                     if (role) return <a key={r}>
-                                        <span className='color cursor' onMouseDown={e => this.removeRole(me, r, e)} style={{ backgroundColor: role.color }}></span>
+                                        <span className='color cursor' onMouseDown={e => this.removeRole(me, r, e)} style={{ width: 12, height: 12, backgroundColor: role.color }}></span>
                                         <span className='text'>{role.text}</span>
                                     </a>
                                     else return <a style={{ display: 'none' }} key={r}></a>
