@@ -439,7 +439,7 @@ export class SideBar extends React.Component {
             </div>
             <div className="flex-fixed flex flex-col flex-center padding-t-6">
                 <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-                <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a>
+                {/* <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a> */}
                 {window.shyConfig?.isWeb && <><div className="shy-sidebar-divider"></div><a target="_blank" href={window.shyConfig?.isUS ? "https://shy.red/download" : "https://shy.live/download"} className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-h-6"><Icon size={24} icon={{ name: 'byte', code: 'to-bottom' }}></Icon></a></>}
             </div>
         </div>

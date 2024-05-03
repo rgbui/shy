@@ -45,7 +45,7 @@ export var DiscoveryView = observer(function () {
     }, [])
     return <div className='shy-discovery' >
         <div className="shy-discovery-wrapper">
-            <div className={"shy-discovery-cover flex-center flex-col" + (isMobileOnly ? " " : " round-16 gap-t-20 ")} style={{
+            <div className={"shy-discovery-cover flex-center flex-col" + (isMobileOnly ? " " : " ")} style={{
                 backgroundImage: 'url(' + discover + ')',
                 backgroundSize: 'cover',
                 // backgroundAttachment: 'fixed',
@@ -63,6 +63,5 @@ export var DiscoveryView = observer(function () {
                 </div>
             </div>
         </div>
-
     </div>
 })
