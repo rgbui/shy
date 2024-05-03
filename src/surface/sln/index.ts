@@ -67,7 +67,7 @@ export class Sln extends Events {
                     if (isend) return;
                     ghostView.move(Point.from(ev));
                 },
-                moveEnd(ev, isMove, data) {
+                async moveEnd(ev, isMove, data) {
                     try {
                         if (isMove) {
                             if (self.hover?.item) {
@@ -75,15 +75,19 @@ export class Sln extends Events {
                                     var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
                                     var overItem = self.hover?.item;
                                     if (self.hover.direction == 'top') {
-                                        if (overItem.prev) pageItemStore.moveToAfterPageItem(dragItem, overItem.prev);
-                                        else if (overItem.parent) pageItemStore.movePrependPageItem(dragItem, overItem.parent);
-                                        else pageItemStore.moveToBeforePageItem(dragItem, overItem)
+                                        if (overItem.prev) await pageItemStore.moveToAfterPageItem(dragItem, overItem.prev);
+                                        else if (overItem.parent) {
+                                            await pageItemStore.movePrependPageItem(dragItem, overItem.parent);
+                                            await overItem.parent.onSpread(true);
+                                        }
+                                        else await pageItemStore.moveToBeforePageItem(dragItem, overItem)
                                     }
                                     else if (self.hover.direction == 'bottom') {
-                                        pageItemStore.moveToAfterPageItem(dragItem, overItem);
+                                        await pageItemStore.moveToAfterPageItem(dragItem, overItem);
                                     }
                                     else if (self.hover.direction == 'bottom-sub') {
-                                        pageItemStore.movePrependPageItem(dragItem, overItem);
+                                        await pageItemStore.movePrependPageItem(dragItem, overItem);
+                                        await overItem.onSpread(true);
                                     }
                                 }
                             }
