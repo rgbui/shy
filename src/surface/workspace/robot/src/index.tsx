@@ -18,6 +18,7 @@ import { RobotWiki } from "./wiki/wiki";
 
 import "./style.less";
 import "../../../user/settings/style.less";
+import "../../settings/style.less";
 
 @observer
 export default class RobotSettings extends EventsComponent {

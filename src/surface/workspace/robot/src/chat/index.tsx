@@ -17,6 +17,7 @@ import { PublishSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { ToolTip } from "rich/component/view/tooltip";
 import { channel } from "rich/net/channel";
+import Pic from "../../../../../assert/img/pig.png";
 
 var messages: {
     id: string,
@@ -130,6 +131,9 @@ export class RobotChat extends React.Component<{ robot: RobotInfo, close: () => 
         return <div style={style} className={"bg-white border shadow-s   round    flex flex-full flex-col gap-b-100 " + classList.join(" ")}>
             <div>
                 <div ref={e => this.scrollEl = e} className="max-h-400 min-h-300 padding-b-50 overflow-y padding-w-10">
+                    {messages.length == 0 && <div className="flex-center gap-t-50">
+                        <img src={Pic} className="obj-center " style={{ maxWidth: 500 }} />
+                    </div>}
                     {this.renderMessages()}
                 </div>
             </div>
