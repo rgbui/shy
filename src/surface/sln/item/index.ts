@@ -290,9 +290,9 @@ export class PageItem {
     async onRemove() {
         if (this.mime == Mime.pages) {
             if (await Confirm(lst('确定要删除吗该操作不可撤消', '确定要删除吗，该操作不可撤消')))
-              await  pageItemStore.deletePageItem(this);
+                await pageItemStore.deletePageItem(this);
         }
-        else await  pageItemStore.deletePageItem(this);
+        else await pageItemStore.deletePageItem(this);
     }
     async onCopy() {
         await channel.post('/clone/page', {
@@ -339,15 +339,15 @@ export class PageItem {
                     label: UA.isMacOs ? "⌘+Shift+R" : "Ctrl+Shift+R"
                 },
                 {
-                    name: 'createFolder',
-                    icon: FolderPlusSvg,
-                    text: lst('创建新分栏')
-                },
-                { type: MenuItemType.divide },
-                {
                     name: 'addNewPage',
                     text: lst('添加新页面'),
                     icon: PlusAreaSvg,
+                },
+                { type: MenuItemType.divide },
+                {
+                    name: 'createFolder',
+                    icon: FolderPlusSvg,
+                    text: lst('创建新栏目')
                 },
                 { type: MenuItemType.divide },
                 {
@@ -366,13 +366,15 @@ export class PageItem {
                 { type: MenuItemType.divide },
                 {
                     name: 'toggleFolder',
-                    icon: this.spread ? FolderCloseSvg : FolderOpenSvg,
-                    text: this.spread ? lst("折叠分栏") : lst('展开分栏')
+                    icon: FolderOpenSvg,
+                    text: lst('展开所有'),
+                    value: true,
                 },
                 {
-                    name: 'unAllFolders',
-                    icon: SeoFolderSvg,
-                    text: lst('折叠所有')
+                    name: 'toggleFolder',
+                    icon: FolderCloseSvg,
+                    text: lst('折叠所有'),
+                    value: false
                 },
                 { type: MenuItemType.divide },
                 {
@@ -512,14 +514,7 @@ export class PageItem {
                 }
                 break;
             case 'toggleFolder':
-                this.onSpread();
-                break;
-            case 'unAllFolders':
-                runInAction(() => {
-                    surface.workspace.childs.each(g => {
-                        g.spread = false;
-                    })
-                })
+                this.onSpread(menuItem.value as boolean);
                 break;
             case 'link':
                 CopyText(this.url);
