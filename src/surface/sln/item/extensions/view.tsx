@@ -9,6 +9,7 @@ import { ChevronDownSvg, DotSvg, DotsSvg, PlusSvg } from "rich/component/svgs";
 import { Mime } from "../../declare";
 import { Spin } from "rich/component/view/spin";
 import { getPageIcon, getPageText } from "rich/src/page/declare";
+import { Tip } from "rich/component/view/tooltip/tip";
 
 export var PageItemView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
@@ -85,8 +86,8 @@ export var PageItemView = observer(function (props: { item: PageItem, deep?: num
             <i className='shy-ws-item-page-icon flex-fixed size-20 item-hover  round-3 flex-center gap-r-5 '><Icon size={18} icon={surface.workspace.allowSlnIcon ? getPageIcon(item) : getPageIcon({ pageType: item.pageType })}></Icon></i>
             {<span className="text-overflow flex-auto h-20 l-20 padding-r-10">{getPageText(item)}</span>}
             {<div className='shy-ws-item-page-operators  visible'>
-                {isCanEdit && <><Icon className='shy-ws-item-page-property ' size={18} icon={DotsSvg}></Icon>
-                    {isCanPlus && <Icon className='shy-ws-item-page-add ' size={18} icon={PlusSvg}></Icon>}</>}
+                {isCanEdit && <><Tip text='删除、复制及更多操作'><Icon className='shy-ws-item-page-property ' size={18} icon={DotsSvg}></Icon></Tip>
+                    {isCanPlus && <Tip text='快速新建子页面'><Icon className='shy-ws-item-page-add ' size={18} icon={PlusSvg}></Icon></Tip>}</>}
                 {item.unreadChats.length > 0 && <span className="unread size-24 flex-center"><DotNumber arrow="none" count={item.unreadChats.length}></DotNumber></span>}
             </div>}
         </div>

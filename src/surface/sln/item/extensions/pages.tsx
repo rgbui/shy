@@ -7,6 +7,7 @@ import { PageItemBox } from "../view/box";
 import { Spin } from "rich/component/view/spin";
 import { surface } from "../../../app/store";
 import { lst } from "rich/i18n/store";
+import { Tip } from "rich/component/view/tooltip/tip";
 
 export var PagesView = observer(function (props: { item: PageItem, deep?: number }) {
     var item = props.item;
@@ -26,7 +27,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
             style={{ '--gap-left': gap + 'px' } as any}
             className={"relative flex gap-w-5 round padding-r-5 item-hover padding-h-3 " + (surface.sln.isDrag && surface.sln.hover?.item === item ? " shy-ws-item-page-drop-" + surface.sln.hover.direction : "")}>
             <div className={'flex-auto flex '}>
-                <span onMouseDown={e =>{
+                <span onMouseDown={e => {
                     if (e.nativeEvent.button == 2) return;
                     item.onSpread()
                 }} className="f-12 round cursor flex">
@@ -39,7 +40,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 </span>
             </div>
             {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>
-                <span className="size-18  flex-center cursor item-hover round">
+                <Tip text='删除及更多操作'><span className="size-18  flex-center cursor item-hover round">
                     <Icon icon={DotsSvg} size={18} onMousedown={e => {
                         e.stopPropagation();
                         var el = e.currentTarget.parentNode.parentNode as HTMLElement;
@@ -50,10 +51,10 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                             el.classList.add('visible');
                         })
                     }}></Icon>
-                </span>
-                <span className="size-18 flex-center cursor item-hover round">
+                </span></Tip>
+                <Tip text='快速新建子页面'><span className="size-18 flex-center cursor item-hover round">
                     <Icon icon={PlusSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onAdd() }}></Icon>
-                </span>
+                </span></Tip>
             </div>}
         </div>
     }
