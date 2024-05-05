@@ -7,7 +7,6 @@ import { surface } from '../../app/store';
 import { observer } from 'mobx-react';
 import { channel } from 'rich/net/channel';
 import { useSetWsDomain } from '../../user/common/setDomain';
-import { useSetCustomDomain } from "../../user/common/setCustomDomain";
 import { SaveTip } from '../../../component/tip/save.tip';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { autoImageUrl } from 'rich/net/element.type';
@@ -69,16 +68,7 @@ export class WorkspaceSettingsView extends React.Component {
             return;
         }
     }
-    async openCustomDomain(event: React.MouseEvent) {
-        var us = await surface.user.wallet();
-        if (config.isDev || config.isBeta || !us.isDue && (us.meal == 'meal-1' || us.meal == 'meal-2')) {
-            await useSetCustomDomain(surface.workspace);
-        }
-        else {
-            ShyAlert(lst('需要开通专业版才能支持自定义域名'))
-            return;
-        }
-    }
+ 
     async createWorkspaceTemplate(event: React.MouseEvent) {
         if (surface.workspace.sn == 24 || window.shyConfig.isDev) {
             var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
@@ -234,15 +224,7 @@ export class WorkspaceSettingsView extends React.Component {
                     <Button size='small' onClick={e => this.openDomain(e)} ghost><S>自定义二级域名</S></Button>
                     <div className='remark f-12 gap-h-10 flex'><S>示例</S>:https://mysite.{UrlRoute.getHost()}</div>
                 </div>}
-                {surface.workspace.customSiteDomain && <div style={{ marginTop: 20 }} className='shy-ws-settings-view-domain'>
-                    <S>自定义域名</S>:
-                    <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} target='_blank' href={`http${surface.workspace.customSiteDomainProtocol ? "s" : ""}://` + surface.workspace.customSiteDomain}>http{surface.workspace.customSiteDomainProtocol ? "s" : ""}://{surface.workspace.customSiteDomain}</a>
-                    <a className='link cursor gap-l-5' onClick={e => this.openCustomDomain(e)}><S>更换</S></a>
-                </div>}
-                {!surface.workspace.customSiteDomain && <div className='gap-t-20'>
-                    <Button size='small' onClick={e => this.openCustomDomain(e)} ghost><S>自定义域名</S></Button>
-                    <div className='remark f-12 gap-h-10 flex'><S>示例</S>:https://yousite.com</div>
-                </div>}
+               
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>

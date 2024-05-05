@@ -121,7 +121,3 @@ export default class WsSettings extends EventsComponent {
     }
 }
 
-// export async function useOpenWorkspaceSettings(mode?: WsSettings['mode']) {
-//     var popover = await Singleton(WsSettings);
-//     popover.open(mode);
-// }

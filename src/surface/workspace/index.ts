@@ -43,6 +43,7 @@ import { PopoverPosition } from "rich/component/popover/position";
 import { useLazyOpenWorkspaceSettings } from "./settings/lazy";
 import { useOpenUserSettings } from "../user/settings/lazy";
 import { useImportFile } from "rich/extensions/Import-export/import-file/lazy";
+import { usePublishSite } from "./settings/publish/site";
 
 export class Workspace {
     public id: string = null;
@@ -171,19 +172,17 @@ export class Workspace {
         defineNavMenu: boolean,
         allowSearch: boolean,
         navMenus: WorkspaceNavMenuItem[],
-        defineContent: boolean,
         isFullWidth: boolean,
         smallFont: boolean,
-        contentTheme: 'default' | 'none' | 'wiki',
+        contentTheme: 'wiki' | 'web',
         defineBottom: boolean
     } = {
             abled: false,
             defineNavMenu: false,
             navMenus: [],
-            defineContent: false,
             isFullWidth: true,
             smallFont: true,
-            contentTheme: 'default',
+            contentTheme: 'wiki',
             defineBottom: false,
             allowSearch: false
         }
@@ -280,7 +279,7 @@ export class Workspace {
         return surface.user?.id == ow ? true : false;
     }
     get isManager() {
-        return this.isAllow(AtomPermission.all);
+        return this.isOwner || this.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions);
     }
     isAllow(...permissions: AtomPermission[]) {
         if (this.isOwner) return true;
@@ -691,10 +690,9 @@ export class Workspace {
             return this.robots || [];
         }
     }
-
     _isApp: boolean = false;
     get isApp() {
-        if (this.isOwner || this.isManager) {
+        if (this.isManager) {
             return this._isApp;
         }
         else return true;
@@ -714,7 +712,7 @@ export class Workspace {
      * 是否隐藏默认的导航菜单
      */
     get isPubSiteHideMenu() {
-        return this.isPubSite && this?.publishConfig?.defineContent && (this?.publishConfig?.contentTheme == 'wiki' || this?.publishConfig?.contentTheme == 'none')
+        return this.isPubSite && this?.publishConfig?.contentTheme == 'web'
     }
     /**
      * 空间是否处于应用模式
@@ -730,31 +728,52 @@ export class Workspace {
         }
         return false;
     }
-
     async openMenu(pos: PopoverPosition, width: number = 200) {
         if (!this.isMember) return;
         if (isMobileOnly) return;
         var menus: MenuItem<string>[] = [];
-        if (this.isOwner || this.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions)) {
+        if (this.isManager) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
                 { type: MenuItemType.divide },
-                { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建分栏') },
+                { name: 'enterApp', text: lst('发布应用'), icon: { name: 'byte', code: 'application-one' } },
+                {
+                    text: lst('应用模式'),
+                    icon: { name: 'byte', code: 'intermediate-mode' },
+                    visible: surface.workspace.publishConfig?.abled,
+                    childs: [
+                        {
+                            name: 'editApp',
+                            text: lst('编辑'),
+                            icon: { name: 'byte', code: 'write' },
+                            checkLabel: surface.workspace.isApp ? false : true
+                        },
+                        {
+                            name: 'operateApp', text: lst('运营'),
+                            icon: { name: 'byte', code: 'zijinyunying' },
+                            checkLabel: surface.workspace.isApp ? true : false
+                        }
+                    ]
+                },
                 { type: MenuItemType.divide },
-                { name: 'enterApp', text: lst('发布应用'), visible: this.isApp ? false : true, icon: { name: 'byte', code: 'application-one' }, checkLabel: this.isApp ? true : false },
+                { name: 'createFolder', icon: FolderPlusSvg, text: lst('创建栏目') },
                 { name: 'importFiles', icon: UploadSvg, text: lst('导入文件') },
                 { type: MenuItemType.divide },
-                { name: 'wsUsers', icon: MemberSvg, text: lst('空间成员') },
                 { name: 'userPay', icon: { name: 'bytedance-icon', code: 'flash-payment' }, text: lst('付费升级') },
+                { name: 'wsUsers', icon: MemberSvg, text: lst('空间成员') },
                 { type: MenuItemType.divide },
-                { name: 'invite', text: lst('邀请ta人'), icon: AddUserSvg },
-                { name: 'report', text: lst('举报'), visible: this.isOwner ? false : true, icon: { name: 'bytedance-icon', code: 'harm' } }
-                // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
+                { name: 'invite', text: lst('邀请ta人'), icon: AddUserSvg }
             ]
             if (!this.isOwner) {
                 menus.push(...[
                     { type: MenuItemType.divide },
                     { name: 'exit', text: lst('退出空间'), icon: LogoutSvg }
+                ])
+            }
+            else {
+                menus.push(...[
+                    { type: MenuItemType.divide },
+                    { name: 'report', text: lst('举报'), icon: { name: 'bytedance-icon', code: 'harm' } as any }
                 ])
             }
         }
@@ -766,7 +785,7 @@ export class Workspace {
                 { name: 'invite', text: lst('邀请ta人'), icon: AddUserSvg },
                 // { name: 'edit', text: '编辑个人空间资料', icon: EditSvg },
                 { type: MenuItemType.divide },
-                { name: 'report', text: lst('举报'), visible: this.isOwner ? false : true, icon: { name: 'bytedance-icon', code: 'harm' } },
+                { name: 'report', text: lst('举报'), icon: { name: 'bytedance-icon', code: 'harm' } },
                 { name: 'exit', text: lst('退出空间'), icon: LogoutSvg }
             ]
         }
@@ -828,10 +847,15 @@ export class Workspace {
                     await useLazyOpenWorkspaceSettings('publish');
                     return;
                 }
-                await this.setMode(true);
+                else {
+                    await usePublishSite(surface.workspace.publishConfig)
+                }
             }
-            else if (se.item.name == 'enterEdit') {
+            else if (se.item.name == 'editApp') {
                 await this.setMode(false);
+            }
+            else if (se.item.name == 'operateApp') {
+                await this.setMode(true);
             }
         }
     }
