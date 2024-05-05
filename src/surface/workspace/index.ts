@@ -218,9 +218,7 @@ export class Workspace {
             isPubSiteDefineBarMenu: computed,
             isPubSiteHideMenu: computed,
             _isApp: observable,
-            isApp: computed,
-            // folderId: observable,
-            // at: observable
+            isApp: computed
         })
     }
     get slnSpread() {
