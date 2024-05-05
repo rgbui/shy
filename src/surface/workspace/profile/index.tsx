@@ -24,7 +24,7 @@ export var WorkspaceProfile = observer(function () {
                 <Icon size={16} icon={{ name: "bytedance-icon", code: 'hamburger-button' }}></Icon>
             </span>}
             <span className="flex flex-auto  gap-r-5 ">
-                <span className="desk-no-drag flex-fixed bold f-16 text-overflow max-w-100">{surface.workspace.text}</span>
+                <span className="desk-no-drag flex-fixed bold f-16 text-overflow max-w-180">{surface.workspace.text}</span>
                 {surface.workspace.isMember && <span className="shy-ws-arrow-drop desk-no-drag size-20 round  flex-center text-1 flex-fixed item-hover "><Icon icon={ChevronDownSvg} size={14} ></Icon></span>}
             </span>
             <div className="flex-fixed">
