@@ -79,12 +79,17 @@ export var SlnView = observer(function () {
             {!(surface?.workspace?.isPubSite && surface?.workspace?.isPubSiteDefineBarMenu) && <WorkspaceProfile ></WorkspaceProfile>}
             {renderPublishSiteSearch()}
             {!local.word && <div style={{
-                paddingTop: surface?.workspace?.isPubSite && !surface?.workspace?.isPubSiteHideMenu ? 0 : undefined
+                paddingTop: surface?.workspace?.isPubSite && !surface?.workspace?.isPubSiteHideMenu ? 0 : undefined,
+
             }} className='shy-ws-items' ref={e => surface.sln.el = e}>
-                {surface.workspace.childs.map(ws => {
-                    var View = surface.sln.getMimeViewComponent(ws.mime);
-                    return <View key={ws.id} item={ws} deep={-1} ></View>
-                })}
+                <div
+                    style={{ minHeight: 'calc(100% - 150px )' }}
+                >
+                    {surface.workspace.childs.map(ws => {
+                        var View = surface.sln.getMimeViewComponent(ws.mime);
+                        return <View key={ws.id} item={ws} deep={-1} ></View>
+                    })}
+                </div>
                 {renderBottoms()}
             </div>}
             {!surface?.workspace?.isPubSite && <UserProfile></UserProfile>}
