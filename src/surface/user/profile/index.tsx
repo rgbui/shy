@@ -28,23 +28,23 @@ export var UserProfile = observer(function () {
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(event) }, [
             {
                 checkLabel: surface.user.status == UserStatus.online, name: 'online', text: lst('在线'), renderIcon: () => {
-                    return getAvatorStatusSvg(UserStatus.online, { marginTop: -7, marginLeft: -9 })
+                    return getAvatorStatusSvg(UserStatus.online, { marginTop: -9, marginLeft: -9 })
                 }
             },
             { type: MenuItemType.divide },
             {
                 checkLabel: surface.user.status == UserStatus.idle, name: 'idle', text: lst('闲置'), renderIcon: () => {
-                    return getAvatorStatusSvg(UserStatus.idle, { marginTop: -7, marginLeft: -9 })
+                    return getAvatorStatusSvg(UserStatus.idle, { marginTop: -9, marginLeft: -9 })
                 }
             },
             {
                 checkLabel: surface.user.status == UserStatus.busy, name: 'busy', text: lst('请勿打扰'), renderIcon: () => {
-                    return getAvatorStatusSvg(UserStatus.busy, { marginTop: -7, marginLeft: -9 })
+                    return getAvatorStatusSvg(UserStatus.busy, { marginTop: -9, marginLeft: -9 })
                 }
             },
             {
                 checkLabel: surface.user.status == UserStatus.hidden, name: 'hidden', text: lst('隐身'), renderIcon: () => {
-                    return getAvatorStatusSvg(UserStatus.hidden, { marginTop: -7, marginLeft: -9 })
+                    return getAvatorStatusSvg(UserStatus.hidden, { marginTop: -9, marginLeft: -9 })
                 }
             }
         ]);
