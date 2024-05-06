@@ -393,7 +393,7 @@ export class WorkspaceRoles extends React.Component {
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>页面权限</S></div>
-                        <div className='remark f-12'><S>设置文档、白板、PPT的权限</S></div>
+                        <div className='remark f-12'><S text='设置文档白板PPT的权限'>设置文档、白板、PPT的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox

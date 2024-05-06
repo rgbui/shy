@@ -182,7 +182,7 @@ export class WorkspaceManage extends React.Component {
                         checked={this.data.aiConfig.seoSearch}>
                     </SwitchText></div>
                 </div>
-                <div className="gap-b-10 f-12 remark"><S>支持百度、Google收录搜索</S></div>
+                <div className="gap-b-10 f-12 remark"><S text='支持百度Google收录搜索'>支持百度、Google收录搜索</S></div>
             </div>
 
             <Divider></Divider>
