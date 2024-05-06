@@ -100,3 +100,4 @@ export var sCache = new SyCache({ security: true });
  * 不加密缓存
  */
 export var yCache = new SyCache();
+//console.log('dec',Aes.decrypt('U2FsdGVkX18/kQ05LdQie8+2XGdVdqx9+W+5MZjwjng='))

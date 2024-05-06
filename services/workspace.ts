@@ -73,8 +73,8 @@ class WorkspaceService extends BaseService {
         return await masterSock.get('/ws/query', data);
     }
     @get('/ws/latest')
-    async latestWs() {
-        return await masterSock.get('/ws/latest');
+    async latestWs(args) {
+        return await masterSock.get('/ws/latest',args);
     }
     @get('/ws/discovery')
     async discoveryWs(args) {
