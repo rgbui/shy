@@ -75,11 +75,17 @@ export function GlobalKeyboard() {
         }
     )
 
-    surface.keyboardPlate.listener(kb =>kb.isMetaOrCtrlAndShift(KeyboardCode.H)|| kb.isMetaOrCtrl(KeyboardCode.Y)||kb.isMetaOrCtrl(KeyboardCode.D)||kb.isMetaOrCtrlAndAlt(KeyboardCode.M), (ev, kt) => {
+    surface.keyboardPlate.listener(kb => kb.isMetaOrCtrlAndShift(KeyboardCode.H) ||
+        kb.isMetaOrCtrl(KeyboardCode.Z) ||
+        kb.isMetaOrCtrl(KeyboardCode.Y) ||
+        kb.isMetaOrCtrl(KeyboardCode.D) ||
+        kb.isMetaOrCtrlAndAlt(KeyboardCode.M) ||
+        kb.isMetaOrCtrl(KeyboardCode.L)
+        ,(ev, kt) => {
 
-        ev.preventDefault()
+            ev.preventDefault()
 
-    })
+        })
 
- 
+
 }
