@@ -23,8 +23,8 @@ import { wss } from "../../../services/workspace";
 import { isMobileOnly } from "react-device-detect";
 import { KeyboardPlate } from "rich/src/common/keys";
 import "./service";
-import { GlobalKeyboard } from "./service";
 import { IconArguments } from "rich/extensions/icon/declare";
+import { GlobalKeyboard } from "./keyboard";
 
 export type UserWorkspaceItem = {
     id: string,
@@ -62,8 +62,7 @@ export class Surface extends Events {
             mobileSlnSpread: observable,
             slnSpread: observable,
             showWorkspace: computed,
-            accessPage: observable,
-            // wssFolderSpreads: observable
+            accessPage: observable
         });
     }
     mobileSlnSpread: boolean = null;
@@ -320,7 +319,6 @@ export class Surface extends Events {
     get showWorkspace() {
         return surface.workspace ? true : false;
     }
-
     async load() {
         await ls.import();
         await surface.user.sign();
