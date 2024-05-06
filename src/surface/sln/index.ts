@@ -37,15 +37,17 @@ export class Sln extends Events {
             item.onContextmenuClickItem(menuItem.item, menuItem.event, el);
         }
     }
-    async onMousedownItem(item: PageItem, event: MouseEvent) {
-        if (surface.keyboardPlate.isAlt()) {
+    async onMousedownItem(item: PageItem, event: MouseEvent)
+    {
+        if (surface.keyboardPlate.isAlt() && surface.keyboardPlate.isKeydown) {
             var page: Page = await channel.air('/page/slide', { elementUrl: item.elementUrl })
             if (page) {
                 await channel.air('/page/slide', { elementUrl: null });
             }
             return;
         }
-        else if (surface.keyboardPlate.isMetaOrCtrl()) {
+        else if (surface.keyboardPlate.isMetaOrCtrl() && surface.keyboardPlate.isKeydown) {
+            surface.keyboardPlate.clear()
             window.open(item.url)
             return;
         }
