@@ -43,7 +43,7 @@ export async function createPageContent(store: PageViewStore) {
                         var snap = SnapStore.createSnap(syncBlock.elementUrl)
                         snap.viewOperatorAndSnap(action.get() as any, {
                             content: await syncBlock.getSyncString()
-                        }, { force: action.immediate ? true : false, notSave: action.isCursorOperator() })
+                        }, { force: action.immediate ? true : false, notSave: action.isCursorOperatorOrPicker() })
                     }
                 if (action.syncPage) {
                     if (page.views.length == 0) {
@@ -54,7 +54,7 @@ export async function createPageContent(store: PageViewStore) {
                         content: await page.getString(),
                         text: store.item?.text,
                         thumb: await page.getThumb()
-                    }, { force: action.immediate ? true : false, notSave: action.isCursorOperator() })
+                    }, { force: action.immediate ? true : false, notSave: action.isCursorOperatorOrPicker() })
                 }
             });
             page.on(PageDirective.syncHistory, async (data) => {
