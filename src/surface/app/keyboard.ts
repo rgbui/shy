@@ -80,7 +80,9 @@ export function GlobalKeyboard() {
         kb.isMetaOrCtrl(KeyboardCode.Y) ||
         kb.isMetaOrCtrl(KeyboardCode.D) ||
         kb.isMetaOrCtrlAndAlt(KeyboardCode.M) ||
-        kb.isMetaOrCtrl(KeyboardCode.L)
+        kb.isMetaOrCtrl(KeyboardCode.L)||
+        kb.isMetaOrCtrl(KeyboardCode.I)
+        
         ,(ev, kt) => {
 
             ev.preventDefault()

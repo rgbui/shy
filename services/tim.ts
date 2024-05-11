@@ -93,6 +93,9 @@ export function workspaceNotifys(tim: Tim) {
         }
         // }
     });
+    tim.only(SyncMessageUrl.blcokSyncRefs, async (e, op) => {
+        await channel.fire(SyncMessageUrl.blcokSyncRefs, e as any, op)
+    })
 
     //空间会话
     tim.only(SyncMessageUrl.channelNotify, (e: { id: string, seq?: number, workspaceId: string, roomId: string }) => {
@@ -120,7 +123,7 @@ export function workspaceNotifys(tim: Tim) {
 
     //页面侧栏
     tim.only(SyncMessageUrl.pageItemOperate, (e, op) => {
-        PageItemOperateNotify(e as any,op);
+        PageItemOperateNotify(e as any, op);
     });
     //页面数据表格元数据
     tim.only(SyncMessageUrl.dateGridOperator, (e, op) => { });

@@ -357,6 +357,7 @@ push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:
 push('/view/browse', '{elementUrl:string,ws:LinkWs,wsId?:string}', '{list:any[],page:number,size:number,total:number}', ['get']);
 push(`/get/page/refs`, '{ws:LinkWs,wsId?:string,pageId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/row/block/sync/refs`, '{ws:LinkWs,wsId?:string,pageId?:string,operators:any[]}', 'SockResponse<{results:{ id: string, error?: string }[]}>', ['post'])
+push('/row/block/sync/refs/notify','{pageId?:string,operators:any[]}','void',['air']);
 push('/delete/page/ref','{ws:LinkWs,wsId?:string,id:string}','SockResponse<void>',['del']);
 push(`/interactive/emoji`, '{elementUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherId?:string,otherExists:boolean}>', ['patch'])
 push(`/user/interactives`, '{ws:LinkWs,wsId?:string,schemaId:string,ids:string[],es:string[]}', 'SockResponse<{list:Record<string,string[]>}>', ['get'])
