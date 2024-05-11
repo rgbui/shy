@@ -130,7 +130,7 @@ export async function createPageContent(store: PageViewStore) {
             page.on(PageDirective.back, async () => {
                 var r = surface.supervisor.elementUrls.findLast(g => g.elementUrl !== page.elementUrl && g.source == 'page');
                 if (r) {
-                    channel.air('/page/open', { elementUrl: r.elementUrl })
+                    channel.act('/page/open', { elementUrl: r.elementUrl })
                 }
             })
             page.on(PageDirective.mounted, async () => {
@@ -147,7 +147,6 @@ export async function createPageContent(store: PageViewStore) {
             else {
                 console.error('store.view.pageEl is null')
             }
-
         }
         else {
             var bound = Rect.fromEle(store.view.pageEl);

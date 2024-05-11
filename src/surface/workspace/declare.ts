@@ -1,4 +1,3 @@
-import { IconArguments } from "rich/extensions/icon/declare";
 
 export type PidType = 'master' | 'org' | 'guard' | 'tim' | "ws" | 'file' | 'api' | 'mail'
 

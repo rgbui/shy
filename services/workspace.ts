@@ -21,12 +21,12 @@ class WorkspaceService extends BaseService {
         var sock: Sock;
         var pids = this.wsPids.get(wsId);
         if (pids) {
-            sock = Workspace.getWsSock(pids, 'ws')
+            sock = Workspace.getWsSock(pids, 'ws', wsId)
         }
         else {
             var r = await masterSock.get('/ws/pids', { wsId });
             if (r?.ok) {
-                sock = Workspace.getWsSock(r.data.pids, 'ws')
+                sock = Workspace.getWsSock(r.data.pids, 'ws', wsId)
                 this.wsPids.set(wsId, r.data.pids)
             }
         }
@@ -74,7 +74,7 @@ class WorkspaceService extends BaseService {
     }
     @get('/ws/latest')
     async latestWs(args) {
-        return await masterSock.get('/ws/latest',args);
+        return await masterSock.get('/ws/latest', args);
     }
     @get('/ws/discovery')
     async discoveryWs(args) {

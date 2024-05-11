@@ -68,12 +68,13 @@ export class Supervisor extends Events {
     }
     async onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.slide?.elementUrl && config?.force !== true) return;
-        if (!elementUrl) this.slide = null;
+        if (!elementUrl) { PageViewStores.clearPageViewStore(this.slide); this.slide = null; }
         else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide', config)
         if (this.slide) {
             if (config?.wait === false) return;
             return new Promise((resolve, reject) => {
                 this.only('closeSlide', () => {
+                    PageViewStores.clearPageViewStore(this.slide);
                     this.slide = null;
                     resolve(true)
                 })
@@ -86,12 +87,13 @@ export class Supervisor extends Events {
      */
     async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl && elementUrl == this.dialog?.elementUrl && config?.force !== true) return;
-        if (!elementUrl) this.dialog = null;
+        if (!elementUrl) { PageViewStores.clearPageViewStore(this.dialog); this.dialog = null; }
         else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog', config);
         if (this.dialog) {
             if (config?.wait === false) return;
             return new Promise((resolve, reject) => {
                 this.only('closeDialog', () => {
+                    PageViewStores.clearPageViewStore(this.dialog);
                     this.dialog = null;
                     resolve(true)
                 })
@@ -113,15 +115,9 @@ export class Supervisor extends Events {
             this.dialog?.page.layout(bound);
         }
     }
-    isShowElementUrl(elementUrl: string) {
-        if (this.page?.elementUrl == elementUrl) return true;
-        if (this.slide?.elementUrl == elementUrl) return true;
-        if (this.dialog?.elementUrl == elementUrl) return true;
-        return false;
-    }
     closeDialogOrSlide() {
-        if (this.dialog) this.dialog = null;
-        if (this.slide) this.slide = null;
+        if (this.dialog) { PageViewStores.clearPageViewStore(this.dialog); this.dialog = null; }
+        if (this.slide) { PageViewStores.clearPageViewStore(this.slide); this.slide = null; }
     }
     openDialogOrSlideToPage() {
         var ele = this.dialog ? this.dialog.elementUrl : undefined;

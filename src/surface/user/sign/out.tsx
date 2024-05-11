@@ -5,6 +5,7 @@ import { User } from "../user";
 import { channel } from "rich/net/channel";
 import { S } from "rich/i18n/view";
 import { config } from "../../../../common/config";
+import { RemoveAllTims } from "../../../../net/primus/tim";
 
 export class LogOut extends React.Component {
     private isLogout: boolean = false;
@@ -12,9 +13,8 @@ export class LogOut extends React.Component {
         if (this.isLogout == false) {
             var r = await channel.get('/sign/out');
             if (r.ok) {
-                surface.user?.removeTim();
+                RemoveAllTims()
                 surface.user = new User();
-                surface.workspace?.removeTim()
                 if (window.shyConfig.isPro) {
                     if (config.isServerSide) {
                         surface.user.toSign();

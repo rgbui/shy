@@ -13,18 +13,16 @@ import { channel } from "rich/net/channel";
 import { surface } from "../app/store";
 import { AtomPermission, getCommonPerssions, getEditOwnPerssions } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
-import { UserAction } from "rich/src/history/action";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
-import { PageViewStores } from "../supervisor/view/store";
+
 import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 import { pageItemStore } from "../sln/item/store/sync";
 import { PageLayoutType, WorkspaceNavMenuItem } from "rich/src/page/declare";
 import { SockType } from "../../../net/sock/type";
 import { Pid, PidType } from "./declare";
-import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
+import { CreateTim, Tim, getWsTim } from "../../../net/primus/tim";
 import { workspaceNotifys } from "../../../services/tim";
-import { HttpMethod } from "../../../net/primus/http";
 import { buildPage } from "rich/src/page/common/create";
 import { getPageItemElementUrl } from "../sln/item/util";
 import { useTemplateView } from "rich/extensions/template";
@@ -44,6 +42,8 @@ import { useLazyOpenWorkspaceSettings } from "./settings/lazy";
 import { useOpenUserSettings } from "../user/settings/lazy";
 import { useImportFile } from "rich/extensions/Import-export/import-file/lazy";
 import { usePublishSite } from "./settings/publish/site";
+import { config } from "../../../common/config";
+import lodash from "lodash";
 
 export class Workspace {
     public id: string = null;
@@ -227,7 +227,7 @@ export class Workspace {
     private _sock: Sock;
     get sock() {
         if (this._sock) return this._sock;
-        return this._sock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'ws'), {
+        return this._sock = new Sock(SockType.workspace, Workspace.getWsSockUrl(this.pids, 'ws'), {
             'shy-sockId': this.tim?.id,
             'shy-wsId': this.id
         });
@@ -235,7 +235,7 @@ export class Workspace {
     private _filesock: Sock;
     get fileSock() {
         if (this._filesock) return this._filesock;
-        return this._filesock = new Sock(SockType.none, Workspace.getWsSockUrl(this.pids, 'ws'), {
+        return this._filesock = new Sock(SockType.workspace, Workspace.getWsSockUrl(this.pids, 'ws'), {
             'shy-sockId': this.tim.id,
             'shy-wsId': this.id
         });
@@ -409,17 +409,17 @@ export class Workspace {
         else if (x.at == y.at) return 0;
         else return -1;
     }
-    pageFSort = (x, y) => {
-        if (x.fat > y.fat) return 1;
-        else if (x.fat == y.fat) return 0;
-        else return -1;
-    }
-    async onNotifyViewOperater(data: UserAction) {
-        var pv = PageViewStores.getPageViewStore(data.elementUrl);
-        if (pv?.page) {
-            await pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
-        }
-    }
+    // pageFSort = (x, y) => {
+    //     if (x.fat > y.fat) return 1;
+    //     else if (x.fat == y.fat) return 0;
+    //     else return -1;
+    // }
+    // async onNotifyViewOperater(data: UserAction) {
+    //     var pv = PageViewStores.getPageViewStore(data.elementUrl);
+    //     if (pv?.page) {
+    //         await pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
+    //     }
+    // }
     async onCreateInvite(isCopy?: boolean, force?: boolean) {
         if (force == true || !this.invite) {
             var r = await channel.put('/ws/invite/create');
@@ -525,54 +525,66 @@ export class Workspace {
         this.tim = await CreateTim(this.dataServiceNumber || 'shy', Workspace.getWsSockUrl(this.pids, 'tim'));
         workspaceNotifys(this.tim);
         var self = this;
-        this.tim.only('reconnected_workspace', async () => {
-            if (this.tim === surface.user.tim) return;
-            var data = await self.getTimHeads();
-            data.sockId = self.tim.id;
-            data.wsId = self.id;
-            data.userid = surface.user.id;
-            if (surface.supervisor?.page) {
-                data.viewUrl = surface.supervisor.page.elementUrl
-            }
-            await self.tim.syncSend(HttpMethod.post, '/sync', data);
-        })
-    }
-    async removeTim() {
-        await RemoveTim(this.dataServiceNumber || 'shy')
+        if (this.tim?.id !== surface.user?.tim?.id) {
+            this.tim.only('reconnected_workspace', async () => {
+                await self.tim.post('/sync', await self.getTimSyncData());
+            })
+        }
     }
     tim: Tim
     static getWsSockUrl(pids: Pid[], type: PidType) {
         return pids.filter(g => g.types.includes(type)).randomOf()?.url;
     }
-    static getWsSock(pids: Pid[], type: PidType) {
-        return Sock.createSock(this.getWsSockUrl(pids, type))
+    static getWsSock(pids: Pid[], type: PidType, wsId: string) {
+        var tim = getWsTim(wsId);
+        var h = {};
+        if (tim) h['shy-sockId'] = tim.id;
+        else {
+            if (config.isPro) {
+                if (pids.some(p => p.url.endsWith('.shy.live') || p.url.endsWith('.shy.red'))) {
+                    h['shy-sockId'] = surface.user.tim?.id;
+                }
+                else {
+
+                }
+            }
+            else h['shy-sockId'] = surface.user.tim?.id;
+        }
+        return Sock.createSock(this.getWsSockUrl(pids, type), SockType.workspace, {
+            'shy-wsId': wsId,
+            ...h
+        });
+
     }
-    async enterWorkspace() {
+    enterWorkspace = lodash.debounce(async () => {
         if (!surface.user.isSign) return;
-        var data = await this.getTimHeads();
+        await this.tim.post('/sync', await this.getTimSyncData());
+    }, 1200)
+
+    async exitWorkspace() {
+        if (!surface.user.isSign) return;
+        var data = await this.getTimSyncData();
+        data.sockId = this.tim.id;
+        delete data.wsId;
+        delete data.viewUrl;
+        await this.tim.post('/sync', data);
+    }
+    async getTimSyncData() {
+        var device = await sCache.get(CacheKey.device);
+        var token = await sCache.get(CacheKey.token);
+        var lang = await sCache.get(CacheKey.lang);
+        var data = {
+            device,
+            token,
+            lang
+        } as any;
         data.sockId = this.tim.id;
         data.wsId = this.id;
         data.userid = surface.user.id;
         if (surface.supervisor?.page) {
             data.viewUrl = surface.supervisor.page.elementUrl
         }
-        await this.tim.syncSend(HttpMethod.post, '/sync', data);
-    }
-    async exitWorkspace() {
-        if (!surface.user.isSign) return;
-        var data = await this.getTimHeads();
-        data.sockId = this.tim.id;
-        await this.tim.syncSend(HttpMethod.post, '/sync', data);
-    }
-    async getTimHeads() {
-        var device = await sCache.get(CacheKey.device);
-        var token = await sCache.get(CacheKey.token);
-        var lang = await sCache.get(CacheKey.lang);
-        return {
-            device,
-            token,
-            lang
-        } as any
+        return data;
     }
     async onImportFiles() {
         var r = await useImportFile();
@@ -589,7 +601,7 @@ export class Workspace {
             });
             if (rc) {
                 await pageItem.onSync(true);
-                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rc.data.item) })
+                channel.act('/page/open', { elementUrl: getPageItemElementUrl(rc.data.item) })
             }
         }
     }
@@ -609,7 +621,7 @@ export class Workspace {
             if (rr.ok) {
                 await pageItem.onSync(true)
                 console.log('rd', rr.data);
-                channel.air('/page/open', { elementUrl: getPageItemElementUrl(rr.data.item) })
+                channel.act('/page/open', { elementUrl: getPageItemElementUrl(rr.data.item) })
             }
         }
     }

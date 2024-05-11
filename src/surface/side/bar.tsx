@@ -427,13 +427,14 @@ export class SideBar extends React.Component {
                 onMouseDown={e => {
                     if (isMobileOnly) return;
                     UrlRoute.push(ShyUrl.me);
-                    surface.workspace.exitWorkspace();
+                    if (surface.workspace)
+                        surface.workspace.exitWorkspace();
                 }}>
                 <ToolTip placement="right" overlay={lst('私信')}><Icon icon={ShyLog} size={48}></Icon></ToolTip>
                 <DotNumber count={userChannelStore.unReadChatCount} ></DotNumber>
             </a>
             <div className="shy-sidebar-divider flex-fixed gap-b-6 "></div>
-            <div className="shy-sidebar-body flex-fixed flex flex-col  " style={{ maxHeight:window.shyConfig?.isWeb? 'calc(100% - 260px)':'calc(100% - 200px)' }}>
+            <div className="shy-sidebar-body flex-fixed flex flex-col  " style={{ maxHeight: window.shyConfig?.isWeb ? 'calc(100% - 260px)' : 'calc(100% - 200px)' }}>
                 {surface.temporaryWs && <ToolTip key={surface.temporaryWs.id} placement="right" overlay={surface.temporaryWs.text}><div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws size-48 flex-center gap-12 ' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{this.renderWs(surface.temporaryWs)}</div></ToolTip>}
                 {this.renderWss()}
             </div>

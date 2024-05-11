@@ -64,7 +64,7 @@ export var SlnView = observer(function () {
                     return <div key={item.id} onMouseDown={e => {
                         local.word = '';
                         if (local.input) local.input.updateValue('');
-                        channel.air('/page/open', { item: item })
+                        channel.act('/page/open', { item: item })
                     }} className="flex gap-h-5 padding-h-5 padding-w-10 round item-hover">
                         <span className="flex-fixed flex-center"><Icon size={18} icon={getPageIcon(item)}></Icon></span>
                         <span className="flex-auto gap-l-5">{getPageText(item)}</span>

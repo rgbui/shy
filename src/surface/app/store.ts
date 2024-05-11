@@ -113,80 +113,72 @@ export class Surface extends Events {
     async onLoadWorkspace(name: string, autoLoadPage = true) {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
-            if (typeof name == 'undefined') {
-                if (this.workspace) {
-                    await this.workspace.exitWorkspace()
+            if (name) {
+                var r = await channel.get('/ws/query', { name });
+                if (r?.data.workspace) {
+                    var ws = new Workspace();
+                    ws.load({ ...r.data.workspace });
+                    if (Array.isArray(r.data.pids)) {
+                        ws.pids = r.data.pids;
+                    }
+                    wss.setWsPids(ws.id, ws.pids);
+                    var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
+                    if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
+                    else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
+                    var g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                    if (g.data.accessForbidden) {
+                        this.accessPage = 'forbidden';
+                        return
+                    }
+                    if (g.data.workspace) {
+                        ws.load({ ...g.data.workspace });
+                    }
+                    if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
+                    ws.roles = g.data.roles || [];
+                    ws.member = g.data.member || null;
+                    var robotIds = (g.data.robotIds || []) as string[];
+                    var willPageItem = g.data.page as PageItem;
+                    if (ws.access == 0
+                        &&
+                        !ws.member
+                        &&
+                        willPageItem
+                    ) {
+                        this.accessPage = 'accessPage';
+                        ws.load({ childs: [willPageItem] })
+                    }
+                    else {
+                        this.accessPage = 'accessWorkspace';
+                        await ws.onLoadPages();
+                    }
+                    if (surface.user.isSign) await ws.createTim();
+                    await sCache.set(CacheKey.wsHost, ws.sn);
+                    runInAction(() => {
+                        if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
+                        else this.temporaryWs = null;
+                        this.workspace = ws;
+                    })
+                    if (autoLoadPage) {
+                        await this.willOpenPage();
+                    }
+                    this.workspace.loadWsRobots(robotIds);
+                    return;
                 }
-                return this.workspace = null;
             }
-            // 
-            var r = await channel.get('/ws/query', { name });
-            if (r?.data.workspace) {
-                var ws = new Workspace();
-                ws.load({ ...r.data.workspace });
-                if (Array.isArray(r.data.pids)) {
-                    ws.pids = r.data.pids;
-                }
-                wss.setWsPids(ws.id, ws.pids);
-                var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
-                if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
-                else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
-                var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
-                if (g.data.accessForbidden) {
-                    this.accessPage = 'forbidden';
-                    return
-                }
-                if (g.data.workspace) {
-                    ws.load({ ...g.data.workspace });
-                }
-                if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
-                ws.roles = g.data.roles || [];
-                ws.member = g.data.member || null;
-                var robotIds = (g.data.robotIds || []) as string[];
-                var willPageItem = g.data.page as PageItem;
-                if (ws.access == 0
-                    &&
-                    !ws.member
-                    &&
-                    willPageItem
-                ) {
-                    this.accessPage = 'accessPage';
-                    ws.load({ childs: [willPageItem] })
-                }
-                else {
-                    this.accessPage = 'accessWorkspace';
-                    await ws.onLoadPages();
-                }
-                if (surface.user.isSign) await ws.createTim();
-                await sCache.set(CacheKey.wsHost, ws.sn);
-                if (this.workspace) {
-                    await this.workspace.exitWorkspace()
-                }
-                runInAction(() => {
-                    if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
-                    else this.temporaryWs = null;
-                    this.workspace = ws;
-                })
-                if (autoLoadPage) {
-                    await this.willOpenPage();
-                }
-                this.workspace.loadWsRobots(robotIds);
+            if (this.workspace) {
+                await this.workspace.exitWorkspace()
             }
-            else {
-                if (this.workspace) {
-                    await this.workspace.exitWorkspace()
-                }
-                this.workspace = null;
-                if (window.shyConfig.isDesk) {
-                    UrlRoute.push(ShyUrl.signIn);
-                }
-                else if (window.shyConfig.isPro) {
-                    if (location.host == UrlRoute.getHost()) UrlRoute.push(ShyUrl.root);
-                    else location.href = UrlRoute.getUrl();
-                }
-                else if (window.shyConfig.isDev)
-                    UrlRoute.push(ShyUrl.home);
+            this.workspace = null;
+            if (window.shyConfig.isDesk) {
+                UrlRoute.push(ShyUrl.signIn);
             }
+            else if (window.shyConfig.isPro) {
+                if (location.host == UrlRoute.getHost()) UrlRoute.push(ShyUrl.root);
+                else location.href = UrlRoute.getUrl();
+            }
+            else if (window.shyConfig.isDev)
+                UrlRoute.push(ShyUrl.home);
+
         }
         catch (ex) {
             console.error(ex)
@@ -196,11 +188,11 @@ export class Surface extends Events {
         if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
             var ul = new URL(location.href);
             var url = ul.searchParams.get('url');
-            channel.air('/page/open', { elementUrl: url })
+            channel.act('/page/open', { elementUrl: url })
         }
         else {
             var page = await surface.workspace.getDefaultPage();
-            channel.air('/page/open', { item: page });
+            channel.act('/page/open', { item: page });
         }
     }
     async exitWorkspace() {
@@ -248,7 +240,7 @@ export class Surface extends Events {
                     od.randomOnlineUsers.delete(surface.user.id);
                 if (od) od.memberOnlineCount = (od.memberOnlineCount || 0) - 1;
             })
-            await PageViewStores.clearPageViewStore()
+            await PageViewStores.clearAllPageViewStore()
             await this.onLoadWorkspace(workspace.id);
             runInAction(() => {
                 var od = surface.wss.find(c => c.id == workspace.id);
@@ -345,7 +337,7 @@ export class Surface extends Events {
                 if (json.name) {
                     if (json.name == 'openPageByTemplate') {
                         var data: PageTemplateType = json.data;
-                        channel.air('/page/open', { elementUrl: getElementUrl(ElementType.PageItem, data.sourcePageId) })
+                        channel.act('/page/open', { elementUrl: getElementUrl(ElementType.PageItem, data.sourcePageId) })
                     }
                 }
             }

@@ -91,11 +91,10 @@ export class PageViewStore extends Events {
             PageViewStores.createPageViewStore(this.elementUrl, this.source, this.config);
         }
     }
-    async clear() {
-
-    }
     onDestroy() {
-
+        if (this.page) {
+            this.page.destory()
+        }
     }
 }
 
@@ -141,11 +140,21 @@ export class PageViewStores {
             if (r) return r;
         }
     }
-    static async clearPageViewStore() {
+    static async clearAllPageViewStore() {
         for (var [k, v] of this.stores) {
-            await v.clear()
+            for (var i = 0; i < v.length; i++) {
+                v[i].onDestroy();
+            }
         }
         this.stores.clear();
+    }
+    static async clearPageViewStore(store: PageViewStore) {
+        if(!store) return;
+        var s = this.stores.get(store.elementUrl);
+        if (Array.isArray(s)) {
+            store.onDestroy();
+            lodash.remove(s, g => g == store)
+        }
     }
 }
 

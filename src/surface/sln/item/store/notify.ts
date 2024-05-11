@@ -3,6 +3,7 @@ import { runInAction } from "mobx";
 import { PageItem } from "..";
 import { surface } from "../../../app/store";
 import { ItemOperator, ItemOperatorDirective, PageItemAction } from "./sync";
+import { channel } from "rich/net/channel";
 
 export function PageItemOperateNotify(e: {
     actions: any[],
@@ -10,7 +11,7 @@ export function PageItemOperateNotify(e: {
         operate: ItemOperator,
         actions: PageItemAction[]
     }
-}) {
+}, options?: { locationId?: string | number, sockId?: string }) {
     if (!surface.workspace) return;
     runInAction(() => {
         switch (e.operate.operate) {
@@ -79,6 +80,7 @@ export function PageItemOperateNotify(e: {
                         surface.sln.onDeleteRefocusItem(item);
                     }
                 }
+                channel.fire('/page/remove', { item: pageId }, options)
                 break;
             case ItemOperator.update:
                 var action = e.operate.actions[0];
@@ -91,6 +93,10 @@ export function PageItemOperateNotify(e: {
                         if (item.parent) {
                             item.parent.childs.sort(surface.workspace.pageSort);
                         }
+                        channel.fire('/page/update/info', {
+                            elementUrl: item.elementUrl,
+                            pageInfo: data
+                        }, options)
                     }
                 }
                 break;

@@ -69,7 +69,7 @@ export class RobotChat extends React.Component<{ robot: RobotInfo, close: () => 
         elementUrl: string;
     }, blockId?: string) {
         if (!blockId) blockId = page.blockIds[0];
-        channel.air('/page/open', { elementUrl: page.elementUrl, config: { force: true, blockId: blockId } })
+        channel.act('/page/open', { elementUrl: page.elementUrl, config: { force: true, blockId: blockId } })
         // this.emit('close');
         if (this.props.close) this.props.close();
     }

@@ -24,8 +24,6 @@ import { RobotInfo } from "rich/types/user";
 import { useOpenRobotSettings } from "../workspace/robot/view";
 
 import { userChannelStore } from "../user/channel/store";
-import { KeyboardCode } from "rich/src/common/keys";
-import { useSearchBox } from "rich/extensions/search/keyword";
 import { useLazyOpenWorkspaceSettings } from "../workspace/settings/lazy";
 import { useOpenUserSettings } from "../user/settings/lazy";
 
@@ -53,11 +51,11 @@ class MessageCenter {
         }
         return { users: new Set() }
     }
-    @air('/robot/open')
+    @act('/robot/open')
     async robotOpen(args: { robot: RobotInfo }) {
         await useOpenRobotSettings(args.robot);
     }
-    @air('/page/open')
+    @act('/page/open')
     async pageOpen(args: { item?: string | PageItem, elementUrl?: string, config?: { isTemplate?: boolean, blockId?: string, force?: boolean } }) {
         var { item, elementUrl } = args;
         if (item) {
@@ -121,11 +119,11 @@ class MessageCenter {
         }
         return { ok: true, data: { items } };
     }
-    @air('/page/dialog')
+    @act('/page/dialog')
     async pageDialog(args: { elementUrl: string, config?: { isTemplate?: boolean } }) {
         return await surface.supervisor.onOpenDialog(args.elementUrl, args.config);
     }
-    @air('/page/slide')
+    @act('/page/slide')
     async pageSlide(args: { elementUrl: string, config?: { isTemplate?: boolean } }) {
         return await surface.supervisor.onOpenSlide(args.elementUrl, args.config);
     }
@@ -421,7 +419,7 @@ class MessageCenter {
                     ws.pids = r.data.pids;
                 }
                 wss.setWsPids(ws.id, ws.pids);
-                var g = await Workspace.getWsSock(ws.pids, 'ws').get('/ws/access/info', { wsId: ws.id });
+                var g = await Workspace.getWsSock(ws.pids, 'ws',ws.id).get('/ws/access/info', { wsId: ws.id });
                 if (g.data.accessForbidden) {
                     return
                 }
@@ -448,7 +446,7 @@ class MessageCenter {
         }
     }
     @air('/page/update/info')
-    async pageUpdateInfo(args: { id?: string, elementUrl?: string, pageInfo: Partial<PageItem> }) {
+    async pageUpdateInfo(args: { id?: string, elementUrl?: string, pageInfo: Partial<PageItem> }, options: { locationId?: string | number }) {
         var itemId;
         if (args.id) {
             itemId = args.id;
@@ -466,9 +464,9 @@ class MessageCenter {
                 item.onUpdateDocument();
             }
         }
-        channel.fire('/page/update/info', args as any);
+        channel.fire('/page/update/info', args as any, options);
     }
-    @air('/page/notify/toggle')
+    @act('/page/notify/toggle')
     async pageNotifyToggle(args: { id: string, visible: boolean }) {
         await yCache.set(
             yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], surface.workspace.id),

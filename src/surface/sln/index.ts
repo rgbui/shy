@@ -40,9 +40,9 @@ export class Sln extends Events {
     async onMousedownItem(item: PageItem, event: MouseEvent)
     {
         if (surface.keyboardPlate.isAlt() && surface.keyboardPlate.isKeydown) {
-            var page: Page = await channel.air('/page/slide', { elementUrl: item.elementUrl })
+            var page: Page = await channel.act('/page/slide', { elementUrl: item.elementUrl })
             if (page) {
-                await channel.air('/page/slide', { elementUrl: null });
+                await channel.act('/page/slide', { elementUrl: null });
             }
             return;
         }
@@ -95,7 +95,7 @@ export class Sln extends Events {
                             }
                         }
                         else {
-                            if ([Mime.page, Mime.table].includes(item.mime)) channel.air('/page/open', { item });
+                            if ([Mime.page, Mime.table].includes(item.mime)) channel.act('/page/open', { item });
                         }
                     }
                     catch (ex) {
@@ -114,11 +114,11 @@ export class Sln extends Events {
             if ([
                 Mime.page,
                 Mime.table
-            ].includes(item.mime)) channel.air('/page/open', { item });
+            ].includes(item.mime)) channel.act('/page/open', { item });
         }
     }
     async onOpenItem(item: PageItem) {
-        await channel.air('/page/open', { item });
+        await channel.act('/page/open', { item });
     }
     onFocusItem(item?: PageItem) {
         if (item && this.selectIds.length == 1 && this.selectIds[0] == item.id) {
@@ -135,7 +135,7 @@ export class Sln extends Events {
         if (this.selectIds && this.selectIds.some(s => s == item.id)) {
             var r = surface.workspace.childs.arrayJsonFindMax('childs', x => x.selectedDate || 0);
             if (r) {
-                channel.air('/page/open', { item: r });
+                channel.act('/page/open', { item: r });
             }
         }
     }

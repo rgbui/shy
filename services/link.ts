@@ -1,7 +1,7 @@
-import { get, post, put } from "rich/net/annotation";
+import { del, get, post, put } from "rich/net/annotation";
 import { BaseService } from "./common/base";
 import { surface } from "../src/surface/app/store";
-import {  masterSock } from "../net/sock";
+import { masterSock } from "../net/sock";
 import { wss } from "./workspace";
 
 class PageService extends BaseService {
@@ -11,6 +11,12 @@ class PageService extends BaseService {
         if (!args) args = {}
         var sock = await wss.getArgsSock(args);
         return sock.post('/row/block/sync/refs', { ...args });
+    }
+    @del('/delete/page/ref')
+    async deletePageRef(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.delete('/delete/page/ref', { ...args });
     }
 
     @get('/get/page/refs')

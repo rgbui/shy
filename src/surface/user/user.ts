@@ -5,8 +5,7 @@ import { channel } from "rich/net/channel";
 import { UserStatus } from "rich/types/user";
 import { util } from "rich/util/util";
 import { sCache, CacheKey } from "../../../net/cache";
-import { HttpMethod } from "../../../net/primus/http";
-import { CreateTim, RemoveTim, Tim } from "../../../net/primus/tim";
+import { CreateTim, Tim } from "../../../net/primus/tim";
 import { masterSock } from "../../../net/sock";
 import { userTimNotify } from "../../../services/tim";
 import { UrlRoute, ShyUrl, SyHistory } from "../../history";
@@ -123,7 +122,7 @@ export class User {
             var self = this;
             var data = await this.getTimHeads();
             data.sockId = this.tim.id;
-            await this.tim.syncSend(HttpMethod.post, '/sync', data);
+            await this.tim.post('/sync', data);
             this.tim.only('reconnected', async () => {
                 var data = await self.getTimHeads();
                 data.sockId = self.tim.id;
@@ -131,16 +130,12 @@ export class User {
                     data.wsId = surface.workspace.id;
                     if (surface.supervisor?.page) {
                         data.viewUrl = surface.supervisor.page.elementUrl;
-                        data.viewEdit = surface.supervisor.page?.page?.isCanEdit || false;
                     }
                 }
-                self.tim.syncSend(HttpMethod.post, '/sync', data);
+                self.tim.post('/sync', data);
             })
             userTimNotify(this.tim);
         }
-    }
-    async removeTim() {
-        await RemoveTim('shy')
     }
     async getTimHeads() {
         var device = await sCache.get(CacheKey.device);

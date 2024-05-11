@@ -34,8 +34,8 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                 var wsName = '1'
                 if (window.shyConfig.isDev) wsName = '34';
                 var ws = await channel.get('/ws/query', { name: wsName });
-                wss.setWsPids(ws.data.workspace.id,ws.data.pids);
-                var sock = Workspace.getWsSock(ws.data.pids, 'ws')
+                wss.setWsPids(ws.data.workspace.id, ws.data.pids);
+                var sock = Workspace.getWsSock(ws.data.pids, 'ws', ws.data.workspace.id)
                 await channel.put('/user/join/ws', { wsId: ws.data.workspace.id });
                 await channel.put('/ws/invite/join', { wsId: ws.data.workspace.id, username: surface.user.name, sock, agree: false });
                 await channel.patch('/user/patch', { data: { isAutoCreateWorkspace: true } });

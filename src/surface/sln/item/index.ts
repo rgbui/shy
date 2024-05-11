@@ -230,7 +230,7 @@ export class PageItem {
                 return false;
             })
         }
-        channel.air('/page/notify/toggle', { id: this.id, visible: this.spread });
+        channel.act('/page/notify/toggle', { id: this.id, visible: this.spread });
     }
     async getSubItems() {
         if (!this.checkedHasChilds) {
@@ -521,9 +521,9 @@ export class PageItem {
                 ShyAlert(lst('访问链接已复制'))
                 break;
             case 'openRight':
-                var page: Page = await channel.air('/page/slide', { elementUrl: this.elementUrl })
+                var page: Page = await channel.act('/page/slide', { elementUrl: this.elementUrl })
                 if (page) {
-                    await channel.air('/page/slide', { elementUrl: null });
+                    await channel.act('/page/slide', { elementUrl: null });
                 }
                 break;
             case 'move':

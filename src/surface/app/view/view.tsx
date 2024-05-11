@@ -21,11 +21,11 @@ export var SurfacePage = observer((props: { pathname: string }) => {
                 if (UrlRoute.isMatch(ShyUrl.wsResource) || UrlRoute.isMatch(ShyUrl.resource)) {
                     var ul = new URL(location.href);
                     var url = ul.searchParams.get('url');
-                    channel.air('/page/open', { elementUrl: url })
+                    channel.act('/page/open', { elementUrl: url })
                 }
                 else {
                     var page = await surface.workspace.getDefaultPage();
-                    channel.air('/page/open', { item: page });
+                    channel.act('/page/open', { item: page });
                 }
             }
         }
