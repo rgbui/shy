@@ -46,10 +46,10 @@ function build(fileName) {
         if (p.methods.some(s => ['get', 'patch', 'put', 'del', 'post'].includes(s))) var isHttp = true;
         if (p.methods.includes('await')) isAsync = true;
         if (!isHttp && !p.methods.includes('query') && !p.methods.includes('act') || p.methods.includes('air')) {
-            syncs.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
+            syncs.push(`"${p.url}":{args:(r:${getP(p.args)},options?:{locationId?:string|number,sockId?:string})=>${rt(p.returnType, isAsync)},returnType:void}`);
             onlys.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
             onces.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
-            offs.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
+            offs.push(`"${p.url}":{args:(r:${getP(p.args)},options?:{locationId?:string|number,sockId?:string})=>${rt(p.returnType, isAsync)},returnType:void}`);
             fires.push(`"${p.url}":{args:${getP(p.args)},returnType:${rt(p.returnType, isAsync)}}`);
         }
         if (isHttp) isAsync = true;
@@ -150,10 +150,10 @@ push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageIte
 push('/page/query/info', `{ ws?: LinkWs,sn?:number, id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/query/parents', `{ ws?: LinkWs, id?: string,sn?:number}`, `SockResponse<{items:LinkPageItem[]}>`, ['get']);
 push(`/page/query/elementUrl`, `{ws?: LinkWs,elementUrl?:string}`, `LinkPageItem`, ['get']);
-push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}`, `void`, ['air']);
-push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['air']);
-push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['air']);
-push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'air']);
+push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}`, `void`, ['act']);
+push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['act']);
+push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['act']);
+push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'act']);
 push('/page/remove', '{item:string|{id:string}}', `void`, ['air']);
 push('/update/user', '{user: Record<string, any>}', 'void', ['air']);
 push('/query/current/user', '', 'UserBasic', ['query']);
@@ -223,7 +223,7 @@ push('/user/onlines', '{users:Set<string>}', 'void', ['air']);
 push('/user/view/onlines', '{viewUrl:string,users:Set<string>}', 'void', ['air']);
 push('/get/view/onlines', '{viewUrl:string}', '{users:Set<string>}', ['query']);
 push('/user/word/query', '{word:string}', 'SockResponse<{list:{id:string}[]}>', ['get']);
-push('/robot/open', '{robot:RobotInfo}', 'Promise<void>', ['air']);
+push('/robot/open', '{robot:RobotInfo}', 'Promise<void>', ['act']);
 push('/sync/wiki/doc', '{wsId?:string,elementUrl:string,pageText:string,robotId:string,contents:{id:string,content:string}[]}', 'SockResponse<{doc:{id:string}}>', ['put']);
 push('/robot/doc/embedding', '{id:string}', 'SockResponse<{totalCount:number}>', ['post'])
 push('/friend/join', '{userid?:string,sn?:number}', 'SockResponse<{exists?:boolean,send?:boolean,refuse?:boolean,black?:boolean}>', ['put'])
@@ -292,7 +292,8 @@ push('/ws/channel/patch/notify', '{ workspaceId: string,roomId: string,content: 
 push('/ws/channel/deleted/notify', '{ workspaceId: string,id:string,roomId:string}', 'void', ['air']);
 push('/ws/channel/emoji/notify', '{workspaceId: string,id: string,roomId: string,emoji:{ emojiId: string, code?: string }}', 'void', ['air']);
 push('/ws/channel/abled/send', '{ws:LinkWs,wsId?:string,roomId:string}', 'SockResponse<{abled:boolean}>', ['get']);
-push('/ws/view/operate/notify', '{id:string,directive:number,operators:any[],elementUrl:string,workspaceId:string,userid:string}', 'void', ['air']);
+push('/ws/view/operate/notify', 'UserAction', 'void', ['air']);
+push('/ws/view/operates/notify', 'UserAction[]', 'void', ['air']);
 push('/ws/page/item/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/datagrid/schema/operate/notify', '{id:string,workspaceId:string,roomId:string}', 'void', ['air']);
 push('/ws/flow', '{ws:LinkWs,wsId?:string,flow:Record<string,any>}', 'SockResponse<{flow:Record<string,any>}>', ['put']);
@@ -356,7 +357,7 @@ push('/view/snap/rollup', '{id:string,elementUrl:string,wsId?:string,bakeTitle?:
 push('/view/browse', '{elementUrl:string,ws:LinkWs,wsId?:string}', '{list:any[],page:number,size:number,total:number}', ['get']);
 push(`/get/page/refs`, '{ws:LinkWs,wsId?:string,pageId:string,size?:number,desc?:boolean}', 'SockResponse<{pages:LinkPageItem[],list:any[],total:number,size:number,page:number}>', ['get'])
 push(`/row/block/sync/refs`, '{ws:LinkWs,wsId?:string,pageId?:string,operators:any[]}', 'SockResponse<{results:{ id: string, error?: string }[]}>', ['post'])
-
+push('/delete/page/ref','{ws:LinkWs,wsId?:string,id:string}','SockResponse<void>',['del']);
 push(`/interactive/emoji`, '{elementUrl:string,fieldName:string}', 'SockResponse<{count:number,exists:boolean,otherCount?:number,otherId?:string,otherExists:boolean}>', ['patch'])
 push(`/user/interactives`, '{ws:LinkWs,wsId?:string,schemaId:string,ids:string[],es:string[]}', 'SockResponse<{list:Record<string,string[]>}>', ['get'])
 

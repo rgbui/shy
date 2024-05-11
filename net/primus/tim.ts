@@ -37,7 +37,7 @@ export class Tim {
 
                     for (let i = 0; i < ses.length; i++) {
                         try {
-                            ses[i].fn(d);
+                            ses[i].fn(d, json);
                         }
                         catch (ex) {
 
@@ -123,7 +123,7 @@ export class Tim {
                         se.isTimeOut = true;
                     }
                     this.sendEvents.remove(g => g.id == id);
-                    reject(new Error('response time out'))
+                    reject(new Error('response tim time out'))
                 }, 2e3) as any
             });
             if (data) GenreConsistency.transform(data);
@@ -214,51 +214,69 @@ export class Tim {
         });
         return url;
     }
-    private events: { url: string, fn: (...args: any[]) => void }[] = [];
-    on(url: string, fn: (...args: any[]) => void) {
+    private events: { url: string, fn: (args: Record<string, any>, options: { sockId: string }) => void }[] = [];
+    on(url: string, fn: (args: Record<string, any>, options: { sockId: string }) => void) {
         this.events.push({ url, fn });
     }
-    only(url: string, fn: (...args: any[]) => void) {
+    only(url: string, fn: (args: Record<string, any>, options: { sockId: string }) => void) {
         var ev = this.events.find(ev => ev.url == url);
         if (ev) ev.fn = fn;
         else this.events.push({ url, fn })
     }
-    off(url: string, fn?: (...args: any[]) => void) {
+    off(url: string, fn?: (args: Record<string, any>, options: { sockId: string }) => void) {
         if (typeof fn == 'function') this.events.removeAll(e => e.url == url && e.fn == fn);
         else this.events.removeAll(e => e.url == url);
     }
-    async emit(url: string, ...args: any[]) {
+    async emit(url: string, args?: Record<string, any>, options?: { sockId?: string }) {
         var ev = this.events.findAll(c => c.url == url);
         for (let i = 0; i < ev.length; i++) {
-            await ev[i].fn.apply(this, args);
+            await ev[i].fn.apply(this, [args, options]);
         }
     }
 }
 
 
 var timPool = new Map<string, Tim>();
+var wsTim: Map<string, Tim> = new Map();
 /**
  * 
  * @param serverNumber 服务号 相同的服务号，表示会提供相同的tim服务，tim开销比较大，能重用就重用呗
  * @param url 
  * @returns 
  */
-export async function CreateTim(serverNumber: string, url: string) {
+export async function CreateTim(serverNumber: string, url: string, wsId?: string) {
     var tp = timPool.get(serverNumber);
-    if (tp) return tp;
+    if (tp) { if (wsId) wsTim.set(wsId, tim); return tp; }
     else {
         var tim = new Tim();
         timPool.set(serverNumber, tim);
         await tim.load(url);
+        if (wsId) wsTim.set(wsId, tim);
         return tim;
     }
 }
-export async function RemoveTim(serverNumber: string) {
+
+export function getWsTim(wsId: string) {
+    return wsTim.get(wsId);
+}
+export function RemoveTim(serverNumber: string) {
     var tp = timPool.get(serverNumber);
     if (tp) {
         tp.close();
         timPool.delete(serverNumber);
     }
+}
+
+export function RemoveAllTims() {
+    for (let tp of timPool.values()) {
+        try {
+            tp.close();
+        }
+        catch (ex) {
+            console.error('remove tim error', ex)
+        }
+    }
+    timPool.clear();
 }
 
 

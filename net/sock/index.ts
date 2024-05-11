@@ -5,9 +5,18 @@ import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "./genre";
 import { surface } from "../../src/surface/app/store";
 
-export class Sock {
 
-    constructor(private type: SockType, private remoteUrl?: string, private headers?: Record<string, any>) { }
+
+export class Sock {
+    private wsId: string;
+    private remoteUrl: string;
+    private type: SockType;
+    private headers?: Record<string, any>;
+    constructor(type: SockType, remoteUrl?: string, header?: Record<string, any>,) {
+        this.type = type;
+        this.remoteUrl = remoteUrl;
+        this.headers = header;
+    }
     async baseUrl() {
         if (this.remoteUrl) return this.remoteUrl;
         switch (this.type) {
@@ -33,11 +42,13 @@ export class Sock {
         headers['shy-device'] = device || 'anonymous';
         if (token) headers['shy-token'] = token;
         if (lang) headers['shy-lang'] = lang;
-        if (this.type == SockType.master) {
+        if (this.type == SockType.master || this.type == SockType.api || this.type == SockType.file) {
             if (surface.user?.tim) headers['shy-sockId'] = surface.user?.tim.id;
+            if (surface.workspace) headers['shy-wsId'] = surface.workspace.id;
         }
-        if (surface.workspace) headers['shy-wsId'] = surface.workspace.id;
-        if (typeof this.headers) Object.assign(headers, this.headers)
+        if (this.headers) {
+            headers = { ...headers, ...this.headers };
+        }
         return {
             headers: headers
         }
@@ -255,9 +266,10 @@ export class Sock {
         }
         return resolveUrl;
     }
-    static createSock(url: string) {
-        return new Sock(SockType.none, url);
+    static createSock(url: string, type: SockType = SockType.none, headers?: Record<string, any>) {
+        return new Sock(type, url, headers);
     }
+
 }
 
 /**
@@ -266,9 +278,11 @@ export class Sock {
 export var masterSock = new Sock(SockType.master);
 /**
  * 主要是用来上传文件
+ * 暂时弃用
  */
-export var fileSock = new Sock(SockType.file);
+// export var fileSock = new Sock(SockType.file);
 /**
  * 调用一些公共的api服务
+ * 暂时弃用
  */
-export var apiSock = new Sock(SockType.api);
+// export var apiSock = new Sock(SockType.api);

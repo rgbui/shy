@@ -1,11 +1,24 @@
 import { StatusCode } from "rich/net/status.code";
 
 export enum SockType {
+    /**
+     * 诗云服务器
+     */
     master,
-    workspace,
     file,
     api,
-    none
+
+
+    none,
+    /**
+     * 诗云工作区服务器（官方）
+     * 服务器（私有云）
+     */
+    workspace,
+    /**
+    *  本地服务器
+    */
+    local
 }
 
 /**

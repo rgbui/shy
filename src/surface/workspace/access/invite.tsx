@@ -66,7 +66,7 @@ export var InviteView = observer(function () {
             if (!rg) return;
             agree = true;
         }
-        var sock = Workspace.getWsSock(local.pids, 'ws')
+        var sock = Workspace.getWsSock(local.pids, 'ws', local.ws.id)
         await channel.put('/user/join/ws', { wsId: local.ws.id });
         var r = await channel.put('/ws/invite/join', {
             wsId: local.ws.id,
