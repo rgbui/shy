@@ -34,6 +34,11 @@ export class Sock {
                 return urls.randomOf();
         }
     }
+    setHeaders(headers: Record<string, any>) {
+        if(headers){
+            this.headers=Object.assign(this.headers,headers);
+        }
+    }
     private async config() {
         var device = await sCache.get(CacheKey.device);
         var token = await sCache.get(CacheKey.token);

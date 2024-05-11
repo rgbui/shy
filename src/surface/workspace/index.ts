@@ -409,17 +409,6 @@ export class Workspace {
         else if (x.at == y.at) return 0;
         else return -1;
     }
-    // pageFSort = (x, y) => {
-    //     if (x.fat > y.fat) return 1;
-    //     else if (x.fat == y.fat) return 0;
-    //     else return -1;
-    // }
-    // async onNotifyViewOperater(data: UserAction) {
-    //     var pv = PageViewStores.getPageViewStore(data.elementUrl);
-    //     if (pv?.page) {
-    //         await pv?.page.onSyncUserActions([data], surface.supervisor.isShowElementUrl(data.elementUrl) ? 'notifyView' : 'notify')
-    //     }
-    // }
     async onCreateInvite(isCopy?: boolean, force?: boolean) {
         if (force == true || !this.invite) {
             var r = await channel.put('/ws/invite/create');
@@ -525,6 +514,12 @@ export class Workspace {
         this.tim = await CreateTim(this.dataServiceNumber || 'shy', Workspace.getWsSockUrl(this.pids, 'tim'));
         workspaceNotifys(this.tim);
         var self = this;
+        this.sock.setHeaders({
+            'shy-sockId': this.tim.id,
+        })
+        this.fileSock.setHeaders({
+            'shy-sockId': this.tim.id
+        })
         if (this.tim?.id !== surface.user?.tim?.id) {
             this.tim.only('reconnected_workspace', async () => {
                 await self.tim.post('/sync', await self.getTimSyncData());
