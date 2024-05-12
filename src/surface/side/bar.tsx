@@ -326,7 +326,7 @@ export class SideBar extends React.Component {
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
             else return <a className="shy-sidebar-ws-name  cursor  size-16 flex-center   relative">
-                <span style={{ fontSize: 6 }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
+                <span className="f-12" style={{ transform: 'scale(0.5)',whiteSpace:'nowrap' }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
         }
