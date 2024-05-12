@@ -17,6 +17,12 @@ export class Tim {
         this.url = url;
         this.id = window.shyConfig.guid();
         var Primus = await loadPrimus();
+        console.log('primus url', url);
+        if (window.shyConfig?.isDev) {
+            if (url.startsWith('http://localhost')) {
+                url = url.replace('http://localhost', 'http://10.102.63.48');
+            }
+        }
         var primus = new Primus(url, {
             // pingTimeout: 30000 * 4
         });

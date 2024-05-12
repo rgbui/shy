@@ -30,7 +30,10 @@ var isDev = mode == 'dev'
  */
 
 let port = 8081;
-let publicPath = `http://127.0.0.1:${port}/`;
+var ip = '127.0.0.1';
+ip = '10.102.63.48'
+var httpUrl = 'http://' + ip + ':';
+let publicPath = httpUrl + `${port}/`;
 if (mode == 'pro') {
     publicPath = `https://static.shy.live/`.replace('shy.live', isUs ? "shy.red" : "shy.live");
     if (!isUs) {
@@ -40,11 +43,11 @@ if (mode == 'pro') {
 else if (mode == 'beta') publicPath = `https://beta.shy.live/`;
 if (['desktop', 'server-side'].includes(platform) && ['pro', 'beta'].includes(mode)) publicPath = `shy://shy.live/`;
 
-var API_MASTER_URLS = ['http://127.0.0.1:8888'];
+var API_MASTER_URLS = [httpUrl + '8888'];
 if (mode == 'beta') API_MASTER_URLS = ['https://beta-b1.shy.live'];
 else if (mode == 'pro') API_MASTER_URLS = ['https://api-m1.shy.live', 'https://api-m2.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
-var FILE_URLS = ['http://127.0.0.1:8889']
+var FILE_URLS = [httpUrl + '8889']
 if (mode == 'beta') FILE_URLS = ['https://beta-b2.shy.live'];
 else if (mode == 'pro') FILE_URLS = [
     // 'https://api-s1.shy.live', 
@@ -53,7 +56,7 @@ else if (mode == 'pro') FILE_URLS = [
     'https://api-m2.shy.live'
 ].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
-var API_URLS = ['http://127.0.0.1:9000'];
+var API_URLS = [httpUrl + '9000'];
 if (mode == 'beta') API_URLS = ['https://beta-b2.shy.live'];
 else if (mode == 'pro') API_URLS = isUs ? FILE_URLS : ['https://api-s3.shy.live', 'https://api-s4.shy.live'].map(s => s.replace('shy.live', isUs ? "shy.red" : "shy.live"));
 
@@ -393,7 +396,7 @@ module.exports = {
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    filename:staticPrefix + "js/shy.nm.[id].[contenthash:8].js",
+                    filename: staticPrefix + "js/shy.nm.[id].[contenthash:8].js",
                     chunks: 'all',
                 },
                 default: {
@@ -414,7 +417,7 @@ if (isDev) {
         client: {
             progress: true,
         },
-        host: '127.0.0.1',
+        host: ip,
         compress: true,
         port: port,
         open: true,

@@ -28,6 +28,7 @@ export async function loadSuccessSend() {
     }
 }
 export async function iframeChannel(url: string, args?: any[]) {
+    if (!url) console.trace(url, args);
     return new Promise((resolve, reject) => {
         try {
             var id = util.guid();
@@ -49,17 +50,28 @@ export async function iframeChannel(url: string, args?: any[]) {
                 })
             }
             else {
+                var ti = 2e3;
+                /**
+                 * 当文档比较大的时候，
+                 * 发现读取db有点慢，所以这里设置一个比较大的时间
+                 */
+                if (url == 'dbStore') ti = 10e3;
                 events.push({
                     id,
+                    url,
+                    args,
+                    sended: false,
                     callback: (data) => {
                         resolve(data);
                     },
                     time: setTimeout(() => {
-                        reject('over time');
+
                         var ev = events.find(g => g.id == id);
+                        console.warn(ev, ev.url, ev.args, ev.sended)
+                        reject('iframe channel over time');
                         lodash.remove(events, g => g.id == id);
                         if (ev.time) { clearTimeout(ev.time); ev.time = null }
-                    }, 2e3)
+                    }, ti)
                 })
                 ifr.contentWindow.postMessage(JSON.stringify({ id, url, args: args || [] }), '*')
             }

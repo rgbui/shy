@@ -15,6 +15,11 @@ export class Sock {
     constructor(type: SockType, remoteUrl?: string, header?: Record<string, any>,) {
         this.type = type;
         this.remoteUrl = remoteUrl;
+        if (window.shyConfig.isDev) {
+            if (this.remoteUrl?.startsWith('http://localhost')) {
+                this.remoteUrl = this.remoteUrl.replace('http://localhost', 'http://10.102.63.48');
+            }
+        }
         this.headers = header;
     }
     async baseUrl() {
@@ -35,8 +40,8 @@ export class Sock {
         }
     }
     setHeaders(headers: Record<string, any>) {
-        if(headers){
-            this.headers=Object.assign(this.headers,headers);
+        if (headers) {
+            this.headers = Object.assign(this.headers, headers);
         }
     }
     private async config() {
