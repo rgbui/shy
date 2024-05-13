@@ -17,7 +17,7 @@ export class Sock {
         this.remoteUrl = remoteUrl;
         if (window.shyConfig.isDev) {
             if (this.remoteUrl?.startsWith('http://localhost')) {
-                this.remoteUrl = this.remoteUrl.replace('http://localhost', 'http://10.102.63.48');
+                this.remoteUrl = this.remoteUrl.replace('http://localhost',location.href.indexOf('10.102.63.48')>-1? 'http://10.102.63.48':"http://127.0.0.1");
             }
         }
         this.headers = header;

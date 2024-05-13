@@ -17,10 +17,9 @@ export class Tim {
         this.url = url;
         this.id = window.shyConfig.guid();
         var Primus = await loadPrimus();
-        console.log('primus url', url);
         if (window.shyConfig?.isDev) {
             if (url.startsWith('http://localhost')) {
-                url = url.replace('http://localhost', 'http://10.102.63.48');
+                url = url.replace('http://localhost',location.href.indexOf('10.102.63.48')>-1? 'http://10.102.63.48':"http://127.0.0.1");
             }
         }
         var primus = new Primus(url, {
