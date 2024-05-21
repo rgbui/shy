@@ -41,9 +41,9 @@ export function ProductView() {
         <div className="shy-site-block">
             <div>
                 <div className="padding-t-50">
-                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S text='知识社区协作生产力工具'>知识社区协作生产力工具</S></h1>
+                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S text='知识社区协作生产力工具'>一体化的知识协作工作台</S></h1>
                     <p className="flex-center remark text-center f-24">
-                        <Sp text='知识社区协作生产力工具-description'>以办公协作，结合沟通社交和Agent，为个人及团队提供<br />一站式社区协作平台，服务好自已的受众群体</Sp>
+                        <Sp text='知识社区协作生产力工具-description'>以知识管理、沟通互动、AI协作的方式，为个人及团队提供<br />一站式知识协作工作台，服务好自已的受众群体</Sp>
                     </p>
                     <p className="flex-center gap-h-10">
                         <a href="sign/in"
@@ -52,7 +52,7 @@ export function ProductView() {
                             <Icon icon={ArrowRightSvg}></Icon>
                         </a>
                     </p>
-                    <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">积累知识，沉淀关系，做自已的小生意，赚自已的小钱钱</S></p>
+                    <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">知识，不止于积累，更乐于交流和分享，服务好每一位粉丝</S></p>
                     <div className="gap-h-30 flex-center  relative">
                         <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src={UrlRoute.getUrl("static/img/pic.png")} />
                         <div className="pos site-mobile-pic">

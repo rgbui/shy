@@ -309,7 +309,9 @@ export class PageItem {
             nextItem.onOpenItem();
         }
     }
-    async onMove(el: HTMLElement) {
+    async onMove(el: HTMLElement)
+    {
+        
         var pos: PopoverPosition;
         if (el) pos = { roundArea: Rect.fromEle(el) }
         else pos = { center: true, centerTop: 100 };

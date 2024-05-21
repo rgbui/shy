@@ -39,18 +39,18 @@ export class Sln extends Events {
     }
     async onMousedownItem(item: PageItem, event: MouseEvent)
     {
-        if (surface.keyboardPlate.isAlt() && surface.keyboardPlate.isKeydown) {
-            var page: Page = await channel.act('/page/slide', { elementUrl: item.elementUrl })
-            if (page) {
-                await channel.act('/page/slide', { elementUrl: null });
-            }
-            return;
-        }
-        else if (surface.keyboardPlate.isMetaOrCtrl() && surface.keyboardPlate.isKeydown) {
-            surface.keyboardPlate.clear()
-            window.open(item.url)
-            return;
-        }
+        // if (surface.keyboardPlate.isAlt() && surface.keyboardPlate.isKeydown) {
+        //     var page: Page = await channel.act('/page/slide', { elementUrl: item.elementUrl })
+        //     if (page) {
+        //         await channel.act('/page/slide', { elementUrl: null });
+        //     }
+        //     return;
+        // }
+        // else if (surface.keyboardPlate.isMetaOrCtrl() && surface.keyboardPlate.isKeydown) {
+        //     surface.keyboardPlate.clear()
+        //     window.open(item.url)
+        //     return;
+        // }
         var self = this;
         if (item.isCanEdit) {
             MouseDragger<{ item: HTMLElement }>({

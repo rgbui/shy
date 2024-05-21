@@ -3,10 +3,11 @@ import { observer } from "mobx-react";
 import React from "react";
 import { channel } from "rich/net/channel";
 import { useSelectPayView } from "../../../../component/pay/select";
-import "./style.less";
+
 import { PricingPackage, PricingValue } from "../../../../../org/common/pricing";
-import { SiteFeatures } from "../../../../../org/common/feature";
 import { UrlRoute } from "../../../../history";
+import { EquityView } from "../../../../../org/common/equity";
+import "./style.less";
 
 @observer
 export class ShyFeature extends React.Component {
@@ -50,7 +51,7 @@ export class ShyFeature extends React.Component {
                 </div>
             </div>
             <div className="gap-t-100">
-                <SiteFeatures small></SiteFeatures>
+                <EquityView></EquityView>
             </div>
 
         </div>
