@@ -152,14 +152,14 @@ export class PublishSite extends EventsComponent {
                                     changeIcon(e, item)
                                 }} className="size-30 cursor flex-fixed round item-hover flex-center gap-r-5"><Icon size={16} icon={item.icon || NoneSvg}></Icon></span>
                             </Tip>
-                            <Input ref={e => self.refInput = e} className="flex-auto" value={item.text || lst('菜单项')}
+                            <Input ref={e => self.refInput = e} className="flex-auto" placeholder={lst('菜单项')} value={item.text }
                                 onChange={e => { item.text = e; }}></Input>
                         </div>
                     </div>
                         {deep > 0 && <div className="flex flex-top">
                             <label className="flex-fixed w-40 flex-end gap-r-5"><S>备注</S>:</label>
                             <div className="flex-auto flex">
-                                <Textarea style={{ maxHeight: 60 }} placeholder={lst('填写菜单项描述信息')} ref={e => self.refTextArea = e} value={item.remark}
+                                <Textarea style={{ maxHeight: 60 }} placeholder={lst('菜单项描述信息...')} ref={e => self.refTextArea = e} value={item.remark}
                                     onChange={e => {
                                         item.remark = e;
                                     }}></Textarea>
@@ -170,7 +170,7 @@ export class PublishSite extends EventsComponent {
                     {item.type == 'logo' &&
                         <><div className="flex">
                             <label className="flex-fixed w-40 flex-end gap-r-5"><S>名称</S>:</label>
-                            <Input ref={e => self.refInput = e} className="flex-auto" value={item.text || lst('菜单项')}
+                            <Input ref={e => self.refInput = e} className="flex-auto" placeholder={lst('菜单项')} value={item.text }
                                 onChange={e => { item.text = e; }}></Input>
                         </div>
                             <div className="flex">
