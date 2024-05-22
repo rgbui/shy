@@ -71,7 +71,7 @@ export class FooterView extends React.Component {
                 <h4><S>帮肋与支持</S></h4>
                 <a href={refShyPage('template')}><S>模板库</S></a>
                 <br />
-                <a href={refShyPage(config.isUS ? "community" : "org", config.isUS ? 3 : 4)}><S>博客</S></a>
+                <a href={refShyPage( "community", config.isUS ? 3 : 4)}><S>博客</S></a>
                 <br />
                 <a href={UrlRoute.getUrl('download')}><S>下载</S></a>
                 <br />
@@ -79,11 +79,11 @@ export class FooterView extends React.Component {
                 <br />
                 <a href={refShyPage('help')}><S>帮助中心</S></a>
                 <br />
-                <a href={refShyPage(config.isUS ? "community" : "org")}><S>云云社区</S></a>
+                <a href={refShyPage( "community" )}><S>云云社区</S></a>
                 <br />
-                <a href={refShyPage(config.isUS ? "community" : "org", config.isUS ? 3 : 4)}><S>问题反馈</S></a>
+                <a href={refShyPage( "community" , config.isUS ? 3 : 4)}><S>问题反馈</S></a>
                 <br />
-                <a href={refShyPage(config.isUS ? "community" : "org", config.isUS ? 3 : 4)}><S>更新日志</S></a>
+                <a href={refShyPage("community", config.isUS ? 3 : 4)}><S>更新日志</S></a>
                 <br />
             </div>
             {!config.isUS && <div>
