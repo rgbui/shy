@@ -419,7 +419,7 @@ class MessageCenter {
                     ws.pids = r.data.pids;
                 }
                 wss.setWsPids(ws.id, ws.pids);
-                var g = await Workspace.getWsSock(ws.pids, 'ws',ws.id).get('/ws/access/info', { wsId: ws.id });
+                var g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id });
                 if (g.data.accessForbidden) {
                     return
                 }
@@ -472,6 +472,13 @@ class MessageCenter {
             yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], surface.workspace.id),
             surface.workspace.getVisibleIds()
         );
+    }
+    @query('/page/recently/viewed')
+    async pageLately(args: { wsId: string }) {
+        if (!args?.wsId) args = { wsId: surface.workspace.id }
+        var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], args.wsId));
+        var items = surface.workspace.findAll(g => ids.includes(g.id));
+        return { items }
     }
     @query('/cache/get')
     async cacheGet(args: { key: string }) {

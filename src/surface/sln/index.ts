@@ -13,7 +13,7 @@ import { pageItemStore } from "./item/store/sync";
 import { channel } from "rich/net/channel";
 import { Mime } from "./declare";
 import { log } from "../../../common/log";
-import { Page } from "rich/src/page";
+
 
 export class Sln extends Events {
     constructor() {

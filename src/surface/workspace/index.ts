@@ -389,7 +389,7 @@ export class Workspace {
     }
     async onLoadPages() {
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], this.id));
-        var rr = await channel.get('/page/items', { ids, wsId: this.id, sock: this.sock, ws: undefined });
+        var rr = await channel.get('/page/ws/items', { ids, wsId: this.id, sock: this.sock, ws: undefined });
         if (rr) {
             if (Array.isArray(rr?.data?.list)) {
                 var pages = rr.data.list;

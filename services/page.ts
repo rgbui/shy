@@ -33,6 +33,12 @@ class PageService extends BaseService {
         var sock = await wss.getArgsSock(args);
         return await sock.get('/page/items', args);
     }
+    @get('/page/ws/items')
+    async pageWsItems(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/page/ws/items', args);
+    }
     @get('/page/item/subs')
     async pageItemSubs(args: Record<string, any>) {
         if (!args) args = {}
