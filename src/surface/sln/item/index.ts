@@ -9,7 +9,7 @@ import { Mime } from "../declare";
 import { computed, makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
-import { PageLayoutType, getPageIcon, getPageText } from "rich/src/page/declare";
+import { PageLayoutType, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
 import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, PlusAreaSvg, PlusSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
@@ -133,6 +133,15 @@ export class PageItem {
         if (this.parentId)
             return this.workspace.find(g => g.id == this.parentId);
     }
+    get parents() {
+        var rs: PageItem[] = [];
+        var pa = this.parent;
+        while (pa) {
+            rs.push(pa);
+            pa = pa.parent;
+        }
+        return rs;
+    }
     get prev() {
         var pa = this.parent;
         if (pa?.childs?.length > 0) {
@@ -207,6 +216,7 @@ export class PageItem {
             else break;
         }
     }
+
     async onSpread(spread?: boolean, spreadParent?: boolean) {
         var sp = typeof spread == 'boolean' ? !spread : this.spread;
         this.spread = sp == false ? true : false;
@@ -309,9 +319,8 @@ export class PageItem {
             nextItem.onOpenItem();
         }
     }
-    async onMove(el: HTMLElement)
-    {
-        
+    async onMove(el: HTMLElement) {
+
         var pos: PopoverPosition;
         if (el) pos = { roundArea: Rect.fromEle(el) }
         else pos = { center: true, centerTop: 100 };
