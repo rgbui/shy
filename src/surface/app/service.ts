@@ -478,6 +478,12 @@ class MessageCenter {
         if (!args?.wsId) args = { wsId: surface.workspace.id }
         var ids = await yCache.get(yCache.resolve(CacheKey[CacheKey.ws_toggle_pages], args.wsId));
         var items = surface.workspace.findAll(g => ids.includes(g.id));
+        items = items.map(g => {
+            if (g.mime == Mime.pages) {
+                return g.childs
+            }
+            else return g;
+        }).flat(3)
         return { items }
     }
     @query('/cache/get')
