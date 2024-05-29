@@ -30,8 +30,7 @@ var OrgMaps = {
     '/service_protocol': ServiceProtocol,
     '/privacy_protocol': PrivacyProtocol
 }
-export function App()
-{
+export function App() {
     async function bindEvents() {
         document.body.addEventListener('mousedown', e => {
             var c = (e.target as HTMLElement).closest('.shy-site-tab-items');
@@ -74,6 +73,36 @@ export function App()
             }
 
         })
+        const videos = document.querySelectorAll('[data-lazy]');
+
+        const videoObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    if (video instanceof HTMLVideoElement) {
+                        const source = video.querySelector('source');
+                        const src = source.getAttribute('data-src');
+                        if (src) {
+                            source.src = src;
+                            video.load();
+                            video.play();
+                        }
+                        else {
+                            video.play();
+                        }
+                    }
+                    else if (entry.target instanceof HTMLImageElement) {
+                        const img = entry.target;
+                        const src = img.getAttribute('data-src');
+                        img.src = src;
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        videos.forEach(video => videoObserver.observe(video));
+
     }
     React.useEffect(() => {
         bindEvents()

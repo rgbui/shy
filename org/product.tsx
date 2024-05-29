@@ -260,8 +260,10 @@ export function ProductView() {
                     </div>
                 </div>
                 <div className="w65  gap-l-30">
-                    <video className=" w100 obj-center" title="ai gen mp4" width="100%" height="56.25%"
-                        muted={true} loop={true} autoPlay={true} controls={false}
+                    <video data-lazy className=" w100 obj-center" title="ai gen mp4" width="100%" height="56.25%"
+                        muted={true} loop={true}
+                        // autoPlay={true} 
+                        controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
                     ><source
                             src="static/img/ai-gen.mp4"
@@ -275,8 +277,10 @@ export function ProductView() {
             <div className="padding-h-50 flex  flex-auto-mobile-wrap">
 
                 <div className="w65 ">
-                    <video title="ai gen mp4" className=" w100 obj-center" width="100%" height="56.25%"
-                        muted={true} loop={true} autoPlay={true} controls={false}
+                    <video data-lazy title="ai gen mp4" className=" w100 obj-center" width="100%" height="56.25%"
+                        muted={true} loop={true} 
+                        // autoPlay={true} 
+                        controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
                     ><source
                             src="static/img/ai-fix.mp4"
