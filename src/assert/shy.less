@@ -2,6 +2,7 @@ html,
 body {
     font-family         : 'gg sans', 'Microsoft YaHei New', 'Microsoft Yahei', 'Microsoft JhengHei', SimSun, Arial, sans-serif;
     font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
 }
 
 html {
@@ -9,6 +10,41 @@ html {
     padding  : 0px;
     font-size: 62.5%;
     overflow : hidden;
+}
+
+/*
+  5. 改善媒体默认值
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+    display  : block;
+    max-width: 100%;
+}
+
+/*
+    6. 移除内置表单排版样式
+  */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/*
+    7. 避免文本溢出
+  */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
 }
 
 @media (max-width: 991.98px) {
@@ -39,10 +75,10 @@ body {
 .shy-app {}
 
 a {
-    text-decoration: none;
+    text-decoration   : none;
     // color          : #e16259;
     // color          : #006ce7;
-    color:var(--text-link-color)
+    color             : var(--text-link-color)
 }
 
 p {
