@@ -140,7 +140,7 @@ export class UserSettingProfile extends React.Component {
                             {surface.user.cover?.url && <img className="obj-center" style={{ height: 120, display: 'block' }} src={autoImageUrl(surface.user.cover?.url, 500)} />}
                         </div>
                         <div className='shy-settings-user-avatar' style={{ top: surface.user.cover?.url ? 120 : 60 }}>
-                            {surface.user?.avatar && <img className="obj-center" src={autoImageUrl(surface.user.avatar.url, 50)} />}
+                            {surface.user?.avatar && <img className="obj-center" src={autoImageUrl(surface.user.avatar.url, 120)} />}
                             {!surface.user?.avatar && <span>{(surface.user.name || "").slice(0, 1)}</span>}
                         </div>
                         <div className="shy-user-settings-profile-box-card-content">

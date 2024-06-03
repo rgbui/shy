@@ -183,7 +183,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <div className='flex'>
                     <span className='bold f-14'><S>工作空间名称</S></span>
                     <span className='flex-fixed gap-l-3'>
-                        <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/55#oY9yENNWGdm6A49jnG4uqV" : "https://help.shy.live/page/249"}><S>了解什么是工作空间</S></HelpText>
+                        <HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/55#oY9yENNWGdm6A49jnG4uqV" : "https://help.shy.live/page/2085#7kdsRwFyGaoeSu8uwrq33U"}><S>了解什么是工作空间</S></HelpText>
                     </span>
                 </div>
                 <div className='remark f-12 gap-b-10 gap-t-5'><S>修改空间名称</S></div>
