@@ -61,7 +61,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
             expireTime: null,
             sign: null
         }
-    renderInputEmail() {
+    renderInputAccount() {
         var local = this.local;
         async function checkInputEmail() {
             local.button.loading = true;
@@ -100,7 +100,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                     name={'email'}
                     onEnter={e => checkInputEmail()}
                     onChange={e => local.account = e}
-                    placeholder={lst('请输入您的邮箱或手机号')}></Input>
+                    placeholder={'邮箱或手机号...'}></Input>
             </div>
             <div className='shy-login-box-button'>
                 <Button tag='button' ref={e => local.button = e} size='larger' block onClick={(e, b) => checkInputEmail()}><S>继续</S></Button >
@@ -227,7 +227,13 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 <Button tag='button' ref={e => local.button = e} size='larger' block onClick={(e, b) => login(b)}><S>登录</S></Button >
             </div>
             <div className="shy-login-box-type">
-                <span><S>您也可以使用</S><a onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? lst("密码登录") : lst("手机或邮箱登录")}</a></span>
+                <div className="flex-fixed f-14 cursor" onMouseDown={e => {
+                    this.local.step = 'input';
+                }}>后退</div>
+                <div className="flex-auto">
+
+                </div>
+                <span className="flex-fixed f-14"><a style={{ textDecoration: 'underline' }} onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? "密码登录" : "手机短信或邮箱校验登录"}</a></span>
             </div>
         </div>
     }
@@ -352,18 +358,21 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
             await surface.user.createTim();
         }
         if (isRedict) {
-            if (typeof this.props.call == 'function') this.props.call()
-            else {
-                if (window.shyConfig.isServerSide) {
-                    return UrlRoute.push(ShyUrl.serverCenter)
-                }
-                var url = new URL(window.location.href);
-                var back = url.searchParams.get('back');
-                if (back) {
-                    location.href = back;
-                }
-                else return UrlRoute.push(ShyUrl.home);
+            this.redict();
+        }
+    }
+    redict() {
+        if (typeof this.props.call == 'function') this.props.call()
+        else {
+            if (window.shyConfig.isServerSide) {
+                return UrlRoute.push(ShyUrl.serverCenter)
             }
+            var url = new URL(window.location.href);
+            var back = url.searchParams.get('back');
+            if (back) {
+                location.href = back;
+            }
+            else return UrlRoute.push(ShyUrl.home);
         }
     }
     renderWx() {
@@ -399,7 +408,9 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
         }
         return <div>
             <WeixinOpen onChange={weixinOnChange}></WeixinOpen>
-            <div className="f-14 remark cursor flex-center" onMouseDown={e => this.local.step = 'input'}><S>帐号登录</S></div>
+            <div className="f-14 remark cursor flex-center">
+                <span className="round padding-w-10 h-30 flex-center cursor border-light item-hover" onMouseDown={e => this.local.step = 'input'}><S>帐号登录</S></span>
+            </div>
         </div>
     }
     renderSetName() {
@@ -462,7 +473,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 {local.step == 'login' && <span><S>登录</S>&nbsp;<S>诗云</S></span>}
                 {local.step == 'setName' && <span><S>完善个人信息</S></span>}
             </div>
-            {local.step == 'input' && this.renderInputEmail()}
+            {local.step == 'input' && this.renderInputAccount()}
             {local.step == 'wixin' && this.renderWx()}
             {local.step == 'login' && this.renderLogin()}
             {local.step == 'register' && this.renderRegister()}
@@ -473,6 +484,11 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
         if (this.local?.expireTime) {
             clearInterval(this.local.expireTime);
             this.local.expireTime = null;
+        }
+    }
+    componentDidMount(): void {
+        if (surface.user?.isSign) {
+            this.redict();
         }
     }
 }
