@@ -33,22 +33,14 @@ export function PriceView() {
             <DifferView></DifferView>
         </div>
 
-        {/* <div className="shy-site-block">
-            <div className="flex-center padding-t-100">
-                <img className="w-300" src='static/img/no-pa.svg' />
-            </div>
-        </div> */}
+      
 
         <UsedView></UsedView>
 
         <div className="shy-site-block">
             <EquityView></EquityView>
         </div>
-
-
-        {/* <div className="shy-site-block">
-            <QuestionView></QuestionView>
-        </div> */}
+       
 
         <div className="min-h-200"></div>
 

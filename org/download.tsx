@@ -3,13 +3,14 @@ import { Icon } from "rich/component/view/icon";
 import { S, Sp } from "rich/i18n/view";
 import { config } from "../common/config";
 import { SiteFeatures } from "./common/feature";
-export function DownloadView() {
+export function DownloadView()
+{
     return <div >
         <div className="shy-site-block">
             <div className="flex gap-h-20 gap-t-100 flex-center error h-40"><S text='更新频繁暂时不支持下载请使用Web版'>更新频繁，暂时不支持下载，请使用Web版</S></div>
             <div className="shy-site-download" style={{ paddingTop: 0 }}>
                 <div className="flex-center">
-                    <img className="w-300" src={config.isUS||true?"static/img/read-book.svg": 'static/img/s1.png'} />
+                    <img className="w-300" src={config.isUS || true ? "static/img/read-book.svg" : 'static/img/s1.png'} />
                 </div>
                 <h2 className="shy-site-block-head flex-center "><S text='诗云客户端-title'>适用于 Mac 和 Windows的诗云客户端</S></h2>
                 <div className="flex-center gap-b-20 shy-site-block-remark"><S text='诗云客户端-description'>独自或与团队一起工作，不受干扰，享受生活美好时光</S></div>
@@ -50,7 +51,7 @@ export function DownloadView() {
             <div className="shy-site-download">
 
                 <div className="flex-center">
-                    <img className="w-400" src={config.isUS||true? 'static/img/user-leaf.svg':"static/img/s2.png"} />
+                    <img className="w-400" src={config.isUS || true ? 'static/img/user-leaf.svg' : "static/img/s2.png"} />
                 </div>
                 <h2 className="shy-site-block-head flex-center"><S>免费的本地及私有化数据存储诗云服务端</S></h2>
                 <div className="flex-center gap-b-20  shy-site-block-remark "><S text='安装在那里数据存那里'>安装在那里，数据存那里</S></div>
@@ -62,7 +63,7 @@ export function DownloadView() {
                         </div>
                         <p><span><S>Windows 诗云服务端</S></span></p>
                         <p style={{ paddingTop: 20 }}><a data-download-win href="https://resources.shy.live/app/download/shy-0.8.23.zip"
-                            download={config.isUS ? "Shy Server" : "诗云服务端"}><S>下载</S></a></p>
+                            download={config.isUS ? "Shy Server" : "诗云服务端"}><S>开发中...</S></a></p>
                     </div>
 
                     <div className="shy-site-download-platform max-w-300  shy-site-block-card">
@@ -71,7 +72,7 @@ export function DownloadView() {
                         </div>
                         <p><span><S>Mac OS 诗云服务端</S></span></p>
                         <p style={{ paddingTop: 20 }}><a data-download-mac href="https://resources.shy.live/app/download/shy-0.8.23.dmg"
-                            download={config.isUS ? "Shy Server" : "诗云服务端"}><S>下载</S></a></p>
+                            download={config.isUS ? "Shy Server" : "诗云服务端"}><S>开发中...</S></a></p>
                     </div>
 
                 </div>

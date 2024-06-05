@@ -154,7 +154,7 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
 
     return <div>
         <h2 className="flex-center shy-site-block-head gap-t-30"><S text=''>文档、数据表、白板、PPT、即时通信、AI</S></h2>
-        <div className="flex-center remark f-24" ><S text='简单而美的收费用户是我们的朋友'>一体化知识协作工作台，自定义你的工作流，服务好自已的受众群体</S></div>
+        <div className="flex-center remark f-24" ><S text='简单而美的收费用户是我们的朋友'>一体化知识协作工作台，你的想象力，就是我们的边界</S></div>
         {props.wrap && <><div className="flex flex-full gap-t-20 r-w50">
             {pres}
         </div><div className="flex  flex-full  gap-t-20 r-w50">
