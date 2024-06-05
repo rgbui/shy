@@ -38,12 +38,14 @@ export async function createPageContent(store: PageViewStore) {
             }
             page.on(PageDirective.history, async function (action) {
                 if (!page.canEdit({ ignoreLocker: true })) return;
+                //console.log(action.syncBlocks, 'syncBlocks')
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
                         var snap = SnapStore.createSnap(syncBlock.elementUrl)
-                        snap.viewOperatorAndSnap(action.get() as any, {
+                        await snap.viewOperatorAndSnap(action.get() as any, {
                             content: await syncBlock.getSyncString()
                         }, { force: action.immediate ? true : false, notSave: action.isCursorOperatorOrPicker() })
+                        //console.log('sss', action.immediate,await syncBlock.getSyncString());
                     }
                 if (action.syncPage) {
                     if (page.views.length == 0) {
@@ -57,7 +59,7 @@ export async function createPageContent(store: PageViewStore) {
                     }, { force: action.immediate ? true : false, notSave: action.isCursorOperatorOrPicker() })
                 }
             });
-            page.on(PageDirective.syncHistory, async (data) => {
+            page.on(PageDirective.syncPage, async (data) => {
                 if (!page.isCanEdit) return;
                 if (page.views.length == 0) {
                     console.error('page views.lenght happend save');

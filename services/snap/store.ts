@@ -61,7 +61,6 @@ export class SnapStore extends Events {
     async viewOperatorAndSnap(operate: Partial<UserAction>, snap: SnapDataType, options?: { force?: boolean, notSave?: boolean }) {
         if (options.force) {
             var rc = await this.viewOperator(operate);
-          
             if (rc) {
                 var rg = Array.isArray(rc) ? rc[0] : rc;
                 snap.seq = rg.seq;

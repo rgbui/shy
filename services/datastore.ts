@@ -1,9 +1,29 @@
 
 import { surface } from "../src/surface/app/store";
-import { del, put, get, patch } from "rich/net/annotation";
+import { del, put, get, patch, air } from "rich/net/annotation";
 import { wss } from "./workspace";
+import { channel } from "rich/net/channel";
 
 class DataStoreService {
+
+    @air('/datastore/operate')
+    async schemaDataOperate(args: { operate: Record<string, any> }, options: { locationId?: string | number }) {
+        var r = await surface.workspace.sock.put<{ result: { actions: any[] } }>('/view/operate/sync', {
+            wsId: surface.workspace.id,
+            operate: args.operate,
+            schema: 'DataStore',
+            sockId: surface.workspace.tim.id
+        })
+        channel.fire('/datastore/operate', args as any, options)
+        return r;
+    }
+    @put('/datastore/rank')
+    async dataSchemaRank(args: Record<string, any>) {
+        return await surface.workspace.sock.put('/datastore/rank', {
+            wsId: surface.workspace.id,
+            ...(args || {})
+        })
+    }
     @put('/datastore/add')
     async add(args) {
         args.wsId = surface.workspace.id;

@@ -6,7 +6,6 @@ import { surface } from "../src/surface/app/store";
 import { PageItemOperateNotify } from "../src/surface/sln/item/store/notify";
 import { userChannelStore } from "../src/surface/user/channel/store";
 
-
 import { SyncMessageUrl } from "rich/net/sync.message";
 
 
@@ -76,22 +75,12 @@ export function workspaceNotifys(tim: Tim) {
     //文档
     tim.only(SyncMessageUrl.viewOperate, async (e, op) => {
         await channel.fire(SyncMessageUrl.viewOperate, e as any, op)
-        // if (surface.workspace?.id == e.workspaceId) {
-        //     window.shyLog('notify view operate', e);
-        //     surface.workspace.onNotifyViewOperater(e as any);
-        // }
     });
     tim.only(SyncMessageUrl.viewOperates, async (e, op) => {
-        // if (surface.workspace?.id == e.workspaceId) {
-        //     window.shyLog('notify view operate', e);
+
         if (Array.isArray(e.operates)) {
             await channel.fire(SyncMessageUrl.viewOperates, e as any, op)
-            // await e.operates.eachAsync(async ee => {
-            //     await channel.fire(SyncMessageUrl.viewOperate, ee, op)
-            //     // await surface.workspace.onNotifyViewOperater(e);
-            // })
         }
-        // }
     });
     tim.only(SyncMessageUrl.blcokSyncRefs, async (e, op) => {
         await channel.fire(SyncMessageUrl.blcokSyncRefs, e as any, op)
@@ -126,7 +115,16 @@ export function workspaceNotifys(tim: Tim) {
         PageItemOperateNotify(e as any, op);
     });
     //页面数据表格元数据
-    tim.only(SyncMessageUrl.dateGridOperator, (e, op) => { });
+    tim.only(SyncMessageUrl.dataGridSchemaOperator, (e, op) => {
+        console.log(e, op);
+        channel.fire('/schema/operate', e as any, op);
+    });
+
+    tim.only(SyncMessageUrl.dataStoreOperate, (e, op) => {
+        console.log(e, op);
+        channel.fire('/datastore/operate', e as any, op)
+    });
+
     tim.only(SyncMessageUrl.workspaceSync, (e: {
         exitView: string,
         exitWsId: string,
@@ -185,6 +183,7 @@ export function workspaceNotifys(tim: Tim) {
             }
         }
     })
+    
     tim.only(SyncMessageUrl.patchWsNotify, (e: { wsId: string, data: Record<string, any> }) => {
         if (surface.workspace?.id == e.wsId) {
             Object.assign(surface.workspace, e.data);

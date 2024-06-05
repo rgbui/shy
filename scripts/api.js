@@ -168,14 +168,25 @@ push('/clone/page', '{pageId: string, text?: string, parentId?: string, downPage
 push('/schema/create', '{text:string,wsId?:string,url:string}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
 push('/schema/create/define', '{text:string,wsId?:string,fields?:any[],views?:any[],datas?:any[]}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
 push('/schema/query', '{ws:LinkWs,wsId?:string,id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
-push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['put']);
+push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['air']);
+
 push('/schema/list', '{ws:LinkWs,wsId?:string,page?:number,size?:number}', 'SockResponse<{total:number,list:Partial<TableSchema>[],page:number,size:number}>', ['get']);
 push('/schema/ids/list', '{ws:LinkWs,wsId?:string,ids:string[]}', 'SockResponse<{list:Partial<TableSchema>[]}>', ['get'])
 push('/schema/delete', '{wsId?:string,id:string}', 'SockResponse<void>', ['del']);
-push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos?:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,data:Record<string,any>}>', ['put']);
-push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
-push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:string}', ['del']);
-push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', 'SockResponse<void>', ['patch']);
+
+
+push('/datastore/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['air']);
+
+// push('/datastore/add', '{schemaId:string,data:Record<string, any>,pos?:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,data:Record<string,any>}>', ['put']);
+// push('/datastore/batch/add', '{schemaId:string,list:any[]}', '{ok:boolean,data:{list:any[]},warn:string}', ['put']);
+// push('/datastore/remove', '{schemaId:string,dataId:string}', '{ok:boolean,warn:string}', ['del']);
+// push('/datastore/update', '{schemaId:string,dataId:string,data:Record<string, any>}', 'SockResponse<void>', ['patch']);
+// push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
+// push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
+// push(`/datastore/row/update`, '{ws:LinkWs,wsId?:string,schemaId: string, filter?:Record<string, any>, data: Record<string, any>}', 'SockResponse<void>', ['patch']);
+// push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
+// push('/datastore/remove/filter', '{schemaId:string,filter:Record<string,any>}', 'SockResponse<void>', ['del']);
+
 push('/datastore/query', '{ws:LinkWs,wsId?:string,schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>},warn:string}', ['get']);
 push('/datastore/query/pre_next', '{ws:LinkWs,wsId?:string,schemaId:string,id:string}', '{ok:boolean,data:{data:Record<string, any>,prev:Record<string, any>,next:Record<string, any>},warn:string}', ['get']);
 push('/datastore/query/list', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[],isIgnoreCount?: boolean}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
@@ -185,11 +196,7 @@ push('/datastore/query/all', '{ws:LinkWs,wsId?:string,schemaId:string,page?:numb
 push('/datastore/group', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,group:string}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/statistics', '{ws:LinkWs,wsId?:string,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,having?:Record<string, any>,sorts?:Record<string, 1|-1>,groups:string[],aggregate?: Record<string, any>}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
 push('/datastore/statistics/value', '{ws:LinkWs,wsId?:string,schemaId:string,filter?:Record<string, any>,fieldName?:string,indicator?:string}', '{ok:boolean,data:{value?:number,total?:number},warn:string}', ['get']);
-push('/datastore/rank', '{schemaId:string,wsId?:string,id:string,pos:{id:string,pos:"before"|"after"}}', 'SockResponse<{isCacSort:boolean,sort:number}>', ['put']);
-push('/datastore/row/object/update', '{schemaId: string, rowId: string, fieldName: string,data: Record<string, any>}', 'SockResponse<void>', ['put']);
-push(`/datastore/row/update`, '{ws:LinkWs,wsId?:string,schemaId: string, filter?:Record<string, any>, data: Record<string, any>}', 'SockResponse<void>', ['patch']);
-push('/datastore/remove/ids', '{schemaId: string,ids:string[]}', 'SockResponse<void>', ['del']);
-push('/datastore/remove/filter', '{schemaId:string,filter:Record<string,any>}', 'SockResponse<void>', ['del']);
+
 push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{exists:boolean}>', ['get']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);

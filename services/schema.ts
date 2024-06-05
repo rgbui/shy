@@ -3,9 +3,10 @@
 
 
 
-import { put, get, del } from "rich/net/annotation";
+import { put, get, del, air } from "rich/net/annotation";
 import { surface } from "../src/surface/app/store";
 import { wss } from "./workspace";
+import { channel } from "rich/net/channel";
 
 class SchemaService {
     @put('/schema/create')
@@ -24,15 +25,19 @@ class SchemaService {
         var sock = await wss.getArgsSock(args);
         return await sock.get('/schema/query', args);
     }
-    @put('/schema/operate')
-    async schemaOperate(args: { operate: Record<string, any> }) {
-        return await surface.workspace.sock.put<{ result: { actions: any[] } }>('/view/operate/sync', {
+    @air('/schema/operate')
+    async schemaOperate(args: { operate: Record<string, any> }, options: { locationId?: string | number }) {
+        var r = await surface.workspace.sock.put<{ result: { actions: any[] } }>('/view/operate/sync', {
             wsId: surface.workspace.id,
             operate: args.operate,
             schema: 'DataGridSchema',
             sockId: surface.workspace.tim.id
         })
+        channel.fire('/schema/operate', args as any, options)
+        return r;
     }
+   
+
     @get('/schema/list')
     async getSchemas(args: Record<string, any>) {
         if (!args) args = {}
@@ -52,11 +57,5 @@ class SchemaService {
             ...(args || {})
         })
     }
-    @put('/datastore/rank')
-    async dataSchemaRank(args: Record<string, any>) {
-        return await surface.workspace.sock.put('/datastore/rank', {
-            wsId: surface.workspace.id,
-            ...(args || {})
-        })
-    }
+  
 }
