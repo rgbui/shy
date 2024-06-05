@@ -56,8 +56,8 @@ export var UrlRoute = {
                 return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
             else {
-                if (location.host == this.getHost()) return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
-                else return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
+                return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
+                // else return SyHistory.push(this.gen(ShyUrl.page, { pageId: pageSn }));
             }
         }
         else return SyHistory.push(this.gen(ShyUrl.wsPage, { wsId: wsSn, pageId: pageSn }))
