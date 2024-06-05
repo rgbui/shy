@@ -395,6 +395,7 @@ export class Workspace {
                 var pages = rr.data.list;
                 pages.sort(this.pageSort)
                 pages = ShyUtil.flatArrayConvertTree(pages);
+                lodash.remove(pages, c => c.mime !== Mime.pages)
                 this.load({ childs: pages });
             }
         }
