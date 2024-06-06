@@ -461,7 +461,7 @@ export class Workspace {
             var id = pe.id;
             var item = this.find(g => g.id == id);
             if (!item) {
-                var pa = await channel.get('/page/parent/ids', { id, ws: undefined });
+                var pa = await channel.get('/page/parent/ids', { id, ws: undefined, recover: true });
                 if (pa.ok) {
                     if (pa.data.exists == false && pe.type == ElementType.Schema) {
                         var viewItem = this.find(g => g.mime == Mime.pages);
@@ -480,23 +480,10 @@ export class Workspace {
                         }
                     }
                     else if (pa.data.exists == true) {
-                        pa.data.parentIds.removeAll(c => this.find(g => g.id == c && g.checkedHasChilds == true) ? true : false);
-                        if (pa.data.parentIds.length > 0) {
-                            var rlist = await channel.get('/page/parent/subs', { parentIds: pa.data.parentIds, ws: surface.workspace });
-                            if (rlist.ok) {
-                                var list = rlist.data.list;
-                                list.sort(this.pageSort);
-                                list = ShyUtil.flatArrayConvertTree(list);
-                                var look = list.lookup(g => g.parentId);
-                                look.forEach((v, k) => {
-                                    var item = this.find(c => c.id == k);
-                                    if (item) {
-                                        item.load(v);
-                                        item.checkedHasChilds = true;
-                                        item.each(c => { c.checkedHasChilds = true })
-                                    }
-                                })
-                            }
+                        var s = this.findAll(g => pa.data.parentIds.includes(g.id));
+                        for (let i = 0; i < s.length; i++) {
+                            var si = s[i];
+                            await si.onSync();
                         }
                         item = this.find(g => g.id == id);
                         return item;

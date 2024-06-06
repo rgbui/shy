@@ -344,7 +344,7 @@ push('/page/items', '{ws?:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockRes
 push('/page/ws/items', '{ws?:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[]}>', ['get'])
 
 push('/page/item/subs', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ list:any[] }>', ['get'])
-push('/page/parent/ids', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{ parentIds:string[],exists:boolean }>', ['get'])
+push('/page/parent/ids', '{ws:LinkWs,wsId?:string,id:string,recover?:boolean}', 'SockResponse<{ parentIds:string[],exists:boolean }>', ['get'])
 push('/page/parent/subs', '{ws:LinkWs,wsId?:string,parentIds:string[]}', 'SockResponse<{ list:any[] }>', ['get'])
 push('/page/item', '{ws?:LinkWs,id?:string,sn?:number}', 'SockResponse<{ item:Record<string,any> }>', ['get'])
 push('/page/item/create', '{wsId?:string,data:Record<string,any>}', 'SockResponse<{ item:Record<string,any> }>', ['put'])
