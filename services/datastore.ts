@@ -122,4 +122,36 @@ class DataStoreService {
         var sock = await wss.getArgsSock(args);
         return await sock.get('/datastore/exists/user/submit', args);
     }
+
+
+    @get('/datastore/stat/fields')
+    async dataStoreStatFields(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/stat/fields', args);
+    }
+    @get('/datastore/board/statistics')
+    async dataStoreBoardStat(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/board/statistics', args);
+    }
+    @get('/datastore/board/stat/fields')
+    async dataStoreBoardStatFields(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/board/stat/fields', args);
+    }
+    @get('/datastore/dataGrid/list')
+    async dataGridList(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/dataGrid/list', args);
+    }
+    @get('/datastore/dataGrid/sub/list')
+    async dataGridSubList(args) {
+        if (!args) args = {}
+        var sock = await wss.getArgsSock(args);
+        return await sock.get('/datastore/dataGrid/sub/list', args);
+    }
 }
