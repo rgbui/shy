@@ -219,20 +219,20 @@ export class Tim {
         });
         return url;
     }
-    private events: { url: string, fn: (args: Record<string, any>, options: { sockId: string }) => void }[] = [];
-    on(url: string, fn: (args: Record<string, any>, options: { sockId: string }) => void) {
+    private events: { url: string, fn: (args: Record<string, any>, options: { sockId: string,userid:string }) => void }[] = [];
+    on(url: string, fn: (args: Record<string, any>, options: { sockId: string,userid:string }) => void) {
         this.events.push({ url, fn });
     }
-    only(url: string, fn: (args: Record<string, any>, options: { sockId: string }) => void) {
+    only(url: string, fn: (args: Record<string, any>, options: { sockId: string,userid:string }) => void) {
         var ev = this.events.find(ev => ev.url == url);
         if (ev) ev.fn = fn;
         else this.events.push({ url, fn })
     }
-    off(url: string, fn?: (args: Record<string, any>, options: { sockId: string }) => void) {
+    off(url: string, fn?: (args: Record<string, any>, options: { sockId: string,userid:string }) => void) {
         if (typeof fn == 'function') this.events.removeAll(e => e.url == url && e.fn == fn);
         else this.events.removeAll(e => e.url == url);
     }
-    async emit(url: string, args?: Record<string, any>, options?: { sockId?: string }) {
+    async emit(url: string, args?: Record<string, any>, options?: { sockId?: string,userid:string }) {
         var ev = this.events.findAll(c => c.url == url);
         for (let i = 0; i < ev.length; i++) {
             await ev[i].fn.apply(this, [args, options]);

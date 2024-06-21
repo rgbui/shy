@@ -46,10 +46,10 @@ function build(fileName) {
         if (p.methods.some(s => ['get', 'patch', 'put', 'del', 'post'].includes(s))) var isHttp = true;
         if (p.methods.includes('await')) isAsync = true;
         if (!isHttp && !p.methods.includes('query') && !p.methods.includes('act') || p.methods.includes('air')) {
-            syncs.push(`"${p.url}":{args:(r:${getP(p.args)},options?:{locationId?:string|number,sockId?:string})=>${rt(p.returnType, isAsync)},returnType:void}`);
+            syncs.push(`"${p.url}":{args:(r:${getP(p.args)},options?:{locationId?:string|number,sockId?:string,userid?:string})=>${rt(p.returnType, isAsync)},returnType:void}`);
             onlys.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
             onces.push(`"${p.url}":{args:(r:${getP(p.args)})=>${rt(p.returnType, isAsync)},returnType:void}`);
-            offs.push(`"${p.url}":{args:(r:${getP(p.args)},options?:{locationId?:string|number,sockId?:string})=>${rt(p.returnType, isAsync)},returnType:void}`);
+            offs.push(`"${p.url}":{args:(r:${getP(p.args)},options?:{locationId?:string|number,sockId?:string,userid?:string})=>${rt(p.returnType, isAsync)},returnType:void}`);
             fires.push(`"${p.url}":{args:${getP(p.args)},returnType:${rt(p.returnType, isAsync)}}`);
         }
         if (isHttp) isAsync = true;
