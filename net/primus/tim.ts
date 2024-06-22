@@ -1,7 +1,7 @@
 import { util } from 'rich/util/util';
 import { log } from '../../common/log';
 import { Sock } from '../sock';
-import { GenreConsistency } from '../sock/genre';
+import { GenreConsistency } from 'rich/net/genre';
 import { SockResponse } from '../sock/type';
 import { HttpMethod } from './http';
 import { loadPrimus } from './load';
