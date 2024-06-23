@@ -12,11 +12,11 @@ export function refShyPage(host: string, pageN?: number) {
 }
 
 export function getTypeColor(type: 'page' | 'channel' | 'ai' | 'whiteboard' | 'ppt' | 'datatable' | 'friends-circle') {
-    if (type == 'page') return { color: 'rgb(42, 157, 153)' }
-    else if (type == 'ai') return { color: 'rgb(189, 115, 232)' }
+    if (type == 'page') return { color: 'var(--high-light-color)' }
+    else if (type == 'ai') return { color: 'var(--text-purple)' }
     else if (type == 'channel') return { color: 'var(--text-p-color)' }
-    else if (type == 'whiteboard') return { color: 'rgb(157, 52, 218)' }
-    else if (type == 'ppt') return { color: "#ff76ad" }
-    else if (type == 'datatable') return { color: 'rgb(37, 79, 173)' }
-    else if (type == 'friends-circle') return { color: "#2aae67" }
+    else if (type == 'whiteboard') return { color: 'var(--text-b-1-color)' }
+    else if (type == 'ppt') return { color: "var(--hight-red-color)" }
+    else if (type == 'datatable') return { color: 'var(--text-p1-color)' }
+    else if (type == 'friends-circle') return { color: "var(--text-g-color)" }
 }

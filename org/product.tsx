@@ -54,7 +54,7 @@ export function ProductView() {
                     </p>
                     {/* <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">知识，不止于积累，更乐于交流和分享，服务好每一位粉丝</S></p> */}
                     <div className="gap-h-30 flex-center  relative">
-                        <img style={{ width: '100%' }} className="shy-site-block-card round-16 obj-center " src={UrlRoute.getUrl("static/img/pic-product-1.png")} />
+                        <img style={{ width: '100%' }} alt="一体化的知识协作工作台" className="shy-site-block-card round-16 obj-center " src={UrlRoute.getUrl("static/img/pic-product-1.png")} />
                         {/* <div className="pos site-mobile-pic">
                             <img style={{ width: 220 }} src={UrlRoute.getUrl('static/img/mobile-1.png')} />
                             <img src='static/img/mobile-content.png' className="pos" style={{
@@ -87,8 +87,8 @@ export function ProductView() {
                             <Sp text='doc-site-description'>简单 强大 美丽的乐高积木式<br />使用灵活的内容块 <br />更有效的进行协作编辑</Sp>
                         </div>
 
-                        <div className="padding-t-20">
-                            <img className="w100 h-300 round obj-top" src='static/img/pic-product-1.png' />
+                        <div className="padding-t-20 h-300 relative overflow-hidden">
+                            <img alt='简单 强大 美丽的乐高积木式' className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/pic-product-1.png' />
                         </div>
 
                     </div>
@@ -98,8 +98,8 @@ export function ProductView() {
                         <div className="text-1 f-14 l-20  gap-t-10" >
                             <Sp text='database-site-description'>自定义数据流，按需定制你的专属业务系统。<br />丰富组件、灵活搭建<br />管理任何类型的项目，无论团队或规模如何。</Sp>
                         </div>
-                        <div className="flex-end padding-t-20">
-                            <img className="w100  h-300   round  object-top" src='static/img/pic-5.png' />
+                        <div className="padding-t-20 h-300 relative overflow-hidden">
+                            <img alt="自定义数据流，按需定制你的专属业务系统" className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/pic-5.png' />
                         </div>
                     </div>
 
@@ -114,8 +114,8 @@ export function ProductView() {
                                 开创性地一起思考、计划和创造<br />
                                 将您的想法变为现实</Sp>
                         </div>
-                        <div className="flex-end padding-t-20">
-                            <img className="w100  h-300  round  obj-top" src='static/img/board.png' />
+                        <div className="padding-t-20 h-300 relative overflow-hidden">
+                            <img alt="无限画布，无限创意" className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/board.png' />
                         </div>
                     </div>
 
@@ -125,8 +125,8 @@ export function ProductView() {
                             简洁、直观、互动 且品牌化 <br />
                             超越文字和无聊的剪贴画的墙壁。</Sp>
                         </div>
-                        <div className="flex-end padding-t-20">
-                            <img className="w100  h-300  round obj-top" src='static/img/pic-7.png' />
+                        <div className="padding-t-20 h-300 relative overflow-hidden">
+                            <img className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/pic-7.png' />
                         </div>
                     </div>
 
@@ -142,21 +142,21 @@ export function ProductView() {
                 </h2>
 
                 <div className="flex-center gap-t-10 gap-b-40 remark f-24"><S text='输出你的影响力自定义你的社交网络'>输出你的影响力，自定义你的社交网络</S></div>
-                <div className="flex flex-full flex-auto-mobile-wrap">
-                    <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
+                <div className="flex flex-full flex-auto-mobile-wrap r-padding-l-20 r-padding-t-20">
+                    <div className="w50  gap-b-20 round-8  shy-site-block-card bg-white gap-r-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('channel')} ><Icon size={48} icon={BoardToolFrameSvg}></Icon><span style={{ fontSize: 40 }}><S>频道</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
                             <S text='使用诗云频道聊天随时随地即时联系并保持互动'>使用 诗云 频道聊天，随时随地即时联系并保持互动</S><br />
                         </div>
-                        <div className="padding-t-20">
-                            <img className="w100 h-300 round obj-top" src='static/img/fr.png' />
+                        <div className="padding-t-20 h-300 relative overflow-hidden">
+                            <img className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/fr.png' />
                         </div>
                     </div>
-                    <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
+                    <div className="w50  gap-b-20 round-8  shy-site-block-card bg-white gap-l-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('friends-circle')} ><Icon size={48} icon={{ name: 'bytedance-icon', code: 'friends-circle' }}></Icon><span style={{ fontSize: 40 }}><S>互动</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" ><S text='讨论、点赞、喜欢、投票、评论'>讨论、点赞、喜欢、投票、评论</S></div>
-                        <div className="padding-t-20">
-                            <img className="w100 h-300 round obj-top" src='static/img/tie.png' />
+                        <div className="padding-t-20 h-300 relative overflow-hidden">
+                            <img className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/tie.png' />
                         </div>
                     </div>
                 </div>

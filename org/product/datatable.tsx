@@ -5,66 +5,117 @@ import { Icon } from "rich/component/view/icon";
 export function ProductDataTable() {
     if (window.shyConfig.isUS) return <></>
     return <div>
-        <div className="shy-site-block bg-white">
+        <div className="shy-site-block  padding-h-30">
             <div className="flex padding-h-30">
-                <div className="flex-fixed">
+                <div className="flex-fixed max-w-500">
                     <h1 className="f-48" >智能表格 + 工作流 + 应用搭建</h1>
                     <p className="text-1 f-16 gap-b-20">
                         一体化数字化平台，让您的团队比以前更快、更自信地工作。
                     </p>
                     <div>
                         <a href={UrlRoute.getUrl('/sign/in')}
-                            className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
+                            className="bg-primary-1-hover  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
                         >免费使用</a>
                     </div>
                 </div>
                 <div className="flex-auto flex-end">
-                    <img className="max-w-600 " src='../static/img/doc/pic.webp' />
+                    <img className="max-w-600 " src='../static/img/db/datatable-pic-1.png' />
                 </div>
             </div>
         </div>
-        <div className="shy-site-block ">
+
+
+        <div className="shy-site-block   padding-h-80">
             <div>
-                <h1>无限可配置，因此您可以按照自己想要的方式工作</h1>
+                <h1 className="flex padding-h-30 flex-center f-48">诗云数据表有什么能力？</h1>
+                <p className="text-1 f-16 gap-b-20">
+                    注意！诗云数据表不是表格，而是将复杂的IT系统，做到傻瓜操作， 无需掌握复杂的公式或者函数计算，即学即用，不论背景，轻松上手
+                </p>
+                <div className="border round-16  padding-20 ">
+
+                    <div className="flex flex-full col-3-g20 r-border-box gap-h-20">
+                        <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
+                            <Icon size={100} className={'text-p1-color'} icon={{ name: 'byte', code: 'peoples-two' }}></Icon>
+                            <p className="f-18 bold flex-center">多人实时协同能力</p>
+                        </div>
+                        <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
+                            <Icon size={100} className={'text-p1-color'} icon={{ name: 'byte', code: 'form-one' }}></Icon>
+                            <p className="f-18 bold flex-center">表单设计能力</p>
+                        </div>
+                        <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
+                            <Icon size={100} className={'text-p1-color'} icon={{ name: 'byte', code: 'data-switching' }}></Icon>
+                            <p className="f-18 bold flex-center">数据联动能力</p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-full col-3-g20 r-border-box gap-h-20">
+                        <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
+                            <Icon size={100} className={'text-p1-color'} icon={{ name: 'byte', code: 'lightning' }}></Icon>
+                            <p className="f-18 bold flex-center">办公自动化能力</p>
+                        </div>
+                        <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
+                            <Icon size={100} className={'text-p1-color'} icon={{ name: 'byte', code: 'network-tree' }}></Icon>
+                            <p className="f-18 bold flex-center">自定义适配业务能力</p>
+                        </div>
+                        <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
+                            <Icon size={100} className={'text-p1-color'} icon={{ name: 'byte', code: 'network-drive' }}></Icon>
+                            <p className="f-18 bold flex-center">云端共享能力</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div className="shy-site-block   padding-h-80">
+            <div>
+                <div className="relative">
+                    <h1 className="flex padding-h-30 flex-center f-48">无限可配置，因此您可以按照自己想要的方式工作</h1>
+
+                    <div className="flex col-2-g20 gap-h-20">
+
+                        <div className="flex-auto bg-2 padding-h-10 round-8">
+                            <div className="padding-w-20 gap-t-10"><Icon className={'text-p1-color'} size={32} icon={{ name: 'byte', code: 'table-file' }}></Icon></div>
+                            <h3 className="padding-w-20 gap-t-10 gap-b-5">记录表格中的每个细节</h3>
+                            <p className="padding-w-20 f-14 text-1">追踪所有可推动更大规模发布的特定项目，以免出现任何疏漏。</p>
+                            <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
+                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                            </div>
+                        </div>
+
+                        <div className="flex-auto bg-2 padding-h-10 round-8">
+                            <div className="padding-w-20 gap-t-10"><Icon className={'text-p1-color'} size={32} icon={{ name: 'byte', code: 'calendar' }}></Icon></div>
+                            <h3 className="padding-w-20 gap-t-10 gap-b-5">查看日历上绘制的每个截止日期</h3>
+                            <p className="padding-w-20 f-14 text-1">管理多日发布？为任何项目添加日历视图，这样您就可以准确查看发货内容和发货时间。</p>
+                            <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
+                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex col-2-g20  gap-h-20">
+
+                        <div className="flex-auto bg-2 padding-h-10 round-8">
+                            <div className="padding-w-20 gap-t-10"><Icon className={'text-p1-color'} size={32} icon={{ name: 'byte', code: 'target' }}></Icon></div>
+                            <h3 className="padding-w-20 gap-t-10 gap-b-5">选择您想要追踪的确切信息</h3>
+                            <p className="padding-w-20 f-14 text-1">创建您自己的优先级标签、状态标签等，以便每个团队都能制定完美的工作流程。</p>
+                            <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
+                                <img className="pos border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                            </div>
+                        </div>
+
+                        <div className="flex-auto bg-2 padding-h-10 round-8">
+                            <div className="padding-w-20 gap-t-10"><Icon className={'text-p1-color'} size={32} icon={{ name: 'byte', code: 'filter' }}></Icon></div>
+                            <h3 className="padding-w-20 gap-t-10 gap-b-5">过滤和排序信息以查看所需内容</h3>
+                            <p className="padding-w-20 f-14 text-1">仅显示分配给您的任务或标记为紧急的项目。以对您最有帮助的方式分解任何复杂项目。</p>
+                            <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
+                                <img className="pos border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex">
-                <div className="flex-auto">
-                    <div><Icon icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
-                    <h3>记录表格中的每个细节</h3>
-                    <p>追踪所有可推动更大规模发布的特定项目，以免出现任何疏漏。</p>
-                    <div>
-                        <img className="w100" src={'../static/img/doc/pic.webp'} />
-                    </div>
-                </div>
-                <div className="flex-auto">
-                    <div><Icon icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
-                    <h3>查看日历上绘制的每个截止日期</h3>
-                    <p>管理多日发布？为任何项目添加日历视图，这样您就可以准确查看发货内容和发货时间。</p>
-                    <div>
-                        <img className="w100" src={'../static/img/doc/pic.webp'} />
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex">
-                <div className="flex-auto">
-                    <div><Icon icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
-                    <h3>选择您想要追踪的确切信息</h3>
-                    <p>创建您自己的优先级标签、状态标签等，以便每个团队都能制定完美的工作流程。</p>
-                    <div>
-                        <img className="w100" src={'../static/img/doc/pic.webp'} />
-                    </div>
-                </div>
-                <div className="flex-auto">
-                    <div><Icon icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
-                    <h3>过滤和排序信息以查看所需内容</h3>
-                    <p>仅显示分配给您的任务或标记为紧急的项目。以对您最有帮助的方式分解任何复杂项目。</p>
-                    <div>
-                        <img className="w100" src={'../static/img/doc/pic.webp'} />
-                    </div>
-                </div>
-            </div>
 
 
 
@@ -72,97 +123,111 @@ export function ProductDataTable() {
 
 
         </div>
+
+
+        <div className="shy-site-block padding-h-80">
+            <div>
+                <div className="relative">
+                    <h1 className="flex padding-h-30 flex-center f-48">高级统计轻松处理复杂数据、千万数据</h1>
+                    <p className="text-1 flex-center f-14">
+                        高级统计内置 BI 能力，图表类型丰富，可结合视图对复杂数据、大数据快速完成统计分析。图表可导出。大屏仪表盘可增加多个。
+                    </p>
+                    <div className="gap-h-20">
+                        <img className="w100 border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="shy-site-block padding-h-80">
+            <div>
+                <div className="relative">
+                    <h1 className="flex padding-h-30 flex-center f-48">制作专属外部应用，与客户、供应商等更方便地协作</h1>
+                    <p className="text-1  flex-center f-14">在表格基础上搭建通用应用、数据查询、地图等多种外部应用。通过一个共享链接或二维码就可以让他人使用。不用编程，0 基础制作自己的专属应用。</p>
+                    <div className="gap-h-20">
+                        <img className="w100 border round-16 shadow-s" src={'../static/img/doc/pic.webp'} />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div className="shy-site-block   padding-h-80">
+            <div>
+                <h1 className="flex padding-h-30 flex-center f-48">丰富多样的应用场景</h1>
+                <p className="text-1 flex-center f-14">诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
+
+
+                <div className="flex flex-full col-3-g20 gap-h-20 r-border-box">
+
+                    <div className="flex-auto padding-l-30 flex shy-site-block-card-hover h-80">
+                        <div className="flex-fixed flex-center size-36 gap-r-10 "><Icon size={36} className={'text-p1-color'} icon={{ name: 'byte', code: "plan" }}></Icon></div>
+                        <span className="f-24">工作计划管理</span>
+                    </div>
+
+                    <div className="flex-auto padding-l-30 flex shy-site-block-card-hover h-80">
+                        <div className="flex-fixed flex-center size-36 gap-r-10 "><Icon size={36} className={'text-p1-color'} icon={{ name: 'byte', code: "list-view" }}></Icon></div>
+                        <span className="f-24">项目管理</span>
+                    </div>
+
+                    <div className="flex-auto padding-l-30 flex shy-site-block-card-hover h-80">
+                        <div className="flex-fixed flex-center size-36 gap-r-10 "><Icon size={36} className={'text-p1-color'} icon={{ name: 'byte', code: "people" }}></Icon></div>
+                        <span className="f-24">客户关系管理</span>
+                    </div>
+
+                </div>
+
+                <div className="flex flex-full col-3-g20 gap-h-20 r-border-box">
+
+                    <div className="flex-auto padding-l-30 flex shy-site-block-card-hover h-80">
+                        <div className="flex-fixed flex-center size-36 gap-r-10 "><Icon size={36} className={'text-p1-color'} icon={{ name: 'byte', code: "sales-report" }}></Icon></div>
+                        <span className="f-24">进销存管理</span>
+                    </div>
+
+                    <div className="flex-auto padding-l-30 flex shy-site-block-card-hover h-80">
+                        <div className="flex-fixed flex-center size-36 gap-r-10 "><Icon size={36} className={'text-p1-color'} icon={{ name: 'byte', code: "analysis" }}></Icon></div>
+                        <span className="f-24">数据统计分析</span>
+                    </div>
+
+                    <div className="flex-auto padding-l-30 flex shy-site-block-card-hover h-80">
+                        <div className="flex-fixed flex-center size-36 gap-r-10 "><Icon size={36} className={'text-p1-color'} icon={{ name: 'byte', code: "application-one" }}></Icon></div>
+                        <span className="f-24">零代码搭建应用</span>
+                    </div>
+
+                </div>
+
+                <div className="gap-h-20">
+                    <img className="w100 border round-16 shadow-s" src={'../static/img/doc/pic.webp'} />
+                </div>
+
+            </div>
+
+        </div>
+
         <div className="shy-site-block">
-            <h1>诗云数据表有什么能力？</h1>
-            <p>
-                注意！诗云数据表不是表格，而是将复杂的IT系统，做到傻瓜操作， 无需掌握复杂的公式或者函数计算，即学即用，不论背景，轻松上手
-            </p>
-            <div>
+            <div style={{
+                backgroundImage: 'url(../static/img/db/datatable-pic-2.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                height: 400
+            }}>
 
-                <div className="flex">
-                    <div>
-                        <Icon icon={{name:'byte',code:'page'}}></Icon>
-                        <p>多人实时协同能力</p>
-                    </div>
-                    <div>
-                        <Icon icon={{name:'byte',code:'page'}}></Icon>
-                        <p>表单设计能力</p>
-                    </div>
-                    <div>
-                        <Icon icon={{name:'byte',code:'page'}}></Icon>
-                        <p>数据联动能力</p>
-                    </div>
-                </div>
-
-                <div className="flex">
-                    <div>
-                        <Icon icon={{name:'byte',code:'page'}}></Icon>
-                        <p>办公自动化能力</p>
-                    </div>
-                    <div>
-                        <Icon icon={{name:'byte',code:'page'}}></Icon>
-                        <p>自定义适配业务能力</p>
-                    </div>
-                    <div>
-                        <Icon icon={{name:'byte',code:'page'}}></Icon>
-                        <p>云端共享能力</p>
+                <div className="padding-20  relative w-500 h-120">
+                    <div className="pos round w100 h100" style={{
+                        zIndex: 1,
+                        backgroundColor: 'rgba(0,0,0,.6)'
+                    }}></div>
+                    <div className="pos round border-box padding-w-10 w100 h100  text-white " style={{
+                        zIndex: 2
+                    }} >
+                        <h1>丰富多样的应用场景</h1>
+                        <p>诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
                     </div>
                 </div>
 
             </div>
-
         </div>
 
-        <div className="shy-site-block">
-            <div>
-                <h1>丰富多样的应用场景</h1>
-                <p>诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
-
-
-                <div className="flex">
-
-                    <div className="flex-auto flex">
-                        <div><Icon icon={{ name: 'byte', code: "page" }}></Icon></div>
-                        <span>工作计划管理</span>
-                    </div>
-
-                    <div className="flex-auto flex">
-                        <div><Icon icon={{ name: 'byte', code: "page" }}></Icon></div>
-                        <span>项目管理</span>
-                    </div>
-
-                    <div className="flex-auto flex">
-                        <div><Icon icon={{ name: 'byte', code: "page" }}></Icon></div>
-                        <span>客户关系管理</span>
-                    </div>
-
-                </div>
-
-                <div className="flex">
-
-                    <div className="flex-auto flex">
-                        <div><Icon icon={{ name: 'byte', code: "page" }}></Icon></div>
-                        <span>进销存管理</span>
-                    </div>
-
-                    <div className="flex-auto flex">
-                        <div><Icon icon={{ name: 'byte', code: "page" }}></Icon></div>
-                        <span>数据统计分析</span>
-                    </div>
-
-                    <div className="flex-auto flex">
-                        <div><Icon icon={{ name: 'byte', code: "page" }}></Icon></div>
-                        <span>零代码搭建应用</span>
-                    </div>
-
-                </div>
-
-                <div>
-                    <img className="w100" src={'../static/img/doc/pic.webp'} />
-                </div>
-
-            </div>
-
-        </div>
     </div>
 }

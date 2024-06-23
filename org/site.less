@@ -120,8 +120,8 @@
         height          : 32px;
         line-height     : 32px;
         border-radius   : 5px;
-        background-color: #242424;
-        color           : #fff;
+        // background-color: #242424;
+        // color           : #fff;
         padding         : 0 10px;
         margin-left     : 10px;
     }
@@ -257,6 +257,17 @@
         border-radius          : 0.6rem;
         box-shadow             : 0 1.8rem 3.6rem -0.6rem rgba(0, 0, 0, .06), 0 0.6rem 1.2rem -0.6rem rgba(0, 0, 0, .06);
     }
+    .shy-site-block-card-hover{
+        -webkit-backdrop-filter: blur(2rem);
+        backdrop-filter        : blur(2rem);
+        background-color       : var(--bg-2);
+        border                 : 0.1rem solid rgba(0, 0, 0, .12);
+        border-radius          : 0.6rem;
+        box-shadow             : 0 1.8rem 3.6rem -0.6rem rgba(0, 0, 0, .06), 0 0.6rem 1.2rem -0.6rem rgba(0, 0, 0, .06);
+        &:hover{
+            background-color       : rgba(255, 255, 255, .8);
+        }
+    }
 
     video {
         border       : 0.1rem solid rgba(0, 0, 0, .12);
@@ -267,7 +278,7 @@
 
 .shy-site-content {
     min-height: calc(100vh - 450px);
-    margin-top: 6rem;
+    margin-top: 5.6rem;
 }
 
 .site-mobile-pic {

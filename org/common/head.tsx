@@ -99,7 +99,7 @@ export function HeadView() {
             <div className="shy-site-head-navs-item"><a href={UrlRoute.getUrl('pricing')}><S>定价</S></a> </div>
         </div>
         <div className="shy-site-head-user">
-            {!surface.user?.id && <a className="shy-site-head-user-sign" href={UrlRoute.getUrl('/sign/in')}><S>登录/注册</S></a>}
+            {!surface.user?.id && <a className="shy-site-head-user-sign bg-button-dark" href={UrlRoute.getUrl('/sign/in')}><S>登录/注册</S></a>}
             {surface.user?.id && <a href={UrlRoute.getUrl('/home')}><Avatar hideStatus user={surface.user} size={36}></Avatar></a>}
             <a className="shy-site-head-menu">
                 <Icon icon={{ name: 'bytedance-icon', code: 'hamburger-button' }} size={24} />

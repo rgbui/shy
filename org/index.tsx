@@ -24,6 +24,8 @@ import { App } from "./app";
 import { blockStore } from "rich/extensions/block/store";
 import { ls } from "rich/i18n/store";
 import { surface } from "../src/surface/app/store";
+import { configure } from 'mobx';
+configure({ enforceActions: 'never' })
 createAuthIframe();
 var div = document.body.querySelector('div');
 if (!div) div = document.body.appendChild(document.createElement('div'))

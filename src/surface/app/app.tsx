@@ -17,6 +17,7 @@ import "./style.less";
 import { RedictUrl } from './view/RedictUrl';
 import { Divider } from 'rich/component/view/grid';
 
+
 export function App() {
   let [isLoad, setLoad] = React.useState(false);
   async function load() {
