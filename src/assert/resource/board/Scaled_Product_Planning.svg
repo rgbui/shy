@@ -1,0 +1,29 @@
+<svg width="320" height="260" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_644_61698)">
+<rect x="40.5" y="16.5" width="159" height="63" rx="3.5" fill="white"/>
+<rect x="40.5" y="16.5" width="159" height="63" rx="3.5" stroke="#1C1C1E"/>
+<path d="M56 32L152 32" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+<rect x="56" y="44" width="24" height="8" fill="#D9D9D9"/>
+<rect x="84" y="44" width="40" height="8" fill="#F0F0F3"/>
+<rect x="56" y="56" width="48" height="8" fill="#F0F0F3"/>
+<path d="M41 20C41 18.3431 42.3431 17 44 17V17V79V79C42.3431 79 41 77.6569 41 76V20Z" fill="#D9D9D9"/>
+<rect x="176.5" y="156.5" width="159" height="63" rx="3.5" fill="white"/>
+<rect x="176.5" y="156.5" width="159" height="63" rx="3.5" stroke="#1C1C1E"/>
+<path d="M192 172H288" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+<rect x="192" y="184" width="24" height="8" fill="#D9D9D9"/>
+<rect x="220" y="184" width="40" height="8" fill="#F0F0F3"/>
+<rect x="192" y="196" width="48" height="8" fill="#F0F0F3"/>
+<path d="M177 160C177 158.343 178.343 157 180 157V157V219V219C178.343 219 177 217.657 177 216V160Z" fill="#D9D9D9"/>
+<rect x="123" y="71" width="40" height="16" rx="8" fill="#FFDD33"/>
+<rect opacity="0.3" x="131" y="77" width="24" height="3" rx="1.5" fill="#6B5E24"/>
+<path d="M176 185.333C177.473 185.333 178.667 186.527 178.667 188C178.667 189.473 177.473 190.667 176 190.667C174.527 190.667 173.334 189.473 173.334 188C173.334 186.527 174.527 185.333 176 185.333ZM98.0004 87.7426L98.5004 87.7426L98.5004 87.7427L98.0004 87.7426ZM98 111.5L97.5 111.5L97.5 111.5L98 111.5ZM174.5 187.5L176 187.5L176 188.5L174.5 188.5L174.5 187.5ZM97.5004 87.7426L97.5004 87L98.5004 87L98.5004 87.7426L97.5004 87.7426ZM98.5004 87.7427L98.5 111.5L97.5 111.5L97.5004 87.7426L98.5004 87.7427ZM174.5 188.5C131.974 188.5 97.5002 154.026 97.5 111.5L98.5 111.5C98.5002 153.474 132.527 187.5 174.5 187.5L174.5 188.5Z" fill="#FFAB57"/>
+<path d="M143 87V261" stroke="#FFDD33" stroke-dasharray="4.32 4.32"/>
+<rect x="77" y="71" width="40" height="16" rx="8" fill="#FFAB57"/>
+<rect opacity="0.3" x="85" y="77" width="24" height="3" rx="1.5" fill="#6B5E24"/>
+</g>
+<defs>
+<clipPath id="clip0_644_61698">
+<rect width="320" height="260" fill="white"/>
+</clipPath>
+</defs>
+</svg>

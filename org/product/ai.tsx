@@ -5,8 +5,7 @@ import { S, Sp } from "rich/i18n/view";
 import { UrlRoute } from "../../src/history";
 import { config } from "../../common/config";
 import { getTypeColor } from "../util";
-export function AiView()
-{
+export function AiView() {
 
     return <div>
         <div className="shy-site-block">
@@ -23,9 +22,9 @@ export function AiView()
                             <Icon icon={ArrowRightSvg}></Icon>
                         </a>
                     </p>
-                    <div className="gap-h-30 flex-center  relative">
+                    {/* <div className="gap-h-30 flex-center  relative">
                         <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src={UrlRoute.getUrl("static/img/pic.png")} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
@@ -119,7 +118,7 @@ export function AiView()
         </div>
 
 
-        <div className="shy-site-block">
+        {/* <div className="shy-site-block">
             <div className="padding-h-50">
                 <div className="shy-site-block-head flex-center"><S>AI机器人</S></div>
                 <div className="remark flex-center"><Sp text="ai-AI机器人-description">自定义的你的AI机器人，全新的人机协作。</Sp></div>
@@ -128,7 +127,7 @@ export function AiView()
 
                 </div>
             </div>
-        </div>
+        </div> */}
 
 
 
@@ -142,7 +141,7 @@ export function AiView()
                 <h3 className="text-center f-16 remark"><S text='如仍然有问题请至'>如仍然有问题，请至</S><a style={{
                     color: 'inherit',
                     textDecoration: 'underline'
-                }} href={config.isUS ? "https://community.shy.red" : 'https://org.shy.live'}><S>云云社区</S></a><S>联系</S></h3>
+                }} href={config.isUS ? "https://community.shy.red" : 'https://community.shy.live'}><S>云云社区</S></a><S>联系</S></h3>
 
                 <div className="r-gap-b-10">
                     <div className="border-top padding-h-10">

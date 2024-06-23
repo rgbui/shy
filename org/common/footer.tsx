@@ -30,7 +30,7 @@ export class FooterView extends React.Component {
                     <img className="w-120" src={UrlRoute.getUrl('static/img/shy.logo.256.png')} />
                     <img className="h-40" src={UrlRoute.getUrl('static/img/shy.png')} />
                 </div>}
-                <span><S>再小的个体也有自己的舞台</S></span>
+                <span><S text='再小的个体也有自己的舞台'>微小个体，自有舞台</S></span>
                 <br />
                 <div className="max-w-120"><SelectBox prefix={<Icon size={16} className={'gap-r-5'} icon={GlobalLinkSvg}></Icon>} small border
                     options={langOptions.map(c => {
@@ -55,7 +55,7 @@ export class FooterView extends React.Component {
             </div>
             <div>
                 <h4><S>产品</S></h4>
-                <a href={UrlRoute.getUrl("product/page")}><S>文档</S></a>
+                <a href={UrlRoute.getUrl("product/doc")}><S>文档</S></a>
                 <br />
                 <a href={UrlRoute.getUrl("product/DataTable")}><S>数据表</S></a>
                 <br />

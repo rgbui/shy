@@ -52,10 +52,10 @@ export function ProductView() {
                             <Icon icon={ArrowRightSvg}></Icon>
                         </a>
                     </p>
-                    <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">知识，不止于积累，更乐于交流和分享，服务好每一位粉丝</S></p>
+                    {/* <p className="flex-center remark" style={{ fontSize: '1.6rem' }}><S text="积累知识-沉淀关系">知识，不止于积累，更乐于交流和分享，服务好每一位粉丝</S></p> */}
                     <div className="gap-h-30 flex-center  relative">
-                        <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src={UrlRoute.getUrl("static/img/pic.png")} />
-                        <div className="pos site-mobile-pic">
+                        <img style={{ width: '100%' }} className="shy-site-block-card round-16 obj-center " src={UrlRoute.getUrl("static/img/pic-product-1.png")} />
+                        {/* <div className="pos site-mobile-pic">
                             <img style={{ width: 220 }} src={UrlRoute.getUrl('static/img/mobile-1.png')} />
                             <img src='static/img/mobile-content.png' className="pos" style={{
                                 top: 33,
@@ -64,7 +64,7 @@ export function ProductView() {
                                 height: 398,
                                 borderRadius: 10
                             }} />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -88,18 +88,18 @@ export function ProductView() {
                         </div>
 
                         <div className="padding-t-20">
-                            <img className="w100 h-300 round obj-center" src='static/img/doc.png' />
+                            <img className="w100 h-300 round obj-top" src='static/img/pic-product-1.png' />
                         </div>
 
                     </div>
 
                     <div className="shy-site-block-card gap-l-10  gap-b-20">
-                        <div className="flex r-gap-r-10" style={getTypeColor('datatable')}><Icon size={48} icon={{ name: 'byte', code: 'table' }}></Icon><span style={{ fontSize: 40 }}><S>数据表</S></span></div>
+                        <div className="flex r-gap-r-10" style={getTypeColor('datatable')}><Icon size={48} icon={{ name: 'byte', code: 'trace' }}></Icon><span style={{ fontSize: 40 }}><S>数据表</S></span></div>
                         <div className="text-1 f-14 l-20  gap-t-10" >
                             <Sp text='database-site-description'>自定义数据流，按需定制你的专属业务系统。<br />丰富组件、灵活搭建<br />管理任何类型的项目，无论团队或规模如何。</Sp>
                         </div>
                         <div className="flex-end padding-t-20">
-                            <img className="w100  h-300   round  obj-center" src='static/img/database.png' />
+                            <img className="w100  h-300   round  object-top" src='static/img/pic-5.png' />
                         </div>
                     </div>
 
@@ -115,18 +115,18 @@ export function ProductView() {
                                 将您的想法变为现实</Sp>
                         </div>
                         <div className="flex-end padding-t-20">
-                            <img className="w100  h-300  round  obj-center" src='static/img/board.png' />
+                            <img className="w100  h-300  round  obj-top" src='static/img/board.png' />
                         </div>
                     </div>
 
                     <div className="shy-site-block-card gap-l-10 gap-b-20">
-                        <div className="flex r-gap-r-10" style={getTypeColor('ppt')}><Icon size={48} icon={DocCardsSvg}></Icon><span className="f-40 text-linear-gradient"><S>宣传页</S></span></div>
+                        <div className="flex r-gap-r-10" style={getTypeColor('ppt')}><Icon size={48} icon={DocCardsSvg}></Icon><span className="f-40 text-linear-gradient">PPT</span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" ><Sp text='ppt-site-description'>精美优雅 新一代幻灯片PPT<br />
                             简洁、直观、互动 且品牌化 <br />
                             超越文字和无聊的剪贴画的墙壁。</Sp>
                         </div>
                         <div className="flex-end padding-t-20">
-                            <img className="w100  h-300  round obj-center" src='static/img/ppt.png' />
+                            <img className="w100  h-300  round obj-top" src='static/img/pic-7.png' />
                         </div>
                     </div>
 
@@ -149,14 +149,14 @@ export function ProductView() {
                             <S text='使用诗云频道聊天随时随地即时联系并保持互动'>使用 诗云 频道聊天，随时随地即时联系并保持互动</S><br />
                         </div>
                         <div className="padding-t-20">
-                            <img className="w100 h-300 round obj-center" src='static/img/fr.png' />
+                            <img className="w100 h-300 round obj-top" src='static/img/fr.png' />
                         </div>
                     </div>
                     <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('friends-circle')} ><Icon size={48} icon={{ name: 'bytedance-icon', code: 'friends-circle' }}></Icon><span style={{ fontSize: 40 }}><S>互动</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" ><S text='讨论、点赞、喜欢、投票、评论'>讨论、点赞、喜欢、投票、评论</S></div>
                         <div className="padding-t-20">
-                            <img className="w100 h-300 round obj-center" src='static/img/tie.png' />
+                            <img className="w100 h-300 round obj-top" src='static/img/tie.png' />
                         </div>
                     </div>
                 </div>
@@ -278,7 +278,7 @@ export function ProductView() {
 
                 <div className="w65 ">
                     <video data-lazy title="ai gen mp4" className=" w100 obj-center" width="100%" height="56.25%"
-                        muted={true} loop={true} 
+                        muted={true} loop={true}
                         // autoPlay={true} 
                         controls={false}
                     // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
@@ -441,7 +441,7 @@ export function ProductView() {
             </div>
         </div>}
 
-        <div className="shy-site-block ">
+        {/* <div className="shy-site-block ">
             <div className="padding-h-50">
                 <h3 className="flex-center shy-site-block-head" ><S>基于网络进行大规模的社区化协作服务</S></h3>
                 <div className="remark gap-h-30 f-24 flex-center text-center">
@@ -492,23 +492,24 @@ export function ProductView() {
                 </div>
 
             </div>
-        </div>
+        </div> */}
 
         <div className="shy-site-block bg-gray-white" >
 
             <div className="padding-h-50">
                 <div className="flex-center">
-                    <img className="w-400 obj-center" src='static/img/read-book.svg' />
+                    <img className="size-120" src={UrlRoute.getUrl('static/img/shy.logo.256.png')} />
+                    {/* <img className="w-400 obj-center" src='static/img/read-book.svg' /> */}
                 </div>
                 <h3 className="shy-site-block-head flex-center">
-                    <S text="诗云知识社区协作生产力工具">诗云-知识社区协作生产力工具</S>
+                    <S text='知识社区协作生产力工具'>一体化的知识协作工作台</S>
                 </h3>
                 <div className="flex-center remark f-24 text-center l-30"  >
-                    <S text='互联协作创见未来'>互联协作，创见未来</S>
+                    <S text='你的想象力，就是我们的边界'>你的想象力，就是我们的边界</S>
                 </div>
                 <div className="flex-center gap-h-20">
-                    <a href='/sign/in' className="inline-block text-white bg-primary bg-primary  f-20 cursor round-8 padding-h-10 padding-w-30 "
-                    ><S>加入诗云</S></a>
+                    <a href='/sign/in' className="inline-block text-white bg-button-dark  f-20 cursor round-8 padding-h-8 padding-w-20 "
+                    ><S>免费使用</S></a>
                 </div>
             </div>
 
