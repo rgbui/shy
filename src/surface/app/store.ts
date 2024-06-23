@@ -114,55 +114,60 @@ export class Surface extends Events {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
             if (name) {
-                var r = await channel.get('/ws/query', { name });
-                if (r?.data.workspace) {
-                    var ws = new Workspace();
-                    ws.load({ ...r.data.workspace });
-                    if (Array.isArray(r.data.pids)) {
-                        ws.pids = r.data.pids;
+                try {
+                    var r = await channel.get('/ws/query', { name });
+                    if (r?.data.workspace) {
+                        var ws = new Workspace();
+                        ws.load({ ...r.data.workspace });
+                        if (Array.isArray(r.data.pids)) {
+                            ws.pids = r.data.pids;
+                        }
+                        wss.setWsPids(ws.id, ws.pids);
+                        var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
+                        if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
+                        else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
+                        var g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                        if (g.data.accessForbidden) {
+                            this.accessPage = 'forbidden';
+                            return
+                        }
+                        if (g.data.workspace) {
+                            ws.load({ ...g.data.workspace });
+                        }
+                        if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
+                        ws.roles = g.data.roles || [];
+                        ws.member = g.data.member || null;
+                        var robotIds = (g.data.robotIds || []) as string[];
+                        var willPageItem = g.data.page as PageItem;
+                        if (ws.access == 0
+                            &&
+                            !ws.member
+                            &&
+                            willPageItem
+                        ) {
+                            this.accessPage = 'accessPage';
+                            ws.load({ childs: [willPageItem] })
+                        }
+                        else {
+                            this.accessPage = 'accessWorkspace';
+                            await ws.onLoadPages();
+                        }
+                        if (surface.user.isSign) await ws.createTim();
+                        await sCache.set(CacheKey.wsHost, ws.sn);
+                        runInAction(() => {
+                            if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
+                            else this.temporaryWs = null;
+                            this.workspace = ws;
+                        })
+                        if (autoLoadPage) {
+                            await this.willOpenPage();
+                        }
+                        this.workspace.loadWsRobots(robotIds);
+                        return;
                     }
-                    wss.setWsPids(ws.id, ws.pids);
-                    var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
-                    if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
-                    else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
-                    var g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
-                    if (g.data.accessForbidden) {
-                        this.accessPage = 'forbidden';
-                        return
-                    }
-                    if (g.data.workspace) {
-                        ws.load({ ...g.data.workspace });
-                    }
-                    if (Array.isArray(g.data.onlineUsers)) g.data.onlineUsers.forEach(u => ws.onLineUsers.add(u))
-                    ws.roles = g.data.roles || [];
-                    ws.member = g.data.member || null;
-                    var robotIds = (g.data.robotIds || []) as string[];
-                    var willPageItem = g.data.page as PageItem;
-                    if (ws.access == 0
-                        &&
-                        !ws.member
-                        &&
-                        willPageItem
-                    ) {
-                        this.accessPage = 'accessPage';
-                        ws.load({ childs: [willPageItem] })
-                    }
-                    else {
-                        this.accessPage = 'accessWorkspace';
-                        await ws.onLoadPages();
-                    }
-                    if (surface.user.isSign) await ws.createTim();
-                    await sCache.set(CacheKey.wsHost, ws.sn);
-                    runInAction(() => {
-                        if (!this.wss.some(s => s.id == ws.id)) this.temporaryWs = ws as any;
-                        else this.temporaryWs = null;
-                        this.workspace = ws;
-                    })
-                    if (autoLoadPage) {
-                        await this.willOpenPage();
-                    }
-                    this.workspace.loadWsRobots(robotIds);
-                    return;
+                }
+                catch (ex) {
+
                 }
             }
             if (this.workspace) {
@@ -173,8 +178,8 @@ export class Surface extends Events {
                 UrlRoute.push(ShyUrl.signIn);
             }
             else if (window.shyConfig.isPro) {
-                if (location.host == UrlRoute.getHost()) UrlRoute.push(ShyUrl.root);
-                else location.href = UrlRoute.getUrl();
+                if (this.user.isSign) UrlRoute.push(ShyUrl.home)
+                else UrlRoute.push(ShyUrl.signIn);
             }
             else if (window.shyConfig.isDev)
                 UrlRoute.push(ShyUrl.home);

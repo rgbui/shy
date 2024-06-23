@@ -99,13 +99,18 @@ export class User {
         UrlRoute.push(ShyUrl.signIn);
     }
     async sign() {
-        await channel.put('/device/sign');
-        var r = await channel.get('/sign')
-        if (r?.ok) {
-            r.data.user.online = true;
-            r.data.user.rk = r.data.rk;
-            r.data.user.uk = r.data.uk;
-            this.syncUserInfo(r.data.user);
+        try {
+            await channel.put('/device/sign');
+            var r = await channel.get('/sign')
+            if (r?.ok) {
+                r.data.user.online = true;
+                r.data.user.rk = r.data.rk;
+                r.data.user.uk = r.data.uk;
+                this.syncUserInfo(r.data.user);
+            }
+        }
+        catch (ex) {
+            console.error(ex);
         }
     }
     async createTim(force?: boolean) {
