@@ -8,6 +8,8 @@
 declare var MODE: 'pro' | 'dev' | 'beta' | 'desktop';
 declare var PLATFORM: 'web' | 'desktop' | 'mobile' | "server-side";
 declare var VERSION: string;
+declare var VERSION_CLIENT:string;
+declare var VERSION_SERVER_CLIENT: string;
 declare var API_MASTER_URLS: string[];
 declare var FILE_URLS: string[];
 declare var API_URLS: string[];
