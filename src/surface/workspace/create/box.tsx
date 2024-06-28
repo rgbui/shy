@@ -18,6 +18,8 @@ import { OpenFileDialoug } from "rich/component/file";
 import { channel } from "rich/net/channel";
 import { UrlRoute } from "../../../history";
 import { HelpText } from "rich/component/view/text";
+import { useOpenUserSettings } from "../../user/settings/lazy";
+import { ShyDeskLocalStore } from "../../../../type";
 
 @observer
 export class CreateWorkspaceView extends EventsComponent {
@@ -32,26 +34,13 @@ export class CreateWorkspaceView extends EventsComponent {
         avatar: ResourceArguments,
         datasource: Workspace['datasource'],
         error: string,
-        privateCloundConfig: {
-            abled: boolean;
-            port: number;
-            storeDir: string;
-            mongodb: {
-                ip: string;
-                port: number;
-                account: string;
-                pwd: string;
-            };
-            esUrl: string;
-        },
         dataServiceAddress?: string
     } = {
             step: 2,
             name: '',
             avatar: null,
-            datasource: 'public-clound',
+            datasource: 'public-cloud',
             template: null,
-            privateCloundConfig: null,
             dataServiceAddress: '',
             error: ''
         }
@@ -118,31 +107,41 @@ export class CreateWorkspaceView extends EventsComponent {
                 <span className="flex-fixed"><HelpText url={window.shyConfig?.isUS ? "https://help.shy.red/page/80#2aEX6xrNuLcu1S7JvH8Xh7" : "https://help.shy.live/page/2043#3T3CRFcWtzTM4TtLDaMij6"}><S>了解存储源</S></HelpText></span>
             </div>
             <div>
-                <SelectBox dropAlign='full' border value={this.local.datasource} onChange={e => { this.local.datasource = e; this.local.error = ''; }} options={[
-                    { text: lst('诗云'), value: 'public-clound' },
-                    { text: lst('私有云'), value: 'private-clound' },
-                    {
-                        text: lst('本地'),
-                        disabled: config?.isDesk ? false : true,
-                        value: 'private-local',
-                        label: config?.isDesk ? undefined : lst('安装桌面客户端')
-                    }
-                ]}></SelectBox>
+                <SelectBox
+                    dropAlign='full'
+                    border
+                    value={this.local.datasource} onChange={e => { this.local.datasource = e; this.local.error = ''; }} options={[
+                        { text: lst('诗云'), value: 'public-cloud' },
+                        { text: lst('私有云'), value: 'private-cloud' },
+                        {
+                            text: lst('本地'),
+                            disabled: config?.isDesk ? false : true,
+                            value: 'private-local',
+                            label: config?.isDesk ? undefined : lst('安装桌面客户端')
+                        }
+                    ]}></SelectBox>
             </div>
-            {this.local.datasource == 'private-clound' && <>
+            {this.local.datasource == 'private-cloud' && <>
                 <div className="remark f-12 gap-t-10 gap-b-3"><S>私有云</S></div>
                 <div><Input value={this.local.dataServiceAddress} onChange={e => {
                     this.local.dataServiceAddress = e;
                 }} placeholder={lst('私有云服务号')}></Input></div>
             </>}
             {
-                this.local.datasource == 'private-local' && <div>
-                    {this.local.privateCloundConfig?.abled !== true && <div className="text-1 item-hover round" onMouseDown={e => this.openLocalServer()}><S>开启本地存储服务</S></div>}
+                this.local.datasource == 'private-local' && <div className="gap-h-10">
+                    {!surface.islocalServerSuccess && <div className="text-1 h-24  flex item-hover cursor round"
+                        onMouseDown={e => this.openLocalServer()}
+                    >
+                        <S text="开启本地存储服务">需要开启本地存储服务,点击开启</S>
+                    </div>}
                 </div>
             }
             <div className="gap-t-10 flex">
                 {/* <span className="flex-fixed item-hover round padding-w-5 padding-h-3 item-hover-light cursor" onMouseDown={e => { this.local.step = 1 }}><S>上一步</S></span> */}
-                <span className="flex-auto flex-end"><Button onMouseDown={(e, b) => this.onCreate(b)} ><S>创建</S></Button></span>
+                <span className="flex-auto flex-end"><Button
+                    disabled={this.local.datasource == 'private-local' && surface.islocalServerSuccess || this.local.datasource == 'private-cloud' && this.local.dataServiceAddress || this.local.datasource == 'public-cloud' ? false : true}
+                    onMouseDown={(e, b) => this.onCreate(b)}
+                ><S>创建</S></Button></span>
             </div>
             {this.local.error && <div className="error  gap-t-10">{this.local.error}</div>}
         </div>
@@ -152,19 +151,24 @@ export class CreateWorkspaceView extends EventsComponent {
         var ws;
         try {
             this.local.error = '';
-            if (this.local.datasource == 'private-clound' && !this.local.dataServiceAddress) {
+            if (this.local.datasource == 'private-cloud' && !this.local.dataServiceAddress) {
                 this.local.error = lst('私有云服务号不能为空')
                 return;
             }
-            else if (this.local.datasource == 'private-local' && !(this.local.privateCloundConfig?.abled === true)) {
+            else if (this.local.datasource == 'private-local' && !surface.islocalServerSuccess) {
                 this.local.error = lst('请开启本地存储服务')
                 return;
+            }
+            var rd: ShyDeskLocalStore;
+            if (this.local.datasource == 'private-local') {
+                rd = await surface.shyDesk.readLocalStore()
             }
             var rr = await channel.put('/ws/create', {
                 text: this.local.name || lst("{name}的空间", { name: surface.user?.name || "" }),
                 datasource: this.local.datasource,
+                datasourceClientId: rd?.clientId,
                 templateUrl: this.local.template || undefined,
-                dataServiceAddress: this.local.datasource == 'private-clound' ? this.local.dataServiceAddress : undefined
+                serviceAddress: this.local.datasource == 'private-cloud' ? this.local.dataServiceAddress : undefined
             })
             if (rr.ok) {
                 await surface.loadWorkspaceList();
@@ -188,9 +192,6 @@ export class CreateWorkspaceView extends EventsComponent {
             {this.local.step == 2 && this.renderStep2()}
         </div>
     }
-    async openLocalServer() {
-
-    }
     componentDidMount(): void {
         this.open();
     }
@@ -200,14 +201,13 @@ export class CreateWorkspaceView extends EventsComponent {
             name: '',
             error: '',
             avatar: null,
-            datasource: 'public-clound',
-            template: null,
-            privateCloundConfig: null
+            datasource: 'public-cloud',
+            template: null
         }
-        var rs = config.isDesk ? await surface.shyDesk.readLocalStore() : null;
-        if (rs) {
-            this.local.privateCloundConfig = rs;
-        }
+    }
+    openLocalServer() {
+        this.emit('close');
+        useOpenUserSettings('local-store');
     }
 }
 

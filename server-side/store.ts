@@ -37,7 +37,6 @@ export class ServerSlideStore {
     time;
     async load() {
         var g = await this.shyServiceSlideElectron.getDeviceID();
-        console.log('device code', g);
         if (g) { this.machineCode = g; }
         var mid = await yCache.get(ServerServiceMachineIdKey);
         var filter: Record<string, any> = {};
@@ -50,32 +49,12 @@ export class ServerSlideStore {
                 this.service_machine = r.data.service_machine;
                 r.data.pids.forEach(d => {
                     var oldPid = this.pids.find(c => c.id == d.id);
-                    if (oldPid) d.status = oldPid.status;
-                    else d.status = 'stop';
+                    if (oldPid) { d.status = oldPid.status; d.loading = oldPid.loading || false; }
+                    else { d.status = 'stop'; d.loading = false; }
                 })
                 this.pids = r.data.pids;
             })
         }
-
-        this.time = setTimeout(async () => {
-
-            var now = new Date();
-            var hour = now.getHours();
-            if (hour > 6 && hour < 20) {
-                if (this.willUpdatePack.loading) return;
-                if (this.willUpdatePack.version) return;
-                // 1点到6点 13点到18点 检查更新，避免影响用户使用 增加随机时间，避免同时检查
-                util.delay(1000 * 60 * util.getRandom(0, 20));
-                await this.checkVersionUpdate()
-            }
-            if (hour > 1 && hour < 6) {
-                if (this.willUpdatePack.installLoading) return;
-                if (this.willUpdatePack.version) {
-                    await this.updateInstall()
-                }
-            }
-        }, 1000 * 60 * 60 * 1);
-        await this.checkVersionUpdate()
     }
     async unload() {
         if (this.time) {
@@ -118,7 +97,7 @@ export class ServerSlideStore {
             if (g.ok) {
                 serverSlideStore.pids.push(g.data.pid);
                 await this.savePid(serverSlideStore.pids.find(c => c.id == g.data.pid.id))
-                
+
             }
         }
     }
@@ -159,12 +138,31 @@ export class ServerSlideStore {
         await this.checkConnect('es')
     }
     async runPid(pid: Pid, event?: React.MouseEvent) {
-        var g = await serverSlideStore.shyServiceSlideElectron.runPid(lodash.cloneDeep(pid))
-        pid.status = 'running';
+        try {
+            pid.loading = true
+            var r = await serverSlideStore.shyServiceSlideElectron.runPid(lodash.cloneDeep(pid))
+            console.log('ggg', r);
+            pid.status = 'running';
+        }
+        catch (ex) {
+            console.error(ex);
+        }
+        finally {
+            pid.loading = false;
+        }
     }
     async stopPid(pid: Pid, event?: React.MouseEvent) {
-        var g = await serverSlideStore.shyServiceSlideElectron.stopPid(lodash.cloneDeep(pid))
-        pid.status = 'stop'
+        try {
+            pid.loading = true
+            await serverSlideStore.shyServiceSlideElectron.stopPid(lodash.cloneDeep(pid))
+            pid.status = 'stop'
+        }
+        catch (ex) {
+            console.error(ex);
+        }
+        finally {
+            pid.loading = false;
+        }
     }
     async runAll() {
         for (let i = 0; i < this.pids.length; i++) {
@@ -177,62 +175,7 @@ export class ServerSlideStore {
         }
     }
 
-    //更新
-    willUpdatePack: {
-        loading: boolean,
-        version: string,
-        filePath: string,
-        installLoading: boolean,
-    } = { loading: false, version: '', filePath: '', installLoading: false };
-    async checkVersionUpdate() {
-        this.willUpdatePack.loading = true;
-        try {
-            var config = (await this.shyServiceSlideElectron.getConfig());
-            var r = await masterSock.get('/pub/server/check/version', { version: config.version });
-            if (r.ok) {
-                if (r.data?.pub_version) {
-                    var g: {
-                        windowPackUrl: string,
-                        macPackUrl: string,
-                        linuxPackUrl: string,
-                        version: string,
-                    } = r.data.pub_version;
-                    var url = g.windowPackUrl;
-                    if (config.platform == 'darwin') url = g.macPackUrl;
-                    if (config.platform == 'linux') url = g.linuxPackUrl;
-                    var c = await this.shyServiceSlideElectron.downloadServerPack(url, g.version);
-                    this.willUpdatePack.version = g.version;
-                    this.willUpdatePack.filePath = c.zipFilePath;
-                }
-            }
-        }
-        catch (ex) {
 
-        }
-        finally {
-            this.willUpdatePack.loading = false
-        }
-    }
-    async updateInstall() {
-        try {
-            this.willUpdatePack.installLoading = true;
-            await this.stopAll();
-            await this.shyServiceSlideElectron.packServerSlide(this.willUpdatePack.filePath, this.willUpdatePack.version);
-            runInAction(() => {
-                this.willUpdatePack.loading = false;
-                this.willUpdatePack.version = null;
-                this.willUpdatePack.filePath = null;
-                this.willUpdatePack.installLoading = false;
-            })
-        }
-        catch (ex) {
-
-        }
-        finally {
-            this.willUpdatePack.installLoading = false;
-            await this.runAll()
-        }
-    }
 }
 
 export var serverSlideStore = new ServerSlideStore()

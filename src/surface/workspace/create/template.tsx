@@ -5,6 +5,7 @@ import { surface } from "../../app/store";
 import { Workspace } from "..";
 import { lst } from "rich/i18n/store";
 import { wss } from "../../../../services/workspace";
+import { getDeskLocalPids } from "../../app/desk";
 
 export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
     ShyAlert(lst('正在初始化创建空间'), 'success', 1000 * 60 * 5);
@@ -34,7 +35,11 @@ export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
                 var wsName = '1'
                 if (window.shyConfig.isDev) wsName = '34';
                 var ws = await channel.get('/ws/query', { name: wsName });
-                wss.setWsPids(ws.data.workspace.id, ws.data.pids);
+                var pids = rr.data.pids;
+                if (ws.data.workspace?.datasource == 'private-local') {
+                    pids = await getDeskLocalPids()
+                }
+                wss.setWsPids(ws.data.workspace.id, pids);
                 var sock = Workspace.getWsSock(ws.data.pids, 'ws', ws.data.workspace.id)
                 await channel.put('/user/join/ws', { wsId: ws.data.workspace.id });
                 await channel.put('/ws/invite/join', { wsId: ws.data.workspace.id, username: surface.user.name, sock, agree: false });

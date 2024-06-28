@@ -12,12 +12,11 @@ import { PageItem } from "../sln/item";
 import { PageViewStores } from "../supervisor/view/store";
 import { config } from "../../../common/config";
 import { blockStore } from "rich/extensions/block/store";
-import { ls, lst } from "rich/i18n/store";
+import { ls } from "rich/i18n/store";
 import { PageTemplateType } from "rich/extensions/template";
 import { ElementType, getElementUrl } from "rich/net/element.type";
-import { masterSock } from "../../../net/sock";
+import { Sock } from "../../../net/sock";
 import { ShyDesk } from "../../../type";
-import { Confirm } from "rich/component/lib/confirm";
 import { useCreateWorkspace } from "../workspace/create/box";
 import { wss } from "../../../services/workspace";
 import { isMobileOnly } from "react-device-detect";
@@ -25,6 +24,9 @@ import { KeyboardPlate } from "rich/src/common/keys";
 import "./service";
 import { IconArguments } from "rich/extensions/icon/declare";
 import { GlobalKeyboard } from "./keyboard";
+import { getDeskLocalPids } from "./desk";
+import { util } from "rich/util/util";
+import lodash from "lodash";
 
 export type UserWorkspaceItem = {
     id: string,
@@ -36,10 +38,10 @@ export type UserWorkspaceItem = {
     randomOnlineUsers: Set<string>,
     loadingOnlineUsers: boolean,
     unreadChats: { id: string, roomId: string, seq: number }[],
-
+    datasource?: 'private-cloud' | 'public-cloud' | 'private-local',
+    datasourceClientId?: string,
     memberOnlineCount: number,
     memberCount: number,
-
     folderId: string,
     at: number,
     owner: string,
@@ -94,6 +96,14 @@ export class Surface extends Events {
             var r = await channel.get('/user/wss');
             if (r?.ok) {
                 var list: UserWorkspaceItem[] = r.data.list;
+                if (!window.shyConfig.isDesk) {
+                    list = list.filter(g => g.datasource != 'private-local')
+                }
+                else {
+                    var rd = await this.shyDesk.readLocalStore();
+                    if (rd && rd.clientId)
+                        list = list.filter(g => g.datasource != 'private-local' || g.datasource == 'private-local' && (g.datasourceClientId && g.datasourceClientId == rd.clientId || !g.datasourceClientId));
+                }
                 list = list.sort((x, y) => {
                     if (typeof x.at == 'number' && typeof y.at == 'number' && x?.at < y?.at) return -1;
                     else return 1;
@@ -119,14 +129,36 @@ export class Surface extends Events {
                     if (r?.data.workspace) {
                         var ws = new Workspace();
                         ws.load({ ...r.data.workspace });
-                        if (Array.isArray(r.data.pids)) {
+                        if (r.data.workspace.datasource == 'private-local') {
+                            ws.pids = await getDeskLocalPids();
+                            await this.waitRunLocalServer();
+                        }
+                        else if (Array.isArray(r.data.pids)) {
                             ws.pids = r.data.pids;
                         }
                         wss.setWsPids(ws.id, ws.pids);
                         var willPageId = UrlRoute.isMatch(ShyUrl.root) ? ws.defaultPageId : undefined;
                         if (UrlRoute.isMatch(ShyUrl.page)) willPageId = UrlRoute.match(ShyUrl.page)?.pageId;
                         else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
-                        var g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                        if (lodash.isNull(willPageId)) willPageId = undefined;
+                        var g: any;
+                        // if (ws.datasource == 'private-local') {
+                        //     var count = 0;
+                        //     while (true) {
+                        //         count += 1;
+                        //         if (count > 100) break;
+                        //         try {
+                        //             g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                        //             break;
+                        //         }
+                        //         catch (ex) {
+                        //             await util.delay(50);
+                        //         }
+                        //     }
+                        // }
+                        // else {
+                        g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                        // }
                         if (g.data.accessForbidden) {
                             this.accessPage = 'forbidden';
                             return
@@ -167,7 +199,7 @@ export class Surface extends Events {
                     }
                 }
                 catch (ex) {
-
+                    console.error(ex);
                 }
             }
             if (this.workspace) {
@@ -175,14 +207,15 @@ export class Surface extends Events {
             }
             this.workspace = null;
             if (window.shyConfig.isDesk) {
-                UrlRoute.push(ShyUrl.signIn);
+                // UrlRoute.push(ShyUrl.signIn);
             }
             else if (window.shyConfig.isPro) {
                 if (this.user.isSign) UrlRoute.push(ShyUrl.home)
                 else UrlRoute.push(ShyUrl.signIn);
             }
-            else if (window.shyConfig.isDev)
+            else if (window.shyConfig.isDev) {
                 UrlRoute.push(ShyUrl.home);
+            }
 
         }
         catch (ex) {
@@ -349,56 +382,57 @@ export class Surface extends Events {
             catch (ex) {
 
             }
-        }
-        )
-        if (config.isDesk) {
-            if (await this.checkDeskVersionUpdate()) {
-                if (await Confirm(lst('发现新补丁', '发现新补丁，是否更新？'))) {
-                    await this.shyDesk.downloadServerPack(this.willUpdatePack.url, this.willUpdatePack.version)
+        })
 
-                }
-            }
-            await this.shyDesk.ready();
+        if (config.isDesk) {
+            this.runLocalServer();
         }
     }
-
     get shyDesk() {
         return (window as any).ShyDesk as ShyDesk
     }
-
-    //更新
-    willUpdatePack: {
-        version: string,
-        url: string,
-    } = { url: '', version: '' };
-    async checkDeskVersionUpdate() {
+    async runLocalServer() {
+        console.log('checkLocalServer');
+        await this.checkLocalServer();
+    }
+    islocalServerSuccess: boolean = false;
+    loadLocalServerFail: boolean = false;
+    async checkLocalServer(force?: boolean) {
         try {
             var rd = await this.shyDesk.readLocalStore();
-            if (rd?.abled) {
-                var config = (await this.shyDesk.getConfig());
-                var r = await masterSock.get('/pub/server/check/version', { version: config.version });
-                if (r.ok) {
-                    if (r.data?.pub_version) {
-                        var g: {
-                            windowPackUrl: string,
-                            macPackUrl: string,
-                            linuxPackUrl: string,
-                            version: string,
-                        } = r.data.pub_version;
-                        var url = g.windowPackUrl;
-                        if (config.platform == 'darwin') url = g.macPackUrl;
-                        if (config.platform == 'linux') url = g.linuxPackUrl;
-                        this.willUpdatePack.version = g.version;
-                        this.willUpdatePack.url = url;
+            if (rd?.abled || force == true) {
+                var sock = Sock.createSock('http://127.0.0.1:' + (rd?.port || 12800));
+                var code = Math.random();
+                var r = await sock.get('/ws/check/connect', { code });
+                if (r?.ok) {
+                    if (r.data.code == code) {
+                        this.islocalServerSuccess = true;
                         return true;
                     }
                 }
             }
+            return false;
         }
         catch (ex) {
-
+            console.error(ex);
+            return false;
         }
-        return false;
+    }
+    async waitRunLocalServer(force?: boolean) {
+        var t = 0;
+        while (true) {
+            if (this.islocalServerSuccess) break;
+            else {
+                await this.checkLocalServer(force);
+                await util.delay(100);
+                t += 100;
+            }
+            if (t > 5000) {
+                this.loadLocalServerFail = true;
+                break;
+            }
+        }
+        console.log('tim', t);
     }
 }
 export var surface = new Surface();

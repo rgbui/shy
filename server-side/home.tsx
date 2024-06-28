@@ -11,7 +11,6 @@ import { Spin } from "rich/component/view/spin";
 import { SettingsSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { useServerSlideConfig } from "./config";
-import { Button } from "rich/component/view/button";
 import { S } from "rich/i18n/view";
 
 export var ServerSlideView = observer(function () {
@@ -62,11 +61,11 @@ export var ServerSlideView = observer(function () {
                 {surface.user && <a className="remark cursor item-hover round " onMouseDown={e => exit()}><S>退出</S></a>}
             </div>
         </div>
-        <div className="padding-w-100 gap-t-80 overflow-y padding-h-80 " style={{ boxSizing: 'border-box', height: 'calc(100% - 60px)' }}>
-            {serverSlideStore.willUpdatePack.version && <div className="padding-20 round border shadow">
+        <div className="padding-w-100 gap-t-50 overflow-y padding-h-80 " style={{ boxSizing: 'border-box', height: 'calc(100% - 60px)' }}>
+            {/* {serverSlideStore.willUpdatePack.version && <div className="padding-20 round border shadow">
                 {serverSlideStore.willUpdatePack.installLoading && <><div className="flex"><Spin></Spin><S>正在安装更新中,请不要退出关闭...</S></div></>}
                 {serverSlideStore.willUpdatePack.installLoading && <><div className="flex"><span><S>将在夜里1点~5点期间自动安装更新</S></span><Button onMouseDown={e => serverSlideStore.updateInstall()} >手动更新</Button></div></>}
-            </div>}
+            </div>} */}
             {!local.isLoad && local.loading && <Spin block></Spin>}
             {local.isLoad && <div >
                 {!serverSlideStore.service_machine && <ServerConfigCreate></ServerConfigCreate>}

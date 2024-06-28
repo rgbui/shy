@@ -10,6 +10,7 @@ import { lst } from "rich/i18n/store";
 import { wsUserCacheStore } from "./cache/user.ws";
 import { WorkspaceMember } from "rich/types/user";
 import lodash from "lodash";
+import { getDeskLocalPids } from "../src/surface/app/desk";
 
 class WorkspaceService extends BaseService {
     private wsPids: Map<string, any[]> = new Map();
@@ -26,8 +27,12 @@ class WorkspaceService extends BaseService {
         else {
             var r = await masterSock.get('/ws/pids', { wsId });
             if (r?.ok) {
-                sock = Workspace.getWsSock(r.data.pids, 'ws', wsId)
-                this.wsPids.set(wsId, r.data.pids)
+                var rpids = r.data.pids;
+                if (r.data.source == 'private-local') {
+                    rpids = await getDeskLocalPids();
+                }
+                sock = Workspace.getWsSock(rpids, 'ws', wsId)
+                this.wsPids.set(wsId, rpids)
             }
         }
         return sock;
@@ -84,18 +89,20 @@ class WorkspaceService extends BaseService {
     async createWs(data: {
         text: string,
         dataServiceAddress?: string,
-        searchServiceAddress?: string,
-        fileServiceAddress?: string,
+        datasource?: 'public-clound' | 'private-clound' | 'private-local',
         templateUrl?: string
     }) {
         var rr = await masterSock.put('/ws/create', {
             text: data.text,
-            dataServiceAddress: data.dataServiceAddress,
-            searchServiceAddress: data.searchServiceAddress,
-            fileServiceAddress: data.fileServiceAddress,
+            datasource: data.datasource,
+            serviceAddress: data.dataServiceAddress
         })
         if (rr.ok) {
-            var url = Workspace.getWsSockUrl(rr.data.pids, 'ws');
+            var pids = rr.data.pids;
+            if (data.datasource == 'private-local') {
+                pids = await getDeskLocalPids();
+            }
+            var url = Workspace.getWsSockUrl(pids, 'ws');
             var sock = Sock.createSock(url);
             await sock.put('/ws/init', {
                 wsId: rr.data.workspace.id,
@@ -104,7 +111,7 @@ class WorkspaceService extends BaseService {
                 templateUrl: data.templateUrl
                 // templateId?: string
             });
-            return { ok: true, data: { workspace: rr.data.workspace, pids: rr.data.pids } }
+            return { ok: true, data: { workspace: rr.data.workspace, pids: pids } }
         }
         else return { ok: false, warn: rr.warn }
     }

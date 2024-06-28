@@ -15,7 +15,6 @@ export interface ShyServiceSlideElectron {
     deletePid: (pid: Pid) => Promise<void>,
     stopPid: (pid: Pid) => Promise<void>,
     checkServiceConnect: (sn: ServiceNumber, name: 'mongodb' | 'redis' | 'es') => Promise<{ error: string, connect: boolean }>
-    installSoft: (callback: (data: string) => void) => void,
     openFile(options: {
         dialogTitle?: string,
         mode?: 'file' | 'dir',
@@ -26,9 +25,8 @@ export interface ShyServiceSlideElectron {
     openPath(filePath: string): Promise<void>,
     setStartUp(isAutoStartup: boolean): Promise<void>,
     setTray(isTray: boolean): Promise<void>,
-    getLocalIp: () => Promise<string>,
-    downloadServerPack(url: string, version: string): Promise<{ zipFilePath: string }>,
-    packServerSlide(filePath: string, version: string): Promise<void>,
+    getLocalIp: () => Promise<string>
+  
 }
 
 
@@ -95,7 +93,8 @@ export class Pid {
     public mode: string;
     public storeDir: string;
     public status?: 'running' | 'stop' | 'error';
-    public config?: Record<string, any>
+    public config?: Record<string, any>;
+    public loading?:boolean;
 }
 export const ServerServiceMachineIdKey = 'ServerServiceMachineId';
 

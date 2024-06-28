@@ -17,6 +17,7 @@ import { useJoinWorkspaceProtocol } from "./protocol";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import { runInAction } from "mobx";
+import { getDeskLocalPids } from "../../app/desk";
 
 export var InviteView = observer(function () {
     var local = useLocalObservable<{
@@ -38,15 +39,20 @@ export var InviteView = observer(function () {
         var w = await channel.get('/ws/invite/check', { invite: inviteCode });
         if (w.ok) {
             var rg = {} as any;
+            var pids = w.data.pids;
+            if (w.data.workspace?.datasource == 'private-local') {
+                pids = await getDeskLocalPids()
+            }
             if (surface.user.isSign) rg = await channel.get('/ws/is/member', {
-                sock: Sock.createSock(Workspace.getWsSockUrl(w.data.pids, 'ws')),
+                sock: Sock.createSock(Workspace.getWsSockUrl(pids, 'ws')),
                 wsId: w.data.workspace.id
             })
             // if (rg?.data?.exists) return UrlRoute.pushToWs(w.data.workspace.siteDomain || w.data.workspace.sn);
             runInAction(() => {
                 local.exists = rg?.data?.exists;
                 local.ws = Object.assign({}, w.data.workspace || {}, rg?.data?.workspace || {});
-                local.pids = w.data.pids;
+                
+                local.pids = pids;
                 local.loading = false;
             })
         }

@@ -56,8 +56,8 @@ export default class UserSettings extends EventsComponent {
     el: HTMLElement;
     render() {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
-        return <div ref={e => this.el = e} className='shy-user-settings fixed-full'>
-            <div className='screen-content-1000 flex-full h100 relative'>
+        return <div ref={e => this.el = e} className='shy-user-settings fixed-full desk-drag'>
+            <div className='screen-content-1000 desk-no-drag flex-full h100 relative'>
                 <div style={{ marginTop: config.isDesk ? 30 : undefined }} className='flex-fixed w-200 shy-user-settings-slide h100 box-border overflow-y'>
                     <div className={config.isDesk ? "padding-t-30 padding-b-60" : 'padding-h-60'}>
                         <h4><S>用户设置</S></h4>
@@ -94,7 +94,8 @@ export default class UserSettings extends EventsComponent {
                     </div>
                 </div>
                 <div className='flex-fixed shy-user-settings-content  h100 box-border overflow-y'>
-                    <div className='padding-h-60'>
+                    <div className='h-60 desk-drag'></div>
+                    <div >
                         {this.mode == 'user-settings' && <UserSettingsView setMode={() => { this.mode = 'user-profile' }}></UserSettingsView>}
                         {this.mode == 'user-profile' && <UserSettingProfile></UserSettingProfile>}
                         {this.mode == 'user-pks' && <ShyUserPks></ShyUserPks>}
@@ -111,7 +112,8 @@ export default class UserSettings extends EventsComponent {
                         {this.mode == 'PrivateClound' && <PrivateClound></PrivateClound>}
                     </div>
                 </div>
-                <div className='shy-user-settings-operators'>
+            </div>
+            <div className='shy-user-settings-operators desk-no-drag'>
                     <a onMouseDown={e => this.close()}>
                         <span>
                             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path
@@ -121,7 +123,6 @@ export default class UserSettings extends EventsComponent {
                         <label><S>退出</S></label>
                     </a>
                 </div>
-            </div>
         </div >
     }
 }

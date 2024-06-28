@@ -107,8 +107,8 @@ if (mode == 'pro') {
         TrackCode = `
     <link rel="dns-prefetch" href="//shy.live">
     <link rel="dns-prefetch" href="//resources.shy.live">
-    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-    <script  src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script charset="UTF-8" id="LA_COLLECT" src="https://sdk.51.la/js-sdk-pro.min.js"></script>
+    <script  src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
     <script>location.host.endsWith('shy.live')&& LA.init({ id: "3EweegziSpUbz8TW", ck: "3EweegziSpUbz8TW", autoTrack: true, hashMode: true })</script>`
     }
 }
@@ -348,6 +348,8 @@ module.exports = {
             PLATFORM: JSON.stringify(platform),
             MODE: JSON.stringify(mode),
             VERSION: JSON.stringify(pkg.version),
+            VERSION_CLIENT: JSON.stringify(pkg.client_version),
+            VERSION_SERVER_CLIENT: JSON.stringify(pkg.server_version),
             API_MASTER_URLS: JSON.stringify(API_MASTER_URLS),
             API_URLS: JSON.stringify(API_URLS),
             FILE_URLS: JSON.stringify(FILE_URLS),

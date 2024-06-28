@@ -7,8 +7,8 @@ import { DuplicateSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 import { CopyAlert } from "rich/component/copy";
 import { lst } from "rich/i18n/store";
-import { UrlRoute } from "../../../../history";
 import { Tip } from "rich/component/view/tooltip/tip";
+import { HelpText } from "rich/component/view/text";
 
 export class ServiceNumber {
     public id: string;
@@ -50,8 +50,8 @@ export class PrivateClound extends React.Component {
         return <div>
             <div className="h2"><S>私有云</S></div>
             <Divider></Divider>
-            {this.list.length == 0 && <div className="flex-center remark gap-h-20 f-12"><S>还没有自已的私有云</S><a className="link gap-l-10" href={UrlRoute.getUrl('/download')}><S>创建私有数据存储</S></a></div>}
-            {this.list.map(l => {
+            {this.list.length == 0 && <div className="flex-center remark gap-h-20 f-12"><S>还没有自已的私有云</S>,<HelpText url={'https://help.shy.live/page/295#oxX8o71Qe5v56TDivA4WED'}><S>了解如何创建私用云</S></HelpText></div>}
+            {this.list.map(l=>{
                 return <div key={l.id} className="round item-hover-light-focus item-hover gap-b-10 padding-10">
                     <div className="flex">
                         <span className="remark"><S>服务号</S>:</span><span>{l.serviceNumber}</span>

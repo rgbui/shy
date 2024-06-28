@@ -321,21 +321,21 @@ export class SideBar extends React.Component {
     }
     renderWs(workspace: UserWorkspaceItem, size?: 48 | 20, isFolderIn?: boolean) {
         if (size == 20) {
-            if (workspace.icon) return <a className="shy-sidebar-ws-icon cursor  size-16 flex-center   relative">
+            if (workspace.icon) return <a className="shy-sidebar-ws-icon cursor  size-16 flex-fixed  flex-center   relative">
                 <img draggable={false} src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 16, height: 16 }} />
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
-            else return <a className="shy-sidebar-ws-name  cursor  size-16 flex-center   relative">
+            else return <a className="shy-sidebar-ws-name  cursor  size-16 flex-fixed  flex-center   relative">
                 <span className="f-12" style={{ transform: 'scale(0.5)',whiteSpace:'nowrap' }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
         }
         else {
-            if (workspace.icon) return <a className={"shy-sidebar-ws-icon cursor  size-48 flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
+            if (workspace.icon) return <a className={"shy-sidebar-ws-icon cursor  size-48 flex-fixed  flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
                 <img draggable={false} src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
-            else return <a className={"shy-sidebar-ws-name  cursor  size-48 flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
+            else return <a className={"shy-sidebar-ws-name  cursor  size-48 flex-fixed  flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
                 <span style={{ fontSize: 18 }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
@@ -439,7 +439,7 @@ export class SideBar extends React.Component {
                 {this.renderWss()}
             </div>
             <div className="flex-fixed flex flex-col flex-center padding-t-6">
-                <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
+                <a className="shy-sidebar-operator size-48 flex-fixed  flex-center gap-w-12 gap-b-6" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
                 {/* <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a> */}
                 {window.shyConfig?.isWeb && <><div className="shy-sidebar-divider"></div><a target="_blank" href={window.shyConfig?.isUS ? "https://shy.red/download" : "https://shy.live/download"} className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-h-6"><Icon size={24} icon={{ name: 'byte', code: 'to-bottom' }}></Icon></a></>}
             </div>

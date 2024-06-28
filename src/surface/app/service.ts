@@ -26,6 +26,7 @@ import { useOpenRobotSettings } from "../workspace/robot/view";
 import { userChannelStore } from "../user/channel/store";
 import { useLazyOpenWorkspaceSettings } from "../workspace/settings/lazy";
 import { useOpenUserSettings } from "../user/settings/lazy";
+import { getDeskLocalPids } from "./desk";
 
 class MessageCenter {
     @query('/ws/current/pages')
@@ -415,7 +416,10 @@ class MessageCenter {
             if (r?.data.workspace) {
                 var ws = new Workspace();
                 ws.load({ ...r.data.workspace });
-                if (Array.isArray(r.data.pids)) {
+                if (r.data.workspace?.datasource == 'private-local') {
+                    ws.pids = await getDeskLocalPids()
+                }
+                else if (Array.isArray(r.data.pids)) {
                     ws.pids = r.data.pids;
                 }
                 wss.setWsPids(ws.id, ws.pids);

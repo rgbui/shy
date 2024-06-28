@@ -16,7 +16,7 @@ export var ServerConfigView = observer(function () {
         var ps: string[] = [];
         Object.keys(obj).forEach(c => {
             if (obj[c]) {
-                if (c == 'paw') ps.push(`${c}=****}`)
+                if (c == 'pwd') ps.push(`${c}=****}`)
                 else ps.push(`${c}=${obj[c]}`)
             }
             else ps.push(c)
@@ -32,12 +32,12 @@ export var ServerConfigView = observer(function () {
 
 
     return <div>
-        <div className="h4  gap-t-30"><span><S>服务号</S></span></div>
+        <div className="h4  gap-t-10"><span><S>服务号</S></span></div>
         <div className="f-14 r-gap-h-10 ">
             <div className="flex">
                 <span><S>服务号</S>:</span>
                 <span>{serverSlideStore.service_number.serviceNumber}</span>
-                <Tip text={'编辑'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></Tip>
+                <Tip text={'编辑'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor  round item-hover gap-l-10"><Icon size={16} icon={{name:"byte",code:"write"}}></Icon></span></Tip>
             </div>
             <div className="">
                 <div className="flex">
@@ -48,7 +48,12 @@ export var ServerConfigView = observer(function () {
                     </span></Tip>
                     <a className="link cursor padding-l-5" onMouseDown={e => serverSlideStore.changeService()}>更换</a>
                 </div>
-                <div className="remark f-12 gap-t-5"><S text={'可将空间存储地址发给需要存储在这里的朋友'}>可将空间存储地址发给需要存储在这里的朋友，注意保持网络连通。</S></div>
+                <div className="remark f-12 gap-t-5"><S text={'可将空间存储地址发给需要存储在这里的朋友'}>可将空间服务号地址发给需要存储在这里的朋友，注意保持网络连通。</S></div>
+            </div>
+
+
+            <div className="h4  gap-t-30">
+                <span><span>检测连接</span></span>
             </div>
 
             <div>
@@ -57,7 +62,7 @@ export var ServerConfigView = observer(function () {
                     {serverSlideStore.mongodbCheck.connect == false && <Icon className={'gap-r-5'} size={20} icon={CloseSvg}></Icon>}
                     <Button disabled={serverSlideStore.mongodbCheck.loading} onClick={e => serverSlideStore.checkConnect('mongodb')} size={'small'} ghost >{serverSlideStore.mongodbCheck.loading && <Spin size={16}></Spin>}<S>检测Mongodb是否正常连接</S></Button>
                     <span className="gap-l-10">{renderConfig(serverSlideStore.service_number.mongodb)}</span>
-                    <Tip text={'编辑Mongodb'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></Tip>
+                    <Tip text={'编辑Mongodb'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor round item-hover gap-l-10"><Icon size={16} icon={{name:"byte",code:"write"}}></Icon></span></Tip>
                 </div>
                 {serverSlideStore.mongodbCheck.connect == false && <div className="error gap-h-5">{serverSlideStore.mongodbCheck.error}</div>}
             </div>
@@ -68,7 +73,7 @@ export var ServerConfigView = observer(function () {
                     {serverSlideStore.redisCheck.connect == false && <Icon className={'gap-r-5'} size={20} icon={CloseSvg}></Icon>}
                     <Button disabled={serverSlideStore.redisCheck.loading} onClick={e => serverSlideStore.checkConnect('redis')} size={'small'} ghost >{serverSlideStore.redisCheck.loading && <Spin size={16}></Spin>}<S>检测Redis是否正常连接</S></Button>
                     <span className="gap-l-10">{renderConfig(serverSlideStore.service_number.redis)}</span>
-                    <Tip text={'编辑Redis'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></Tip>
+                    <Tip text={'编辑Redis'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor  round item-hover gap-l-10"><Icon size={16} icon={{name:"byte",code:"write"}}></Icon></span></Tip>
                 </div>
                 {serverSlideStore.redisCheck.connect == false && <div className="error gap-h-5">{serverSlideStore.redisCheck.error}</div>}
             </div>
@@ -80,11 +85,12 @@ export var ServerConfigView = observer(function () {
                     {serverSlideStore.esCheck.connect == false && <Icon className={'gap-r-5'} size={20} icon={CloseSvg}></Icon>}
                     <Button disabled={serverSlideStore.esCheck.loading} onClick={e => serverSlideStore.checkConnect('es')} size={'small'} ghost >{serverSlideStore.esCheck.loading && <Spin size={16}></Spin>}<S>检测ElasticSearch是否正常连接</S></Button>
                     <span className="gap-l-10">{renderConfig(serverSlideStore.service_number.search)}</span>
-                    <Tip text={'编辑ElasticSearch'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor"><Icon size={16} icon={EditSvg}></Icon></span></Tip>
+                    <Tip text={'编辑ElasticSearch'}><span onClick={e => serverSlideStore.editService()} className="flex-center size-20 cursor  round item-hover gap-l-10"><Icon size={16} icon={{name:"byte",code:"write"}}></Icon></span></Tip>
                 </div>
                 {serverSlideStore.esCheck.connect == false && <div className="error gap-h-5">{serverSlideStore.esCheck.error}</div>}
             </div>
             }
+
         </div>
 
         <Divider></Divider>
@@ -95,7 +101,7 @@ export var ServerConfigView = observer(function () {
                 <Button size={'small'} onMouseDown={e => serverSlideStore.stopAll()}><S>全部暂停</S></Button>
             </div>
             <div className="flex-fixed">
-                {(serverSlideStore.pids.length > 1 && serverSlideStore.service_number?.redis?.abled == true || serverSlideStore.pids.length <= 1) && <Button size={'small'} onMouseDown={e => { serverSlideStore.addPid(e); this.forceUpdate() }}><S>添加</S></Button>}
+                {(serverSlideStore.pids.length > 1 && serverSlideStore.service_number?.redis?.abled == true || serverSlideStore.pids.length <= 1) && <Button size={'small'} onMouseDown={e => { serverSlideStore.addPid(e); }}><S>添加</S></Button>}
             </div>
         </div>
         <div className="flex round item-hover-focus padding-w-10 padding-h-3 remark bold">
@@ -111,19 +117,34 @@ export var ServerConfigView = observer(function () {
                 <div className="flex-fixed flex">
                     <span className="w-100">{pid.port + (pid.name ? `(${pid.name})` : '')}</span>
                     <span className="w-180">{pid.url ? pid.url : (`http://127.0.0.1:${pid.port}`)}</span>
-                    <span className="w-80">{getPidStatus(pid)}{pid.status == 'running' && <Spin size={16}></Spin>}</span>
+                    <span className="w-80">
+                        {getPidStatus(pid)}
+                    </span>
+                    <span className="flex-auto">
+                        {pid.loading && <Spin size={16}></Spin>}
+                    </span>
                 </div>
-                <div className="flex-auto flex-end flex r-padding-w-5 r-padding-h-3 r-round r-flex-center r-item-hover r-cursor">
+                <div className="flex-auto flex-end flex r-padding-w-5 r-padding-h-3 r-gap-l-5 r-round r-flex-center r-item-hover r-cursor">
 
-                    <span onMouseDown={e => serverSlideStore.runPid(pid, e)}><Icon size={14} icon={PlaySvg}></Icon><em><S>运行</S></em></span>
-                    <span onMouseDown={e => serverSlideStore.stopPid(pid, e)}><Icon size={14} icon={PauseSvg}></Icon><em><S>暂停</S></em></span>
+                    <span onMouseDown={e => serverSlideStore.runPid(pid, e)}><Icon size={14} icon={PlaySvg}></Icon><em className="gap-l-3"><S>运行</S></em></span>
+                    <span onMouseDown={e => serverSlideStore.stopPid(pid, e)}><Icon size={14} icon={PauseSvg}></Icon><em className="gap-l-3"><S>暂停</S></em></span>
 
-                    <span onMouseDown={e => serverSlideStore.editPid(pid, e)}><Icon size={14} icon={EditSvg}></Icon><em><S>编辑</S></em></span>
-                    <span onMouseDown={e => serverSlideStore.removePid(pid, e)}><Icon size={14} icon={TrashSvg}></Icon><em><S>删除</S></em></span>
+                    <span onMouseDown={e => serverSlideStore.editPid(pid, e)}><Icon size={14} icon={{name:"byte",code:"write"}}></Icon><em className="gap-l-3"><S>编辑</S></em></span>
+                    <span onMouseDown={e => serverSlideStore.removePid(pid, e)}><Icon size={14} icon={TrashSvg}></Icon><em className="gap-l-3"><S>删除</S></em></span>
 
                 </div>
             </div>
 
         })}
+
+        <div className="h4  gap-t-30">
+            <span><span>环境要求</span></span>
+        </div>
+        <div className="r-gap-h-5">
+            <div>1. 服务器必须安装NodeJs</div>
+            <div>2. 服务器必须安装Mongodb</div>
+            <div>3. 如果希望开多进程，须安装redis</div>
+            <div>4. 如果希望空间支持搜索，须安装es (Elasticsearch)搜索引擎</div>
+        </div>
     </div>
 })

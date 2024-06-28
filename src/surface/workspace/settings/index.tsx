@@ -59,8 +59,8 @@ export default class WsSettings extends EventsComponent {
     el: HTMLElement;
     render() {
         if (this.visible == false) return <div style={{ display: 'none' }}></div>
-        return <div ref={e => this.el = e} className='shy-ws-settings fixed-full'>
-            <div className='screen-content-1000 flex-full h100 relative'>
+        return <div ref={e => this.el = e} className='shy-ws-settings fixed-full desk-drag'>
+            <div className='screen-content-1000 desk-no-drag flex-full h100 relative'>
                 <div className='flex-fixed w-200 shy-ws-settings-slide h100 box-border overflow-y'>
                     <div className='padding-h-60'>
                         <h4>{surface.workspace.text}</h4>
@@ -91,7 +91,8 @@ export default class WsSettings extends EventsComponent {
                     </div>
                 </div>
                 <div className='flex-fixed shy-ws-settings-content  h100 box-border overflow-y'>
-                    <div className='padding-h-60'>
+                    <div className='h-60 desk-drag'></div>
+                    <div>
                         {this.mode == 'roles' && <WorkspaceRoles></WorkspaceRoles>}
                         {this.mode == 'settings' && <WorkspaceSettingsView ></WorkspaceSettingsView>}
                         {this.mode == 'members' && <WorkspaceMembers></WorkspaceMembers>}
@@ -106,16 +107,16 @@ export default class WsSettings extends EventsComponent {
                         {this.mode == 'publish' && <SitePublishView></SitePublishView>}
                     </div>
                 </div>
-                <div className='shy-ws-settings-operators'>
-                    <a onMouseDown={e => this.close()}>
-                        <span>
-                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path
-                                fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)"
-                                d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
-                        </span>
-                        <label><S>退出</S></label>
-                    </a>
-                </div>
+            </div>
+            <div className='shy-ws-settings-operators desk-no-drag'>
+                <a onMouseDown={e => this.close()}>
+                    <span>
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path
+                            fill="hsl(218, calc(var(--saturation-factor, 1) * 4.6%), 46.9%)"
+                            d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+                    </span>
+                    <label><S>退出</S></label>
+                </a>
             </div>
         </div>
     }

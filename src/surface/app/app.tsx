@@ -11,7 +11,7 @@ import { surface } from './store';
 import { MyWorkSpace } from './view/my';
 import { renderAvatorStatusSvgMask } from "rich/component/view/avator/status";
 import { isMobileOnly } from 'react-device-detect';
-import { SK} from 'rich/component/view/spin';
+import { SK } from 'rich/component/view/spin';
 import { PageContentView } from '../supervisor/content';
 import "./style.less";
 import { RedictUrl } from './view/RedictUrl';
@@ -114,7 +114,7 @@ export function App() {
   return <div className='shy-app' >
     {renderAvatorStatusSvgMask()}
     {!isLoad && <SK className={'vw100 vh100 flex flex-full'}>
-      <div className='w-50 flex flex-col  flex-fixed border-right-light'>
+      <div style={{ marginTop: window.shyConfig?.isDesk ? 50 : 0 }} className='w-50 flex flex-col  flex-fixed border-right-light'>
         <div className='size-40 circle sk-bg gap-h-10'></div>
         <div className='size-40 circle sk-bg gap-h-10'></div>
         <div className='size-40 circle sk-bg gap-h-10'></div>

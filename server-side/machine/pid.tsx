@@ -1,11 +1,10 @@
 import lodash from "lodash";
 import { EventsComponent } from "rich/component/lib/events.component";
-
-import { Pid, PidTypeOptions } from "../declare";
+import { Pid } from "../declare";
 import React from "react";
 import { Button } from "rich/component/view/button";
 import { Input } from "rich/component/view/input";
-import { SelectBox } from "rich/component/view/select/box";
+
 import { InputNumber } from "rich/component/view/input/number";
 import { Divider } from "rich/component/view/grid";
 import { serverSlideStore } from "../store";
@@ -37,16 +36,20 @@ export class PidView extends EventsComponent {
                 <div><label><S>网址</S>:</label><span className="remark f-12"><S>对外公开访问网址</S>,<a className="cursor item-hover" onMouseDown={e => this.getLocalIp()}><S>局域网ip</S></a></span></div>
                 <div className="flex gap-t-5 gap-b-10"><Input clear placeholder={'http://127.0.0.1:' + this.pid.port} value={this.pid.url} onChange={e => { this.pid.url = e; this.forceUpdate() }}></Input></div>
 
-                <div><label><S>服务</S>:</label></div>
+                {/* <div><label><S>服务</S>:</label></div>
                 <div className="flex gap-t-5 gap-b-10">
-                    <SelectBox style={{ width: '100%' }} border
+                    <SelectBox
+                        style={{ width: '100%' }}
+                        border
                         multiple
-                        onChange={e => { this.pid.types = e as string[]; this.forceUpdate() }}
+                        onChange={e => {
+                            this.pid.types = e as string[]; this.forceUpdate()
+                        }}
                         value={this.pid.types}
                         options={PidTypeOptions}
                     ></SelectBox>
-                </div>
-                {this.pid.types?.includes('file') && <><div><label><S>本地文件存储</S>:</label><span className="remark f-12">(<S>如果为空会存到系统盘</S>)</span></div>
+                </div> */}
+                {this.pid.types?.includes('file') && <><div><label><S>本地文件存储</S>:</label><span className="remark f-12">(<S>一旦填后不要随意更改</S>)</span></div>
                     <div className="flex gap-t-5 gap-b-10">
                         <div className="flex-auto">
                             <Input value={this.pid.storeDir} readonly></Input>

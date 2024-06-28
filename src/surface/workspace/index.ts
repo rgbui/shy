@@ -54,12 +54,17 @@ export class Workspace {
 
     /**
      * 空间存储的源存在那里
-     * private-clound: 私有云
-     * public-clound: 公有云
+     * private-cloud: 私有云
+     * public-cloud: 公有云
      * private-local: 本地存储
      */
-    public datasource: 'private-clound' | 'public-clound' | 'private-local' = 'public-clound';
-
+    public datasource: 'private-cloud' | 'public-cloud' | 'private-local' = 'public-cloud';
+    /**
+     * 当datasource为private-local时，参数有效
+     * 表示客户端ID。
+     * 因为可能用户会在不同的电脑上开启本地服务，这里用ClientId加以区分
+     */
+    public datasourceClientId:string;
     public pids: Pid[] = [];
     /**
      * 
@@ -499,7 +504,11 @@ export class Workspace {
         }
     }
     async createTim() {
-        this.tim = await CreateTim(this.dataServiceNumber || 'shy', Workspace.getWsSockUrl(this.pids, 'tim'));
+        var dn = this.dataServiceNumber || 'shy';
+        if (this.datasource == 'private-local') {
+            dn = 'local';
+        }
+        this.tim = await CreateTim(dn, Workspace.getWsSockUrl(this.pids, 'tim'));
         workspaceNotifys(this.tim);
         var self = this;
         this.sock.setHeaders({
