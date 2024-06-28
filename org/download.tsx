@@ -3,8 +3,7 @@ import { Icon } from "rich/component/view/icon";
 import { S, Sp } from "rich/i18n/view";
 import { config } from "../common/config";
 import { SiteFeatures } from "./common/feature";
-export function DownloadView()
-{
+export function DownloadView() {
     return <div >
         <div className="shy-site-block">
             <div className="flex gap-h-20 gap-t-100 flex-center error h-40"><S text='更新频繁暂时不支持下载请使用Web版'>更新频繁，暂时不支持下载，请使用Web版</S></div>
@@ -20,7 +19,7 @@ export function DownloadView()
                             <img src='static/img/d-mac.svg' />
                         </div>
                         <p><span><S>Mac OS 客户端</S></span></p>
-                        <p style={{ paddingTop: 20 }}><a className="item-primary-hover" data-download-mac href="https://resources.shy.live/app/download/shy-0.8.23.dmg"
+                        <p style={{ paddingTop: 20 }}><a className="item-primary-hover" data-download-mac href={`https://resources.shy.live/app/download/诗云-${VERSION_CLIENT.replace('-pro','')}.dmg`}
                             download={config.isUS ? "Shy" : "诗云"}><S>开发中...</S></a></p>
                     </div>
                     <div style={{ backgroundColor: 'rgb(239, 246, 255)' }} className="shy-site-download-platform shy-site-block-card">
@@ -28,7 +27,7 @@ export function DownloadView()
                             <img className="size-50 obj-center" src='static/img/windows.svg' />
                         </div>
                         <p><span><S>Windows 客户端</S></span></p>
-                        <p style={{ paddingTop: 20 }}><a className="item-primary-hover" data-download-win href="https://resources.shy.live/app/download/shy-0.8.23.zip"
+                        <p style={{ paddingTop: 20 }}><a className="item-primary-hover" data-download-win href={`https://resources.shy.live/app/download/诗云-${VERSION_CLIENT.replace('-pro','')}.zip`}
                             download={config.isUS ? "Shy" : "诗云"}><S>开发中...</S></a></p>
                     </div>
                     <div style={{ backgroundClip: 'rgb(240, 253, 244)' }} className="shy-site-download-platform shy-site-block-card">
@@ -62,18 +61,18 @@ export function DownloadView()
                             <img className="size-50 obj-center" src='static/img/windows.svg' />
                         </div>
                         <p><span><S>Windows 诗云服务端</S></span></p>
-                        <p style={{ paddingTop: 20 }}><a data-download-win href="https://resources.shy.live/app/download/shy-0.8.23.zip"
+                        <p style={{ paddingTop: 20 }}><a data-download-win href={`https://resources.shy.live/app-server/download/诗云服务端-${VERSION_SERVER_CLIENT}.zip`}
                             download={config.isUS ? "Shy Server" : "诗云服务端"}><S>开发中...</S></a></p>
                     </div>
 
-                    <div className="shy-site-download-platform max-w-300  shy-site-block-card">
+                    {/* <div className="shy-site-download-platform max-w-300  shy-site-block-card">
                         <div className="shy-site-download-platform-icon">
                             <img src='static/img/d-mac.svg' />
                         </div>
                         <p><span><S>Mac OS 诗云服务端</S></span></p>
-                        <p style={{ paddingTop: 20 }}><a data-download-mac href="https://resources.shy.live/app/download/shy-0.8.23.dmg"
+                        <p style={{ paddingTop: 20 }}><a data-download-mac href="https://resources.shy.live/app/download/诗云服务端-0.8.23.dmg"
                             download={config.isUS ? "Shy Server" : "诗云服务端"}><S>开发中...</S></a></p>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

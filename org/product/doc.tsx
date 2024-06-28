@@ -1,9 +1,24 @@
 import React from "react";
 import { UrlRoute } from "../../src/history";
 import { Icon } from "rich/component/view/icon";
+import { observer, useLocalObservable } from "mobx-react";
 
 
-export function ProductDocView() {
+
+
+export var ProductDocView = observer(function () {
+
+    var local = useLocalObservable<{
+        index: number
+
+    }>(() => {
+        return {
+            index: 0
+
+        }
+    })
+
+
     if (window.shyConfig.isUS) return <></>
     return <div>
         <div className="shy-site-block padding-h-30">
@@ -29,28 +44,28 @@ export function ProductDocView() {
             <div>
 
                 <div className="flex flex-full col-4-g20 r-border-box">
-                    <div className="flex-auto visible-hover cursor shy-site-block-card-hover round-8 padding-10">
+                    <div onMouseEnter={e => { local.index = 0 }} className="flex-auto visible-hover cursor shy-site-block-card-hover round-8 padding-10">
                         <div><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
                         <h3 className="gap-t-10 gap-b-5">会议记录</h3>
                         <p className="f-14 text-1">将人员和项目与更新和行动项目联系起来。</p>
-                        <div className="visible gap-h-10"><a>复制模板<i className="padding-l-5">→</i></a></div>
+                        <div className="visible gap-h-10"><a href='https://template.shy.live/page/2179#cr728PkDrjxphXEyb5by49'>复制模板<i className="padding-l-5">→</i></a></div>
                     </div>
 
-                    <div className="flex-auto visible-hover cursor shy-site-block-card-hover round padding-10">
+                    <div onMouseEnter={e => { local.index = 1 }} className="flex-auto visible-hover cursor shy-site-block-card-hover round padding-10">
                         <div><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
                         <h3 className="gap-t-10 gap-b-5">设计系统</h3>
                         <p className="f-14 text-1">您公司的所有设计资产都集中在一个地方。</p>
                         <div className="visible gap-h-10"><a>复制模板<i className="padding-l-5">→</i></a></div>
                     </div>
 
-                    <div className="flex-auto visible-hover cursor shy-site-block-card-hover round padding-10">
+                    <div onMouseEnter={e => { local.index = 2 }} className="flex-auto visible-hover cursor shy-site-block-card-hover round padding-10">
                         <div><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
                         <h3 className="gap-t-10 gap-b-5">项目要求</h3>
                         <p className="f-14 text-1">可定制的 PRD 适合任何类型项目。</p>
                         <div className="visible gap-h-10"><a>复制模板<i className="padding-l-5">→</i></a></div>
                     </div>
 
-                    <div className="flex-auto visible-hover cursor shy-site-block-card-hover round padding-10">
+                    <div onMouseEnter={e => { local.index = 3 }} className="flex-auto visible-hover cursor shy-site-block-card-hover round padding-10">
                         <div><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'weixin-favorites' }}></Icon></div>
                         <h3 className="gap-t-10 gap-b-5">演讲平台</h3>
                         <p className="f-14 text-1">以动态的方式讲述您公司的故事。</p>
@@ -60,10 +75,10 @@ export function ProductDocView() {
                 </div>
 
                 <div className="gap-h-20">
-                    <div><img alt={'会议记录'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/pic-product-1.png'} /></div>
-                    <div style={{ display: 'none' }}><img alt={'设计系统'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
-                    <div style={{ display: 'none' }}><img alt={'项目要求'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
-                    <div style={{ display: 'none' }}><img alt={'演讲平台'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
+                    <div style={{ display: local.index == 0 ? "block" : 'none' }}><img alt={'会议记录'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/doc-meet.png'} /></div>
+                    <div style={{ display: local.index == 1 ? "block" : 'none' }}><img alt={'设计系统'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
+                    <div style={{ display: local.index == 2 ? "block" : 'none' }}><img alt={'项目要求'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
+                    <div style={{ display: local.index == 3 ? "block" : 'none' }}><img alt={'演讲平台'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
                 </div>
 
             </div>
@@ -77,27 +92,27 @@ export function ProductDocView() {
                     <div className="flex-auto bg-2 padding-h-10 round-8">
                         <div className="padding-w-20 gap-t-10"><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'code' }}></Icon></div>
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">代码片段</h3>
-                        <p className="padding-w-20 f-14 text-1">数十种语言的本机语法高亮显示。</p>
-                        <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                            <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                        <p className="padding-w-20 f-14 text-1 h-40">数十种语言的本机语法高亮显示。<br /></p>
+                        <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
+                            <img className="pos   h100 " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-code.png'} />
                         </div>
                     </div>
 
                     <div className="flex-auto bg-2 padding-h-10 round-8">
                         <div className="padding-w-20 gap-t-10"><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'list-bottom' }}></Icon></div>
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">切换</h3>
-                        <p className="padding-w-20 f-14 text-1">可折叠的部分使您的文档易于阅读。</p>
-                        <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                            <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                        <p className="padding-w-20 f-14 text-1  h-40">可折叠的部分使您的文档易于阅读。<br /></p>
+                        <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
+                            <img className="pos   h100  " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-toggle.png'} />
                         </div>
                     </div>
 
                     <div className="flex-auto bg-2 padding-h-10 round-8">
                         <div className="padding-w-20 gap-t-10"><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'pic' }}></Icon></div>
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">图片与媒体</h3>
-                        <p className="padding-w-20 f-14 text-1">直接从 网易云音乐 和 B站 嵌入，或上传您自己的。</p>
-                        <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                            <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                        <p className="padding-w-20 f-14 text-1  h-40">直接从 网易云音乐 和 B站 嵌入，或上传您自己的。</p>
+                        <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
+                            <img className="pos   h100 " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-video.png'} />
                         </div>
                     </div>
 
@@ -107,9 +122,9 @@ export function ProductDocView() {
                     <div className="flex-auto bg-2 padding-h-10 round-8">
                         <div className="padding-w-20 gap-t-10"><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'mindmap-list' }}></Icon></div>
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">目录</h3>
-                        <p className="padding-w-20 f-14 text-1">单击即可跳至某一部分，自动更新。</p>
-                        <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                            <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                        <p className="padding-w-20 f-14 text-1   h-40">单击即可跳至某一部分，自动更新。</p>
+                        <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
+                            <img className="pos   h100" style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-outline.png'} />
                         </div>
                     </div>
 
@@ -117,9 +132,9 @@ export function ProductDocView() {
                     <div className="flex-auto bg-2 padding-h-10 round-8">
                         <div className="padding-w-20 gap-t-10"><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'formula' }}></Icon></div>
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">数学方程式</h3>
-                        <p className="padding-w-20 f-14 text-1">你从未见过数学如此美丽。</p>
-                        <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                            <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                        <p className="padding-w-20 f-14 text-1   h-40">你从未见过数学如此美丽。</p>
+                        <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
+                            <img className="pos   h100" style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-math.png'} />
                         </div>
                     </div>
 
@@ -127,9 +142,9 @@ export function ProductDocView() {
                     <div className="flex-auto bg-2 padding-h-10 round-8">
                         <div className="padding-w-20 gap-t-10"><Icon className={'text-high'} size={32} icon={{ name: 'byte', code: 'cross-ring-two' }}></Icon></div>
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">以及 100 多种内容类型。</h3>
-                        <p className="padding-w-20 f-14 text-1">就像一个无底的积木盒……</p>
-                        <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                            <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                        <p className="padding-w-20 f-14 text-1   h-40">就像一个无底的积木盒……</p>
+                        <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
+                            <img className="pos   h100 " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-blocks.png'} />
                         </div>
                     </div>
 
@@ -152,7 +167,7 @@ export function ProductDocView() {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">共同协作处理文档</h3>
                             <p className="padding-w-20 f-14 text-1">只需输入@键即可引起某人的注意。</p>
                             <div className="padding-w-20 border-box gap-t-30">
-                                <img className="w100 border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                                <img className="w100 border round-t-l-16 h100 shadow-s " src={'../static/img/doc/pic.webp'} />
                             </div>
                         </div>
 
@@ -162,7 +177,7 @@ export function ProductDocView() {
                                 <h3 className="padding-w-20 gap-t-10 gap-b-5">评论让事情继续异步发展</h3>
                                 <p className="padding-w-20 f-14 text-1">通过整合反馈视图，可以轻松进行迭代，甚至跨办公室和时区。</p>
                                 <div className="gap-t-30 gap-l-20 relative h-250 overflow-hidden">
-                                    <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                    <img className="pos border round-t-l-16 h100 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
                                 </div>
                             </div>
                             <div className="flex-auto bg-2 padding-h-10 round-8">
@@ -170,7 +185,7 @@ export function ProductDocView() {
                                 <h3 className="padding-w-20 gap-t-10 gap-b-5">即时讨论让事情明了清晰</h3>
                                 <p className="padding-w-20 f-14 text-1">通过实时的沟通交互，可以快速解决问题。</p>
                                 <div className="gap-t-30 gap-l-20 relative h-250 overflow-hidden">
-                                    <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                    <img className="pos border round-t-l-16 h100 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
                                 </div>
                             </div>
                         </div>
@@ -268,3 +283,4 @@ export function ProductDocView() {
 
     </div>
 }
+)
