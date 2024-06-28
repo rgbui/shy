@@ -123,7 +123,7 @@ export class Surface extends Events {
     async onLoadWorkspace(name: string, autoLoadPage = true) {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
-            if (name) {
+          if (name) {
                 try {
                     var r = await channel.get('/ws/query', { name });
                     if (r?.data.workspace) {
@@ -142,23 +142,9 @@ export class Surface extends Events {
                         else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
                         if (lodash.isNull(willPageId)) willPageId = undefined;
                         var g: any;
-                        // if (ws.datasource == 'private-local') {
-                        //     var count = 0;
-                        //     while (true) {
-                        //         count += 1;
-                        //         if (count > 100) break;
-                        //         try {
-                        //             g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
-                        //             break;
-                        //         }
-                        //         catch (ex) {
-                        //             await util.delay(50);
-                        //         }
-                        //     }
-                        // }
-                        // else {
+                      
                         g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
-                        // }
+                        
                         if (g.data.accessForbidden) {
                             this.accessPage = 'forbidden';
                             return
@@ -197,6 +183,9 @@ export class Surface extends Events {
                         this.workspace.loadWsRobots(robotIds);
                         return;
                     }
+                    else{
+                        console.log('ggg',r);
+                    }
                 }
                 catch (ex) {
                     console.error(ex);
@@ -206,16 +195,16 @@ export class Surface extends Events {
                 await this.workspace.exitWorkspace()
             }
             this.workspace = null;
-            if (window.shyConfig.isDesk) {
-                // UrlRoute.push(ShyUrl.signIn);
-            }
-            else if (window.shyConfig.isPro) {
-                if (this.user.isSign) UrlRoute.push(ShyUrl.home)
-                else UrlRoute.push(ShyUrl.signIn);
-            }
-            else if (window.shyConfig.isDev) {
-                UrlRoute.push(ShyUrl.home);
-            }
+            // if (window.shyConfig.isDesk) {
+            //     // UrlRoute.push(ShyUrl.signIn);
+            // }
+            // else if (window.shyConfig.isPro) {
+            //     // if (this.user.isSign) UrlRoute.push(ShyUrl.home)
+            //     // else UrlRoute.push(ShyUrl.signIn);
+            // }
+            // else if (window.shyConfig.isDev) {
+            //    // UrlRoute.push(ShyUrl.home);
+            // }
 
         }
         catch (ex) {
