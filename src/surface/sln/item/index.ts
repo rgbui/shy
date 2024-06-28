@@ -35,7 +35,7 @@ export class PageItem {
     public plain: string;
     public thumb: ResourceArguments;
     spread: boolean = false;
-    description: string = '';
+    description: { abled: boolean, text: string } = null;
     createDate: Date = null;
     creater: string = null;
     mime: Mime = Mime.none;
@@ -102,7 +102,7 @@ export class PageItem {
             inviteUsersPermissions: observable,
             editDate: observable,
             editor: observable,
-            description: observable,
+            // description: observable,
             unreadChats: observable,
             pageType: observable,
             subCount: observable,
