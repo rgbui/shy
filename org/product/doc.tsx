@@ -76,9 +76,9 @@ export var ProductDocView = observer(function () {
 
                 <div className="gap-h-20">
                     <div style={{ display: local.index == 0 ? "block" : 'none' }}><img alt={'会议记录'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/doc-meet.png'} /></div>
-                    <div style={{ display: local.index == 1 ? "block" : 'none' }}><img alt={'设计系统'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
-                    <div style={{ display: local.index == 2 ? "block" : 'none' }}><img alt={'项目要求'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
-                    <div style={{ display: local.index == 3 ? "block" : 'none' }}><img alt={'演讲平台'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/pic.webp'} /></div>
+                    <div style={{ display: local.index == 1 ? "block" : 'none' }}><img alt={'设计系统'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/doc-design.png'} /></div>
+                    <div style={{ display: local.index == 2 ? "block" : 'none' }}><img alt={'项目要求'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/doc-project.png'} /></div>
+                    <div style={{ display: local.index == 3 ? "block" : 'none' }}><img alt={'演讲平台'} className="w100 round-16 shy-site-block-card-hover" src={'../static/img/doc/doc-plan-b.png'} /></div>
                 </div>
 
             </div>
@@ -205,7 +205,7 @@ export var ProductDocView = observer(function () {
                         <p className="padding-w-20 f-14 text-1">将路线图与目标联系起来，让人们了解何时运送什么。</p>
                         <div className="padding-w-20 visible gap-h-20"><a>了解 PM 如何使用 诗云<i className="padding-l-5">→</i></a></div>
                         <div className="padding-w-20 border-box">
-                            <img className="w100" src={'../static/img/doc/pic.webp'} />
+                            <img alt='产品PM' className="w100 border shadow-s round" src={'../static/img/doc/doc-pm.png'} />
                         </div>
                     </div>
                     <div className="flex-auto bg-2 round padding-10">
@@ -213,7 +213,7 @@ export var ProductDocView = observer(function () {
                         <p className="padding-w-20 f-14 text-1">提前审核轮次、确定请求的优先顺序并满足所有创意截止日期。</p>
                         <div className="padding-w-20 visible gap-h-20"><a>了解设计师如何使用 诗云<i className="padding-l-5">→</i></a></div>
                         <div className="padding-w-20 border-box">
-                            <img className="w100" src={'../static/img/doc/pic.webp'} />
+                            <img alt="设计师人物" className="w100 border shadow-s  round" src={'../static/img/doc/doc-designer.png'} />
                         </div>
                     </div>
                     <div className="flex-auto bg-2 round padding-10">
@@ -221,7 +221,7 @@ export var ProductDocView = observer(function () {
                         <p className="padding-w-20 f-14 text-1">通过冲刺、代码指南、错误修复等，在一个地方更快地交付功能。</p>
                         <div className="padding-w-20 visible gap-h-20"><a>了解工程师如何使用 诗云<i className="padding-l-5">→</i></a></div>
                         <div className="padding-w-20 border-box">
-                            <img className="w100" src={'../static/img/doc/pic.webp'} />
+                            <img alt="工程师" className="w100 border shadow-s round" src={'../static/img/doc/doc-coder.png'} />
                         </div>
                     </div>
                 </div>
