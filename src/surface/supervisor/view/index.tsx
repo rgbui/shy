@@ -6,8 +6,9 @@ import { Rect } from "rich/src/common/vector/point";
 import { surface } from "../../app/store";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
-import { SK} from "rich/component/view/spin";
+import { SK } from "rich/component/view/spin";
 import { Divider } from "rich/component/view/grid";
+import lodash from "lodash";
 
 @observer
 export class PageSupervisorView extends React.Component<{
@@ -69,7 +70,11 @@ export class PageSupervisorView extends React.Component<{
     pageEl: HTMLElement;
     el: HTMLElement;
     render() {
-        return <div ref={e => this.el = e} className={"shy-supervisor-view" + (this.props.slide ? " shadow-s" : "")} style={this.props.style || {}}>
+        var style = lodash.cloneDeep(this.props.style || {});
+        if (this.props.slide) {
+            style.boxShadow = `rgba(15, 15, 15, 0.04) 0px 0px 0px 1px, rgba(15, 15, 15, 0.03) 0px 3px 6px, rgba(15, 15, 15, 0.06) 0px 9px 24px`
+        }
+        return <div ref={e => this.el = e} className={"shy-supervisor-view "} style={style}>
             {this.loading && <SK className='pos-full flex flex-col flex-full' style={{ zIndex: 1 }}>
                 <div className='flex flex-fixed '>
                     <div className='h-20 w-300 sk-bg gap-l-30 gap-h-10'></div>
