@@ -253,10 +253,10 @@ export var ProductDocView = observer(function () {
                         <div className="flex-auto bg-2 round" >
                             <h3 className="padding-w-20">诗云 的产品需求文档</h3>
                             <div className="padding-w-20 gap-h-20">
-                                <a className="padding-l-5"> 尝试模板<i>→</i></a>
+                                <a href={'https://template.shy.live/page/2206'} className="padding-l-5"> 尝试模板<i>→</i></a>
                             </div>
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                <img alt="产品需求文档" className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-prd.png'} />
                             </div>
 
                         </div>
