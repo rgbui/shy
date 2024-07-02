@@ -126,7 +126,7 @@ export class UserSettingProfile extends React.Component {
                                 value={this.inputSlogan || surface.user.slogan}
                                 onChange={e => this.inputSlogan = e}></Textarea>
                         </div>
-                        {this.inputSlogan && <div>
+                        {this.inputSlogan && <div className="gap-t-10">
                             <Button size="small" onClick={(e, b) => this.saveSlogan(e, b)}><S>保存</S></Button>
                         </div>}
                     </div>

@@ -88,7 +88,11 @@ export class PageViewStore extends Events {
                 lodash.remove(pvs, c => c == this)
             }
             this.elementUrl = elementUrl;
-            PageViewStores.createPageViewStore(this.elementUrl, this.source, this.config);
+            if (this.page) this.page.customElementUrl = elementUrl;
+            var npvs = PageViewStores.stores.get(this.elementUrl);
+            if (!npvs) npvs = [];
+            if (Array.isArray(npvs) && !npvs.includes(this)) npvs.push(this);
+            PageViewStores.stores.set(this.elementUrl, npvs)
         }
     }
     onDestroy() {
@@ -149,7 +153,7 @@ export class PageViewStores {
         this.stores.clear();
     }
     static async clearPageViewStore(store: PageViewStore) {
-        if(!store) return;
+        if (!store) return;
         var s = this.stores.get(store.elementUrl);
         if (Array.isArray(s)) {
             store.onDestroy();

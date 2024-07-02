@@ -40,7 +40,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                 </span>
             </div>
             {isCanEdit && <div className='flex-fixed flex-end visible padding-r-5'>
-                <Tip text='删除及更多操作'><span className="size-18  flex-center cursor item-hover round">
+                <Tip text='删除及更多操作'><span className="size-20  flex-center cursor item-hover remark round">
                     <Icon icon={DotsSvg} size={18} onMousedown={e => {
                         e.stopPropagation();
                         var el = e.currentTarget.parentNode.parentNode as HTMLElement;
@@ -52,7 +52,7 @@ export var PagesView = observer(function (props: { item: PageItem, deep?: number
                         })
                     }}></Icon>
                 </span></Tip>
-                <Tip text='快速新建子页面'><span className="size-18 flex-center cursor item-hover round">
+                <Tip text='快速新建子页面'><span className="size-20 flex-center cursor item-hover remark round">
                     <Icon icon={PlusSvg} size={18} onMousedown={e => { e.stopPropagation(); item.onAdd() }}></Icon>
                 </span></Tip>
             </div>}
