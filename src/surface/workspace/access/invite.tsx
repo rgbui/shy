@@ -25,37 +25,52 @@ export var InviteView = observer(function () {
         pids: Pid[],
         loading: boolean,
         exists: boolean,
+        notFound: boolean
 
     }>(() => {
         return {
             ws: null,
             pids: [],
             loading: true,
-            exists: false
+            exists: false,
+            notFound: false
         }
     })
     async function loadInviteWorkspace() {
-        var inviteCode = UrlRoute.match(ShyUrl.invite)?.id;
-        var w = await channel.get('/ws/invite/check', { invite: inviteCode });
-        if (w.ok) {
-            var rg = {} as any;
-            var pids = w.data.pids;
-            if (w.data.workspace?.datasource == 'private-local') {
-                pids = await getDeskLocalPids()
+        try {
+            var inviteCode = UrlRoute.match(ShyUrl.invite)?.id;
+            var w = await channel.get('/ws/invite/check', { invite: inviteCode });
+            if (w.ok) {
+                var rg = {} as any;
+                var pids = w.data.pids;
+                if (w.data.workspace?.datasource == 'private-local') {
+                    pids = await getDeskLocalPids()
+                }
+                if (surface.user.isSign) rg = await channel.get('/ws/is/member', {
+                    sock: Sock.createSock(Workspace.getWsSockUrl(pids, 'ws')),
+                    wsId: w.data.workspace.id
+                })
+                // if (rg?.data?.exists) return UrlRoute.pushToWs(w.data.workspace.siteDomain || w.data.workspace.sn);
+                runInAction(() => {
+                    local.exists = rg?.data?.exists;
+                    local.ws = Object.assign({}, w.data.workspace || {}, rg?.data?.workspace || {});
+
+                    local.pids = pids;
+
+                })
+                if (local.exists) {
+                    goto()
+                }
             }
-            if (surface.user.isSign) rg = await channel.get('/ws/is/member', {
-                sock: Sock.createSock(Workspace.getWsSockUrl(pids, 'ws')),
-                wsId: w.data.workspace.id
-            })
-            // if (rg?.data?.exists) return UrlRoute.pushToWs(w.data.workspace.siteDomain || w.data.workspace.sn);
-            runInAction(() => {
-                local.exists = rg?.data?.exists;
-                local.ws = Object.assign({}, w.data.workspace || {}, rg?.data?.workspace || {});
-                
-                local.pids = pids;
-                local.loading = false;
-            })
+            else local.notFound = true;
         }
+        catch (ex) {
+
+        }
+        finally {
+            local.loading = false;
+        }
+
     }
     async function join() {
         if (!surface.user.isSign) {
@@ -80,6 +95,9 @@ export var InviteView = observer(function () {
             sock,
             agree
         });
+        goto();
+    }
+    async function goto() {
         await surface.loadWorkspaceList();
         return UrlRoute.pushToWs(local.ws.siteDomain || local.ws.sn);
     }
@@ -93,8 +111,17 @@ export var InviteView = observer(function () {
     if (local.loading == true) return <div className="gap-h-30 flex-center">
         <Spin></Spin>
     </div>
+
     return <div className="shy-invite padding-w-80 padding-b-40 round-16" style={{ width: isMobileOnly ? "calc(100vw - 40px)" : 350 }}>
-        {local.ws.accessProfile?.disabledJoin && <div>
+        {local.notFound && <div className="padding-t-40">
+            <div className="flex-center">
+                <span className="error-bg round padding-w-5 padding-h-2"><S>邀请的空间地址不存在或已失效</S></span>
+            </div>
+            <div className="flex-center gap-t-10">
+                <span>返回<a href='https://shy.live'>诗云</a></span>
+            </div>
+        </div>}
+        {local.ws && local.ws.accessProfile?.disabledJoin && <div>
             <div className="flex-center  gap-h-30">
                 <span className="error-bg round padding-w-5 padding-h-2"><S>您无法加入，该空间已禁止成员加入</S></span>
             </div>
@@ -102,9 +129,9 @@ export var InviteView = observer(function () {
                 <WsAvatar wsId={local.ws.id}></WsAvatar>
             </div>
         </div>}
-        {!local.ws.accessProfile.disabledJoin && <div>
-            <div className="flex-center f-16 bold gap-h-20">
-                <S>邀请您加入</S>{local.ws.text}
+        {local.ws && !local.ws.accessProfile?.disabledJoin && <div>
+            <div className="flex-center f-16  gap-h-20">
+                <S>邀请您加入</S><span className="bold">{local.ws.text}</span>
             </div>
             <div >
                 <WsAvatar wsId={local.ws.id}></WsAvatar>
