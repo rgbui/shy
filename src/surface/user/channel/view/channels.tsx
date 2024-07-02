@@ -28,7 +28,7 @@ export var UserChannels = observer(function ()
                                 return <><div className="flex-fixed size-32 relative"><Avatar size={32} user={user}></Avatar>  {c.unreadCount > 0 && <DotNumber count={c.unreadCount}></DotNumber>}</div>
                                     <div className="flex-auto gap-l-5" style={{ width: 'calc(100% - 40px)' }}>
                                         <div className="f-14 bold">{user.name}</div>
-                                        <div className="remark text-over f-12" dangerouslySetInnerHTML={{ __html: c.room.currentContent }}></div>
+                                        <div className="remark text-over f-12 l-20 h-20" dangerouslySetInnerHTML={{ __html: c.room.currentContent }}></div>
                                     </div></>
                             }}</Observer>
                         </div>

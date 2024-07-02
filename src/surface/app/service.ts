@@ -170,6 +170,8 @@ class MessageCenter {
                     url: item.url,
                     elementUrl: item.elementUrl,
                     share: item.share,
+                    speak:item.speak,
+                    speakDate:item.speakDate,
                     netPermissions: item.netPermissions,
                     memberPermissions: item.memberPermissions,
                     inviteUsersPermissions: item.inviteUsersPermissions,
@@ -202,7 +204,9 @@ class MessageCenter {
                         'memberPermissions',
                         'inviteUsersPermissions',
                         'parentId',
-                        'mime'
+                        'mime',
+                        'speak',
+                        'speakDate'
                     ]))
             }
             else return { ok: false, warn: r.warn };
@@ -464,7 +468,7 @@ class MessageCenter {
         if (itemId) {
             var item = surface.workspace.find(g => g.id == itemId);
             if (item) {
-                await pageItemStore.updatePageItem(item, args.pageInfo);
+                await pageItemStore.updatePageItem(item, lodash.cloneDeep(args.pageInfo));
                 item.onUpdateDocument();
             }
         }

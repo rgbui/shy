@@ -446,7 +446,8 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
 
             }
             finally {
-                local.button.loading = false;
+                if (local.button)
+                    local.button.loading = false;
             }
         }
         var local = this.local;
