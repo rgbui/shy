@@ -326,7 +326,7 @@ export class SideBar extends React.Component {
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
             else return <a className="shy-sidebar-ws-name  cursor  size-16 flex-fixed  flex-center   relative">
-                <span className="f-12" style={{ transform: 'scale(0.5)',whiteSpace:'nowrap' }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
+                <span className="f-12" style={{ transform: 'scale(0.5)', whiteSpace: 'nowrap' }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
         }
@@ -434,14 +434,16 @@ export class SideBar extends React.Component {
                 <DotNumber count={userChannelStore.unReadChatCount} ></DotNumber>
             </a>
             <div className="shy-sidebar-divider flex-fixed gap-b-6 "></div>
-            <div className="shy-sidebar-body flex-fixed flex flex-col  " style={{ maxHeight: window.shyConfig?.isWeb ? 'calc(100% - 260px)' : 'calc(100% - 200px)' }}>
-                {surface.temporaryWs && <ToolTip key={surface.temporaryWs.id} placement="right" overlay={surface.temporaryWs.text}><div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws size-48 flex-center gap-12 ' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{this.renderWs(surface.temporaryWs)}</div></ToolTip>}
-                {this.renderWss()}
-            </div>
-            <div className="flex-fixed flex flex-col flex-center padding-t-6">
-                <a className="shy-sidebar-operator size-48 flex-fixed  flex-center gap-w-12 gap-b-6" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
-                {/* <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a> */}
-                {window.shyConfig?.isWeb && <><div className="shy-sidebar-divider"></div><a target="_blank" href={window.shyConfig?.isUS ? "https://shy.red/download" : "https://shy.live/download"} className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-h-6"><Icon size={24} icon={{ name: 'byte', code: 'to-bottom' }}></Icon></a></>}
+            <div className="shy-sidebar-scroll flex-auto flex flex-col flex-nowrap flex-full">
+                <div className="shy-sidebar-body flex-fixed flex flex-col  ">
+                    {surface.temporaryWs && <ToolTip key={surface.temporaryWs.id} placement="right" overlay={surface.temporaryWs.text}><div onMouseDown={e => surface.onChangeWorkspace(surface.temporaryWs)} key={surface.temporaryWs.id} className={'shy-sidebar-ws size-48 flex-center gap-12 ' + (surface.workspace.id == surface.temporaryWs.id ? " hover" : "")}>{this.renderWs(surface.temporaryWs)}</div></ToolTip>}
+                    {this.renderWss()}
+                </div>
+                <div className="flex-fixed flex flex-col flex-center padding-t-6 padding-b-50" >
+                    <a className="shy-sidebar-operator size-48 flex-fixed  flex-center gap-w-12 gap-b-6" onMouseDown={e => surface.onCreateWorkspace()} ><Icon size={24} icon={PlusSvg}></Icon></a>
+                    {/* <a className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-b-6" onMouseDown={e => { UrlRoute.push(ShyUrl.discovery); surface.workspace?.exitWorkspace(); }}><Icon size={24} icon={PubWorkspace}></Icon></a> */}
+                    {window.shyConfig?.isWeb && <><div className="shy-sidebar-divider"></div><a target="_blank" href={window.shyConfig?.isUS ? "https://shy.red/download" : "https://shy.live/download"} className="shy-sidebar-operator size-48 flex-center gap-w-12 gap-h-6"><Icon size={24} icon={{ name: 'byte', code: 'to-bottom' }}></Icon></a></>}
+                </div>
             </div>
         </div>
     }
