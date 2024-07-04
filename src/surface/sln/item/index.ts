@@ -10,13 +10,13 @@ import { computed, makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { PageLayoutType, getPageText } from "rich/src/page/declare";
-import { AtomPermission, getCommonPerssions } from "rich/src/page/permission";
+import { AtomPermission, getCommonPermission, getDenyPermission, getEditOwnPerssions, mergeAtomPermission } from "rich/src/page/permission";
 import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, PlusAreaSvg, PlusSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Confirm } from "rich/component/lib/confirm";
 import { useForm } from "rich/component/view/form/dialoug";
-import { getPageItemElementUrl } from "./util";
+import { getPageItemElementUrl, itemIsPermissons } from "./util";
 import { Page } from "rich/src/page";
 import { lst } from "rich/i18n/store";
 import { useWsPicker } from "rich/extensions/ws/index";
@@ -24,6 +24,8 @@ import { useInputIconAndText } from "rich/component/view/input/iconAndText";
 import { UA } from "rich/util/ua";
 import { PopoverPosition } from "rich/component/popover/position";
 import lodash from "lodash";
+import { WorkspaceRole } from "rich/types/user";
+import { S } from "rich/i18n/view";
 
 export class PageItem {
     id: string = null;
@@ -52,20 +54,19 @@ export class PageItem {
     * local 本地存储
     */
     share: 'net' | 'nas' | 'local' = 'nas';
-
     /**
-     * 互联网是否公开，如果公开的权限是什么
+     * 互联网公开的权限
      */
     public netPermissions: AtomPermission[] = [];
     /**
-     * 外部邀请的用户权限
+     * 特定的用户权限
      */
     public inviteUsersPermissions: { userid: string, permissions: AtomPermission[] }[] = [];
     /**
      * 空间成员权限，
      * 可以指定角色，也可以指定具体的人
      */
-    public memberPermissions: { roleId: string, userid: string, permissions: AtomPermission[] }[] = [];
+    public memberPermissions: { roleId: string, permissions: AtomPermission[] }[] = [];
     public editDate: Date = null;
     public editor: string = null;
     speak?: 'more' | 'only' = 'more';
@@ -102,7 +103,6 @@ export class PageItem {
             inviteUsersPermissions: observable,
             editDate: observable,
             editor: observable,
-            // description: observable,
             unreadChats: observable,
             pageType: observable,
             subCount: observable,
@@ -608,59 +608,16 @@ export class PageItem {
             }
         }
     }
-    isAllow(...ps: AtomPermission[]) {
-        if (!this.workspace) return false;
-        if (this.workspace.isOwner) return true;
-        if (this.denyPublicAccess) return false;
-        if (this.workspace?.access == 1) {
-            //表示是公开的
-            return getCommonPerssions().some(s => ps.includes(s))
-        }
-        if (this.share == 'net' && this.netPermissions?.some(s => ps.includes(s))) return true;
-        if (this.workspace?.isMember) {
-            // 如果是成员，那么就看成员权限
-            var me = this.workspace.member;
-            var rs = (this.memberPermissions || []).filter(g => g.userid && g.userid == me.id || g.userid && g.userid == 'all' || g.roleId && me.roleIds.includes(g.roleId));
-            if (rs.length == 0) {
-                var c = this.workspace.isAllow(...ps);
-                if (c) return c;
-                else {
-                    var pa = this.closest(g => g.isAllow(...ps), true);
-                    if (pa) return true;
-                    else return false;
-                }
-            }
-            var g = rs.some(s => s.permissions.some(p => ps.includes(p)))
-            return g;
-        }
-        else {
-            if (surface.user.isSign) {
-                // 如果是登录用户，那么就看登录用户的权限
-                var rg = this.inviteUsersPermissions.find(g => g.userid == surface.user.id);
-                if (rg) {
-                    var d = rg.permissions.some(s => ps.includes(s))
-                    if (!d) {
-                        if (this.share == 'net' && this.netPermissions) return this.netPermissions.some(s => ps.includes(s))
-                        return false;
-                    }
-                    else return d;
-                }
-                else return false;
-            }
-            else {
-                if (this.share == 'net' && this.netPermissions) return this.netPermissions.some(s => ps.includes(s))
-                return false;
-            }
-        }
+    isAllow(...ps: AtomPermission[]): boolean {
+        return this.getUserPermissions()?.permissions.some(s => ps.includes(s)) ? true : false
     }
-    get isCanEdit() {
+    get isCanEdit(): boolean {
         if (surface?.workspace?.isPubSite) return false;
         return this.isAllow(
-            AtomPermission.all,
-            AtomPermission.docEdit,
-            AtomPermission.channelEdit,
-            AtomPermission.dbEdit,
-            AtomPermission.wsEdit
+            AtomPermission.pageFull,
+            AtomPermission.pageEdit,
+            AtomPermission.dbFull,
+            AtomPermission.dbEdit
         )
     }
     find(predict: (item: PageItem) => boolean) {
@@ -668,6 +625,50 @@ export class PageItem {
     }
     each(predict: (item: PageItem) => void) {
         this.childs.arrayJsonEach('childs', predict)
+    }
+    getUserPermissions() {
+        var keys = [
+            'id',
+            'text',
+            'parentId',
+            'icon',
+            'pageType',
+            'share',
+            'netPermissions',
+            'memberPermissions',
+            'inviteUsersPermissions'
+        ]
+        var item: PageItem = this;
+        var data;
+        while (true) {
+            var r = itemIsPermissons(surface, lodash.pick(item, keys), false);
+            if (r) {
+                data = r;
+                break;
+            }
+            else {
+                item = item.parent;
+                if (!item) break;
+            }
+        }
+        if (data) return data;
+        if (surface.workspace.isMember) {
+            return surface.workspace.memberPermissions;
+        }
+        else {
+            if (surface.workspace.access == 1) {
+                return {
+                    soruce: 'workspacePublicAccess',
+                    data: { access: surface.workspace.access },
+                    permissions: getCommonPermission()
+                }
+            }
+            return {
+                soruce: 'workspacePublicAccess',
+                data: { access: surface.workspace.access },
+                permissions: getDenyPermission()
+            }
+        }
     }
 }
 

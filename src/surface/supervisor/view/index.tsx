@@ -30,7 +30,7 @@ export class PageSupervisorView extends React.Component<{
         if (this.el && this.props.slide) {
             var sapp = document.querySelector('.shy-app');
             if (!this.el.contains(t) && sapp && sapp.contains(t)) {
-                this.onClose()
+                this.onCloseSlide()
             }
         }
     }
@@ -88,7 +88,8 @@ export class PageSupervisorView extends React.Component<{
             {this.props.slide && <div onMouseDown={e => this.mousedown(e)} className="cursor-col z-2000 w-10 pos pos-t pos-b pos-l border-left-light"></div>}
         </div>
     }
-    onClose() {
-        this.props.store.page.onSubmitForm({ isClose: true, isFormMargin: true });
+    async onCloseSlide() {
+        await this.props.store.page.onSubmitForm();
+        surface.supervisor.emit('closeSlide');
     }
 }

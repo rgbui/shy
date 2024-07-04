@@ -82,7 +82,7 @@ import { UserAction } from "../src/history/action";
 import { RobotInfo, UserBasic, UserStatus, WorkspaceMember } from "../types/user";
 import { ResourceArguments } from "../extensions/icon/declare";
 import { PayFeatureCheck } from "../component/pay";
-import { AtomPermission } from "../src/page/permission";
+import { AtomPermission, PageSourcePermission } from "../src/page/permission";
 import { WsConsumeType } from "./ai/cost";
 export type SockResponse<T, U = string> = {
         /**
@@ -163,7 +163,7 @@ push('/current/page', '{}', 'LinkPageItem', ['query'])
 push('/page/create/sub', '{pageId:string,text:string}', 'LinkPageItem', ['air'])
 push('/cache/get', '{key:string}', 'Promise<any>', ['query']);
 push('/cache/set', '{key:string,value:any}', 'Promise<void>', ['act']);
-push('/page/allow', '{elementUrl:string}', 'Promise<{ isOwner?: boolean,isWs?: boolean,netPermissions?: AtomPermission[],item?:LinkPageItem,permissions?: AtomPermission[],memberPermissions?:{userid?:string,roleId?:string,permissions?: AtomPermission[]}[]}>', ['get']);
+push('/page/allow', '{elementUrl:string}', 'PageSourcePermission', ['get']);
 push('/clone/page', '{pageId: string, text?: string, parentId?: string, downPageId?: string}', 'SockResponse<{items:LinkPageItem[]}>', ['post']);
 push('/schema/create', '{text:string,wsId?:string,url:string}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
 push('/schema/create/define', '{text:string,wsId?:string,fields?:any[],views?:any[],datas?:any[]}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
@@ -202,7 +202,7 @@ push('/datastore/board/stat/fields','{groupFilters?: { id: string, filter: Recor
 
 push('/datastore/dataGrid/list', '{ws:LinkWs,wsId?:string,groupView?:any,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[],isIgnoreCount?: boolean}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number,groupList?: { id: string|{min:number,max:number}, count: number, total?: number, list: any[] }[]},warn:string}', ['get']);
 push('/datastore/dataGrid/sub/list', '{parentId:string, ws:LinkWs,wsId?:string,groupFilter?:any,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[]}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
-push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{exists:boolean}>', ['get']);
+push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{data:Record<string,any>}>', ['get']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 

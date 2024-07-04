@@ -10,13 +10,13 @@ import { ShyUrl, UrlRoute } from "../../history";
 import { Mime } from "../sln/declare";
 import { PageItem } from "../sln/item";
 import { pageItemStore } from "../sln/item/store/sync";
-import { getPageItemElementUrl } from "../sln/item/util";
+import { findItemPermisson, getPageItemElementUrl, itemIsPermissons } from "../sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useSelectPayView } from "../../component/pay/select";
 import { SnapStore } from "../../../services/snap/store";
 import { masterSock } from "../../../net/sock";
-import { TableSchema } from "rich/blocks/data-grid/schema/meta";
-import { AtomPermission } from "rich/src/page/permission";
+import { TableSchema, TableSchemaView } from "rich/blocks/data-grid/schema/meta";
+import { AtomPermission, getEditOwnPerssions } from "rich/src/page/permission";
 import { Workspace } from "../workspace";
 import { wss } from "../../../services/workspace";
 import { lst } from "rich/i18n/store";
@@ -170,8 +170,8 @@ class MessageCenter {
                     url: item.url,
                     elementUrl: item.elementUrl,
                     share: item.share,
-                    speak:item.speak,
-                    speakDate:item.speakDate,
+                    speak: item.speak,
+                    speakDate: item.speakDate,
                     netPermissions: item.netPermissions,
                     memberPermissions: item.memberPermissions,
                     inviteUsersPermissions: item.inviteUsersPermissions,
@@ -294,110 +294,104 @@ class MessageCenter {
     }
     @get('/page/allow')
     async pageAllow(args: { elementUrl: string }) {
-        var allow: {
-            isOwner?: boolean,
-            isWs?: boolean,
-            netPermissions?: AtomPermission[],
-            permissions?: AtomPermission[],
-            memberPermissions?: PageItem['memberPermissions']
-        } = {}
-        if (surface.workspace.isOwner) return allow = { isOwner: true }
         var pe = parseElementUrl(args.elementUrl);
-        function ge(item: PageItem) {
-            if (!item) return;
-            if (surface.user?.isSign) {
-                if (surface.workspace.isMember) {
-                    var me = surface.workspace.member;
-                    if (Array.isArray(item.memberPermissions) && item.memberPermissions.length > 0) {
-                        var rs = (item.memberPermissions || []).filter(g => g.userid && g.userid == me.id || g.roleId && g.roleId == 'all' || g.roleId && me.roleIds.includes(g.roleId));
-                        if (rs.length > 0) {
-                            return {
-                                item: item,
-                                memberPermissions: rs
-                            }
-                        }
-                    }
-                }
-                else {
-                    if (item.share == 'net' && Array.isArray(item.netPermissions) && item.netPermissions.length > 0) {
-                        return {
-                            item,
-                            netPermissions: item.netPermissions
-                        }
-                    }
-                }
-            }
-            else {
-                if (item.share == 'net' && Array.isArray(item.netPermissions) && item.netPermissions.length > 0) {
-                    return {
-                        item,
-                        netPermissions: item.netPermissions
-                    }
-                }
-            }
-        }
-        async function findParents(item: PageItem) {
-            var fp;
-            var p = item;
-            if (p) {
-                while (true) {
-                    var r = ge(p);
-                    if (r) { fp = r; break; }
-                    else {
-                        var parentId = p.parentId;
-                        if (parentId) {
-                            var pa = await channel.get('/page/query/info', { id: parentId });
-                            if (pa?.ok) {
-                                p = pa.data as PageItem;
-                            }
-                            else break
-                        }
-                        else break
-                    }
-                }
-            }
-            if (fp) {
-                return fp;
-            }
-            else {
-                fp = {
-                    isWs: true,
-                    permissions: surface.workspace.allMemeberPermissions
-                }
-                return fp;
-            }
-        }
         switch (pe.type) {
             case ElementType.PageItem:
             case ElementType.Room:
+                return await findItemPermisson(surface, pe.id);
             case ElementType.Schema:
-                var item = await channel.get('/page/query/info', { id: pe.id });
-                allow = await findParents(item.data as PageItem);
-                break;
+                if (surface.workspace.isOwner) return {
+                    source: 'wsOwner',
+                    permissions: getEditOwnPerssions()
+                }
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
+                if (rcs) {
+                    rcs.source = 'schema'
+                    rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                    return rcs;
+                }
+                return await findItemPermisson(surface, pe.id);
             case ElementType.SchemaRecordView:
-                var schema = await TableSchema.loadTableSchema(pe.id, undefined);
-                var sv = schema ? schema.views.find(g => g.id == pe.id1) : undefined;
-                var sc = ge(sv as any);
-                if (sc) allow = sc;
-                else {
-                    var item = await channel.get('/page/query/info', { id: schema.id });
-                    allow = await findParents(item as PageItem);
+                if (surface.workspace.isOwner) return {
+                    source: 'wsOwner',
+                    permissions: getEditOwnPerssions()
+                }
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                var sv = schema.views.find(g => g.id == pe.id1);
+                console.log('ggg',sv);
+                if (sv) {
+                    var rc = itemIsPermissons(surface, sv, false) as { source: 'SchemaRecordView', data: Partial<TableSchemaView>, permissions: AtomPermission[] };
+                    if (rc) {
+                        rc.source = 'SchemaRecordView'
+                        rc.data = sv as any;
+                        return rc;
+                    }
+                    var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
+                    if (rcs) {
+                        rcs.source = 'schema'
+                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                        return rcs;
+                    }
+                    return await findItemPermisson(surface, pe.id);
                 }
                 break;
             case ElementType.SchemaData:
-                var schema = await TableSchema.loadTableSchema(pe.id, undefined);
+                if (surface.workspace.isOwner) return {
+                    source: 'wsOwner',
+                    permissions: getEditOwnPerssions()
+                }
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
                 var row = await schema.rowGet(pe.id1);
                 if (row) {
-                    var sr = ge(row.config as any);
-                    if (sr) allow = sr;
-                    else {
-                        var item = await channel.get('/page/query/info', { id: schema.id });
-                        allow = await findParents(item as PageItem);
+                    var rcg = itemIsPermissons(surface, row.config, false) as { source: 'SchemaData', data: Record<string, any>, permissions: AtomPermission[] };
+                    if (rcg) {
+                        rcg.source = 'SchemaData';
+                        rcg.data = row;
+                        return rcg;
                     }
+                    var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
+                    if (rcs) {
+                        rcs.source = 'schema'
+                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                        return rcs;
+                    }
+                    return await findItemPermisson(surface, pe.id);
+                }
+                break;
+            case ElementType.SchemaRecordViewData:
+                if (surface.workspace.isOwner) return {
+                    source: 'wsOwner',
+                    permissions: getEditOwnPerssions()
+                }
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                var row = await schema.rowGet(pe.id2);
+                if (row) {
+                    var rcg = itemIsPermissons(surface, row.config, false) as { source: 'SchemaData', data: Record<string, any>, permissions: AtomPermission[] };
+                    if (rcg) {
+                        rcg.source = 'SchemaData';
+                        rcg.data = row;
+                        return rcg;
+                    }
+                    var sv = schema.views.find(g => g.id == pe.id1);
+                    if (sv) {
+                        var rc = itemIsPermissons(surface, sv, false) as { source: 'SchemaRecordView', data: Partial<TableSchemaView>, permissions: AtomPermission[] };;
+                        if (rc) {
+                            rc.source = 'SchemaRecordView';
+                            rc.data = sv;
+                            return rc;
+                        }
+                    }
+                    var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
+                    if (rcs) {
+                        rcs.source = 'schema'
+                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                        return rcs;
+                    }
+                    return await findItemPermisson(surface, pe.id);
                 }
                 break;
         }
-        return allow;
     }
     @query('/query/current/user')
     queryCurrentUser() {

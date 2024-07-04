@@ -10,20 +10,30 @@ import { Mime } from "../../sln/declare";
 import { PageViewStore } from "./store";
 import { log } from "../../../../common/log";
 import { channel } from "rich/net/channel";
+import { ViewOperate } from "rich/src/history/action";
+import { AtomPermission } from "rich/src/page/permission";
 
 export async function createPageContent(store: PageViewStore) {
     try {
         if (!store.page) {
             var page = new Page();
             page.ws = surface.workspace;
-            page.edit = store.config.isCanEdit;
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
             page.openPageData = store.config.initData;
             page.customElementUrl = store.elementUrl;
             store.page = page;
-            await page.cachCurrentPermissions();
-            var pd = await store.snapStore.querySnap(page.isCanEdit ? false : true);
+            await page.cacCurrentPermissions();
+            var pd: {
+                content: any;
+                operates?: undefined;
+            } | {
+                operates: ViewOperate[];
+                content: any;
+            }
+            if (!page.isAllow(AtomPermission.pageDeny, AtomPermission.dbDeny)) {
+                pd = await store.snapStore.querySnap(page.isCanEdit ? false : true);
+            }
             if (store.config?.type) store.page.pageLayout = { type: store.config.type }
             if (store.item) {
                 page.pageInfo = store.item;
@@ -138,7 +148,8 @@ export async function createPageContent(store: PageViewStore) {
             page.on(PageDirective.mounted, async () => {
                 store.page.onHighlightBlock(store.config.blockId, true);
             })
-            await page.load(pd.content, pd.operates);
+            if (pd)
+                await page.load(pd.content, pd.operates);
             if (store.view.pageEl) {
                 var bound = Rect.fromEle(store.view.pageEl);
                 page.render(store.view.pageEl, {

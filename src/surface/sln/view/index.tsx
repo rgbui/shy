@@ -31,7 +31,7 @@ export var SlnView = observer(function () {
     function renderBottoms() {
         if (surface?.workspace?.isPubSite) return <></>
         if (surface.workspace.isManager)
-            return <div className="gap-t-20">
+            return <div className="gap-h-20">
                 <div onMouseDown={e => surface.workspace.onOpenTemplate(e)} className="shy-ws-item-page flex gap-w-5 min-h-28 round relative cursor ">
                     <span className="gap-l-5 round size-20 flex-center gap-r-5 "><Icon size={18} icon={{ name: 'bytedance-icon', code: 'page-template' }}></Icon></span>
                     <span className=""><S>模板</S></span>
@@ -45,7 +45,7 @@ export var SlnView = observer(function () {
                     <span className=""><S>垃圾桶</S></span>
                 </div>
             </div>
-        else return <></>
+        else return <div className="gap-h-20"></div>
     }
     function renderPublishSiteSearch() {
         return <> {surface?.workspace?.isPubSite && !surface?.workspace?.isPubSiteHideMenu && <div className="gap-10">

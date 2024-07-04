@@ -37,20 +37,7 @@ export class Sln extends Events {
             item.onContextmenuClickItem(menuItem.item, menuItem.event, el);
         }
     }
-    async onMousedownItem(item: PageItem, event: MouseEvent)
-    {
-        // if (surface.keyboardPlate.isAlt() && surface.keyboardPlate.isKeydown) {
-        //     var page: Page = await channel.act('/page/slide', { elementUrl: item.elementUrl })
-        //     if (page) {
-        //         await channel.act('/page/slide', { elementUrl: null });
-        //     }
-        //     return;
-        // }
-        // else if (surface.keyboardPlate.isMetaOrCtrl() && surface.keyboardPlate.isKeydown) {
-        //     surface.keyboardPlate.clear()
-        //     window.open(item.url)
-        //     return;
-        // }
+    async onMousedownItem(item: PageItem, event: MouseEvent) {
         var self = this;
         if (item.isCanEdit) {
             MouseDragger<{ item: HTMLElement }>({
@@ -76,6 +63,7 @@ export class Sln extends Events {
                                 if (!self.dragIds.some(s => s == self.hover?.item.id)) {
                                     var dragItem = surface.workspace.find(g => self.dragIds.some(s => s == g.id));
                                     var overItem = self.hover?.item;
+                                    if (!overItem.isCanEdit) return;
                                     if (self.hover.direction == 'top') {
                                         if (overItem.prev) await pageItemStore.moveToAfterPageItem(dragItem, overItem.prev);
                                         else if (overItem.parent) {
@@ -278,6 +266,7 @@ export class Sln extends Events {
                     }
                 }
             }
+            if (pageItem && !pageItem.isCanEdit) pageItem = null;
             if (pageItem && direction && pageItem !== dragItem) {
                 var f = dragItem.find(c => c.id == pageItem?.id);
                 if (f) {

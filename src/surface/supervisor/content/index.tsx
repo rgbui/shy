@@ -30,9 +30,7 @@ export var PageContentView = observer(function (props: { elementUrl?: string, ws
             var token = usp.get('token');
         }
         await surface.onLoadWorkspace(wsId, false)
-
         // var sock = await wss.getWsSock(wsId);
-      
         var r = await surface.workspace.sock.get<{
             localExisting: boolean,
             file: IconArguments,
@@ -49,13 +47,12 @@ export var PageContentView = observer(function (props: { elementUrl?: string, ws
             var page = new Page();
             var item = await channel.get('/page/query/elementUrl', { elementUrl: e })
             page.pageInfo = item;
-            page.edit = await false;
             page.openSource = 'page'
             page.isSchemaRecordViewTemplate = false;
             page.customElementUrl = e;
             page.readonly = true;
             page.bar = false;
-            await page.cachCurrentPermissions();
+            await page.cacCurrentPermissions();
             await page.load(pd.content, pd.operates);
             var bound = Rect.fromEle(local.el);
             page.on(PageDirective.mounted, async () => {

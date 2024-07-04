@@ -16,6 +16,15 @@ export function GlobalKeyboard() {
     surface.keyboardPlate.listener(kb => kb.isMetaOrCtrl(KeyboardCode.S),
         (event, kt) => {
             event.preventDefault()
+            if (surface.supervisor.dialog?.page) {
+                surface.supervisor.dialog?.page.onPageSave();
+                return;
+            }
+            if (surface.supervisor.slide?.page) {
+                surface.supervisor.slide?.page.onPageSave();
+                return;
+            }
+
             if (surface.supervisor?.page?.page)
                 surface.supervisor?.page?.page.onPageSave();
         }
@@ -72,7 +81,7 @@ export function GlobalKeyboard() {
     )
 
     surface.keyboardPlate.listener(kb => kb.isAlt(KeyboardCode.F),
-        (ev, kt) => {
+        (ev,kt) =>{
             ev.preventDefault();
             surface.supervisor.openDialogOrSlideToPage();
         }

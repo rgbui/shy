@@ -5,9 +5,10 @@ import ReactDOM from "react-dom";
 import { popoverLayer } from "rich/component/lib/zindex";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
+import { surface } from "../../app/store";
 
 @observer
-export class PageSupervisorDialog extends React.Component<{ store: PageViewStore }>{
+export class PageSupervisorDialog extends React.Component<{ store: PageViewStore }> {
     node: HTMLElement;
     constructor(props) {
         super(props);
@@ -49,8 +50,9 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
             this.onClose();
         }
     }
-    onClose() {
-        this.props.store.page.onSubmitForm({ isClose: true, isFormMargin: true });
+    async onClose() {
+        await this.props.store.page.onSubmitForm();
+        surface.supervisor.emit('closeDialog')
     }
     pageEl: HTMLElement;
     render() {
