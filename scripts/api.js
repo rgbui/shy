@@ -165,7 +165,7 @@ push('/cache/get', '{key:string}', 'Promise<any>', ['query']);
 push('/cache/set', '{key:string,value:any}', 'Promise<void>', ['act']);
 push('/page/allow', '{elementUrl:string}', 'PageSourcePermission', ['get']);
 push('/clone/page', '{pageId: string, text?: string, parentId?: string, downPageId?: string}', 'SockResponse<{items:LinkPageItem[]}>', ['post']);
-push('/schema/create', '{text:string,wsId?:string,url:string}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
+push('/schema/create', '{text:string,id?:string,wsId?:string,url:string}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
 push('/schema/create/define', '{text:string,wsId?:string,fields?:any[],views?:any[],datas?:any[]}', 'SockResponse<{schema:Partial<TableSchema>}>', ['put']);
 push('/schema/query', '{ws:LinkWs,wsId?:string,id:string}', '{ok:boolean,data:{schema:Partial<TableSchema>},warn:string}', ['get']);
 push('/schema/operate', '{operate:{operate?:string,schemaId:string,date?:Date,actions:any[]}}', 'SockResponse<{actions:any[]}>', ['air']);

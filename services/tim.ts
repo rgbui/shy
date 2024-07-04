@@ -116,12 +116,10 @@ export function workspaceNotifys(tim: Tim) {
     });
     //页面数据表格元数据
     tim.only(SyncMessageUrl.dataGridSchemaOperator, (e, op) => {
-        console.log(e, op);
         channel.fire('/schema/operate', e as any, op);
     });
 
     tim.only(SyncMessageUrl.dataStoreOperate, (e, op) => {
-        console.log(e, op);
         channel.fire('/datastore/operate', e as any, op)
     });
 
