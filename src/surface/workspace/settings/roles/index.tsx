@@ -19,7 +19,7 @@ import lodash from 'lodash';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import React from "react";
-import { ChevronLeftSvg, ChevronRightSvg, CloseSvg, DotsSvg, MemberSvg, PlusSvg, TrashSvg, TypesPersonSvg } from "rich/component/svgs";
+import { ChevronLeftSvg, ChevronRightSvg, CloseSvg, DotsSvg, MemberSvg, PlusSvg, TrashSvg } from "rich/component/svgs";
 import { Avatar } from 'rich/component/view/avator/face';
 import { Button } from 'rich/component/view/button';
 import { Row, Col, Divider } from 'rich/component/view/grid';
@@ -32,7 +32,7 @@ import { Rect } from 'rich/src/common/vector/point';
 import { util } from 'rich/util/util';
 import { surface } from '../../../app/store';
 import { SaveTip } from '../../../../component/tip/save.tip';
-import { AtomPermission, getCommonPerssions, getAtomPermissionComputedChanges, getAtomPermissionOptions } from "rich/src/page/permission";
+import { AtomPermission, getCommonPermission, getAtomPermissionComputedChanges, getAtomPermissionOptions } from "rich/src/page/permission";
 import { ToolTip } from 'rich/component/view/tooltip';
 import { SelectBox } from 'rich/component/view/select/box';
 import { MenuItemType } from 'rich/component/view/menu/declare';
@@ -41,7 +41,6 @@ import { useUserPicker } from 'rich/extensions/at/picker';
 import { Confirm } from 'rich/component/lib/confirm';
 import { SearchListType } from 'rich/component/types';
 import { Spin } from 'rich/component/view/spin';
-import { PageLayoutType } from 'rich/src/page/declare';
 import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
 import { Tip } from 'rich/component/view/tooltip/tip';
@@ -49,6 +48,7 @@ import "./style.less";
 import { useColorPicker } from 'rich/component/view/color/lazy';
 import Pic from "../../../../assert/img/four-hand.png";
 import { WorkspaceRole } from 'rich/types/user';
+import { ShyAlert } from 'rich/component/lib/alert';
 
 const RoleColors: string[] = [
     'rgb(26,188,156)',
@@ -96,6 +96,8 @@ export class WorkspaceRoles extends React.Component {
         loading: false
     }
     async openEditRole(role) {
+
+        if (!surface.workspace.isAllow(AtomPermission.wsFull)) return;
         this.editRole = role;
         if (!role.id) {
             this.mode = 'permission';
@@ -156,15 +158,16 @@ export class WorkspaceRoles extends React.Component {
     }
     async loadRoles() {
         this.roles = lodash.cloneDeep(surface.workspace.roles);
-        this.roles.push({ text: lst('所有人'), permissions: surface.workspace.allMemeberPermissions || getCommonPerssions() })
+        this.roles.push({ text: lst('所有人'), permissions: surface.workspace.allMemeberPermissions || getCommonPermission() })
         this.bakeRoles = lodash.cloneDeep(this.roles);
     }
     async addRole() {
+        if (!surface.workspace.isAllow(AtomPermission.wsFull)) return ShyAlert(lst('你没有权限'));
         var r = await channel.put('/ws/role/create', {
             data: {
                 text: lst('新角色'),
                 color: RoleColors[lodash.random(0, RoleColors.length)],
-                permissions: getCommonPerssions()
+                permissions: getCommonPermission()
             }
         });
         if (r.ok) {
@@ -211,7 +214,7 @@ export class WorkspaceRoles extends React.Component {
             <div className='shy-ws-roles-list-box'>
                 <div className='shy-ws-roles-list-box-head flex'>
                     <div className='flex-auto'><span><S>角色</S></span></div>
-                    <div className='flex-fixed'><Button size='small' onClick={e => this.addRole()}><S>添加角色</S></Button></div>
+                    {surface.workspace.isAllow(AtomPermission.wsFull) && <div className='flex-fixed'><Button size='small' onClick={e => this.addRole()}><S>添加角色</S></Button></div>}
                 </div>
                 {this.roles.length == 1 && <div className='remark flex-center gap-h-20'><S>还没有创建任何角色</S></div>}
                 {this.roles.filter(g => g.id ? true : false).map(r => {
@@ -231,7 +234,7 @@ export class WorkspaceRoles extends React.Component {
                             </svg>
                             <span>{r.text}</span>
                         </div>
-                        <div className='flex-fixed size-24 visible item-hover round cursor flex-center ' onMouseDown={e => this.operatorRole(r, e)} > <Icon size={16} icon={DotsSvg}></Icon></div>
+                        {surface.workspace.isAllow(AtomPermission.wsFull) && <div className='flex-fixed size-24 visible item-hover round cursor flex-center ' onMouseDown={e => this.operatorRole(r, e)} > <Icon size={16} icon={DotsSvg}></Icon></div>}
                     </div>
                 })}
             </div>
@@ -315,7 +318,14 @@ export class WorkspaceRoles extends React.Component {
                 var br = this.bakeRoles.find(b => b.id == role.id);
                 if (br) {
                     if (JSON.stringify(br) !== JSON.stringify(role)) {
-                        await channel.patch('/ws/role/patch', { roleId: role.id, data: { text: role.text, color: role.color, permissions: role.permissions } });
+                        lodash.remove(role.permissions, g => typeof g == 'number' && g < 100);
+                        await channel.patch('/ws/role/patch', {
+                            roleId: role.id, data: {
+                                text: role.text,
+                                color: role.color,
+                                permissions: role.permissions
+                            }
+                        });
                         var wr = surface.workspace.roles.find(g => g.id == role.id);
                         if (wr) {
                             Object.assign(wr, role);
@@ -369,16 +379,14 @@ export class WorkspaceRoles extends React.Component {
     }
     renderPermissions() {
         var self = this;
-        function save(ps: AtomPermission[]) {
-            var first = ps[0];
-            var name = AtomPermission[first];
-            name = name.slice(0, 2);
-            lodash.remove(self.editRole.permissions, g => (AtomPermission[g as any] as string)?.startsWith(name))
+        function save(ps: AtomPermission[], names: string[]) {
+            lodash.remove(self.editRole.permissions as AtomPermission[], g => !AtomPermission[g] || names.some(n => AtomPermission[g] && AtomPermission[g].startsWith(n) ? true : false));
             ps.forEach(p => {
                 if (!self.editRole.permissions.includes(p)) {
                     self.editRole.permissions.push(p)
                 }
             })
+            lodash.remove(self.editRole.permissions, g => typeof g == 'number' && g > -1 && g < 1000 ? false : true);
             self.tip.open();
         }
         return <div className="shy-ws-role-permission">
@@ -393,63 +401,42 @@ export class WorkspaceRoles extends React.Component {
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>页面权限</S></div>
-                        <div className='remark f-12'><S text='设置文档白板PPT的权限'>设置文档、白板、PPT的权限</S></div>
+                        <div className='remark f-12'><S text='设置文档白板PPT的权限'>设置文档、白板、PPT、频道、数据表等页面权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
-                            small
                             border
                             multiple
                             computedChanges={async (vs, v) => {
-                                return getAtomPermissionComputedChanges(PageLayoutType.doc, vs, v);
+                                return getAtomPermissionComputedChanges('pageAndDb', vs, v);
                             }}
-                            options={getAtomPermissionOptions(PageLayoutType.doc)}
-                            value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('doc'))}
-                            onChange={e => { save(e) }}
+                            options={getAtomPermissionOptions('pageAndDb')}
+                            value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('page') || AtomPermission[g]?.startsWith('db'))}
+                            onChange={e => { save(e, ['page', 'db']) }}
                         ></SelectBox>
                     </div>
                 </div>
                 <Divider></Divider>
-                <div className='flex'>
-                    <div className='flex-auto'>
-                        <div><S>频道权限</S></div>
-                        <div className='remark f-12'><S>设置频道的权限</S></div>
-                    </div>
-                    <div className='flex-fixed'>
-                        <SelectBox
-                            small
-                            multiple
-                            border
-                            computedChanges={async (vs, v) => {
-                                return getAtomPermissionComputedChanges(PageLayoutType.textChannel, vs, v);
-                            }}
-                            options={getAtomPermissionOptions(PageLayoutType.textChannel)}
-                            value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('channel'))}
-                            onChange={e => { save(e) }}
-                        ></SelectBox>
-                    </div>
-                </div>
-                <Divider></Divider>
-                <div className='flex'>
+                {/* <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>数据表权限</S></div>
                         <div className='remark f-12'><S>设置数据表的权限</S></div>
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
-                            small
+
                             border
-                            options={getAtomPermissionOptions(PageLayoutType.db)}
+                            options={getAtomPermissionOptions('db')}
                             multiple
                             computedChanges={async (vs, v) => {
-                                return getAtomPermissionComputedChanges(PageLayoutType.db, vs, v);
+                                return getAtomPermissionComputedChanges('db', vs, v);
                             }}
                             value={self.editRole?.permissions?.filter(g => AtomPermission[g]?.startsWith('db'))}
                             onChange={e => { save(e) }}
                         ></SelectBox>
                     </div>
                 </div>
-                <Divider></Divider>
+                <Divider></Divider> */}
                 <div className='flex'>
                     <div className='flex-auto'>
                         <div><S>空间管理权限</S></div>
@@ -457,23 +444,14 @@ export class WorkspaceRoles extends React.Component {
                     </div>
                     <div className='flex-fixed'>
                         <SelectBox
-                            small
                             border
-                            options={[
-                                { text: lst('管理空间'), value: AtomPermission.wsEdit },
-                                { type: MenuItemType.divide },
-                                { text: lst('管理成员'), value: AtomPermission.wsMemeberPermissions },
-                                { type: MenuItemType.divide },
-                                { text: lst('无权限'), value: AtomPermission.wsNotAllow }
-                            ]}
+                            options={getAtomPermissionOptions('ws')}
                             multiple
                             computedChanges={async (vs, v) => {
-                                vs = []
-                                if (!vs.includes(v)) vs.push(v)
-                                return vs;
+                                return getAtomPermissionComputedChanges('ws', vs, v);
                             }}
                             value={self.editRole?.permissions.filter(g => AtomPermission[g]?.startsWith('ws'))}
-                            onChange={e => { save(e) }}
+                            onChange={e => { save(e, ['ws']) }}
                         ></SelectBox>
                     </div>
                 </div>

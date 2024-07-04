@@ -11,7 +11,7 @@ import { Sock } from "../../../net/sock";
 import { computed, makeObservable, observable } from "mobx";
 import { channel } from "rich/net/channel";
 import { surface } from "../app/store";
-import { AtomPermission, getCommonPerssions, getEditOwnPerssions } from "rich/src/page/permission";
+import { AtomPermission, PageSourcePermission, getCommonPermission, getEditOwnPerssions, mergeAtomPermission } from "rich/src/page/permission";
 import { ElementType, parseElementUrl } from "rich/net/element.type";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
@@ -64,7 +64,7 @@ export class Workspace {
      * 表示客户端ID。
      * 因为可能用户会在不同的电脑上开启本地服务，这里用ClientId加以区分
      */
-    public datasourceClientId:string;
+    public datasourceClientId: string;
     public pids: Pid[] = [];
     /**
      * 
@@ -96,7 +96,7 @@ export class Workspace {
     public memberCount: number = null;
     public memberOnlineCount: number = null;
     public childs: PageItem[] = [];
-    public allMemeberPermissions: AtomPermission[] = getCommonPerssions();
+    public allMemeberPermissions: AtomPermission[] = getCommonPermission();
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
     public allowSlnIcon: boolean = true;
@@ -122,7 +122,7 @@ export class Workspace {
      * 0:不公开 
      * 1:公开
      */
-    public access: number = 0;
+    public access: 0 | 1 = 0;
     public accessProfile: {
         disabledJoin: boolean,
         checkJoinProtocol: boolean,
@@ -282,11 +282,14 @@ export class Workspace {
         return surface.user?.id == ow ? true : false;
     }
     get isManager() {
-        return this.isOwner || this.isAllow(AtomPermission.wsEdit, AtomPermission.wsMemeberPermissions);
+        return  this.isAllow(
+            AtomPermission.wsEdit,
+            AtomPermission.wsFull
+        );
     }
-    isAllow(...permissions: AtomPermission[]) {
-        if (this.isOwner) return true;
-        return this.memberPermissions.some(s => permissions.includes(s))
+    isAllow(...permissions: AtomPermission[])
+    {
+        return this.memberPermissions.permissions.some(s => permissions.includes(s))
     }
     get isMember() {
         if (this.member) return true;
@@ -295,28 +298,39 @@ export class Workspace {
     /**
      * 获取当前成员在这个空间的权限
      */
-    get memberPermissions() {
-        var ps: AtomPermission[] = [];
+    get memberPermissions(): PageSourcePermission {
         if (surface.user?.id == this.owner) {
-            return getEditOwnPerssions()
+            return { source: 'wsOwner', permissions: getEditOwnPerssions() }
         }
+        var ps: AtomPermission[] = [];
         if (this.member) {
+            var roles: WorkspaceRole[] = [];
             if (this.member.roleIds.length > 0) {
-                ps = [];
                 this.member.roleIds.forEach(rid => {
                     var role = this.roles.find(g => g.id == rid);
                     if (role && Array.isArray(role.permissions)) {
-                        role.permissions.forEach(p => {
-                            if (!ps.includes(p)) ps.push(p)
-                        })
+                        ps = mergeAtomPermission(ps, role.permissions);
+                        if (role.permissions.some(s => ps.includes(s))) {
+                            roles.push(role);
+                        }
                     }
                 });
-                return ps;
+                return {
+                    source: 'wsRole',
+                    data: roles,
+                    permissions: ps
+                }
             }
         }
-        ps = this.allMemeberPermissions?.length > 0 ? this.allMemeberPermissions : getCommonPerssions();
-        if (!ps) ps = [];
-        return ps;
+        if (ps.length == 0) {
+            var allPs = this.allMemeberPermissions?.length > 0 ? this.allMemeberPermissions : getCommonPermission();
+            ps = mergeAtomPermission(ps, allPs);
+            return {
+                source: 'wsAllUser',
+                permissions: ps
+            }
+        }
+
     }
     load(data) {
         for (var n in data) {
@@ -734,7 +748,11 @@ export class Workspace {
         if (!this.isMember) return;
         if (isMobileOnly) return;
         var menus: MenuItem<string>[] = [];
-        if (this.isManager) {
+        if (this.isOwner || this.isAllow(
+            AtomPermission.wsEdit,
+            AtomPermission.wsFull,
+            AtomPermission.wsView
+        )) {
             menus = [
                 { name: 'setting', icon: SettingsSvg, text: lst('空间设置') },
                 { type: MenuItemType.divide },

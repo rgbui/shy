@@ -53,7 +53,7 @@ export class SitePublishView extends React.Component {
         if (r.ok) {
             runInAction(() => {
                 surface.workspace.publishConfig = lodash.cloneDeep(this.data.publishConfig);
-                surface.workspace.access = this.data.access;
+                surface.workspace.access = this.data.access as |1;
                 this.tip.close();
             })
         }

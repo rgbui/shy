@@ -66,7 +66,6 @@ export class WorkspaceMembers extends React.Component {
         var gs = await channel.get('/ws/robots');
         if (gs.ok) {
             this.currentRobots = gs.data.list as any;
-            // console.log(JSON.stringify(this.currentRobots))
         }
     }
     searchList: SearchListType<any, { roleId: string }> = {
@@ -109,6 +108,7 @@ export class WorkspaceMembers extends React.Component {
         }
     }
     async removeRole(member, roleId: string, event: React.MouseEvent) {
+        if(!surface.workspace.isManager) return ShyAlert(lst('你没有权限'));
         if (Array.isArray(member.roleIds)) {
             var g = await channel.del('/ws/user/delete/role', {
                 userid: member.userid,
@@ -120,6 +120,7 @@ export class WorkspaceMembers extends React.Component {
         }
     }
     async removeUser(member) {
+        if(!surface.workspace.isManager) return ShyAlert(lst('你没有权限'));
         if (await Confirm(lst(`确认要移除成员吗`))) {
             await channel.act('/current/ws/remove/member', { userid: member.userid })
             this.loadMembers();
@@ -173,6 +174,10 @@ export class WorkspaceMembers extends React.Component {
                         </div>
                         <div className='flex-auto'>
                             <div className='shy-ws-member-roles'>
+                                {surface.workspace.owner == me.userid && <a >
+                                    <span className='cursor inline-block circle size-14 gap-r-5' style={{ width: 12, height: 12, backgroundColor: '#f50' }}></span>
+                                    <span className='text'><S>超级管理员</S></span>
+                                </a>}
                                 {(me.roleIds || []).map(r => {
                                     var role = surface.workspace.roles.find(g => g.id == r);
                                     if (role) return <a key={r}>
@@ -181,7 +186,7 @@ export class WorkspaceMembers extends React.Component {
                                     </a>
                                     else return <a style={{ display: 'none' }} key={r}></a>
                                 })}
-                                {(me.roleIds || []).length < surface.workspace.roles.length && <ToolTip overlay={<S>添加角色</S>}><span style={{ padding: 0 }} className='cursor size-24 flex-center item-hover item-hover-light-focus round'><Icon size={16} icon={PlusSvg} onClick={e => this.selectRole(me, e)}></Icon></span></ToolTip>}
+                                {surface.workspace.owner !== me.userid && (me.roleIds || []).length < surface.workspace.roles.length && <ToolTip overlay={<S>添加角色</S>}><span style={{ padding: 0 }} className='cursor size-24 flex-center item-hover item-hover-light-focus round'><Icon size={16} icon={PlusSvg} onClick={e => this.selectRole(me, e)}></Icon></span></ToolTip>}
                             </div>
                         </div>
                         <div className='flex-fixed'>

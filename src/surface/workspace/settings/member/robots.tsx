@@ -111,6 +111,7 @@ export class RecommendRobots extends React.Component {
         }
     }
     async addMember(l: RobotInfo, e: React.MouseEvent, b: Button) {
+        if(!surface.workspace.isManager) return ShyAlert(lst('你没有权限'));
         b.loading = true;
         try {
             await surface.workspace.sock.put('/ws/member/add/robot', {

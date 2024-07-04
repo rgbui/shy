@@ -14,6 +14,7 @@ import { useOpenRobotSettings } from "./view";
 import { lst } from "rich/i18n/store";
 import { S } from "rich/i18n/view";
 import Pic from "../../../assert/img/robots.png";
+import { ShyAlert } from "rich/component/lib/alert";
 
 @observer
 export class RobotList extends React.Component {
@@ -46,14 +47,16 @@ export class RobotList extends React.Component {
         }
     }
     async add(event: React.MouseEvent) {
+        if (!surface.workspace.isManager) return ShyAlert(lst('你没有权限'));
         var g = await useForm({
             maskCloseNotSave: true,
             title: lst('创建AI机器人'),
             fields: [
                 { name: 'text', placeholder: lst('机器人名称...'), type: 'input', text: lst('机器人名称') },
                 {
-                    name: 'slogan', type: 'textarea', text: lst('描述')
-
+                    name: 'slogan',
+                    type: 'textarea',
+                    text: lst('描述')
                 }
             ]
         })
@@ -70,6 +73,7 @@ export class RobotList extends React.Component {
         }
     }
     open(robot: RobotInfo) {
+        if (!surface.workspace.isManager) return ShyAlert(lst('你没有权限'));
         this.currentRobot = robot;
         useOpenRobotSettings(this.currentRobot);
     }

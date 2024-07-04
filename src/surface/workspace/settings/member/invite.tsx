@@ -8,10 +8,12 @@ import { S } from "rich/i18n/view";
 import { lst } from "rich/i18n/store";
 import { HelpText } from "rich/component/view/text";
 import Pic from "../../../../assert/img/invite-user.png";
+import { ShyAlert } from "rich/component/lib/alert";
 
 @observer
 export class WorkspaceInvite extends React.Component {
     async createInvite(force?: boolean) {
+        if(!surface.workspace.isManager) return ShyAlert(lst('你没有权限'));
         await surface.workspace.onCreateInvite(true, force);
         if (this.input) this.input.updateValue(surface.workspace.getInviteUrl());
     }
