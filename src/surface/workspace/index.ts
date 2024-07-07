@@ -282,13 +282,12 @@ export class Workspace {
         return surface.user?.id == ow ? true : false;
     }
     get isManager() {
-        return  this.isAllow(
+        return this.isAllow(
             AtomPermission.wsEdit,
             AtomPermission.wsFull
         );
     }
-    isAllow(...permissions: AtomPermission[])
-    {
+    isAllow(...permissions: AtomPermission[]) {
         return this.memberPermissions.permissions.some(s => permissions.includes(s))
     }
     get isMember() {
@@ -744,7 +743,8 @@ export class Workspace {
         }
         return false;
     }
-    async openMenu(pos: PopoverPosition, width: number = 200) {
+    async openMenu(pos: PopoverPosition,width: number = 200)
+    {
         if (!this.isMember) return;
         if (isMobileOnly) return;
         var menus: MenuItem<string>[] = [];
@@ -758,18 +758,18 @@ export class Workspace {
                 { type: MenuItemType.divide },
                 { name: 'enterApp', text: lst('发布应用'), icon: { name: 'byte', code: 'application-one' } },
                 {
-                    text: lst('应用模式'),
+                    text: lst('应用状态'),
                     icon: { name: 'byte', code: 'intermediate-mode' },
                     visible: surface.workspace.publishConfig?.abled,
                     childs: [
                         {
                             name: 'editApp',
-                            text: lst('编辑'),
+                            text: lst('编辑模式'),
                             icon: { name: 'byte', code: 'write' },
                             checkLabel: surface.workspace.isApp ? false : true
                         },
                         {
-                            name: 'operateApp', text: lst('运营'),
+                            name: 'operateApp', text: lst('发布模式'),
                             icon: { name: 'byte', code: 'zijinyunying' },
                             checkLabel: surface.workspace.isApp ? true : false
                         }

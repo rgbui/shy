@@ -44,7 +44,7 @@ export var InviteCode = observer(function () {
                         <span>{local.user?.inviteCode}</span>
                         <i className="size-20 flex-center inline-flex item-hover round "><Icon size={16} icon={DuplicateSvg}></Icon></i>
                     </div>
-                    <div className="flex-fixed"><Button size="small" onClick={e => { CopyAlert(UrlRoute.getUrl()+`/sign/in?code=` + local.user?.inviteCode, ls.t('邀请地址已复制') ); }}><S>复制邀请地址</S></Button></div>
+                    <div className="flex-fixed"><Button  onClick={e => { CopyAlert(UrlRoute.getUrl()+`/sign/in?code=` + local.user?.inviteCode, ls.t('邀请地址已复制') ); }}><S>复制邀请地址</S></Button></div>
                 </div>
             </div>
             </>

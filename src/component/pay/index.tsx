@@ -12,6 +12,7 @@ import { Spin } from 'rich/component/view/spin';
 import { lst } from 'rich/i18n/store';
 import { S } from 'rich/i18n/view';
 import { PopoverSingleton } from 'rich/component/popover/popover';
+import { ShyOrderInfo } from './declare';
 
 export class PayView extends EventsComponent {
     async predictCreateOrder() {
@@ -45,28 +46,9 @@ export class PayView extends EventsComponent {
         this.forceUpdate()
     }
     code: string = '';
-    orderInfo: {
-        id?: string,
-        orderId?: string,
-        kind: 'fill' | 'meal-1' | 'meal-2',
-        subject: string,
-        body: string,
-        price: number,
-        count: number,
-        amount: number,
-        platform: string,
-        sockId?: string,
-    }
+    orderInfo: ShyOrderInfo
     loading: boolean = false;
-    async open(orderInfo: {
-        kind: 'fill' | 'meal-1' | 'meal-2',
-        subject: string,
-        body: string,
-        price: number,
-        count: number,
-        amount: number,
-        platform: string
-    }) {
+    async open(orderInfo: ShyOrderInfo) {
         this.orderInfo = lodash.cloneDeep(orderInfo);
         this.orderInfo.sockId = window.shyConfig.guid();
         await this.predictCreateOrder();
@@ -90,7 +72,7 @@ export class PayView extends EventsComponent {
     componentWillUnmount(): void {
         window.removeEventListener('message', this.onMessage)
     }
-    openSetPlatform(platform: string) {
+    openSetPlatform(platform: "alipay" | "weixin") {
         this.orderInfo.platform = platform;
         this.predictCreateOrder();
     }

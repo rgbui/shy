@@ -127,7 +127,7 @@ export class SitePublishView extends React.Component {
             <div className="gap-h-20">
                 <div className="bold f-14"><S>公开至互联网</S></div>
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text="公开互联网后">公开互联网后，会产生一定的流量、内容审核费用</S></div>
-                <div><Switch size='small' onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
+                <div><Switch  onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
             </div>
             <div className="gap-h-20">
                 <div className="bold f-14"><S>SEO优化</S></div>
@@ -138,7 +138,7 @@ export class SitePublishView extends React.Component {
                         checked={this.data.aiConfig.seoSearch}>
                     </SwitchText>
                 </div>
-                {this.data.aiConfig.seoSearch && <div>
+                {this.data.aiConfig.seoSearch && <div className="gap-h-10 flex">
                     <Button onMouseDown={async (e, b) => {
                         try {
                             b.loading = true;
@@ -153,7 +153,7 @@ export class SitePublishView extends React.Component {
                                 b.loading = false;
                         }
                     }} ghost><S>手动构建HTML</S></Button>
-                    <span>支持之前的数据被搜索引擎搜索到</span>
+                    <span className="gap-l-10 remark  f-12">支持之前的数据被搜索引擎搜索到</span>
                 </div>}
             </div>
 

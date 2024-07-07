@@ -161,7 +161,7 @@ export class WorkspaceMembers extends React.Component {
                         </div>
                         <div className='flex-auto flex-end'>
                             <SelectBox border value={this.searchList.roleId} onChange={e => { this.searchList.roleId = e; this.loadMembers() }} options={this.getRoleOptions()}></SelectBox>
-                            <Input className={'gap-l-10'} size='small' style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder={lst('搜索用户...')}></Input>
+                            <Input className={'gap-l-10'}  style={{ width: 180 }} value={this.searchList.word} onChange={e => this.searchList.word = e} onEnter={e => this.loadMembers()} placeholder={lst('搜索用户...')}></Input>
                         </div>
                     </div>
                 </div>

@@ -152,7 +152,7 @@ export class PublishSite extends EventsComponent {
                                     changeIcon(e, item)
                                 }} className="size-30 cursor flex-fixed round item-hover flex-center gap-r-5"><Icon size={16} icon={item.icon || NoneSvg}></Icon></span>
                             </Tip>
-                            <Input ref={e => self.refInput = e} className="flex-auto" placeholder={lst('菜单项')} value={item.text }
+                            <Input ref={e => self.refInput = e} className="flex-auto" placeholder={lst('菜单项')} value={item.text}
                                 onChange={e => { item.text = e; }}></Input>
                         </div>
                     </div>
@@ -170,7 +170,7 @@ export class PublishSite extends EventsComponent {
                     {item.type == 'logo' &&
                         <><div className="flex">
                             <label className="flex-fixed w-40 flex-end gap-r-5"><S>名称</S>:</label>
-                            <Input ref={e => self.refInput = e} className="flex-auto" placeholder={lst('菜单项')} value={item.text }
+                            <Input ref={e => self.refInput = e} className="flex-auto" placeholder={lst('菜单项')} value={item.text}
                                 onChange={e => { item.text = e; }}></Input>
                         </div>
                             <div className="flex">
@@ -393,7 +393,6 @@ export class PublishSite extends EventsComponent {
             <div className="flex-center gap-h-20"><S>敬请期待...</S></div>
             <div className="flex-center">
                 <div className="bg-white round-16 w-300 h-500" style={{ border: '10px solid #444' }}>
-
                 </div>
             </div>
         </div>
@@ -407,7 +406,7 @@ export class PublishSite extends EventsComponent {
                         onMouseDown={e => {
                             this.onClose();
                         }}>
-                        <span className="flex-fixed item-hover l-20 h-20 padding-r-5  round flex flex-inline"><Icon icon={{ name: 'byte', code: 'left' }}></Icon><S>后退</S>
+                        <span className="flex-fixed item-hover l-20 h-20 padding-r-5 cursor round flex flex-inline"><Icon icon={{ name: 'byte', code: 'left' }}></Icon><S>后退</S>
                         </span>
                     </div>
                     <div className="flex-center">

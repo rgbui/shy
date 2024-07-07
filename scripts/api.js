@@ -259,7 +259,7 @@ push('/user/chat/cancel', '{id:string,roomId:string}', 'SockResponse<void>', ['d
 push('/user/chat/patch', '{id:string,roomId:string,content?:string,file?:any}', 'SockResponse<void>', ['patch']);
 push('/user/chat/emoji', '{id:string,roomId:string,emoji:{emojiId: string, code?: string}}', 'SockResponse<{emoji:{emojiId: string, code?: string,count:number}}>', ['put']);
 push('/user/room/unread', '{unrooms: { roomId: string, seq: number }[]}', 'SockResponse<{unreads:{roomId:string,count:number}[]}>', ['get']);
-push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string}`, 'SockResponse<{orderId:string,code:string}>', ['put'])
+push('/create/qr_pay/order', `{subject: string,body: string,price: number,count: number,amount?: number,kind: string,free:number,rate:number}`, 'SockResponse<{orderId:string,code:string}>', ['put'])
 push('/repeat/qr_pay/order', '{orderId:string,platform:string}', 'SockResponse<{orderId:string,code:string}>', ['get'])
 push('/user/order/list', '{page?: number, size?: number, word?: string, status?: string,deal?:boolean}', 'SockResponse<{page:number,size:number,list:any[],total:number}>', ['get']);
 push('/user/del/order', '{orderId:string}', 'SockResponse<void>', ['del']);

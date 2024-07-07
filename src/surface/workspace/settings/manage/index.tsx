@@ -30,25 +30,32 @@ export class WorkspaceManage extends React.Component {
             error: observable
         })
     }
-    data: { createPageConfig: Workspace['createPageConfig'], aiConfig: Workspace['aiConfig'] } & { defaultPageId?: string, defaultPageTitle?: string, allowSlnIcon?: boolean } = {
-        createPageConfig: {
-            isFullWidth: true,
-            smallFont: false,
-            nav: false,
-            autoRefPages: false,
-            autoRefSubPages: true,
-        },
-        defaultPageId: null,
-        defaultPageTitle: '',
-        allowSlnIcon: false,
-        aiConfig: {
-            text: getAiDefaultModel(undefined, 'text'),
-            image: getAiDefaultModel(undefined, 'image'),
-            embedding: getAiDefaultModel(undefined, 'embedding'),
-            aiSearch: false,
-            disabled: false
-        }
-    };
+    data: {
+        createPageConfig: Workspace['createPageConfig'],
+        aiConfig: Workspace['aiConfig']
+    } & {
+        defaultPageId?: string,
+        defaultPageTitle?: string,
+        allowSlnIcon?: boolean
+    } = {
+            createPageConfig: {
+                isFullWidth: true,
+                smallFont: false,
+                nav: false,
+                autoRefPages: false,
+                autoRefSubPages: true,
+            },
+            defaultPageId: null,
+            defaultPageTitle: '',
+            allowSlnIcon: false,
+            aiConfig: {
+                text: getAiDefaultModel(undefined, 'text'),
+                image: getAiDefaultModel(undefined, 'image'),
+                embedding: getAiDefaultModel(undefined, 'embedding'),
+                aiSearch: false,
+                disabled: false
+            }
+        };
     error: Record<string, any> = {};
     tip: SaveTip;
     componentDidMount() {
@@ -155,15 +162,15 @@ export class WorkspaceManage extends React.Component {
             <Divider></Divider>
             <div className="gap-t-10 gap-b-20">
 
-                <div className="bold f-14"><S>空间搜索</S></div>
+                <div className="bold f-14"><S>搜索</S></div>
 
                 <div className="flex gap-t-10">
-                    <div className="flex-auto  f-14 text-1"><S>空间搜索</S></div>
+                    <div className="flex-auto  f-14 text"><S>空间搜索</S></div>
                     <div className="flex-fixed">
                         <Switch size="small" onChange={e => this.change('aiConfig.esSearch', e)} checked={this.data.aiConfig.esSearch}></Switch>
                     </div>
                 </div>
-                {this.data.aiConfig.esSearch && <div >
+                {this.data.aiConfig.esSearch && <div className="gap-h-10 flex" >
                     <Button onMouseDown={async (e, b) => {
                         try {
                             b.loading = true;
@@ -178,12 +185,12 @@ export class WorkspaceManage extends React.Component {
                                 b.loading = false;
                         }
                     }} ghost><S>手动索引</S></Button>
-                    <span>支持之前的数据被搜索到</span>
+                    <span className="gap-l-10 remark f-12">支持之前的数据被搜索到</span>
                 </div>}
-                <div className="gap-b-10 f-12 remark"><S>基于Elasticsearch空间内搜索</S></div>
+                <div className="gap-h-5 f-12 remark"><S>基于Elasticsearch空间内搜索</S></div>
 
                 <div className="flex gap-t-10">
-                    <div className="flex-auto  f-14 text-1 flex">
+                    <div className="flex-auto  f-14 text flex">
                         <span className="gap-r-3"><S>智能搜索</S></span>
                         <span><HelpText url={window.shyConfig.isUS ? "https://help.shy.red/page/61#36astuDyScJiKa7xgSMFwq" : "https://help.shy.live/page/1553#5btvRFFL217adGAnGsT74D"}><S>了解诗云AI智能搜索</S></HelpText></span>
                     </div>
@@ -192,7 +199,7 @@ export class WorkspaceManage extends React.Component {
                         checked={this.data.aiConfig.aiSearch}>
                     </SwitchText></div>
                 </div>
-                {this.data.aiConfig.aiSearch && <div>
+                {this.data.aiConfig.aiSearch && <div className="gap-h-10 flex">
                     <Button onMouseDown={async (e, b) => {
                         try {
                             b.loading = true;
@@ -207,11 +214,9 @@ export class WorkspaceManage extends React.Component {
                                 b.loading = false;
                         }
                     }} ghost><S>手动训练</S></Button>
-                    <span>训练之前的数据被智能搜索到</span>
+                    <span className="gap-l-10 remark  f-12">训练之前的数据被智能搜索到</span>
                 </div>}
-                <div className="gap-b-10 f-12 remark"><S>基于AI大模型QA问答搜索</S></div>
-
-
+                <div className="gap-h-5 f-12 remark"><S>基于AI大模型QA问答搜索</S></div>
 
             </div>
 
@@ -219,7 +224,7 @@ export class WorkspaceManage extends React.Component {
             <div className="gap-t-10 gap-b-20">
                 <div className="bold f-14"><S>空间侧边栏设置</S></div>
                 <div className="flex gap-t-10">
-                    <div className="flex-auto  f-14 text-1"><S>允许自定义图标</S></div>
+                    <div className="flex-auto  f-14 text"><S>允许自定义图标</S></div>
                     <div className="flex-fixed"><Switch size="small" onChange={e => this.change('allowSlnIcon', e)} checked={this.data.allowSlnIcon}></Switch></div>
                 </div>
                 <div className="remark f-12 gap-b-10"><S>允许侧边栏页面图标自定义显示</S></div>
@@ -243,7 +248,7 @@ export class WorkspaceManage extends React.Component {
                 </div>
                 {!(this.data.aiConfig.disabled == true) && <>
                     <div className="flex gap-h-10">
-                        <div className="flex-auto  f-14 text-1"><S>文本生成</S></div>
+                        <div className="flex-auto  f-14 text"><S>文本生成</S></div>
                         <div className="flex-fixed">
                             <SelectBox
                                 dropWidth={250}
@@ -261,7 +266,7 @@ export class WorkspaceManage extends React.Component {
                         </div>
                     </div>
                     <div className="flex gap-h-10">
-                        <div className="flex-auto  f-14 text-1"><S>图像生成</S></div>
+                        <div className="flex-auto  f-14 text"><S>图像生成</S></div>
                         <div className="flex-fixed">
                             <SelectBox
                                 border

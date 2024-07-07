@@ -1,10 +1,14 @@
 import React from "react";
 import { S } from "rich/i18n/view";
 
-import CheckImg from "../../src/assert/img/check.png";
+// import CheckImg from "../../src/assert/img/check.png";
+import { CheckSvg } from "rich/component/svgs";
+import { Icon } from "rich/component/view/icon";
 
 
 var eqs = [
+
+    { group: '基础功能' },
 
     { text: '文档功能', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '数据表功能', local: true, private: true, cloud: true, standard: true, pro: true },
@@ -15,10 +19,12 @@ var eqs = [
     { text: '双链', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '标签', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '协作分享', local: false, private: true, cloud: true, standard: true, pro: true },
-    { text: 'AI协作(写作、创作等)', local: true, private: true, cloud:  true, standard: true, pro: true },
+    { text: 'AI协作(写作、创作等)', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: 'AI智能搜索', local: true, private: true, cloud: false, standard: true, pro: true },
     { text: 'AI机器人客服', local: false, private: true, cloud: false, standard: true, pro: true },
     { text: '成员管理', local: false, private: true, cloud: false, standard: true, pro: true },
+
+    { group: '存储' },
 
     { text: '空间存储', local: '不限', private: '不限', cloud: '100M', standard: '20G', pro: '100G' },
     { text: '单图片上限', local: '不限', private: '不限', cloud: '5M', standard: '20 MB', pro: '50 MB' },
@@ -26,12 +32,13 @@ var eqs = [
     { text: '单视频上限', local: '不限', private: '不限', cloud: '不支持上传', standard: '500 MB', pro: '2 GB' },
     { text: '数据行数', local: '不限', private: '不限', cloud: '5千行', standard: '30万行', pro: '200万行' },
     { text: '日活DAU（高峰)', local: false, private: '不限', cloud: '5人/月', standard: '50人/月', pro: '2000人/月' },
-   
+
 
     { text: '语言大模型', local: '充值', private: '充值', cloud: '1万字', standard: '300万字', pro: '2000万字' },
     { text: 'AI生图', local: '充值', private: '充值', cloud: false, standard: '20张', pro: '100张' },
     { text: '内容安全过滤', local: false, private: '充值', cloud: '系统过滤', standard: '系统及自定义过滤', pro: '系统及自定义过滤' },
 
+    { group: "高级功能" },
 
     { text: '公开互联网', local: false, private: '需备案', cloud: false, standard: true, pro: true },
     { text: 'SEO优化', local: false, private: true, cloud: false, standard: true, pro: true },
@@ -53,7 +60,10 @@ export function EquityView() {
 
     function rf(g: string | boolean) {
         if (typeof g == 'string') return g;
-        if (g) return <img src={CheckImg} className="size-20" alt="" />;
+        if (g) return <div className="flex-center">
+            <Icon size={16} icon={CheckSvg}></Icon>
+            {/* <img src={CheckImg} className="size-20" alt="" /> */}
+        </div>;
         else return '-'
     }
 
@@ -70,22 +80,29 @@ export function EquityView() {
                         <th>本地(免费)</th>
                         <th>私有云(免费)</th>
                         <th>云端(免费)</th>
-                        <th>标准版</th>
-                        <th>专业版</th>
+                        <th>个人版</th>
+                        <th>协作版</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {eqs.map((v, i) => <tr key={i}>
+                    {eqs.map((v, i) => {
+                        if (v.group) return <tr key={i}>
+                            <td colSpan={6} className="gap-t-30 ">
+                                <div className="flex remark">{v.group}</div>
+                            </td>
+                        </tr>
+                        return <tr key={i}>
 
-                        <td>{v.text}</td>
-                        <td>{rf(v.local)}</td>
-                        <td>{rf(v.private)}</td>
-                        <td>{rf(v.cloud)}</td>
-                        <td>{rf(v.standard)}</td>
-                        <td>{rf(v.pro)}</td>
+                            <td><div className="flex">{v.text}</div></td>
+                            <td>{rf(v.local)}</td>
+                            <td>{rf(v.private)}</td>
+                            <td>{rf(v.cloud)}</td>
+                            <td>{rf(v.standard)}</td>
+                            <td>{rf(v.pro)}</td>
 
 
-                    </tr>)}
+                        </tr>
+                    })}
                 </tbody>
             </table>
         </div>

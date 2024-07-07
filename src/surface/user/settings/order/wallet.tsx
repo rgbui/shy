@@ -212,10 +212,10 @@ export class ShyWallet extends React.Component {
         }
         function getMeal() {
             if (self.wallet.meal == 'meal-1') {
-                return lst('专业版');
+                return lst('个人版');
             }
             else if (self.wallet.meal == 'meal-2') {
-                return lst('社区版');
+                return lst('协作版');
             }
             else if (self.wallet.meal == 'meal') {
                 return lst('云端版')
@@ -229,8 +229,8 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>余额</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed">{Price.toFixed(this.wallet.money)}<S>元</S></span>
-                    <span className="flex-auto flex-end r-gap-l-10"><Button size="small" onClick={e => openPay('fill')}><S>充值</S></Button>
-                        <Button size="small" ghost onClick={e => this.coupon(e)}><S>兑换码</S></Button></span>
+                    <span className="flex-auto flex-end r-gap-l-10"><Button  onClick={e => openPay('fill')}><S>充值</S></Button>
+                        <Button  ghost onClick={e => this.coupon(e)}><S>兑换码</S></Button></span>
                 </div>
                 <Divider></Divider>
             </div>
@@ -238,8 +238,8 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>套餐</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed"><em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal' || this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i className="text-1">[{dayjs(this.wallet.due).format('YYYY.MM.DD')}<S>到期</S>]</i>}</span>
-                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button size="small" ghost onClick={e => openPay('meal-1')}><S>专业版</S></Button>}
-                        <Button size="small" ghost onClick={e => openPay('meal-2')}><S>社区版</S></Button></span>
+                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button  ghost onClick={e => openPay('meal-1')}><S>个人版</S></Button>}
+                        <Button  ghost onClick={e => openPay('meal-2')}><S>协作版</S></Button></span>
                 </div>
                 <Divider></Divider>
             </div>
