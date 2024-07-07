@@ -65,7 +65,9 @@ export async function createPageContent(store: PageViewStore) {
                     await store.snapStore.viewOperatorAndSnap(action.get() as any, {
                         content: await page.getString(),
                         text: store.item?.text,
-                        thumb: await page.getThumb()
+                        thumb: await page.getThumb(),
+                        plain: await page.getPlain(),
+                        preview: await page.getPreviewContent(),
                     }, { force: action.immediate ? true : false, notSave: action.isCursorOperatorOrPicker() })
                 }
             });
@@ -79,6 +81,8 @@ export async function createPageContent(store: PageViewStore) {
                     content: await page.getString(),
                     text: store.item?.text,
                     thumb: await page.getThumb(),
+                    plain: await page.getPlain(),
+                    preview: await page.getPreviewContent(),
                     ...data,
                 });
             })

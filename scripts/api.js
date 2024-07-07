@@ -363,7 +363,7 @@ push('/view/snap/query', '{ws:LinkWs,elementUrl: string}', 'SockResponse<{conten
 push('/view/snap/query/readonly', '{ws:LinkWs,wsId?:string, elementUrl: string}', 'SockResponse<{content:string,operates:any[]}>', ['get'])
 push('/view/snap/operator', '{ elementUrl: string, operate: Partial<UserAction> }', 'Promise<{seq: number,id: string;}>', ['act'])
 push('/view/snap/store', '{  elementUrl: string, seq: number, content: any,plain?:string,text?:string,thumb?:any }', 'Promise<void>', ['act'])
-push('/view/snap/direct', '{wsId?:string,  elementUrl: string, content: any,plain?:string,text?:string,thumb?:any }', 'Promise<void>', ['put'])
+//push('/view/snap/direct', '{wsId?:string,  elementUrl: string, content: any,plain?:string,text?:string,thumb?:any }', 'Promise<void>', ['put'])
 
 push('/view/snap/list', '{ws:LinkWs,wsId?:string, elementUrl: string, page: number, size: number}', 'SockResponse<{list:any[],total:number,size:number,page:number}>', ['get'])
 push('/view/snap/content', '{ws:LinkWs,wsId?:string,id:string}', 'SockResponse<{id:string,content:string}>', ['get'])

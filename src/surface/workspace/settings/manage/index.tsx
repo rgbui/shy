@@ -18,6 +18,8 @@ import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
 import { getPageText } from "rich/src/page/declare";
 import { checkModelPay, getAiDefaultModel, getAiImageModelOptions, getAiModelOptions } from "rich/net/ai/cost";
 import { HelpText } from "rich/component/view/text";
+import { Button } from "rich/component/view/button";
+import { util } from "rich/util/util";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -146,7 +148,7 @@ export class WorkspaceManage extends React.Component {
                 <div className="bold f-14"><S>空间默认首页</S></div>
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text={'通过自定义域名打开时'}>通过自定义域名打开时，默认显示初始页面</S></div>
                 <div className="max-w-500">
-                    <Input onMousedown={e => this.open(e)} value={this.data.defaultPageTitle} readonly></Input>
+                    <Input onMousedown={e => this.open(e)} value={this.data.defaultPageTitle || ''} readonly></Input>
                 </div>
             </div>
 
@@ -161,6 +163,23 @@ export class WorkspaceManage extends React.Component {
                         <Switch size="small" onChange={e => this.change('aiConfig.esSearch', e)} checked={this.data.aiConfig.esSearch}></Switch>
                     </div>
                 </div>
+                {this.data.aiConfig.esSearch && <div >
+                    <Button onMouseDown={async (e, b) => {
+                        try {
+                            b.loading = true;
+                            await surface.workspace.sock.post('/view/search/all', { wsId: surface.workspace.id });
+                            await util.delay(1000 * 600)
+                        }
+                        catch (ex) {
+
+                        }
+                        finally {
+                            if (b)
+                                b.loading = false;
+                        }
+                    }} ghost><S>手动索引</S></Button>
+                    <span>支持之前的数据被搜索到</span>
+                </div>}
                 <div className="gap-b-10 f-12 remark"><S>基于Elasticsearch空间内搜索</S></div>
 
                 <div className="flex gap-t-10">
@@ -173,16 +192,27 @@ export class WorkspaceManage extends React.Component {
                         checked={this.data.aiConfig.aiSearch}>
                     </SwitchText></div>
                 </div>
+                {this.data.aiConfig.aiSearch && <div>
+                    <Button onMouseDown={async (e, b) => {
+                        try {
+                            b.loading = true;
+                            await surface.workspace.sock.post('/ws/ai/all', { wsId: surface.workspace.id });
+                            await util.delay(1000 * 600)
+                        }
+                        catch (ex) {
+
+                        }
+                        finally {
+                            if (b)
+                                b.loading = false;
+                        }
+                    }} ghost><S>手动训练</S></Button>
+                    <span>训练之前的数据被智能搜索到</span>
+                </div>}
                 <div className="gap-b-10 f-12 remark"><S>基于AI大模型QA问答搜索</S></div>
 
-                <div className="flex gap-t-10">
-                    <div className="flex-auto  f-14 text-1"><S>SEO优化</S></div>
-                    <div className="flex-fixed"><SwitchText size="small"
-                        onChange={e => this.change('aiConfig.seoSearch', e)}
-                        checked={this.data.aiConfig.seoSearch}>
-                    </SwitchText></div>
-                </div>
-                <div className="gap-b-10 f-12 remark"><S text='支持百度Google收录搜索'>支持百度、Google收录搜索</S></div>
+
+
             </div>
 
             <Divider></Divider>
@@ -216,7 +246,6 @@ export class WorkspaceManage extends React.Component {
                         <div className="flex-auto  f-14 text-1"><S>文本生成</S></div>
                         <div className="flex-fixed">
                             <SelectBox
-                                small
                                 dropWidth={250}
                                 border
                                 dropAlign="right"
@@ -226,7 +255,7 @@ export class WorkspaceManage extends React.Component {
                                 options={
                                     getAiModelOptions()
                                 }
-                                value={getAiDefaultModel(this.data.aiConfig?.text)}
+                                value={getAiDefaultModel(this.data.aiConfig?.text, 'text')}
                                 onChange={e => { this.change('aiConfig.text', e) }}
                             ></SelectBox>
                         </div>
@@ -235,7 +264,6 @@ export class WorkspaceManage extends React.Component {
                         <div className="flex-auto  f-14 text-1"><S>图像生成</S></div>
                         <div className="flex-fixed">
                             <SelectBox
-                                small
                                 border
                                 dropWidth={250}
                                 dropAlign="right"

@@ -20,7 +20,8 @@ export type SnapDataType = {
     date?: Date,
     plain?: string,
     text?: string,
-    thumb?: ResourceArguments[]
+    thumb?: ResourceArguments[],
+    preview?:string
 }
 
 
@@ -147,6 +148,7 @@ export class SnapStore extends Events {
             plain: (snap.plain || ''),
             text: snap.text,
             thumb: snap.thumb,
+            preview:snap.preview,
             creater: snap.creater || surface?.user?.id,
         };
         if (options?.force) await this.storeLocal();
@@ -189,6 +191,7 @@ export class SnapStore extends Events {
                         seq: this.localViewSnap.seq,
                         content: this.localViewSnap.content,
                         plain: this.localViewSnap.plain,
+                        preview:this.localViewSnap.preview,
                         thumb: this.localViewSnap.thumb,
                         pageText: this.localViewSnap.text
                     })

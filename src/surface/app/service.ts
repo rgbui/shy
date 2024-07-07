@@ -13,7 +13,7 @@ import { pageItemStore } from "../sln/item/store/sync";
 import { findItemPermisson, getPageItemElementUrl, itemIsPermissons } from "../sln/item/util";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useSelectPayView } from "../../component/pay/select";
-import { SnapStore } from "../../../services/snap/store";
+import { SnapDataType, SnapStore } from "../../../services/snap/store";
 import { masterSock } from "../../../net/sock";
 import { TableSchema, TableSchemaView } from "rich/blocks/data-grid/schema/meta";
 import { AtomPermission, getEditOwnPerssions } from "rich/src/page/permission";
@@ -319,7 +319,7 @@ class MessageCenter {
                 }
                 var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
                 var sv = schema.views.find(g => g.id == pe.id1);
-                console.log('ggg',sv);
+                console.log('ggg', sv);
                 if (sv) {
                     var rc = itemIsPermissons(surface, sv, false) as { source: 'SchemaRecordView', data: Partial<TableSchemaView>, permissions: AtomPermission[] };
                     if (rc) {
@@ -501,20 +501,16 @@ class MessageCenter {
         await useSelectPayView('fill');
     }
     @act('/view/snap/store')
-    async viewSnapStore(args: {
-        elementUrl: string,
-        seq?: number,
-        content: string,
-        plain: string,
-        text: string
-    }) {
+    async viewSnapStore(args: SnapDataType & { elementUrl: string }) {
         var ss = await SnapStore.createSnap(args.elementUrl);
         if (ss) {
             await ss.viewSnap({
                 seq: args.seq,
                 content: args.content,
                 plain: args.plain,
-                text: args.text
+                text: args.text,
+                thumb: args.thumb,
+                preview: args.preview
 
             }, { force: true });
         }

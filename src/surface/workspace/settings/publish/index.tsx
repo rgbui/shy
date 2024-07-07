@@ -1,6 +1,6 @@
 import React from "react";
 import { Divider } from "rich/component/view/grid";
-import { Switch } from "rich/component/view/switch";
+import { Switch, SwitchText } from "rich/component/view/switch";
 import { surface } from "../../../app/store";
 import { observer } from "mobx-react";
 import { channel } from "rich/net/channel";
@@ -15,6 +15,8 @@ import { usePublishSite } from "./site";
 import { Button } from "rich/component/view/button";
 import { ShyAlert } from "rich/component/lib/alert";
 import { useSetCustomDomain } from "../../../user/common/setCustomDomain";
+import { getAiDefaultModel } from "rich/net/ai/cost";
+import { util } from "rich/util/util";
 
 @observer
 export class SitePublishView extends React.Component {
@@ -28,6 +30,7 @@ export class SitePublishView extends React.Component {
     data: {
         publishConfig: Workspace['publishConfig'],
         access: number,
+        aiConfig: Workspace['aiConfig']
     } = {
             access: 1,
             publishConfig: {
@@ -39,6 +42,13 @@ export class SitePublishView extends React.Component {
                 contentTheme: 'wiki',
                 defineBottom: false,
                 allowSearch: false
+            },
+            aiConfig: {
+                text: getAiDefaultModel(undefined, 'text'),
+                image: getAiDefaultModel(undefined, 'image'),
+                embedding: getAiDefaultModel(undefined, 'embedding'),
+                aiSearch: false,
+                disabled: false
             }
         };
     error: Record<string, any> = {};
@@ -47,13 +57,14 @@ export class SitePublishView extends React.Component {
         var r = await channel.patch('/ws/patch', {
             data: {
                 publishConfig: lodash.cloneDeep(this.data.publishConfig),
-                access: this.data.access
+                access: this.data.access,
+                aiConfig: lodash.cloneDeep(this.data.aiConfig)
             }
         });
         if (r.ok) {
             runInAction(() => {
                 surface.workspace.publishConfig = lodash.cloneDeep(this.data.publishConfig);
-                surface.workspace.access = this.data.access as |1;
+                surface.workspace.access = this.data.access as | 1;
                 this.tip.close();
             })
         }
@@ -61,7 +72,8 @@ export class SitePublishView extends React.Component {
     async reset() {
         this.data = {
             publishConfig: lodash.cloneDeep(surface.workspace.publishConfig),
-            access: surface.workspace.access
+            access: surface.workspace.access,
+            aiConfig: lodash.cloneDeep(surface.workspace.aiConfig)
         };
         if (!this.data.publishConfig?.navMenus || Array.isArray(this.data.publishConfig?.navMenus) && this.data.publishConfig.navMenus.length == 0) {
             this.data.publishConfig.navMenus = [{
@@ -117,6 +129,35 @@ export class SitePublishView extends React.Component {
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text="公开互联网后">公开互联网后，会产生一定的流量、内容审核费用</S></div>
                 <div><Switch size='small' onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
             </div>
+            <div className="gap-h-20">
+                <div className="bold f-14"><S>SEO优化</S></div>
+                <div className="remark f-12 gap-b-10 gap-t-5"><S text='支持百度Google收录搜索'>支持百度、Google收录搜索</S></div>
+                <div>
+                    <SwitchText size="small"
+                        onChange={e => this.change('aiConfig.seoSearch', e)}
+                        checked={this.data.aiConfig.seoSearch}>
+                    </SwitchText>
+                </div>
+                {this.data.aiConfig.seoSearch && <div>
+                    <Button onMouseDown={async (e, b) => {
+                        try {
+                            b.loading = true;
+                            await surface.workspace.sock.post('/view/search/all', { wsId: surface.workspace.id });
+                            await util.delay(1000 * 600)
+                        }
+                        catch (ex) {
+
+                        }
+                        finally {
+                            if (b)
+                                b.loading = false;
+                        }
+                    }} ghost><S>手动构建HTML</S></Button>
+                    <span>支持之前的数据被搜索引擎搜索到</span>
+                </div>}
+            </div>
+
+
             <div className="gap-h-20">
                 <div className="bold f-14"><S>自定义域名</S></div>
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text="支持自定义你自已的域名">支持自定义你自已的域名，需要国内备案</S></div>

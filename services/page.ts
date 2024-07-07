@@ -108,20 +108,20 @@ class PageService extends BaseService {
         var snapStore = SnapStore.createSnap(args.elementUrl);
         return await snapStore.viewOperator(args.operate);
     }
-    @act('/view/snap/store')
-    async PageViewSnap(args: { elementUrl: string, seq: number, content: any }) {
-        var snapStore = SnapStore.createSnap(args.elementUrl);
-        return snapStore.viewSnap({ seq: args.seq, content: args.content })
-    }
-    @put('/view/snap/direct')
-    async PageViewDirect(args) {
-        if (!args) args = {}
-        var sock = await wss.getArgsSock(args);
-        sock.put('/view/snap/direct', {
-            ...args,
-            wsId: surface.workspace.id
-        });
-    }
+    // @act('/view/snap/store')
+    // async PageViewSnap(args: { elementUrl: string, seq: number, content: any }) {
+    //     var snapStore = SnapStore.createSnap(args.elementUrl);
+    //     return snapStore.viewSnap({ seq: args.seq, content: args.content })
+    // }
+    // @put('/view/snap/direct')
+    // async PageViewDirect(args) {
+    //     if (!args) args = {}
+    //     var sock = await wss.getArgsSock(args);
+    //     sock.put('/view/snap/direct', {
+    //         ...args,
+    //         wsId: surface.workspace.id
+    //     });
+    // }
     @get('/view/snap/list')
     async viewSnapList(args) {
         if (!args) args = {}

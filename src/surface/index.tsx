@@ -12,17 +12,18 @@ import "../../org/site.less";
 import "./supervisor/style.less";
 import "./sln/style.less";
 import dayjs from "dayjs";
-import 'dayjs/locale/zh-cn' 
-if(!window.shyConfig.isUS){
-    dayjs.locale('zh-cn') // use loaded locale globally
+import 'dayjs/locale/zh-cn'
+if (!window.shyConfig.isUS) {
+  dayjs.locale('zh-cn') // use loaded locale globally
 }
 import { App } from './app/app';
 import { configure } from 'mobx';
 configure({ enforceActions: 'never' })
 document.body.classList.add('theme-light');
-
+var div = document.body.querySelector('div');
+if (!div) div = document.body.appendChild(document.createElement('div'))
 ReactDOM.render(
   <App />,
-  document.body.appendChild(document.createElement('div')),
+  div,
 )
 
