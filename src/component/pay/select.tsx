@@ -16,6 +16,8 @@ import { UrlRoute } from "../../history";
 import { surface } from "../../surface/app/store";
 import { PopoverSingleton } from "rich/component/popover/popover";
 
+export const MEAL_1_PRICE = 99;
+export const MEAL_2_PRICE = 300;
 export class SelectPayView extends EventsComponent {
     orderInfo: {
         kind: 'fill' | 'meal-1' | 'meal-2',
@@ -41,8 +43,8 @@ export class SelectPayView extends EventsComponent {
 
         this.orderInfo.platform = 'weixin';
         this.orderInfo.price = 100;
-        if (kind == 'meal-1') this.orderInfo.price = 160;
-        else if (kind == 'meal-2') this.orderInfo.price = 800;
+        if (kind == 'meal-1') this.orderInfo.price = MEAL_1_PRICE;
+        else if (kind == 'meal-2') this.orderInfo.price = MEAL_2_PRICE;
         this.orderInfo.count = 1;
         this.forceUpdate()
     }
@@ -98,10 +100,10 @@ export class SelectPayView extends EventsComponent {
                     <div><S text='按量付费适用于轻度知识工作者'>按量付费，适用于轻度知识工作者</S></div>
                 </div>}
                 {this.orderInfo.kind == 'meal-1' && <div className="r-padding-h-5  round l-20">
-                    <div><S>适用于中度知识工作者及小群体</S></div>
+                    <div><S>适用于云端知识工作者</S></div>
                 </div>}
                 {this.orderInfo.kind == 'meal-2' && <div className="r-padding-h-5  round l-20">
-                    <div><S>适用于开放性的社区群体</S></div>
+                    <div><S>适用于多人协作，经营服务，价值变现</S></div>
                 </div>}
             </div>
             <h3><S>支付方式</S></h3>
@@ -112,17 +114,18 @@ export class SelectPayView extends EventsComponent {
             <h3><S>支付金额</S></h3>
             <div className="flex">
                 <div className="flex-fixed">
-                    {this.orderInfo.kind == 'fill' && <div className="shy-pay-money"><span><S>充值</S>&nbsp;</span><Input size={'default'} value={this.orderInfo.price.toString()} onChange={e => { var v = parseFloat(e); !(!isNaN(v) && v >= 1 && v <= 5000) ? undefined : this.orderInfo.price = v; this.forceUpdate() }}></Input><em>&nbsp;￥</em></div>}
-                    {this.orderInfo.kind != 'fill' && <span style={{ fontSize: '24px' }}>{this.orderInfo.kind == 'meal-1' ? "￥180" : "￥800"}</span>}
+                    {this.orderInfo.kind == 'fill' && <div className="shy-pay-money"><span><S>充值</S>&nbsp;</span><Input
+                        size={'default'}
+                        value={this.orderInfo.price.toString()}
+                        onChange={e => { var v = parseFloat(e); !(!isNaN(v) && v >= 1 && v <= 5000) ? undefined : this.orderInfo.price = v; this.forceUpdate() }}></Input><em>&nbsp;￥</em></div>}
+                    {this.orderInfo.kind != 'fill' && <span style={{ fontSize: '24px' }}>{this.orderInfo.kind == 'meal-1' ? "￥" + MEAL_1_PRICE : "￥" + MEAL_2_PRICE}</span>}
                 </div>
                 <div className="flex-auto flex-end">
-                    {this.orderInfo.kind == 'fill' && <span className="remark"><S>最低充</S>99<S>元</S></span>}
+                    {this.orderInfo.kind == 'fill' && <span className="remark"><S>最低充</S>100<S>元</S></span>}
                     {this.orderInfo.kind != 'fill' && <SelectBox value={this.orderInfo.count} options={[
                         { text: '1' + lst('年'), value: 1 },
                         { text: '2' + lst('年'), value: 2 },
-                        { text: '3' + lst('年'), value: 3 },
-                        { text: '4' + lst('年'), value: 4 },
-                        { text: '5' + lst('年'), value: 5 }
+                        { text: '3' + lst('年'), value: 3 }
                     ]} onChange={e => { this.orderInfo.count = e; this.forceUpdate(); }}></SelectBox>}
                 </div>
             </div>

@@ -4,9 +4,9 @@ import { Icon } from "rich/component/view/icon";
 import { S, Sp } from "rich/i18n/view";
 import { config } from "../../common/config";
 import { UrlRoute } from "../../src/history";
+import { MEAL_1_PRICE, MEAL_2_PRICE } from "../../src/component/pay/select";
 
-export function PricingValue(props: { small?: boolean })
-{
+export function PricingValue(props: { small?: boolean }) {
     //诗云
     return <div>
         <h3 className="flex-center shy-site-block-head">
@@ -43,6 +43,7 @@ export function PricingValue(props: { small?: boolean })
         </div>
     </div>
 }
+
 export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" | "meal-1" | "meal-2") => void }) {
     var pres = <>
         <div className="gap-10 padding-14 shy-site-block-card">
@@ -50,7 +51,6 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
             <div className="remark gap-h-10 f-14 l-20"><S text='免费版-description'>适用于本地及私有云</S></div>
             {/* <div className="text-center link-red"><span className="f-20"><S>￥</S><em className="f-50 bold ">0</em></span></div> */}
             <div className="bg-ghost-hover gap-h-20 text-white flex-center h-50 round cursor" onClick={e => props.openPay && props.openPay('fill')}><S>免费使用</S></div>
-
 
 
             <div className="r-gap-b-5">
@@ -68,30 +68,28 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
                 <div className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>存储容量</S><span className="flex-auto flex-end">100M</span></div>
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>协作及访客</S><span className="flex-auto flex-end"><S text='{count}人/月' data={{ count: 5 }}>5人/月</S></span></p>
                 {/* <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>数据</S><span className="flex-auto flex-end"><S text='{count}条' data={{ count: config.isUS ? "10K" : "1万" }}>1万条</S></span></p>
-            <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>语言大模型</S><span className="flex-auto flex-end"><S text='{count}字' data={{ count: config.isUS ? "10K" : "1万" }}>1万字</S></span></p> */}
+                <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>语言大模型</S><span className="flex-auto flex-end"><S text='{count}字' data={{ count: config.isUS ? "10K" : "1万" }}>1万字</S></span></p> */}
                 <div className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>仅协作分享</S></div>
                 {/* <div className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>不支持公开互联网</S></div> */}
 
 
             </div>
 
-
-
         </div>
         <div className="gap-10  padding-14 shy-site-block-card">
-            <div className="bold f-24"><S>标准版</S></div>
+            <div className="bold f-24"><S>个人版</S></div>
             <div className="remark gap-h-10 f-14 l-20"><S text='个人版-description'>适用于云端知识工作者</S></div>
-            <div className="text-center link-red"><span className="f-20"><S>￥</S><em className="f-50 bold ">99</em></span><span><S>年</S></span><span className="remark del f-12 gap-l-5"><S text='元/年' data={{ count: 180}}>180元/年</S></span></div>
+            <div className="text-center link-red"><span className="f-20"><S>￥</S><em className="f-50 bold ">{MEAL_1_PRICE}</em></span><span><S>年</S></span><span className="remark del f-12 gap-l-5"><S text='元/年' data={{ count: 180 }}>180元/年</S></span></div>
             <div className="bg-primary-hover  gap-h-20  text-white flex-center h-50 round cursor" onClick={e => props.openPay && props.openPay('meal-1')}><S>升级购买</S></div>
 
             <div className="r-gap-b-5">
-                <div className="remark f-14 l-20 "><S >标准版</S>:</div>
+                <div className="remark f-14 l-20 "><S >个人版</S>:</div>
+
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>存储容量</S><span className="flex-auto flex-end">20G</span></p>
-                <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>协作及访客</S><span className="flex-auto flex-end"><S text='{count}人/月' data={{ count: 50 }}>200人/月</S></span></p>
+                <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>协作及访客DAU</S><span className="flex-auto flex-end"><S text='{count}人/月' data={{ count: 50 }}>200人/月</S></span></p>
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>数据行数</S><span className="flex-auto flex-end"><S text='{count}行' data={{ count: config.isUS ? "300K" : "30万" }}>30万条</S></span></p>
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>语言大模型</S><span className="flex-auto flex-end"><S text='{count}万字' data={{ count: 300 }}>300万字</S></span></p>
                 <p className="text-1 flex-top f-14 l-20 "><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><label className="flex-auto"><S>AI生图</S></label><span className="flex-fixed"><S text='{count}张' data={{ count: 20 }}>20张</S></span></p>
-               
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><label className="flex-auto"><S>二级域名</S></label><span className="flex-fixed"><S text='{count}个' data={{ count: 2 }}>2个</S></span></p>
                 <div className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>支持API</S></div>
                 <div className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20 flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>支持公开互联网、SEO优化</S></div>
@@ -104,15 +102,15 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
     </>
     var lasts = <>
         <div className="gap-10 padding-14 shy-site-block-card">
-            <div className="bold f-24"><S>专业版</S></div>
+            <div className="bold f-24"><S>协作版</S></div>
             <div className="remark gap-h-10 f-14 l-20"><S text='专业版-description'>适用于多人协作，经营服务，价值变现</S></div>
-            <div className="text-center  link-red"><span className="f-20"><S>￥</S><em className="f-50 bold">399</em></span><span><S>年</S></span></div>
+            <div className="text-center  link-red"><span className="f-20"><S>￥</S><em className="f-50 bold">{MEAL_2_PRICE}</em></span><span><S>年</S></span></div>
             <div className="bg-primary-hover  gap-h-20  text-white flex-center h-50 round cursor" onClick={e => props.openPay && props.openPay('meal-2')}><S>升级购买</S></div>
 
             <div className="r-gap-b-5">
-                <div className="remark f-14 l-20"><S text='专业版-features'>标准版的所有内容，以及</S></div>
+                <div className="remark f-14 l-20"><S text='专业版-features'>个人版的所有内容，以及</S></div>
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>空间存储</S><span className="flex-auto flex-end">100G</span></p>
-                <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>协作及访客</S><span className="flex-auto flex-end"><S text='{count}人/月' data={{ count: 2000 }}>2000人/月</S></span></p>
+                <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>协作及访客DAU</S><span className="flex-auto flex-end"><S text='{count}人/月' data={{ count: 1000 }}>1000人/月</S></span></p>
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>数据行数</S><span className="flex-auto flex-end"><S text='{count}行' data={{ count: config.isUS ? "2000K" : "200万" }}>200万条</S></span></p>
                 <p className="text-1 flex-top f-14 l-20"><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><S>语言大模型</S><span className="flex-auto flex-end"><S text='{count}万字' data={{ count: 2000 }}>2000万字</S></span></p>
                 <p className="text-1 flex-top f-14 l-20 "><span className={'remark flex-fixed size-20  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'check' }} size={12} ></Icon></span><label className="flex-auto"><S>AI生图</S></label><span className="flex-fixed"><S text='{count}张' data={{ count: 100 }}>100张</S></span></p>
@@ -133,14 +131,14 @@ export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" 
 
             <div className="r-gap-b-5">
                 <div className="remark f-14 l-20"><S text='付费标准'>付费标准</S></div>
-                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>空间存储</S></label><span className="flex-fixed"><S text='元/年/G' data={{ count: 3 }}>元/年/G</S></span></p>
-                <p className="text-1 flex f-14 l-20"><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><S>协作及访客(高峰)≤1万</S><span className="flex-auto flex-end"><S text='{money}元/{count}人/月' data={{ count: 10, money: 1 }}>1元/10人/月</S></span></p>
-                <p className="text-1 flex f-14 l-20"><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><S>协作及访客(高峰)&gt;1万</S><span className="flex-auto flex-end"><S text='{money}元/{count}人/月' data={{ count: 100, money: 1 }}>1元/10人/月</S></span></p>
-                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>数据行数</S></label><span className="flex-fixed"><S text='元/1万行' data={{ count: 3 }}>元/1万行</S></span></p>
+                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>空间存储</S></label><span className="flex-fixed"><S text='元/年/G' data={{ count: 5 }}>元/年/G</S></span></p>
+                <p className="text-1 flex f-14 l-20"><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><S>协作及访客DAU(每月高峰)≤1万</S><span className="flex-auto flex-end"><S text='{money}元/{count}人/月' data={{ count: 10, money: 1 }}>1元/10人/月</S></span></p>
+                <p className="text-1 flex f-14 l-20"><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><S>协作及访客DAU(每月高峰)&gt;1万</S><span className="flex-auto flex-end"><S text='{money}元/{count}人/月' data={{ count: 100, money: 1 }}>1元/10人/月</S></span></p>
+                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>数据行数</S></label><span className="flex-fixed"><S text='元/1万行' data={{ count: 5 }}>元/1万行</S></span></p>
                 <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12 flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>语言大模型(最低)</S></label><span className="flex-fixed"><S text='{money}元/{count}万字' data={{ count: 10, money: 1 }}>元/10万字</S></span></p>
                 <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>AI生图</S></label><span className="flex-fixed"><S text='{money}元/{count}张' data={{ count: 10, money: 3 }}>元/10张</S></span></p>
-                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>二级域名</S></label><span className="flex-fixed"><S text='{money}元/域名' data={{ count: 1, money:20 }}>元/域名</S></span></p>
-                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>独立域名(需备案)</S></label><span className="flex-fixed"><S text='{money}元/域名/年' data={{ count: 1, money: 60 }}>元/域名/年</S></span></p>
+                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>二级域名</S></label><span className="flex-fixed"><S text='{money}元/域名' data={{ count: 1, money: 20 }}>元/域名</S></span></p>
+                <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>独立域名(需备案)</S></label><span className="flex-fixed"><S text='{money}元/域名' data={{ count: 1, money: 100 }}>元/域名/年</S></span></p>
                 <p className="text-1 flex f-14 l-20 "><span className={'remark flex-fixed size-12  flex-center '}><Icon icon={{ name: 'bytedance-icon', code: 'dot' }} size={12} ></Icon></span><label className="flex-auto"><S>独立app发布</S></label><span className="flex-fixed">
                     <S>敬请期待</S>
                     {/* <S text='{money}元/个/年' data={{ count: 1, money: 300 }}>元/个/年</S> */}
