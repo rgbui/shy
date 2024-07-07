@@ -80,7 +80,7 @@ export var SlnView = observer(function () {
             {renderPublishSiteSearch()}
             {!local.word && <div style={{
                 paddingTop: surface?.workspace?.isPubSite && !surface?.workspace?.isPubSiteHideMenu ? 0 : undefined,
-
+                paddingBottom: surface.workspace.isPubSite ? 100 : 0
             }} className='shy-ws-items' ref={e => surface.sln.el = e}>
                 <div
                     style={{ minHeight: 'calc(100% - 150px )' }}
