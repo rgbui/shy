@@ -64,6 +64,7 @@ export class SitePublishView extends React.Component {
         if (r.ok) {
             runInAction(() => {
                 surface.workspace.publishConfig = lodash.cloneDeep(this.data.publishConfig);
+                surface.workspace.aiConfig = lodash.cloneDeep(this.data.aiConfig);
                 surface.workspace.access = this.data.access as | 1;
                 this.tip.close();
             })
@@ -127,7 +128,7 @@ export class SitePublishView extends React.Component {
             <div className="gap-h-20">
                 <div className="bold f-14"><S>公开至互联网</S></div>
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text="公开互联网后">公开互联网后，会产生一定的流量、内容审核费用</S></div>
-                <div><Switch  onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
+                <div><Switch onChange={e => this.openAccess(e ? 1 : 0)} checked={this.data.access == 1}></Switch></div>
             </div>
             <div className="gap-h-20">
                 <div className="bold f-14"><S>SEO优化</S></div>
