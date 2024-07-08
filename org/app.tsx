@@ -57,8 +57,8 @@ export function App() {
 
             var dg = (e.target as HTMLElement).closest('[data-toggle]');
             if (dg) {
-                var se = Array.from(dg.children);
-                var arrowIcon = se.find(c => c.classList.contains('shy-icon')) as HTMLElement
+                // var se = Array.from(dg.children);
+                var arrowIcon = dg.querySelector('[data-toggle-icon]') as HTMLElement;
                 var ne = dg.nextElementSibling as HTMLElement;
                 if (ne) {
                     if (getComputedStyle(ne, null).display == 'none') {

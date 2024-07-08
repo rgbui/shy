@@ -4,8 +4,6 @@ import { Icon } from "rich/component/view/icon";
 import { observer, useLocalObservable } from "mobx-react";
 
 
-
-
 export var ProductDocView = observer(function () {
 
     var local = useLocalObservable<{
@@ -24,8 +22,8 @@ export var ProductDocView = observer(function () {
         <div className="shy-site-block padding-h-30">
             <div className="flex padding-h-30">
                 <div className="flex-fixed">
-                    <h1 className="f-48" >新一代的笔记和文档</h1>
-                    <p className="text-1 f-16 gap-b-20">
+                    <h1 className="f-64" >新一代的笔记和文档</h1>
+                    <p className="text-1 f-20 gap-b-20" style={{ lineHeight: '36px' }}>
                         简单、强大、美丽。<br />借助诗云的灵活构建模块，更高效地沟通。
                     </p>
                     <div>
@@ -206,7 +204,7 @@ export var ProductDocView = observer(function () {
                     <div className="flex-auto bg-2 round padding-10">
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">产品</h3>
                         <p className="padding-w-20 f-14 text-1">将路线图与目标联系起来，让人们了解何时运送什么。</p>
-                        <div className="padding-w-20 visible gap-h-20"><a>了解 PM 如何使用 诗云<i className="padding-l-5">→</i></a></div>
+                        <div className="padding-w-20 visible gap-h-20"><a href='https://solution.shy.live/page/2289' target="_blank">了解 PM 如何使用 诗云<i className="padding-l-5">→</i></a></div>
                         <div className="padding-w-20 border-box">
                             <img alt='产品PM' className="w100 border shadow-s round" src={'../static/img/doc/doc-pm.png'} />
                         </div>
@@ -214,7 +212,7 @@ export var ProductDocView = observer(function () {
                     <div className="flex-auto bg-2 round padding-10">
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">设计</h3>
                         <p className="padding-w-20 f-14 text-1">提前审核轮次、确定请求的优先顺序并满足所有创意截止日期。</p>
-                        <div className="padding-w-20 visible gap-h-20"><a>了解设计师如何使用 诗云<i className="padding-l-5">→</i></a></div>
+                        <div className="padding-w-20 visible gap-h-20"><a href='https://solution.shy.live/page/2290' target="_blank">了解设计师如何使用 诗云<i className="padding-l-5">→</i></a></div>
                         <div className="padding-w-20 border-box">
                             <img alt="设计师人物" className="w100 border shadow-s  round" src={'../static/img/doc/doc-designer.png'} />
                         </div>
@@ -222,7 +220,7 @@ export var ProductDocView = observer(function () {
                     <div className="flex-auto bg-2 round padding-10">
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">工程</h3>
                         <p className="padding-w-20 f-14 text-1">通过冲刺、代码指南、错误修复等，在一个地方更快地交付功能。</p>
-                        <div className="padding-w-20 visible gap-h-20"><a>了解工程师如何使用 诗云<i className="padding-l-5">→</i></a></div>
+                        <div className="padding-w-20 visible gap-h-20"><a href='https://solution.shy.live/page/2291' target="_blank">了解工程师如何使用 诗云<i className="padding-l-5">→</i></a></div>
                         <div className="padding-w-20 border-box">
                             <img alt="工程师" className="w100 border shadow-s round" src={'../static/img/doc/doc-coder.png'} />
                         </div>

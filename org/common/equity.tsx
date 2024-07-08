@@ -10,29 +10,31 @@ var eqs = [
 
     { group: '基础功能' },
 
-    { text: '文档功能', local: true, private: true, cloud: true, standard: true, pro: true },
-    { text: '数据表功能', local: true, private: true, cloud: true, standard: true, pro: true },
-    { text: '白板功能', local: true, private: true, cloud: true, standard: true, pro: true },
-    { text: 'PPT功能', local: true, private: true, cloud: true, standard: true, pro: true },
-    { text: '频道功能（聊天)', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: '文档', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: '数据表', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: '白板', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: 'PPT', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: '频道（即时通信IM)', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '导入导出', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '双链', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '标签', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: '思维导图', local: true, private: true, cloud: true, standard: true, pro: true },
+    { text: '空间搜索', local:true, private: true, cloud: true, standard: true, pro: true },
     { text: '协作分享', local: false, private: true, cloud: true, standard: true, pro: true },
     { text: 'AI协作(写作、创作等)', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: 'AI智能搜索', local: true, private: true, cloud: false, standard: true, pro: true },
     { text: 'AI机器人客服', local: false, private: true, cloud: false, standard: true, pro: true },
     { text: '成员管理', local: false, private: true, cloud: false, standard: true, pro: true },
+    { text: '应用发布', local: false, private: true, cloud: false, standard: true, pro: true },
 
-    { group: '存储' },
-
+    { group: '用量' },
+    { text: '协作及访客DAU', local: false, private: '不限', cloud: '5人/月', standard: '50人/月', pro: '1000人/月' },
     { text: '空间存储', local: '不限', private: '不限', cloud: '100M', standard: '20G', pro: '100G' },
+    { text: '数据行数', local: '不限', private: '不限', cloud: '5千行', standard: '30万行', pro: '200万行' },
     { text: '单图片上限', local: '不限', private: '不限', cloud: '5M', standard: '20 MB', pro: '50 MB' },
     { text: '单附件上限', local: '不限', private: '不限', cloud: '5M', standard: '500 MB', pro: '2 GB' },
     { text: '单视频上限', local: '不限', private: '不限', cloud: '不支持上传', standard: '500 MB', pro: '2 GB' },
-    { text: '数据行数', local: '不限', private: '不限', cloud: '5千行', standard: '30万行', pro: '200万行' },
-    { text: '日活DAU（高峰)', local: false, private: '不限', cloud: '5人/月', standard: '50人/月', pro: '2000人/月' },
-
+  
 
     { text: '语言大模型', local: '充值', private: '充值', cloud: '1万字', standard: '300万字', pro: '2000万字' },
     { text: 'AI生图', local: '充值', private: '充值', cloud: false, standard: '20张', pro: '100张' },
@@ -48,7 +50,7 @@ var eqs = [
     { text: '二级域名', local: false, private: false, cloud: false, standard: true, pro: true },
     { text: '独立域名', local: false, private: '1个', cloud: false, standard: false, pro: '3个' },
     { text: '独立app', local: false, private: false, cloud: false, standard: false, pro: '1个' },
-    { text: '商业化运营(变现)', local: false, private: false, cloud: false, standard: false, pro: true },
+    { text: '商业化运营', local: false, private: true, cloud: false, standard: false, pro: true },
     { text: '特色功能优先体验', local: false, private: true, cloud: false, standard: false, pro: true },
 
 ]
@@ -93,7 +95,7 @@ export function EquityView() {
                         </tr>
                         return <tr key={i}>
 
-                            <td><div className="flex">{v.text}</div></td>
+                            <td><div className="flex flex-end">{v.text}</div></td>
                             <td>{rf(v.local)}</td>
                             <td>{rf(v.private)}</td>
                             <td>{rf(v.cloud)}</td>

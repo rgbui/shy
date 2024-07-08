@@ -28,19 +28,23 @@ export function PriceView() {
         <div className="shy-site-block">
             <div className="gap-h-50">
                 <PricingPackage openPay={openPay}></PricingPackage>
-            </div></div>
-        <div className="shy-site-block">
-            <DifferView></DifferView>
+            </div>
         </div>
-
-      
 
         <UsedView></UsedView>
 
         <div className="shy-site-block">
             <EquityView></EquityView>
         </div>
-       
+        
+        <div className="shy-site-block">
+            <div className="h-30"></div>
+            <DifferView></DifferView>
+        </div>
+
+
+
+
 
         <div className="min-h-200"></div>
 
