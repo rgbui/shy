@@ -167,7 +167,7 @@ export var ProductDocView = observer(function () {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">共同协作处理文档</h3>
                             <p className="padding-w-20 f-14 text-1">只需输入@键即可引起某人的注意。</p>
                             <div className="padding-w-20 border-box gap-t-30">
-                                <img className="w100 border round-t-l-16 h100 shadow-s " src={'../static/img/doc/pic.webp'} />
+                                <img className="w100 border round-t-l-16  shadow-s " alt="协作处理文档" src={'../static/img/doc/doc-collaboration.png'} />
                             </div>
                         </div>
 
@@ -177,7 +177,10 @@ export var ProductDocView = observer(function () {
                                 <h3 className="padding-w-20 gap-t-10 gap-b-5">评论让事情继续异步发展</h3>
                                 <p className="padding-w-20 f-14 text-1">通过整合反馈视图，可以轻松进行迭代，甚至跨办公室和时区。</p>
                                 <div className="gap-t-30 gap-l-20 relative h-250 overflow-hidden">
-                                    <img className="pos border round-t-l-16 h100 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                    <div className="pos bg-white border round-t-l-16  w-700 shadow-s overflow h100 " style={{ top: 0, left: 0 }} >
+                                        <img className="pos w-700  " alt="评论让事情继续异步发展" style={{ top: -100, left: -100 }} src={'../static/img/doc/doc-comment.png'} />
+                                    </div>
+
                                 </div>
                             </div>
                             <div className="flex-auto bg-2 padding-h-10 round-8">
@@ -185,7 +188,7 @@ export var ProductDocView = observer(function () {
                                 <h3 className="padding-w-20 gap-t-10 gap-b-5">即时讨论让事情明了清晰</h3>
                                 <p className="padding-w-20 f-14 text-1">通过实时的沟通交互，可以快速解决问题。</p>
                                 <div className="gap-t-30 gap-l-20 relative h-250 overflow-hidden">
-                                    <img className="pos border round-t-l-16 h100 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                    <img className="pos border round-t-l-16 w-700 shadow-s " alt="即时讨论" style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-channel.png'} />
                                 </div>
                             </div>
                         </div>

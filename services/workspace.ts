@@ -298,7 +298,11 @@ class WorkspaceService extends BaseService {
     @put('/ws/invite/join')
     async inviteJoin(args) {
         if (args.sock) {
-            return await args.sock.put('/ws/invite/join', { wsId: args.wsId });
+            return await args.sock.put('/ws/invite/join', { 
+                wsId: args.wsId,
+                username:args.username ,
+                agree:args.agree
+            });
         }
     }
     @get('/ws/is/member')
