@@ -2,7 +2,7 @@ import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import ReactDOM from "react-dom";
-import { popoverLayer } from "rich/component/lib/zindex";
+import { pageLayer, popoverLayer } from "rich/component/lib/zindex";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
 import { surface } from "../../app/store";
@@ -35,7 +35,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
         this.loading = false;
     }
     componentWillUnmount(): void {
-        popoverLayer.clear(g => g.obj === this);
+        pageLayer.clear(this);
         if (this.props.store.page)
             this.props.store.page.cacheFragment()
         if (this.node) {
@@ -58,7 +58,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
     render() {
         return ReactDOM.createPortal(<div
             onMouseDown={e => this.mousedown(e)}
-            style={{ zIndex: popoverLayer.zoom(this) }}
+            style={{ zIndex: pageLayer.zoom(this) }}
             className="fixed-full mask flex-center"><div style={{ marginTop: 72, marginBottom: 72, height: 'calc(100% - 144px)' }} className="round shadow bg-white relative w-960">
                 <div className="shy-supervisor-view-content overflow-y" style={{ height: 'calc(100% - 48px)' }} ref={e => this.pageEl = e}>
                 </div>
