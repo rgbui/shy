@@ -22,7 +22,7 @@ class WsDomain extends EventsComponent {
                 <div>
                     <Button block ref={e => this.button = e} onClick={e => this.save()}><S>保存</S></Button>
                 </div>
-                {this.error && <div className="error">
+                {this.error && <div className="error gap-t-10">
                     {this.error}
                 </div>}
             </div>
