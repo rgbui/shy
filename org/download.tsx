@@ -2,7 +2,6 @@ import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { S, Sp } from "rich/i18n/view";
 import { config } from "../common/config";
-import { SiteFeatures } from "./common/feature";
 import { ChevronDownSvg } from "rich/component/svgs";
 export function DownloadView() {
     return <div >
@@ -162,9 +161,11 @@ export function DownloadView() {
                 </div>
 
             </div>
-
         </div>
 
-      
+        <div className="shy-site-block">
+            <div className="h-100"></div>
+        </div>
+
     </div>
 }

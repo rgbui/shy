@@ -4,15 +4,13 @@ import { Icon } from "rich/component/view/icon";
 import { observer, useLocalObservable } from "mobx-react";
 
 
-export var ProductDocView = observer(function () {
-
+export var ProductDocView = observer(function ()
+{
     var local = useLocalObservable<{
         index: number
-
     }>(() => {
         return {
             index: 0
-
         }
     })
 
@@ -33,7 +31,7 @@ export var ProductDocView = observer(function () {
                     </div>
                 </div>
                 <div className="flex-auto flex-end">
-                    <img className="max-w-600 " src='../static/img/doc/pic.webp' />
+                    <img className="max-w-500" src='../static/img/doc/pic.webp' />
                 </div>
             </div>
         </div>
@@ -242,20 +240,22 @@ export var ProductDocView = observer(function () {
                     <div className="flex col-3-g20 gap-t-20 flex-full r-border-box">
 
                         <div className="flex-auto bg-2 round">
-                            <h3 className="padding-w-20">Mixpanel 的每日站立会议和任务</h3>
+                            <h3 className="padding-w-20">每日站立会议和任务</h3>
                             <div className="padding-w-20 gap-h-20">
-                                <a className="padding-l-5"> 尝试模板<i>→</i></a>
+                                <a className="padding-l-5" href={'https://template.shy.live/page/2179'} target="_blank"> 尝试模板<i>→</i></a>
                             </div>
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                <img className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-meet-1.png'} />
                             </div>
                         </div>
 
                         <div className="flex-auto bg-2 round" >
                             <h3 className="padding-w-20">诗云 的产品需求文档</h3>
+
                             <div className="padding-w-20 gap-h-20">
                                 <a href={'https://template.shy.live/page/2206'} className="padding-l-5"> 尝试模板<i>→</i></a>
                             </div>
+
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
                                 <img alt="产品需求文档" className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-prd.png'} />
                             </div>
@@ -263,12 +263,12 @@ export var ProductDocView = observer(function () {
                         </div>
 
                         <div className="flex-auto bg-2 round">
-                            <h3 className="padding-w-20">Netflix 的品牌框架</h3>
+                            <h3 className="padding-w-20">年度绩效自我评估</h3>
                             <div className="padding-w-20 gap-h-20">
-                                <a className="padding-l-5"> 尝试模板<i>→</i></a>
+                                <a className="padding-l-5" href='https://template.shy.live/page/2292' target="_blank"> 尝试模板<i>→</i></a>
                             </div>
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                <img alt="年度绩效自我评估" className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-eff.png'} />
                             </div>
 
                         </div>

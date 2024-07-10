@@ -6,7 +6,10 @@ import { config } from "../../common/config";
 import { UrlRoute } from "../../src/history";
 import { MEAL_1_PRICE, MEAL_2_PRICE } from "../../src/component/pay/select";
 
-export function PricingValue(props: { small?: boolean, isNav?: boolean }) {
+export function PricingValue(props: {
+    small?: boolean,
+    isNav?: boolean
+}) {
     //诗云
     return <div>
         <h3 className="flex-center shy-site-block-head">
@@ -17,9 +20,9 @@ export function PricingValue(props: { small?: boolean, isNav?: boolean }) {
         <div className="flex-center-full   flex-auto-mobile-wrap  r-padding-30 r-round-8 r-bg-white gap-t-20">
             <div className="gap-r-10 gap-b-20 w40 r-gap-b-10 shy-site-block-card" >
                 <div className={" shy-site-block-head h-40   flex r-gap-r-5 "} ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/local.svg')} /><span className={"f-28"}><S>本地及私有云免费</S></span></div>
-                <div className="f-14 text-1 l-22 " ><Sp text='适用于本地数据安全敏感的用户'>您的数据，您做主。<br />无条件的支持您本地及私有云(包括局域网），确保您数据安全无忧</Sp></div>
+                <div className="f-14 text-1 l-22 " style={{ height: props.small ? 80 : undefined }} ><Sp text='适用于本地数据安全敏感的用户'>您的数据，您做主。<br />无条件的支持您本地及私有云(包括局域网），确保您数据安全无忧</Sp></div>
                 <div className={"bold " + (props.small ? "f-16" : "f-20")}><S>信任</S></div>
-                <div className="r-gap-b-5" style={{ height: props.small ? 200 : undefined }}>
+                <div className="r-gap-b-5" >
                     <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><S text='无功能限制无广告无歧视'>无功能限制、无广告、无歧视</S></div>
                     <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><S>支持私有云多人协作</S></div>
                     <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><Sp text='安装诗云服务端安装在那里，数据存那里'>安装<a href='download' style={{ color: 'inherit', textDecoration: 'underline' }}>诗云服务端</a>，安装在那里，数据存那里</Sp></div>
@@ -28,9 +31,9 @@ export function PricingValue(props: { small?: boolean, isNav?: boolean }) {
             </div>
             <div className="gap-l-10 gap-b-20 w40 r-gap-b-10 shy-site-block-card">
                 <div className={" shy-site-block-head flex  h-40   r-gap-r-5 "}  ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/online.svg')} /><span className={"f-28"}><S>云端按量付费</S></span></div>
-                <div className="f-14 text-1 l-22 " ><Sp text='适用于云端协作办公'>云端协作，成果付费，为您增加的收入买单。<br />您的收入增长才是诗云前进的动力。</Sp></div>
+                <div className="f-14 text-1 l-22 " style={{ height: props.small ? 80 : undefined }} ><Sp text='适用于云端协作办公'>云端协作，成果付费，为您增加的收入买单。<br />您的收入增长才是诗云前进的动力。</Sp></div>
                 <div className={"bold " + (props.small ? "f-16" : "f-20")}><S>承诺</S></div>
-                <div className="r-gap-b-5" style={{ height: props.small ? 200 : undefined }}>
+                <div className="r-gap-b-5" >
                     <div className=" f-14 l-20 text-1 flex-top" >
                         <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><S text='生产力是一种云资源'>生产力是一种云资源，用多少付多少</S>
                     </div>

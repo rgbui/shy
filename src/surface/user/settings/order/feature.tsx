@@ -51,7 +51,7 @@ export class ShyFeature extends React.Component {
                 </div>
             </div>
             <div className="gap-t-100">
-                <EquityView></EquityView>
+                <EquityView top={0}></EquityView>
             </div>
 
         </div>

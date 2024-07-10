@@ -467,7 +467,7 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
     render() {
         var local = this.local;
         return <div className={'shy-login desk-no-drag' + (isMobileOnly ? "  border-box vw100-c40" : " w-350")} >
-            <div className="text-center gap-b-10 error"><S>需要邀请码才能注册</S></div>
+            {/* <div className="text-center gap-b-10 error"><S>需要邀请码才能注册</S></div> */}
             <div className='shy-login-head'>
                 {!['login', 'register', 'setName'].includes(local.step) && <span><S>登录/注册</S>&nbsp;<S>诗云</S></span>}
                 {local.step == 'register' && <span><S>注册</S>&nbsp;<S>诗云</S></span>}

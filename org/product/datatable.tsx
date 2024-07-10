@@ -8,7 +8,7 @@ export function ProductDataTable() {
         <div className="shy-site-block  padding-h-30">
             <div className="flex padding-h-30">
                 <div className="flex-fixed max-w-500">
-                    <h1 className="f-48" >智能表格 + 工作流 + 应用搭建</h1>
+                    <h1 className="f-48" style={{ fontSize: 64 }} >智能表格 + 工作流 + 应用搭建</h1>
                     <p className="text-1 f-16 gap-b-20">
                         一体化数字化平台，让您的团队比以前更快、更自信地工作。
                     </p>
@@ -77,9 +77,9 @@ export function ProductDataTable() {
                         <div className="flex-auto bg-2 padding-h-10 round-8">
                             <div className="padding-w-20 gap-t-10"><Icon className={'text-p1-color'} size={32} icon={{ name: 'byte', code: 'table-file' }}></Icon></div>
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">记录表格中的每个细节</h3>
-                            <p className="padding-w-20 f-14 text-1">追踪所有可推动更大规模发布的特定项目，以免出现任何疏漏。</p>
+                            <p className="padding-w-20 f-14 text-1">追踪所有可推动更大规模发布的特定项目，以免出现任何疏漏。<br/>&nbsp;&nbsp; </p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                <img className="pos border round-16 shadow-s w-700 " alt="记录表格" style={{ top: 0, left: 0 }} src={'../static/img/db/db-table.png'} />
                             </div>
                         </div>
 
@@ -88,9 +88,13 @@ export function ProductDataTable() {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">查看日历上绘制的每个截止日期</h3>
                             <p className="padding-w-20 f-14 text-1">管理多日发布？为任何项目添加日历视图，这样您就可以准确查看发货内容和发货时间。</p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/pic.webp'} />
+                                <img className="pos border round-16 shadow-s  w-600"
+                                    style={{ top: 0, left: 0 }}
+                                    src={'../static/img/db/db-calendar.png'}
+                                />
                             </div>
                         </div>
+
                     </div>
 
                     <div className="flex col-2-g20  gap-h-20">
@@ -100,7 +104,7 @@ export function ProductDataTable() {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">选择您想要追踪的确切信息</h3>
                             <p className="padding-w-20 f-14 text-1">创建您自己的优先级标签、状态标签等，以便每个团队都能制定完美的工作流程。</p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                                <img className="pos border round-16 shadow-s  w-600" alt="追踪信息" src={'../static/img/db/db-option.png'} />
                             </div>
                         </div>
 
@@ -109,31 +113,24 @@ export function ProductDataTable() {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">过滤和排序信息以查看所需内容</h3>
                             <p className="padding-w-20 f-14 text-1">仅显示分配给您的任务或标记为紧急的项目。以对您最有帮助的方式分解任何复杂项目。</p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                                <img className="pos border round-16 shadow-s w-700 " alt="过滤和排序信息" src={'../static/img/db/db-filter.png'} />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-
-
-
-
-
-
         </div>
-
 
         <div className="shy-site-block padding-h-80">
             <div>
                 <div className="relative">
                     <h1 className="flex padding-h-30 flex-center f-48">高级统计轻松处理复杂数据、千万数据</h1>
                     <p className="text-1 flex-center f-14">
-                        高级统计内置 BI 能力，图表类型丰富，可结合视图对复杂数据、大数据快速完成统计分析。图表可导出。大屏仪表盘可增加多个。
+                        高级统计内置 BI 能力，图表类型丰富，可结合视图对复杂数据、大数据快速完成统计分析。
                     </p>
                     <div className="gap-h-20">
-                        <img className="w100 border round-16 shadow-s " src={'../static/img/doc/pic.webp'} />
+                        <img className="w100 border round-16 shadow-s " src={'../static/img/db/db-charts.png'} />
                     </div>
                 </div>
             </div>
@@ -148,6 +145,30 @@ export function ProductDataTable() {
                         <img className="w100 border round-16 shadow-s" src={'../static/img/doc/pic.webp'} />
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div className="shy-site-block">
+            <div style={{
+                backgroundImage: 'url(../static/img/db/datatable-pic-2.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                height: 450
+            }}>
+                <div className="padding-20  relative w-500 h-120">
+                    <div className="pos round w100 h100" style={{
+                        zIndex: 1,
+                        backgroundColor: 'rgba(0,0,0,.6)'
+                    }}></div>
+                    <div className="pos round border-box padding-w-10 w100 h100  text-white " style={{
+                        zIndex: 2
+                    }} >
+                        <h1>丰富多样的应用场景</h1>
+                        <p>诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -204,30 +225,7 @@ export function ProductDataTable() {
 
         </div>
 
-        <div className="shy-site-block">
-            <div style={{
-                backgroundImage: 'url(../static/img/db/datatable-pic-2.png)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                height: 400
-            }}>
 
-                <div className="padding-20  relative w-500 h-120">
-                    <div className="pos round w100 h100" style={{
-                        zIndex: 1,
-                        backgroundColor: 'rgba(0,0,0,.6)'
-                    }}></div>
-                    <div className="pos round border-box padding-w-10 w100 h100  text-white " style={{
-                        zIndex: 2
-                    }} >
-                        <h1>丰富多样的应用场景</h1>
-                        <p>诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
 
     </div>
 }

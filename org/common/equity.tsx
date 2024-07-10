@@ -1,7 +1,5 @@
 import React from "react";
 import { S } from "rich/i18n/view";
-
-// import CheckImg from "../../src/assert/img/check.png";
 import { CheckSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 
@@ -19,7 +17,7 @@ var eqs = [
     { text: '双链', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '标签', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '思维导图', local: true, private: true, cloud: true, standard: true, pro: true },
-    { text: '空间搜索', local:true, private: true, cloud: true, standard: true, pro: true },
+    { text: '空间搜索', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: '协作分享', local: false, private: true, cloud: true, standard: true, pro: true },
     { text: 'AI协作(写作、创作等)', local: true, private: true, cloud: true, standard: true, pro: true },
     { text: 'AI智能搜索', local: true, private: true, cloud: false, standard: true, pro: true },
@@ -34,7 +32,7 @@ var eqs = [
     { text: '单图片上限', local: '不限', private: '不限', cloud: '5M', standard: '20 MB', pro: '50 MB' },
     { text: '单附件上限', local: '不限', private: '不限', cloud: '5M', standard: '500 MB', pro: '2 GB' },
     { text: '单视频上限', local: '不限', private: '不限', cloud: '不支持上传', standard: '500 MB', pro: '2 GB' },
-  
+
 
     { text: '语言大模型', local: '充值', private: '充值', cloud: '1万字', standard: '300万字', pro: '2000万字' },
     { text: 'AI生图', local: '充值', private: '充值', cloud: false, standard: '20张', pro: '100张' },
@@ -47,7 +45,7 @@ var eqs = [
 
     { text: '支持API', local: false, private: true, cloud: false, standard: true, pro: true },
     { text: '社区支持', local: true, private: true, cloud: false, standard: true, pro: true },
-    { text: '二级域名', local: false, private: false, cloud: false, standard: true, pro: true },
+    { text: '二级域名', local: false, private: false, cloud: false, standard: '2个', pro: '5个' },
     { text: '独立域名', local: false, private: '1个', cloud: false, standard: false, pro: '3个' },
     { text: '独立app', local: false, private: false, cloud: false, standard: false, pro: '1个' },
     { text: '商业化运营', local: false, private: true, cloud: false, standard: false, pro: true },
@@ -58,7 +56,7 @@ var eqs = [
 /**
  * 权益对比
  */
-export function EquityView() {
+export function EquityView(props: { top?: number }) {
 
     function rf(g: string | boolean) {
         if (typeof g == 'string') return g;
@@ -75,7 +73,7 @@ export function EquityView() {
             <table className="table ">
                 <thead style={{
                     position: 'sticky',
-                    top: 56
+                    top: typeof props.top == 'number' ? props.top : 56
                 }}>
                     <tr>
                         <th></th>
