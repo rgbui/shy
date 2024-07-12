@@ -229,9 +229,9 @@ export var ProductDataTable = observer(function () {
                 <div className="gap-h-20">
                     <div style={{ display: local.index == 0 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-meet.png'} /></div>
                     <div style={{ display: local.index == 1 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-plan.png'} /></div>
-                    <div style={{ display: local.index == 2 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-charts.png'} /></div>
+                    <div style={{ display: local.index == 2 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-1.png'} /></div>
 
-                    <div style={{ display: local.index == 3 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-app.png'} /></div>
+                    <div style={{ display: local.index == 3 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-2.png'} /></div>
                     <div style={{ display: local.index == 4 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-charts.png'}/></div>
                     <div style={{ display: local.index == 5 ? "block" : 'none' }}><img className="w100 border round-16 shadow-s" src={'../static/img/db/db-app.png'} /></div>
                 </div>
