@@ -5,6 +5,7 @@ import { GenreConsistency } from 'rich/net/genre';
 import { SockResponse } from '../sock/type';
 import { HttpMethod } from './http';
 import { loadPrimus } from './load';
+import lodash from 'lodash';
 
 export class Tim {
     public isConncted: boolean = false;
@@ -19,7 +20,7 @@ export class Tim {
         var Primus = await loadPrimus();
         if (window.shyConfig?.isDev) {
             if (url.startsWith('http://localhost')) {
-                url = url.replace('http://localhost',location.href.indexOf('10.102.63.48')>-1? 'http://10.102.63.48':"http://127.0.0.1");
+                url = url.replace('http://localhost', location.href.indexOf('10.102.63.48') > -1 ? 'http://10.102.63.48' : "http://127.0.0.1");
             }
         }
         var primus = new Primus(url, {
@@ -105,6 +106,7 @@ export class Tim {
      * @param data 
      */
     async syncSend(method: HttpMethod, url: string, data?: any) {
+        if (data) data = lodash.cloneDeep(data);
         var id = await this.getId();
         url = Sock.resolve('/' + API_VERSION, url);
         return new Promise((resolve, reject) => {
@@ -142,6 +144,7 @@ export class Tim {
      * @param data 
      */
     send(method: HttpMethod, url: string, data: Record<string, any>) {
+
         url = Sock.resolve('/' + API_VERSION, url);
         this.primus.write({ method, url, data });
     }
@@ -162,6 +165,7 @@ export class Tim {
         return this.handleResponse<T, U>(r);
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
+        if (querys) querys = lodash.cloneDeep(querys);
         var url = this.urlJoint(url, querys);
         GenreConsistency.transform(querys);
         var resolveUrl = url;
@@ -219,20 +223,20 @@ export class Tim {
         });
         return url;
     }
-    private events: { url: string, fn: (args: Record<string, any>, options: { sockId: string,userid:string }) => void }[] = [];
-    on(url: string, fn: (args: Record<string, any>, options: { sockId: string,userid:string }) => void) {
+    private events: { url: string, fn: (args: Record<string, any>, options: { sockId: string, userid: string }) => void }[] = [];
+    on(url: string, fn: (args: Record<string, any>, options: { sockId: string, userid: string }) => void) {
         this.events.push({ url, fn });
     }
-    only(url: string, fn: (args: Record<string, any>, options: { sockId: string,userid:string }) => void) {
+    only(url: string, fn: (args: Record<string, any>, options: { sockId: string, userid: string }) => void) {
         var ev = this.events.find(ev => ev.url == url);
         if (ev) ev.fn = fn;
         else this.events.push({ url, fn })
     }
-    off(url: string, fn?: (args: Record<string, any>, options: { sockId: string,userid:string }) => void) {
+    off(url: string, fn?: (args: Record<string, any>, options: { sockId: string, userid: string }) => void) {
         if (typeof fn == 'function') this.events.removeAll(e => e.url == url && e.fn == fn);
         else this.events.removeAll(e => e.url == url);
     }
-    async emit(url: string, args?: Record<string, any>, options?: { sockId?: string,userid:string }) {
+    async emit(url: string, args?: Record<string, any>, options?: { sockId?: string, userid: string }) {
         var ev = this.events.findAll(c => c.url == url);
         for (let i = 0; i < ev.length; i++) {
             await ev[i].fn.apply(this, [args, options]);

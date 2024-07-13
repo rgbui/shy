@@ -5,7 +5,7 @@ import { FileMd5 } from "../../src/util/file";
 import { GenreConsistency } from "rich/net/genre";
 import { surface } from "../../src/surface/app/store";
 
-
+import lodash from 'lodash';
 
 export class Sock {
     private wsId: string;
@@ -17,7 +17,7 @@ export class Sock {
         this.remoteUrl = remoteUrl;
         if (window.shyConfig.isDev) {
             if (this.remoteUrl?.startsWith('http://localhost')) {
-                this.remoteUrl = this.remoteUrl.replace('http://localhost',location.href.indexOf('10.102.63.48')>-1? 'http://10.102.63.48':"http://127.0.0.1");
+                this.remoteUrl = this.remoteUrl.replace('http://localhost', location.href.indexOf('10.102.63.48') > -1 ? 'http://10.102.63.48' : "http://127.0.0.1");
             }
         }
         this.headers = header;
@@ -95,6 +95,7 @@ export class Sock {
         return response;
     }
     async post<T = any, U = any>(url: string, data?: Record<string, any>) {
+        if (data) data = lodash.cloneDeep(data);
         var baseUrl = await this.baseUrl();
         url = Sock.urlJoint(url, data);
         GenreConsistency.transform(data);
@@ -102,6 +103,7 @@ export class Sock {
         return this.handleResponse<T, U>(r);
     }
     async get<T = any, U = any>(url: string, querys?: Record<string, any>) {
+        if (querys) querys = lodash.cloneDeep(querys);
         var baseUrl = await this.baseUrl();
         url = Sock.urlJoint(url, querys);
         GenreConsistency.transform(querys);
@@ -121,6 +123,7 @@ export class Sock {
         return this.handleResponse<T, U>(r);
     }
     async delete<T = any, U = any>(url: string, querys?: Record<string, any>) {
+        if (querys) querys = lodash.cloneDeep(querys);
         var baseUrl = await this.baseUrl();
         url = Sock.urlJoint(url, querys);
         GenreConsistency.transform(querys);
@@ -140,6 +143,7 @@ export class Sock {
         return this.handleResponse<T, U>(r);
     }
     async put<T = any, U = any>(url: string, data: Record<string, any>) {
+        if (data) data = lodash.cloneDeep(data);
         var baseUrl = await this.baseUrl();
         url = Sock.urlJoint(url, data);
         GenreConsistency.transform(data);
@@ -147,6 +151,7 @@ export class Sock {
         return this.handleResponse<T, U>(r);
     }
     async patch<T = any, U = any>(url: string, data: Record<string, any>) {
+        if (data) { data = lodash.cloneDeep(data); }
         var baseUrl = await this.baseUrl();
         url = Sock.urlJoint(url, data);
         GenreConsistency.transform(data);
@@ -178,7 +183,8 @@ export class Sock {
         data?: Record<string, any>,
         uploadProgress?: (event: ProgressEvent) => void
     }) {
-        if (options.data) GenreConsistency.transform(options.data);
+        if (options.data) { options.data = lodash.cloneDeep(options.data); GenreConsistency.transform(options.data); }
+
         var baseUrl = await this.baseUrl();
         var url = Sock.resolve(baseUrl, API_VERSION, options.url || '/file/upload');
         var configs = await this.config();
@@ -224,6 +230,10 @@ export class Sock {
         method: string
     },
         callback: (chunk: any, done?: boolean, controller?: AbortController) => void) {
+        if (options.data) {
+            options.data = lodash.cloneDeep(options.data)
+            GenreConsistency.transform(options.data);
+        }
         var resolveUrl = await this.getUrlData(options.url, options.data || {}, options?.method?.toLowerCase() == 'get');
         var headers = await this.config() as any;
         headers = {
@@ -257,6 +267,7 @@ export class Sock {
         await readChunk()
     }
     async getUrlData(url: string, querys: Record<string, any>, isGet = false) {
+        if (querys) querys = lodash.cloneDeep(querys);
         var baseUrl = await this.baseUrl();
         url = Sock.urlJoint(url, querys);
         GenreConsistency.transform(querys);
