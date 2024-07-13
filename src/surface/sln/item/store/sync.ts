@@ -72,6 +72,13 @@ class PageItemStore {
             pageItem.parent.subCount = pageItem.parent.subCount - 1;
         }
     }
+    public async updatePage(id: string, data: Record<string, any>, wsId?: string) {
+        var cloneData = lodash.cloneDeep(data);
+        var actions: PageItemAction[] = [];
+        actions.push({ directive: ItemOperatorDirective.update, pageId: id, data });
+        await this.save(wsId || surface.workspace?.id, { operate: ItemOperator.update, actions });
+
+    }
     public async updatePageItem(pageItem: PageItem, data: Record<string, any>) {
         var cloneData = lodash.cloneDeep(data);
         var actions: PageItemAction[] = [];

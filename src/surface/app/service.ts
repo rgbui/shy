@@ -319,7 +319,6 @@ class MessageCenter {
                 }
                 var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
                 var sv = schema.views.find(g => g.id == pe.id1);
-                console.log('ggg', sv);
                 if (sv) {
                     var rc = itemIsPermissons(surface, sv, false) as { source: 'SchemaRecordView', data: Partial<TableSchemaView>, permissions: AtomPermission[] };
                     if (rc) {
@@ -450,18 +449,29 @@ class MessageCenter {
     @air('/page/update/info')
     async pageUpdateInfo(args: { id?: string, elementUrl?: string, pageInfo: Partial<PageItem> }, options: { locationId?: string | number }) {
         var itemId;
+        var pe = parseElementUrl(args.elementUrl);
         if (args.id) {
             itemId = args.id;
         }
         else if (args.elementUrl) {
-            var pe = parseElementUrl(args.elementUrl);
             if ([ElementType.PageItem, ElementType.Schema, ElementType.Room].includes(pe.type)) {
                 itemId = pe.id;
             }
         }
         if (itemId) {
             var item = surface.workspace.find(g => g.id == itemId);
-            if (item) {
+            if (!item) {
+                await pageItemStore.updatePage(itemId, args.pageInfo);
+                if (pe && pe.type == ElementType.Schema) {
+                    var ts = await TableSchema.loadTableSchema(itemId, surface.workspace);
+                    await ts.update(args.pageInfo as any, options.locationId);
+                }
+            }
+            else if (item) {
+                if (item.mime == Mime.table) {
+                    var ts = await TableSchema.loadTableSchema(item.id, surface.workspace);
+                    await ts.update(args.pageInfo as any, options.locationId);
+                }
                 await pageItemStore.updatePageItem(item, lodash.cloneDeep(args.pageInfo));
                 item.onUpdateDocument();
             }
