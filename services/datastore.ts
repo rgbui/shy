@@ -13,7 +13,8 @@ class DataStoreService {
             operate: args.operate,
             schema: 'DataStore',
             sockId: surface.workspace.tim.id
-        })
+        });
+        (args as any).result = r.data
         channel.fire('/datastore/operate', args as any, options)
         return r;
     }
