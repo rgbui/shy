@@ -459,18 +459,35 @@ class MessageCenter {
             }
         }
         if (itemId) {
+            if (typeof args.pageInfo?.pageType != 'undefined') {
+                if (args.pageInfo.pageType == PageLayoutType.db) {
+                    args.pageInfo.mime = Mime.table;
+                }
+                else if (args.pageInfo?.pageType == PageLayoutType.textChannel) {
+                    args.pageInfo.mime = Mime.chatroom
+                }
+            }
             var item = surface.workspace.find(g => g.id == itemId);
+            var updateProps: string[] = ['icon',
+                'cover',
+                'text',
+                'sourcePermission',
+                'share',
+                'netPermissions',
+                'inviteUsersPermissions',
+                'memberPermissions'];
+            var updateDatas = lodash.pick(args.pageInfo, updateProps);
             if (!item) {
                 await pageItemStore.updatePage(itemId, args.pageInfo);
-                if (pe && pe.type == ElementType.Schema) {
+                if (pe && pe.type == ElementType.Schema && Object.keys(updateDatas).length > 0) {
                     var ts = await TableSchema.loadTableSchema(itemId, surface.workspace);
-                    await ts.update(args.pageInfo as any, options.locationId);
+                    await ts.update(updateDatas as any, options.locationId);
                 }
             }
             else if (item) {
-                if (item.mime == Mime.table) {
+                if ((item.mime == Mime.table || item.pageType == PageLayoutType.db) && Object.keys(updateDatas).length > 0) {
                     var ts = await TableSchema.loadTableSchema(item.id, surface.workspace);
-                    await ts.update(args.pageInfo as any, options.locationId);
+                    await ts.update(updateDatas as any, options.locationId);
                 }
                 await pageItemStore.updatePageItem(item, lodash.cloneDeep(args.pageInfo));
                 item.onUpdateDocument();
