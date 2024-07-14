@@ -47,7 +47,7 @@ import { Tip } from 'rich/component/view/tooltip/tip';
 import "./style.less";
 import { useColorPicker } from 'rich/component/view/color/lazy';
 import Pic from "../../../../assert/img/four-hand.png";
-import { WorkspaceRole } from 'rich/types/user';
+import { UserBasic, WorkspaceRole } from 'rich/types/user';
 import { ShyAlert } from 'rich/component/lib/alert';
 
 const RoleColors: string[] = [
@@ -459,7 +459,7 @@ export class WorkspaceRoles extends React.Component {
         </div>
     }
     async onAddRoleMember(e: React.MouseEvent) {
-        var r = await useUserPicker({ center: true, centerTop: 100 }, surface.workspace, { ignoreUserAll: true });
+        var r = await useUserPicker({ center: true, centerTop: 100 }, surface.workspace, { ignoreUserAll: true }) as UserBasic;
         if (r) {
             var g = await surface.workspace.sock.put('/ws/user/put/role', { wsId: surface.workspace.id, roleId: this.editRole.id, userid: r.id });
             await this.loadRoleMemebers(this.editRole)
