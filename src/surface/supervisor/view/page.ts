@@ -124,11 +124,14 @@ export async function createPageContent(store: PageViewStore) {
                 surface.onToggleSln();
             });
             page.on(PageDirective.rollup, async (id) => {
-                var pd = await store.snapStore.rollupSnap(id);
-                if (pd?.content) {
-                    await page.reload(pd.content);
-                    page.forceUpdate();
-                }
+                await store.snapStore.rollupSnap(id);
+                page.onUnmount();
+                delete store.page;
+                createPageContent(store);
+                // if (pd?.content) {
+                //     await page.reload(pd.content);
+                //     page.forceUpdate();
+                // }
             });
             page.on(PageDirective.reload, async () => {
                 page.onUnmount();
