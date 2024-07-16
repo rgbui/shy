@@ -76,6 +76,17 @@ export class SitePublishView extends React.Component {
             access: surface.workspace.access,
             aiConfig: lodash.cloneDeep(surface.workspace.aiConfig)
         };
+        if (!lodash.isObject(this.data.publishConfig))
+            this.data.publishConfig = {
+                abled: false,
+                defineNavMenu: false,
+                navMenus: [],
+                isFullWidth: true,
+                smallFont: true,
+                contentTheme: 'wiki',
+                defineBottom: false,
+                allowSearch: false
+            }
         if (!this.data.publishConfig?.navMenus || Array.isArray(this.data.publishConfig?.navMenus) && this.data.publishConfig.navMenus.length == 0) {
             this.data.publishConfig.navMenus = [{
                 id: config.guid(),
@@ -177,14 +188,14 @@ export class SitePublishView extends React.Component {
                 <span className="bold f-14"><S>发布站点</S></span>
                 <div className="remark f-12 gap-b-10 gap-t-5"><S text="支持自定义你的网站">支持自定义你的web网站及独立的app应用。</S></div>
                 <div>
-                    <Switch checked={this.data.publishConfig.abled} onChange={async e => {
+                    <Switch checked={this.data?.publishConfig?.abled} onChange={async e => {
                         if (await surface.user.isFillPay(lst('需要充值才能发布应用')))
                             this.change('publishConfig.abled', e)
                     }}></Switch>
                 </div>
             </div>
 
-            {this.data.publishConfig.abled && <div className="r-gap-h-10">
+            {this.data?.publishConfig?.abled && <div className="r-gap-h-10">
                 <div><Button ghost onClick={e => {
                     this.openPublishSite()
                 }}><S>自定义应用</S></Button></div>
