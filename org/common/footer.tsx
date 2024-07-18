@@ -108,7 +108,7 @@ export class FooterView extends React.Component {
                 <br />
                 <a href={refShyPage('help', config.isUS ? 340 : 340)} target="_blank"><S>公开分享服务协议</S></a>
                 <br />
-                {!config.isUS && <a href={'https://shy.red'} target="_blank" ><S>诗云国际版</S></a>}
+                {/* {!config.isUS && <a href={'https://shy.red'} target="_blank" ><S>诗云国际版</S></a>} */}
             </div>
         </div>
     }
