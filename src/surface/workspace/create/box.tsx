@@ -183,6 +183,7 @@ export class CreateWorkspaceView extends EventsComponent {
             this.emit('close');
             if (ws) {
                 UrlRoute.pushToWs(ws.sn, true);
+                surface.onLoadWorkspace(ws.sn);
             }
         }
     }
