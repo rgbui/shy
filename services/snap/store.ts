@@ -21,7 +21,7 @@ export type SnapDataType = {
     plain?: string,
     text?: string,
     thumb?: ResourceArguments[],
-    preview?:string
+    preview?: string
 }
 
 
@@ -39,8 +39,9 @@ export class SnapStore extends Events {
      * 尝试将多个操作合并成一个请求，然后快照只保存一次
      */
     batchViewOperators = new MergeSock(async (batchs) => {
+        // debugger
         var rs = await this.viewOperator(batchs.map(c => c.args[0]));
-       if (!Array.isArray(rs)) {
+        if (!Array.isArray(rs)) {
             if (rs) rs = [rs]
             else rs = [];
         }
@@ -48,7 +49,7 @@ export class SnapStore extends Events {
         if (lb) {
             var snap = lb.args[1];
             snap.seq = rs[0].seq;
-          
+
             if (!batchs.every(c => c.args[2] && c.args[2]?.notSave == true))
                 this.viewSnap(snap)
         }
@@ -91,7 +92,7 @@ export class SnapStore extends Events {
             operate: operate
         })
         if (r.ok) {
-          
+
             if (Array.isArray(r.data.operates) && Array.isArray(operate)) {
                 r.data.operates.forEach(d => {
                     var op = (operate as UserAction[]).find(o => o.id == d.id);
@@ -111,7 +112,7 @@ export class SnapStore extends Events {
     private localViewSnap: SnapDataType;
     private localTimer;
     private async storeLocal() {
-        //  console.log('local store...');
+        console.log('local store...', this.localViewSnap?.seq);
         /**
               * 本地先存起来
               */
@@ -148,13 +149,14 @@ export class SnapStore extends Events {
             plain: (snap.plain || ''),
             text: snap.text,
             thumb: snap.thumb,
-            preview:snap.preview,
+            preview: snap.preview,
             creater: snap.creater || surface?.user?.id,
         };
+        // await this.storeLocal();
         if (options?.force) await this.storeLocal();
         else this.localTimer = setTimeout(() => {
             this.storeLocal();
-        }, 1000 * 1);
+        }, 200 * 1);
     }
     async viewSnap(snap: SnapDataType, options?: { force?: boolean }) {
         await this.lazyStoreLocal(snap);
@@ -191,7 +193,7 @@ export class SnapStore extends Events {
                         seq: this.localViewSnap.seq,
                         content: this.localViewSnap.content,
                         plain: this.localViewSnap.plain,
-                        preview:this.localViewSnap.preview,
+                        preview: this.localViewSnap.preview,
                         thumb: this.localViewSnap.thumb,
                         pageText: this.localViewSnap.text
                     })
