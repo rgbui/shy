@@ -64,7 +64,7 @@ export function DifferView() {
             </div>
             <div className="remark f-14 l-24" style={{ display: 'none' }}>
                 协作与访客日活（DAU）是指在一个工作空间里，每天有多少人在线使用或访问。 <br />
-                这个指标不仅反应您对诗云的使用量，也反应了您们服务的客户星。
+                这个指标不仅反应您对诗云的使用量，也反应了您们服务的客户量。
             </div>
         </div>
 
@@ -98,7 +98,7 @@ export function DifferView() {
             <div className="remark f-14 l-24" style={{ display: 'none' }}>
                 诗云和WPS都提供文档、数据表和PPT等办公功能。
                 <br />
-                WPS适合于处理单一文档和满足基本的办公需求，而诗云则可以帮你直接开展办公业务。
+                WPS适合于处理单一文档和满足基本的办公需求，而诗云则可以帮你直接开展办公业务、做生意。
             </div>
         </div>
 

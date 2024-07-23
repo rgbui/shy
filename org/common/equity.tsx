@@ -26,7 +26,7 @@ var eqs = [
     { text: '应用发布', local: false, private: true, cloud: false, standard: true, pro: true },
 
     { group: '用量' },
-    { text: '协作及访客DAU', local: false, private: '不限', cloud: '5人/月', standard: '50人/月', pro: '1000人/月' },
+    { text: '协作及访客DAU', local: false, private: '不限', cloud: '5人/日', standard: '50人/日', pro: '1000人/日' },
     { text: '空间存储', local: '不限', private: '不限', cloud: '100M', standard: '20G', pro: '100G' },
     { text: '数据行数', local: '不限', private: '不限', cloud: '5千行', standard: '30万行', pro: '200万行' },
     { text: '单图片上限', local: '不限', private: '不限', cloud: '5M', standard: '20 MB', pro: '50 MB' },
