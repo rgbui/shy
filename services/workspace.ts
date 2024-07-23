@@ -88,32 +88,50 @@ class WorkspaceService extends BaseService {
     @put('/ws/create')
     async createWs(data: {
         text: string,
-        dataServiceAddress?: string,
+        serviceAddress?: string,
         datasource?: 'public-clound' | 'private-clound' | 'private-local',
         templateUrl?: string
     }) {
         var rr = await masterSock.put('/ws/create', {
             text: data.text,
             datasource: data.datasource,
-            serviceAddress: data.dataServiceAddress
+            serviceAddress: data.serviceAddress
         })
         if (rr.ok) {
+            var createFail = async () => {
+                await masterSock.delete('/ws/create/delete', { wsId: rr.data.workspace.id });
+            }
             var pids = rr.data.pids;
             if (data.datasource == 'private-local') {
                 pids = await getDeskLocalPids();
             }
             var url = Workspace.getWsSockUrl(pids, 'ws');
+            if (window.shyConfig?.isWeb) {
+                if (window.shyConfig?.isPro && !url.startsWith('https:')) {
+                    await createFail();
+                    return { ok: false, warn: lst('私有云非https地址无法在web使用') }
+                }
+            }
             var sock = Sock.createSock(url);
-            await sock.put('/ws/init', {
-                wsId: rr.data.workspace.id,
-                text: data.text,
-                sn: rr.data.workspace.sn,
-                templateUrl: data.templateUrl
-                // templateId?: string
-            });
-            return { ok: true, data: { workspace: rr.data.workspace, pids: pids } }
+            try {
+                var rc = await sock.put('/ws/init', {
+                    wsId: rr.data.workspace.id,
+                    text: data.text,
+                    sn: rr.data.workspace.sn,
+                    templateUrl: data.templateUrl
+                    //templateId?: string
+                });
+                if (rc.ok && rc.data.workspace && rc.data.workspace.id == rr.data.workspace.id) {
+                    return { ok: true, data: { workspace: rc.data.workspace, pids: pids } }
+                }
+            }
+            catch (ex) {
+
+            }
+            await createFail();
+            return { ok: false, warn: lst('创建空间失败') }
         }
-        else return { ok: false, warn: rr.warn }
+        else return { ok: false, warn: rr.warn, data: rr.data }
     }
     @patch('/ws/patch')
     async update(data: { wsId?: string, sockId?: string, data: Record<string, any> }) {
@@ -298,10 +316,10 @@ class WorkspaceService extends BaseService {
     @put('/ws/invite/join')
     async inviteJoin(args) {
         if (args.sock) {
-            return await args.sock.put('/ws/invite/join', { 
+            return await args.sock.put('/ws/invite/join', {
                 wsId: args.wsId,
-                username:args.username ,
-                agree:args.agree
+                username: args.username,
+                agree: args.agree
             });
         }
     }

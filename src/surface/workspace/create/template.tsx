@@ -7,7 +7,8 @@ import { lst } from "rich/i18n/store";
 import { wss } from "../../../../services/workspace";
 import { getDeskLocalPids } from "../../app/desk";
 
-export async function autoCreateWorkspaceAndJoinWorkspace(text?: string) {
+export async function autoCreateWorkspaceAndJoinWorkspace(text?: string)
+{
     ShyAlert(lst('正在初始化创建空间'), 'success', 1000 * 60 * 5);
     try {
         var g = await masterSock.get<{ template: { id: string, text: string, url: string, file: { url: string } } }>('/get/auto/create/workspace/template');

@@ -173,6 +173,16 @@ export class CreateWorkspaceView extends EventsComponent {
             if (rr.ok) {
                 await surface.loadWorkspaceList();
                 ws = rr.data.workspace;
+                this.emit('close');
+                if (ws) {
+                    UrlRoute.pushToWs(ws.sn, true);
+                    surface.onLoadWorkspace(ws.sn);
+                }
+            }
+            else {
+                if (rr.ok == false && (rr.data as any).error) this.local.error = (rr.data as any).error;
+                else if (rr.ok == false && rr.warn) this.local.error = rr.warn;
+                else this.local.error = lst('创建空间失败!')
             }
         }
         catch (ex) {
@@ -180,11 +190,7 @@ export class CreateWorkspaceView extends EventsComponent {
         }
         finally {
             b.loading = false;
-            this.emit('close');
-            if (ws) {
-                UrlRoute.pushToWs(ws.sn, true);
-                surface.onLoadWorkspace(ws.sn);
-            }
+
         }
     }
     render() {
