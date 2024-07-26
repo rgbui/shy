@@ -100,21 +100,6 @@ export class Workspace {
     public roles: WorkspaceRole[] = [];
     public member: WorkspaceMember = null;
     public allowSlnIcon: boolean = true;
-
-    public stats: {
-        totalFileSize?: number;
-        totalDoc?: number;
-        totalDocCard?: number;
-        totalChannel?: number;
-        totalBoard?: number;
-        totalTable?: number;
-        totalRowCount?: number;
-        totalBookmark?: number;
-        totalComment?: number;
-        totalViewSnap?: number;
-        totalViewBrowse?: number;
-        totalTag?: number;
-    }
     get accessWorkspace() {
         return surface.accessWorkspace;
     }
@@ -743,8 +728,7 @@ export class Workspace {
         }
         return false;
     }
-    async openMenu(pos: PopoverPosition,width: number = 200)
-    {
+    async openMenu(pos: PopoverPosition, width: number = 200) {
         if (!this.isMember) return;
         if (isMobileOnly) return;
         var menus: MenuItem<string>[] = [];

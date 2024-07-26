@@ -8,31 +8,32 @@ export type WsCostRecord = {
     consumeType: WsConsumeType,
     wsId: string
 }
+
 export class WsCost {
-   
+
     public id: string;
-  
+
     public createDate: Date;
-   
+
     public workspaceId: string;
 
-    
+
     public consumeType: WsConsumeType;
 
-   
+
     public cost: number
 
 
-    
+
     public details: WsCostRecord[]
 
-   
+
     public checkCost: boolean;
 
- 
+
     public deleted: boolean;
-   
+
     public deletedDate: Date;
-   
+
     public deletedUser: string
 }

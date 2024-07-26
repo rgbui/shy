@@ -24,62 +24,30 @@ import { Rect } from "rich/src/common/vector/point";
 
 
 export class UserResourceConsume {
-
+    name: string;
     userid: string
-
-
     id: string
-
-
     public createDate: Date;
-
     /**
      * 磁盘空间消耗
      */
+
     public diskSpace: number;
-
-    /**
-     * 流量消耗
-     */
-    netStream: number
-
-    /**
-     * 数据表格行数
-     */
-
     rowCount: number;
-
-    /**
-     * 费用比较低的ai消耗
-     */
-    cheapAI: number
-
-    /**
-     * 费用比较高的ai消耗
-     */
-    expensiveAI: number
-    /**
-     * 生成图片
-     */
-
+    dauCount: number;
+    aiCost: number;
     imageAI: number;
-    /**
-     * 绿色内容安全
-     */
     public greenContent: number;
-    /**
-     * 
-     * 图片处理
-     * 书签，文档数等等
-     */
-    public handleContent: number;
+    public secondDomainCount: number;
+    public thirdDomainCount: number;
+    public appCount: number;
 }
 
 @observer
 export class ShyWallet extends React.Component {
     constructor(props) {
         super(props);
-        this.statDayList = {
+        this.costDayList = {
             loading: false,
             year: dayjs().year(),
             month: dayjs().month() + 1,
@@ -87,7 +55,7 @@ export class ShyWallet extends React.Component {
         }
         makeObservable(this, {
             wallet: observable,
-            statDayList: observable,
+            costDayList: observable,
             free: observable,
             consume: observable
         })
@@ -108,35 +76,35 @@ export class ShyWallet extends React.Component {
     }
     myChart;
     async loadUserStat() {
-        if (this.statDayList.month <= 0) {
-            this.statDayList.month = 12;
-            this.statDayList.year--;
+        if (this.costDayList.month <= 0) {
+            this.costDayList.month = 12;
+            this.costDayList.year--;
         }
-        else if (this.statDayList.month > 12) {
-            this.statDayList.month = 1;
-            this.statDayList.year++;
+        else if (this.costDayList.month > 12) {
+            this.costDayList.month = 1;
+            this.costDayList.year++;
         }
         var r = await masterSock.get('/user/day/cost', {
-            year: this.statDayList.year,
-            month: this.statDayList.month
+            year: this.costDayList.year,
+            month: this.costDayList.month
         });
         if (r?.ok) {
             runInAction(() => {
-                this.statDayList.list = [];
-                var d = dayjs().year(this.statDayList.year).month(this.statDayList.month - 1);
+                this.costDayList.list = [];
+                var d = dayjs().year(this.costDayList.year).month(this.costDayList.month - 1);
                 var s = d.startOf('month').toDate();
                 var e = d.endOf('month').toDate();
                 for (var i = s.getDate(); i < e.getDate(); i++) {
                     var rs = r.data.list.filter(e => dayjs(e.createDate).date() == i);
                     if (rs.length > 0)
-                        this.statDayList.list.push({
+                        this.costDayList.list.push({
                             cost: rs.reduce((a, b) => a + b.cost, 0),
                             createDate: rs[0]?.createDate
                         })
                     else {
-                        this.statDayList.list.push({
+                        this.costDayList.list.push({
                             cost: 0,
-                            createDate: dayjs().year(this.statDayList.year).month(this.statDayList.month - 1).date(i).toDate()
+                            createDate: dayjs().year(this.costDayList.year).month(this.costDayList.month - 1).date(i).toDate()
                         })
                     }
                 }
@@ -152,14 +120,14 @@ export class ShyWallet extends React.Component {
             var option = {
                 xAxis: {
                     type: 'category',
-                    data: this.statDayList.list.map(e => dayjs(e.createDate).format('YYYY-MM-DD'))
+                    data: this.costDayList.list.map(e => dayjs(e.createDate).format('YYYY-MM-DD'))
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [
                     {
-                        data: this.statDayList.list.map(e => e.cost),
+                        data: this.costDayList.list.map(e => e.cost),
                         type: 'bar'
                     }
                 ]
@@ -167,7 +135,7 @@ export class ShyWallet extends React.Component {
             this.myChart.setOption(option);
         }
     }
-    statDayList: {
+    costDayList: {
         loading: boolean,
         year: number,
         month: number,
@@ -229,8 +197,8 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>余额</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed">{Price.toFixed(this.wallet.money)}<S>元</S></span>
-                    <span className="flex-auto flex-end r-gap-l-10"><Button  onClick={e => openPay('fill')}><S>充值</S></Button>
-                        <Button  ghost onClick={e => this.coupon(e)}><S>兑换码</S></Button></span>
+                    <span className="flex-auto flex-end r-gap-l-10"><Button onClick={e => openPay('fill')}><S>充值</S></Button>
+                        <Button ghost onClick={e => this.coupon(e)}><S>兑换码</S></Button></span>
                 </div>
                 <Divider></Divider>
             </div>
@@ -238,8 +206,8 @@ export class ShyWallet extends React.Component {
                 <div className="h4"><S>套餐</S></div>
                 <div className="flex flex-top gap-h-20 r-gap-r-10">
                     <span className="f-16 flex-fixed"><em>{getMeal()}</em> {this.wallet.due && (this.wallet.meal == 'meal' || this.wallet.meal == 'meal-1' || this.wallet.meal == 'meal-2') && <i className="text-1">[{dayjs(this.wallet.due).format('YYYY.MM.DD')}<S>到期</S>]</i>}</span>
-                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button  ghost onClick={e => openPay('meal-1')}><S>个人版</S></Button>}
-                        <Button  ghost onClick={e => openPay('meal-2')}><S>协作版</S></Button></span>
+                    <span className="flex-auto flex-end r-gap-l-10">{this.wallet.meal != 'meal-2' && <Button ghost onClick={e => openPay('meal-1')}><S>个人版</S></Button>}
+                        <Button ghost onClick={e => openPay('meal-2')}><S>协作版</S></Button></span>
                 </div>
                 <Divider></Divider>
             </div>
@@ -261,8 +229,12 @@ export class ShyWallet extends React.Component {
                     <div className="f-24 gap-t-10 flex-center">{this.consume?.rowCount || 0}/{(this.free?.rowCount || 0)}</div>
                 </div>
                 <div className="flex-fixed min-w-120   item-hover-focus ">
-                    <div className="flex remark flex-center"><span className="size-20 flex-center"><Icon size={16} icon={AiStartSvg}></Icon></span><S>AI额度</S></div>
-                    <div className="f-24 gap-t-10 flex-center">{(this.consume?.cheapAI || 0 + (this.consume?.expensiveAI || 0)).toFixed(2)}/{this.free?.cheapAI + this.free?.expensiveAI}</div>
+                    <div className="flex remark flex-center"><span className="size-20 flex-center"><Icon size={16} icon={AiStartSvg}></Icon></span><S>AI消耗</S></div>
+                    <div className="f-24 gap-t-10 flex-center">{((this.consume?.aiCost || 0) * 10).toFixed(2) + '万字'}/{this.free?.aiCost * 10 + '万字'}</div>
+                </div>
+                <div className="flex-fixed min-w-120   item-hover-focus ">
+                    <div className="flex remark flex-center"><span className="size-20 flex-center"><Icon size={16} icon={{ name: 'byte', code: 'pic' }}></Icon></span><S>AI生图</S></div>
+                    <div className="f-24 gap-t-10 flex-center">{Math.ceil((this.consume?.imageAI || 0) / 0.03) + '张'}/{Math.ceil(this.free?.imageAI / 0.03) + '张'}</div>
                 </div>
             </div>
             <Divider></Divider>
@@ -284,8 +256,8 @@ export class ShyWallet extends React.Component {
         }
         var r = await useSelectMenuItem({ roundArea: Rect.fromEvent(e) }, rs);
         if (r?.item) {
-            this.statDayList.year = r.item.value.year;
-            this.statDayList.month = r.item.value.month;
+            this.costDayList.year = r.item.value.year;
+            this.costDayList.month = r.item.value.month;
             this.loadUserStat();
         }
     }
@@ -296,13 +268,13 @@ export class ShyWallet extends React.Component {
                 <div className="flex gap-t-30 gap-l-30">
                     <span className="size-20 flex-center cursor item-hover round"
                         onMouseDown={e => {
-                            this.statDayList.month--;
+                            this.costDayList.month--;
                             this.loadUserStat();
                         }}><Icon icon={ChevronLeftSvg}></Icon></span>
                     <span className="flex-center gap-w-5"
-                        onMouseDown={e => this.onSelectDate(e)}>{this.statDayList.year}-{this.statDayList.month}</span>
+                        onMouseDown={e => this.onSelectDate(e)}>{this.costDayList.year}-{this.costDayList.month}</span>
                     <span className="size-20 flex-center   cursor item-hover round" onMouseDown={e => {
-                        this.statDayList.month++;
+                        this.costDayList.month++;
                         this.loadUserStat();
                     }}><Icon icon={ChevronRightSvg}></Icon></span>
                 </div>
