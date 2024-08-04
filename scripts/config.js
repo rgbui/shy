@@ -175,6 +175,10 @@ var cps = [{
     to: staticPrefix + 'data-grid/formula/docs'
 },
 {
+    from: path.join(__dirname, "../../rich/extensions/board/shapes/data"),
+    to: staticPrefix + 'board/shapes/data'
+},
+{
     from: path.join(__dirname, "../../rich/blocks/data-grid/template/card/views/data"),
     to: staticPrefix + 'data-grid/template/datas'
 },
