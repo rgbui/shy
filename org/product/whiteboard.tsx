@@ -2,8 +2,8 @@ import React from "react";
 import { UrlRoute } from "../../src/history";
 import { observer, useLocalObservable } from "mobx-react";
 
-
-export var ProductWhiteBoard = observer(function () {
+export var ProductWhiteBoard = observer(function () 
+{
 
     var local = useLocalObservable<{
         index: number
@@ -11,18 +11,18 @@ export var ProductWhiteBoard = observer(function () {
     }>(() => {
         return {
             index: 0
-
         }
     })
 
     return <div style={{ backgroundColor: '#fbf7ef' }}>
-
         <div className="shy-site-block    padding-h-30">
             <h1 className="f-48 flex-center">
-                思考和创造，全部在一个白板内完成。
+                白板之上，思考与创造完美呈现
             </h1>
             <p className="text-1 f-16 gap-b-20  flex-center">
-                <span className="max-w-600 inline-block l-22"> 诗云白板，一个激发创意和点燃团队协作的空间。集思维表达，灵感梳理，流程整理，任务管理，素材收集，笔记文档多种创意表达能力于一体，将创造和团队效率提升到新的层次。</span>
+                <span className="max-w-600 inline-block l-22">
+                    诗云白板，融合了思维表达、灵感梳理、流程整理、任务管理、素材搜集与笔记文档等多种功能，一站式提升创造力与团队效率，开启工作的新境界。
+                </span>
             </p>
             <div className="flex-center">
                 <a href={UrlRoute.getUrl('/sign/in')}
@@ -232,8 +232,8 @@ export var ProductWhiteBoard = observer(function () {
             }}>
                 <div className="shy-site-block">
 
-                    <div className="text-white bold" style={{ paddingTop: 240 }}>
-                        <h1 className="f-30 gap-b-10 flex-center">帮助世界上最具创新精神的公司更好地进行日常协作</h1>
+                    <div className="text-white bold " style={{ paddingTop: 120 }}>
+                        {/* <h1 className="f-30 gap-b-10 flex-center">帮助世界上最具创新精神的公司更好地进行日常协作</h1> */}
                         <p className="f-22 flex-center ">
                             <span className="max-w-800 inline-block">我们的工作室墙提供了协作的清晰性和自由度，助力我们做出明智决策。诗云白板将其数字化，让我们随时随地协作。</span>
                         </p>
