@@ -339,6 +339,7 @@ push('/ws/comment/send', '{elementUrl: string,wsId?: string, parentId: string, r
 push('/ws/comment/del', '{id?:string,elementUrl?: string}', 'SockResponse<void>', ['del']);
 push('/ws/comment/emoji', '{wsId?: string, elementUrl: string}', 'SockResponse<{count:number,exists?:boolean}>', ['put']);
 push('/ws/robots', '{}', 'SockResponse<{list:{userid:string,name:string}[]}>', ['get']);
+push('/ws/clear/all','{wsId?:string}', 'SockResponse<void>', ['del']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 push('/get/robot', '{id:string}', 'SockResponse<{robot:RobotInfo}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);

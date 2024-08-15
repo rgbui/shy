@@ -83,6 +83,9 @@ window.shyLog = (...args) => {
         console.log(...args);
     }
 }
+console.dev = (...args) => {
+    if (window.shyConfig.isDev) console.log(...args);
+}
 window.addEventListener("online", function () {
     window.shyConfig.isOnline = window.navigator.onLine ? true : false;
 }, false);

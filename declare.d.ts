@@ -101,5 +101,9 @@ interface HTMLElement {
   shy_end?: (event: MouseEvent) => void;
 }
 
+interface Console{
+  dev(...args: any[]): void;
+}
+
 
 

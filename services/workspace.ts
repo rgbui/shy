@@ -474,6 +474,11 @@ class WorkspaceService extends BaseService {
         }
         return { ok: true, data: { wsMember: me } };
     }
+    @del('/ws/clear/all')
+    async wsClearAll(args) {
+        var sock = await this.getArgsSock(args);
+        return await sock.delete('/ws/clear/all', args);
+    }
 }
 
 
