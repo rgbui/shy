@@ -3,7 +3,7 @@ import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { UserWorkspaceItem, surface } from "../app/store";
 import PubWorkspace from "../../assert/svg/pubWorkspace.svg";
-import { PlusSvg, SlideBarFolderSvg } from "rich/component/svgs";
+import { PlusSvg, SlideBarFolderSvg, TrashSvg } from "rich/component/svgs";
 import ShyLog from "../../assert/img/shy.svg";
 
 import { ShyUrl, UrlRoute } from "../../history";
@@ -28,6 +28,9 @@ import lodash from "lodash";
 import { util } from "rich/util/util";
 import { masterSock } from "../../../net/sock";
 import { yCache } from "../../../net/cache";
+import { MenuItem } from "rich/component/view/menu/declare";
+import { useSelectMenuItem } from "rich/component/view/menu";
+import { useForm } from "rich/component/view/form/dialoug";
 
 const SIDE_FOLDER_SPREAD_KEY = 'shy-side-folder-spread';
 
@@ -319,23 +322,59 @@ export class SideBar extends React.Component {
             }
         })
     }
+    async onContextMenu(workspace: UserWorkspaceItem, event: React.MouseEvent) {
+        event.preventDefault();
+        var items: MenuItem[] = [];
+        if (workspace.owner == surface.user.id) {
+            items.push({
+                text: lst('注销空间'),
+                name: "register",
+                warn: true,
+                icon: TrashSvg
+            })
+        }
+        if (items.length > 0) {
+            var r = await useSelectMenuItem({ roundArea: Rect.fromEle(event.currentTarget as HTMLElement) }, items);
+            if (r) {
+                if (r.item.name == 'register') {
+                    var rc = await useForm({
+                        title: lst('注销空间'),
+                        remark: lst(`输入注销空间的名称[{text}]`, { text: workspace.text }),
+                        fields: [{ name: 'name', type: 'input', text: lst('空间名称') }]
+                    });
+                    if (rc?.name == workspace.text) {
+                        var g = await channel.del('/ws/clear/all', { wsId: workspace.id });
+                        // var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: workspace.id });
+                        if (g.ok) {
+                            var rg = await masterSock.delete('/ws/clear', { wsId: workspace.id });
+                            if (rg.ok) {
+                                surface.wss = surface.wss.filter(x => x.id != workspace.id);
+                                if (surface.workspace?.id == workspace.id)
+                                    UrlRoute.push(ShyUrl.home)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     renderWs(workspace: UserWorkspaceItem, size?: 48 | 20, isFolderIn?: boolean) {
         if (size == 20) {
-            if (workspace.icon) return <a className="shy-sidebar-ws-icon cursor  size-16 flex-fixed  flex-center   relative">
+            if (workspace.icon) return <a onContextMenu={e => { this.onContextMenu(workspace, e) }} className="shy-sidebar-ws-icon cursor  size-16 flex-fixed  flex-center   relative">
                 <img draggable={false} src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 16, height: 16 }} />
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
-            else return <a className="shy-sidebar-ws-name  cursor  size-16 flex-fixed  flex-center   relative">
+            else return <a onContextMenu={e => { this.onContextMenu(workspace, e) }} className="shy-sidebar-ws-name  cursor  size-16 flex-fixed  flex-center   relative">
                 <span className="f-12" style={{ transform: 'scale(0.5)', whiteSpace: 'nowrap' }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
         }
         else {
-            if (workspace.icon) return <a className={"shy-sidebar-ws-icon cursor  size-48 flex-fixed  flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
+            if (workspace.icon) return <a onContextMenu={e => { this.onContextMenu(workspace, e) }} className={"shy-sidebar-ws-icon cursor  size-48 flex-fixed  flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
                 <img draggable={false} src={autoImageUrl(workspace?.icon.url, 120)} style={{ width: 48, height: 48 }} />
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>
-            else return <a className={"shy-sidebar-ws-name  cursor  size-48 flex-fixed  flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
+            else return <a onContextMenu={e => { this.onContextMenu(workspace, e) }} className={"shy-sidebar-ws-name  cursor  size-48 flex-fixed  flex-center  gap-h-4  relative " + (isFolderIn ? "" : "gap-w-12")}>
                 <span style={{ fontSize: 18 }}>{ShyUtil.firstToUpper(workspace?.text?.slice(0, 2))}</span>
                 <DotNumber count={workspace?.unreadChats?.length} ></DotNumber>
             </a>

@@ -12,7 +12,7 @@ import { PageItem } from "../sln/item";
 import { PageViewStores } from "../supervisor/view/store";
 import { config } from "../../../common/config";
 import { blockStore } from "rich/extensions/block/store";
-import { ls } from "rich/i18n/store";
+import { ls, lst } from "rich/i18n/store";
 import { PageTemplateType } from "rich/extensions/template";
 import { ElementType, getElementUrl } from "rich/net/element.type";
 import { Sock } from "../../../net/sock";
@@ -64,7 +64,8 @@ export class Surface extends Events {
             mobileSlnSpread: observable,
             slnSpread: observable,
             showWorkspace: computed,
-            accessPage: observable
+            accessPage: observable,
+            accessError: observable
         });
     }
     mobileSlnSpread: boolean = null;
@@ -89,8 +90,11 @@ export class Surface extends Events {
      * accessWorkspace: 可以访问工作区
      * accessPage: 可以访问页面
      * forbidden: 禁止访问
+     * netError: 网络错误
+     * notFound: 未找到
      */
-    accessPage: 'none' | 'forbidden' | 'accessWorkspace' | 'accessPage' = 'none';
+    accessPage: 'none' | 'forbidden' | 'accessWorkspace' | 'accessPage' | 'notFound' | 'netError' = 'none';
+    accessError: string = '';
     async loadWorkspaceList() {
         if (this.user.isSign) {
             var r = await channel.get('/user/wss');
@@ -123,7 +127,7 @@ export class Surface extends Events {
     async onLoadWorkspace(name: string, autoLoadPage = true) {
         try {
             if (typeof (name as any) == 'number') name = name.toString();
-          if (name) {
+            if (name) {
                 try {
                     var r = await channel.get('/ws/query', { name });
                     if (r?.data.workspace) {
@@ -142,9 +146,23 @@ export class Surface extends Events {
                         else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
                         if (lodash.isNull(willPageId)) willPageId = undefined;
                         var g: any;
-                      
-                        g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
-                        
+                        try {
+                            g = await Workspace.getWsSock(ws.pids, 'ws', ws.id).get('/ws/access/info', { wsId: ws.id, pageId: willPageId });
+                        }
+                        catch (ex) {
+                            console.error(ex);
+                            this.accessPage = 'netError';
+                            if (r.data?.workspace?.datasource == 'private-local') {
+                                this.accessError = '本地服务错误，请检查本地服务是否正常运行';
+                            }
+                            else if (r.data?.workspace?.datasource == 'private-cloud') {
+                                this.accessError = `${r.data.pids?.map(p => p.url).join(",")} 网络访问错误，请检查网络连接`;
+                            }
+                            else {
+                                this.accessError = '诗云空间服务网络，请刷新尝试...';
+                            }
+                        }
+
                         if (g.data.accessForbidden) {
                             this.accessPage = 'forbidden';
                             return
@@ -183,28 +201,20 @@ export class Surface extends Events {
                         this.workspace.loadWsRobots(robotIds);
                         return;
                     }
-                    else{
-                        console.log('ggg',r);
+                    else {
+                        this.accessPage = 'notFound';
+                        this.accessError = lst('访问的空间页面不存在')
                     }
                 }
                 catch (ex) {
-                    console.error(ex);
+                    this.accessPage = 'netError';
+                    this.accessError = lst('网络错误，请检查网络连接')
                 }
             }
             if (this.workspace) {
                 await this.workspace.exitWorkspace()
             }
             this.workspace = null;
-            // if (window.shyConfig.isDesk) {
-            //     // UrlRoute.push(ShyUrl.signIn);
-            // }
-            // else if (window.shyConfig.isPro) {
-            //     // if (this.user.isSign) UrlRoute.push(ShyUrl.home)
-            //     // else UrlRoute.push(ShyUrl.signIn);
-            // }
-            // else if (window.shyConfig.isDev) {
-            //    // UrlRoute.push(ShyUrl.home);
-            // }
 
         }
         catch (ex) {

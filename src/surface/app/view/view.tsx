@@ -13,6 +13,10 @@ import { ViewNotAllow } from "./404";
 import { channel } from "rich/net/channel";
 import { Spin } from "rich/component/view/spin";
 import { DefinePageNavBar } from "rich/src/page/view/common";
+import { Divider } from "rich/component/view/grid";
+import { S } from "rich/i18n/view";
+import { config } from "../../../../common/config";
+import { Button } from "rich/component/view/button";
 
 export var SurfacePage = observer((props: { pathname: string }) => {
     async function load() {
@@ -34,6 +38,21 @@ export var SurfacePage = observer((props: { pathname: string }) => {
         load();
     }, [props.pathname]);
     if (surface.accessPage == 'forbidden') return <ViewNotAllow></ViewNotAllow>
+    else if (surface.accessPage == 'notFound' || surface.accessPage == 'netError') {
+        return <div>
+            <div className='flex-center flex-auto v100'>
+                <div className='w-500' >
+                    <div className="h2 flex-center"><S>空间页面访问出错</S></div>
+                    <Divider ></Divider>
+                    <div className="gap-t-10">
+                        <div className="flex-center remark">{surface.accessError}</div>
+                        <div className="flex-center gap-h-20"><Button onClick={e => UrlRoute.push(ShyUrl.home)}><S>立即使用诗云</S></Button></div>
+                        {!(surface.user?.isSign) && <div className="flex-center"><S text='您尚未登录诗云立即'>您尚未登录 诗云，立即</S><a href={config.isUS ? "https://shy.red/sign/in" : 'https://shy.live/sign/in'}><S>登录</S></a></div>}
+                    </div>
+                </div>
+            </div >
+        </div>
+    }
     if (surface.workspace) {
         var h = 0;
         if (surface.showJoinTip) h += 40;
