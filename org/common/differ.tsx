@@ -7,6 +7,7 @@ import { S } from "rich/i18n/view";
 export function DifferView() {
     return <div className="gap-h-30">
         <h3 className="flex-center shy-site-block-head gap-t-30"><S>诗云与其它产品区别</S></h3>
+        
         <div className="border-top padding-t-10 padding-b-20">
             <div data-toggle className="flex b-500 f-18 text-1 gap-b-5 cursor">
                 <span className="flex-auto">

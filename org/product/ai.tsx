@@ -5,15 +5,17 @@ import { S, Sp } from "rich/i18n/view";
 import { UrlRoute } from "../../src/history";
 import { config } from "../../common/config";
 import { getTypeColor } from "../util";
+
 export function AiView() {
 
     return <div>
         <div className="shy-site-block">
             <div>
                 <div className="padding-t-50">
-                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S>诗云AI.你的私人智能肋手</S></h1>
+                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S>诗云AI，智慧的墨水</S></h1>
                     <p className="flex-center remark text-center f-24">
-                        <S text='发挥AI的无限力量-description'>全新的人机协作体验，发挥 AI 的无限力量。写的更好，工作更快，想象更美好。</S>
+                        跨越写作的边界，编织创作的纽带，在设计的海洋里，
+                        <br />链接每一份灵感，让智慧如流水般自由涌动
                     </p>
                     <p className="flex-center gap-h-10">
                         <a href={UrlRoute.getUrl('/sign/in')}
@@ -22,58 +24,52 @@ export function AiView() {
                             <Icon icon={ArrowRightSvg}></Icon>
                         </a>
                     </p>
-                    {/* <div className="gap-h-30 flex-center  relative">
-                        <img style={{ border: '8px solid #000', width: '80%' }} className="border round-16 obj-center " src={UrlRoute.getUrl("static/img/pic.png")} />
-                    </div> */}
                 </div>
             </div>
         </div>
 
         <div className="shy-site-block">
             <div className="padding-h-50">
-                <div className="shy-site-block-head flex-center"><S>写的更好</S></div>
-                <div className="remark flex-center"><S text='写的更好-description'>提高写作水平，让你写作更加自信</S></div>
-                <div className="shy-site-block-card bg-white padding-w-14 round-8 gap-h-20">
-                    <video className="w100 obj-center" title="ai gen mp4" width="100%"
-                        muted={true} loop={true} autoPlay={true} controls={false}
-                    // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
-                    ><source src={UrlRoute.getUrl("static/img/ai-gen.mp4")}
-                        type="video/mp4" />
-                    </video>
+
+                <h1 className="f-32 flex-center">提高写作水平，让你写作更加自信</h1>
+                <div className="gap-h-20 w100  round-16    border shadow-s  bg-white" >
+                    <img alt="AI写作" className="w100 round-16 obj-center" src={'../static/img/ai/text-3.png'} />
                 </div>
+
+
                 <div>
                     <div className="flex flex-full flex-auto-mobile-wrap">
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={Edit1Svg}></Icon></div>
-                            <div className="h3"><S>修复拼写和语法</S></div>
-                            <div><S text="修复拼写和语法-description">修复拼写错误、语法错误</S></div>
+                            <div className="h3">修复拼写和语法</div>
+                            <div>修复拼写错误、语法错误</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-w-5">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'translation' }}></Icon></div>
-                            <div className="h3"><S>翻译</S></div>
-                            <div><S text="翻译-description">现在你可以用日语、西班牙语、德语等语言写作。</S></div>
+                            <div className="h3">翻译</div>
+                            <div>现在你可以用日语、西班牙语、德语等语言写作。</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'topic' }}></Icon></div>
-                            <div className="h3"><S>润色</S></div>
-                            <div><S text="润色-description">以不同的语言风格重写你的提案。</S></div>
+                            <div className="h3">润色</div>
+                            <div>以不同的语言风格重写你的提案。</div>
                         </div>
                     </div>
                     <div className="flex flex-full flex-auto-mobile-wrap">
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'double-right' }}></Icon></div>
-                            <div className="h3"><S>变短或变长</S></div>
-                            <div><S text="变短或变长-description">在不损失语义的情况下将内容加长或变短。</S></div>
+                            <div className="h3">变短或变长</div>
+                            <div>在不损失语义的情况下将内容加长或变短。</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-w-5">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'voice-one' }}></Icon></div>
-                            <div className="h3"><S>解释</S></div>
-                            <div><S text="解释-description">为每个人解释专有术语。</S></div>
+                            <div className="h3">解释</div>
+                            <div>为每个人解释专有术语。</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'good-one' }}></Icon></div>
-                            <div className="h3"><S>使用更简单的语言</S></div>
-                            <div><S text="使用更简单的语言-description">使你的提案变的更易理解。</S></div>
+                            <div className="h3">使用更简单的语言</div>
+                            <div>使你的提案变的更易理解。</div>
                         </div>
                     </div>
                 </div>
@@ -82,16 +78,11 @@ export function AiView() {
 
         <div className="shy-site-block">
             <div className="padding-h-50">
-                <div className="shy-site-block-head flex-center"><S>增强你的创造力</S></div>
-                <div className="remark flex-center"><S text='增强你的创造力-description'>克服写作障碍,让诗云AI帮你定初稿</S></div>
+                <div className="shy-site-block-head flex-center">增强你的创造力</div>
+                <div className="remark flex-center">克服写作障碍,让诗云AI帮你提供思路</div>
                 <div>
                     <div className="shy-site-block-card bg-white padding-w-14 round-8 gap-h-20">
-                        <video className="w100 obj-center" title="ai gen mp4" width="100%"
-                            muted={true} loop={true} autoPlay={true} controls={false}
-                        // poster="https://sanity-images.imgix.net/production/b7f2a0a42e872c4c29b78ceb086b4937e1d6a226-1040x1000.png?h=450&amp;dpr=2&amp;w=&amp;auto=format%2Ccompress"
-                        ><source src={UrlRoute.getUrl("static/img/ai-gen.mp4")}
-                            type="video/mp4" />
-                        </video>
+                        <img alt="AI写作" className="w100 round-16 obj-center" src={'../static/img/ai/text-5.png'} />
                     </div>
                 </div>
                 <div>
@@ -99,17 +90,17 @@ export function AiView() {
                         <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'enter-the-keyboard' }}></Icon></div>
                             <div className="h3"><S>帮我写</S></div>
-                            <div><S text='帮我写-description'>在页面上获取一些内容，而不是盯着闪烁的光标。</S></div>
+                            <div>在页面上获取一些内容，而不是盯着闪烁的光标。</div>
                             <div>
-                                <img className="obj-center w100 h100" src={UrlRoute.getUrl("static/img/pic.png")} />
+                                <img alt="AI写作" className="w100 round-16 obj-center" src={'../static/img/ai/text-1.png'} />
                             </div>
                         </div>
                         <div className="w50  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'doc-add' }}></Icon></div>
                             <div className="h3"><S>继续写</S></div>
-                            <div><S text="继续写-description">一个好的开始？诗云 AI 可以从这里获取它。</S></div>
+                            <div>一个好的开始？诗云 AI 可以从这里获取它。</div>
                             <div>
-                                <img className="obj-center w100 h100" src={UrlRoute.getUrl("static/img/pic.png")} />
+                                <img alt="AI写作" className="w100 round-16 obj-center" src={'../static/img/ai/text-4.png'} />
                             </div>
                         </div>
                     </div>
@@ -118,16 +109,19 @@ export function AiView() {
         </div>
 
 
-        {/* <div className="shy-site-block">
+        <div className="shy-site-block">
             <div className="padding-h-50">
-                <div className="shy-site-block-head flex-center"><S>AI机器人</S></div>
-                <div className="remark flex-center"><Sp text="ai-AI机器人-description">自定义的你的AI机器人，全新的人机协作。</Sp></div>
-                <div></div>
-                <div>
-
+                <div className="shy-site-block-head flex-center">AI智能搜索</div>
+                <div className="remark flex-center">
+                    问答功能利用您 文档中的信息来帮助您开展工作。您只需提出问题即可。
                 </div>
+
+                <div className="gap-h-20 w100  round-16    border shadow-s  bg-white" >
+                    <img alt="AI智能搜索" className="w100 round-16 obj-center" src={'../static/img/ai/so.png'} />
+                </div>
+
             </div>
-        </div> */}
+        </div>
 
 
 
@@ -144,56 +138,84 @@ export function AiView() {
                 }} href={config.isUS ? "https://community.shy.red" : 'https://community.shy.live'}><S>云云社区</S></a><S>联系</S></h3>
 
                 <div className="r-gap-b-10">
-                    <div className="border-top padding-h-10">
-                        <div data-toggle className="cursor flex bold f-18 text-1 gap-b-5">
-                            <span className="flex-auto"><S text='如何激活诗云AI'>如何激活诗云AI？</S></span>
-                            <Icon style={{ transform: 'rotate(90deg)' }} className={'ts flex-fixed remark cursor'} icon={ChevronDownSvg}></Icon>
+
+                    <div className="border-top padding-t-10 padding-b-20">
+                        <div data-toggle className="flex b-500 f-18 text-1 gap-b-5 cursor">
+                            <span className="flex-auto">
+                                如何开启诗云AI?
+                            </span>
+                            <span data-toggle-icon style={{ transform: 'rotate(90deg)' }} className="ts flex-fixed size-20 flex-center round item-hover">
+                                <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
+                            </span>
                         </div>
-                        <div style={{ display: 'none' }} className="remark f-14 l-24">
-                            <Sp text='如何激活诗云AI-answer'>诗云AI 默认提供所有用户使用。您可以使用空格键、突出显示文本并选择“诗云AI”或通过斜线命令来触发诗云AI。<br />
-                                也在可以空间设置中更换AI使用的模型或关闭AI功能<br />
-                            </Sp>
+                        <div className="remark f-14 l-24">
+                            诗云AI默认是自动开启的，您可以在空间设置中关闭AI写作，详细操作请参考诗云帮助文档。
+
                         </div>
                     </div>
 
-                    <div className="border-top  padding-h-10">
-                        <div data-toggle className="cursor flex bold f-18 text-1 gap-b-5">
-                            <span className="flex-auto"><S text='诗云AI与其他人工智能工具有何不同'>诗云AI与其他人工智能工具有何不同？</S></span>
-                            <Icon style={{ transform: 'rotate(90deg)' }} className={'ts flex-fixed remark cursor'} icon={ChevronDownSvg}></Icon>
+                    <div className="border-top padding-t-10 padding-b-20">
+                        <div data-toggle className="flex b-500 f-18 text-1 gap-b-5 cursor">
+                            <span className="flex-auto">
+                                诗云AI如何使用我的数据？
+                            </span>
+                            <span data-toggle-icon style={{ transform: 'rotate(90deg)' }} className="ts flex-fixed size-20 flex-center round item-hover">
+                                <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
+                            </span>
                         </div>
-                        <div style={{ display: 'none' }} className="remark f-14 l-24">
-                            <Sp text='诗云AI与其他人工智能工具有何不同-answer'>
-                                诗云 当然不是唯一的人工智能工具。但 诗云 AI 的特别之处在于：<br />
-                                1.当人工智能集成到您已经完成工作、存储笔记和文档以及与他人协作的地方时，它会变得更加有用。无需在笔记和单独的人工智能工具之间来回切换。<br />
-                                2.与其他工具相比，诗云 具有独特且高度灵活的拖放文本编辑器，可以轻松地重新排列和转换任何 AI 生成的内容。随着时间的推移，诗云 AI 将能够利用更多 诗云 功能。<br />
-                                3.如今，诗云 AI 在您的笔记和文档中具有多种用途。但 诗云 的功能远不止笔记——我们将继续扩展 诗云 AI 的功能，以帮助未来的项目管理和团队知识库。这仅仅是个开始！<br />
-                            </Sp>
+                        <div className="remark f-14 l-24">
+                            空间内的知识默认是不会自动发送给AI服务商，只有当涉及到AI功能时才会发至大模型
+                            <br />
+                            当您开启空间AI智能搜索时，会将您的数据发送至AI服务商进行向量化处理，如您不希望发送数据，请关闭空间AI智能搜索。
+
+
                         </div>
                     </div>
 
-                    <div className="border-top  padding-h-10">
-                        <div data-toggle className="cursor flex bold f-18 text-1 gap-b-5">
-                            <span className="flex-auto"><S text='诗云AI如何使用我的数据'>诗云AI如何使用我的数据？</S></span>
-                            <Icon style={{ transform: 'rotate(90deg)' }} className={'ts flex-fixed remark cursor'} icon={ChevronDownSvg}></Icon>
+                    <div className="border-top padding-t-10 padding-b-20">
+                        <div data-toggle className="flex b-500 f-18 text-1 gap-b-5 cursor">
+                            <span className="flex-auto">
+                                诗云AI目前使用了那些AI服务商？
+                            </span>
+                            <span data-toggle-icon style={{ transform: 'rotate(90deg)' }} className="ts flex-fixed size-20 flex-center round item-hover">
+                                <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
+                            </span>
                         </div>
-                        <div style={{ display: 'none' }} className="remark f-14 l-24">
-                            <Sp text={'ai-诗云AI如何使用我的数据-answer'}>
-                                诗云空间里面的知识内容不会自动发送给AI，只有当涉及到AI的数据才会发至大模型<br />
-                                诗云目前调用了第三方AI，无法避免发送数据，在使用中，请注意保护自己的隐私。<br />
-                                诗云目前集成了GPT，该功能仅限于诗云内部产品的研发、探索及用户体验，不建议你商业化使用。<br />
-                                如你使用，造成的数据安全问题需要你自行承担。<br /></Sp>
+                        <div className="remark f-14 l-24">
+                            诗云AI目前使用了 DeepSeek、智谱、文言一心 <br />
+                            诗云AI会根据您的使用情况，选择最有性价比的AI服务商为您提供AI服务。
                         </div>
                     </div>
 
-                    <div className="border-top  padding-h-10">
-                        <div data-toggle className="cursor flex bold f-18 text-1 gap-b-5">
-                            <span className="flex-auto"><S text="诗云AI有免费试用版吗">诗云AI有免费试用版吗？</S></span>
-                            <Icon style={{ transform: 'rotate(90deg)' }} className={'ts flex-fixed remark cursor'} icon={ChevronDownSvg}></Icon>
+                    <div className="border-top padding-t-10 padding-b-20">
+                        <div data-toggle className="flex b-500 f-18 text-1 gap-b-5 cursor">
+                            <span className="flex-auto">
+                                诗云AI是如何定价收费的？
+                            </span>
+                            <span data-toggle-icon style={{ transform: 'rotate(90deg)' }} className="ts flex-fixed size-20 flex-center round item-hover">
+                                <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
+                            </span>
                         </div>
-                        <div style={{ display: 'none' }} className="remark f-14 l-24">
-                            <Sp text="诗云AI有免费试用版吗-answer">诗云AI支持一定的免费体验额度，如你需要大量使用，建议充值。<br /></Sp>
+                        <div className="remark f-14 l-24">
+                            诗云AI目前是按消耗的tokens计量收费的。<br />
+                            如果您买了诗云的个人版、协作版 会有默认的tokens，如果您的tokens用完了，会按照tokens的价格进行收费。
                         </div>
                     </div>
+
+                    <div className="border-top padding-t-10 padding-b-20">
+                        <div data-toggle className="flex b-500 f-18 text-1 gap-b-5 cursor">
+                            <span className="flex-auto">
+                                诗云AI提供免费的AI吗？
+                            </span>
+                            <span data-toggle-icon style={{ transform: 'rotate(90deg)' }} className="ts flex-fixed size-20 flex-center round item-hover">
+                                <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
+                            </span>
+                        </div>
+                        <div className="remark f-14 l-24">
+                           我们会集成第三方免费的AI服务商，给您提供免费的AI服务。
+                        </div>
+                    </div>
+
 
                 </div>
 

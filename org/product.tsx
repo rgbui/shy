@@ -41,9 +41,9 @@ export function ProductView() {
         <div className="shy-site-block">
             <div>
                 <div className="padding-t-50">
-                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S text='知识社区协作生产力工具'>一体化的知识协作工作台</S></h1>
+                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} >一体化的知识协作工作台</h1>
                     <p className="flex-center remark text-center f-24">
-                        <Sp text='知识社区协作生产力工具-description'>以知识管理、沟通互动、AI协作的方式，为个人及团队提供<br />一站式知识协作工作台，服务好自已的受众群体</Sp>
+                        以知识管理、沟通互动、AI协作的方式，为个人及团队提供<br />一站式知识协作工作台，服务好自已的受众群体
                     </p>
                     <p className="flex-center gap-h-10">
                         <a href="sign/in"
@@ -75,7 +75,7 @@ export function ProductView() {
             <div className="padding-h-50">
                 <h2 className="flex-center gap-t-40 f-36" ><span className="bold"><Sp text='文档数据表白板PPT'>文档&nbsp;数据表&nbsp;白板&nbsp;PPT</Sp></span></h2>
                 <div className="flex-center gap-h-20 remark f-24">
-                    <S text='你的一体化知识系统'>你的一体化知识系统，高度融合写作、计划、创作、表达，释放你的创造力。</S>
+                    你的一体化知识系统，高度融合写作、计划、创作、表达，释放你的创造力。
                 </div>
 
                 <div className="flex-full flex-auto-mobile-wrap r-padding-l-20 r-padding-t-20 r-w50">
@@ -84,7 +84,7 @@ export function ProductView() {
 
                         <div className="flex r-gap-r-10" style={getTypeColor('page')} ><Icon size={48} icon={PageSvg}></Icon><span style={{ fontSize: 40 }}><S>文档</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
-                            <Sp text='doc-site-description'>简单 强大 美丽的乐高积木式<br />使用灵活的内容块 <br />更有效的进行协作编辑</Sp>
+                            灵活的内容块<br />更有效的进行协作编辑
                         </div>
 
                         <div className="padding-t-20 h-300 relative overflow-hidden">
@@ -96,7 +96,7 @@ export function ProductView() {
                     <div className="shy-site-block-card gap-l-10  gap-b-20">
                         <div className="flex r-gap-r-10" style={getTypeColor('datatable')}><Icon size={48} icon={{ name: 'byte', code: 'trace' }}></Icon><span style={{ fontSize: 40 }}><S>数据表</S></span></div>
                         <div className="text-1 f-14 l-20  gap-t-10" >
-                            <Sp text='database-site-description'>自定义数据流，按需定制你的专属业务系统。<br />丰富组件、灵活搭建<br />管理任何类型的项目，无论团队或规模如何。</Sp>
+                            自定义数据流，按需定制你的专属业务系统。<br />管理任何类型的项目，无论团队或规模如何。
                         </div>
                         <div className="padding-t-20 h-300 relative overflow-hidden">
                             <img alt="自定义数据流，按需定制你的专属业务系统" className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/pic-5.png' />
@@ -110,9 +110,8 @@ export function ProductView() {
                     <div className="shy-site-block-card gap-r-10 gap-b-20">
                         <div className="flex r-gap-r-10" style={getTypeColor('whiteboard')}><Icon size={48} icon={{ name: 'bytedance-icon', code: 'enter-the-keyboard' }}></Icon><span style={{ fontSize: 40 }}><S>白板</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
-                            <Sp text='whiteboard-site-description'>无限画布，无限创意<br />
-                                开创性地一起思考、计划和创造<br />
-                                将您的想法变为现实</Sp>
+                            无限画布，无限创意<br />
+                            将您的想法变为现实
                         </div>
                         <div className="padding-t-20 h-300 relative overflow-hidden">
                             <img alt="无限画布，无限创意" className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/board.png' />
@@ -121,9 +120,8 @@ export function ProductView() {
 
                     <div className="shy-site-block-card gap-l-10 gap-b-20">
                         <div className="flex r-gap-r-10" style={getTypeColor('ppt')}><Icon size={48} icon={DocCardsSvg}></Icon><span className="f-40 text-linear-gradient">PPT</span></div>
-                        <div className="text-1 f-14 l-20 gap-t-10" ><Sp text='ppt-site-description'>精美优雅 新一代幻灯片PPT<br />
-                            简洁、直观、互动 且品牌化 <br />
-                            超越文字和无聊的剪贴画的墙壁。</Sp>
+                        <div className="text-1 f-14 l-20 gap-t-10" >精美优雅 新一代幻灯片PPT<br />
+                            简洁、直观、互动、品牌化且超越文字
                         </div>
                         <div className="padding-t-20 h-300 relative overflow-hidden">
                             <img className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/pic-7.png' />
@@ -146,7 +144,7 @@ export function ProductView() {
                     <div className="w50  gap-b-20 round-8  shy-site-block-card bg-white gap-r-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('channel')} ><Icon size={48} icon={BoardToolFrameSvg}></Icon><span style={{ fontSize: 40 }}><S>频道</S></span></div>
                         <div className="text-1 f-14 l-20 gap-t-10" >
-                            <S text='使用诗云频道聊天随时随地即时联系并保持互动'>使用 诗云 频道聊天，随时随地即时联系并保持互动</S><br />
+                            使用 诗云 频道聊天，随时随地即时联系并保持互动<br />
                         </div>
                         <div className="padding-t-20 h-300 relative overflow-hidden">
                             <img className="pos h-600 border round-16 shadow-s  obj-top" src='static/img/fr.png' />
@@ -199,7 +197,7 @@ export function ProductView() {
                         </div>
                     </div>
                     <div className="w65 gap-l-30">
-                        <img className="w100 obj-center  shy-site-block-card" src='static/img/pic.png' />
+                        <img className="w100 obj-center  shy-site-block-card" src='static/img/doc/doc-collaboration.png' />
                     </div>
                 </div>
             </div>

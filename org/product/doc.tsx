@@ -22,7 +22,8 @@ export var ProductDocView = observer(function ()
                 <div className="flex-fixed">
                     <h1 className="f-64" >新一代的笔记和文档</h1>
                     <p className="text-1 f-20 gap-b-20" style={{ lineHeight: '36px' }}>
-                        简单、强大、美丽。<br />借助诗云的灵活构建模块，更高效地沟通。
+                    灵活的构建块，更高效地沟通<br />
+                    挥洒创意无拘束，交流协作如丝滑，效率提升，灵感不间断
                     </p>
                     <div>
                         <a href={UrlRoute.getUrl('/sign/in')}
@@ -277,6 +278,17 @@ export var ProductDocView = observer(function ()
                 </div>
             </div>
 
+        </div>
+
+        <div className="shy-site-block padding-h-80">
+            <h1 className="f-48 flex-center">新一代的笔记和文档</h1>
+            <p className="text-1 f-18 gap-b-20 flex-center">灵活构建模块，更高效地沟通。</p>
+            <div className="flex-center">
+                <a href={UrlRoute.getUrl('/sign/in')}
+                    className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
+                >免费使用</a>
+            </div>
+            <div className="h-80"></div>
         </div>
 
         <div className="shy-site-block h-80"></div>

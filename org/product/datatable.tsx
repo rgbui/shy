@@ -37,7 +37,7 @@ export var ProductDataTable = observer(function () {
         <div className="shy-site-block   padding-h-80">
             <div>
                 <h1 className="flex padding-h-30 flex-center f-48">诗云数据表有什么能力？</h1>
-                <p className="text-1 f-16 gap-b-20">
+                <p className="text-1 f-16 gap-b-20 flex-center">
                     注意！诗云数据表不是表格，而是将复杂的IT系统，做到傻瓜操作， 无需掌握复杂的公式或者函数计算，即学即用，不论背景，轻松上手
                 </p>
                 <div className="border round-16  padding-20 ">
@@ -135,7 +135,7 @@ export var ProductDataTable = observer(function () {
             <div>
                 <div className="relative">
                     <h1 className="flex padding-h-30 flex-center f-48">高级统计轻松处理复杂数据、千万数据</h1>
-                    <p className="text-1 flex-center f-14  f-18">
+                    <p className="text-1 flex-center  f-18">
                         高级统计内置 BI 能力，图表类型丰富，可结合视图对复杂数据、大数据快速完成统计分析。
                     </p>
                     <div className="gap-h-20">
@@ -159,23 +159,23 @@ export var ProductDataTable = observer(function () {
         </div>
 
         <div className="shy-site-block">
-            <div style={{
-                backgroundImage: 'url(../static/img/db/datatable-pic-2.png)',
+            <div className="flex-center" style={{
+                backgroundImage: 'url(../static/img/db/work-flow.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
-                height: 450
+                height: 600
             }}>
                 <div className="padding-20  relative w-500 h-120">
-                    <div className="pos round w100 h100" style={{
+                    <div className="pos  round w100 h100" style={{
                         zIndex: 1,
-                        backgroundColor: 'rgba(0,0,0,.6)'
+                        backgroundColor: 'rgba(0,0,0,.7)'
                     }}></div>
                     <div className="pos round border-box padding-w-10 w100 h100  text-white " style={{
                         zIndex: 2
                     }} >
                         <h1>我们如何帮助您的业务增长？</h1>
-                        <p>我们的技术帮助人们创造更好的工作、生活、公司和社区。</p>
+                        <p>诗云 shy.live 帮助人们创造更好的工作、生活、公司和社区。</p>
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@ export var ProductDataTable = observer(function () {
         <div className="shy-site-block   padding-h-80">
             <div>
                 <h1 className="flex padding-h-30 flex-center f-48">丰富多样的应用场景</h1>
-                <p className="text-1 flex-center f-14">诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
+                <p className="text-1 flex-center f-16">诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
 
 
                 <div className="flex flex-full col-3-g20 gap-h-20 r-border-box">
@@ -232,12 +232,23 @@ export var ProductDataTable = observer(function () {
                     <div style={{ display: local.index == 2 ? "block" : 'none' }}><img alt="客户关系管理" className="w100 border round-16 shadow-s" src={'../static/img/db/db-1.png'} /></div>
 
                     <div style={{ display: local.index == 3 ? "block" : 'none' }}><img alt="进销存管理" className="w100 border round-16 shadow-s" src={'../static/img/db/db-4.png'} /></div>
-                    <div style={{ display: local.index == 4 ? "block" : 'none' }}><img alt="数据统计分析" className="w100 border round-16 shadow-s" src={'../static/img/db/db-charts.png'}/></div>
+                    <div style={{ display: local.index == 4 ? "block" : 'none' }}><img alt="数据统计分析" className="w100 border round-16 shadow-s" src={'../static/img/db/db-charts.png'} /></div>
                     <div style={{ display: local.index == 5 ? "block" : 'none' }}><img alt="零代码搭建应用" className="w100 border round-16 shadow-s" src={'../static/img/db/db-3.png'} /></div>
                 </div>
 
             </div>
 
+        </div>
+
+        <div className="shy-site-block padding-h-80">
+            <h1 className="f-48 flex-center">智能表格 + 工作流 + 应用搭建</h1>
+            <p className="text-1 f-16 gap-b-20 flex-center"> 一体化数字化平台，让您的团队比以前更快、更自信地工作。</p>
+            <div className="flex-center">
+                <a href={UrlRoute.getUrl('/sign/in')}
+                    className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
+                >免费使用</a>
+            </div>
+            <div className="h-80"></div>
         </div>
 
 
