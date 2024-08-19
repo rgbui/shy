@@ -11,7 +11,7 @@ import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { PageLayoutType, getPageText } from "rich/src/page/declare";
 import { AtomPermission, getCommonPermission, getDenyPermission } from "rich/src/page/permission";
-import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, PlusAreaSvg,TrashSvg } from "rich/component/svgs";
+import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, PlusAreaSvg, TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Confirm } from "rich/component/lib/confirm";
@@ -172,8 +172,7 @@ export class PageItem {
         for (var n in data) {
             if (n == 'childs') {
                 this.childs = [];
-                if (data.childs.length > 0)
-                    this.checkedHasChilds = true;
+                if (data.childs.length > 0) this.checkedHasChilds = true;
                 data.childs.each(child => {
                     var item = new PageItem();
                     item.load(child);
