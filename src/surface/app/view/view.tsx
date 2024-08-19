@@ -39,9 +39,9 @@ export var SurfacePage = observer((props: { pathname: string }) => {
     }, [props.pathname]);
     if (surface.accessPage == 'forbidden') return <ViewNotAllow></ViewNotAllow>
     else if (surface.accessPage == 'notFound' || surface.accessPage == 'netError') {
-        return <div>
-            <div className='flex-center flex-auto v100'>
-                <div className='w-500' >
+        return <div className="w100">
+            <div className='flex-center w100  v100'>
+                <div className='w-500' style={{ marginTop: 100 }} >
                     <div className="h2 flex-center"><S>空间页面访问出错</S></div>
                     <Divider ></Divider>
                     <div className="gap-t-10">

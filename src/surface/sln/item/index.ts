@@ -10,8 +10,8 @@ import { computed, makeObservable, observable, runInAction } from "mobx";
 import { pageItemStore } from "./store/sync";
 import { channel } from "rich/net/channel";
 import { PageLayoutType, getPageText } from "rich/src/page/declare";
-import { AtomPermission, getCommonPermission, getDenyPermission, getEditOwnPerssions, mergeAtomPermission } from "rich/src/page/permission";
-import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, MoveToSvg, PlusAreaSvg, PlusSvg, RenameSvg, SeoFolderSvg, TrashSvg } from "rich/component/svgs";
+import { AtomPermission, getCommonPermission, getDenyPermission } from "rich/src/page/permission";
+import { DuplicateSvg, FolderCloseSvg, FolderOpenSvg, FolderPlusSvg, LinkSvg, LogoutSvg, PlusAreaSvg,TrashSvg } from "rich/component/svgs";
 import { CopyText } from "rich/component/copy";
 import { ShyAlert } from "rich/component/lib/alert";
 import { Confirm } from "rich/component/lib/confirm";
@@ -24,8 +24,6 @@ import { useInputIconAndText } from "rich/component/view/input/iconAndText";
 import { UA } from "rich/util/ua";
 import { PopoverPosition } from "rich/component/popover/position";
 import lodash from "lodash";
-import { WorkspaceRole } from "rich/types/user";
-import { S } from "rich/i18n/view";
 
 export class PageItem {
     id: string = null;
