@@ -9,8 +9,6 @@ import { GlobalLinkSvg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
 
 export class FooterView extends React.Component {
-    componentDidMount(): void {
-    }
     render(): React.ReactNode {
         return <div className="shy-site-footer padding-gap">
             <div className="max-w-400">
@@ -88,7 +86,7 @@ export class FooterView extends React.Component {
             </div>
             {!config.isUS && <div>
                 <h4><S>联系我们</S></h4>
-                <img className="size-100" src={UrlRoute.getUrl('static/img/contact.jpeg')} />
+                <img className="size-100" src={UrlRoute.getUrl('static/img/contact.jpg')} />
                 <br /><span><S>微信群二维码</S></span>
                 <br />
                 <br />
