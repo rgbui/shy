@@ -28,3 +28,8 @@
 [YJS](https://github.com/yjs/yjs)
 [primus](https://github.com/primus/primus)
 
+
+各位早上好，[抱拳] 阚海 上海，连续创业者，原仙工智能自动化负责人
+专注于协作办公、Web3、agent自动化。
+我们目前在做知识协作办公类的产品(notion)，办公不是写写文档、ppt，是能直接开展业务，做自已的小生意。
+产品支持本地及私有云，功能无限制，上线后，欢迎各位体验[抱拳]

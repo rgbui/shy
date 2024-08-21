@@ -89,10 +89,10 @@ export function HeadView() {
                             <a href={UrlRoute.getUrl("product/ai")} ><span className="size-24 flex-center gap-r-5" style={getTypeColor('ai')}><Icon size={24} icon={AiStartSvg}></Icon></span><span className="text b-500"><S>AI</S></span><span className="remark flex-auto flex-end padding-r-10"><S >协作</S></span></a>
 
                         </div>
-                        <div className="remark f-12   padding-l-10 gap-t-10  gap-b-10 "><S>自定义社交网络</S></div>
+                        <div className="remark f-12   padding-l-10 gap-t-10  gap-b-10 ">自定义社区圈子</div>
                         <div className="r-padding-h-5  r-gap-h-5  r-padding-l-10    r-round r-cursor r-item-hover r-flex r-text-1 f-14">
                             <a href={UrlRoute.getUrl("product/channel")} ><span className="size-24 flex-center gap-r-5" style={getTypeColor('channel')}><Icon size={24} icon={BoardToolFrameSvg}></Icon></span><span className="text b-500"><S>频道</S></span><span className="remark flex-auto flex-end padding-r-10"><S text='沟通-名词'>沟通</S></span></a>
-                            <a href={UrlRoute.getUrl("product/channel")} ><span className="size-24 flex-center gap-r-5" style={getTypeColor('friends-circle')}><Icon size={24} icon={{ name: 'bytedance-icon', code: 'friends-circle' }}></Icon></span><span className="text b-500"><S>社群</S></span><span className="remark flex-auto flex-end padding-r-10"><S text='互动-名词'>互动</S></span></a>
+                            <a href={UrlRoute.getUrl("product/channel")} ><span className="size-24 flex-center gap-r-5" style={getTypeColor('friends-circle')}><Icon size={24} icon={{ name: 'bytedance-icon', code: 'friends-circle' }}></Icon></span><span className="text b-500"><S>社群</S></span><span className="remark flex-auto flex-end padding-r-10">圈子</span></a>
                         </div>
                     </div>
                 </div>

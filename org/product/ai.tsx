@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowRightSvg, ChevronDownSvg, Edit1Svg } from "rich/component/svgs";
 import { Icon } from "rich/component/view/icon";
-import { S, Sp } from "rich/i18n/view";
+import { S } from "rich/i18n/view";
 import { UrlRoute } from "../../src/history";
 import { config } from "../../common/config";
 import { getTypeColor } from "../util";
@@ -42,34 +42,34 @@ export function AiView() {
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={Edit1Svg}></Icon></div>
                             <div className="h3">修复拼写和语法</div>
-                            <div>修复拼写错误、语法错误</div>
+                            <div className="f-16 text-1">修复拼写错误、语法错误</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-w-5">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'translation' }}></Icon></div>
                             <div className="h3">翻译</div>
-                            <div>现在你可以用日语、西班牙语、德语等语言写作。</div>
+                            <div className="f-16 text-1">现在你可以用日语、西班牙语、德语等语言写作。</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'topic' }}></Icon></div>
                             <div className="h3">润色</div>
-                            <div>以不同的语言风格重写你的提案。</div>
+                            <div className="f-16 text-1">以不同的语言风格重写你的提案。</div>
                         </div>
                     </div>
                     <div className="flex flex-full flex-auto-mobile-wrap">
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-r-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'double-right' }}></Icon></div>
                             <div className="h3">变短或变长</div>
-                            <div>在不损失语义的情况下将内容加长或变短。</div>
+                            <div className="f-16 text-1">在不损失语义的情况下将内容加长或变短。</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-w-5">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'voice-one' }}></Icon></div>
                             <div className="h3">解释</div>
-                            <div>为每个人解释专有术语。</div>
+                            <div className="f-16 text-1">为每个人解释专有术语。</div>
                         </div>
                         <div className="w33  gap-b-20 round-8 padding-14 shy-site-block-card bg-white gap-l-10">
                             <div style={getTypeColor('ai')}><Icon size={30} icon={{ name: 'bytedance-icon', code: 'good-one' }}></Icon></div>
                             <div className="h3">使用更简单的语言</div>
-                            <div>使你的提案变的更易理解。</div>
+                            <div className="f-16 text-1">使你的提案变的更易理解。</div>
                         </div>
                     </div>
                 </div>
@@ -182,8 +182,8 @@ export function AiView() {
                             </span>
                         </div>
                         <div className="remark f-14 l-24">
-                            诗云AI目前使用了 DeepSeek、智谱、文言一心 <br />
-                            诗云AI会根据您的使用情况，选择最有性价比的AI服务商为您提供AI服务。
+                            诗云AI目前集成了 DeepSeek、智谱、文言一心 <br />
+                            诗云AI会根据大家的使用情况，选择最有性价比的AI服务商为您提供AI服务。
                         </div>
                     </div>
 
