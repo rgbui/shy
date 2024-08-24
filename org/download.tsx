@@ -94,8 +94,8 @@ export function DownloadView() {
                             <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
                         </span>
                     </div>
-                    <div className="remark f-14 l-24">
-                        我们认为产品最大价值在于更多的人使用它。在不大幅增加成本的情况下，我们很乐意的去支持大家对诗云的使用。
+                    <div className="remark f-16 l-24">
+                        我们坚信产品的价值在于广泛使用。在成本可控的前提下，我们乐意支持大家充分利用诗云。
                     </div>
                 </div>
                 <div className="border-top padding-t-10 padding-b-20">
@@ -109,8 +109,8 @@ export function DownloadView() {
                         </span>
 
                     </div>
-                    <div className="remark f-14 l-24" >
-                        建议你参考我们的<a style={{ textDecoration: 'underline', color: 'inherit' }} href='https://help.shy.live'>诗云产品帮肋文档</a>,或加我们用户群，或者你到我们的<a style={{ textDecoration: 'underline', color: 'inherit' }} href='https://community.shy.live/' target="_blank">云云社区</a>提问，我们会尽力帮助你解决问题。
+                    <div className="remark f-16 l-24" >
+                        建议你参考我们的<a className="link" href='https://help.shy.live'>诗云产品帮肋文档</a>,或加我们用户群，或者你到我们的<a className="link" href='https://community.shy.live/' target="_blank">云云社区</a>提问，我们会尽力帮助你解决问题。
                     </div>
                 </div>
 
@@ -123,9 +123,9 @@ export function DownloadView() {
                             <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
                         </span>
                     </div>
-                    <div className="remark f-14 l-24" style={{ display: 'none' }}>
-                        下载我们的诗云客户端，安装Mongodb，开启本地存储，享受与云端一样的体验。<br />
-                        只是额外安装Mongodb数据库，仅安装一次，一路的默认下去，操作非常简单，详细操作参考<a style={{ textDecoration: 'underline', color: 'inherit' }} href='https://help.shy.live/page/2174' target="_blank">诗云客户端安装手册</a><br />
+                    <div className="remark f-16 l-24" style={{ display: 'none' }}>
+                        安装诗云客户端，并一次性配置Mongodb本地存储，即可享受与云端同步的体验。
+                        默认设置即可轻松完成Mongodb安装，具体步骤详见<a className="link" href='https://help.shy.live/page/2174' target="_blank">客户端安装指南</a>。
                     </div>
                 </div>
 
@@ -138,9 +138,9 @@ export function DownloadView() {
                             <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
                         </span>
                     </div>
-                    <div className="remark f-14 l-24" style={{ display: 'none' }}>
-                        我们提供了诗云服务端，您可以找台空闲的windows电脑或在阿里云租台windows服务器，按着相应的要求安装诗云服务端即可。<br />
-                        详细操作请参考<a style={{ textDecoration: 'underline', color: 'inherit' }} href='https://help.shy.live/page/295' target="_blank">诗云服务端安装教程</a>
+                    <div className="remark f-16 l-24" style={{ display: 'none' }}>
+                        我们提供诗云服务端，您可在闲置Windows电脑或阿里云租赁的Windows服务器上，按指示完成安装。<br />
+                        详细操作请参考<a className="link" href='https://help.shy.live/page/295' target="_blank">诗云服务端安装教程</a>
                     </div>
                 </div>
 
@@ -153,10 +153,11 @@ export function DownloadView() {
                             <Icon className={'  remark cursor'} icon={ChevronDownSvg}></Icon>
                         </span>
                     </div>
-                    <div className="remark f-14 l-24" style={{ display: 'none' }}>
-                        不管是本地还是私有云，都需要联网，因为诗云的帐号是统一的。<br />
-                        产品功能上没有什么特别的限制，我们是按着消耗的云端资源来收费的。<br />
-                        如果您的本地资源足够，那么您可以无限制的使用诗云的功能。
+                    <div className="remark f-16 l-24" style={{ display: 'none' }}>
+                        无论是本地还是私有云，均需联网使用统一的诗云账号，避免大量的重复注册。<br />
+                        产品功能无特殊限制，按云端资源消耗计费。<br />
+                        本地资源充足时，诗云功能可无限使用。
+
                     </div>
                 </div>
 

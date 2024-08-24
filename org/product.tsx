@@ -8,6 +8,7 @@ import { PricingValue } from "./common/pricing";
 import { getTypeColor } from "./util";
 import { UrlRoute } from "../src/history";
 import { PubBusinessView } from "./common/business";
+import { isMobileOnly } from "react-device-detect";
 
 /***
  * 
@@ -55,7 +56,7 @@ export function ProductView() {
                         </a>
                     </p>
                     <div className="gap-h-30 flex-center  relative">
-                        <img style={{ width: '100%', borderRadius: 24 }} alt="一体化的知识协作工作台" className="shy-site-block-card round-16 obj-center " src={UrlRoute.getUrl("static/img/pic-product-1.png")} />
+                        <img style={{ width: '100%', borderRadius: isMobileOnly ? 16 : 24 }} alt="一体化的知识协作工作台" className="shy-site-block-card round-16 obj-center " src={UrlRoute.getUrl("static/img/pic-product-1.png")} />
                         {/* <div className="pos site-mobile-pic">
                             <img style={{ width: 220 }} src={UrlRoute.getUrl('static/img/mobile-1.png')} />
                             <img src='static/img/mobile-content.png' className="pos" style={{
@@ -307,7 +308,7 @@ export function ProductView() {
                     实时沟通互动
                 </h2>
 
-                <div className="flex-center  gap-h-20 remark f-20">输出你的影响力，一起打造有个性的交流社区</div>
+                <div className="flex-center  gap-h-20 remark f-20">输出你的影响力，一起打造有个性的交流区</div>
                 <div className="flex flex-full flex-auto-mobile-wrap r-padding-l-20 r-padding-t-20">
                     <div className="w50  gap-b-20 round-8  shy-site-block-card bg-white gap-r-10">
                         <div className="flex r-gap-r-10" style={getTypeColor('channel')} ><Icon size={48} icon={BoardToolFrameSvg}></Icon><span style={{ fontSize: 40 }}><S>频道</S></span></div>

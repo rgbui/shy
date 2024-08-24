@@ -3,6 +3,7 @@ import React from "react";
 import { Icon } from "rich/component/view/icon";
 import { getTypeColor } from "../util";
 import { AiStartSvg, SearchSvg } from "rich/component/svgs";
+import { isMobileOnly } from "react-device-detect";
 
 
 export function SiteFeatures(props: { small?: boolean }) {
@@ -48,7 +49,7 @@ export function SiteFeatures(props: { small?: boolean }) {
         <div className="h-20"></div>
 
         <div
-            className="flex flex-top shy-site-block-card padding-10 round"
+            className="flex flex-top flex-auto-mobile-wrap shy-site-block-card padding-10 round"
         >
             <div className="flex-fixed w-350 gap-r-10">
 
@@ -346,7 +347,7 @@ export function SimpleFeatures() {
             一体化模块设计，灵活应对个人知识管理、团队协作及社区交流的多样化需求。
         </div>
         <div className="h-20"></div>
-        <div className="flex flex-top">
+        <div className="flex flex-top flex-auto-mobile-wrap">
             <div className="flex-fixed">
                 <div className={"round cursor gap-r-10 gap-b-10 padding-10 " + (index == 0 ? "item-hover-light-focus" : "")} onMouseDown={e => {
                     setIndex(0);
@@ -459,11 +460,12 @@ export function AiFeatures() {
                     height: 383,
                     overflow: 'hidden'
                 }}>
-                    <img alt="AI智能搜索" className="w500 pos "
+                    <img alt="AI智能搜索" className="w500 pos mobile-hide"
                         style={{
                             top: -70,
                             left: -225,
                             width: 1000,
+                            display:isMobileOnly?'none':'block'
                         }}
                         src={'static/img/ai/so.png'} />
                 </div>

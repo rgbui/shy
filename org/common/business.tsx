@@ -12,7 +12,7 @@ export function PubBusinessView() {
             从知识管理到数字化运营，笔记软件集组织、同步、编辑、分享、个性化于一体，让你的生意更灵活
         </div>
 
-        <div className="flex-center-full   flex-auto-mobile-wrap col-3-g20">
+        <div className="flex-center-full   flex-auto-mobile-wrap r-gap-b-20 col-3-g20">
 
             <div className="shy-site-block-card padding-20 box-border">
                 <div className="flex-center">
