@@ -11,9 +11,9 @@ export function AiView() {
     return <div>
         <div className="shy-site-block">
             <div>
-                <div className="padding-t-50">
-                    <h1 className={"flex-center " + (config.isUS ? " f-60" : 'f-72')} ><S>诗云AI，智慧的墨水</S></h1>
-                    <p className="flex-center remark text-center f-24">
+                <div className="padding-h-80">
+                    <h1 style={{ margin: 0 }} className={"flex-center f-64" } >诗云AI，智慧的墨水</h1>
+                    <p className="flex gap-h-30 remark f-20 l-24 flex-center">
                         跨越写作的边界，编织创作的纽带，在设计的海洋里，
                         <br />链接每一份灵感，让智慧如流水般自由涌动
                     </p>
@@ -29,7 +29,7 @@ export function AiView() {
         </div>
 
         <div className="shy-site-block">
-            <div className="padding-h-50">
+            <div className="padding-h-80">
 
                 <h1 className="f-32 flex-center">提高写作水平，让你写作更加自信</h1>
                 <div className="gap-h-20 w100  round-16    border shadow-s  bg-white" >
@@ -77,9 +77,9 @@ export function AiView() {
         </div>
 
         <div className="shy-site-block">
-            <div className="padding-h-50">
-                <div className="shy-site-block-head flex-center">增强你的创造力</div>
-                <div className="remark flex-center">克服写作障碍,让诗云AI帮你提供思路</div>
+            <div className="padding-h-80">
+                <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>增强你的创造力</h1>
+                <div className="flex-center gap-h-20 remark f-20">克服写作障碍,让诗云AI帮你提供思路</div>
                 <div>
                     <div className="shy-site-block-card bg-white padding-w-14 round-8 gap-h-20">
                         <img alt="AI写作" className="w100 round-16 obj-center" src={'../static/img/ai/text-5.png'} />
@@ -110,9 +110,9 @@ export function AiView() {
 
 
         <div className="shy-site-block">
-            <div className="padding-h-50">
-                <div className="shy-site-block-head flex-center">AI智能搜索</div>
-                <div className="remark flex-center">
+            <div className="padding-h-80">
+            <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>AI智能搜索</h1>
+                <div className="flex-center gap-h-20 remark f-20">
                     问答功能利用您 文档中的信息来帮助您开展工作。您只需提出问题即可。
                 </div>
 
@@ -132,10 +132,10 @@ export function AiView() {
                     <S>常见问题</S>
                 </h1>
 
-                <h3 className="text-center f-16 remark"><S text='如仍然有问题请至'>如仍然有问题，请至</S><a style={{
+                <h3 className="flex-center gap-h-20 remark f-20">如仍然有问题，请至<a style={{
                     color: 'inherit',
                     textDecoration: 'underline'
-                }} href={config.isUS ? "https://community.shy.red" : 'https://community.shy.live'}><S>云云社区</S></a><S>联系</S></h3>
+                }} href={config.isUS ? "https://community.shy.red" : 'https://community.shy.live'}>云云社区</a>联系</h3>
 
                 <div className="r-gap-b-10">
 
@@ -212,7 +212,7 @@ export function AiView() {
                             </span>
                         </div>
                         <div className="remark f-14 l-24">
-                           我们会集成第三方免费的AI服务商，给您提供免费的AI服务。
+                            我们会集成第三方免费的AI服务商，给您提供免费的AI服务。
                         </div>
                     </div>
 

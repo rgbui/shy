@@ -1,6 +1,6 @@
 {
   "name": "shy",
-  "version": "0.9.357-pro",
+  "version": "0.9.358-pro",
   "sync_version": "0.8.64-pro",
   "server_version": "0.8.24-pro",
   "client_version": "0.8.28-pro",
@@ -45,7 +45,8 @@
     "react-router-dom": "^5.2.0",
     "rich": "file:../rich",
     "short-uuid": "^4.1.0",
-    "spark-md5": "^3.0.1"
+    "spark-md5": "^3.0.1",
+    "tinycolor2": "^1.6.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^7.0.0",

@@ -39,46 +39,16 @@ export function HeadView() {
     return <div className="shy-site-head ">
         <a className="w-120 flex-center flex-fixed" href={UrlRoute.getUrl()}>
             <span className="flex">
-                <img className="size-50" src={UrlRoute.getUrl('static/img/shy.logo.256.png')} />
-                <img className="h-25" src={UrlRoute.getUrl(config.isUS ? 'static/img/shy.png' : 'static/img/shy.text.png')} />
+                <img style={{
+                    height: 50
+                }} src={UrlRoute.getUrl(config.isUS ? 'static/img/shy.red.svg' : 'static/img/shy.live.svg')} />
             </span>
         </a>
         <div className="shy-site-head-navs flex">
             <div className="relative visible-hover h-40 flex-center">
                 <div className="shy-site-head-navs-item"><span className="flex"><S>产品</S><span className="gap-l-5"><Icon size={12} icon={ChevronDownSvg}></Icon></span></span></div>
                 <div className="shy-site-head-navs-pop shadow-s visible pos  max-vw90 flex-top padding-10 " style={{ width: 210, top: 40, left: 10 }}>
-                    {/* <div className="w60" >
-                        <div className="remark f-14 padding-l-10 "><S>为什么选择诗云</S></div>
-                        <div className="gap-h-10 r-item-hover r-padding-h-5 r-gap-h-10 r-padding-w-10 r-round r-cursor">
-                            <a className="flex-top" href={UrlRoute.getUrl('product/ai')}>
-                                <span className="flex-fixed flex-center  size-40 " style={getTypeColor('ai')}><Icon icon={AiStartSvg} size={45}></Icon></span>
-                                <span className="flex-auto gap-l-10">
-                                    <span className="text b-500 f-16"><S>诗云 AI</S></span>
-                                    <span className="block remark f-14"><Sp text='why-select你的私人AI写作肋手'>你的私人AI写作肋手，带给你全新的休验</Sp></span>
-                                </span>
-                            </a>
-                            <a className="flex-top" href={UrlRoute.getUrl('pricing')}>
-                                <span className="flex-fixed flex-center size-40 "><img className="size-40" src={UrlRoute.getUrl('static/img/fuli.svg')} /></span>
-                                <span className="flex-auto  gap-l-10">
-                                    <span className="text b-500 f-16"><S>免费又省钱</S></span>
-                                    <span className="block remark f-14">
-                                        <Sp text='why-select本地及私有化部署免费'>本地及私有化部署免费，云端按量计费，功能无限制</Sp>
-                                    </span>
-                                </span>
-                            </a>
-                            <a className="flex-top" href={'/'}>
-                                <span className="flex-fixed flex-center  size-40 ">
-                                    <img className="size-40" src={UrlRoute.getUrl('static/img/save-money.svg')} />
-                                </span>
-                                <span className="flex-auto  gap-l-10">
-                                    <span className="text b-500 f-16"><S>赚钱计划</S></span>
-                                    <span className="block remark f-14"><Sp text='why-select站式社区协作平台'>一体化知识协作工作台，积累知识、沟通互动、维护关系，做自已的小生意，赚更多的钱。</Sp></span>
-                                </span>
-                            </a>
-                        </div>
-                    </div> */}
                     <div className="w100">
-
                         <div className="remark f-12 padding-l-10 gap-b-10 "><S>一体化知识系统</S></div>
                         <div className="r-padding-h-5 r-gap-h-5 r-padding-l-10     r-round r-cursor r-item-hover r-flex r-text-1 f-14">
 

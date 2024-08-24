@@ -5,6 +5,7 @@ import { S, Sp } from "rich/i18n/view";
 import { config } from "../../common/config";
 import { UrlRoute } from "../../src/history";
 import { MEAL_1_PRICE, MEAL_2_PRICE } from "../../src/component/pay/select";
+import tinycolor2 from "tinycolor2";
 
 export function PricingValue(props: {
     small?: boolean,
@@ -20,15 +21,19 @@ export function PricingValue(props: {
             <div className="gap-r-10 gap-b-20 w40 r-gap-b-10 shy-site-block-card" >
                 <div className={" shy-site-block-head h-40   flex r-gap-r-5 "} ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/local.svg')} /><span className={"f-28"}><S>本地及私有云免费</S></span></div>
                 <div className="f-18 text-1 l-22 " style={{ height: props.small ? 80 : undefined }} >
-                  全力支持本地及私有云部署(包括局域网）
+                    全力支持本地及私有云部署(包括局域网）
                 </div>
                 <div className={"bold " + (props.small ? "f-16" : "f-20")}><S>信任</S></div>
                 <div className="r-gap-b-10" >
                     <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><S text='无功能限制无广告无歧视'>无功能限制、无广告、无歧视</S></div>
                     <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><S>支持私有云多人协作</S></div>
                     <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span><Sp text='安装诗云服务端安装在那里，数据存那里'>安装<a href='download' style={{ color: 'inherit', textDecoration: 'underline' }}>诗云服务端</a>，安装在那里，数据存那里</Sp></div>
-                    <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span>我们想让更多的人用上诗云，仅此而已</div></div>
-                {props.isNav && <div className=" flex gap-t-20"><a className="flex padding-w-14 padding-h-5 round-8 cursor text-white" style={{ background: '#0BDCC0' }} href={UrlRoute.getUrl('/pricing')}>了解详情<Icon className={'gap-l-10'} size={16} icon={{name:'byte',code:'arrow-right'}}></Icon></a></div>}
+                    <div className=" f-14 l-20 text-1 flex-top"> <span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span>我们想让更多的人用上诗云，仅此而已</div>
+                </div>
+                {props.isNav && <div className=" flex gap-t-20"><a className="flex bg-hover-define padding-w-14 padding-h-5 round-8 cursor text-white" style={{
+                    background: '#0BDCC0',
+                    ['--define-color' as any]: tinycolor2('#0BDCC0').darken(5).toString()
+                }} href={UrlRoute.getUrl('/pricing')}>了解详情<Icon className={'gap-l-10'} size={16} icon={{ name: 'byte', code: 'arrow-right' }}></Icon></a></div>}
             </div>
             <div className="gap-l-10 gap-b-20 w40 r-gap-b-10 shy-site-block-card">
                 <div className={" shy-site-block-head flex  h-40   r-gap-r-5 "}  ><img style={{ height: config.isUS ? 28 * 2 : undefined }} src={UrlRoute.getUrl('/static/img/online.svg')} /><span className={"f-28"}><S>云端按量付费</S></span></div>
@@ -42,10 +47,13 @@ export function PricingValue(props: {
                     <div className=" f-14 l-20 text-1 flex-top"><span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span>无会员，无超级会员，无广告、无套路</div>
                     <div className=" f-14 l-20 text-1 flex-top"><span className="flex-center size-20 flex-fixed"><Icon icon={CheckSvg} size={12}></Icon></span>无乱收费，按量计费</div>
                 </div>
-                {props.isNav && <div className=" flex gap-t-20"><a className=" flex padding-w-14 padding-h-5 round-8 cursor text-white" style={{ background: '#ADA9FF' }} href={UrlRoute.getUrl('/pricing')}>了解详情<Icon className={'gap-l-10'} size={16} icon={{name:'byte',code:'arrow-right'}}></Icon></a></div>}
+                {props.isNav && <div className=" flex gap-t-20"><a className=" flex bg-hover-define padding-w-14 padding-h-5 round-8 cursor text-white" style={{
+                    background: '#ADA9FF',
+                    ['--define-color' as any]: tinycolor2('#ADA9FF').darken(5).toString()
+                }} href={UrlRoute.getUrl('/pricing')}>了解详情<Icon className={'gap-l-10'} size={16} icon={{ name: 'byte', code: 'arrow-right' }}></Icon></a></div>}
             </div>
         </div>
-    </div>
+    </div >
 }
 
 export function PricingPackage(props: { wrap?: boolean, openPay?: (kind: "fill" | "meal-1" | "meal-2") => void }) {

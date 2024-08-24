@@ -8,7 +8,21 @@ import "./style.less";
 
 export var Login = (function () {
     return <div className={'shy-login-panel   desk-drag'}  >
-        <div className='shy-login-logo'><a className="text-p" href={window.shyConfig.isServerSide ? "/home" : '/'}><img style={{ width: 60, height: 60 }} src={UrlRoute.getUrl(window.shyConfig.isServerSide ?'static/img/shy.logo.blue.256.png' : 'static/img/shy.logo.256.png') } /><span>{window.shyConfig.isServerSide ? lst("诗云服务端") : <img className="h-25" src={UrlRoute.getUrl(config.isUS ? 'static/img/shy.png' : 'static/img/shy.text.png')} />}</span></a></div>
+        {!window.shyConfig.isServerSide && <div className='shy-login-logo'><a
+            className="text-p" href={'/'}>
+            <img alt="诗云 shy.live" style={{
+                height: 50
+            }} src={config.isUS ? UrlRoute.getUrl('static/img/shy.red.svg') : UrlRoute.getUrl('static/img/shy.live.svg')} />
+        </a>
+        </div>}
+        {window.shyConfig.isServerSide && <div className='shy-login-logo'>
+            <a
+                className="text-p" href={"/home"}><img
+                    style={{ width: 60, height: 60 }}
+                    src={UrlRoute.getUrl('static/img/shy.logo.blue.256.png')} />
+                <span>{lst("诗云服务端")}</span>
+            </a>
+        </div>}
         {config.isUS && <UsLogin></UsLogin>}
         {!config.isUS && <CnLogin></CnLogin>}
     </div>

@@ -4,8 +4,7 @@ import { Icon } from "rich/component/view/icon";
 import { observer, useLocalObservable } from "mobx-react";
 
 
-export var ProductDocView = observer(function ()
-{
+export var ProductDocView = observer(function () {
     var local = useLocalObservable<{
         index: number
     }>(() => {
@@ -22,8 +21,8 @@ export var ProductDocView = observer(function ()
                 <div className="flex-fixed">
                     <h1 className="f-64" >新一代的笔记和文档</h1>
                     <p className="text-1 f-20 gap-b-20" style={{ lineHeight: '36px' }}>
-                    灵活的构建块，更高效地沟通<br />
-                    挥洒创意无拘束，交流协作如丝滑，效率提升，灵感不间断
+                        灵活的构建块，更高效地沟通<br />
+                        挥洒创意无拘束，交流协作如丝滑，效率提升，灵感不间断
                     </p>
                     <div>
                         <a href={UrlRoute.getUrl('/sign/in')}
@@ -91,8 +90,9 @@ export var ProductDocView = observer(function ()
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">代码片段</h3>
                         <p className="padding-w-20 f-14 text-1 h-40">数十种语言的本机语法高亮显示。<br /></p>
                         <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
-                            <img className="pos   h100 " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-code.png'} />
+                            <img className="pos   " style={{ top: 10, left: 10, width: 300 }} src={'../static/img/doc/doc-code.png'} />
                         </div>
+
                     </div>
 
                     <div className="flex-auto bg-2 padding-h-10 round-8">
@@ -100,7 +100,7 @@ export var ProductDocView = observer(function ()
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">切换</h3>
                         <p className="padding-w-20 f-14 text-1  h-40">可折叠的部分使您的文档易于阅读。<br /></p>
                         <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
-                            <img className="pos   h100  " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-toggle.png'} />
+                            <img className="pos   h100  " style={{ top: 10, left: 0 }} src={'../static/img/doc/doc-toggle.png'} />
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@ export var ProductDocView = observer(function ()
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">图片与媒体</h3>
                         <p className="padding-w-20 f-14 text-1  h-40">直接从 网易云音乐 和 B站 嵌入，或上传您自己的。</p>
                         <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
-                            <img className="pos   h100 " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-video.png'} />
+                            <img className="pos   " style={{ top: 10, left: -10, width: 300 }} src={'../static/img/doc/doc-video.png'} />
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@ export var ProductDocView = observer(function ()
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">目录</h3>
                         <p className="padding-w-20 f-14 text-1   h-40">单击即可跳至某一部分，自动更新。</p>
                         <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
-                            <img className="pos   h100" style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-outline.png'} />
+                            <img className="pos   h100" style={{ top: 10, left: 0 }} src={'../static/img/doc/doc-outline.png'} />
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@ export var ProductDocView = observer(function ()
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">数学方程式</h3>
                         <p className="padding-w-20 f-14 text-1   h-40">你从未见过数学如此美丽。</p>
                         <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
-                            <img className="pos   h100" style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-math.png'} />
+                            <img className="pos   h100" style={{ top: 10, left: 10 }} src={'../static/img/doc/doc-math.png'} />
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@ export var ProductDocView = observer(function ()
                         <h3 className="padding-w-20 gap-t-10 gap-b-5">以及 100 多种内容类型。</h3>
                         <p className="padding-w-20 f-14 text-1   h-40">就像一个无底的积木盒……</p>
                         <div className="gap-t-20 gap-l-20 relative h-150 overflow-hidden round-t-l-16  border shadow-s  bg-white" >
-                            <img className="pos   h100 " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-blocks.png'} />
+                            <img className="pos   h100 " style={{ top: 10, left: 10 }} src={'../static/img/doc/doc-blocks.png'} />
                         </div>
                     </div>
 
@@ -164,8 +164,11 @@ export var ProductDocView = observer(function ()
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">共同协作处理文档</h3>
                             <p className="padding-w-20 f-14 text-1">只需输入@键即可引起某人的注意。</p>
                             <div className="padding-w-20 border-box gap-t-30">
-                                <img className="w100 border round-t-l-16  shadow-s " alt="协作处理文档" src={'../static/img/doc/doc-collaboration.png'} />
+                                <img className="w100 border round-16  shadow-s " alt="协作处理文档" src={'../static/img/doc/doc-collaboration.png'} />
                             </div>
+
+
+
                         </div>
 
                         <div className="flex col-2-g20 gap-h-20">
@@ -175,9 +178,10 @@ export var ProductDocView = observer(function ()
                                 <p className="padding-w-20 f-14 text-1">通过整合反馈视图，可以轻松进行迭代，甚至跨办公室和时区。</p>
                                 <div className="gap-t-30 gap-l-20 relative h-250 overflow-hidden">
                                     <div className="pos bg-white border round-t-l-16  w-700 shadow-s overflow h100 " style={{ top: 0, left: 0 }} >
-                                        <img className="pos w-700  " alt="评论让事情继续异步发展" style={{ top: -100, left: -100 }} src={'../static/img/doc/doc-comment.png'} />
+                                        <div className="pos w100 h100 overflow-hidden" style={{ top: 10, left: 10 }}>
+                                            <img className="pos w-700  " alt="评论让事情继续异步发展" style={{ top: -100, left: -100 }} src={'../static/img/doc/doc-comment.png'} />
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
                             <div className="flex-auto bg-2 padding-h-10 round-8">
@@ -246,7 +250,9 @@ export var ProductDocView = observer(function ()
                                 <a className="padding-l-5" href={'https://template.shy.live/page/2179'} target="_blank"> 尝试模板<i>→</i></a>
                             </div>
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                                <img className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-meet-1.png'} />
+                                <div className="pos round-t-l-16 shadow-s  w100 h100 bg-white border">
+                                    <img className="pos  " style={{ width: 500, top: 10, left: 10 }} src={'../static/img/doc/doc-meet-1.png'} />
+                                </div>
                             </div>
                         </div>
 
@@ -258,9 +264,10 @@ export var ProductDocView = observer(function ()
                             </div>
 
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                                <img alt="产品需求文档" className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-prd.png'} />
+                                <div className="pos round-t-l-16 shadow-s  w100 h100 bg-white border">
+                                    <img alt="产品需求文档" className="w-400 pos  " style={{ top: 10, left: 10 }} src={'../static/img/doc/doc-prd.png'} />
+                                </div>
                             </div>
-
                         </div>
 
                         <div className="flex-auto bg-2 round">
@@ -269,11 +276,11 @@ export var ProductDocView = observer(function ()
                                 <a className="padding-l-5" href='https://template.shy.live/page/2292' target="_blank"> 尝试模板<i>→</i></a>
                             </div>
                             <div className="gap-t-30 gap-l-20 relative h-150 overflow-hidden" >
-                                <img alt="年度绩效自我评估" className="w-400 pos border round-16 shadow-s " style={{ top: 0, left: 0 }} src={'../static/img/doc/doc-eff.png'} />
+                                <div className="pos round-t-l-16 shadow-s w100 h100 bg-white border">
+                                    <img alt="年度绩效自我评估" className="w-400 pos " style={{ top: 10, left: 10 }} src={'../static/img/doc/doc-eff.png'} />
+                                </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>

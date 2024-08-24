@@ -18,9 +18,9 @@ export var ProductWhiteBoard = observer(function () {
             <h1 className="f-48 flex-center">
                 白板之上，思考与创造完美呈现
             </h1>
-            <p className="text-1 f-16 gap-b-20  flex-center">
+            <p className="flex gap-h-10 remark f-20 l-24 flex-center">
                 <span className="max-w-600 inline-block l-22">
-                    诗云白板，融合了思维表达、灵感梳理、流程整理、任务管理、素材搜集与笔记文档等多种功能，一站式提升创造力与团队效率，开启工作的新境界。
+                    诗云白板，集思维表达、灵感整理、流程规划、任务执行、素材收集与笔记于一体，全面提升创造力和团队效率，开启工作新篇章。
                 </span>
             </p>
             <div className="flex-center">
@@ -116,12 +116,12 @@ export var ProductWhiteBoard = observer(function () {
                 <h1 className="flex-center f-48 ">将所有内容集中在一个地方</h1>
 
                 <div className="flex col-4-g20 r-border-box">
+
                     <div>
                         <div>
                             <img className="w100 border round-16 shadow-s " src='../static/img/board/note.png' />
                         </div>
                         <h3 style={{ fontSize: 16, fontWeight: 400 }}>使用便利贴表达想法</h3>
-                        {/* <p>简单的文本编辑和任务管理可让您轻松地将想法添加到板上。</p> */}
                     </div>
 
                     <div>
@@ -129,7 +129,6 @@ export var ProductWhiteBoard = observer(function () {
                             <img className="w100 border round-16 shadow-s " src='../static/img/board/s.png' />
                         </div>
                         <h3 style={{ fontSize: 16, fontWeight: 400 }}>通过贴纸和表情，有趣的互动</h3>
-                        {/* <p>诗云 支持所有常见的文件类型，包括 JPG、PDF、Word、Excel、常见设计文件等等。</p> */}
                     </div>
 
                     <div>
@@ -137,7 +136,6 @@ export var ProductWhiteBoard = observer(function () {
                             <img className="w100 border round-16 shadow-s " src='../static/img/board/embed.png' />
                         </div>
                         <h3 style={{ fontSize: 16, fontWeight: 400 }}>来自网络的视频、音频和输入数学公式</h3>
-                        {/* <p>简单的文本编辑和任务管理可让您轻松地将想法添加到板上。</p> */}
                     </div>
 
                     <div>
@@ -145,7 +143,6 @@ export var ProductWhiteBoard = observer(function () {
                             <img className="w100 border round-16 shadow-s " src='../static/img/board/ss.png' />
                         </div>
                         <h3 style={{ fontSize: 16, fontWeight: 400 }}>1000+的失量、插图库</h3>
-                        {/* <p>当您返回计算机时，您在Milanote 应用程序中保存的所有内容均可立即进行整理。</p> */}
                     </div>
 
                 </div>
@@ -158,7 +155,7 @@ export var ProductWhiteBoard = observer(function () {
                 <div className="flex-auto">
                     <h1 className="f-48 ">各式对象满足你的表达欲</h1>
                     <p className="text-1 f-16 gap-b-20 ">
-                        诗云 白板中的所有内容都是称心如意的对象，包括便利贴、图形、线条和图片等。无论是豪放派还是婉约派，都能在白板上自由表达和有序整理自己的想法。所有内容都以可视化的方式呈现，方便在所有设备上浏览。
+                        诗云白板，内容丰富随心所欲，便利贴、图形、线条、图片一应俱全。无论是豪放还是婉约，都能在此自由创作、有序梳理。所有内容可视化，跨设备轻松浏览。
                     </p>
                 </div>
                 <div className="flex-fixed w-600 gap-l-30">
@@ -243,13 +240,12 @@ export var ProductWhiteBoard = observer(function () {
 
         <div className="shy-site-block   padding-h-80">
 
-            <h1 className="f-48 flex-center">激发团队创造力的新方式</h1>
-            <p className="text-1 f-16 gap-b-20 flex-center">
+            <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>激发团队创造力的新方式</h1>
+            <p className="flex-center gap-h-20 remark f-20 flex">
                 准备好开始使用诗云白板了吗？
             </p>
             <div className="flex-center">
-                <a href={UrlRoute.getUrl('/sign/in')}
-                    className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
+                <a href={UrlRoute.getUrl('/sign/in')} className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
                 >免费使用</a>
             </div>
             <div className="h-80"></div>

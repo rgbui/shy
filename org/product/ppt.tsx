@@ -6,9 +6,9 @@ export function ProductPPT() {
     return <div style={{
         background: 'linear-gradient(#faf2e9, rgba(250, 242, 233, 0))'
     }}>
-        <div className="shy-site-block   padding-h-30">
-            <h1 className="f-48 flex-center">表达想法的新媒介</h1>
-            <p className="text-1 f-16 gap-b-20  flex-center">精美的演示文稿、文档和网站。 无需设计或编码技能。</p>
+        <div className="shy-site-block   padding-h-80">
+            <h1 className="f-48 flex-center" style={{margin:0}}>表达想法的新媒介</h1>
+            <p className="flex-center gap-h-20 remark f-20 flex">精美的演示文稿、文档和网站。 无需设计或编码技能。</p>
             <div className="flex-center">
                 <a href={UrlRoute.getUrl('/sign/in')}
                     className="text-white bg-primary bg-primary-hover  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
@@ -78,8 +78,8 @@ export function ProductPPT() {
         </div>
 
         <div className="shy-site-block padding-h-80">
-            <h1 className="f-48 flex-center">打开新宇宙的大门</h1>
-            <p className="text-1 f-16 gap-b-20 flex-center">比文档更直观。比幻灯片更具有协作性。比视频更具互动性。</p>
+            <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>打开新宇宙的大门</h1>
+            <p className="flex-center gap-h-20 remark f-20 flex">比文档更直观。比幻灯片更具有协作性。比视频更具互动性。</p>
             <div className="flex-center">
                 <a href={UrlRoute.getUrl('/sign/in')}
                     className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"

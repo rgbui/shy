@@ -18,10 +18,10 @@ export var ProductDataTable = observer(function () {
             <div className="flex padding-h-30">
                 <div className="flex-fixed max-w-500">
                     <h1 className="f-48" style={{ fontSize: 64 }} >智能表格 + 工作流 + 应用搭建</h1>
-                    <p className="text-1 f-20 gap-b-20">
+                    <p className="flex gap-h-10 remark f-20 l-24">
                         一体化数字化平台，让您的团队比以前更快、更自信地工作。
                     </p>
-                    <div>
+                    <div className="gap-t-20">
                         <a href={UrlRoute.getUrl('/sign/in')}
                             className="bg-primary-1-hover  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"
                         >免费使用</a>
@@ -36,11 +36,11 @@ export var ProductDataTable = observer(function () {
 
         <div className="shy-site-block   padding-h-80">
             <div>
-                <h1 className="flex padding-h-30 flex-center f-48">诗云数据表有什么能力？</h1>
-                <p className="text-1 f-16 gap-b-20 flex-center">
+                <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>诗云数据表有什么能力？</h1>
+                <p className="flex flex-center   gap-h-20 remark f-20 l-24">
                     注意！诗云数据表不是表格，而是将复杂的IT系统，做到傻瓜操作， 无需掌握复杂的公式或者函数计算，即学即用，不论背景，轻松上手
                 </p>
-                <div className="border round-16  padding-20 ">
+                <div className="border round-16  padding-w-20 ">
 
                     <div className="flex flex-full col-3-g20 r-border-box gap-h-20">
                         <div className="bg-2 shadow-s padding-h-20 flex flex-col flex-center">
@@ -79,7 +79,7 @@ export var ProductDataTable = observer(function () {
         <div className="shy-site-block   padding-h-80">
             <div>
                 <div className="relative">
-                    <h1 className="flex padding-h-30 flex-center f-48">无限可配置，因此您可以按照自己想要的方式工作</h1>
+                    <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>无限可配置，因此您可以按照自己想要的方式工作</h1>
 
                     <div className="flex col-2-g20 gap-h-20">
 
@@ -87,8 +87,10 @@ export var ProductDataTable = observer(function () {
                             <div className="padding-w-20 gap-t-10"><Icon className={'text-p1-color'} size={32} icon={{ name: 'byte', code: 'table-file' }}></Icon></div>
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">记录表格中的每个细节</h3>
                             <p className="padding-w-20 f-14 text-1">追踪所有可推动更大规模发布的特定项目，以免出现任何疏漏。<br />&nbsp;&nbsp; </p>
-                            <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s w-700 " alt="记录表格" style={{ top: 0, left: 0 }} src={'../static/img/db/db-table.png'} />
+                            <div className="gap-t-30 gap-l-20 relative h-300 ">
+                                <div className="w100 h100 pos round-t-l-16 shadow-s border overflow-hidden">
+                                    <img className="pos  w-700 " alt="记录表格" style={{ top: -10, left: -50 }} src={'../static/img/db/db-table.png'} />
+                                </div>
                             </div>
                         </div>
 
@@ -97,10 +99,13 @@ export var ProductDataTable = observer(function () {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">查看日历上绘制的每个截止日期</h3>
                             <p className="padding-w-20 f-14 text-1">管理多日发布？为任何项目添加日历视图，这样您就可以准确查看发货内容和发货时间。</p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s  w-600"
-                                    style={{ top: 0, left: 0 }}
-                                    src={'../static/img/db/db-calendar.png'}
-                                />
+
+                                <div className="w100 h100 pos round-t-l-16 shadow-s border overflow-hidden">
+                                    <img className="pos   w-600"
+                                        style={{ top: 0, left: -30 }}
+                                        src={'../static/img/db/db-calendar.png'}
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -113,7 +118,9 @@ export var ProductDataTable = observer(function () {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">选择您想要追踪的确切信息</h3>
                             <p className="padding-w-20 f-14 text-1">创建您自己的优先级标签、状态标签等，以便每个团队都能制定完美的工作流程。</p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s  w-600" alt="追踪信息" src={'../static/img/db/db-option.png'} />
+                                <div className="w100 h100 pos round-t-l-16 shadow-s border overflow-hidden bg-white">
+                                    <img style={{ top: 5, left: 5 }} className="pos  w-600" alt="追踪信息" src={'../static/img/db/db-option.png'} />
+                                </div>
                             </div>
                         </div>
 
@@ -122,7 +129,9 @@ export var ProductDataTable = observer(function () {
                             <h3 className="padding-w-20 gap-t-10 gap-b-5">过滤和排序信息以查看所需内容</h3>
                             <p className="padding-w-20 f-14 text-1">仅显示分配给您的任务或标记为紧急的项目。以对您最有帮助的方式分解任何复杂项目。</p>
                             <div className="gap-t-30 gap-l-20 relative h-300 overflow-hidden">
-                                <img className="pos border round-16 shadow-s w-700 " alt="过滤和排序信息" src={'../static/img/db/db-filter.png'} />
+                                <div className="w100 h100 pos round-t-l-16 shadow-s border overflow-hidden  bg-white">
+                                    <img style={{ top: 0, left: -10 }} className="pos  w-700 " alt="过滤和排序信息" src={'../static/img/db/db-filter.png'} />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -134,8 +143,8 @@ export var ProductDataTable = observer(function () {
         <div className="shy-site-block padding-h-80">
             <div>
                 <div className="relative">
-                    <h1 className="flex padding-h-30 flex-center f-48">高级统计轻松处理复杂数据、千万数据</h1>
-                    <p className="text-1 flex-center  f-18">
+                    <h1 className="flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>高级统计轻松处理复杂数据、千万数据</h1>
+                    <p className="flex-center gap-h-20 remark f-20">
                         高级统计内置 BI 能力，图表类型丰富，可结合视图对复杂数据、大数据快速完成统计分析。
                     </p>
                     <div className="gap-h-20">
@@ -148,8 +157,8 @@ export var ProductDataTable = observer(function () {
         <div className="shy-site-block padding-h-80">
             <div>
                 <div className="relative">
-                    <h1 className="flex padding-h-30 flex-center f-48">搭建专属外部应用，与客户更方便地协作</h1>
-                    <p className="text-1  flex-center f-18">在表格基础上搭建通用应用、数据查询等多种外部应用。通过一个共享链接就可以让他人使用。不用编程，0 基础制作自己的专属应用。</p>
+                    <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>搭建专属外部应用，与客户更方便地协作</h1>
+                    <p className="flex-center gap-h-20 remark f-20">基于表格构建通用应用、数据查询等，一键分享链接即可供他人使用。无需编程，轻松打造个人定制应用。</p>
                     <p className="flex-center gap-t-10"><a className="cursor" href='https://template.shy.live/page/546' target="_blank">浏览模板地址</a></p>
                     <div className="gap-h-20">
                         <img alt="应用外部协作" className="w100 border round-16 shadow-s" src={'../static/img/db/db-app.png'} />
@@ -184,8 +193,8 @@ export var ProductDataTable = observer(function () {
 
         <div className="shy-site-block   padding-h-80">
             <div>
-                <h1 className="flex padding-h-30 flex-center f-48">丰富多样的应用场景</h1>
-                <p className="text-1 flex-center f-16">诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
+                <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>丰富多样的应用场景</h1>
+                <p className="flex-center gap-h-20 remark f-20">诗云 提供了丰富的功能及可视化操作，可以根据不同的业务需求，快速实现各种业务系统和软件应用，帮企业灵活地定制自己的数字化平台。</p>
 
 
                 <div className="flex flex-full col-3-g20 gap-h-20 r-border-box">
@@ -241,8 +250,8 @@ export var ProductDataTable = observer(function () {
         </div>
 
         <div className="shy-site-block padding-h-80">
-            <h1 className="f-48 flex-center">智能表格 + 工作流 + 应用搭建</h1>
-            <p className="text-1 f-16 gap-b-20 flex-center"> 一体化数字化平台，让您的团队比以前更快、更自信地工作。</p>
+            <h1 className="flex flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}>智能表格 + 工作流 + 应用搭建</h1>
+            <p className="flex-center gap-h-20 remark f-20"> 一体化数字化平台，让您的团队比以前更快、更自信地工作。</p>
             <div className="flex-center">
                 <a href={UrlRoute.getUrl('/sign/in')}
                     className="text-white bg-button-dark  cursor round-8 padding-h-10 padding-w-20   flex flex-inline f-20"

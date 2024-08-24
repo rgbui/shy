@@ -73,10 +73,15 @@ body {
 .shy-app {}
 
 a {
-    text-decoration   : none;
+    text-decoration: none;
+
     // color          : #e16259;
     // color          : #006ce7;
-    color             : var(--text-link-color)
+    color: var(--text-link-color);
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 p {
@@ -121,14 +126,14 @@ input {
 ::-webkit-scrollbar-thumb {
     // background-clip : padding-box;
     // border          : 2px solid transparent;
-    border-radius   : 4px;
-     background-color: #333;
+    border-radius      : 4px;
+    background-color   : #333;
     // min-height      : 40px;
 }
 
 ::-webkit-scrollbar-track {
     background-color   : transparent;
-    border-color: transparent;
+    border-color       : transparent;
     // border-color    : var(--scrollbar-thin-track);
     // background-color: var(--scrollbar-thin-track);
     // border          : 2px solid var(--scrollbar-thin-track);

@@ -21,7 +21,7 @@ html {
 
 @media (max-width: 767.98px) {
     html {
-        font-size: 50%;//缩放至0.8
+        font-size: 50%; //缩放至0.8
     }
 }
 
@@ -35,9 +35,16 @@ body {
 
 
 a {
-    color          : #e16259;
+    color          : var(--text-link-color);
     text-decoration: none;
+
+    &.link {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
+
 
 em,
 i {
