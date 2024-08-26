@@ -47,7 +47,7 @@ export function PubBusinessView() {
                 <h4 className="f-24 gap-h-15 flex-center">灵活应变</h4>
                 <p className="f-16 text-1  l-24">
                     笔记软件的多样化表达，可以让你随时调整产品、价格、营销策略。
-                    <br />随时按需添加新业务板块
+                    <br />随时按需动态扩增新业务模块
                 </p>
             </div>
 

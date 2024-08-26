@@ -74,14 +74,7 @@ body {
 
 a {
     text-decoration: none;
-
-    // color          : #e16259;
-    // color          : #006ce7;
     color: var(--text-link-color);
-
-    &:hover {
-        text-decoration: underline;
-    }
 }
 
 p {
@@ -107,8 +100,8 @@ input {
 }
 
 ::-webkit-scrollbar {
-    // width : 8px;
-    // height: 8px;
+    width : 8px;
+    height: 8px;
 }
 
 :hover::-webkit-scrollbar-thumb,
@@ -124,19 +117,15 @@ input {
 
 
 ::-webkit-scrollbar-thumb {
-    // background-clip : padding-box;
-    // border          : 2px solid transparent;
+   
     border-radius      : 4px;
-    background-color   : #333;
-    // min-height      : 40px;
+    background-color   : rgba(79, 84, 92, 0.3);
+   
 }
 
 ::-webkit-scrollbar-track {
     background-color   : transparent;
-    border-color       : transparent;
-    // border-color    : var(--scrollbar-thin-track);
-    // background-color: var(--scrollbar-thin-track);
-    // border          : 2px solid var(--scrollbar-thin-track);
+    border-color       : transparent; 
 }
 
 input,

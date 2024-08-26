@@ -33,6 +33,7 @@ export class Supervisor extends Events {
     dialog: PageViewStore = null;
     elementUrls: { date: Date, elementUrl: string, source: PageViewStore['source'] }[] = [];
     async onOpen(elementUrl: string, config?: PageViewStore['config']) {
+        console.log('open', elementUrl, config);
         if (isMobileOnly) {
             surface.mobileSlnSpread = false;
         }

@@ -17,7 +17,8 @@ import { Avatar } from "rich/component/view/avator/face";
 import { ShyOrderInfo } from './declare'
 
 export const MEAL_1_PRICE = 99;
-export const MEAL_2_PRICE = 300;
+export const MEAL_2_PRICE = 298;
+export const MEAL_FOREVER_PRICE = 498;
 export class SelectPayView extends EventsComponent {
     orderInfo: ShyOrderInfo = {
         kind: 'fill',

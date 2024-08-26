@@ -20,6 +20,7 @@ export function SiteFeatures(props: { small?: boolean }) {
         const timer = setInterval(() => {
             var speed = 4;
             var dis = 20;
+            if (isMobileOnly) return;
             if (el1.current.scroll) {
                 el1.current.el.scrollTop += el1.current.forward ? speed : -speed;
                 if (el1.current.el.scrollTop >= el1.current.el.scrollHeight - el1.current.el.clientHeight - dis) {
@@ -32,7 +33,7 @@ export function SiteFeatures(props: { small?: boolean }) {
         }, 100);
 
         return () => {
-
+            clearInterval(timer);
         };
     }, []);
 
@@ -47,12 +48,10 @@ export function SiteFeatures(props: { small?: boolean }) {
             很简单，更好用，细腻的小细节，巧妙的小功能，简便的小操作, 汇聚成一股强大的力量
         </div>
         <div className="h-20"></div>
-
         <div
             className="flex flex-top flex-auto-mobile-wrap shy-site-block-card padding-10 round"
         >
             <div className="flex-fixed w-350 gap-r-10">
-
                 <div className="flex-center gap-t-20">
                     <img className="round-16 " alt="细腻的小细节，巧妙的小功能，简便的小操作" src='static/img/3d-girl.png'
                         style={{
@@ -60,7 +59,6 @@ export function SiteFeatures(props: { small?: boolean }) {
                         }}
                     />
                 </div>
-
                 <div>
                     <img alt="细腻的小细节，巧妙的小功能，简便的小操作" src='static/img/power2.svg'
                         style={{
@@ -69,7 +67,6 @@ export function SiteFeatures(props: { small?: boolean }) {
                         }}
                     />
                 </div>
-
             </div>
             <div
                 onMouseEnter={e => {
@@ -83,8 +80,8 @@ export function SiteFeatures(props: { small?: boolean }) {
                     el1.current.el = e;
                 }}
                     style={{
-                        height: 500,
-                        overflowY: 'auto',
+                        height: isMobileOnly ? 'auto' : 500,
+                        overflowY: isMobileOnly ? "visible" : 'auto',
                         scrollbarWidth: 'none',
                         scrollbarColor: 'transparent transparent',
                         scrollBehavior: 'smooth',
@@ -117,7 +114,7 @@ export function SiteFeatures(props: { small?: boolean }) {
                             <h5 className="f-18 " style={{ margin: 0, marginBottom: 5, fontWeight: 500 }}  >数学公式</h5>
                             <p className="f-14 text-1   l-20">支持Latex公式</p>
                         </div>
-                        
+
                         <div className="shy-site-block-card padding-10 round">
                             <div><Icon className={'text-high'} icon={{ name: "byte", code: 'code' }} size={32}></Icon></div>
                             <h5 className="f-18 " style={{ margin: 0, marginBottom: 5, fontWeight: 500 }}  >代码块</h5>
@@ -408,7 +405,6 @@ export function SimpleFeatures() {
 
 export function AiFeatures() {
     return <div>
-
         <div className="flex-full flex-auto-mobile-wrap  r-padding-t-20 r-w50">
             <div className="gap-r-10">
                 <h2 className="flex gap-t-40 f-36" style={{ marginBottom: 0 }}>
@@ -454,18 +450,19 @@ export function AiFeatures() {
         <div className="gap-t-20">
             <div className="shy-site-block-card relative">
                 <img alt="AI写作" className="w100 round-32 obj-center" src={'static/img/ai/text-4.png'} />
-                <div className="pos round-32 shy-site-block-card border shadow-s bg-white" style={{
-                    top: 50, right: 100,
+                <div className="pos round-32 shy-site-block-card border shadow-s bg-white mobile-hide" style={{
+                    top: 50,
+                    right: 100,
                     width: 553,
                     height: 383,
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    display: isMobileOnly ? 'none' : 'block'
                 }}>
-                    <img alt="AI智能搜索" className="w500 pos mobile-hide"
+                    <img alt="AI智能搜索" className="w500 pos "
                         style={{
                             top: -70,
                             left: -225,
-                            width: 1000,
-                            display:isMobileOnly?'none':'block'
+                            width: 1000
                         }}
                         src={'static/img/ai/so.png'} />
                 </div>

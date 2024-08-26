@@ -83,7 +83,10 @@ export class Sln extends Events {
                             }
                         }
                         else {
-                            if ([Mime.page, Mime.table].includes(item.mime)) channel.act('/page/open', { item });
+                            if ([Mime.page,
+                            Mime.table,
+                            Mime.chatroom,
+                            Mime.tableForm].includes(item.mime)) channel.act('/page/open', { item });
                         }
                     }
                     catch (ex) {
@@ -99,9 +102,12 @@ export class Sln extends Events {
             })
         }
         else {
+            console.log(item.mime, item);
             if ([
                 Mime.page,
-                Mime.table
+                Mime.table,
+                Mime.chatroom,
+                Mime.tableForm
             ].includes(item.mime)) channel.act('/page/open', { item });
         }
     }

@@ -75,7 +75,7 @@ export function ProductView() {
         <div className="shy-site-block ">
             <div className="padding-h-50">
 
-                <h2 className="flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}><span className="bold">你用诗云,可以做的更多</span></h2>
+                <h2 className="flex-center gap-t-40 f-36" style={{ marginBottom: 0 }}><span className="bold">你用诗云，可以做的更多</span></h2>
                 <div className="flex-center gap-h-20 remark f-20">
                     办公不只是写文档、做PPT，而是直接开展业务，做自已的小生意
                 </div>
@@ -171,7 +171,7 @@ export function ProductView() {
                             </div>
                             <h3 className="f-24" style={{ margin: 0 }}>你的知识，流动才更有价值</h3>
                             <p className=" gap-h-10 remark f-16 l-24">
-                                知识重在交流，不单是记录
+                                知识的价值在于交流，而非仅仅是记录整理
                                 <br />
                                 现在，构建你的网络交流圈，连接知识与见解
                             </p>
@@ -385,7 +385,7 @@ export function ProductView() {
                 <div className="flex-center  gap-h-20 remark l-32 f-20 ">
                     “
                     我极度依赖手机和电脑处理工作，频繁使用第三方平台，却面临隐私泄露、缺乏个性化和信息碎片化等问题。<br />
-                    现在，新一代的笔记软件结合AI和区块链，让我看到了另一种方式。<br />我们可以根据需要，随时搭建或动态扩展自己的网络系统，更好地管理我们的信息资源，并与朋友们一起经营它。
+                    现在，新一代的笔记软件结合AI和区块链，让我看到了另一种方式。<br />我们可以根据需要，随时搭建或动态扩展自己的网络系统，灵活的管理我们的信息资源，并与朋友们一起经营它。
                     ”
                 </div>
                 <div className="flex-center  gap-h-20 remark f-20">
