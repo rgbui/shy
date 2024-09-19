@@ -90,7 +90,7 @@ class MessageCenter {
             else if (UrlRoute.isMatch(ShyUrl.wsPage)) willPageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;
             it.onUpdateDocument();
             surface.sln.onFocusItem(it);
-            if (!(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn?.toString())) {
+            if (args.config?.force == true || !(willPageId == it.id || willPageId && it && willPageId.toString() == it.sn?.toString())) {
                 UrlRoute.pushToPage(surface.workspace.siteDomain || surface.workspace.sn, it.sn);
             }
         }

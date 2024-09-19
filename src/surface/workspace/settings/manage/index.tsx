@@ -20,6 +20,7 @@ import { checkModelPay, getAiDefaultModel, getAiImageModelOptions, getAiModelOpt
 import { HelpText } from "rich/component/view/text";
 import { Button } from "rich/component/view/button";
 import { util } from "rich/util/util";
+import { ToolTip } from "rich/component/view/tooltip";
 
 @observer
 export class WorkspaceManage extends React.Component {
@@ -170,24 +171,27 @@ export class WorkspaceManage extends React.Component {
                         <Switch size="small" onChange={e => this.change('aiConfig.esSearch', e)} checked={this.data.aiConfig.esSearch}></Switch>
                     </div>
                 </div>
-                {this.data.aiConfig.esSearch && <div className="gap-h-10 flex" >
-                    <Button onMouseDown={async (e, b) => {
-                        try {
-                            b.loading = true;
-                            await surface.workspace.sock.post('/view/search/all', { wsId: surface.workspace.id });
-                            await util.delay(1000 * 600)
-                        }
-                        catch (ex) {
-
-                        }
-                        finally {
-                            if (b)
-                                b.loading = false;
-                        }
-                    }} ghost><S>手动索引</S></Button>
-                    <span className="gap-l-10 remark f-12">支持之前的数据被搜索到</span>
-                </div>}
                 <div className="gap-h-5 f-12 remark"><S>基于Elasticsearch空间内搜索</S></div>
+                {this.data.aiConfig.esSearch && <div className="gap-h-10 flex" >
+                    <ToolTip overlay={<span className="">支持之前的数据被搜索到</span>}>
+                        <Button onMouseDown={async (e, b) => {
+                            try {
+                                b.loading = true;
+                                await surface.workspace.sock.post('/view/search/all', { wsId: surface.workspace.id });
+                                await util.delay(1000 * 600)
+                            }
+                            catch (ex) {
+
+                            }
+                            finally {
+                                if (b)
+                                    b.loading = false;
+                            }
+                        }} ghost><S>手动索引</S></Button>
+                    </ToolTip>
+
+
+                </div>}
 
                 <div className="flex gap-t-10">
                     <div className="flex-auto  f-14 text flex">
@@ -199,8 +203,9 @@ export class WorkspaceManage extends React.Component {
                         checked={this.data.aiConfig.aiSearch}>
                     </SwitchText></div>
                 </div>
+                <div className="gap-h-5 f-12 remark"><S>基于AI大模型QA问答搜索</S></div>
                 {this.data.aiConfig.aiSearch && <div className="gap-h-10 flex">
-                    <Button onMouseDown={async (e, b) => {
+                    <ToolTip overlay={<span className="">训练之前的数据被智能搜索到</span>}><Button onMouseDown={async (e, b) => {
                         try {
                             b.loading = true;
                             await surface.workspace.sock.post('/ws/ai/all', { wsId: surface.workspace.id });
@@ -213,11 +218,8 @@ export class WorkspaceManage extends React.Component {
                             if (b)
                                 b.loading = false;
                         }
-                    }} ghost><S>手动训练</S></Button>
-                    <span className="gap-l-10 remark  f-12">训练之前的数据被智能搜索到</span>
+                    }} ghost><S>手动训练</S></Button></ToolTip>
                 </div>}
-                <div className="gap-h-5 f-12 remark"><S>基于AI大模型QA问答搜索</S></div>
-
             </div>
 
             <Divider></Divider>

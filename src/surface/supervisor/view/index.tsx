@@ -45,6 +45,11 @@ export class PageSupervisorView extends React.Component<{
             if (prevProps?.store?.page) prevProps?.store?.page.cacheFragment()
             this.load();
         }
+        else {
+            if (this.props?.store?.elementUrl && !this.props.store?.page) {
+                this.load();
+            }
+        }
     }
     componentWillUnmount(): void {
         document.removeEventListener('mousedown', this.dc, true);

@@ -7,6 +7,7 @@ import { surface } from "../../src/surface/app/store";
 
 import lodash from 'lodash';
 
+
 export class Sock {
     private wsId: string;
     private remoteUrl: string;
@@ -17,7 +18,14 @@ export class Sock {
         this.remoteUrl = remoteUrl;
         if (window.shyConfig.isDev) {
             if (this.remoteUrl?.startsWith('http://localhost')) {
-                this.remoteUrl = this.remoteUrl.replace('http://localhost', location.href.indexOf('10.102.63.48') > -1 ? 'http://10.102.63.48' : "http://127.0.0.1");
+                var su = STATIC_URL.slice(0, STATIC_URL.lastIndexOf(':'));
+                console.log('su', su);
+                this.remoteUrl = this.remoteUrl.replace('http://localhost', su);
+            }
+            if (this.remoteUrl?.startsWith('http://127.0.0.1')) {
+                var su = STATIC_URL.slice(0, STATIC_URL.lastIndexOf(':'));
+                console.log('su', su);
+                this.remoteUrl = this.remoteUrl.replace('http://127.0.0.1', su);
             }
         }
         this.headers = header;

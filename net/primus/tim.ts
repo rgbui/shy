@@ -19,11 +19,18 @@ export class Tim {
         this.id = window.shyConfig.guid();
         var Primus = await loadPrimus();
         if (window.shyConfig?.isDev) {
-            if (url.startsWith('http://localhost')) {
-                url = url.replace('http://localhost', location.href.indexOf('10.102.63.48') > -1 ? 'http://10.102.63.48' : "http://127.0.0.1");
+            console.log('this.url', this.url);
+            if (this.url?.startsWith('http://localhost')) {
+                var su = STATIC_URL.slice(0, STATIC_URL.lastIndexOf(':'));
+                this.url = this.url.replace('http://localhost', su);
             }
+            if (this.url?.startsWith('http://127.0.0.1')) {
+                var su = STATIC_URL.slice(0, STATIC_URL.lastIndexOf(':'));
+                this.url = this.url.replace('http://127.0.0.1', su);
+            }
+            console.log('ttt',this.url);
         }
-        var primus = new Primus(url, {
+        var primus = new Primus(this.url, {
             // pingTimeout: 30000 * 4
         });
         this.primus = primus;

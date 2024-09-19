@@ -31,7 +31,8 @@ var isDev = mode == 'dev'
 
 let port = 8081;
 var ip = '127.0.0.1';
-// ip = '10.102.63.48'
+// ip = '10.102.60.29'
+//ip='169.254.246.31'
 var httpUrl = 'http://' + ip + ':';
 let publicPath = httpUrl + `${port}/`;
 if (mode == 'pro') {

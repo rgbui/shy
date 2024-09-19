@@ -17,6 +17,7 @@ import { ShyAlert } from "rich/component/lib/alert";
 import { useSetCustomDomain } from "../../../user/common/setCustomDomain";
 import { getAiDefaultModel } from "rich/net/ai/cost";
 import { util } from "rich/util/util";
+import { ToolTip } from "rich/component/view/tooltip";
 
 @observer
 export class SitePublishView extends React.Component {
@@ -151,7 +152,9 @@ export class SitePublishView extends React.Component {
                     </SwitchText>
                 </div>
                 {this.data.aiConfig.seoSearch && <div className="gap-h-10 flex">
-                    <Button onMouseDown={async (e, b) => {
+                    <ToolTip overlay={
+                        <span className="f-12">支持之前的数据被搜索引擎搜索到</span>
+                    }><Button onMouseDown={async (e, b) => {
                         try {
                             b.loading = true;
                             await surface.workspace.sock.post('/view/search/all', { wsId: surface.workspace.id });
@@ -164,8 +167,7 @@ export class SitePublishView extends React.Component {
                             if (b)
                                 b.loading = false;
                         }
-                    }} ghost><S>手动构建HTML</S></Button>
-                    <span className="gap-l-10 remark  f-12">支持之前的数据被搜索引擎搜索到</span>
+                    }} ghost><S>手动构建</S></Button></ToolTip>
                 </div>}
             </div>
 

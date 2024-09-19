@@ -86,7 +86,8 @@ export function SiteFeatures(props: { small?: boolean }) {
                         scrollbarColor: 'transparent transparent',
                         scrollBehavior: 'smooth',
                         paddingTop: 20,
-                        paddingBottom: 20
+                        paddingBottom: 20,
+                        overscrollBehavior: 'contain'
                     }}
                     className="flex flex-end flex-full flex-auto-mobile-wrap col-3-g20">
                     <div> <div className="r-gap-b-20">

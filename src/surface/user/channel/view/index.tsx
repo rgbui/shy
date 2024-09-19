@@ -12,6 +12,8 @@ import "./style.less";
 import { S } from "rich/i18n/view";
 
 export var UserChannel = observer(function () {
+
+   
     return <div className="shy-user-channel">
         <div className="shy-user-channel-slide">
             <div className="shy-user-channel-slide-head">
