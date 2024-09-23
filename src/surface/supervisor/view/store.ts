@@ -26,7 +26,8 @@ export class PageViewStore extends Events {
         blockId?: string,
         initData?: Record<string, any>,
         isCanEdit?: boolean,
-        wait?: boolean
+        wait?: boolean,
+        createItemForm?: boolean
     } = {};
     constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();

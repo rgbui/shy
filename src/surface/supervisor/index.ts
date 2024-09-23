@@ -54,9 +54,14 @@ export class Supervisor extends Events {
             if (mainStore.elementUrl && !mainStore.item && [
                 ElementType.PageItem,
                 ElementType.Room,
-                ElementType.Schema
+                ElementType.Schema,
+                ElementType.SchemaRecordView
             ].includes(mainStore.pe.type)) {
-                await surface.workspace.onLoadElementUrl(elementUrl);
+                if (mainStore.pe.type == ElementType.SchemaRecordView) {
+                    if (config?.createItemForm == true)
+                        await surface.workspace.onLoadElementUrl(elementUrl);
+                }
+                else await surface.workspace.onLoadElementUrl(elementUrl);
             }
             this.page = mainStore;
         }

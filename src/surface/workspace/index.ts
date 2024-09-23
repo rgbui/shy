@@ -460,25 +460,49 @@ export class Workspace {
     }
     async onLoadElementUrl(elementUrl: string) {
         var pe = parseElementUrl(elementUrl);
-        if ([ElementType.PageItem, ElementType.Room, ElementType.Schema].includes(pe.type)) {
+        if ([
+            ElementType.PageItem,
+            ElementType.Room,
+            ElementType.SchemaRecordView,
+            ElementType.Schema
+        ].includes(pe.type)) {
             var id = pe.id;
+            if (pe.type == ElementType.SchemaRecordView) {
+                id = pe.id1;
+            }
             var item = this.find(g => g.id == id);
             if (!item) {
                 var pa = await channel.get('/page/parent/ids', { id, ws: undefined, recover: true });
                 if (pa.ok) {
-                    if (pa.data.exists == false && pe.type == ElementType.Schema) {
+                    if (pa.data.exists == false && (pe.type == ElementType.Schema || pe.type == ElementType.SchemaRecordView)) {
                         var viewItem = this.find(g => g.mime == Mime.pages);
                         if (viewItem) {
-                            var sch = await TableSchema.loadTableSchema(id, undefined);
+                            var sch = await TableSchema.loadTableSchema(pe.id, undefined);
                             if (sch) {
-                                item = await pageItemStore.appendPageItem(viewItem, {
-                                    id: sch.id,
-                                    text: sch.text,
-                                    mime: Mime.table,
-                                    pageType: PageLayoutType.db,
-                                    spread: false,
-                                });
-                                return item;
+                                if (pe.type == ElementType.Schema) {
+                                    item = await pageItemStore.appendPageItem(viewItem, {
+                                        id: sch.id,
+                                        text: sch.text,
+                                        mime: Mime.table,
+                                        pageType: PageLayoutType.db,
+                                        spread: false,
+                                    });
+                                    return item;
+                                }
+                                else {
+                                    var sv = sch.views.find(g => g.id == pe.id1);
+                                    if (sv.formType == 'doc-add') {
+                                        item = await pageItemStore.appendPageItem(viewItem, {
+                                            id: pe.id1,
+                                            text: sv.text,
+                                            mime: Mime.tableForm,
+                                            pageType: PageLayoutType.doc,
+                                            refTableId: sch.id,
+                                            spread: false,
+                                        });
+                                        return item;
+                                    }
+                                }
                             }
                         }
                     }

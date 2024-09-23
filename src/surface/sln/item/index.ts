@@ -39,6 +39,10 @@ export class PageItem {
     createDate: Date = null;
     creater: string = null;
     mime: Mime = Mime.none;
+    /**
+     * 当mime为tableForm时，refTableId为表格的id
+     */
+    refTableId: string;
     pageType: PageLayoutType = PageLayoutType.doc;
     workspaceId: string;
     selectedDate: number = null;
@@ -561,7 +565,7 @@ export class PageItem {
             if (util.valueIsEqual(json, pageInfo)) return;
         }
         if (onlyUpdateItem !== true)
-            channel.air('/page/update/info', { id: this.id, pageInfo });
+            channel.air('/page/update/info', {id:this.id, pageInfo }, { locationId: "PageItem.onChange" });
     }
     getVisibleIds() {
         var ids: string[] = [this.id];
