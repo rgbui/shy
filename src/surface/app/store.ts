@@ -374,7 +374,11 @@ export class Surface extends Events {
                 if (json.name) {
                     if (json.name == 'openPageByTemplate') {
                         var data: PageTemplateType = json.data;
-                        channel.act('/page/open', { elementUrl: getElementUrl(ElementType.PageItem, data.sourcePageId) })
+                        var url = data.sourceElementUrl || (data as any).elementUrl;
+                        if (!url) {
+                            url = getElementUrl(ElementType.PageItem, data.sourcePageId || (data as any).pageId)
+                        }
+                        channel.act('/page/open', { elementUrl: url })
                     }
                 }
             }
