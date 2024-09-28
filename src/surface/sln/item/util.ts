@@ -4,17 +4,18 @@ import { ElementType, getElementUrl } from "rich/net/element.type";
 import { AtomPermission, PageSourcePermission, getCommonPermission, getDenyPermission, getEditOwnPerssions, mergeAtomPermission } from "rich/src/page/permission";
 import { Surface } from "../../app/store";
 import lodash from "lodash";
+import { Mime } from "../declare";
 
 export function getPageItemElementUrl(item: PageItem) {
-    if (item.pageType == PageLayoutType.db) {
+    if (item.mime == Mime.tableForm) {
+        return getElementUrl(ElementType.SchemaRecordView, item.refTableId, item.id);
+    }
+    else if (item.pageType == PageLayoutType.db) {
         return getElementUrl(ElementType.Schema, item.id);
     }
     else if (item.pageType == PageLayoutType.doc || item.pageType == PageLayoutType.board || item.pageType == PageLayoutType.ppt) {
         return getElementUrl(ElementType.PageItem, item.id);
     }
-    // else if (item.pageType == PageLayoutType.dbView) {
-    //     return getElementUrl(ElementType.SchemaView, item.parentId, item.id);
-    // }
     else if (item.pageType == PageLayoutType.textChannel) {
         return getElementUrl(ElementType.Room, item.id);
     }

@@ -2,7 +2,7 @@ import { makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import ReactDOM from "react-dom";
-import { pageLayer, popoverLayer } from "rich/component/lib/zindex";
+import { pageLayer } from "rich/component/lib/zindex";
 import { createPageContent } from "./page";
 import { PageViewStore } from "./store";
 import { surface } from "../../app/store";
@@ -51,7 +51,7 @@ export class PageSupervisorDialog extends React.Component<{ store: PageViewStore
         }
     }
     async onClose() {
-        await this.props.store.page.onSubmitForm();
+        await this.props.store.page.onSubmitForm('close-save');
         surface.supervisor.emit('closeDialog')
     }
     pageEl: HTMLElement;

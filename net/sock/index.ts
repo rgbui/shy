@@ -237,7 +237,7 @@ export class Sock {
         data?: Record<string, any>,
         method: string
     },
-        callback: (chunk: any, done?: boolean, controller?: AbortController) => void) {
+        callback: (chunk: any, done?: boolean, controller?: AbortController,abort?:boolean) => void) {
         if (options.data) {
             options.data = lodash.cloneDeep(options.data)
             GenreConsistency.transform(options.data);
@@ -249,6 +249,7 @@ export class Sock {
             ...headers.headers
         }
         let controller = new AbortController();
+      
         const res = await fetch(resolveUrl, {
             signal: controller.signal,
             method: (options.method || "POST").toUpperCase(),
@@ -262,14 +263,19 @@ export class Sock {
         // Create a decoder for UTF-8 encoded text
         const decoder = new TextDecoder("utf-8");
         const readChunk = async () => {
-            var rg = await reader.read();
-            if (!rg.done) {
-                const dataString = decoder.decode(rg.value);
-                if (typeof callback == 'function') callback(dataString)
-                readChunk();
+            try {
+                var rg = await reader.read();
+                if (!rg.done) {
+                    const dataString = decoder.decode(rg.value);
+                    if (typeof callback == 'function') callback(dataString)
+                    readChunk();
+                }
+                else {
+                    callback(undefined, true);
+                }
             }
-            else {
-                callback(undefined, true);
+            catch (ex) {
+                callback(undefined, true, undefined, true);
             }
         }
         await readChunk()

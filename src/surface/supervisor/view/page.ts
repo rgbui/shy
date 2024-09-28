@@ -48,8 +48,8 @@ export async function createPageContent(store: PageViewStore) {
             }
             page.on(PageDirective.history, async function (action) {
                 if (!page.canEdit({ ignoreLocker: true })) return;
-                if(window.shyConfig?.isDev)
-                console.log(action, 'syncBlocks')
+                if (window.shyConfig?.isDev)
+                    console.log(action, 'syncBlocks')
                 if (Array.isArray(action.syncBlocks))
                     for (var syncBlock of action.syncBlocks) {
                         var snap = SnapStore.createSnap(syncBlock.elementUrl)

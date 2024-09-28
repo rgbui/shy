@@ -94,7 +94,7 @@ export class PageSupervisorView extends React.Component<{
         </div>
     }
     async onCloseSlide() {
-        await this.props.store.page.onSubmitForm();
+        await this.props.store.page.onSubmitForm('close-save');
         surface.supervisor.emit('closeSlide');
     }
 }

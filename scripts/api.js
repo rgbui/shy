@@ -150,9 +150,9 @@ push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageIte
 push('/page/query/info', `{ ws?: LinkWs,sn?:number, id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/query/parents', `{ ws?: LinkWs, id?: string,sn?:number}`, `SockResponse<{items:LinkPageItem[]}>`, ['get']);
 push(`/page/query/elementUrl`, `{ws?: LinkWs,elementUrl?:string}`, `LinkPageItem`, ['get']);
-push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}`, `void`, ['act']);
-push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['act']);
-push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean}}', 'any', ['act']);
+push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean}}`, `void`, ['act']);
+push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean}}', 'any', ['act']);
+push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean}}', 'any', ['act']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'act']);
 push('/page/recently/viewed', '{wsId:string}', 'Promise<{items:LinkPageItem[]}>', ['query'])
 
@@ -202,7 +202,7 @@ push('/datastore/board/stat/fields','{groupFilters?: { id: string, filter: Recor
 
 push('/datastore/dataGrid/list', '{ws:LinkWs,wsId?:string,groupView?:any,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[],isIgnoreCount?: boolean}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number,groupList?: { id: string|{min:number,max:number}, count: number, total?: number, list: any[] }[]},warn:string}', ['get']);
 push('/datastore/dataGrid/sub/list', '{parentId:string, ws:LinkWs,wsId?:string,groupFilter?:any,schemaId:string,page?:number,size?:number,filter?:Record<string, any>,sorts?:Record<string, 1|-1>,projects?: string[]}', '{ok:boolean,data:{list:any[],total:number,page:number,size:number},warn:string}', ['get']);
-push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{data:Record<string,any>}>', ['get']);
+push('/datastore/exists/user/submit', '{ws:LinkWs,wsId?:string,schemaId:string}', 'SockResponse<{data:Record<string,any>,total?:number}>', ['get']);
 push('/device/sign', '', 'void', ['put']);
 push('/device/query', '', 'string', ['shy', 'query', 'await']);
 
@@ -267,7 +267,7 @@ push('/user/wallet', '{}', 'SockResponse<{money:number,meal:string}>', ['get']);
 push('/check/feature', '{type:PayFeatureCheck,config?:{fileSize?:number}}', 'SockResponse<{warn:boolean,limit:boolean,wallet:{due:Date,oveDue:boolean,meal:string,money:number},free:Record<string,any>,consume:Record<string,any>}>', ['get']);
 push('/query/wiki/answer', '{ask: string,minRank?:number,model?:WsConsumeType, robotId: string,size?:number,contextSize?:number}', 'SockResponse<{docs:{contentId:string,docId:string,ps:{at:number,content:string,contentId:string,rank:number}[]}[]}>', ['get']);
 push('/text/ai', '{input: string, model?: WsConsumeType, uid?: string, options?: {isSession?: boolean,sessionTimeOut?: number, parameters?: Record<string, any>}}', 'SockResponse<{message:string}>', ['post']);
-push('/text/ai/stream', '{question: string,role?:string, model?: WsConsumeType, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController)=>void}', 'SockResponse<void>', ['post'])
+push('/text/ai/stream', '{question: string,role?:string, model?: WsConsumeType, uid?: string, options?: Record<string, any>,callback:(str:string,done?:boolean,controller?:AbortController,abort?:boolean)=>void}', 'SockResponse<void>', ['post'])
 push('/text/edit', '{code: boolean, input: string, question: string, options: any}', 'SockResponse<{content:string}>', ['post'])
 push('/text/embedding', '{text:string}', 'SockResponse<{embedding:number[]}>', ['get'])
 push('/text/to/image', '{prompt:string,model?:WsConsumeType,options:Record<string,any>}', 'SockResponse<{file:Record<string,any>}>', ['post']);
@@ -343,7 +343,7 @@ push('/ws/clear/all','{wsId?:string}', 'SockResponse<void>', ['del']);
 push('/robots/info', '{ids:string[]}', 'SockResponse<{list:any[]}>', ['get']);
 push('/get/robot', '{id:string}', 'SockResponse<{robot:RobotInfo}>', ['get']);
 push('/create/template', '{wsId?:string,config?:{pageId?: string, dataGridMaxRecordCount?: number}}', 'SockResponse<{file:ResourceArguments}>', ['post']);
-push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments, wsId: string, pageId?: string, elementUrl:string, templateUrl: string, text?: string,icon?:any, description?: string, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
+push('/create/workspace/template', '{config?:Record<string,any>,file: ResourceArguments,childs?:any[], wsId: string, pageId?: string, elementUrl:string, templateUrl: string, text?: string,icon?:any, description?: string,pageType?:any, type:"workspace"|"dir"|"page"}', 'SockResponse<void>', ['post']);
 push('/get/workspace/template', '{wsId: string, pageId?: string,elementUrl?:string}', 'SockResponse<{template:Record<string,any>}>', ['get'])
 push('/del/workspace/template', '{id:string}', 'SockResponse<void>', ['del']);
 push('/page/items', '{ws?:LinkWs,wsId?:string,ids:string[],sock?:any}', 'SockResponse<{ list:any[]}>', ['get'])

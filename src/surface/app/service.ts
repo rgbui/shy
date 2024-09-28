@@ -173,6 +173,7 @@ class MessageCenter {
                     speak: item.speak,
                     speakDate: item.speakDate,
                     netPermissions: item.netPermissions,
+                    netCopy: item.netCopy,
                     memberPermissions: item.memberPermissions,
                     inviteUsersPermissions: item.inviteUsersPermissions,
                     parentId: item.parentId
@@ -201,6 +202,7 @@ class MessageCenter {
                         'thumb',
                         'share',
                         'netPermissions',
+                        'netCopy',
                         'memberPermissions',
                         'inviteUsersPermissions',
                         'parentId',
@@ -308,7 +310,7 @@ class MessageCenter {
                 var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
                 if (rcs) {
                     rcs.source = 'schema'
-                    rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                    rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share','netCopy', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
                     return rcs;
                 }
                 return await findItemPermisson(surface, pe.id);
@@ -329,7 +331,7 @@ class MessageCenter {
                     var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
                     if (rcs) {
                         rcs.source = 'schema'
-                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share','netCopy', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
                         return rcs;
                     }
                     return await findItemPermisson(surface, pe.id);
@@ -352,7 +354,7 @@ class MessageCenter {
                     var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
                     if (rcs) {
                         rcs.source = 'schema'
-                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share','netCopy', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
                         return rcs;
                     }
                     return await findItemPermisson(surface, pe.id);
@@ -384,7 +386,7 @@ class MessageCenter {
                     var rcs = itemIsPermissons(surface, schema, false) as { source: 'schema', data: Partial<TableSchema>, permissions: AtomPermission[] };
                     if (rcs) {
                         rcs.source = 'schema'
-                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
+                        rcs.data = lodash.pick(schema, ['id', 'icon', 'locker', 'sn', 'text', 'cover', 'share','netCopy', 'netPermissions', 'memberPermissions', 'inviteUsersPermissions'])
                         return rcs;
                     }
                     return await findItemPermisson(surface, pe.id);
@@ -448,6 +450,7 @@ class MessageCenter {
     }
     @air('/page/update/info')
     async pageUpdateInfo(args: { id?: string, elementUrl?: string, pageInfo: Partial<PageItem> }, options: { locationId?: string | number }) {
+        console.log('/page/update/info ', args, options);
         var itemId;
         var pe = parseElementUrl(args.elementUrl);
         if (args.id) {
@@ -456,6 +459,9 @@ class MessageCenter {
         else if (args.elementUrl) {
             if ([ElementType.PageItem, ElementType.Schema, ElementType.Room].includes(pe.type)) {
                 itemId = pe.id;
+            }
+            else if (pe.type == ElementType.SchemaRecordView) {
+                itemId = pe.id1;
             }
         }
         if (itemId) {
@@ -468,12 +474,14 @@ class MessageCenter {
                 }
             }
             var item = surface.workspace.find(g => g.id == itemId);
-            var updateProps: string[] = ['icon',
+            var updateProps: string[] = [
+                'icon',
                 'cover',
                 'text',
                 'sourcePermission',
                 'share',
                 'netPermissions',
+                'netCopy',
                 'inviteUsersPermissions',
                 'memberPermissions'];
             var updateDatas = lodash.pick(args.pageInfo, updateProps);
@@ -483,11 +491,33 @@ class MessageCenter {
                     var ts = await TableSchema.loadTableSchema(itemId, surface.workspace);
                     await ts.update(updateDatas as any, options.locationId);
                 }
+                else if (pe && pe.type == ElementType.SchemaRecordView && Object.keys(updateDatas).length > 0) {
+                    var props = lodash.pick(args.pageInfo, ['icon', 'cover', 'description', 'text']);
+                    if (Object.keys(props).length > 0 && options.locationId == 'PageItem.onChange') {
+                        var ts = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                        var sv = ts.views.find(g => g.id == pe.id1);
+                        if (sv) {
+                            await ts.onSchemaOperate([{ name: 'updateSchemaView', id: sv.id, data: props }], options.locationId)
+                        }
+                    }
+                }
             }
             else if (item) {
                 if ((item.mime == Mime.table || item.pageType == PageLayoutType.db) && Object.keys(updateDatas).length > 0) {
                     var ts = await TableSchema.loadTableSchema(item.id, surface.workspace);
                     await ts.update(updateDatas as any, options.locationId);
+                }
+                else if (item.mime == Mime.tableForm && Object.keys(updateDatas).length > 0) {
+                    var props = lodash.pick(args.pageInfo, ['icon', 'cover', 'description', 'text']);
+                    if (Object.keys(props).length > 0 && item.refTableId && options.locationId == 'PageItem.onChange') {
+
+                        var ts = await TableSchema.loadTableSchema(item.refTableId, surface.workspace);
+                        var sv = ts.views.find(g => g.id == item.id);
+                        if (sv) {
+                            console.log('ts', props)
+                            await ts.onSchemaOperate([{ name: 'updateSchemaView', id: sv.id, data: props }], options.locationId)
+                        }
+                    }
                 }
                 await pageItemStore.updatePageItem(item, lodash.cloneDeep(args.pageInfo));
                 item.onUpdateDocument();

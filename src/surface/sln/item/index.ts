@@ -60,6 +60,7 @@ export class PageItem {
      * 互联网公开的权限
      */
     public netPermissions: AtomPermission[] = [];
+    public netCopy: boolean = null;
     /**
      * 特定的用户权限
      */
@@ -101,6 +102,7 @@ export class PageItem {
             willLoadSubs: observable,
             share: observable,
             netPermissions: observable,
+            netCopy: observable,
             memberPermissions: observable,
             inviteUsersPermissions: observable,
             editDate: observable,
@@ -565,7 +567,7 @@ export class PageItem {
             if (util.valueIsEqual(json, pageInfo)) return;
         }
         if (onlyUpdateItem !== true)
-            channel.air('/page/update/info', {id:this.id, pageInfo }, { locationId: "PageItem.onChange" });
+            channel.air('/page/update/info', { id: this.id, pageInfo }, { locationId: "PageItem.onChange" });
     }
     getVisibleIds() {
         var ids: string[] = [this.id];
@@ -636,6 +638,7 @@ export class PageItem {
             'pageType',
             'share',
             'netPermissions',
+            'netCopy',
             'memberPermissions',
             'inviteUsersPermissions'
         ]
