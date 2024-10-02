@@ -19,12 +19,12 @@ export class Sock {
         if (window.shyConfig.isDev) {
             if (this.remoteUrl?.startsWith('http://localhost')) {
                 var su = STATIC_URL.slice(0, STATIC_URL.lastIndexOf(':'));
-                console.log('su', su);
+                //console.log('su', su);
                 this.remoteUrl = this.remoteUrl.replace('http://localhost', su);
             }
             if (this.remoteUrl?.startsWith('http://127.0.0.1')) {
                 var su = STATIC_URL.slice(0, STATIC_URL.lastIndexOf(':'));
-                console.log('su', su);
+                //console.log('su', su);
                 this.remoteUrl = this.remoteUrl.replace('http://127.0.0.1', su);
             }
         }
