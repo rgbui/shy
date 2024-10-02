@@ -16,6 +16,7 @@ export class PageViewStore extends Events {
     createDate: number = Date.now();
     openDate: number = Date.now();
     elementUrl: string = '';
+    customElementUrl:string='';
     page: Page = null;
     view: PageSupervisorView | PageSupervisorDialog = null;
     snapSaving: boolean = false;
@@ -27,7 +28,7 @@ export class PageViewStore extends Events {
         initData?: Record<string, any>,
         isCanEdit?: boolean,
         wait?: boolean,
-        createItemForm?: boolean
+        createItemForm?: boolean|string
     } = {};
     constructor(options: { elementUrl: string, source?: PageViewStore['source'], config?: PageViewStore['config'] }) {
         super();

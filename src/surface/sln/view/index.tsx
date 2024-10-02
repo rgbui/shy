@@ -24,6 +24,7 @@ export var SlnView = observer(function () {
             surface.sln.globalMove(event);
         }
         document.addEventListener('mousemove', move)
+        surface.sln.onAutoScrollFocus();
         return () => {
             document.removeEventListener('mousemove', move);
         }

@@ -3,9 +3,10 @@ import { Events } from "rich/util/events";
 import { Rect } from "rich/src/common/vector/point";
 import { makeObservable, observable } from "mobx";
 import { PageViewStore, PageViewStores } from "./view/store";
-import { ElementType } from "rich/net/element.type";
+import { ElementType, getElementUrl, parseElementUrl } from "rich/net/element.type";
 import { surface } from "../app/store";
 import { isMobileOnly } from "react-device-detect";
+import { TableSchema } from "rich/blocks/data-grid/schema/meta";
 
 export class Supervisor extends Events {
     constructor() {
@@ -33,7 +34,8 @@ export class Supervisor extends Events {
     dialog: PageViewStore = null;
     elementUrls: { date: Date, elementUrl: string, source: PageViewStore['source'] }[] = [];
     async onOpen(elementUrl: string, config?: PageViewStore['config']) {
-        console.log('open', elementUrl, config);
+        if (window.shyConfig.isDev)
+            console.log('open', elementUrl, config);
         if (isMobileOnly) {
             surface.mobileSlnSpread = false;
         }
@@ -46,7 +48,21 @@ export class Supervisor extends Events {
         if (this.elementUrls.length > 20) this.elementUrls = this.elementUrls.slice(-20)
         this.opening = true;
         try {
-            var mainStore = PageViewStores.createPageViewStore(elementUrl, 'page', config);
+            var pe = parseElementUrl(elementUrl)
+            var schemaViewRecordTemplateUrl;
+            if (pe.type == ElementType.SchemaRecordViewData) {
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                if (schema) {
+                    var view = schema.views.find(x => x.id == pe.id1);
+                    if (view && view.formType == 'doc-detail') {
+                        schemaViewRecordTemplateUrl = getElementUrl(ElementType.SchemaRecordView, schema.id, view.id);
+                        if (!config) config = {}
+                        config.force = true;
+                    }
+                }
+            }
+            var mainStore = PageViewStores.createPageViewStore(schemaViewRecordTemplateUrl ? schemaViewRecordTemplateUrl : elementUrl, 'page', config);
+            if (schemaViewRecordTemplateUrl) mainStore.customElementUrl = elementUrl;
             /**
              * 这里打开的elementType，但workspace没有，需要递归查找
              * 对于Schema可能需要自动创建
@@ -58,8 +74,8 @@ export class Supervisor extends Events {
                 ElementType.SchemaRecordView
             ].includes(mainStore.pe.type)) {
                 if (mainStore.pe.type == ElementType.SchemaRecordView) {
-                    if (config?.createItemForm == true)
-                        await surface.workspace.onLoadElementUrl(elementUrl);
+                    if (config?.createItemForm)
+                        await surface.workspace.onLoadElementUrl(elementUrl, typeof config?.createItemForm == 'string' ? config?.createItemForm : undefined);
                 }
                 else await surface.workspace.onLoadElementUrl(elementUrl);
             }
@@ -75,7 +91,24 @@ export class Supervisor extends Events {
     async onOpenSlide(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl == this.slide?.elementUrl && config?.force !== true) return;
         if (!elementUrl) { PageViewStores.clearPageViewStore(this.slide); this.slide = null; }
-        else this.slide = PageViewStores.createPageViewStore(elementUrl, 'slide', config)
+        else {
+            var pe = parseElementUrl(elementUrl)
+            var schemaViewRecordTemplateUrl;
+            if (pe.type == ElementType.SchemaRecordViewData) {
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                if (schema) {
+                    var view = schema.views.find(x => x.id == pe.id1);
+                    if (view && view.formType == 'doc-detail') {
+                        schemaViewRecordTemplateUrl = getElementUrl(ElementType.SchemaRecordView, schema.id, view.id);
+                        if (!config) config = {}
+                        config.force = true;
+                    }
+                }
+            }
+            var slide = PageViewStores.createPageViewStore(schemaViewRecordTemplateUrl || elementUrl, 'slide', config)
+            if (schemaViewRecordTemplateUrl) slide.customElementUrl = elementUrl;
+            this.slide=slide;
+        }
         if (this.slide) {
             if (config?.wait === false) return;
             return new Promise((resolve, reject) => {
@@ -94,7 +127,24 @@ export class Supervisor extends Events {
     async onOpenDialog(elementUrl: string, config?: PageViewStore['config']) {
         if (elementUrl && elementUrl == this.dialog?.elementUrl && config?.force !== true) return;
         if (!elementUrl) { PageViewStores.clearPageViewStore(this.dialog); this.dialog = null; }
-        else this.dialog = PageViewStores.createPageViewStore(elementUrl, 'dialog', config);
+        else {
+            var pe = parseElementUrl(elementUrl)
+            var schemaViewRecordTemplateUrl;
+            if (pe.type == ElementType.SchemaRecordViewData) {
+                var schema = await TableSchema.loadTableSchema(pe.id, surface.workspace);
+                if (schema) {
+                    var view = schema.views.find(x => x.id == pe.id1);
+                    if (view && view.formType == 'doc-detail') {
+                        schemaViewRecordTemplateUrl = getElementUrl(ElementType.SchemaRecordView, schema.id, view.id);
+                        if (!config) config = {}
+                        config.force = true;
+                    }
+                }
+            }
+            var dialog = PageViewStores.createPageViewStore(schemaViewRecordTemplateUrl || elementUrl, 'dialog', config);
+             if (schemaViewRecordTemplateUrl) dialog.customElementUrl = elementUrl;
+             this.dialog=dialog;
+        }
         if (this.dialog) {
             if (config?.wait === false) return;
             return new Promise((resolve, reject) => {

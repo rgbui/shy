@@ -21,7 +21,8 @@ export async function createPageContent(store: PageViewStore) {
             page.openSource = store.source;
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
             page.openPageData = store.config.initData;
-            page.customElementUrl = store.elementUrl;
+            page.customElementUrl = store.customElementUrl || store.elementUrl;
+            console.log('pa',store, page.customElementUrl, store.customElementUrl, store.elementUrl);
             store.page = page;
             await page.cacCurrentPermissions();
             var pd: {

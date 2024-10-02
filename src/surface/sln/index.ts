@@ -120,9 +120,19 @@ export class Sln extends Events {
             return;
         }
         this.selectIds = item ? [item.id] : [];
+        this.onAutoScrollFocus();
         if (item) {
             item.selectedDate = new Date().getTime();
             yCache.set(CacheKey.ws_open_page_id, item.id);
+        }
+    }
+    onAutoScrollFocus() {
+        var id = this.selectIds[0];
+        if (this.el && id) {
+            var ele = this.el.querySelector(`.shy-ws-item[data-id='${id}']`) as HTMLElement;
+             if (ele) {
+                ele.scrollIntoView({ block: 'center', behavior: 'smooth' })
+            }
         }
     }
     onDeleteRefocusItem(item?: PageItem) {
@@ -203,7 +213,12 @@ export class Sln extends Events {
                 }
             }
             if (pageItem) {
-                if (dragItem.mime == Mime.page) {
+                if ([
+                    Mime.page,
+                    Mime.tableForm,
+                    Mime.table,
+                    Mime.chatroom
+                ].includes(dragItem.mime)) {
                     if (pageItem.mime == Mime.pages) {
                         if (!direction) {
                             if (pageItem.childs.length > 0) {
@@ -279,7 +294,7 @@ export class Sln extends Events {
                     this.hover = { item: null, direction: 'none' };
                 }
                 else {
-                    if (pageItem.mime == Mime.table && direction == 'bottom-sub') {
+                    if ([Mime.table, Mime.chatroom, Mime.tableForm].includes(pageItem.mime) && direction == 'bottom-sub') {
                         direction = 'bottom';
                     }
                     this.hover = { item: pageItem, direction };

@@ -150,7 +150,7 @@ push('/page/update/info', `{id?: string,elementUrl?:string, pageInfo:LinkPageIte
 push('/page/query/info', `{ ws?: LinkWs,sn?:number, id?: string,elementUrl?:string}`, `SockResponse<LinkPageItem>`, ['get']);
 push('/page/query/parents', `{ ws?: LinkWs, id?: string,sn?:number}`, `SockResponse<{items:LinkPageItem[]}>`, ['get']);
 push(`/page/query/elementUrl`, `{ws?: LinkWs,elementUrl?:string}`, `LinkPageItem`, ['get']);
-push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean}}`, `void`, ['act']);
+push('/page/open', `{item?: string | { id: string }, elementUrl?: string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean|string}}`, `void`, ['act']);
 push('/page/dialog', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean}}', 'any', ['act']);
 push('/page/slide', '{elementUrl:string,config?:{isTemplate?:boolean,wait?:boolean,blockId?:string,force?:boolean,initData?:Record<string,any>,isCanEdit?:boolean,createItemForm?:boolean}}', 'any', ['act']);
 push('/page/notify/toggle', `{id: string,visible:boolean}`, `void`, ['shy', 'act']);

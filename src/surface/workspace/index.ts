@@ -458,7 +458,7 @@ export class Workspace {
             }
         }
     }
-    async onLoadElementUrl(elementUrl: string) {
+    async onLoadElementUrl(elementUrl: string, fromItemId?: string) {
         var pe = parseElementUrl(elementUrl);
         if ([
             ElementType.PageItem,
@@ -492,6 +492,10 @@ export class Workspace {
                                 else {
                                     var sv = sch.views.find(g => g.id == pe.id1);
                                     if (sv.formType == 'doc-add') {
+                                        if (fromItemId) {
+                                            var fi = this.find(g => g.id == fromItemId);
+                                            if (fi) viewItem = fi;
+                                        }
                                         item = await pageItemStore.appendPageItem(viewItem, {
                                             id: pe.id1,
                                             text: sv.text,
