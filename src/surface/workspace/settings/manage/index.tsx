@@ -14,13 +14,14 @@ import { Rect } from "rich/src/common/vector/point";
 import { SelectBox } from "rich/component/view/select/box";
 import { S } from "rich/i18n/view";
 
-import { CanSupportFeature, PayFeatureCheck } from "rich/component/pay";
+
 import { getPageText } from "rich/src/page/declare";
 import { checkModelPay, getAiDefaultModel, getAiImageModelOptions, getAiModelOptions } from "rich/net/ai/cost";
 import { HelpText } from "rich/component/view/text";
 import { Button } from "rich/component/view/button";
 import { util } from "rich/util/util";
 import { ToolTip } from "rich/component/view/tooltip";
+import { CanSupportFeature, PayFeatureCheck } from "rich/extensions/pay/pay";
 
 @observer
 export class WorkspaceManage extends React.Component {
