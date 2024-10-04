@@ -12,8 +12,8 @@ import { log } from "../../../../common/log";
 import { channel } from "rich/net/channel";
 import { ViewOperate } from "rich/src/history/action";
 import { AtomPermission } from "rich/src/page/permission";
-
-export async function createPageContent(store: PageViewStore) {
+export async function createPageContent(store: PageViewStore)
+{
     try {
         if (!store.page) {
             var page = new Page();
@@ -22,7 +22,6 @@ export async function createPageContent(store: PageViewStore) {
             page.isSchemaRecordViewTemplate = store.config.isTemplate;
             page.openPageData = store.config.initData;
             page.customElementUrl = store.customElementUrl || store.elementUrl;
-            console.log('pa',store, page.customElementUrl, store.customElementUrl, store.elementUrl);
             store.page = page;
             await page.cacCurrentPermissions();
             var pd: {
