@@ -219,7 +219,7 @@ export class CreateWorkspaceView extends EventsComponent {
 }
 
 export async function useCreateWorkspace() {
-    let popover = await PopoverSingleton(CreateWorkspaceView, { mask: true });
+    let popover = await PopoverSingleton(CreateWorkspaceView, { mask: true, shadow: true });
     let fv = await popover.open({ center: true, centerTop: 100 });
     fv.open();
     return new Promise((resolve: (name: string) => void, reject) => {
