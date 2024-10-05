@@ -343,15 +343,17 @@ export class SideBar extends React.Component {
                         fields: [{ name: 'name', type: 'input', text: lst('空间名称') }]
                     });
                     if (rc?.name == workspace.text) {
-                        var g = await channel.del('/ws/clear/all', { wsId: workspace.id });
-                        // var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: workspace.id });
-                        if (g.ok) {
-                            var rg = await masterSock.delete('/ws/clear', { wsId: workspace.id });
-                            if (rg.ok) {
-                                surface.wss = surface.wss.filter(x => x.id != workspace.id);
-                                if (surface.workspace?.id == workspace.id)
-                                    UrlRoute.push(ShyUrl.home)
+                        var rg = await masterSock.delete('/ws/clear', { wsId: workspace.id });
+                        if (rg.ok) {
+                            surface.wss = surface.wss.filter(x => x.id != workspace.id); 
+                            try {
+                                await channel.del('/ws/clear/all', { wsId: workspace.id });
                             }
+                            catch (ex) {
+                                console.error(ex);
+                            }
+                            if (surface.workspace?.id == workspace.id)
+                                UrlRoute.push(ShyUrl.home)
                         }
                     }
                 }

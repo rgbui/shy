@@ -68,7 +68,7 @@ export class WorkspaceSettingsView extends React.Component {
             return;
         }
     }
- 
+
     async createWorkspaceTemplate(event: React.MouseEvent) {
         if (surface.workspace.sn == 24 || window.shyConfig.isDev) {
             var g = await surface.workspace.sock.post('/create/template', { wsId: surface.workspace.id })
@@ -94,12 +94,17 @@ export class WorkspaceSettingsView extends React.Component {
             fields: [{ name: 'name', type: 'input', text: lst('空间名称') }]
         });
         if (r?.name == surface.workspace.text) {
-            var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: surface.workspace.id });
-            if (g.ok) {
-                var rg = await masterSock.delete('/ws/clear', { wsId: surface.workspace.id });
-                if (rg.ok) {
-                    UrlRoute.push(ShyUrl.home)
+            var rg = await masterSock.delete('/ws/clear', { wsId: surface.workspace.id });
+            if (rg.ok) {
+                try {
+                    var g = await surface.workspace.sock.delete('/ws/clear/all', { wsId: surface.workspace.id });
+                    if (g.ok) {
+                    }
                 }
+                catch (ex) {
+
+                }
+                UrlRoute.push(ShyUrl.home)
             }
         }
     }
@@ -173,7 +178,7 @@ export class WorkspaceSettingsView extends React.Component {
                             <div className='f-12 remark gap-b-10'>
                                 <S text='建议使用200x200以上的图片'>建议使用 200x200 以上的图片。</S>
                             </div>
-                            <Button ghost  onClick={e => this.onUploadFace()}><S>上传图片</S></Button>
+                            <Button ghost onClick={e => this.onUploadFace()}><S>上传图片</S></Button>
                         </div>
                     </Space>
                 </div>
@@ -200,8 +205,8 @@ export class WorkspaceSettingsView extends React.Component {
                         {surface.workspace.cover && <img src={autoImageUrl(surface.workspace.cover.url, 500)} />}
                         <div className='shy-settings-ws-cover-hover'><S>更换横幅</S></div>
                     </div>}
-                    {surface.workspace.cover && <Button  className='gap-l-10' ghost onClick={() => this.onRemoveCover()}><S>移除横幅背景</S></Button>}
-                    {!surface.workspace.cover && <Button  ghost onClick={() => this.onUploadCover()}><S>上传横幅背景</S></Button>}
+                    {surface.workspace.cover && <Button className='gap-l-10' ghost onClick={() => this.onRemoveCover()}><S>移除横幅背景</S></Button>}
+                    {!surface.workspace.cover && <Button ghost onClick={() => this.onUploadCover()}><S>上传横幅背景</S></Button>}
                 </div>
             </div>
             <Divider></Divider>
@@ -221,17 +226,17 @@ export class WorkspaceSettingsView extends React.Component {
                     <a style={{ textDecoration: 'underline', color: 'inherit', display: 'inline-block', marginRight: 10 }} target='_blank' href={'https://' + domain + '.' + UrlRoute.getHost()}>https://{domain}.{UrlRoute.getHost()}</a>
                 </div>}
                 {!surface.workspace.siteDomain && <div className='gap-t-20'>
-                    <Button  onClick={e => this.openDomain(e)} ghost><S>自定义二级域名</S></Button>
+                    <Button onClick={e => this.openDomain(e)} ghost><S>自定义二级域名</S></Button>
                     <div className='remark f-12 gap-h-10 flex'><S>示例</S>:https://mysite.{UrlRoute.getHost()}</div>
                 </div>}
-               
+
             </div>
             <Divider></Divider>
             <div className='gap-h-10'>
                 <div className='bold f-14'><S>导出数据</S></div>
                 <div className='remark f-12 gap-b-10 gap-t-5'><S text='导出空间所有的数据'>导出空间所有的数据(暂不开放）</S></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <Button  onClick={e => this.createWorkspaceTemplate(e)} ghost><S>导出数据</S></Button>
+                    <Button onClick={e => this.createWorkspaceTemplate(e)} ghost><S>导出数据</S></Button>
                 </div>
             </div>
             <Divider></Divider>
@@ -239,7 +244,7 @@ export class WorkspaceSettingsView extends React.Component {
                 <div className='bold f-14'><S>注销空间</S></div>
                 <div className='remark f-12 gap-b-10 gap-t-5'><S text='注销空间不可撤消'>注销空间不可撤消，空间内的数据将自动清理</S></div>
                 <div className='shy-ws-settings-view-domain'>
-                    <Button  onClick={e => this.cancelWorkspace(e)} danger ><S>注销空间</S></Button>
+                    <Button onClick={e => this.cancelWorkspace(e)} danger ><S>注销空间</S></Button>
                 </div>
             </div>
         </div>
