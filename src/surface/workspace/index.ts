@@ -8,7 +8,7 @@ import { Mime } from "../sln/declare";
 import { ShyUtil } from "../../util";
 import { util } from "rich/util/util";
 import { Sock } from "../../../net/sock";
-import { computed, makeObservable, observable } from "mobx";
+import { computed, makeObservable, observable, runInAction } from "mobx";
 import { channel } from "rich/net/channel";
 import { surface } from "../app/store";
 import { AtomPermission, PageSourcePermission, getCommonPermission, getEditOwnPerssions, mergeAtomPermission } from "rich/src/page/permission";
@@ -352,9 +352,13 @@ export class Workspace {
     }
     async onUpdateInfo(data: Partial<Workspace>) {
         await channel.patch('/ws/patch', { data });
-        for (let n in data) {
-            this[n] = util.clone(data[n]);
-        }
+        var ws = surface.wss.find(g => g.id == this.id);
+        runInAction(() => {
+            for (let n in data) {
+                this[n] = util.clone(data[n]);
+                ws[n] = util.clone(data[n]);
+            }
+        });
     }
     async getDefaultPage() {
         var pageId = UrlRoute.match(ShyUrl.wsPage)?.pageId;

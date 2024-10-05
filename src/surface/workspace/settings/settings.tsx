@@ -41,6 +41,9 @@ export class WorkspaceSettingsView extends React.Component {
             }
         }
     }
+    async onRemoveFace() {
+        await surface.workspace.onUpdateInfo({ icon: null })
+    }
     async onUploadCover() {
         var file = await OpenFileDialoug({ exts: ['image/*'] });
         if (file) {
@@ -177,8 +180,10 @@ export class WorkspaceSettingsView extends React.Component {
                         <div>
                             <div className='f-12 remark gap-b-10'>
                                 <S text='建议使用200x200以上的图片'>建议使用 200x200 以上的图片。</S>
+                            </div> 
+                            <div className='flex'><Button ghost onClick={e => this.onUploadFace()}><S>上传图片</S></Button>
+                                <Button className='gap-l-10' link onClick={e => { this.onRemoveFace() }}><S>移除头像</S></Button>
                             </div>
-                            <Button ghost onClick={e => this.onUploadFace()}><S>上传图片</S></Button>
                         </div>
                     </Space>
                 </div>
