@@ -18,7 +18,7 @@ export function DifferView() {
                 </span>
             </div>
             <div className="remark f-16 l-24">
-                我们坚信产品的最大价值在于广泛的使用。在不显著提高成本的前提下，我们乐意支持大家便捷使用诗云。
+                我们坚信产品的最大价值在于广泛的使用。<br/>在不显著提高成本的前提下，我们乐意支持大家便捷使用诗云。
             </div>
         </div>
 
@@ -160,7 +160,7 @@ export function DifferView() {
                 </span>
             </div>
             <div className="remark f-16 l-24" style={{ display: 'none' }}>
-                诗云集成更多的国内AI大模型，寻找最有性价比的AI大模型。支持更好的AI写作、创作、检索、推荐、分析、统计等功能。
+                诗云集成更多的国内AI大模型，寻找最有性价比的AI大模型。<br/>支持更好的AI写作、创作、检索、推荐、分析、统计等功能。
             </div>
         </div>
 
