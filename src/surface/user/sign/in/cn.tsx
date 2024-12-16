@@ -349,6 +349,14 @@ export class CnLogin extends React.Component<{ call?: () => void }> {
                 <Button tag='button' ref={e => local.button = e} size='larger' block onClick={(e, b) => register(b)}><S>注册</S></Button >
             </div>
             {local.failMsg && <div className='shy-login-box-fail'>{local.failMsg}</div>}
+            <div className="shy-login-box-type">
+                <div className="flex-fixed f-14 cursor" onMouseDown={e => {
+                    this.local.step = 'input';
+                }}>后退</div>
+                <div className="flex-auto">
+                </div>
+                {/* <span className="flex-fixed f-14"><a style={{ textDecoration: 'underline' }} onMouseDown={e => { local.loginType = local.loginType == "code" ? "paw" : "code"; local.failMsg = ''; }}>{local.loginType == 'code' ? "密码登录" : "手机短信或邮箱校验登录"}</a></span> */}
+            </div>
         </div>
     }
     async success(token: string, user: Record<string, any>, isRedict: boolean = true, isSign: boolean = true) {
