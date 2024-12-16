@@ -1,4 +1,9 @@
 window.isAuth = false;
+import dayjs from "dayjs";
+import 'dayjs/locale/zh-cn'
+if (!window.shyConfig.isUS) {
+  dayjs.locale('zh-cn') // use loaded locale globally
+}
 import "../../common/config";
 import { createAuthIframe } from '../../auth/iframe';
 if (window.shyConfig.isWeb) createAuthIframe();
@@ -11,11 +16,6 @@ import "../assert/theme.less";
 import "../../org/site.less";
 import "./supervisor/style.less";
 import "./sln/style.less";
-import dayjs from "dayjs";
-import 'dayjs/locale/zh-cn'
-if (!window.shyConfig.isUS) {
-  dayjs.locale('zh-cn') // use loaded locale globally
-}
 import { App } from './app/app';
 import { configure } from 'mobx';
 configure({ enforceActions: 'never' })
